@@ -1,0 +1,68 @@
+.formBox {
+    /*min-width: 400px;*/
+    width: 100%;
+    border-radius: 20px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+}
+
+.blueForm input, .blueForm textarea, .blueForm select, .blueForm textarea{
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    display: inline-block;
+    border: 1px solid rgb(0, 110, 181);
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.blueForm input[type=submit] {
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgb(0, 110, 181);
+    color: rgb(0, 110, 181);
+    padding: 8px 15px;
+    margin: 15px 0 0;
+    border-radius: 4444px;
+    cursor: pointer;
+    /*font-size: 110%;*/
+}
+
+.blueForm input[type=submit]:hover {
+    background: rgb(0, 110, 181);
+    color: white;
+}
+
+.blueForm input[type=submit]:disabled {
+    border: 1px solid grey;
+    background: whitesmoke;
+    color: grey;
+    cursor: default;
+}
+
+.blueForm input:focus, .blueForm textarea:focus, .blueForm select:focus, .blueForm textarea:focus {
+    border: 2px solid rgb(0, 110, 181);
+    outline: none;
+}
+.formLabel, .blueForm label {
+     margin-top: 15px;
+     margin-left: 4px;
+     margin-bottom: 4px;
+     vertical-align: top;
+     display: block;
+ }
+
+.blueForm label:first-child {
+    margin-top: 5px;
+}
+
+.wrongCredInput{
+    border: 2px solid #c0000a;
+}
+
+.errSpan{
+    color: #c0000a;
+}

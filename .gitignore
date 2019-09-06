@@ -1,0 +1,7 @@
+/vendor/
+/.idea/
+/app/settings.php
+/logs/*
+/var/cache/*
+/composer.lock
+/.gtm/
