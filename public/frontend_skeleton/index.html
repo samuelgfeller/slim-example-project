@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="frontend_skeleton/css/form.css">
+    <link rel="stylesheet" href="frontend_skeleton/css/style.css">
+    <link rel="stylesheet" href="frontend_skeleton/css/plus_button.css">
+    <link rel="stylesheet" href="frontend_skeleton/css/modal.css">
+    <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="pageContent">
+        <h1>Slim api template</h1>
+
+<!--        modal -->
+        <!-- Modal content -->
+        <h2>Modal Example</h2>
+
+        <!-- Trigger/Open The Modal -->
+        <button id="myBtn">Open Modal</button>
+
+<!--        &lt;!&ndash; The Modal &ndash;&gt;
+        <div id="myModal" class="modal">
+
+            &lt;!&ndash; Modal content &ndash;&gt;
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Modal Header</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the Modal Body</p>
+                    <p>Some other text...</p>
+                </div>
+                <div class="modal-footer">
+                    <h3>Modal Footer</h3>
+                </div>
+            </div>
+
+        </div>-->
+
+
+        <img src="frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" alt="edit">
+
+
+
+
+        <!--    Adding an user          -->
+
+<!--        <h2>Add user</h2>
+        <div class="plusBtn" id="addPostBtn"></div>
+
+        <div class="formBox">
+            <form action="register/success" class="blueForm" method="post" autocomplete="on">
+                <label for="registerEmailInp">Email</label>
+                <input type="email" name="email" id="registerEmailInp"
+                       placeholder="your@email.com"
+                       maxlength="254"
+                       required>
+                <label for="registerPassword1Inp">New password</label>
+                <input type="password" name="password1" id="registerPassword1Inp"
+                       required>
+                <input type="submit" value="Create account">
+            </form>
+        </div>-->
+
+        <!--    Display all users an user          -->
+
+        <h2>All users</h2>
+        <div class="usersDiv">
+        </div>
+        <div class="clearfix"></div>
+        <!--    Update user              -->
+
+        <h3 id="changeEmailBtn" class="cursorPointer">Change Email</h3>
+        <div class="formBox" id="changeEmailDiv">
+            <form action="user/change/email" class="blueForm profileForm" method="post" autocomplete="on">
+                <label for="updateEmailInp">Email</label>
+                <input type="email" name="email" id="updateEmailInp"
+                       value=""
+                       maxlength="254"
+                       required>
+                <input type="submit" value="Update email">
+            </form>
+        </div>
+        <h3 id="updPasswordBtn" class="cursorPointer">Update password</h3>
+        <div class="formBox" id="updatePasswordDiv">
+            <form action="user/update/password" class="blueForm profileForm" method="post" autocomplete="on">
+                <label for="updatePasswordInpOld">Old password</label>
+                <input type="password" name="oldpassword" id="updatePasswordInpOld"
+                       required>
+                <label for="updatePasswordInp1">New password</label>
+                <input type="password" name="newpassword1" id="updatePasswordInp1" autocomplete="new-password" required>
+                <input type="password" name="newpassword2" id="updatePasswordInp2" autocomplete="new-password" required>
+                <input type="submit" id="submitChangePasswordBtn" value="Update password" disabled>
+            </form>
+        </div>
+    </div>
+</div>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script src="/frontend_skeleton/js/script.js"></script>
+<script src="/frontend_skeleton/js/user.js"></script>
+<script src="/frontend_skeleton/js/modal.js"></script>
+
+</body>
+</html>

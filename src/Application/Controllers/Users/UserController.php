@@ -20,37 +20,42 @@ class UserController extends Controller {
 
     public function get(Request $request, Response $response, array $args) {
         $id = $args['id'];
+        $user = $this->userService->findUser($id);
 //        var_dump($this->container->get('logger'));
+        $response->getBody()->write(json_encode($user));
         $response->getBody()->write('GET request');
-        $this->logger->info('locations/' . $id . ' has been called');
+        $this->logger->info('users/' . $id . ' has been called');
 //        var_dump($this->logger);
         return $response;
     }
 
-    public function update(Request $request, Response $response, array $args) {
+    public function update(Request $request, Response $response, array $args): Response
+    {
         $response->getBody()->write('PUT request');
         return $response;
     }
 
-    public function delete(Request $request, Response $response, array $args) {
+    public function delete(Request $request, Response $response, array $args): Response
+    {
         $response->getBody()->write('DELETE request');
         return $response;
     }
 
-    public function create(Request $request, Response $response, array $args) {
+    public function create(Request $request, Response $response, array $args): Response
+    {
         $response->getBody()->write('POST request');
         return $response;
     }
 
     public function list(Request $request, Response $response, array $args) {
         $allUsers = $this->userService->findAllUsers();
-
         //somehow that doesnt work
-//        $this->respondWithData($response, $allUsers);
+//        $this->respondWithData($response, va$allUsers);
         //    $this->respondWithDataPrettyJson($response, $allUsers);
 
         // This works though
          $response->getBody()->write(json_encode($allUsers));
+//         $response->getBody()->write('omg');
         return $response->withHeader('Content-Type', 'application/json');
 
     }

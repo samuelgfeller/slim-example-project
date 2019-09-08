@@ -8,7 +8,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
     $app->get('/', function (Request $request, Response $response, array $args) {
-        require_once __DIR__.'/../public/api_test/index.html';
+        require_once __DIR__ . '/../public/frontend_skeleton/index.html';
         return $response;
     });
     

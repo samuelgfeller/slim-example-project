@@ -27,75 +27,79 @@ abstract class DataManager
     {
         return $this->connection->newQuery()->from($this->table);
     }
-    
+
     /**
      * Return all rows in a database
      * Reason why empty array is returned if nothing: https://stackoverflow.com/a/11536281/9013718
      *
+     * @param array $fields
      * @return array
      */
-    public function findAll(): array
+    public function findAll(array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select('*')
+        $query = $query->select($fields)
             ->where([
-                'deleted_at' => null
+                'deleted_at IS' => null
             ]);
         return $query->execute()->fetchAll('assoc') ?: [];
     }
-    
+
     /**
      * Searches entry in table which has given id
      * If not found it returns an empty array
      *
      * @param int $id
+     * @param array $fields
      * @return array []
      */
-    public function findById(int $id): array
+    public function findById(int $id, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select()
+        $query = $query->select($fields)
             ->where([
-                'deleted_at' => null,
+                'deleted_at IS' => null,
                 'id' => $id
             ]);
         return $query->execute()->fetch('assoc') ?: [];
     }
-    
+
     /**
      * Searches entry in table with has given value at given column
      *
      * @param string $column
      * @param $value
+     * @param array $fields
      * @return array
      */
-    public function findBy(string $column, $value): array
+    public function findBy(string $column, $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
         // Retrieving a single Row
-        $query = $query->select()
+        $query = $query->select($fields)
             ->andWhere([
-                'deleted_at' => null,
+                'deleted_at IS' => null,
                 $column => $value
             ]);
         // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
         return $query->execute()->fetch('assoc') ?: [];
     }
-    
+
     /**
      * Retrieve entry from table which has given id
      * If it doesn't find anything an error is thrown
      *
      * @param int $id
+     * @param array $fields
      * @return array
      * @throws PersistenceRecordNotFoundException
      */
-    public function getById(int $id): array
+    public function getById(int $id, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select()
+        $query = $query->select($fields)
             ->where([
-                'deleted_at' => null,
+                'deleted_at IS' => null,
                 'id' => $id
             ]);
         $entry = $query->execute()->fetch('assoc');

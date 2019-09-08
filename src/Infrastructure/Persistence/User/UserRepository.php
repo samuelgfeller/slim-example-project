@@ -12,17 +12,23 @@ use User;
 
 class UserRepository extends DataManager implements UserRepositoryInterface
 {
+    // Fields without password
+    private $fields = ['id','name','email','updated_at','created_at'];
 
     public function __construct(Connection $conn = null)
     {
         parent::__construct($conn);
         $this->table = 'user';
     }
-    
 
+    /**
+     * Return all users
+     *
+     * @return array
+     */
     public function findAllUsers(): array
     {
-        return $this->findAll();
+        return $this->findAll($this->fields);
     }
     
     /**
@@ -34,7 +40,7 @@ class UserRepository extends DataManager implements UserRepositoryInterface
      */
     public function findUserById(int $id): array
     {
-        return $this->findById($id);
+        return $this->findById($id,$this->fields);
     }
     
     /**
@@ -47,7 +53,7 @@ class UserRepository extends DataManager implements UserRepositoryInterface
      */
     public function getUserById(int $id): array
     {
-        return $this->getById($id);
+        return $this->getById($id,$this->fields);
     }
     
     /**
