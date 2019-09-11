@@ -13,14 +13,14 @@ $(document).ready(function () {
             if (output === '[]') {
             } else {
                 $('.postsDiv').empty();
-                let places = output;
+                let users = output;
                 // let places = JSON.parse(output);
-                $.each(places, function (index, value) {
-                    $('<div class="singleBox" data-id="' + value.id + '" id="user' + value.id + '">' +
+                $.each(users, function (index, value) {
+                    $('<div class="singleBox" id="user' + value.id + '">' +
                         '<div class="boxContent">' +
                         '<div class="boxInnerContent">' +
-                        '<img src="frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" alt="edit">' +
-                        '<img src="frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" alt="del">' +
+                        '<img src="frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + value.id + '" alt="edit">' +
+                        '<img src="frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + value.id + '" alt="del">' +
                         '<h3 class="boxHeader">' + value.name + '</h3>' +
                         '<p><span class="infoInBoxSpan">Email: </span><b>' + value.email + '</b></p>' +
                         '<p><span class="infoInBoxSpan">Updated at: </span><b>' + value.updated_at + '</b></p>' +
@@ -38,23 +38,26 @@ $(document).ready(function () {
     });
 
     $('.usersDiv').on('click', '.editIcon', function () {
-        let id = $('.singleBox').data('id');
+        let id = $(this).data('id');
         $('<div class="modal" id="myModal">' +
             '<div class="modal-content">' +
             '<div class="modal-header">' +
             '<span class="closeModal">&times;</span>' +
             '<h2>Edit user</h2>' +
             '</div>' +
+            '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
             '<div class="modal-body">' +
-            '<form action="user/change/email" class="blueForm profileForm" method="put" autocomplete="on">' +
-            '<label for="updateEmailInp">Email</label>' +
-            '<input type="email" name="email" id="updateEmailInp" value="test@test.ch" maxlength="254" required>' +
-            '</form>' +
+            '<b><label for="updateNameInp"">Name: </label></b>' +
+            '<input type="text" name="name" id="updateNameInp" value="" placeholder="loading..." maxlength="200" required>' +
+            '<b><label for="updateEmailInp">Email: </label></b>' +
+            '<input type="email" name="email" id="updateEmailInp" value="" placeholder="loading..." maxlength="254" required>' +
             '</div>' +
             '<div class="modal-footer">' +
-            '<h3>Modal Footer</h3>' +
-            '<input type="submit" value="Update user">'+
+            // '<h3>Modal Footer</h3>' +
+            '<button type="button" id="submitBtnEditUser" data-id="" class="submitBtn modalSubmitBtn">Update user</button>' +
+            '<div class="clearfix"></div>' +
             '</div>' +
+            '</form>' +
             '</div>' +
             '</div>').appendTo($('.usersDiv'));
         $('.modal').show();
@@ -62,7 +65,11 @@ $(document).ready(function () {
             url: 'users/' + id,
             type: 'get',
         }).done(function (output) {
-
+            console.log(output);
+            let user = JSON.parse(output);
+            $('#updateNameInp').val(user.name);
+            $('#updateEmailInp').val(user.email);
+            $('#submitBtnEditUser').attr('data-id',user.id);
         }).fail(function (output) {
             console.log(output);
             alert('Error while deleting');
@@ -70,7 +77,7 @@ $(document).ready(function () {
     });
 
     $('.usersDiv').on('click', '.delIcon', function () {
-        let id = $('.singleBox').data('id');
+        let id = $(this).data('id');
         if (confirm('Are you sure that you want to delete this post?')) {
             $.ajax({
                 url: 'users/' + id,
@@ -88,5 +95,48 @@ $(document).ready(function () {
             });
         }
     });
-})
-;
+
+    $('.usersDiv').on('click', '#submitBtnEditUser', function () {
+        let id = $(this).data('id');
+        $.ajax({
+            url: 'users/' + id,
+            type: 'put',
+            data:{
+                email: $('#updateEmailInp').val(),
+                name: $('#updateNameInp').val(),
+            },
+        }).done(function (output) {
+            if (output === 'success') {
+                $('#user' + id).remove();
+            } else {
+                console.log(output);
+                alert('Output does not equal the expected string "success"');
+            }
+        }).fail(function (output) {
+            console.log(output);
+            alert('Error while updating');
+        });
+    });
+
+    // $('.usersDiv').on('click', '.submitBtnEditUser', function () {
+    //     $('#updateNameInp').val()
+    //     $('#updateEmailInp').val()
+    //
+    //     $.ajax({
+    //         url: 'users/' + id,
+    //         type: 'put',
+    //     }).done(function (output) {
+    //         if (output === 'success') {
+    //             $('#user' + id).remove();
+    //         } else {
+    //             console.log(output);
+    //             alert('Output does not equal the expected string "success"');
+    //         }
+    //     }).fail(function (output) {
+    //         console.log(output);
+    //         alert('Error while deleting');
+    //     });
+    // });
+
+
+});

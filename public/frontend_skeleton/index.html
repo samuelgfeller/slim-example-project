@@ -74,35 +74,14 @@
         <div class="clearfix"></div>
         <!--    Update user              -->
 
-        <h3 id="changeEmailBtn" class="cursorPointer">Change Email</h3>
-        <div class="formBox" id="changeEmailDiv">
-            <form action="user/change/email" class="blueForm profileForm" method="post" autocomplete="on">
-                <label for="updateEmailInp">Email</label>
-                <input type="email" name="email" id="updateEmailInp"
-                       value=""
-                       maxlength="254"
-                       required>
-                <input type="submit" value="Update email">
-            </form>
-        </div>
-        <h3 id="updPasswordBtn" class="cursorPointer">Update password</h3>
-        <div class="formBox" id="updatePasswordDiv">
-            <form action="user/update/password" class="blueForm profileForm" method="post" autocomplete="on">
-                <label for="updatePasswordInpOld">Old password</label>
-                <input type="password" name="oldpassword" id="updatePasswordInpOld"
-                       required>
-                <label for="updatePasswordInp1">New password</label>
-                <input type="password" name="newpassword1" id="updatePasswordInp1" autocomplete="new-password" required>
-                <input type="password" name="newpassword2" id="updatePasswordInp2" autocomplete="new-password" required>
-                <input type="submit" id="submitChangePasswordBtn" value="Update password" disabled>
-            </form>
-        </div>
+
     </div>
 </div>
-<script
+<!--<script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>-->
+<script src="/frontend_skeleton/lib/jquery-3.2.1.min.js"></script>
 <script src="/frontend_skeleton/js/script.js"></script>
 <script src="/frontend_skeleton/js/user.js"></script>
 <script src="/frontend_skeleton/js/modal.js"></script>

@@ -23,7 +23,7 @@ class UserController extends Controller {
         $user = $this->userService->findUser($id);
 //        var_dump($this->container->get('logger'));
         $response->getBody()->write(json_encode($user));
-        $response->getBody()->write('GET request');
+//        $response->getBody()->write('GET request');
         $this->logger->info('users/' . $id . ' has been called');
 //        var_dump($this->logger);
         return $response;
@@ -31,6 +31,23 @@ class UserController extends Controller {
 
     public function update(Request $request, Response $response, array $args): Response
     {
+        $userId = $args['id'];
+        var_dump($request->getBody()->getMetadata());
+        $json = $request->getBody()->__toString();
+        $data = json_decode($json, true);
+        var_dump($json,$data);
+
+        $username = array_value('username', $data);
+        $updated = $this->userService->updateUser($id, $name);
+        if ($updated) {
+            return $this->json($response, ['success' => true]);
+        }
+        return $this->json($response, ['success' => false]);
+        $this->userService->updateUser($args['id']);
+//        $request-> get put params
+        // https://discourse.slimframework.com/t/slim-v3-put-method-and-retrieve-post-data/849
+//        http://www.slimframework.com/docs/v3/objects/request.html
+//        https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
         $response->getBody()->write('PUT request');
         return $response;
     }

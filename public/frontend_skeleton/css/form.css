@@ -1,7 +1,7 @@
 :root{
     --outer-box-border-radius: 20px;
     --input-boder-radius: 10px;
-    --color: black;
+    --formColor: black;
     /* dark pink #660066*/
 }
 .formBox {
@@ -20,30 +20,30 @@
     padding: 8px;
     margin-top: 4px;
     display: inline-block;
-    border: 1px solid var(--color);
+    border: 1px solid var(--formColor);
     border-radius: var(--input-boder-radius);
     box-sizing: border-box;
     font-size: 16px;
 }
 
-.blueForm input[type=submit] {
+.blueForm input[type=submit], .submitBtn {
     width: 100%;
     background-color: white;
-    border: 1px solid var(--color);
-    color: var(--color);
+    border: 1px solid var(--formColor);
+    color: var(--formColor);
     padding: 8px 15px;
     margin: 15px 0 0;
     border-radius: 4444px;
     cursor: pointer;
-    /*font-size: 110%;*/
+    font-size: 100%;
 }
 
-.blueForm input[type=submit]:hover {
-    background: var(--color);
+.blueForm input[type=submit]:hover, .submitBtn:hover {
+    background: var(--formColor);
     color: white;
 }
 
-.blueForm input[type=submit]:disabled {
+.blueForm input[type=submit]:disabled, .submitBtn:disabled {
     border: 1px solid grey;
     background: whitesmoke;
     color: grey;
@@ -51,7 +51,7 @@
 }
 
 .blueForm input:focus, .blueForm textarea:focus, .blueForm select:focus, .blueForm textarea:focus {
-    border: 2px solid var(--color);
+    border: 2px solid var(--formColor);
     outline: none;
 }
 .formLabel, .blueForm label {

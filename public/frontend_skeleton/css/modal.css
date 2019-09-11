@@ -24,7 +24,7 @@ body {
     margin: auto;
     padding: 0;
     border-radius: 20px;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     min-width: 300px;
     width: 40%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -36,8 +36,9 @@ body {
 .closeModal {
     color: #aaaaaa;
     float: right;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
+    margin-top: 10px;
 }
 
 .closeModal:hover,
@@ -61,11 +62,19 @@ body {
 
 /* Modal Footer */
 .modal-footer {
-    padding: 2px 30px;
+    padding: 10px 30px 20px 0;
     /*background-color: #5cb85c;*/
     /*color: white;*/
 }
 
+/* Modal */
+.modalForm input[type=submit], .modalSubmitBtn {
+    /*padding: 6px 6px;*/
+    width: 30%;
+    min-width: 160px;
+    float: right;
+    /*font-size: 90%;*/
+}
 
 /* Add Animation */
 @keyframes animatetop {

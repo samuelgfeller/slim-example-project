@@ -24,13 +24,6 @@ a:hover {
     width: 100%;
 }
 
-/* Profile */
-.profileForm input[type=submit] {
-    /*padding: 6px 6px;*/
-    width: 30%;
-    min-width: 160px;
-    /*font-size: 90%;*/
-}
 
 /*
 .profileForm input[type=submit]:after {
