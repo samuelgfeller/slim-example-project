@@ -32,32 +32,22 @@ class UserController extends Controller {
 
     public function update(Request $request, Response $response, array $args): Response
     {
-        $userId = $args['id'];
+        $id = $args['id'];
 //        var_dump($request->getParsedBody());
-        var_dump($request->getBody()->__toString());
     
-        var_dump($request->getParsedBody());
+        $data = $request->getParsedBody();
         
+        // todo validation
+    
+        $name = $data['name'];
+        $email = $data['email'];
         
+        $updated = $this->userService->updateUser($id,$name,$email);
         
-        
-//        $json = $request->getBody()->__toString();
-//        $data = json_decode($json, true);
-//        var_dump($json,$data);
-
-        $username = array_value('username', $data);
-        $updated = $this->userService->updateUser($id, $name);
         if ($updated) {
-            return $this->json($response, ['success' => true]);
+            return $this->respondWithJson($response, ['success' => true]);
         }
-        return $this->json($response, ['success' => false]);
-        $this->userService->updateUser($args['id']);
-//        $request-> get put params
-        // https://discourse.slimframework.com/t/slim-v3-put-method-and-retrieve-post-data/849
-//        http://www.slimframework.com/docs/v3/objects/request.html
-//        https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
-        $response->getBody()->write('PUT request');
-        return $response;
+        return $this->respondWithJson($response, ['success' => false]);
     }
 
     public function delete(Request $request, Response $response, array $args): Response

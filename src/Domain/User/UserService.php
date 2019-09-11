@@ -21,9 +21,12 @@ class UserService {
         return $this->userRepositoryInterface->findUserById($id);
     }
 
-    public function updateUser($id): bool
+    public function updateUser($id,$name,$email): bool
     {
-
+        $data = [
+            'name' => $name,
+            'email' => $email
+        ];
         return $this->userRepositoryInterface->updateuser($data,$id);
     }
 

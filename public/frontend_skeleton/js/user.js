@@ -15,6 +15,7 @@ $(document).ready(function () {
                 $('.postsDiv').empty();
                 let users = output;
                 // let places = JSON.parse(output);
+                $('.usersDiv').empty();
                 $.each(users, function (index, value) {
                     $('<div class="singleBox" id="user' + value.id + '">' +
                         '<div class="boxContent">' +
@@ -76,6 +77,7 @@ $(document).ready(function () {
         });
     });
 
+    // Delete user
     $('.usersDiv').on('click', '.delIcon', function () {
         let id = $(this).data('id');
         if (confirm('Are you sure that you want to delete this post?')) {
@@ -83,11 +85,10 @@ $(document).ready(function () {
                 url: 'users/' + id,
                 type: 'delete',
             }).done(function (output) {
-                if (output === 'success') {
+                if (output.success === true) {
                     $('#user' + id).remove();
-                } else {
-                    console.log(output);
-                    alert('Output does not equal the expected string "success"');
+                }else{
+                    alert(output.success);
                 }
             }).fail(function (output) {
                 console.log(output);
@@ -96,22 +97,23 @@ $(document).ready(function () {
         }
     });
 
+    // Update user
     $('.usersDiv').on('click', '#submitBtnEditUser', function () {
         let id = $(this).data('id');
         $.ajax({
             url: 'users/' + id,
+            // url: 'users',
             type: 'put',
-            data:{
+            dataType : "json",
+            contentType: "application/json; charset=utf-8",
+            data:JSON.stringify({
                 email: $('#updateEmailInp').val(),
                 name: $('#updateNameInp').val(),
-            },
+            }),
         }).done(function (output) {
-            if (output === 'success') {
-                $('#user' + id).remove();
-            } else {
-                console.log(output);
-                alert('Output does not equal the expected string "success"');
-            }
+
+                alert(output.success);
+
         }).fail(function (output) {
             console.log(output);
             alert('Error while updating');

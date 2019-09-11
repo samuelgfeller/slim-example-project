@@ -24,9 +24,10 @@ abstract class Controller
      * @param array|object|null $data
      * @return Response
      */
-    protected function respondWithData(Response $response, $data = null)
+    protected function respondWithJson(Response $response, $data = null)
     {
         $response->getBody()->write(json_encode($data));
+        $response->withStatus(200);
         return $response->withHeader('Content-Type', 'application/json');
     }
 
