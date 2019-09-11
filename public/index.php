@@ -36,8 +36,9 @@ AppFactory::setContainer($container);
 // Instantiate the app
 $app = AppFactory::create();
 
-// Add Routing Middleware
-$app->addRoutingMiddleware();
+// Register middleware
+$middleware = require __DIR__ . '/../app/middleware.php';
+$middleware($app);
 
 // Access Control headers
 /*$app->add(function ($request, $handler) {
@@ -64,6 +65,8 @@ $container->set('LocationService', function (ContainerInterface $c) {
 // doc https://www.slimframework.com/docs/v4/objects/routing.html#how-to-create-routes
 // Route group best practices: https://stackoverflow.com/questions/34502856/slim-3-framework-should-i-be-using-route-groups-for-my-api
 
+// Add Routing Middleware
+$app->addRoutingMiddleware();
 
 // Routing
 $routes = require __DIR__ . '/../app/routes.php';

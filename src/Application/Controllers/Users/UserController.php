@@ -8,6 +8,7 @@ use App\Domain\User\UserService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
+use Slim\Handlers\Strategies\RequestHandler;
 
 class UserController extends Controller {
 
@@ -32,10 +33,17 @@ class UserController extends Controller {
     public function update(Request $request, Response $response, array $args): Response
     {
         $userId = $args['id'];
-        var_dump($request->getBody()->getMetadata());
-        $json = $request->getBody()->__toString();
-        $data = json_decode($json, true);
-        var_dump($json,$data);
+//        var_dump($request->getParsedBody());
+        var_dump($request->getBody()->__toString());
+    
+        var_dump($request->getParsedBody());
+        
+        
+        
+        
+//        $json = $request->getBody()->__toString();
+//        $data = json_decode($json, true);
+//        var_dump($json,$data);
 
         $username = array_value('username', $data);
         $updated = $this->userService->updateUser($id, $name);
