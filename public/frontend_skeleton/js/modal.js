@@ -1,14 +1,22 @@
 $(document).ready(function () {
-    $('.usersDiv').on('click', '.closeModal', function () {
+    $('.pageContent').on('click', '.closeModal', function () {
         $('.modal').remove();
     });
-    $('.usersDiv').on('click', '.modal', function (e) {
+    $('.pageContent').on('click', '.modal', function (e) {
         if ($('.modal').text() == e.target.textContent) {
             $('.modal').remove();
         }
     });
 });
 
+/**
+ * Create and show moadal with given content
+ *
+ * @param header
+ * @param body
+ * @param footer
+ * @param appendTo jquery selector for e.g. $('#divId')
+ */
 function createModal(header, body, footer, appendTo){
     // Id not important because there can only be one modal at a time
     $('<div class="modal">' +
