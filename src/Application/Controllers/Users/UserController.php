@@ -43,7 +43,6 @@ class UserController extends Controller {
         $email = $data['email'];
         
         $updated = $this->userService->updateUser($id,$name,$email);
-        
         if ($updated) {
             return $this->respondWithJson($response, ['success' => true]);
         }

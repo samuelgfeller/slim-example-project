@@ -139,6 +139,7 @@ abstract class DataManager
             ->where([
                 'id' => $whereIdIs
             ]);
+//        var_dump($query);
         return $query->execute()->rowCount() > 0;
     }
     

@@ -12,7 +12,6 @@ $(document).ready(function () {
         if (output !== '') {
             if (output === '[]') {
             } else {
-                $('.postsDiv').empty();
                 let users = output;
                 // let places = JSON.parse(output);
                 $('.usersDiv').empty();
@@ -73,7 +72,8 @@ $(document).ready(function () {
             $('#submitBtnEditUser').attr('data-id',user.id);
         }).fail(function (output) {
             console.log(output);
-            alert('Error while deleting');
+            $('.modal').remove();
+            alert('Error while retrieving data');
         });
     });
 
@@ -85,10 +85,10 @@ $(document).ready(function () {
                 url: 'users/' + id,
                 type: 'delete',
             }).done(function (output) {
-                if (output.success === true) {
+                if (output.success === true || output.success === 'true') {
                     $('#user' + id).remove();
                 }else{
-                    alert(output.success);
+                    alert('Error while deleting');
                 }
             }).fail(function (output) {
                 console.log(output);
@@ -111,9 +111,11 @@ $(document).ready(function () {
                 name: $('#updateNameInp').val(),
             }),
         }).done(function (output) {
-
-                alert(output.success);
-
+            $('.modal').remove();
+            if (output.success === true || output.success === 'true') {
+            }else{
+                alert('Update: '+output.success);
+            }
         }).fail(function (output) {
             console.log(output);
             alert('Error while updating');

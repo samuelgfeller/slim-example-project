@@ -85,6 +85,7 @@ class UserRepository extends DataManager implements UserRepositoryInterface
      * @return bool
      */
     public function updateUser(array $data,int $id): bool {
+//        return true;
         return $this->update($data, $id);
     }
 }
