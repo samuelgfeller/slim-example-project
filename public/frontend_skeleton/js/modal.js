@@ -8,6 +8,30 @@ $(document).ready(function () {
         }
     });
 });
+
+function createModal(header, body, footer, appendTo){
+    // Id not important because there can only be one modal at a time
+    $('<div class="modal">' +
+        '<div class="modal-content">' +
+        '<div class="modal-header">' +
+        '<span class="closeModal">&times;</span>' +
+        header +
+        '</div>' +
+        '<div class="modal-body">' +
+        body +
+        '</div>' +
+        '<div class="modal-footer">' +
+        footer +
+        '</div>' +
+        '</div>' +
+        '</div>').appendTo(appendTo);
+    $('.modal').show();
+}
+
+function closeModal() {
+    $('.modal').remove();
+}
+
 /*
 x
 // Get the modal

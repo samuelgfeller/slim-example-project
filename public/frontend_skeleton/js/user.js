@@ -1,11 +1,55 @@
 $(document).ready(function () {
+
+    loadAllUsers();
+
+    // Edit user open form modal
+    $('.usersDiv').on('click', '.editIcon', function () {
+        let id = $(this).data('id');
+        openEditUserForm(id);
+    });
+
+    // Send update request
+    $('.usersDiv').on('click', '#submitBtnEditUser', function () {
+        let id = $(this).data('id');
+        submitUpdatedUser(id);
+    });
+
+    // Delete user
+    $('.usersDiv').on('click', '.delIcon', function () {
+        let id = $(this).data('id');
+        deleteUser(id);
+    });
+
+    // $('.usersDiv').on('click', '.submitBtnEditUser', function () {
+    //     $('#updateNameInp').val()
+    //     $('#updateEmailInp').val()
+    //
+    //     $.ajax({
+    //         url: 'users/' + id,
+    //         type: 'put',
+    //     }).done(function (output) {
+    //         if (output === 'success') {
+    //             $('#user' + id).remove();
+    //         } else {
+    //             console.log(output);
+    //             alert('Output does not equal the expected string "success"');
+    //         }
+    //     }).fail(function (output) {
+    //         console.log(output);
+    //         alert('Error while deleting');
+    //     });
+    // });
+});
+
+/**
+ * Populate .usersDiv with all users in database
+ */
+function loadAllUsers() {
     //Load users
     $.ajax({
         url: 'users',
+        dataType: "json",
         type: 'get',
-        /*        data: {
-                    'place_id': placeId,
-                }*/
     }).done(function (output) {
         console.log(output);
         // output = JSON.parse(output);
@@ -36,111 +80,104 @@ $(document).ready(function () {
     }).fail(function (output) {
         alert('Error while fetching data');
     });
+}
 
-    $('.usersDiv').on('click', '.editIcon', function () {
-        let id = $(this).data('id');
-        $('<div class="modal" id="myModal">' +
-            '<div class="modal-content">' +
-            '<div class="modal-header">' +
-            '<span class="closeModal">&times;</span>' +
-            '<h2>Edit user</h2>' +
-            '</div>' +
-            '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
-            '<div class="modal-body">' +
-            '<b><label for="updateNameInp"">Name: </label></b>' +
-            '<input type="text" name="name" id="updateNameInp" value="" placeholder="loading..." maxlength="200" required>' +
-            '<b><label for="updateEmailInp">Email: </label></b>' +
-            '<input type="email" name="email" id="updateEmailInp" value="" placeholder="loading..." maxlength="254" required>' +
-            '</div>' +
-            '<div class="modal-footer">' +
-            // '<h3>Modal Footer</h3>' +
-            '<button type="button" id="submitBtnEditUser" data-id="" class="submitBtn modalSubmitBtn">Update user</button>' +
-            '<div class="clearfix"></div>' +
-            '</div>' +
-            '</form>' +
-            '</div>' +
-            '</div>').appendTo($('.usersDiv'));
-        $('.modal').show();
-        $.ajax({
-            url: 'users/' + id,
-            type: 'get',
-        }).done(function (output) {
-            console.log(output);
-            let user = JSON.parse(output);
-            $('#updateNameInp').val(user.name);
-            $('#updateEmailInp').val(user.email);
-            $('#submitBtnEditUser').attr('data-id',user.id);
-        }).fail(function (output) {
-            console.log(output);
-            $('.modal').remove();
-            alert('Error while retrieving data');
-        });
+function createUser() {
+    let header = '<h2>Create user</h2>';
+    let body = '<form action="users" class="blueForm modalForm" method="post" autocomplete="on">' +
+        '<label for="createEmailInp">Email</label>' +
+        '<input type="email" name="email" id="createEmailInp" placeholder="your@email.com"' +
+        '       maxlength="254" required>' +
+        '<label for="registerPassword1Inp">New password</label>' +
+        '<input type="password" name="password1" id="registerPassword1Inp" required>';
+    let footer = '<button type="button" id="submitBtnEditUser" class="submitBtn modalSubmitBtn">Create user</button>' +
+        '<div class="clearfix"></div>' +
+        '</form>';
+    createModal(header,body,footer);
+}
+
+/**
+ * Open Modalbox with form to edit the user data
+ *
+ * @param id
+ */
+function openEditUserForm(id) {
+    let header = '<h2>Edit user</h2>';
+    let body = '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
+        '<b><label for="updateNameInp"">Name: </label></b>' +
+        '<input type="text" name="name" id="updateNameInp" value="" placeholder="loading..." maxlength="200" required>' +
+        '<b><label for="updateEmailInp">Email: </label></b>' +
+        '<input type="email" name="email" id="updateEmailInp" value="" placeholder="loading..." maxlength="254" required>';
+    let footer = '<button type="button" id="submitBtnEditUser" data-id="" class="submitBtn modalSubmitBtn">Update user</button>' +
+        '<div class="clearfix"></div>' +
+        '</form>';
+
+    createModal(header, body, footer, $('.usersDiv'));
+
+    $.ajax({
+        url: 'users/' + id,
+        type: 'get',
+    }).done(function (output) {
+        console.log(output);
+        let user = JSON.parse(output);
+        $('#updateNameInp').val(user.name);
+        $('#updateEmailInp').val(user.email);
+        $('#submitBtnEditUser').attr('data-id', user.id);
+    }).fail(function (output) {
+        console.log(output);
+        closeModal();
+        alert('Error while retrieving data');
     });
+}
 
-    // Delete user
-    $('.usersDiv').on('click', '.delIcon', function () {
-        let id = $(this).data('id');
-        if (confirm('Are you sure that you want to delete this post?')) {
-            $.ajax({
-                url: 'users/' + id,
-                type: 'delete',
-            }).done(function (output) {
-                if (output.success === true || output.success === 'true') {
-                    $('#user' + id).remove();
-                }else{
-                    alert('Error while deleting');
-                }
-            }).fail(function (output) {
-                console.log(output);
-                alert('Error while deleting');
-            });
+/**
+ * Send form data via put to update an user
+ *
+ * @param id
+ */
+function submitUpdatedUser(id) {
+    $.ajax({
+        url: 'users/' + id,
+        // url: 'users',
+        type: 'put',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            email: $('#updateEmailInp').val(),
+            name: $('#updateNameInp').val(),
+        }),
+    }).done(function (output) {
+        closeModal();
+        if (output.success === true || output.success === 'true') {
+            reloadUser(id);
+        } else {
+            alert('Update: ' + output.success);
         }
+    }).fail(function (output) {
+        console.log(output);
+        alert('Error while updating');
     });
+}
 
-    // Update user
-    $('.usersDiv').on('click', '#submitBtnEditUser', function () {
-        let id = $(this).data('id');
+/**
+ * Send request to delete an user
+ *
+ * @param id
+ */
+function deleteUser(id) {
+    if (confirm('Are you sure that you want to delete this post?')) {
         $.ajax({
             url: 'users/' + id,
-            // url: 'users',
-            type: 'put',
-            dataType : "json",
-            contentType: "application/json; charset=utf-8",
-            data:JSON.stringify({
-                email: $('#updateEmailInp').val(),
-                name: $('#updateNameInp').val(),
-            }),
+            type: 'delete',
         }).done(function (output) {
-            $('.modal').remove();
             if (output.success === true || output.success === 'true') {
-            }else{
-                alert('Update: '+output.success);
+                $('#user' + id).remove();
+            } else {
+                alert('Error while deleting');
             }
         }).fail(function (output) {
             console.log(output);
-            alert('Error while updating');
+            alert('Error while deleting');
         });
-    });
-
-    // $('.usersDiv').on('click', '.submitBtnEditUser', function () {
-    //     $('#updateNameInp').val()
-    //     $('#updateEmailInp').val()
-    //
-    //     $.ajax({
-    //         url: 'users/' + id,
-    //         type: 'put',
-    //     }).done(function (output) {
-    //         if (output === 'success') {
-    //             $('#user' + id).remove();
-    //         } else {
-    //             console.log(output);
-    //             alert('Output does not equal the expected string "success"');
-    //         }
-    //     }).fail(function (output) {
-    //         console.log(output);
-    //         alert('Error while deleting');
-    //     });
-    // });
-
-
-});
+    }
+}
