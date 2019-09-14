@@ -84,10 +84,11 @@ function loadAllUsers() {
 function getUserBox(jsonData){
     return $('<div class="singleBox" id="user' + jsonData.id + '">' +
         '<div class="boxContent">' +
-        '<div class="boxInnerContent">' +
         '<img src="frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
         '<img src="frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + jsonData.id + '" alt="del">' +
+        '<div class="loader" id="loaderForUser'+jsonData.id+'"></div>'+
         '<h3 class="boxHeader">' + jsonData.name + '</h3>' +
+        '<div id="boxInnerContent'+jsonData.id+'">' +
         '<p><span class="infoInBoxSpan">Email: </span><b>' + jsonData.email + '</b></p>' +
         '<p><span class="infoInBoxSpan">Updated at: </span><b>' + jsonData.updated_at + '</b></p>' +
         '<p><span class="infoInBoxSpan">Created at: </span>' + jsonData.created_at + '</p>' +
@@ -181,7 +182,7 @@ function submitUpdatedUser(id) {
         url: 'users/' + id,
         // url: 'users',
         type: 'put',
-        dataType: "json",
+        // dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             email: $('#updateEmailInp').val(),
@@ -190,6 +191,7 @@ function submitUpdatedUser(id) {
     }).done(function (output) {
         closeModal();
         if (output.success === true || output.success === 'true') {
+            showLoader('loaderForUser'+id);
             reloadUser(id);
         } else {
             alert('Update: ' + output.success);
@@ -229,10 +231,10 @@ function reloadUser(id){
         type: 'get',
     }).done(function (output) {
         let user = JSON.parse(output);
+        hideLoader('loaderForUser'+id);
         $('#user'+id).replaceWith(getUserBox(user))
     }).fail(function (output) {
         console.log(output);
-        closeModal();
         alert('Error while retrieving data');
     });
 

@@ -69,6 +69,7 @@ a:hover {
 .boxHeader {
     /*font-size: 1.5em;*/
     /*Remove default margin*/
+    padding: 0 70px 0 0;
     margin: 0;
 }
 .boxContent {
