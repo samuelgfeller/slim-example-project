@@ -61,7 +61,6 @@ function loadAllUsers() {
         dataType: "json",
         type: 'get',
     }).done(function (output) {
-        console.log(output);
         // output = JSON.parse(output);
         if (output !== '') {
             if (output === '[]') {
@@ -103,11 +102,11 @@ function getUserBox(jsonData){
 function openCreateUserForm() {
     let header = '<h2>Create user</h2>';
     let body = '<form action="users" class="blueForm modalForm" method="post" autocomplete="on">' +
-        '<label for="createEmailInp">Email</label>' +
+        '<b><label for="createNameInp">Name</label></b>' +
+        '<input type="text" name="name" id="createNameInp" placeholder="John Doe" maxlength="200" required>'+
+        '<b><label for="createEmailInp">Email</label></b>' +
         '<input type="email" name="email" id="createEmailInp" placeholder="your@email.com"' +
-        '       maxlength="254" required>' +
-        '<label for="registerPassword1Inp">New password</label>' +
-        '<input type="password" name="password" id="createPasswordInp" required>';
+        '       maxlength="254" required>';
     let footer = '<button type="button" id="submitBtnCreateUser" class="submitBtn modalSubmitBtn">Create user</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
@@ -115,25 +114,29 @@ function openCreateUserForm() {
 }
 
 function submitCreateUser() {
+    console.log(document.getElementById('createEmailInp').value);
+    console.log($('#createEmailInp').val());
+    console.log(JSON.stringify({email: $('#createEmailInp').val()}));
+
     $.ajax({
         url: 'users',
         type: 'post',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
+            name: $('#createNameInp').val(),
             email: $('#createEmailInp').val(),
-            name: $('#createPasswordInp').val(),
         }),
     }).done(function (output) {
         closeModal();
         if (output.success === true || output.success === 'true') {
-            silentReloadUser();
+            loadAllUsers();
         } else {
             alert('Update: ' + output.success);
         }
     }).fail(function (output) {
         console.log(output);
-        alert('Error while updating');
+        alert('Error while adding');
     });
 }
 
@@ -157,11 +160,11 @@ function openEditUserForm(id) {
 
     // Retrieve actual user infos and populate input
     $.ajax({
+        dataType: "json",
         url: 'users/' + id,
         type: 'get',
     }).done(function (output) {
-        console.log(output);
-        let user = JSON.parse(output);
+        let user = output;
         $('#updateNameInp').val(user.name);
         $('#updateEmailInp').val(user.email);
         $('#submitBtnEditUser').attr('data-id', user.id);
@@ -178,11 +181,17 @@ function openEditUserForm(id) {
  * @param id
  */
 function submitUpdatedUser(id) {
+/*    let val = $('#updateEmailInp').val();
+    $('#updateEmailInp').val(val+'ö');
+    console.log(document.getElementById('updateEmailInp').value);
+    console.log($('#updateEmailInp').val());
+    console.log(decodeURIComponent(escape($('#updateEmailInp').val())));*/
+
     $.ajax({
         url: 'users/' + id,
         // url: 'users',
         type: 'put',
-        // dataType: "json",
+        dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             email: $('#updateEmailInp').val(),
@@ -227,16 +236,16 @@ function deleteUser(id) {
 
 function reloadUser(id){
     $.ajax({
+        dataType: "json",
         url: 'users/' + id,
         type: 'get',
     }).done(function (output) {
-        let user = JSON.parse(output);
+        let user = output;
+        console.log(output);
         hideLoader('loaderForUser'+id);
         $('#user'+id).replaceWith(getUserBox(user))
     }).fail(function (output) {
         console.log(output);
         alert('Error while retrieving data');
     });
-
-
 }

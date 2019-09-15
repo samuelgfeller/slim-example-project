@@ -55,14 +55,14 @@ class UserRepository extends DataManager implements UserRepositoryInterface
     {
         return $this->getById($id,$this->fields);
     }
-    
+
     /**
      * Insert user in database
      *
      * @param array $data
-     * @return int lastInsertId
+     * @return string lastInsertId
      */
-    public function insertUser(array $data): int {
+    public function insertUser(array $data): string {
         return $this->insert($data);
     }
     

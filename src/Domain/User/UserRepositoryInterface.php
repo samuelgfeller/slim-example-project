@@ -39,7 +39,7 @@ interface UserRepositoryInterface
      * @param array $data
      * @return int lastInsertId
      */
-    public function insertUser(array $data): int;
+    public function insertUser(array $data): string;
     
     /**
      * Delete user from database

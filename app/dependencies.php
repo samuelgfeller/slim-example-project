@@ -29,6 +29,7 @@ return function (ContainerBuilder $containerBuilder) {
         },
         Connection::class => function (ContainerInterface $c) {
             $settings = $c->get('settings')['db'];
+            $settings['encoding'] = 'UTF8';
             $driver = new Mysql($settings);
             return new Connection(['driver' => $driver]);
         },

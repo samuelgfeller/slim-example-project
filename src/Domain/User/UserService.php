@@ -21,6 +21,17 @@ class UserService {
         return $this->userRepositoryInterface->findUserById($id);
     }
 
+    /**
+     * Insert user in database
+     *
+     * @param $data
+     * @return string
+     */
+    public function createUser($data): string
+    {
+        return $this->userRepositoryInterface->insertUser($data);
+    }
+
     public function updateUser($id,$name,$email): bool
     {
         $data = [
