@@ -22,12 +22,13 @@ abstract class Controller
     /**
      * @param Response $response
      * @param array|object|null $data
+     * @param int $status
      * @return Response
      */
-    protected function respondWithJson(Response $response, $data = null)
+    protected function respondWithJson(Response $response, $data = null, int $status = 200)
     {
         $response->getBody()->write(json_encode($data));
-        $response->withStatus(200);
+        $response->withStatus($status);
         return $response->withHeader('Content-Type', 'application/json');
     }
 

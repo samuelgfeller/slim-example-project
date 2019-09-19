@@ -29,26 +29,6 @@ $(document).ready(function () {
         let id = $(this).data('id');
         deleteUser(id);
     });
-
-    // $('#usersDiv').on('click', '.submitBtnEditUser', function () {
-    //     $('#updateNameInp').val()
-    //     $('#updateEmailInp').val()
-    //
-    //     $.ajax({
-    //         url: 'users/' + id,
-    //         type: 'put',
-    //     }).done(function (output) {
-    //         if (output === 'success') {
-    //             $('#user' + id).remove();
-    //         } else {
-    //             console.log(output);
-    //             alert('Output does not equal the expected string "success"');
-    //         }
-    //     }).fail(function (output) {
-    //         console.log(output);
-    //         alert('Error while deleting');
-    //     });
-    // });
 });
 
 /**
@@ -114,10 +94,6 @@ function openCreateUserForm() {
 }
 
 function submitCreateUser() {
-    console.log(document.getElementById('createEmailInp').value);
-    console.log($('#createEmailInp').val());
-    console.log(JSON.stringify({email: $('#createEmailInp').val()}));
-
     $.ajax({
         url: 'users',
         type: 'post',
@@ -148,7 +124,7 @@ function submitCreateUser() {
 function openEditUserForm(id) {
     let header = '<h2>Edit user</h2>';
     let body = '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
-        '<b><label for="updateNameInp"">Name: </label></b>' +
+        '<b><label for="updateNameInp">Name: </label></b>' +
         '<input type="text" name="name" id="updateNameInp" value="" placeholder="loading..." maxlength="200" required>' +
         '<b><label for="updateEmailInp">Email: </label></b>' +
         '<input type="email" name="email" id="updateEmailInp" value="" placeholder="loading..." maxlength="254" required>';
@@ -181,12 +157,6 @@ function openEditUserForm(id) {
  * @param id
  */
 function submitUpdatedUser(id) {
-/*    let val = $('#updateEmailInp').val();
-    $('#updateEmailInp').val(val+'ö');
-    console.log(document.getElementById('updateEmailInp').value);
-    console.log($('#updateEmailInp').val());
-    console.log(decodeURIComponent(escape($('#updateEmailInp').val())));*/
-
     $.ajax({
         url: 'users/' + id,
         // url: 'users',

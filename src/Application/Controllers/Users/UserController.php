@@ -52,8 +52,21 @@ class UserController extends Controller {
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $response->getBody()->write('DELETE request');
-        return $response;
+        $userId = $args['id'];
+/* https://github.com/D4rkMindz/roast.li/blob/master/src/Controller/UserController.php
+$validationResult = $this->userValidation->validateDeletion($userId, $this->getUserId());
+        if ($validationResult->fails()) {
+            $responseData = [
+                'success' => false,
+                'validation' => $validationResult->toArray(),
+            ];
+            return $this->respondWithJson($response, $responseData, 422);
+        }*/
+        $deleted = $this->userService->deleteUser($userId);
+        if ($deleted) {
+            return $this->respondWithJson($response, ['success' => true]);
+        }
+        return $this->respondWithJson($response, ['success' => false]);
     }
 
     public function create(Request $request, Response $response, array $args): Response

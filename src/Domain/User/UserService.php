@@ -41,5 +41,10 @@ class UserService {
         return $this->userRepositoryInterface->updateuser($data,$id);
     }
 
+    public function deleteUser($id): bool
+    {
+        return $this->userRepositoryInterface->deleteUser($id);
+    }
+
 
 }
