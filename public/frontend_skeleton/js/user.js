@@ -1,5 +1,5 @@
-$(document).ready(function () {
 
+$(document).ready(function () {
     loadAllUsers();
 
     // Edit user open form modal
@@ -31,13 +31,14 @@ $(document).ready(function () {
     });
 });
 
+
 /**
  * Populate #usersDiv with all users in database
  */
 function loadAllUsers() {
     //Load users
     $.ajax({
-        url: 'users',
+        url: config.api_url+'users',
         dataType: "json",
         type: 'get',
     }).done(function (output) {
@@ -63,8 +64,8 @@ function loadAllUsers() {
 function getUserBox(jsonData){
     return $('<div class="singleBox" id="user' + jsonData.id + '">' +
         '<div class="boxContent">' +
-        '<img src="frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
-        '<img src="frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + jsonData.id + '" alt="del">' +
+        '<img src="/frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
+        '<img src="/frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + jsonData.id + '" alt="del">' +
         '<div class="loader" id="loaderForUser'+jsonData.id+'"></div>'+
         '<h3 class="boxHeader">' + jsonData.name + '</h3>' +
         '<div id="boxInnerContent'+jsonData.id+'">' +
@@ -95,7 +96,7 @@ function openCreateUserForm() {
 
 function submitCreateUser() {
     $.ajax({
-        url: 'users',
+        url: config.api_url+'users',
         type: 'post',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -137,7 +138,7 @@ function openEditUserForm(id) {
     // Retrieve actual user infos and populate input
     $.ajax({
         dataType: "json",
-        url: 'users/' + id,
+        url: config.api_url+'users/' + id,
         type: 'get',
     }).done(function (output) {
         let user = output;
@@ -158,7 +159,7 @@ function openEditUserForm(id) {
  */
 function submitUpdatedUser(id) {
     $.ajax({
-        url: 'users/' + id,
+        url: config.api_url+'users/' + id,
         // url: 'users',
         type: 'put',
         dataType: "json",
@@ -189,7 +190,7 @@ function submitUpdatedUser(id) {
 function deleteUser(id) {
     if (confirm('Are you sure that you want to delete this post?')) {
         $.ajax({
-            url: 'users/' + id,
+            url: config.api_url+'users/' + id,
             type: 'delete',
         }).done(function (output) {
             if (output.success === true || output.success === 'true') {
@@ -207,7 +208,7 @@ function deleteUser(id) {
 function reloadUser(id){
     $.ajax({
         dataType: "json",
-        url: 'users/' + id,
+        url: config.api_url+'users/' + id,
         type: 'get',
     }).done(function (output) {
         let user = output;

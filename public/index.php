@@ -12,7 +12,7 @@ use DI\ContainerBuilder;
 // todo add posts and user roles
 // todo testing junit
 // todo translation
-// todo user frontend framework
+// todo use frontend framework
 
 
 require __DIR__ . '/../vendor/autoload.php';
