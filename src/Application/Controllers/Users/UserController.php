@@ -5,6 +5,7 @@ namespace App\Controllers\Users;
 use App\Application\Controllers\Controller;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\UserService;
+use App\Domain\User\UserValidation;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -13,10 +14,12 @@ use Slim\Handlers\Strategies\RequestHandler;
 class UserController extends Controller {
 
     protected $userService;
+    protected $userValidation;
 
-    public function __construct(LoggerInterface $logger, UserService $userService) {
+    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation) {
         parent::__construct($logger);
         $this->userService = $userService;
+        $this->userValidation = $userValidation;
     }
 
     public function get(Request $request, Response $response, array $args): Response
@@ -73,14 +76,26 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
     {
         $data = $request->getParsedBody();
 
-        // todo validation
-
-        $validatedData = [
+        $userData = [
             'name' => $data['name'],
             'email' => $data['email']
         ];
 
-        $insertId = $this->userService->createUser($validatedData);
+        // todo validation
+//        $validationResult = $this->userValidation->validateRegister($userData);
+/*        if ($validationResult->fails()) {
+            $responseData = [
+                'success' => false,
+                'validation' => $validationResult->toArray(),
+            ];
+
+            return $this->json($response, $responseData, 422);
+        }
+
+        $userId = $this->userRepository->createUser();*/
+
+
+        $insertId = $this->userService->createUser($userData);
         if (null !== $insertId) {
             return $this->respondWithJson($response, ['success' => true]);
         }
