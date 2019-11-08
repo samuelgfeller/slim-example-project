@@ -7,6 +7,14 @@ ini_set('xdebug.var_display_max_data', '1024');
 use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 
+// todo validation - return error
+// todo login / calls via token jsfw
+// todo add posts and user roles
+// todo testing junit
+// todo translation
+// todo user frontend framework
+
+
 require __DIR__ . '/../vendor/autoload.php';
 
 /*
