@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $('.pageContent').on('click', '.closeModal', function () {
+    $('#pageContent').on('click', '.closeModal', function () {
         $('.modal').remove();
     });
-    $('.pageContent').on('click', '.modal', function (e) {
+    $('#pageContent').on('click', '.modal', function (e) {
         if ($('.modal').text() == e.target.textContent) {
             $('.modal').remove();
         }

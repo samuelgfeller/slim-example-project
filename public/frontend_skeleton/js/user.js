@@ -1,7 +1,5 @@
 
 $(document).ready(function () {
-    loadAllUsers();
-
     // Edit user open form modal
     $('#createUserBtn').on('click', function () {
         openCreateUserForm();
