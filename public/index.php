@@ -80,6 +80,12 @@ $app->addRoutingMiddleware();
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 
+// Frontend routing todo remove when separating frontend
+$routesFrontend = require __DIR__ . '/../app/routes_frontend.php';
+$routesFrontend($app);
+
+
+
 
 /*
  * Add Error Handling Middleware

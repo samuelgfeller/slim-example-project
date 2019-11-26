@@ -7,27 +7,6 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    //    Frontend (temporary)
-    $app->get('/', function (Request $request, Response $response, array $args) {
-        require_once __DIR__ . '/../public/frontend_skeleton/index.html';
-        return $response;
-    });
-    $app->group('/frontend', function (RouteCollectorProxy $group)  {
-        $group->get('', function (Request $request, Response $response, array $args) {
-            require_once __DIR__ . '/../public/frontend_skeleton/index.html';
-            return $response;
-        });
-        $group->get('/userlist', function (Request $request, Response $response, array $args) {
-            require_once __DIR__ . '/../public/frontend_skeleton/index.html';
-            return $response;
-        });
-    });
-
-
-
-
-
-
     $app->group('/users', function (RouteCollectorProxy $group)  {
         $group->get('', UserController::class.':list');
         $group->get('/{id:[0-9]+}', UserController::class.':get');
