@@ -100,6 +100,14 @@ a:hover {
     word-break: break-word;
 }
 
+/*Login*/
+.discreteLink{
+    text-decoration: none;
+    font-style: italic;
+    color: #575757;
+    font-size: 0.9em;
+}
+
 .delIcon {
     display: none;
     width: 20px;;
