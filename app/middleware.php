@@ -7,9 +7,9 @@ return function (App $app) {
 
     $settings = $app->getContainer()->get('settings');
 
-
     $app->add(SessionMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
+
     $app->add(new \Tuupola\Middleware\JwtAuthentication([
         "path" => "/api", /* or ["/api", "/admin"] */
         //"attribute" => "decoded_token_data",
