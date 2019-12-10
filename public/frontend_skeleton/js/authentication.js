@@ -1,18 +1,20 @@
 $(document).ready(function () {
 
-    $('#updatePasswordInp1, #updatePasswordInp2').on('keyup', function () {
+    /*$('#updatePasswordInp1, #updatePasswordInp2').on('keyup', function () {
         checkIfInputHaveSameVal($('#updatePasswordInp1'), $('#updatePasswordInp2'), $('#submitChangePasswordBtn'));
-    });
+    });*/
 
-    $('#setNewPasswordInp1, #setNewPasswordInp2').on('keyup', function () {
-        checkIfInputHaveSameVal($('#setNewPasswordInp1'), $('#setNewPasswordInp2'), $('#submitSetNewPasswordBtn'));
+    $('#registerPassword1Inp, #registerPassword2Inp').on('keyup', function () {
+        checkIfInputHaveSameVal($('#registerPassword1Inp'), $('#registerPassword2Inp'), $('#registerSubmitBtn'));
     });
 });
 
+
 function checkIfInputHaveSameVal(inp1, inp2, submitBtn) {
-    if (inp1.val() === inp2.val()) {
+    if (inp1.val() === inp2.val() && inp1.val() !== "") {
         submitBtn.attr("disabled", false);
     } else {
         submitBtn.attr("disabled", true);
     }
 }
+
