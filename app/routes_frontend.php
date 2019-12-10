@@ -30,6 +30,10 @@ return function (App $app) {
             require_once __DIR__ . '/../public/frontend_skeleton/pages/login.html';
             return $response;
         });
+        $group->get('/login/success', function (Request $request, Response $response, array $args) {
+            require_once __DIR__ . '/../public/frontend_skeleton/pages/login.html';
+            return $response;
+        });
         $group->get('/register', function (Request $request, Response $response, array $args) {
             require_once __DIR__ . '/../public/frontend_skeleton/pages/register.html';
             return $response;

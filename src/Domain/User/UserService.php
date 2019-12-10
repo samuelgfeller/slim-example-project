@@ -21,6 +21,11 @@ class UserService {
         return $this->userRepositoryInterface->findUserById($id);
     }
 
+    public function findUserByEmail($email): array
+    {
+        return $this->userRepositoryInterface->findUserByEmail($email);
+    }
+
     /**
      * Insert user in database
      *

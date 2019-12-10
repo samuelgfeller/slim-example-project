@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Handlers\Strategies\RequestHandler;
+use Firebase\JWT\JWT;
 
 class UserController extends Controller {
 
@@ -77,8 +78,9 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
         $data = $request->getParsedBody();
 
         $userData = [
-            'name' => $data['name'],
-            'email' => $data['email']
+            'email' => $data['email'],
+            'password1' => $data['password1'],
+            'password2' => $data['password2'],
         ];
 
         $validationResult = $this->userValidation->validateUserRegistration($userData);
@@ -90,7 +92,6 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
 
             return $this->respondWithJson($response, $responseData, 422);
         }
-
         $insertId = $this->userService->createUser($userData);
 
         if (null !== $insertId) {

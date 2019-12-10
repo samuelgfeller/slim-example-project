@@ -6,7 +6,8 @@
         "php-di/php-di": "^6.0",
         "ext-pdo": "*",
         "ext-json": "*",
-        "cakephp/database": "^3.8"
+        "cakephp/database": "^3.8",
+        "tuupola/slim-jwt-auth": "^3.4"
     },
     "autoload": {
         "psr-4": {
