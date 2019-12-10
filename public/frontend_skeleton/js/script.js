@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
 });
+
+
 function showLoader(containerId) {
     let html = '<span></span> ' +
         '<span></span> ' +

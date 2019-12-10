@@ -73,3 +73,10 @@
 .errSpan{
     color: #c0000a;
 }
+
+.inputWarning{
+    font-weight: 400;
+    margin-top: 10px;
+    display: inline-block;
+    color: #d66500;
+}

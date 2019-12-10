@@ -4,20 +4,68 @@ $(document).ready(function () {
         checkIfInputHaveSameVal($('#updatePasswordInp1'), $('#updatePasswordInp2'), $('#submitChangePasswordBtn'));
     });*/
 
-    $('#registerPassword1Inp, #registerPassword2Inp').on('keyup', function () {
-        checkPwnForBreaches($('#registerPassword1Inp').val(), $('#registerSubmitBtn'));
-        checkIfInputHaveSameVal($('#registerPassword1Inp'), $('#registerPassword2Inp'), $('#registerSubmitBtn'));
+    let registerPassword1Inp = $('#registerPassword1Inp');
+    let registerPassword2Inp = $('#registerPassword2Inp');
+
+    $($('#registerPassword1Inp, #registerPassword2Inp')).on('keyup', function () {
+        let submitBtn = $('#registerSubmitBtn');
+        console.log(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp));
+        if(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp)){
+            submitBtn.attr("disabled", false);
+        }else{
+            submitBtn.attr("disabled", true);
+        }
     });
+
+    // Warning that password is unsafe
+    $(registerPassword1Inp).on('change', function () {
+        // check if warning already appended
+        if (isBreached(registerPassword1Inp.val())){
+            if ($('#pwnedPasswordWarning').length === 0) {
+                registerPassword1Inp.after('<span class="inputWarning" id="pwnedPasswordWarning">This password is known to have been leaked and is unsafe to use</span>');
+            }
+        }else{
+            $('#pwnedPasswordWarning').remove();
+        }
+    });
+
+
 });
 
-
-function checkIfInputHaveSameVal(inp1, inp2, submitBtn) {
-    if (inp1.val() === inp2.val() && inp1.val() !== "") {
-        submitBtn.attr("disabled", false);
-    } else {
-        submitBtn.attr("disabled", true);
-    }
+/**
+ * Checks if given input objects have same values
+ * @param inp1
+ * @param inp2
+ * @returns {boolean}
+ */
+function inputHaveSameVal(inp1, inp2) {
+    return inp1.val() === inp2.val() && inp1.val() !== "";
 }
+
+/**
+ * Makes request to
+ *
+ * @param password
+ * @returns {boolean}
+ */
+function isBreached(password) {
+    var pwhash = sha1(password);
+    var hashprefix = pwhash.substr(0, 5);
+    var hashsuffix = pwhash.substr(5);
+    let result = false;
+
+    // todo implement async function to return after result https://stackoverflow.com/a/5316805/9013718
+    $.ajax({
+        url:`https://api.pwnedpasswords.com/range/${hashprefix}`,
+        async: false,
+        success:function(data) {
+            result = data.toLowerCase().includes(hashsuffix);
+        }
+    });
+
+    return result;
+}
+
 
 function sha1(msg) {
     function rotate_left(n, s) {
@@ -154,17 +202,3 @@ function sha1(msg) {
     return temp.toLowerCase();
 };
 
-function checkPwnForBreaches(password, submitBtn){
-    var pwhash = sha1(password);
-    var hashprefix = pwhash.substr(0, 5);
-    var hashsuffix = pwhash.substr(5);
-    $.get(
-        `https://api.pwnedpasswords.com/range/${hashprefix}`,
-        function(data,status) {
-            if(data.toLowerCase().includes(hashsuffix)){
-                submitBtn.attr("disabled", true);
-            } else {
-                submitBtn.attr("disabled", false);
-            }
-        });
-};
