@@ -120,10 +120,8 @@ class UserValidation extends AppValidation
      * @param $userData
      * @return ValidationResult
      */
-    public function validateRegister($userData): ValidationResult {
-        $validationResult = new ValidationResult('Your registration is not correct');
-        $this->validateFirstname($userData['firstname'], $validationResult);
-        $this->validateLastname($userData['lastname'], $validationResult);
+    public function validateUserRegistration($userData): ValidationResult {
+        $validationResult = new ValidationResult('There is something in your registration data which couldn\'t be validated');
         $this->validateEmail($userData['email'], $validationResult);
         $this->validatePassword($userData['password'], $validationResult);
 
@@ -193,12 +191,7 @@ class UserValidation extends AppValidation
      */
     private function validatePassword(string $password, ValidationResult $validationResult)
     {
-        $this->validateLengthMax($password, 'password', $validationResult);
-        $this->validateLengthMin($password, 'password', $validationResult, 6);
-        if (!preg_match('/(?=.*[A-Z])(?=.*[a-z]).*/', $password)) {
-            $validationResult->setError('password',
-                __('Password must contain at least one uppercase and one lowercase letter'));
-        }
+        $this->validateLengthMin($password, 'password', $validationResult, 3);
     }
 
     /**
@@ -207,13 +200,18 @@ class UserValidation extends AppValidation
      * @param string $email
      * @param ValidationResult $validationResult
      */
-    private function validateEmail(string $email, ValidationResult $validationResult)
+    private function validateEmail(string $email, ValidationResult $validationResult): void
     {
-        if (!is_email($email)) {
-            $validationResult->setError('email', __('Not a valid email address'));
-        }
-        if ($this->userRepositoryInterface->existsUserByEmail($email)) {
-            $validationResult->setError('email', __('Email already registered'));
+        if ($validEmail = filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ($this->userRepositoryInterface->findUserByEmail($validEmail)) {
+                $this->logger->info('Account creation tried with existing email: ' . $validEmail);
+
+                // todo implement function to tell client that register success without actually writing something in db;
+                // todo send email to user to say that someone registered with his email and that he has already an account
+                // todo in email provide link to login and how the password can be changed
+            }
+        }else{
+            $validationResult->setError('email', 'Email address could not be validated');
         }
     }
 

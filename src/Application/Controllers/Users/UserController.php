@@ -81,21 +81,18 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
             'email' => $data['email']
         ];
 
-        // todo validation
-//        $validationResult = $this->userValidation->validateRegister($userData);
-/*        if ($validationResult->fails()) {
+        $validationResult = $this->userValidation->validateUserRegistration($userData);
+        if ($validationResult->fails()) {
             $responseData = [
                 'success' => false,
                 'validation' => $validationResult->toArray(),
             ];
 
-            return $this->json($response, $responseData, 422);
+            return $this->respondWithJson($response, $responseData, 422);
         }
 
-        $userId = $this->userRepository->createUser();*/
-
-
         $insertId = $this->userService->createUser($userData);
+
         if (null !== $insertId) {
             return $this->respondWithJson($response, ['success' => true]);
         }

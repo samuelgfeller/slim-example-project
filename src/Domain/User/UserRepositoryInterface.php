@@ -22,6 +22,15 @@ interface UserRepositoryInterface
      * @return array
      */
     public function findUserById(int $id): array;
+
+    /**
+     * Return user with given email if it exists
+     * otherwise null
+     *
+     * @param string $email
+     * @return array
+     */
+    public function findUserByEmail(string $email): array;
     
     /**
      * Retrieve user from database
@@ -58,4 +67,6 @@ interface UserRepositoryInterface
      * @return bool
      */
     public function updateUser(array $data, int $id): bool;
+
+
 }
