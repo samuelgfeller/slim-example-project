@@ -65,7 +65,7 @@ abstract class DataManager
     }
 
     /**
-     * Searches entry in table with has given value at given column
+     * Searches entry in table with given value at given column
      *
      * @param string $column
      * @param $value

@@ -42,6 +42,18 @@ class UserRepository extends DataManager implements UserRepositoryInterface
     {
         return $this->findById($id,$this->fields);
     }
+
+    /**
+     * Return user with given id if it exists
+     * otherwise null
+     *
+     * @param string $email
+     * @return array
+     */
+    public function findUserByEmail(string $email): array
+    {
+        return $this->findBy('email', $email,$this->fields);
+    }
     
     /**
      * Retrieve user from database
