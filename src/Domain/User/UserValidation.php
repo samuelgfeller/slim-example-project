@@ -121,10 +121,9 @@ class UserValidation extends AppValidation
      * @return ValidationResult
      */
     public function validateUserRegistration($userData): ValidationResult {
-        $validationResult = new ValidationResult('There is something in your registration data which couldn\'t be validated');
+        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
         $this->validateEmail($userData['email'], $validationResult);
-        $this->validatePassword($userData['password'], $validationResult);
-
+        $this->validatePasswords([$userData['password1'],$userData['password2']], $validationResult);
         return $validationResult;
     }
 
@@ -186,12 +185,18 @@ class UserValidation extends AppValidation
     /**
      * Validate password
      *
-     * @param string $password
+     * @param array $passwords [$password1, $password2]
      * @param ValidationResult $validationResult
      */
-    private function validatePassword(string $password, ValidationResult $validationResult)
+    private function validatePasswords(array $passwords, ValidationResult $validationResult)
     {
-        $this->validateLengthMin($password, 'password', $validationResult, 3);
+
+        if ($passwords[0] !== $passwords[1]) {
+            $validationResult->setError('password2', 'Passwords do not match');
+        }
+        $this->validateLengthMin($passwords[0], 'password1', $validationResult, 3);
+        $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
+
     }
 
     /**

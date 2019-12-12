@@ -28,14 +28,14 @@
         </div>
 
         <div class="formBox">
-<!--           todo low prio Add automated redirect after success -->
+            <!--           todo low prio Add automated redirect after success -->
             <form action="login/success" class="blueForm" method="post" autocomplete="on">
-<!--           todo high prio add wrong credentials functionality
-<?php if (!empty($errClassName)) { ?>
-                <span class="errSpan">Wrong credentials. Please try again.</span> <br> <br>
-                <?php } ?>-->
+                <!--           todo high prio add wrong credentials functionality
+                <?php if (!empty($errClassName)) { ?>
+                                <span class="errSpan">Wrong credentials. Please try again.</span> <br> <br>
+                                <?php } ?>-->
                 <label for="registerEmailInp">Email</label>
-<!--             todo normal add error class ("wrongCredInput") to both inputs-->
+                <!--             todo normal add error class ("wrongCredInput") to both inputs-->
                 <input type="email" name="email" id="registerEmailInp" class=""
                        placeholder="your@email.com"
                        maxlength="254"
@@ -47,10 +47,7 @@
 
                 <input type="submit" value="Login">
             </form>
-            <br>Not registered? <a href="/register">Register</a>
-        </div>
-
-
+            <br>Not registered? <a href="/register">Register</a></div>
     </div>
 </div>
 <!--<script
@@ -62,6 +59,5 @@
 <script src="/frontend_skeleton/js/pageContentManager.js"></script>
 <script src="/frontend_skeleton/js/script.js"></script>
 <script src="/frontend_skeleton/js/modal.js"></script>
-
 </body>
 </html>
