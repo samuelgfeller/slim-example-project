@@ -6,6 +6,8 @@ use App\Application\Controllers\Controller;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -73,31 +75,33 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
         return $this->respondWithJson($response, ['success' => false]);
     }
 
-    public function create(Request $request, Response $response, array $args): Response
+    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $request->getParsedBody();
-
-        $userData = [
-            'email' => $data['email'],
-            'password1' => $data['password1'],
-            'password2' => $data['password2'],
-        ];
-
-        $validationResult = $this->userValidation->validateUserRegistration($userData);
-        if ($validationResult->fails()) {
-            $responseData = [
-                'success' => false,
-                'validation' => $validationResult->toArray(),
+        if(null !== $data) {
+            $userData = [
+                'email' => $data['email'],
+                'password1' => $data['password1'],
+                'password2' => $data['password2'],
             ];
 
-            return $this->respondWithJson($response, $responseData, 422);
-        }
-        $insertId = $this->userService->createUser($userData);
+            $validationResult = $this->userValidation->validateUserRegistration($userData);
+            if ($validationResult->fails()) {
+                $responseData = [
+                    'success' => false,
+                    'validation' => $validationResult->toArray(),
+                ];
 
-        if (null !== $insertId) {
-            return $this->respondWithJson($response, ['success' => true]);
+                return $this->respondWithJson($response, $responseData, 422);
+            }
+            $insertId = $this->userService->createUser($userData);
+
+            if (null !== $insertId) {
+                return $this->respondWithJson($response, ['success' => true]);
+            }
+            return $this->respondWithJson($response, ['success' => false, 'message' => 'User could not be inserted']);
         }
-        return $this->respondWithJson($response, ['success' => false]);
+        return $this->respondWithJson($response, ['success' => false, 'message' => 'Request body empty']);
     }
 
     public function list(Request $request, Response $response, array $args) {

@@ -190,7 +190,6 @@ class UserValidation extends AppValidation
      */
     private function validatePasswords(array $passwords, ValidationResult $validationResult)
     {
-
         if ($passwords[0] !== $passwords[1]) {
             $validationResult->setError('password2', 'Passwords do not match');
         }
