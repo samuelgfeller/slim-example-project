@@ -10,12 +10,11 @@ use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
 interface PostRepositoryInterface
 {
     /**
-     * @return Post[]
+     * @return array[]
      */
     public function findAllPosts(): array;
-    
     /**
-     * Return user with given id if it exists
+     * Return post with given id if it exists
      * otherwise null
      *
      * @param int $id
@@ -23,17 +22,9 @@ interface PostRepositoryInterface
      */
     public function findPostById(int $id): array;
 
-    /**
-     * Return user with given email if it exists
-     * otherwise null
-     *
-     * @param string $email
-     * @return array
-     */
-    public function findPostByEmail(string $email): array;
     
     /**
-     * Retrieve user from database
+     * Retrieve post from database
      * If not found error is thrown
      *
      * @param int $id
@@ -43,7 +34,7 @@ interface PostRepositoryInterface
     public function getPostById(int $id): array;
     
     /**
-     * Insert user in database
+     * Insert post in database
      *
      * @param array $data
      * @return string lastInsertId
@@ -51,7 +42,7 @@ interface PostRepositoryInterface
     public function insertPost(array $data): string;
     
     /**
-     * Delete user from database
+     * Delete post from database
      *
      * @param int $id
      * @return bool
@@ -59,7 +50,7 @@ interface PostRepositoryInterface
     public function deletePost(int $id): bool;
     
     /**
-     * Update values from user
+     * Update values from post
      * Example of $data: ['name' => 'New name']
      *
      * @param int $id
