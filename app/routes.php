@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\AuthController;
+use App\Controllers\Posts\PostController;
 use App\Controllers\Users\UserController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -21,6 +22,16 @@ return function (App $app) {
         $group->delete('/{id:[0-9]+}', UserController::class . ':delete');
         $group->post('', UserController::class . ':create');
     });
+
+    $app->group('/posts', function (RouteCollectorProxy $group) {
+        $group->get('', PostController::class . ':list');
+        $group->get('/{id:[0-9]+}', PostController::class . ':get');
+        $group->put('/{id:[0-9]+}', PostController::class . ':update');
+        $group->delete('/{id:[0-9]+}', PostController::class . ':delete');
+        $group->post('', PostController::class . ':create');
+    });
+
+
 
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
