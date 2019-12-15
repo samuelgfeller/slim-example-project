@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\User\UserRepositoryInterface;
+use App\Infrastructure\Persistence\Post\PostRepository;
 use App\Infrastructure\Persistence\User\UserRepository;
 use Cake\Database\Connection;
 use DI\ContainerBuilder;
