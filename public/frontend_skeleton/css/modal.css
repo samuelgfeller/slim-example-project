@@ -87,3 +87,22 @@ body {
         opacity: 1
     }
 }
+
+@media only screen and (max-width: 1100px) {
+    .modal-content  {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .modal-content  {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .modal-content  {
+        width: 95%;
+    }
+}
+
