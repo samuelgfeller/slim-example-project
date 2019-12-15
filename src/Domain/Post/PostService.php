@@ -23,11 +23,6 @@ class PostService {
         return $this->postRepositoryInterface->findPostById($id);
     }
 
-    public function findPostByEmail($email): array
-    {
-        return $this->postRepositoryInterface->findPostByEmail($email);
-    }
-
     /**
      * Insert post in database
      *

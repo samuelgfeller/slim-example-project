@@ -8,7 +8,7 @@ $(document).ready(function () {
     });
 
     // Send update request
-    $('#createPostDiv').on('click', '#submitBtnCreateUser', function () {
+    $('#createPostDiv').on('click', '#submitBtnCreatePost', function () {
         submitCreatePost();
     });
 
@@ -19,12 +19,12 @@ $(document).ready(function () {
     });
 
     // Send update request
-    $('#postsDiv').on('click', '#submitBtnEditUser', function () {
+    $('#postsDiv').on('click', '#submitBtnEditPost', function () {
         let id = $(this).data('id');
         submitUpdatedPost(id);
     });
 
-    // Delete user
+    // Delete post
     $('#postsDiv').on('click', '.delIcon', function () {
         let id = $(this).data('id');
         deletePost(id);
@@ -33,10 +33,10 @@ $(document).ready(function () {
 
 
 /**
- * Populate #usersDiv with all users in database
+ * Populate #postsDiv with all posts in database
  */
 function loadAllPosts() {
-    //Load users
+    //Load posts
     $.ajax({
         url: config.api_url+'posts',
         dataType: "json",
@@ -78,12 +78,12 @@ function getPostBox(jsonData){
 }
 
 /**
- * Open modal to create a user
+ * Open modal to create a post
  */
 function openCreatePostForm() {
     let header = '<h2>Post</h2>';
     let body = '<form action="posts" class="blueForm modalForm" method="post" autocomplete="on">' +
-        '<textarea rows="4" cols="50" name="message" id="createMessageTextarea" placeholder="Your message here." maxlength="500" required></textarea>';
+        '<textarea rows="4" cols="50" name="message" id="createMessageTextarea" placeholder="Your message here." minlength="4" maxlength="500" required></textarea>';
     let footer = '<button type="button" id="submitBtnCreatePost" class="submitBtn modalSubmitBtn">Create post</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
@@ -119,15 +119,15 @@ function submitCreatePost() {
  */
 function openEditPostForm(id) {
     let header = '<h2>Edit post</h2>';
-    let body = '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
-        '<textarea name="message" id="createMessageTextarea" placeholder="Your message here." maxlength="500" required>';
+    let body = '<form action="posts/' + id + '" class="blueForm modalForm" autocomplete="on">' +
+        '<textarea name="message" id="createMessageTextarea" placeholder="Your message here." minlength="4" maxlength="500" required>';
     let footer = '<button type="button" id="submitBtnEditPost" data-id="" class="submitBtn modalSubmitBtn">Update post</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
 
     createModal(header, body, footer, $('#postsDiv'));
 
-    // Retrieve actual user infos and populate input
+    // Retrieve actual post infos and populate input
     $.ajax({
         dataType: "json",
         url: config.api_url+'posts/' + id,
@@ -150,7 +150,7 @@ function openEditPostForm(id) {
 function submitUpdatedPost(id) {
     $.ajax({
         url: config.api_url+'posts/' + id,
-        // url: 'users',
+        // url: 'posts',
         type: 'put',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -160,8 +160,8 @@ function submitUpdatedPost(id) {
     }).done(function (output) {
         closeModal();
         if (output.success === true || output.success === 'true') {
-            showLoader('loaderForUser'+id);
-            reloadUser(id);
+            showLoader('loaderForPost'+id);
+            reloadPost(id);
         } else {
             console.log(output.success);
         }

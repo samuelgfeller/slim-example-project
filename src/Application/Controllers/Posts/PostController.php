@@ -6,6 +6,7 @@ use App\Application\Controllers\Controller;
 use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\Post\PostService;
 use App\Domain\Post\PostValidation;
+use App\Domain\User\UserService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -19,7 +20,7 @@ class PostController extends Controller {
     protected $postService;
     protected $postValidation;
 
-    public function __construct(LoggerInterface $logger, PostService $postService, PostValidation $postValidation) {
+    public function __construct(LoggerInterface $logger, PostService $postService, PostValidation $postValidation, UserService $postValidation) {
         parent::__construct($logger);
         $this->postService = $postService;
         $this->postValidation = $postValidation;
@@ -30,9 +31,9 @@ class PostController extends Controller {
         $id = $args['id'];
         $post = $this->postService->findPost($id);
 //        var_dump($this->container->get('logger'));
-//        $response->getBody()->write('GET request');
 
-        $this->logger->info('posts/' . $id . ' has been called');
+//        $user = $this->userService
+//        $this->logger->info('posts/' . $id . ' has been called');
 //        var_dump($this->logger);
         return $this->respondWithJson($response, $post);
     }
@@ -80,12 +81,11 @@ $validationResult = $this->postValidation->validateDeletion($postId, $this->getP
         $data = $request->getParsedBody();
         if(null !== $data) {
             $postData = [
-                'email' => $data['email'],
-                'password1' => $data['password1'],
-                'password2' => $data['password2'],
+                'message' => $data['message'],
+                'user_id' => 1 // todo get authenticated user
             ];
 
-            $validationResult = $this->postValidation->validatePostRegistration($postData);
+            $validationResult = $this->postValidation->validatePostCreation($postData);
             if ($validationResult->fails()) {
                 $responseData = [
                     'success' => false,
