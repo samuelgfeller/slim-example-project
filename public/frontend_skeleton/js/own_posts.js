@@ -83,7 +83,7 @@ function getPostBox(jsonData){
 function openCreatePostForm() {
     let header = '<h2>Post</h2>';
     let body = '<form action="posts" class="blueForm modalForm" method="post" autocomplete="on">' +
-        '<textarea name="post" id="createMessageTextarea" placeholder="Your message here." maxlength="200" required>';
+        '<textarea rows="4" cols="50" name="message" id="createMessageTextarea" placeholder="Your message here." maxlength="500" required></textarea>';
     let footer = '<button type="button" id="submitBtnCreatePost" class="submitBtn modalSubmitBtn">Create post</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
@@ -120,7 +120,7 @@ function submitCreatePost() {
 function openEditPostForm(id) {
     let header = '<h2>Edit post</h2>';
     let body = '<form action="users/' + id + '" class="blueForm modalForm" autocomplete="on">' +
-        '<textarea name="post" id="createMessageTextarea" placeholder="Your message here." maxlength="200" required>';
+        '<textarea name="message" id="createMessageTextarea" placeholder="Your message here." maxlength="500" required>';
     let footer = '<button type="button" id="submitBtnEditPost" data-id="" class="submitBtn modalSubmitBtn">Update post</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
