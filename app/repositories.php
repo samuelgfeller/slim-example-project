@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\Persistence\User\UserRepository;
 use Cake\Database\Connection;
@@ -14,5 +15,10 @@ return function (ContainerBuilder $containerBuilder) {
             $pdo = $container->get(Connection::class);
             return new UserRepository($pdo);
         },
+        PostRepositoryInterface::class => function (ContainerInterface $container) {
+            $pdo = $container->get(Connection::class);
+            return new PostRepository($pdo);
+        },
+
     ]);
 };
