@@ -67,9 +67,9 @@ function getPostBox(jsonData){
         '<img src="/frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
         '<img src="/frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + jsonData.id + '" alt="del">' +
         '<div class="loader" id="loaderForPost'+jsonData.id+'"></div>'+
-        '<h3 class="boxHeader">' + jsonData.name + '</h3>' +
+        '<h3 class="boxHeader">' + jsonData.user_name + '</h3>' +
         '<div id="boxInnerContent'+jsonData.id+'">' +
-        '<p><span class="infoInBoxSpan">Email: </span><b>' + jsonData.email + '</b></p>' +
+        '<p><span class="infoInBoxSpan"></span><b>' + jsonData.message + '</b></p>' +
         '<p><span class="infoInBoxSpan">Updated at: </span><b>' + jsonData.updated_at + '</b></p>' +
         '<p><span class="infoInBoxSpan">Created at: </span>' + jsonData.created_at + '</p>' +
         '</div>' +

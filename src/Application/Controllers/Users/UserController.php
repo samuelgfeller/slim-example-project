@@ -85,6 +85,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
                 'password2' => $data['password2'],
             ];
 
+            // todo input htmlspecialchars in input and output
             $validationResult = $this->userValidation->validateUserRegistration($userData);
             if ($validationResult->fails()) {
                 $responseData = [

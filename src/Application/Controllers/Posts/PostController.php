@@ -19,25 +19,43 @@ class PostController extends Controller {
 
     protected $postService;
     protected $postValidation;
+    protected $userService;
 
-    public function __construct(LoggerInterface $logger, PostService $postService, PostValidation $postValidation, UserService $postValidation) {
+    public function __construct(LoggerInterface $logger, PostService $postService, PostValidation $postValidation, UserService $userService) {
         parent::__construct($logger);
         $this->postService = $postService;
         $this->postValidation = $postValidation;
+        $this->userService = $userService;
     }
 
     public function get(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
         $post = $this->postService->findPost($id);
-//        var_dump($this->container->get('logger'));
 
-//        $user = $this->userService
-//        $this->logger->info('posts/' . $id . ' has been called');
-//        var_dump($this->logger);
-        return $this->respondWithJson($response, $post);
+        // Get user information connected to post
+        $user = $this->userService->findUser($post['user_id']);
+
+        // Add user name info to post
+        $postWithUser = $post;
+        $postWithUser['user_name'] = $user['name'];
+        return $this->respondWithJson($response, $postWithUser);
     }
 
+    public function list(Request $request, Response $response, array $args) {
+        $allPosts = $this->postService->findAllPosts();
+        // Add user name info to post
+        $postsWithUser = [];
+        foreach ($allPosts as $post){
+            // Get user information connected to post
+            $user = $this->userService->findUser($post['user_id']);
+            $post['user_name'] = $user['name'];
+            $postsWithUser[] = $post;
+        }
+
+        return $this->respondWithJson($response, $postsWithUser);
+
+    }
     public function update(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
@@ -104,17 +122,5 @@ $validationResult = $this->postValidation->validateDeletion($postId, $this->getP
         return $this->respondWithJson($response, ['success' => false, 'message' => 'Request body empty']);
     }
 
-    public function list(Request $request, Response $response, array $args) {
-        $allPosts = $this->postService->findAllPosts();
-        //somehow that doesnt work
-//        $this->respondWithData($response, va$allPosts);
-        //    $this->respondWithDataPrettyJson($response, $allPosts);
 
-        // This works though
-//         $response->getBody()->write(json_encode($allPosts));
-//         $response->getBody()->write('omg');
-        $response->withHeader('Content-Type', 'application/json');
-        return $this->respondWithJson($response, $allPosts);
-
-    }
 }
