@@ -52,7 +52,7 @@ class UserRepository extends DataManager implements UserRepositoryInterface
      */
     public function findUserByEmail(string $email): array
     {
-        return $this->findBy('email', $email,$this->fields);
+        return $this->findBy('email', $email,['id','email','password']);
     }
     
     /**
