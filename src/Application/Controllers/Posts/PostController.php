@@ -103,7 +103,7 @@ class PostController extends Controller {
         $data = $request->getParsedBody();
         if(null !== $data) {
             $postData = [
-                'message' => $data['message'],
+                'message' => htmlspecialchars($data['message']),
                 'user_id' => 1 // todo get authenticated user
             ];
 
