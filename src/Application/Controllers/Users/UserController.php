@@ -43,11 +43,9 @@ class UserController extends Controller {
 //        var_dump($request->getParsedBody());
     
         $data = $request->getParsedBody();
-        
-        // todo validation
-    
-        $name = $data['name'];
-        $email = $data['email'];
+
+        $name = htmlspecialchars($data['name']);
+        $email = htmlspecialchars($data['email']);
 //        var_dump($data);
         $updated = $this->userService->updateUser($id,$name,$email);
         if ($updated) {
@@ -80,7 +78,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
         $data = $request->getParsedBody();
         if(null !== $data) {
             $userData = [
-                'email' => $data['email'],
+                'email' => htmlspecialchars($data['email']),
                 'password1' => $data['password1'],
                 'password2' => $data['password2'],
             ];
@@ -95,6 +93,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
 
                 return $this->respondWithJson($response, $responseData, 422);
             }
+
             $insertId = $this->userService->createUser($userData);
 
             if (null !== $insertId) {
