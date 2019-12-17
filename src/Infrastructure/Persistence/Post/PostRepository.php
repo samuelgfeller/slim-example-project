@@ -82,7 +82,6 @@ class PostRepository extends DataManager implements PostRepositoryInterface
      * @return bool
      */
     public function updatePost(array $data,int $id): bool {
-//        return true;
         return $this->update($data, $id);
     }
 }

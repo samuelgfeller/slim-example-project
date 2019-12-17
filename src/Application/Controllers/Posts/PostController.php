@@ -65,7 +65,7 @@ class PostController extends Controller {
 
         $postData = [
             'message' => htmlspecialchars($data['message']),
-            'user_id' => 1 // todo get authenticated user
+            'user' => htmlspecialchars($data['user']),
         ];
 
         $validationResult = $this->postValidation->validatePostCreation($postData);
@@ -78,7 +78,7 @@ class PostController extends Controller {
             return $this->respondWithJson($response, $responseData, 422);
         }
 //        var_dump($data);
-        $updated = $this->postService->updatePost($id,$postData['message']);
+        $updated = $this->postService->updatePost($id,$postData);
         if ($updated) {
             return $this->respondWithJson($response, ['success' => true]);
         }
@@ -104,7 +104,7 @@ class PostController extends Controller {
         if(null !== $data) {
             $postData = [
                 'message' => htmlspecialchars($data['message']),
-                'user_id' => 1 // todo get authenticated user
+                'user' => htmlspecialchars($data['user']),
             ];
 
             $validationResult = $this->postValidation->validatePostCreation($postData);

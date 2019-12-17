@@ -54,8 +54,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password']
         ];
-        //TODO: validate email/pw
-        //TODO: check if pw is correct
+
         $user = $this->userService->findUserByEmail($userData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
         if(password_verify($userData['password'],$user['password'])) {

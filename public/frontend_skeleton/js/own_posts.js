@@ -98,6 +98,7 @@ function submitCreatePost() {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
+            user : sessionStorage.getItem("token"),
         }),
     }).done(function (output) {
         closeModal();
@@ -157,6 +158,7 @@ function submitUpdatedPost(id) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
+            user : sessionStorage.getItem("token"),
         }),
     }).done(function (output) {
         closeModal();

@@ -4,6 +4,8 @@
 namespace App\Domain\Post;
 
 use App\Domain\Post\PostRepositoryInterface;
+use Firebase\JWT\JWT;
+
 
 class PostService {
     
@@ -31,15 +33,36 @@ class PostService {
      */
     public function createPost($data): string
     {
-        return $this->postRepositoryInterface->insertPost($data);
+        $token = $data['user'];
+        $jwt = JWT::decode($token,'test',['HS256']);
+
+        if(!empty($jwt)){
+            return $this->postRepositoryInterface->insertPost([
+                'message' => $data['message'],
+                'user_id' => $jwt->data->userId
+            ]);
+        }
+        return "Error could not create";
     }
 
-    public function updatePost($id,$newMessage): bool
+    public function updatePost($id,$data): bool
     {
-        $data = [
-            'message' => $newMessage,
+        $userData = [
+            'message' => $data['message'],
+            'user' => $data['user']
         ];
-        return $this->postRepositoryInterface->updatePost($data,$id);
+
+        $jwt = JWT::decode($userData['user'],'test',['HS256']);
+
+        $post = $this->postRepositoryInterface->findPostById($id);
+        if(!empty($jwt) && !empty($post)) {
+            if ($jwt->data->userId == $post['user_id']) {
+                return $this->postRepositoryInterface->updatePost([
+                    "message" => $userData['message'],
+                    "user_id" => $jwt->data->userId
+                ], $id);
+            }
+        } return false;
     }
 
     public function deletePost($id): bool
