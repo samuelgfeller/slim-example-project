@@ -1,8 +1,9 @@
 $(document).ready(function () {
 
-    /*$('#updatePasswordInp1, #updatePasswordInp2').on('keyup', function () {
-        checkIfInputHaveSameVal($('#updatePasswordInp1'), $('#updatePasswordInp2'), $('#submitChangePasswordBtn'));
-    });*/
+    // Send login requests
+    $('#submitBtnLogin').on('click', function () {
+        login();
+    });
 
     let registerPassword1Inp = $('#registerPassword1Inp');
     let registerPassword2Inp = $('#registerPassword2Inp');
@@ -66,7 +67,12 @@ function isBreached(password) {
     return result;
 }
 
-
+/**
+ * Creates sha1 hash of arbitrary string
+ *
+ * @param msg
+ * @returns {string}
+ */
 function sha1(msg) {
     function rotate_left(n, s) {
         var t4 = (n << s) | (n >>> (32 - s));
@@ -202,3 +208,24 @@ function sha1(msg) {
     return temp.toLowerCase();
 };
 
+/**
+ * Leases jwt token and stores in sessionstorage
+ *
+ */
+function login() {
+    $.ajax({
+        url: config.api_url + 'login',
+        type: 'post',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            email: $('#loginEmailInp').val(),
+            password: $('#loginPasswordInp').val(),
+        }),
+    }).done(function (output) {
+        sessionStorage.setItem('token', output);
+    }).fail(function (output) {
+        console.log(output);
+        alert('Error while adding');
+    });
+}

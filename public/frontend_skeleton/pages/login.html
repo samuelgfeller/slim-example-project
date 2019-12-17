@@ -36,18 +36,18 @@
                 <?php if (!empty($errClassName)) { ?>
                                 <span class="errSpan">Wrong credentials. Please try again.</span> <br> <br>
                                 <?php } ?>-->
-                <label for="registerEmailInp">Email</label>
+                <label for="loginEmailInp">Email</label>
                 <!--             todo normal add error class ("wrongCredInput") to both inputs-->
-                <input type="email" name="email" id="registerEmailInp" class=""
+                <input type="email" name="email" id="loginEmailInp" class=""
                        placeholder="your@email.com"
                        maxlength="254"
                        required>
-                <label for="registerPasswordInp">Password</label>
-                <input type="password" name="password" id="registerPasswordInp"
+                <label for="loginPasswordInp">Password</label>
+                <input type="password" name="password" id="loginPasswordInp"
                        class="" required>
                 <br><a class="discreteLink" href="login/password/reset/mail">Lost password?</a>
 
-                <input type="submit" value="Login">
+                <button type="button" id="submitBtnLogin">Login</button>
             </form>
             <br>Not registered? <a href="/register">Register</a></div>
     </div>
@@ -61,5 +61,6 @@
 <script src="/frontend_skeleton/js/pageContentManager.js"></script>
 <script src="/frontend_skeleton/js/general_scripts.js"></script>
 <script src="/frontend_skeleton/js/modal.js"></script>
+<script src="/frontend_skeleton/js/authentication.js"></script>
 </body>
 </html>
