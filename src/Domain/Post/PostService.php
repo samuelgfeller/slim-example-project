@@ -34,11 +34,10 @@ class PostService {
         return $this->postRepositoryInterface->insertPost($data);
     }
 
-    public function updatePost($id,$name,$email): bool
+    public function updatePost($id,$newMessage): bool
     {
         $data = [
-            'name' => $name,
-            'email' => $email
+            'message' => $newMessage,
         ];
         return $this->postRepositoryInterface->updatePost($data,$id);
     }

@@ -120,7 +120,7 @@ function submitCreatePost() {
 function openEditPostForm(id) {
     let header = '<h2>Edit post</h2>';
     let body = '<form action="posts/' + id + '" class="blueForm modalForm" autocomplete="on">' +
-        '<textarea name="message" id="createMessageTextarea" placeholder="Your message here." minlength="4" maxlength="500" required>';
+        '<textarea name="message" id="createMessageTextarea" placeholder="Loading..." minlength="4" maxlength="500" required></textarea>';
     let footer = '<button type="button" id="submitBtnEditPost" data-id="" class="submitBtn modalSubmitBtn">Update post</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
@@ -135,6 +135,7 @@ function openEditPostForm(id) {
     }).done(function (output) {
         let post = output;
         $('#createMessageTextarea').val(post.message);
+        $('#submitBtnEditPost').attr('data-id', post.id);
     }).fail(function (output) {
         console.log(output);
         closeModal();

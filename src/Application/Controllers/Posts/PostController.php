@@ -62,13 +62,23 @@ class PostController extends Controller {
 //        var_dump($request->getParsedBody());
     
         $data = $request->getParsedBody();
-        
-        // todo validation
-    
-        $name = $data['name'];
-        $email = $data['email'];
+
+        $postData = [
+            'message' => $data['message'],
+            'user_id' => 1 // todo get authenticated user
+        ];
+
+        $validationResult = $this->postValidation->validatePostCreation($postData);
+        if ($validationResult->fails()) {
+            $responseData = [
+                'success' => false,
+                'validation' => $validationResult->toArray(),
+            ];
+
+            return $this->respondWithJson($response, $responseData, 422);
+        }
 //        var_dump($data);
-        $updated = $this->postService->updatePost($id,$name,$email);
+        $updated = $this->postService->updatePost($id,$postData['message']);
         if ($updated) {
             return $this->respondWithJson($response, ['success' => true]);
         }
@@ -77,16 +87,10 @@ class PostController extends Controller {
 
     public function delete(Request $request, Response $response, array $args): Response
     {
+
         $postId = $args['id'];
-/* https://github.com/D4rkMindz/roast.li/blob/master/src/Controller/UserController.php
-$validationResult = $this->postValidation->validateDeletion($postId, $this->getPostId());
-        if ($validationResult->fails()) {
-            $responseData = [
-                'success' => false,
-                'validation' => $validationResult->toArray(),
-            ];
-            return $this->respondWithJson($response, $responseData, 422);
-        }*/
+
+
         $deleted = $this->postService->deletePost($postId);
         if ($deleted) {
             return $this->respondWithJson($response, ['success' => true]);
