@@ -78,12 +78,14 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
         $data = $request->getParsedBody();
         if(null !== $data) {
             $userData = [
+                'name' => htmlspecialchars($data['name']),
                 'email' => htmlspecialchars($data['email']),
-                'password1' => $data['password1'],
-                'password2' => $data['password2'],
+//                'password1' => $data['password1'],
+//                'password2' => $data['password2'],
+                'password1' => 'placeholder',
+                'password2' => 'placeholder',
             ];
 
-            // todo input htmlspecialchars in input and output
             $validationResult = $this->userValidation->validateUserRegistration($userData);
             if ($validationResult->fails()) {
                 $responseData = [
@@ -93,6 +95,9 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
 
                 return $this->respondWithJson($response, $responseData, 422);
             }
+
+            $userData['password'] = password_hash($userData['password1'],PASSWORD_DEFAULT);
+            unset($userData['password1'], $userData['password2']);
 
             $insertId = $this->userService->createUser($userData);
 
