@@ -210,6 +210,9 @@ class UserValidation extends AppValidation
             if ($this->userRepositoryInterface->findUserByEmail($validEmail)) {
                 $this->logger->info('Account creation tried with existing email: ' . $validEmail);
 
+                // todo remove that
+                $validationResult->setError('email', 'Error in registration');
+
                 // todo implement function to tell client that register success without actually writing something in db;
                 // todo send email to user to say that someone registered with his email and that he has already an account
                 // todo in email provide link to login and how the password can be changed
