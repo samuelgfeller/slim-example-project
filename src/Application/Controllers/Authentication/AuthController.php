@@ -62,8 +62,8 @@ class AuthController extends Controller
 
             $tokenId = base64_encode(random_bytes(32));
             $issuedAt = time();
-            $notBefore = $issuedAt + 10;             //Adding 10 seconds
-            $expire = $notBefore + 240;            // Adding 240 seconds
+            $notBefore = $issuedAt + 2;             //Adding 2 seconds
+            $expire = $notBefore + 300;            // Adding 300 seconds
 
             $data = [
                 'iat' => $issuedAt,         // Issued at: time when the token was generated
