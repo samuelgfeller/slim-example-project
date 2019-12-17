@@ -79,10 +79,8 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
             $userData = [
                 'name' => htmlspecialchars($data['name']),
                 'email' => htmlspecialchars($data['email']),
-//                'password1' => $data['password1'],
-//                'password2' => $data['password2'],
-                'password1' => 'placeholder',
-                'password2' => 'placeholder',
+                'password1' => $data['password1'],
+                'password2' => $data['password2'],
             ];
 
             $validationResult = $this->userValidation->validateUserRegistration($userData);
