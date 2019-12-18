@@ -37,7 +37,7 @@ abstract class Controller
      * @param array|object|null $data
      * @return Response
      */
-    protected function respondWithDataPrettyJson(Response $response, $data = null): Response
+    protected function respondWithPrettyJson(Response $response, $data = null): Response
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
         $response->getBody()->write($json);
