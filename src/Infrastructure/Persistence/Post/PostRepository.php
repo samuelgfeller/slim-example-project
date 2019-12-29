@@ -54,6 +54,17 @@ class PostRepository extends DataManager implements PostRepositoryInterface
     }
 
     /**
+     * Return all posts which are linked to the given user
+     *
+     * @param $userId
+     * @return array
+     */
+    public function findAllPostsByUserId(int $userId): array
+    {
+        return $this->findAllBy('user_id',$userId);
+    }
+
+    /**
      * Insert post in database
      *
      * @param array $data

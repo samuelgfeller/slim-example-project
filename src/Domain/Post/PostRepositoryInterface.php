@@ -32,6 +32,15 @@ interface PostRepositoryInterface
      * @throws PersistenceRecordNotFoundException
      */
     public function getPostById(int $id): array;
+
+    /**
+     * Return all posts which are linked to the given user
+     *
+     * @param int $userId
+     * @return array
+     */
+    public function findAllPostsByUserId(int $userId): array;
+
     
     /**
      * Insert post in database
