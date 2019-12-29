@@ -46,6 +46,7 @@ class PostController extends Controller {
         $allPosts = $this->postService->findAllPosts();
         // Add user name info to post
         $postsWithUser = [];
+        // todo move this logic to service
         foreach ($allPosts as $post){
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
@@ -56,6 +57,20 @@ class PostController extends Controller {
         return $this->respondWithJson($response, $postsWithUser);
 
     }
+
+    public function getOwnPosts(Request $request, Response $response, array $args): Response
+    {
+        // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
+        // option 2 /own-posts and get user id from token data body
+
+        // token 'data' is an stdClass and can is transformed into array with this function https://stackoverflow.com/a/18576902/9013718
+        $userId = json_decode(json_encode($request->getAttribute('token')['data']), true)['userId'];
+
+        $posts = $this->postService->findAllPostsFromUser($userId);
+
+        return $this->respondWithJson($response, $posts);
+    }
+
     public function update(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
