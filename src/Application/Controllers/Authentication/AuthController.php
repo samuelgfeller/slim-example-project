@@ -51,7 +51,7 @@ class AuthController extends Controller
         $data = $request->getParsedBody();
 
         $userData = [
-            'email' => $data['email'],
+            'email' => htmlspecialchars($data['email']),
             'password' => $data['password']
         ];
 
@@ -77,8 +77,9 @@ class AuthController extends Controller
                 ]
             ];
 
-            $token = JWT::encode($data, "test", "HS256"); //change test to settings
-            return $this->respondWithJson($response, $token, 200);
+            $token = JWT::encode($data, "test", "HS256"); // todo change test to settings
+            // todo maybe dont pass user_id to client https://softwareengineering.stackexchange.com/questions/218306/why-not-expose-a-primary-key
+            return $this->respondWithJson($response, ['token' => $token/*, 'user_id' => $user['id']*/], 200);
         } else {
             return $this->respondWithJson($response, "could not lease token: invalid credentials", 500);
         }
