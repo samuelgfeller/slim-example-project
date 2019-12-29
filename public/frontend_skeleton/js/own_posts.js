@@ -36,11 +36,17 @@ $(document).ready(function () {
  * Populate #postsDiv with all posts in database
  */
 function loadAllPosts() {
+    // https://florimond.dev/blog/articles/2018/08/restful-api-design-13-best-practices-to-make-your-users-happy/
+
     //Load posts
     $.ajax({
-        url: config.api_url+'posts',
+        url: config.api_url+'own-posts',
         dataType: "json",
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         // output = JSON.parse(output);
         if (output !== '') {
@@ -56,8 +62,8 @@ function loadAllPosts() {
         } else {
             console.log(output);
         }
-    }).fail(function (output) {
-        alert('Error while fetching data');
+    }).fail(function (xhr) {
+            alert(xhr.responseText);
     });
 }
 

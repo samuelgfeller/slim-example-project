@@ -30,6 +30,7 @@ return function (App $app) {
         $group->delete('/{id:[0-9]+}', PostController::class . ':delete');
         $group->post('', PostController::class . ':create');
     });
+    $app->get('/own-posts', PostController::class . ':getOwnPosts');
 
 
 
