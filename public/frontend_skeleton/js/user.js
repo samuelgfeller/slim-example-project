@@ -41,6 +41,10 @@ function loadAllUsers() {
         url: config.api_url+'users',
         dataType: "json",
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         // output = JSON.parse(output);
         if (output !== '') {
@@ -100,6 +104,10 @@ function submitCreateUser() {
         type: 'post',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
         data: JSON.stringify({
             name: $('#createNameInp').val(),
             email: $('#createEmailInp').val(),
@@ -140,6 +148,10 @@ function openEditUserForm(id) {
         dataType: "json",
         url: config.api_url+'users/' + id,
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         let user = output;
         $('#updateNameInp').val(user.name);
@@ -164,6 +176,10 @@ function submitUpdatedUser(id) {
         type: 'put',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
         data: JSON.stringify({
             email: $('#updateEmailInp').val(),
             name: $('#updateNameInp').val(),
@@ -192,6 +208,10 @@ function deleteUser(id) {
         $.ajax({
             url: config.api_url+'users/' + id,
             type: 'delete',
+            beforeSend: function (xhr) {
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            },
         }).done(function (output) {
             if (output.success === true || output.success === 'true') {
                 $('#user' + id).remove();
@@ -210,6 +230,10 @@ function reloadUser(id){
         dataType: "json",
         url: config.api_url+'users/' + id,
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         let user = output;
         console.log(output);
