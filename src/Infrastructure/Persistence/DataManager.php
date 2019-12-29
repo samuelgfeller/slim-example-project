@@ -72,7 +72,7 @@ abstract class DataManager
      * @param array $fields
      * @return array
      */
-    public function findBy(string $column, $value, array $fields = ['*']): array
+    public function findOneBy(string $column, $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
         // Retrieving a single Row
@@ -86,30 +86,26 @@ abstract class DataManager
     }
 
     /**
-     * Retrieve entry from table which has given id
-     * If it doesn't find anything an error is thrown
+     * Searches entry in table with given value at given column
      *
-     * @param int $id
+     * @param string $column
+     * @param $value
      * @param array $fields
      * @return array
-     * @throws PersistenceRecordNotFoundException
      */
-    public function getById(int $id, array $fields = ['*']): array
+    public function findAllBy(string $column, $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
+        // Retrieving a single Row
         $query = $query->select($fields)
-            ->where([
+            ->andWhere([
                 'deleted_at IS' => null,
-                'id' => $id
+                $column => $value
             ]);
-        $entry = $query->execute()->fetch('assoc');
-        if (!$entry) {
-            $err = new PersistenceRecordNotFoundException();
-            $err->setNotFoundElement($this->table);
-            throw $err;
-        }
-        return $entry;
+        // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
+        return $query->execute()->fetchAll('assoc') ?: [];
     }
+
 
     /**
      * Insert in database.
@@ -183,5 +179,31 @@ abstract class DataManager
         $row = $query->execute()->fetch();
         return !empty($row);
     }
-    
+
+    /**
+     * Retrieve entry from table which has given id
+     * If it doesn't find anything an error is thrown
+     *
+     * @param int $id
+     * @param array $fields
+     * @return array
+     * @throws PersistenceRecordNotFoundException
+     */
+    public function getById(int $id, array $fields = ['*']): array
+    {
+        $query = $this->newSelectQuery();
+        $query = $query->select($fields)
+            ->where([
+                'deleted_at IS' => null,
+                'id' => $id
+            ]);
+        $entry = $query->execute()->fetch('assoc');
+        if (!$entry) {
+            $err = new PersistenceRecordNotFoundException();
+            $err->setNotFoundElement($this->table);
+            throw $err;
+        }
+        return $entry;
+    }
+
 }
