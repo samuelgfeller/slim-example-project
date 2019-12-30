@@ -224,7 +224,6 @@ function login() {
         }),
     }).done(function (output) {
         sessionStorage.setItem('token', output.token);
-        // sessionStorage.setItem('user_id', output.user_id);
     }).fail(function (output) {
         console.log(output);
         alert('Error while authenticating');
