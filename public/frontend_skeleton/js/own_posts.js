@@ -102,6 +102,10 @@ function submitCreatePost() {
         type: 'post',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
             user : sessionStorage.getItem("token"),
@@ -139,6 +143,10 @@ function openEditPostForm(id) {
         dataType: "json",
         url: config.api_url+'posts/' + id,
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         let post = output;
         $('#createMessageTextarea').val(post.message);
@@ -162,6 +170,10 @@ function submitUpdatedPost(id) {
         type: 'put',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
             user : sessionStorage.getItem("token"),
@@ -190,6 +202,10 @@ function deletePost(id) {
         $.ajax({
             url: config.api_url+'posts/' + id,
             type: 'delete',
+            beforeSend: function (xhr) {
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            },
         }).done(function (output) {
             if (output.success === true || output.success === 'true') {
                 $('#post' + id).remove();
@@ -208,6 +224,10 @@ function reloadPost(id){
         dataType: "json",
         url: config.api_url+'posts/' + id,
         type: 'get',
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+        },
     }).done(function (output) {
         let post = output;
         hideLoader('loaderForPost'+id);
