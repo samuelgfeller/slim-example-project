@@ -151,10 +151,10 @@ function openEditPostForm(id) {
         let post = output;
         $('#createMessageTextarea').val(post.message);
         $('#submitBtnEditPost').attr('data-id', post.id);
-    }).fail(function (output) {
+    }).fail(function (xhr) {
         closeModal();
-        alert(output);
-        // alert('Error while retrieving data');
+
+        handleFail(xhr);
     });
 }
 

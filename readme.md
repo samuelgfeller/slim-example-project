@@ -29,3 +29,9 @@ return function (ContainerBuilder $containerBuilder) {
     ]);
 };
 ```
+
+### Returning an error
+Backend SHOULD return `"message":"errorMsg"` which MUST be a JSON response so the frontend has information 
+about the reason of the fail.   
+The javascript function `handleFail(xhr)` checks for `xhr.responseJSON.message` **if it finds it** so not 
+mandatory but is be good in some situations for clarity and user experience. 
