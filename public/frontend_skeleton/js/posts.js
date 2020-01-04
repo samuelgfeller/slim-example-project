@@ -25,7 +25,7 @@ function loadAllPosts() {
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
     }).done(function (output) {
         // output = JSON.parse(output);
@@ -43,6 +43,7 @@ function loadAllPosts() {
             console.log(output);
         }
     }).fail(function (xhr) {
+        $('#postsDiv').empty();
         handleFail(xhr);
     });
 }
@@ -82,18 +83,16 @@ function submitCreatePost() {
         contentType: "application/json; charset=utf-8",
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
-            user : sessionStorage.getItem("token"),
+            user : localStorage.getItem("token"),
         }),
     }).done(function (output) {
         closeModal();
         if (output.status === 'success') {
             loadAllPosts();
-        } else {
-            console.log(output.success);
         }
     }).fail(function (output) {
         handleFail(xhr);

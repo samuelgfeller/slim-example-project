@@ -209,7 +209,7 @@ function sha1(msg) {
 };
 
 /**
- * Leases jwt token and stores in sessionstorage
+ * Leases jwt token and stores in localStorage
  *
  */
 function login() {
@@ -223,7 +223,7 @@ function login() {
             password: $('#loginPasswordInp').val(),
         }),
     }).done(function (output) {
-        sessionStorage.setItem('token', output.token);
+        localStorage.setItem('token', output.token);
         alert('Login successful');
     }).fail(function (output) {
         console.log(output);

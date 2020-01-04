@@ -45,7 +45,7 @@ function loadAllPosts() {
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
     }).done(function (output) {
         // output = JSON.parse(output);
@@ -63,6 +63,7 @@ function loadAllPosts() {
             console.log(output);
         }
     }).fail(function (xhr) {
+        $('#postsDiv').empty();
         handleFail(xhr);
     });
 }
@@ -104,11 +105,11 @@ function submitCreatePost() {
         contentType: "application/json; charset=utf-8",
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
-            user : sessionStorage.getItem("token"),
+            user : localStorage.getItem("token"),
         }),
     }).done(function (output) {
         closeModal();
@@ -145,7 +146,7 @@ function openEditPostForm(id) {
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
     }).done(function (output) {
         let post = output;
@@ -172,11 +173,11 @@ function submitUpdatedPost(id) {
         contentType: "application/json; charset=utf-8",
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
         data: JSON.stringify({
             message: $('#createMessageTextarea').val(),
-            user : sessionStorage.getItem("token"),
+            user : localStorage.getItem("token"),
         }),
     }).done(function (output) {
         closeModal();
@@ -203,7 +204,7 @@ function deletePost(id) {
             type: 'delete',
             beforeSend: function (xhr) {
                 /* Authorization header */
-                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+                xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             },
         }).done(function (output) {
             if (output.status === 'success') {
@@ -224,7 +225,7 @@ function reloadPost(id){
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
     }).done(function (output) {
         let post = output;
