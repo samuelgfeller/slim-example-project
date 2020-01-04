@@ -104,7 +104,7 @@ class PostController extends Controller
             $validationResult = $this->postValidation->validatePostCreation($postData);
             if ($validationResult->fails()) {
                 $responseData = [
-                    'success' => false,
+                    'status' => 'error',
                     'validation' => $validationResult->toArray(),
                 ];
 
@@ -129,9 +129,9 @@ class PostController extends Controller
 
         $deleted = $this->postService->deletePost($postId);
         if ($deleted) {
-            return $this->respondWithJson($response, ['success' => true]);
+            return $this->respondWithJson($response, ['status' => 'success']);
         }
-        return $this->respondWithJson($response, ['success' => false]);
+        return $this->respondWithJson($response, ['status' => 'error']);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -146,7 +146,7 @@ class PostController extends Controller
             $validationResult = $this->postValidation->validatePostCreation($postData);
             if ($validationResult->fails()) {
                 $responseData = [
-                    'success' => false,
+                    'status' => 'error',
                     'validation' => $validationResult->toArray(),
                 ];
 
@@ -155,11 +155,11 @@ class PostController extends Controller
             $insertId = $this->postService->createPost($postData);
 
             if (null !== $insertId) {
-                return $this->respondWithJson($response, ['success' => true]);
+                return $this->respondWithJson($response, ['status' => 'success']);
             }
-            return $this->respondWithJson($response, ['success' => false, 'message' => 'Post could not be inserted']);
+            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Post could not be inserted']);
         }
-        return $this->respondWithJson($response, ['success' => false, 'message' => 'Request body empty']);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
     }
 
 

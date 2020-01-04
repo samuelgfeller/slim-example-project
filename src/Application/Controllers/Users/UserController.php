@@ -48,9 +48,9 @@ class UserController extends Controller {
 //        var_dump($data);
         $updated = $this->userService->updateUser($id,$name,$email);
         if ($updated) {
-            return $this->respondWithJson($response, ['success' => true]);
+            return $this->respondWithJson($response, ['status' => 'success']);
         }
-        return $this->respondWithJson($response, ['success' => false]);
+        return $this->respondWithJson($response, ['status' => 'error']);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -60,16 +60,16 @@ class UserController extends Controller {
 $validationResult = $this->userValidation->validateDeletion($userId, $this->getUserId());
         if ($validationResult->fails()) {
             $responseData = [
-                'success' => false,
+                'status' => 'error',
                 'validation' => $validationResult->toArray(),
             ];
             return $this->respondWithJson($response, $responseData, 422);
         }*/
         $deleted = $this->userService->deleteUser($userId);
         if ($deleted) {
-            return $this->respondWithJson($response, ['success' => true]);
+            return $this->respondWithJson($response, ['status' => 'success']);
         }
-        return $this->respondWithJson($response, ['success' => false]);
+        return $this->respondWithJson($response, ['status' => 'error']);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -86,7 +86,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
             $validationResult = $this->userValidation->validateUserRegistration($userData);
             if ($validationResult->fails()) {
                 $responseData = [
-                    'success' => false,
+                    'status' => 'error',
                     'validation' => $validationResult->toArray(),
                 ];
 
@@ -99,11 +99,11 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
             $insertId = $this->userService->createUser($userData);
 
             if (null !== $insertId) {
-                return $this->respondWithJson($response, ['success' => true]);
+                return $this->respondWithJson($response, ['status' => 'success']);
             }
-            return $this->respondWithJson($response, ['success' => false, 'message' => 'User could not be inserted']);
+            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User could not be inserted']);
         }
-        return $this->respondWithJson($response, ['success' => false, 'message' => 'Request body empty']);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
     }
 
     public function list(Request $request, Response $response, array $args) {
