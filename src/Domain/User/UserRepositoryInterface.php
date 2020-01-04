@@ -68,5 +68,13 @@ interface UserRepositoryInterface
      */
     public function updateUser(array $data, int $id): bool;
 
+    /**
+     * Retrieve user role
+     *
+     * @param int $id
+     * @return string
+     * @throws PersistenceRecordNotFoundException
+     */
+    public function getUserRole(int $id): string;
 
 }

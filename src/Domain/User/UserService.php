@@ -51,5 +51,17 @@ class UserService {
         return $this->userRepositoryInterface->deleteUser($id);
     }
 
+    /**
+     * Get user role
+     *
+     * @param $id
+     * @return string
+     * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
+     */
+    public function getUserRole($id): string
+    {
+        return $this->userRepositoryInterface->getUserRole($id);
+    }
+
 
 }

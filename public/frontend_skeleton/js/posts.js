@@ -90,7 +90,7 @@ function submitCreatePost() {
         }),
     }).done(function (output) {
         closeModal();
-        if (output.success === true || output.success === 'true') {
+        if (output.status === 'success') {
             loadAllPosts();
         } else {
             console.log(output.success);

@@ -25,10 +25,10 @@ abstract class Controller
      * @param int $status
      * @return Response
      */
-    protected function respondWithJson(Response $response, $data = null, int $status = 200)
+    protected function respondWithJson(Response $response, $data = null, int $status = 200): Response
     {
         $response->getBody()->write(json_encode($data));
-        $response->withStatus($status);
+        $response = $response->withStatus($status);
         return $response->withHeader('Content-Type', 'application/json');
     }
 
@@ -42,6 +42,21 @@ abstract class Controller
         $json = json_encode($data, JSON_PRETTY_PRINT);
         $response->getBody()->write($json);
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * If the user_id is in the JWT Token data it is returned
+     *
+     * @param Request $request
+     * @return int|null
+     */
+    protected function getUserIdFromToken(Request $request): ?int
+    {
+        if (isset($request->getAttribute('token')['data'])) {
+            // token 'data' is an stdClass and can be transformed into array with this function https://stackoverflow.com/a/18576902/9013718
+            return (int)json_decode(json_encode($request->getAttribute('token')['data']), true)['userId'];
+        }
+        return null;
     }
 
 }

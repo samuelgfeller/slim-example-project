@@ -15,13 +15,19 @@ use Psr\Log\LoggerInterface;
 use Slim\Handlers\Strategies\RequestHandler;
 use Firebase\JWT\JWT;
 
-class PostController extends Controller {
+class PostController extends Controller
+{
 
     protected $postService;
     protected $postValidation;
     protected $userService;
 
-    public function __construct(LoggerInterface $logger, PostService $postService, PostValidation $postValidation, UserService $userService) {
+    public function __construct(
+        LoggerInterface $logger,
+        PostService $postService,
+        PostValidation $postValidation,
+        UserService $userService
+    ) {
         parent::__construct($logger);
         $this->postService = $postService;
         $this->postValidation = $postValidation;
@@ -42,12 +48,14 @@ class PostController extends Controller {
         return $this->respondWithJson($response, $postWithUser);
     }
 
-    public function list(Request $request, Response $response, array $args) {
+    public function list(Request $request, Response $response, array $args)
+    {
         $allPosts = $this->postService->findAllPosts();
+        // todo output escaping
         // Add user name info to post
         $postsWithUser = [];
         // todo move this logic to service
-        foreach ($allPosts as $post){
+        foreach ($allPosts as $post) {
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
             $post['user_name'] = $user['name'];
@@ -63,8 +71,7 @@ class PostController extends Controller {
         // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
         // option 2 /own-posts and get user id from token data body
 
-        // token 'data' is an stdClass and can is transformed into array with this function https://stackoverflow.com/a/18576902/9013718
-        $userId = json_decode(json_encode($request->getAttribute('token')['data']), true)['userId'];
+        $userId = $this->getUserIdFromToken($request);
 
         $posts = $this->postService->findAllPostsFromUser($userId);
 
@@ -73,36 +80,50 @@ class PostController extends Controller {
 
     public function update(Request $request, Response $response, array $args): Response
     {
-        $id = $args['id'];
-//        var_dump($request->getParsedBody());
-    
-        $data = $request->getParsedBody();
+        // todo check if user has authorisation with token data
+        $userId = $this->getUserIdFromToken($request);
 
-        $postData = [
-            'message' => htmlspecialchars($data['message']),
-            'user' => htmlspecialchars($data['user']),
-        ];
+        $id = (int)$args['id'];
 
-        $validationResult = $this->postValidation->validatePostCreation($postData);
-        if ($validationResult->fails()) {
-            $responseData = [
-                'success' => false,
-                'validation' => $validationResult->toArray(),
+        $post = $this->postService->findPost($id);
+        // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
+        $userRole = $this->userService->getUserRole($userId);
+
+        // Check if it's admin or if it's its own post
+        if ($userRole === 'admin' || (int) $post['user_id'] === $userId) {
+
+//      var_dump($request->getParsedBody());
+
+            $data = $request->getParsedBody();
+
+            $postData = [
+                'message' => htmlspecialchars($data['message']),
+                'user' => htmlspecialchars($data['user']),
             ];
 
-            return $this->respondWithJson($response, $responseData, 422);
-        }
+            $validationResult = $this->postValidation->validatePostCreation($postData);
+            if ($validationResult->fails()) {
+                $responseData = [
+                    'success' => false,
+                    'validation' => $validationResult->toArray(),
+                ];
+
+                return $this->respondWithJson($response, $responseData, 422);
+            }
 //        var_dump($data);
-        $updated = $this->postService->updatePost($id,$postData);
-        if ($updated) {
-            return $this->respondWithJson($response, ['success' => true]);
+            $updated = $this->postService->updatePost($id, $postData);
+            if ($updated) {
+                return $this->respondWithJson($response, ['status' => 'success']);
+            }
+            $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'The post was not updated']);
+            return $response->withAddedHeader('Warning', 'The post was not updated');
         }
-        return $this->respondWithJson($response, ['success' => false]);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 401);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-
+        // todo check if user has authorisation
         $postId = $args['id'];
 
 
@@ -116,7 +137,7 @@ class PostController extends Controller {
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $request->getParsedBody();
-        if(null !== $data) {
+        if (null !== $data) {
             $postData = [
                 'message' => htmlspecialchars($data['message']),
                 'user' => htmlspecialchars($data['user']),

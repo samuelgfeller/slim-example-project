@@ -112,7 +112,7 @@ function submitCreatePost() {
         }),
     }).done(function (output) {
         closeModal();
-        if (output.success === true || output.success === 'true') {
+        if (output.status === 'success') {
             loadAllPosts();
         } else {
             console.log(output.success);
@@ -152,9 +152,9 @@ function openEditPostForm(id) {
         $('#createMessageTextarea').val(post.message);
         $('#submitBtnEditPost').attr('data-id', post.id);
     }).fail(function (output) {
-        console.log(output);
         closeModal();
-        alert('Error while retrieving data');
+        alert(output);
+        // alert('Error while retrieving data');
     });
 }
 
@@ -180,11 +180,11 @@ function submitUpdatedPost(id) {
         }),
     }).done(function (output) {
         closeModal();
-        if (output.success === true || output.success === 'true') {
+        if (output.status === 'success') {
             showLoader('loaderForPost'+id);
             reloadPost(id);
         } else {
-            console.log(output.success);
+            console.log(output);
         }
     }).fail(function (output) {
         console.log(output);
@@ -207,7 +207,7 @@ function deletePost(id) {
                 xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
             },
         }).done(function (output) {
-            if (output.success === true || output.success === 'true') {
+            if (output.status === 'success') {
                 $('#post' + id).remove();
             } else {
                 alert('Error while deleting');

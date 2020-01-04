@@ -100,4 +100,16 @@ class UserRepository extends DataManager implements UserRepositoryInterface
 //        return true;
         return $this->update($data, $id);
     }
+
+    /**
+     * Retrieve user role
+     *
+     * @param int $id
+     * @return string
+     * @throws PersistenceRecordNotFoundException
+     */
+    public function getUserRole(int $id) : string{
+        // todo put role in separate tables
+        return $this->getById($id,['role'])['role'];
+    }
 }
