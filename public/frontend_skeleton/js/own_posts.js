@@ -63,7 +63,7 @@ function loadAllPosts() {
             console.log(output);
         }
     }).fail(function (xhr) {
-            alert(xhr.responseText);
+        handleFail(xhr);
     });
 }
 
@@ -118,8 +118,8 @@ function submitCreatePost() {
             console.log(output.success);
         }
     }).fail(function (output) {
-        console.log(output);
-        alert('Error while adding');
+        handleFail(xhr);
+
     });
 }
 
@@ -186,9 +186,8 @@ function submitUpdatedPost(id) {
         } else {
             console.log(output);
         }
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while updating');
+    }).fail(function (xhr) {
+        handleFail(xhr);
     });
 }
 
@@ -212,9 +211,8 @@ function deletePost(id) {
             } else {
                 alert('Error while deleting');
             }
-        }).fail(function (output) {
-            console.log(output);
-            alert('Error while deleting');
+        }).fail(function (xhr) {
+            handleFail(xhr);
         });
     }
 }
@@ -232,8 +230,7 @@ function reloadPost(id){
         let post = output;
         hideLoader('loaderForPost'+id);
         $('#post'+id).replaceWith(getPostBox(post))
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while retrieving data');
+    }).fail(function (xhr) {
+        handleFail(xhr);
     });
 }
