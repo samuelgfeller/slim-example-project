@@ -26,11 +26,11 @@ function hideLoader(containerId){
  * @param xhr
  */
 function handleFail(xhr){
-    let errorMsg = 'Request failed';
+    let errorMsg = 'Request failed. Please try again';
 
     if (xhr.status === 401 || xhr.status === '401'){
         // Overwriting general error message to unauthorized
-        errorMsg = 'Permission denied';
+        errorMsg = 'Permission denied please try again after login';
     }
     // todo add more status verifications
 
@@ -39,5 +39,7 @@ function handleFail(xhr){
         // If we know the error message we can add it to the error popup
         errorMsg += '\nMessage: '+xhr.responseJSON.message;
     }
+
+    // Output error to user
     alert(errorMsg);
 }
