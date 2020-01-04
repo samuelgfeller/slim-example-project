@@ -43,7 +43,7 @@ function loadAllPosts() {
             console.log(output);
         }
     }).fail(function (xhr) {
-            alert(xhr.responseText);
+        handleFail(xhr);
     });
 }
 
@@ -96,8 +96,7 @@ function submitCreatePost() {
             console.log(output.success);
         }
     }).fail(function (output) {
-        console.log(output);
-        alert('Error while adding');
+        handleFail(xhr);
     });
 }
 
