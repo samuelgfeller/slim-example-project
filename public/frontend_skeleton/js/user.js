@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
     loadAllUsers();
@@ -38,7 +37,7 @@ $(document).ready(function () {
 function loadAllUsers() {
     //Load users
     $.ajax({
-        url: config.api_url+'users',
+        url: config.api_url + 'users',
         dataType: "json",
         type: 'get',
         beforeSend: function (xhr) {
@@ -65,14 +64,14 @@ function loadAllUsers() {
     });
 }
 
-function getUserBox(jsonData){
+function getUserBox(jsonData) {
     return $('<div class="singleBox" id="user' + jsonData.id + '">' +
         '<div class="boxContent">' +
         '<img src="/frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
         '<img src="/frontend_skeleton/img/del_icon.svg" class="delIcon cursorPointer" data-id="' + jsonData.id + '" alt="del">' +
-        '<div class="loader" id="loaderForUser'+jsonData.id+'"></div>'+
+        '<div class="loader" id="loaderForUser' + jsonData.id + '"></div>' +
         '<h3 class="boxHeader">' + jsonData.name + '</h3>' +
-        '<div id="boxInnerContent'+jsonData.id+'">' +
+        '<div id="boxInnerContent' + jsonData.id + '">' +
         '<p><span class="infoInBoxSpan">Email: </span><b>' + jsonData.email + '</b></p>' +
         '<p><span class="infoInBoxSpan">Updated at: </span><b>' + jsonData.updated_at + '</b></p>' +
         '<p><span class="infoInBoxSpan">Created at: </span>' + jsonData.created_at + '</p>' +
@@ -88,19 +87,19 @@ function openCreateUserForm() {
     let header = '<h2>Create user</h2>';
     let body = '<form action="users" class="blueForm modalForm" method="post" autocomplete="on">' +
         '<b><label for="createNameInp">Name</label></b>' +
-        '<input type="text" name="name" id="createNameInp" placeholder="John Doe" maxlength="200" required>'+
+        '<input type="text" name="name" id="createNameInp" placeholder="John Doe" maxlength="200" required>' +
         '<b><label for="createEmailInp">Email</label></b>' +
         '<input type="email" name="email" id="createEmailInp" placeholder="your@email.com"' +
         '       maxlength="254" required>';
     let footer = '<button type="button" id="submitBtnCreateUser" class="submitBtn modalSubmitBtn">Create user</button>' +
         '<div class="clearfix"></div>' +
         '</form>';
-    createModal(header,body,footer,$('#createUserDiv'));
+    createModal(header, body, footer, $('#createUserDiv'));
 }
 
 function submitCreateUser() {
     $.ajax({
-        url: config.api_url+'users',
+        url: config.api_url + 'users',
         type: 'post',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -114,7 +113,7 @@ function submitCreateUser() {
         }),
     }).done(function (output) {
         closeModal();
-        if (output.success === true || output.success === 'true') {
+        if (output.status === 'success') {
             loadAllUsers();
         } else {
             alert('Update: ' + output.success);
@@ -146,7 +145,7 @@ function openEditUserForm(id) {
     // Retrieve actual user infos and populate input
     $.ajax({
         dataType: "json",
-        url: config.api_url+'users/' + id,
+        url: config.api_url + 'users/' + id,
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
@@ -171,7 +170,7 @@ function openEditUserForm(id) {
  */
 function submitUpdatedUser(id) {
     $.ajax({
-        url: config.api_url+'users/' + id,
+        url: config.api_url + 'users/' + id,
         // url: 'users',
         type: 'put',
         dataType: "json",
@@ -186,8 +185,8 @@ function submitUpdatedUser(id) {
         }),
     }).done(function (output) {
         closeModal();
-        if (output.success === true || output.success === 'true') {
-            showLoader('loaderForUser'+id);
+        if (output.status === 'success') {
+            showLoader('loaderForUser' + id);
             reloadUser(id);
         } else {
             alert('Update: ' + output.success);
@@ -206,14 +205,14 @@ function submitUpdatedUser(id) {
 function deleteUser(id) {
     if (confirm('Are you sure that you want to delete this post?')) {
         $.ajax({
-            url: config.api_url+'users/' + id,
+            url: config.api_url + 'users/' + id,
             type: 'delete',
             beforeSend: function (xhr) {
                 /* Authorization header */
                 xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
             },
         }).done(function (output) {
-            if (output.success === true || output.success === 'true') {
+            if (output.status === 'success') {
                 $('#user' + id).remove();
             } else {
                 alert('Error while deleting');
@@ -225,10 +224,10 @@ function deleteUser(id) {
     }
 }
 
-function reloadUser(id){
+function reloadUser(id) {
     $.ajax({
         dataType: "json",
-        url: config.api_url+'users/' + id,
+        url: config.api_url + 'users/' + id,
         type: 'get',
         beforeSend: function (xhr) {
             /* Authorization header */
@@ -237,8 +236,8 @@ function reloadUser(id){
     }).done(function (output) {
         let user = output;
         console.log(output);
-        hideLoader('loaderForUser'+id);
-        $('#user'+id).replaceWith(getUserBox(user))
+        hideLoader('loaderForUser' + id);
+        $('#user' + id).replaceWith(getUserBox(user))
     }).fail(function (output) {
         console.log(output);
         alert('Error while retrieving data');
