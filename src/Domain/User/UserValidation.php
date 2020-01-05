@@ -110,9 +110,7 @@ class UserValidation extends AppValidation
      */
     private function validateEmail(string $email, ValidationResult $validationResult): void
     {
-        if ($validEmail = filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-        } else {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $validationResult->setError('email', 'Email address could not be validated');
         }
     }
@@ -130,7 +128,7 @@ class UserValidation extends AppValidation
     }
 
     /**
-     * Validate firstname.
+     * Validate Name.
      *
      * @param string $name
      * @param ValidationResult $validationResult
@@ -174,9 +172,6 @@ class UserValidation extends AppValidation
     {
         $validationResult = new ValidationResult('Something went wrong');
         $this->validateUser($userId, $validationResult);
-        if ((int)$executorId !== (int)$userId) {
-            $this->validatePermissionLevel($executorId, RoleLevel::SUPER_ADMIN, $validationResult);
-        }
 
         return $validationResult;
     }

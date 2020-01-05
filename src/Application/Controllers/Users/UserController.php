@@ -91,7 +91,7 @@ class UserController extends Controller
         if ($userRole === 'admin' || $id === $loggedUserId) {
             $rawData = $request->getParsedBody();
 
-            $validationResult = $this->userValidation->validateUserUpdate($id,$rawData);
+            $validationResult = $this->userValidation->validateUserUpdate($id, $rawData);
 
             if ($validationResult->fails()) {
                 $responseData = [
@@ -116,21 +116,28 @@ class UserController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $userId = $args['id'];
-        /* https://github.com/D4rkMindz/roast.li/blob/master/src/Controller/UserController.php
-        $validationResult = $this->userValidation->validateDeletion($userId, $this->getUserId());
-                if ($validationResult->fails()) {
-                    $responseData = [
-                        'status' => 'error',
-                        'validation' => $validationResult->toArray(),
-                    ];
-                    return $this->respondWithJson($response, $responseData, 422);
-                }*/
-        $deleted = $this->userService->deleteUser($userId);
-        if ($deleted) {
-            return $this->respondWithJson($response, ['status' => 'success']);
+        $loggedUserId = (int)$this->getUserIdFromToken($request);
+        $id = (int)$args['id'];
+        $userRole = $this->userService->getUserRole($loggedUserId);
+
+        // Check if it's admin or if it's its own user
+        if ($userRole === 'admin' || $id === $loggedUserId) {
+            $validationResult = $this->userValidation->validateDeletion($id, $loggedUserId);
+            if ($validationResult->fails()) {
+                $responseData = [
+                    'status' => 'error',
+                    'validation' => $validationResult->toArray(),
+                ];
+                return $this->respondWithJson($response, $responseData, 422);
+            }
+            $deleted = $this->userService->deleteUser($id);
+            if ($deleted) {
+                return $this->respondWithJson($response, ['status' => 'success', 'message' => 'User deleted']);
+            }
+            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User not deleted']);
         }
-        return $this->respondWithJson($response, ['status' => 'error']);
+        return $this->respondWithJson($response,
+            ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 401);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
