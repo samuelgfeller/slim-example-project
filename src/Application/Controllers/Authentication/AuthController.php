@@ -47,6 +47,62 @@ class AuthController extends Controller
         return $this->encoder->encode($request, $response, 'Auth/index.html.twig');
     }
 
+    public function register(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        if (null !== $data) {
+            $userData = [
+                'name' => htmlspecialchars($data['name']),
+                'email' => htmlspecialchars($data['email']),
+                'password1' => $data['password1'],
+                'password2' => $data['password2'],
+            ];
+
+            $validationResult = $this->userValidation->validateUserRegistration($userData);
+            if ($validationResult->fails()) {
+                $responseData = [
+                    'status' => 'error',
+                    'validation' => $validationResult->toArray(),
+                ];
+
+                return $this->respondWithJson($response, $responseData, 422);
+            }
+
+            $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
+            // used to give login function
+            $plainPass = $userData['password1'];
+            unset($userData['password1'], $userData['password2']);
+
+            $insertId = $this->userService->createUser($userData);
+
+            if (null !== $insertId) {
+                $this->logger->info('User "' . $userData['email'] . '" created');
+
+                // Add email and password like it is expected in the login function
+                $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
+                // Call login function to authenticate the user
+                // todo check if that is good practice or bad
+                $loginResponse = $this->login($request, $response);
+
+                $loginContent = json_decode($loginResponse->getBody(), true);
+
+                // Clear response body after body content is saved
+                $response = new \Slim\Psr7\Response();
+
+                $responseContent = $loginContent;
+
+                // maybe there is already a message so it has to be transformed as array
+                $responseContent['message'] = [$loginContent['message']];
+                $responseContent['message'][] = 'User created and logged in';
+
+                return $this->respondWithJson($response, $responseContent);
+            }
+            return $this->respondWithJson($response,
+                ['status' => 'error', 'message' => 'User could not be registered']);
+        }
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
+    }
+
     public function login(Request $request, Response $response): Response
     {
         // todo add check if already logged in
@@ -81,11 +137,12 @@ class AuthController extends Controller
 
             $token = JWT::encode($data, 'test', 'HS256'); // todo change test to settings
 
-            $this->logger->info('User "' . $userData['email'].'" logged in. Token leased for '.$durationInSec.'sec');
+            $this->logger->info('User "' . $userData['email'] . '" logged in. Token leased for ' . $durationInSec . 'sec');
 
-            return $this->respondWithJson($response, ['token' => $token], 200);
+            return $this->respondWithJson($response,
+                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'], 200);
         }
-        $this->logger->info('Invalid login attempt from "' . $userData['email'].'"');
+        $this->logger->info('Invalid login attempt from "' . $userData['email'] . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
 
 

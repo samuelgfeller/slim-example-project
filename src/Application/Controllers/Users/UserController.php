@@ -140,39 +140,10 @@ class UserController extends Controller
             ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 401);
     }
 
-    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+/*    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $data = $request->getParsedBody();
-        if (null !== $data) {
-            $userData = [
-                'name' => htmlspecialchars($data['name']),
-                'email' => htmlspecialchars($data['email']),
-                'password1' => $data['password1'],
-                'password2' => $data['password2'],
-            ];
-
-            $validationResult = $this->userValidation->validateUserRegistration($userData);
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'validation' => $validationResult->toArray(),
-                ];
-
-                return $this->respondWithJson($response, $responseData, 422);
-            }
-
-            $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
-            unset($userData['password1'], $userData['password2']);
-
-            $insertId = $this->userService->createUser($userData);
-
-            if (null !== $insertId) {
-                return $this->respondWithJson($response, ['status' => 'success']);
-            }
-            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User could not be inserted']);
-        }
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
-    }
+        // see register in authcontroller
+    }*/
 
 
 }

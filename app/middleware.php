@@ -18,7 +18,7 @@ return function (App $app) {
 
     $app->add(new \Tuupola\Middleware\JwtAuthentication([
 //        'path' => '/api', /* or ["/api", "/admin"] */
-        'ignore' => ['/frontend', '/login'],
+        'ignore' => ['/frontend', '/login', '/register'],
         //"attribute" => "decoded_token_data",
         'secret' => 'test',//$settings['settings']['jwt']['secret'],
         'algorithm' => ['HS256'],

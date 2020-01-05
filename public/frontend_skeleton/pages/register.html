@@ -26,37 +26,37 @@
     <div id="pageContent">
 
 
-
         <!--    Display all users an user     -->
         <div class="verticalCenter">
             <h2 style="display:inline-block;">Register</h2>
         </div>
 
-        <div class="formBox">
+        <div class="formBox" id="registerFormBox">
 
-        <form action="/users" class="blueForm" method="post" autocomplete="on">
-            <label for="registerNameInp">Name</label>
-            <input type="text" name="name" id="registerNameInp"
-                   placeholder="John Doe"
-                   maxlength="200"
-                   minlength="2"
-                   autofocus
-            required>
-            <label for="registerEmailInp">Email</label>
-            <input type="email" name="email" id="registerEmailInp"
-                   placeholder="your@email.com"
-                   maxlength="254"
-                   required>
-            <label for="registerPassword1Inp">Password</label>
-            <input type="password" name="password1" id="registerPassword1Inp" minlength="3"
-                   required>
-            <label for="registerPassword2Inp">Repeat password</label>
-            <input type="password" name="password2" id="registerPassword2Inp" minlength="3"
-                   required>
-            <input type="submit" value="Create account" id="registerSubmitBtn" disabled>
-        </form>
-        <br>Do you already have an account? <a href="login">Login</a>
-    </div>
+            <form class="blueForm" autocomplete="on">
+                <label for="registerNameInp">Name</label>
+                <input type="text" name="name" id="registerNameInp"
+                       placeholder="John Doe"
+                       maxlength="200"
+                       minlength="2"
+                       autofocus
+                       required>
+                <label for="registerEmailInp">Email</label>
+                <input type="email" name="email" id="registerEmailInp"
+                       placeholder="your@email.com"
+                       maxlength="254"
+                       required>
+                <label for="registerPassword1Inp">Password</label>
+                <input type="password" name="password1" id="registerPassword1Inp" minlength="3"
+                       required>
+                <label for="registerPassword2Inp">Repeat password</label>
+                <input type="password" name="password2" id="registerPassword2Inp" minlength="3"
+                       required>
+                <button type="button" class="submitBtn" id="registerSubmitBtn">Create account</button>
+
+            </form>
+            <br>Do you already have an account? <a href="login">Login</a>
+        </div>
     </div>
 </div>
 <!--<script

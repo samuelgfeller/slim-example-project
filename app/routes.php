@@ -9,11 +9,9 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->group('/login', function (RouteCollectorProxy $group) {
-        $group->get('', AuthController::class . ':index')->setName('auth');
-        $group->post('', AuthController::class . ':login')->setName('auth.login');
+    $app->post('/login', AuthController::class . ':login')->setName('auth.login');
+    $app->post('/register', AuthController::class . ':register')->setName('auth.register');
 
-    });
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->get('', UserController::class . ':list');
@@ -31,8 +29,6 @@ return function (App $app) {
         $group->post('', PostController::class . ':create');
     });
     $app->get('/own-posts', PostController::class . ':getOwnPosts');
-
-
 
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {

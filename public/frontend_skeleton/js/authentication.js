@@ -5,15 +5,20 @@ $(document).ready(function () {
         login();
     });
 
+    $('#registerSubmitBtn').on('click', function () {
+        register();
+    });
+
+
     let registerPassword1Inp = $('#registerPassword1Inp');
     let registerPassword2Inp = $('#registerPassword2Inp');
 
     $($('#registerPassword1Inp, #registerPassword2Inp')).on('keyup', function () {
         let submitBtn = $('#registerSubmitBtn');
         console.log(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp));
-        if(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp)){
+        if (inputHaveSameVal(registerPassword1Inp, registerPassword2Inp)) {
             submitBtn.attr("disabled", false);
-        }else{
+        } else {
             submitBtn.attr("disabled", true);
         }
     });
@@ -21,11 +26,11 @@ $(document).ready(function () {
     // Warning that password is unsafe
     $(registerPassword1Inp).on('change', function () {
         // check if warning already appended
-        if (isBreached(registerPassword1Inp.val())){
+        if (isBreached(registerPassword1Inp.val())) {
             if ($('#pwnedPasswordWarning').length === 0) {
                 registerPassword1Inp.after('<span class="inputWarning" id="pwnedPasswordWarning">This password is known to have been leaked and is unsafe to use</span>');
             }
-        }else{
+        } else {
             $('#pwnedPasswordWarning').remove();
         }
     });
@@ -57,14 +62,64 @@ function isBreached(password) {
 
     // todo implement async function to return after result https://stackoverflow.com/a/5316805/9013718
     $.ajax({
-        url:`https://api.pwnedpasswords.com/range/${hashprefix}`,
+        url: `https://api.pwnedpasswords.com/range/${hashprefix}`,
         async: false,
-        success:function(data) {
+        success: function (data) {
             result = data.toLowerCase().includes(hashsuffix);
         }
     });
 
     return result;
+}
+
+/**
+ * Leases jwt token and stores in localStorage
+ *
+ */
+function login() {
+    $.ajax({
+        url: config.api_url + 'login',
+        type: 'post',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            email: $('#loginEmailInp').val(),
+            password: $('#loginPasswordInp').val(),
+        }),
+    }).done(function (output) {
+        localStorage.setItem('token', output.token);
+        $('.loggedInInfo').remove();
+        $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
+
+    }).fail(function (xhr) {
+        handleFail(xhr);
+    });
+}
+
+/**
+ * Leases jwt token and stores in localStorage
+ *
+ */
+function register() {
+    $.ajax({
+        url: config.api_url + 'register',
+        type: 'post',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            name: $('#registerNameInp').val(),
+            email: $('#registerEmailInp').val(),
+            password1: $('#registerPassword1Inp').val(),
+            password2: $('#registerPassword2Inp').val(),
+        }),
+    }).done(function (output) {
+        localStorage.setItem('token', output.token);
+        $('.loggedInInfo').remove();
+        $("#registerFormBox").prepend("<b class='loggedInInfo greenText''>Registered and logged in.</b>");
+
+    }).fail(function (xhr) {
+        handleFail(xhr);
+    });
 }
 
 /**
@@ -207,28 +262,3 @@ function sha1(msg) {
 
     return temp.toLowerCase();
 };
-
-/**
- * Leases jwt token and stores in localStorage
- *
- */
-function login() {
-    $.ajax({
-        url: config.api_url + 'login',
-        type: 'post',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({
-            email: $('#loginEmailInp').val(),
-            password: $('#loginPasswordInp').val(),
-        }),
-    }).done(function (output) {
-        localStorage.setItem('token', output.token);
-        $('.loggedInInfo').remove();
-        $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
-
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while authenticating');
-    });
-}

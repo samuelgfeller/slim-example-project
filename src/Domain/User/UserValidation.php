@@ -71,7 +71,7 @@ class UserValidation extends AppValidation
 
         // First check if validation already failed. If not email is checked in db because we know its a valid email
         if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($userData['email'])) {
-            $this->logger->info('Account creation tried with existing email: ' . $userData['email']);
+            $this->logger->info('Account creation tried with existing email: "' . $userData['email'].'"');
 
             // todo remove that
             $validationResult->setError('email', 'Error in registration');
