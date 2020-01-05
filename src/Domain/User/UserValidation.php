@@ -25,24 +25,128 @@ class UserValidation extends AppValidation
      * @param LoggerInterface $logger
      * @param UserRepositoryInterface $userRepositoryInterface
      */
-    public function __construct(LoggerInterface $logger, UserRepositoryInterface $userRepositoryInterface) {
+    public function __construct(LoggerInterface $logger, UserRepositoryInterface $userRepositoryInterface)
+    {
         parent::__construct($logger);
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
+
     /**
-     * @param string $userId
+     * Validate updating the user.
+     *
+     * @param int $id
+     * @param array $userData
+     * @return ValidationResult
+     */
+    public function validateUserUpdate(int $id, array $userData): ValidationResult
+    {
+        $validationResult = new ValidationResult('Please check your data');
+        $this->validateUser($id, $validationResult);
+
+        if (isset($userData['name'])){
+            $this->validateName($userData['name'], $validationResult);
+        }
+        if (isset($userData['email'])){
+            $this->validateEmail($userData['email'], $validationResult);
+        }
+        if (isset($userData['password1'],$userData['password2'])){
+            $this->validatePasswords([$userData['password1'],$userData['password2']], $validationResult);
+        }
+
+        return $validationResult;
+    }
+
+    /**
+     * Validate registration.
+     *
+     * @param $userData
+     * @return ValidationResult
+     */
+    public function validateUserRegistration($userData): ValidationResult
+    {
+        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
+        $this->validateName($userData['email'], $validationResult);
+        $this->validateEmail($userData['email'], $validationResult);
+
+        // First check if validation already failed. If not email is checked in db because we know its a valid email
+        if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($userData['email'])) {
+            $this->logger->info('Account creation tried with existing email: ' . $userData['email']);
+
+            // todo remove that
+            $validationResult->setError('email', 'Error in registration');
+
+            // todo implement function to tell client that register success without actually writing something in db;
+            // todo send email to user to say that someone registered with his email and that he has already an account
+            // todo in email provide link to login and how the password can be changed
+        }
+
+        $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+        return $validationResult;
+    }
+
+
+
+    /**
+     * Validate password
+     *
+     * @param array $passwords [$password1, $password2]
      * @param ValidationResult $validationResult
      */
-    protected function validateUser(string $userId, ValidationResult $validationResult)
+    private function validatePasswords(array $passwords, ValidationResult $validationResult)
     {
-        $exists = $this->userRepositoryInterface->existsUser($userId);
-        if (!$exists) {
-            $validationResult->setMessage('You are not a registered user!');
-            $validationResult->setError('user', __('Not registered'));
-            // TODO add logging
+        if ($passwords[0] !== $passwords[1]) {
+            $validationResult->setError('password2', 'Passwords do not match');
+        }
+        $this->validateLengthMin($passwords[0], 'password1', $validationResult, 3);
+        $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
+    }
+
+    /**
+     * Validate email
+     *
+     * @param string $email
+     * @param ValidationResult $validationResult
+     */
+    private function validateEmail(string $email, ValidationResult $validationResult): void
+    {
+        if ($validEmail = filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        } else {
+            $validationResult->setError('email', 'Email address could not be validated');
         }
     }
+
+    protected function validateUser($userId, ValidationResult $validationResult): void
+    {
+        $exists = $this->userRepositoryInterface->userExists($userId);
+        if (!$exists) {
+            $validationResult->setMessage('User not found');
+            $validationResult->setError('user', 'User not existing');
+
+            $this->logger->info('Check for user (id: '.$userId.') that didn\'t exist in validation');
+
+        }
+    }
+
+    /**
+     * Validate firstname.
+     *
+     * @param string $name
+     * @param ValidationResult $validationResult
+     */
+    private function validateName(string $name, ValidationResult $validationResult): void
+    {
+        $this->validateLengthMax($name, 'name', $validationResult, 200);
+        $this->validateLengthMin($name, 'name', $validationResult, 2);
+    }
+
+
+
+
+
+
+    // unused from björn original
 
     /**
      * Validate loading the user.
@@ -58,74 +162,6 @@ class UserValidation extends AppValidation
         return $validationResult;
     }
 
-    /**
-     * Validate updating the user.
-     *
-     * @param string $executorId
-     * @param string $userId
-     * @param null|string $username
-     * @param string|null $oldPassword
-     * @param null|string $password
-     * @param null|string $email
-     * @param null|string $firstName
-     * @param null|string $lastName
-     * @param null|string $roleId
-     * @return ValidationResult
-     */
-    public function validateUpdate(
-        string $executorId,
-        string $userId,
-        ?string $username,
-        ?string $oldPassword,
-        ?string $password,
-        ?string $email,
-        ?string $firstName,
-        ?string $lastName,
-        ?string $roleId
-    ) {
-        $validationResult = new ValidationResult(__('Please check your data'));
-        $this->validateUser($userId, $validationResult);
-
-        if (!empty($username)) {
-            $this->validateUsername($username, $validationResult);
-        }
-
-        if (!empty($password)) {
-            $this->validateOldPassword($userId, $oldPassword, $validationResult);
-            $this->validatePassword($password, $validationResult);
-        }
-
-        if (!empty($email)) {
-            $this->validateEmail($email, $validationResult);
-        }
-
-        if (!empty($firstName)) {
-            $this->validateFirstname($firstName, $validationResult);
-        }
-
-        if (!empty($lastName)) {
-            $this->validateLastname($lastName, $validationResult);
-        }
-
-        if (!empty($roleId) && !$this->hasPermissionLevel($executorId, RoleLevel::SUPER_ADMIN)) {
-            $validationResult->setError('permission', 'You do not have the permission to execute this action');
-        }
-
-        return $validationResult;
-    }
-
-    /**
-     * Validate registration.
-     *
-     * @param $userData
-     * @return ValidationResult
-     */
-    public function validateUserRegistration($userData): ValidationResult {
-        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
-        $this->validateEmail($userData['email'], $validationResult);
-        $this->validatePasswords([$userData['password1'],$userData['password2']], $validationResult);
-        return $validationResult;
-    }
 
     /**
      * Validate deletion.
@@ -182,45 +218,7 @@ class UserValidation extends AppValidation
         }
     }
 
-    /**
-     * Validate password
-     *
-     * @param array $passwords [$password1, $password2]
-     * @param ValidationResult $validationResult
-     */
-    private function validatePasswords(array $passwords, ValidationResult $validationResult)
-    {
-        if ($passwords[0] !== $passwords[1]) {
-            $validationResult->setError('password2', 'Passwords do not match');
-        }
-        $this->validateLengthMin($passwords[0], 'password1', $validationResult, 3);
-        $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
 
-    }
-
-    /**
-     * Validate email
-     *
-     * @param string $email
-     * @param ValidationResult $validationResult
-     */
-    private function validateEmail(string $email, ValidationResult $validationResult): void
-    {
-        if ($validEmail = filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            if ($this->userRepositoryInterface->findUserByEmail($validEmail)) {
-                $this->logger->info('Account creation tried with existing email: ' . $validEmail);
-
-                // todo remove that
-                $validationResult->setError('email', 'Error in registration');
-
-                // todo implement function to tell client that register success without actually writing something in db;
-                // todo send email to user to say that someone registered with his email and that he has already an account
-                // todo in email provide link to login and how the password can be changed
-            }
-        }else{
-            $validationResult->setError('email', 'Email address could not be validated');
-        }
-    }
 
     /**
      * Validate firstname.

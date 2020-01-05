@@ -112,4 +112,17 @@ class UserRepository extends DataManager implements UserRepositoryInterface
         // todo put role in separate tables
         return $this->getById($id,['role'])['role'];
     }
+
+    /**
+     * Retrieve user role
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function userExists(int $id) : bool{
+        return $this->exists('id',$id);
+    }
+
+
+
 }

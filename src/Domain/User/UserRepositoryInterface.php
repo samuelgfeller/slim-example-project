@@ -77,4 +77,14 @@ interface UserRepositoryInterface
      */
     public function getUserRole(int $id): string;
 
+    /**
+     * Retrieve user role
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function userExists(int $id): bool;
+
+
+
 }
