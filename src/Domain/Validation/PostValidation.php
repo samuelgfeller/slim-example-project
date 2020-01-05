@@ -1,7 +1,4 @@
 <?php
-/**
- * Created by Björn Pfoster for roast.li
- */
 
 namespace App\Service\Validation;
 
