@@ -70,7 +70,7 @@ class AuthController extends Controller
             $data = [
                 'iat' => $issuedAt,         // Issued at: time when the token was generated
                 'jti' => $tokenId,          // Json Token Id: an unique identifier for the token
-                'iss' => "MyApp",       // Issuer
+                'iss' => 'MyApp',       // Issuer
                 'nbf' => $notBefore,        // Not before
                 'exp' => $expire,           // Expire
                 'data' => [                  // Data related to the signer user
@@ -79,13 +79,13 @@ class AuthController extends Controller
                 ]
             ];
 
-            $token = JWT::encode($data, "test", "HS256"); // todo change test to settings
+            $token = JWT::encode($data, 'test', 'HS256'); // todo change test to settings
 
-            $this->logger->info('User ' . $userData['email'].' logged in. Token leased for '.$durationInSec.'sec');
+            $this->logger->info('User "' . $userData['email'].'" logged in. Token leased for '.$durationInSec.'sec');
 
             return $this->respondWithJson($response, ['token' => $token], 200);
         }
-        $this->logger->info('Invalid login attempt from ' . $userData['email']);
+        $this->logger->info('Invalid login attempt from "' . $userData['email'].'"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
 
 

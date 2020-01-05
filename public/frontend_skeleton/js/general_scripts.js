@@ -30,7 +30,7 @@ function handleFail(xhr){
 
     if (xhr.status === 401 || xhr.status === '401'){
         // Overwriting general error message to unauthorized
-        errorMsg = 'Permission denied please try again after login';
+        errorMsg = 'Access denied';
     }
     // todo add more status verifications
 

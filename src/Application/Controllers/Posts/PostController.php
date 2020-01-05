@@ -80,8 +80,7 @@ class PostController extends Controller
 
     public function update(Request $request, Response $response, array $args): Response
     {
-        // todo check if user has authorisation with token data
-        $userId = $this->getUserIdFromToken($request);
+        $userId = (int)$this->getUserIdFromToken($request);
 
         $id = (int)$args['id'];
 

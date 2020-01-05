@@ -60,6 +60,7 @@ function loadAllUsers() {
             console.log(output);
         }
     }).fail(function (xhr) {
+        $('#usersDiv').empty();
         handleFail(xhr);
     });
 }
@@ -201,7 +202,7 @@ function submitUpdatedUser(id) {
  * @param id
  */
 function deleteUser(id) {
-    if (confirm('Are you sure that you want to delete this post?')) {
+    if (confirm('Are you sure that you want to delete this user?')) {
         $.ajax({
             url: config.api_url + 'users/' + id,
             type: 'delete',
