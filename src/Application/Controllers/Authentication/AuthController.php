@@ -29,31 +29,14 @@ class AuthController extends Controller
         $this->userValidation = $userValidation;
     }
 
-    public function get(Request $request, Response $response, array $args): Response
-    {
-        $id = $args['id'];
-        $user = $this->userService->findUser($id);
-//        var_dump($this->container->get('logger'));
-//        $response->getBody()->write('GET request');
-
-        $this->logger->info('users/' . $id . ' has been called');
-//        var_dump($this->logger);
-        return $this->respondWithJson($response, $user);
-    }
-
-    // Björn
-    public function indexAction(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        return $this->encoder->encode($request, $response, 'Auth/index.html.twig');
-    }
-
     public function register(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
         if (null !== $data) {
+            // todo put filter in general function like validation
             $userData = [
-                'name' => htmlspecialchars($data['name']),
-                'email' => htmlspecialchars($data['email']),
+                'name' =>  $data['name'],
+                'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
                 'password1' => $data['password1'],
                 'password2' => $data['password2'],
             ];
@@ -110,7 +93,7 @@ class AuthController extends Controller
         $data = $request->getParsedBody();
 
         $userData = [
-            'email' => htmlspecialchars($data['email']),
+            'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
             'password' => $data['password']
         ];
 
@@ -144,9 +127,5 @@ class AuthController extends Controller
         }
         $this->logger->info('Invalid login attempt from "' . $userData['email'] . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
-
-
     }
-
-
 }
