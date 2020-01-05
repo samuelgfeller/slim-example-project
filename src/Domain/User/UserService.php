@@ -16,7 +16,7 @@ class UserService {
         return $allUsers;
     }
 
-    public function findUser($id): array
+    public function findUser(int $id): array
     {
         return $this->userRepositoryInterface->findUserById($id);
     }

@@ -61,9 +61,9 @@ class PostController extends Controller
         // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
         // option 2 /own-posts and get user id from token data body
 
-        $userId = $this->getUserIdFromToken($request);
+        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $posts = $this->postService->findAllPostsFromUser($userId);
+        $posts = $this->postService->findAllPostsFromUser($loggedUserId);
 
         return $this->respondWithJson($response, $posts);
     }
@@ -84,13 +84,13 @@ class PostController extends Controller
 //      var_dump($request->getParsedBody());
 
             $data = $request->getParsedBody();
+            // todo check if userbody is empty everywhere
 
             $postData = [
-                'message' => htmlspecialchars($data['message']),
-                'user' => htmlspecialchars($data['user']),
+                'message' => $data['message'],
             ];
 
-            $validationResult = $this->postValidation->validatePostCreation($postData);
+            $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
             if ($validationResult->fails()) {
                 $responseData = [
                     'status' => 'error',
@@ -112,27 +112,39 @@ class PostController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        // todo check if user has authorisation
-        $postId = $args['id'];
+        $userId = (int)$this->getUserIdFromToken($request);
 
+        $id = (int)$args['id'];
 
-        $deleted = $this->postService->deletePost($postId);
-        if ($deleted) {
-            return $this->respondWithJson($response, ['status' => 'success']);
+        $post = $this->postService->findPost($id);
+
+        $userRole = $this->userService->getUserRole($userId);
+
+        // Check if it's admin or if it's its own post
+        if ($userRole === 'admin' || (int) $post['user_id'] === $userId) {
+
+            $deleted = $this->postService->deletePost($id);
+            if ($deleted) {
+                return $this->respondWithJson($response, ['status' => 'success']);
+            }
+            $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not deleted']);
+            return $response->withAddedHeader('Warning', 'The post got not deleted');
         }
-        return $this->respondWithJson($response, ['status' => 'error']);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 401);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+        $userId = (int)$this->getUserIdFromToken($request);
+
         $data = $request->getParsedBody();
         if (null !== $data) {
             $postData = [
-                'message' => htmlspecialchars($data['message']),
-                'user' => htmlspecialchars($data['user']),
+                'message' => $data['message'],
+                'user_id' => $userId,
             ];
 
-            $validationResult = $this->postValidation->validatePostCreation($postData);
+            $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
             if ($validationResult->fails()) {
                 $responseData = [
                     'status' => 'error',
@@ -146,10 +158,9 @@ class PostController extends Controller
             if (null !== $insertId) {
                 return $this->respondWithJson($response, ['status' => 'success']);
             }
-            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Post could not be inserted']);
+            $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not created']);
+            return $response->withAddedHeader('Warning', 'The post could not be created');
         }
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
     }
-
-
 }

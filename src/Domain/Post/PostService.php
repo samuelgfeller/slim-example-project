@@ -71,36 +71,17 @@ class PostService
      */
     public function createPost($data): string
     {
-        $token = $data['user'];
-        $jwt = JWT::decode($token,'test',['HS256']);
-
-        if(!empty($jwt)){
-            return $this->postRepositoryInterface->insertPost([
-                'message' => $data['message'],
-                'user_id' => $jwt->data->userId
-            ]);
-        }
-        return "Error could not create";
+        return $this->postRepositoryInterface->insertPost($data);
     }
 
-    public function updatePost($id,$data): bool
+
+    public function updatePost($id, $data): bool
     {
         $userData = [
             'message' => $data['message'],
-            'user' => $data['user']
         ];
 
-        $jwt = JWT::decode($userData['user'],'test',['HS256']);
-
-        $post = $this->postRepositoryInterface->findPostById($id);
-        if(!empty($jwt) && !empty($post)) {
-            if ($jwt->data->userId == $post['user_id']) {
-                return $this->postRepositoryInterface->updatePost([
-                    "message" => $userData['message'],
-                    "user_id" => $jwt->data->userId
-                ], $id);
-            }
-        } return false;
+        return $this->postRepositoryInterface->updatePost($userData, $id);
     }
 
     public function deletePost($id): bool

@@ -36,7 +36,7 @@ class PostValidation extends AppValidation
      * @param $userData
      * @return ValidationResult
      */
-    public function validatePostCreation($userData): ValidationResult {
+    public function validatePostCreationOrUpdate($userData): ValidationResult {
         $validationResult = new ValidationResult('There is something in the post data which couldn\'t be validated');
 
         $this->validateLengthMax($userData['message'], 'message', $validationResult, 500);
