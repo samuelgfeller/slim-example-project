@@ -8,8 +8,8 @@ use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 
 // todo validation - return error
+// todo maybe put permission validation in a better place like UserValidation class?
 // todo login / calls via token jsfw
-// todo add posts and user roles
 // todo testing junit
 // todo translation
 // todo use frontend framework
