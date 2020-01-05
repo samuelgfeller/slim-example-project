@@ -59,8 +59,8 @@ function loadAllUsers() {
         } else {
             console.log(output);
         }
-    }).fail(function (output) {
-        alert('Error while fetching data');
+    }).fail(function (xhr) {
+        handleFail(xhr);
     });
 }
 
@@ -118,9 +118,8 @@ function submitCreateUser() {
         } else {
             alert('Update: ' + output.success);
         }
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while adding');
+    }).fail(function (xhr) {
+        handleFail(xhr);
     });
 }
 
@@ -156,10 +155,9 @@ function openEditUserForm(id) {
         $('#updateNameInp').val(user.name);
         $('#updateEmailInp').val(user.email);
         $('#submitBtnEditUser').attr('data-id', user.id);
-    }).fail(function (output) {
-        console.log(output);
+    }).fail(function (xhr) {
         closeModal();
-        alert('Error while retrieving data');
+        handleFail(xhr);
     });
 }
 
@@ -191,9 +189,9 @@ function submitUpdatedUser(id) {
         } else {
             alert('Update: ' + output.success);
         }
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while updating');
+    }).fail(function (xhr) {
+        handleFail(xhr);
+
     });
 }
 
@@ -217,9 +215,8 @@ function deleteUser(id) {
             } else {
                 alert('Error while deleting');
             }
-        }).fail(function (output) {
-            console.log(output);
-            alert('Error while deleting');
+        }).fail(function (xhr) {
+            handleFail(xhr);
         });
     }
 }
@@ -238,8 +235,7 @@ function reloadUser(id) {
         console.log(output);
         hideLoader('loaderForUser' + id);
         $('#user' + id).replaceWith(getUserBox(user))
-    }).fail(function (output) {
-        console.log(output);
-        alert('Error while retrieving data');
+    }).fail(function (xhr) {
+        handleFail(xhr);
     });
 }
