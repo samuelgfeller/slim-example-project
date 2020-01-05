@@ -224,7 +224,8 @@ function login() {
         }),
     }).done(function (output) {
         localStorage.setItem('token', output.token);
-        $("#loginFormBox").prepend("<b class='greenText'>Logged in.</b>");
+        $('.loggedInInfo').remove();
+        $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
 
     }).fail(function (output) {
         console.log(output);
