@@ -24,6 +24,29 @@ class UserController extends Controller {
         $this->userValidation = $userValidation;
     }
 
+    /**
+     * Returns all users
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
+     */
+    public function list(Request $request, Response $response, array $args) {
+        $loggedUserId = (int)$this->getUserIdFromToken($request);
+
+        $userRole = $this->userService->getUserRole($loggedUserId);
+
+        if ($userRole === 'admin') {
+            $allUsers = $this->userService->findAllUsers();
+
+            $response->withHeader('Content-Type', 'application/json');
+            return $this->respondWithJson($response, $allUsers);
+        }
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin to view all users'], 401);
+    }
+
     public function get(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
@@ -106,17 +129,5 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
     }
 
-    public function list(Request $request, Response $response, array $args) {
-        $allUsers = $this->userService->findAllUsers();
-        //somehow that doesnt work
-//        $this->respondWithData($response, va$allUsers);
-        //    $this->respondWithDataPrettyJson($response, $allUsers);
 
-        // This works though
-//         $response->getBody()->write(json_encode($allUsers));
-//         $response->getBody()->write('omg');
-        $response->withHeader('Content-Type', 'application/json');
-        return $this->respondWithJson($response, $allUsers);
-
-    }
 }

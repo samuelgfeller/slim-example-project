@@ -58,7 +58,7 @@ class UserService {
      * @return string
      * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
      */
-    public function getUserRole($id): string
+    public function getUserRole(int $id): string
     {
         return $this->userRepositoryInterface->getUserRole($id);
     }

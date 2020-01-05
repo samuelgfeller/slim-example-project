@@ -48,6 +48,7 @@ class PostService {
      */
     private function populatePostsArrayWithUser($posts): array
     {
+        // todo output escaping
         // Add user name info to post
         $postsWithUser = [];
         foreach ($posts as $post){
