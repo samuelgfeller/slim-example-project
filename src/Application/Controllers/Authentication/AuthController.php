@@ -22,7 +22,8 @@ class AuthController extends Controller
     protected $userService;
     protected $userValidation;
 
-    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation) {
+    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation)
+    {
         parent::__construct($logger);
         $this->userService = $userService;
         $this->userValidation = $userValidation;
@@ -48,6 +49,8 @@ class AuthController extends Controller
 
     public function login(Request $request, Response $response): Response
     {
+        // todo add check if already logged in
+
         $data = $request->getParsedBody();
 
         $userData = [
@@ -57,13 +60,12 @@ class AuthController extends Controller
 
         $user = $this->userService->findUserByEmail($userData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
-        if(password_verify($userData['password'],$user['password'])) {
-
-
+        if (password_verify($userData['password'], $user['password'])) {
+            $durationInSec = 500;
             $tokenId = base64_encode(random_bytes(32));
             $issuedAt = time();
             $notBefore = $issuedAt + 2;             //Adding 2 seconds
-            $expire = $notBefore + 300;            // Adding 300 seconds
+            $expire = $notBefore + $durationInSec;            // Adding 300 seconds
 
             $data = [
                 'iat' => $issuedAt,         // Issued at: time when the token was generated
@@ -78,10 +80,13 @@ class AuthController extends Controller
             ];
 
             $token = JWT::encode($data, "test", "HS256"); // todo change test to settings
+
+            $this->logger->info('User ' . $userData['email'].' logged in. Token leased for '.$durationInSec.'sec');
+
             return $this->respondWithJson($response, ['token' => $token], 200);
-        } else {
-            return $this->respondWithJson($response, "could not lease token: invalid credentials", 500);
         }
+        $this->logger->info('Invalid login attempt from ' . $userData['email']);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
 
 
     }
