@@ -13,12 +13,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Handlers\Strategies\RequestHandler;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     protected $userService;
     protected $userValidation;
 
-    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation) {
+    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation)
+    {
         parent::__construct($logger);
         $this->userService = $userService;
         $this->userValidation = $userValidation;
@@ -33,7 +35,8 @@ class UserController extends Controller {
      * @return Response
      * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
      */
-    public function list(Request $request, Response $response, array $args) {
+    public function list(Request $request, Response $response, array $args)
+    {
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
         $userRole = $this->userService->getUserRole($loggedUserId);
@@ -44,32 +47,39 @@ class UserController extends Controller {
             $response->withHeader('Content-Type', 'application/json');
             return $this->respondWithJson($response, $allUsers);
         }
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin to view all users'], 401);
+        return $this->respondWithJson($response,
+            ['status' => 'error', 'message' => 'You have to be admin to view all users'], 401);
     }
 
     public function get(Request $request, Response $response, array $args): Response
     {
-        $id = $args['id'];
-        $user = $this->userService->findUser($id);
-//        var_dump($this->container->get('logger'));
-//        $response->getBody()->write('GET request');
+        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $this->logger->info('users/' . $id . ' has been called');
-//        var_dump($this->logger);
-        return $this->respondWithJson($response, $user);
+        $id = (int)$args['id'];
+
+        $userRole = $this->userService->getUserRole($loggedUserId);
+
+        // Check if it's admin or if it's its own user
+        if ($userRole === 'admin' || $id === $loggedUserId) {
+            $user = $this->userService->findUser($id);
+            return $this->respondWithJson($response, $user);
+        }
+
+        return $this->respondWithJson($response,
+            ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'], 401);
     }
 
     public function update(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
 //        var_dump($request->getParsedBody());
-    
+
         $data = $request->getParsedBody();
 
         $name = htmlspecialchars($data['name']);
         $email = htmlspecialchars($data['email']);
 //        var_dump($data);
-        $updated = $this->userService->updateUser($id,$name,$email);
+        $updated = $this->userService->updateUser($id, $name, $email);
         if ($updated) {
             return $this->respondWithJson($response, ['status' => 'success']);
         }
@@ -79,15 +89,15 @@ class UserController extends Controller {
     public function delete(Request $request, Response $response, array $args): Response
     {
         $userId = $args['id'];
-/* https://github.com/D4rkMindz/roast.li/blob/master/src/Controller/UserController.php
-$validationResult = $this->userValidation->validateDeletion($userId, $this->getUserId());
-        if ($validationResult->fails()) {
-            $responseData = [
-                'status' => 'error',
-                'validation' => $validationResult->toArray(),
-            ];
-            return $this->respondWithJson($response, $responseData, 422);
-        }*/
+        /* https://github.com/D4rkMindz/roast.li/blob/master/src/Controller/UserController.php
+        $validationResult = $this->userValidation->validateDeletion($userId, $this->getUserId());
+                if ($validationResult->fails()) {
+                    $responseData = [
+                        'status' => 'error',
+                        'validation' => $validationResult->toArray(),
+                    ];
+                    return $this->respondWithJson($response, $responseData, 422);
+                }*/
         $deleted = $this->userService->deleteUser($userId);
         if ($deleted) {
             return $this->respondWithJson($response, ['status' => 'success']);
@@ -98,7 +108,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $request->getParsedBody();
-        if(null !== $data) {
+        if (null !== $data) {
             $userData = [
                 'name' => htmlspecialchars($data['name']),
                 'email' => htmlspecialchars($data['email']),
@@ -116,7 +126,7 @@ $validationResult = $this->userValidation->validateDeletion($userId, $this->getU
                 return $this->respondWithJson($response, $responseData, 422);
             }
 
-            $userData['password'] = password_hash($userData['password1'],PASSWORD_DEFAULT);
+            $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
             unset($userData['password1'], $userData['password2']);
 
             $insertId = $this->userService->createUser($userData);
