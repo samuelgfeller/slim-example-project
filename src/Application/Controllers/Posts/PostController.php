@@ -50,19 +50,9 @@ class PostController extends Controller
 
     public function list(Request $request, Response $response, array $args)
     {
-        $allPosts = $this->postService->findAllPosts();
-        // todo output escaping
-        // Add user name info to post
-        $postsWithUser = [];
-        // todo move this logic to service
-        foreach ($allPosts as $post) {
-            // Get user information connected to post
-            $user = $this->userService->findUser($post['user_id']);
-            $post['user_name'] = $user['name'];
-            $postsWithUser[] = $post;
-        }
+        $postsWithUsers = $this->postService->findAllPosts();
 
-        return $this->respondWithJson($response, $postsWithUser);
+        return $this->respondWithJson($response, $postsWithUsers);
 
     }
 

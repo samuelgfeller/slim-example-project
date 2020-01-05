@@ -8,19 +8,22 @@ use App\Domain\User\UserService;
 use Firebase\JWT\JWT;
 
 
-class PostService {
-    
+class PostService
+{
+
     private $postRepositoryInterface;
     private $userService;
 
-    public function __construct(PostRepositoryInterface $postRepositoryInterface, UserService $userService) {
+    public function __construct(PostRepositoryInterface $postRepositoryInterface, UserService $userService)
+    {
         $this->postRepositoryInterface = $postRepositoryInterface;
         $this->userService = $userService;
     }
 
-    public function findAllPosts() {
-        $allPosts= $this->postRepositoryInterface->findAllPosts();
-        return $allPosts;
+    public function findAllPosts()
+    {
+        $allPosts = $this->postRepositoryInterface->findAllPosts();
+        return $this->populatePostsArrayWithUser($allPosts);
     }
 
     public function findPost($id): array
@@ -51,7 +54,7 @@ class PostService {
         // todo output escaping
         // Add user name info to post
         $postsWithUser = [];
-        foreach ($posts as $post){
+        foreach ($posts as $post) {
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
             $post['user_name'] = $user['name'];
@@ -59,6 +62,7 @@ class PostService {
         }
         return $postsWithUser;
     }
+
     /**
      * Insert post in database
      *
