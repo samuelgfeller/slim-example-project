@@ -1,15 +1,6 @@
 $(document).ready(function () {
 
     loadAllUsers();
-    // Edit user open form modal
-    $('#createUserBtn').on('click', function () {
-        openCreateUserForm();
-    });
-
-    // Send update request
-    $('#createUserDiv').on('click', '#submitBtnCreateUser', function () {
-        submitCreateUser();
-    });
 
     // Edit user open form modal
     $('#usersDiv').on('click', '.editIcon', function () {
@@ -79,49 +70,6 @@ function getUserBox(jsonData) {
         '</div>' +
         '</div>' +
         '</div>');
-}
-
-/**
- * Open modal to create a user
- */
-function openCreateUserForm() {
-    let header = '<h2>Create user</h2>';
-    let body = '<form action="users" class="blueForm modalForm" method="post" autocomplete="on">' +
-        '<b><label for="createNameInp">Name</label></b>' +
-        '<input type="text" name="name" id="createNameInp" placeholder="John Doe" maxlength="200" required>' +
-        '<b><label for="createEmailInp">Email</label></b>' +
-        '<input type="email" name="email" id="createEmailInp" placeholder="your@email.com"' +
-        '       maxlength="254" required>';
-    let footer = '<button type="button" id="submitBtnCreateUser" class="submitBtn modalSubmitBtn">Create user</button>' +
-        '<div class="clearfix"></div>' +
-        '</form>';
-    createModal(header, body, footer, $('#createUserDiv'));
-}
-
-function submitCreateUser() {
-    $.ajax({
-        url: config.api_url + 'users',
-        type: 'post',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function (xhr) {
-            /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-        },
-        data: JSON.stringify({
-            name: $('#createNameInp').val(),
-            email: $('#createEmailInp').val(),
-        }),
-    }).done(function (output) {
-        closeModal();
-        if (output.status === 'success') {
-            loadAllUsers();
-        } else {
-            alert('Update: ' + output.success);
-        }
-    }).fail(function (xhr) {
-        handleFail(xhr);
-    });
 }
 
 /**
