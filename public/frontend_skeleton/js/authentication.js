@@ -224,7 +224,8 @@ function login() {
         }),
     }).done(function (output) {
         localStorage.setItem('token', output.token);
-        alert('Login successful');
+        $("#loginFormBox").prepend("<b class='greenText'>Logged in.</b>");
+
     }).fail(function (output) {
         console.log(output);
         alert('Error while authenticating');
