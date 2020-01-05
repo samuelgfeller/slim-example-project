@@ -40,6 +40,7 @@ function handleFail(xhr){
         errorMsg += '\nMessage: '+xhr.responseJSON.message;
     }
 
+    errorMsg += '\nCode: '+ xhr.status;
     // Output error to user
     alert(errorMsg);
 }
