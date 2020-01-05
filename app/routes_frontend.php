@@ -22,7 +22,7 @@ return function (App $app) {
             require_once __DIR__ . '/../public/frontend_skeleton/index.html';
             return $response;
         });
-        $group->get('/userlist', function (Request $request, Response $response, array $args) {
+        $group->get('/user-list', function (Request $request, Response $response, array $args) {
             require_once __DIR__ . '/../public/frontend_skeleton/pages/userlist.html';
             return $response;
         });

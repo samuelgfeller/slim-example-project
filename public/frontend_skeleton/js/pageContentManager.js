@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#userListNavBtn').on('click', function () {
-        location.href = config.frontend_url + 'userlist';
+        location.href = config.frontend_url + 'user-list';
 
     });
     $('#profileNavBtn').on('click', function () {
