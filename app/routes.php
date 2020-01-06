@@ -35,6 +35,7 @@ return function (App $app) {
         $name = $args['name'];
         $response->getBody()->write("Hello, $name");
         $response->getBody()->write(json_encode($response->getStatusCode()));
+        throw new \HttpInternalServerErrorException('Nooooooooooooooo!');
         return $response;
     });
 };
