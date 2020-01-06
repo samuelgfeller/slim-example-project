@@ -34,24 +34,16 @@ function handleFail(xhr){
     }
 
     if (xhr.status === 403 || xhr.status === '403'){
-        // Overwriting general error message to forbidden
         errorMsg = 'Forbidden. You do not have access to this area or function';
     }
 
-    if (xhr.status === 404 || xhr.status === '403'){
-        // Overwriting general error message to forbidden
+    if (xhr.status === 404 || xhr.status === '404'){
         errorMsg = 'Page not found!';
-        window.open('https://www.amazon.de/asdf');
     }
-
 
     if (xhr.status === 500 || xhr.status === '500'){
-        // Overwriting general error message to server error
         errorMsg = 'Internal server error';
     }
-
-
-    // todo add more status verifications
 
     // Add error messages if they are given by the backend
     if(typeof xhr.responseJSON.message !== 'undefined' ){

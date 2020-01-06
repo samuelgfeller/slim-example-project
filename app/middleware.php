@@ -17,13 +17,11 @@ return function (App $app) {
     $app->add(JsonBodyParserMiddleware::class);
 
     $app->add(new \Tuupola\Middleware\JwtAuthentication([
-//        'path' => '/api', /* or ["/api", "/admin"] */
+//      'path' => '/api', /* or ["/api", "/admin"] */
         'ignore' => ['/frontend', '/login', '/register','/hello'],
-        //"attribute" => "decoded_token_data",
         'secret' => 'test',//$settings['settings']['jwt']['secret'],
         'algorithm' => ['HS256'],
         'logger' => $logger,
-
         // HTTPS not mandatory for local development
         'relaxed' => ['localhost', 'dev.slim_api_skeleton'],
         'error' => function ($response, $arguments) {
@@ -33,14 +31,5 @@ return function (App $app) {
                 ->withHeader('Content-Type', 'application/json')
                 ->getBody()->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
         }
-
-
-        /*"error" => function ($response, $arguments) {
-            $data["status"] = "error";
-            $data["message"] = $arguments["message"];
-            return $response
-                ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-        }*/
     ]));
 };

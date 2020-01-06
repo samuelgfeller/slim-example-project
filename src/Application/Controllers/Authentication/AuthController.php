@@ -92,14 +92,14 @@ class AuthController extends Controller
 
         $data = $request->getParsedBody();
 
-        $userData = [
+        $loginData = [
             'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
             'password' => $data['password']
         ];
 
-        $user = $this->userService->findUserByEmail($userData['email']);
+        $user = $this->userService->findUserByEmail($loginData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
-        if (password_verify($userData['password'], $user['password'])) {
+        if (password_verify($loginData['password'], $user['password'])) {
             $durationInSec = 500;
             $tokenId = base64_encode(random_bytes(32));
             $issuedAt = time();
@@ -114,18 +114,18 @@ class AuthController extends Controller
                 'exp' => $expire,           // Expire
                 'data' => [                  // Data related to the signer user
                     'userId' => $user['id'], // userid from the users table
-                    'email' => $userData['email'],
                 ]
             ];
 
             $token = JWT::encode($data, 'test', 'HS256'); // todo change test to settings
 
-            $this->logger->info('User "' . $userData['email'] . '" logged in. Token leased for ' . $durationInSec . 'sec');
+            $this->logger->info('User "' . $loginData['email'] . '" logged in. 
+                Token leased for ' . $durationInSec . 'sec');
 
             return $this->respondWithJson($response,
                 ['token' => $token, 'status' => 'success', 'message' => 'Logged in'], 200);
         }
-        $this->logger->info('Invalid login attempt from "' . $userData['email'] . '"');
+        $this->logger->notice('Invalid login attempt from "' . $loginData['email'] . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
     }
 }
