@@ -58,8 +58,10 @@ class UserController extends Controller
             $response->withHeader('Content-Type', 'application/json');
             return $this->respondWithJson($response, $allUsers);
         }
+        $this->logger->notice('User '.$loggedUserId.' tried to view all other users');
+
         return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You have to be admin to view all users'], 401);
+            ['status' => 'error', 'message' => 'You have to be admin to view all users'], 403);
     }
 
     public function get(Request $request, Response $response, array $args): Response
@@ -76,9 +78,10 @@ class UserController extends Controller
             $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
             return $this->respondWithJson($response, $user);
         }
+        $this->logger->notice('User '.$loggedUserId.' tried to view other user with id: '.$id);
 
         return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'], 401);
+            ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'], 403);
     }
 
     /**
@@ -122,8 +125,10 @@ class UserController extends Controller
             }
             return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User wasn\'t updated']);
         }
+        $this->logger->notice('User '.$loggedUserId.' tried to update other user with id: '.$id);
+
         return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to view others'], 401);
+            ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to view others'], 403);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -148,8 +153,10 @@ class UserController extends Controller
             }
             return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User not deleted']);
         }
+        $this->logger->notice('User '.$loggedUserId.' tried to delete other user with id: '.$id);
+
         return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 401);
+            ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 403);
     }
 
     /*    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

@@ -118,7 +118,8 @@ class PostController extends Controller
             $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'The post was not updated']);
             return $response->withAddedHeader('Warning', 'The post was not updated');
         }
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 401);
+        $this->logger->notice('User '.$userId.' tried to update other post with id: '.$id);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -141,7 +142,8 @@ class PostController extends Controller
             $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not deleted']);
             return $response->withAddedHeader('Warning', 'The post got not deleted');
         }
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 401);
+        $this->logger->notice('User '.$userId.' tried to delete other post with id: '.$id);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
