@@ -7,6 +7,7 @@ use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\Post\PostService;
 use App\Domain\Post\PostValidation;
 use App\Domain\User\UserService;
+use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,17 +22,20 @@ class PostController extends Controller
     protected $postService;
     protected $postValidation;
     protected $userService;
+    protected $outputEscapeService;
 
     public function __construct(
         LoggerInterface $logger,
         PostService $postService,
         PostValidation $postValidation,
-        UserService $userService
+        UserService $userService,
+        OutputEscapeService $outputEscapeService
     ) {
         parent::__construct($logger);
         $this->postService = $postService;
         $this->postValidation = $postValidation;
         $this->userService = $userService;
+        $this->outputEscapeService = $outputEscapeService;
     }
 
     public function get(Request $request, Response $response, array $args): Response
@@ -45,12 +49,17 @@ class PostController extends Controller
         // Add user name info to post
         $postWithUser = $post;
         $postWithUser['user_name'] = $user['name'];
+
+        $postWithUser = $this->outputEscapeService->escapeOneDimensionalArray($postWithUser);
         return $this->respondWithJson($response, $postWithUser);
     }
 
     public function list(Request $request, Response $response, array $args)
     {
         $postsWithUsers = $this->postService->findAllPosts();
+
+        // output escaping only done here https://stackoverflow.com/a/20962774/9013718
+        $postsWithUsers = $this->outputEscapeService->escapeTwoDimensionalArray($postsWithUsers);
 
         return $this->respondWithJson($response, $postsWithUsers);
 
@@ -64,6 +73,8 @@ class PostController extends Controller
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
         $posts = $this->postService->findAllPostsFromUser($loggedUserId);
+
+        $posts = $this->outputEscapeService->escapeTwoDimensionalArray($posts);
 
         return $this->respondWithJson($response, $posts);
     }

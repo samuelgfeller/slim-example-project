@@ -46,10 +46,10 @@ class UserService {
     {
         $validatedData = [];
         if (isset($data['name'])){
-            $validatedData['name'] = htmlspecialchars($data['name']);
+            $validatedData['name'] = $data['name'];
         }
         if (isset($data['email'])){
-            $validatedData['email'] = htmlspecialchars($data['email']);
+            $validatedData['email'] = $data['email'];
         }
         if (isset($data['password1'],$data['password2'])){
             // passwords are already identical since they were validated in UserValidation.php

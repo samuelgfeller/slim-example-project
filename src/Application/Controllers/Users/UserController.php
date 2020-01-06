@@ -6,6 +6,7 @@ use App\Application\Controllers\Controller;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
+use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -18,12 +19,20 @@ class UserController extends Controller
 
     protected $userService;
     protected $userValidation;
+    protected $outputEscapeService;
 
-    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation)
-    {
+
+    public function __construct(
+        LoggerInterface $logger,
+        UserService $userService,
+        UserValidation $userValidation,
+        OutputEscapeService $outputEscapeService
+    ) {
         parent::__construct($logger);
         $this->userService = $userService;
         $this->userValidation = $userValidation;
+        $this->outputEscapeService = $outputEscapeService;
+
     }
 
     /**
@@ -44,6 +53,8 @@ class UserController extends Controller
         if ($userRole === 'admin') {
             $allUsers = $this->userService->findAllUsers();
 
+            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
+
             $response->withHeader('Content-Type', 'application/json');
             return $this->respondWithJson($response, $allUsers);
         }
@@ -62,6 +73,7 @@ class UserController extends Controller
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
             $user = $this->userService->findUser($id);
+            $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
             return $this->respondWithJson($response, $user);
         }
 
@@ -108,7 +120,7 @@ class UserController extends Controller
             if ($updated) {
                 return $this->respondWithJson($response, ['status' => 'success']);
             }
-            return $this->respondWithJson($response, ['status' => 'error']);
+            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User wasn\'t updated']);
         }
         return $this->respondWithJson($response,
             ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to view others'], 401);
@@ -140,10 +152,10 @@ class UserController extends Controller
             ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 401);
     }
 
-/*    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        // see register in authcontroller
-    }*/
+    /*    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+        {
+            // see register in authcontroller
+        }*/
 
 
 }
