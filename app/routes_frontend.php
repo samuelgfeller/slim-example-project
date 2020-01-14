@@ -9,16 +9,21 @@ use Slim\Routing\RouteCollectorProxy;
 return function (App $app) {
     //    Frontend (temporary)
     $app->get('/', function (Request $request, Response $response, array $args) {
+
         require_once __DIR__ . '/../public/frontend_skeleton/index.html';
         return $response;
     });
 
     $app->group('/frontend', function (RouteCollectorProxy $group) {
         $group->get('', function (Request $request, Response $response, array $args) {
+            return $response->withHeader('Location', '/frontend/login')->withStatus(302);
+
             require_once __DIR__ . '/../public/frontend_skeleton/index.html';
             return $response;
         });
         $group->get('/', function (Request $request, Response $response, array $args) {
+            return $response->withHeader('Location', '/frontend/login')->withStatus(302);
+
             require_once __DIR__ . '/../public/frontend_skeleton/index.html';
             return $response;
         });
@@ -29,7 +34,7 @@ return function (App $app) {
         $group->get('/login', function (Request $request, Response $response, array $args) {
             require_once __DIR__ . '/../public/frontend_skeleton/pages/login.html';
             return $response;
-        });
+        })->setName('login-route');
         $group->get('/login/success', function (Request $request, Response $response, array $args) {
             require_once __DIR__ . '/../public/frontend_skeleton/pages/login.html';
             return $response;
