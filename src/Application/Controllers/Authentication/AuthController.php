@@ -100,7 +100,7 @@ class AuthController extends Controller
         $user = $this->userService->findUserByEmail($loginData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
         if (password_verify($loginData['password'], $user['password'])) {
-            $durationInSec = 500;
+            $durationInSec = 500; // In seconds
             $tokenId = base64_encode(random_bytes(32));
             $issuedAt = time();
             $notBefore = $issuedAt + 2;             //Adding 2 seconds
