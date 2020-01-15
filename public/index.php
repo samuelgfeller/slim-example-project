@@ -9,7 +9,6 @@ use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 
 // todo do I have to filter input data?
-// todo check if userbody is empty everywhere
 // todo maybe put permission validation in a better place like UserValidation class?
 // todo login / calls via token jsfw
 // todo testing junit

@@ -31,59 +31,51 @@ class AuthController extends Controller
 
     public function register(Request $request, Response $response): Response
     {
-        $data = $request->getParsedBody();
-        if (null !== $data) {
-            // todo put filter in general function like validation
-            $userData = [
-                'name' =>  $data['name'],
-                'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
-                'password1' => $data['password1'],
-                'password2' => $data['password2'],
+        $parsedBody = $request->getParsedBody();
+
+        $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
+        if ($validationResult->fails()) {
+            $responseData = [
+                'status' => 'error',
+                'validation' => $validationResult->toArray(),
             ];
 
-            $validationResult = $this->userValidation->validateUserRegistration($userData);
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'validation' => $validationResult->toArray(),
-                ];
-
-                return $this->respondWithJson($response, $responseData, 422);
-            }
-
-            $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
-            // used to give login function
-            $plainPass = $userData['password1'];
-            unset($userData['password1'], $userData['password2']);
-
-            $insertId = $this->userService->createUser($userData);
-
-            if (null !== $insertId) {
-                $this->logger->info('User "' . $userData['email'] . '" created');
-
-                // Add email and password like it is expected in the login function
-                $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
-                // Call login function to authenticate the user
-                // todo check if that is good practice or bad
-                $loginResponse = $this->login($request, $response);
-
-                $loginContent = json_decode($loginResponse->getBody(), true);
-
-                // Clear response body after body content is saved
-                $response = new \Slim\Psr7\Response();
-
-                $responseContent = $loginContent;
-
-                // maybe there is already a message so it has to be transformed as array
-                $responseContent['message'] = [$loginContent['message']];
-                $responseContent['message'][] = 'User created and logged in';
-
-                return $this->respondWithJson($response, $responseContent);
-            }
-            return $this->respondWithJson($response,
-                ['status' => 'error', 'message' => 'User could not be registered']);
+            return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
         }
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty']);
+
+        $userData = $validationResult->getValidatedData();
+
+        $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
+        // used to give login function
+        $plainPass = $userData['password1'];
+        unset($userData['password1'], $userData['password2']);
+
+        $insertId = $this->userService->createUser($userData);
+
+        if (null !== $insertId) {
+            $this->logger->info('User "' . $userData['email'] . '" created');
+
+            // Add email and password like it is expected in the login function
+            $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
+            // Call login function to authenticate the user
+            // todo check if that is good practice or bad
+            $loginResponse = $this->login($request, $response);
+
+            $loginContent = json_decode($loginResponse->getBody(), true);
+
+            // Clear response body after body content is saved
+            $response = new \Slim\Psr7\Response();
+
+            $responseContent = $loginContent;
+
+            // maybe there is already a message so it has to be transformed as array
+            $responseContent['message'] = [$loginContent['message']];
+            $responseContent['message'][] = 'User created and logged in';
+
+            return $this->respondWithJson($response, $responseContent);
+        }
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User could not be registered']);
+
     }
 
     public function login(Request $request, Response $response): Response

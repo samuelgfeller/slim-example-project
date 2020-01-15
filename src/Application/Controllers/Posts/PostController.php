@@ -94,29 +94,34 @@ class PostController extends Controller
 
 //      var_dump($request->getParsedBody());
 
-            $data = $request->getParsedBody();
-            // todo check if userbody is empty everywhere
+            // todo check if parsedbody is empty everywhere
+            if (null !== $data = $request->getParsedBody()) {
 
-            $postData = [
-                'message' => $data['message'],
-            ];
-
-            $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'validation' => $validationResult->toArray(),
+                $postData = [
+                    'message' => $data['message'],
                 ];
 
-                return $this->respondWithJson($response, $responseData, 422);
-            }
+                $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
+                if ($validationResult->fails()) {
+                    $responseData = [
+                        'status' => 'error',
+                        'validation' => $validationResult->toArray(),
+                    ];
+
+                    return $this->respondWithJson($response, $responseData, 422);
+                }
 //        var_dump($data);
-            $updated = $this->postService->updatePost($id, $postData);
-            if ($updated) {
-                return $this->respondWithJson($response, ['status' => 'success']);
+                $updated = $this->postService->updatePost($id, $postData);
+                if ($updated) {
+                    return $this->respondWithJson($response, ['status' => 'success']);
+                }
+                $response = $this->respondWithJson($response,
+                    ['status' => 'warning', 'message' => 'The post was not updated']);
+                return $response->withAddedHeader('Warning', 'The post was not updated');
             }
-            $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'The post was not updated']);
-            return $response->withAddedHeader('Warning', 'The post was not updated');
+            $response = $this->respondWithJson($response,
+                ['status' => 'error', 'message' => 'Request body empty'], 400);
+            return $response->withAddedHeader('Warning', '');
         }
         $this->logger->notice('User '.$userId.' tried to update other post with id: '.$id);
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
@@ -169,7 +174,7 @@ class PostController extends Controller
             $insertId = $this->postService->createPost($postData);
 
             if (null !== $insertId) {
-                return $this->respondWithJson($response, ['status' => 'success']);
+                return $this->respondWithJson($response, ['status' => 'success'], 201);
             }
             $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not created']);
             return $response->withAddedHeader('Warning', 'The post could not be created');

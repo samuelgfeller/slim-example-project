@@ -66,22 +66,39 @@ class UserValidation extends AppValidation
     public function validateUserRegistration($userData): ValidationResult
     {
         $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
-        $this->validateName($userData['email'], $validationResult);
-        $this->validateEmail($userData['email'], $validationResult);
 
-        // First check if validation already failed. If not email is checked in db because we know its a valid email
-        if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($userData['email'])) {
-            $this->logger->info('Account creation tried with existing email: "' . $userData['email'].'"');
+        if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
 
-            // todo remove that
-            $validationResult->setError('email', 'Error in registration');
+            $this->validateName($userData['name'], $validationResult);
+            $this->validateEmail($userData['email'], $validationResult);
 
-            // todo implement function to tell client that register success without actually writing something in db;
-            // todo send email to user to say that someone registered with his email and that he has already an account
-            // todo in email provide link to login and how the password can be changed
+            // First check if validation already failed. If not email is checked in db because we know its a valid email
+            if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($userData['email'])) {
+                $this->logger->info('Account creation tried with existing email: "' . $userData['email'] . '"');
+
+                // todo remove that
+                $validationResult->setError('email', 'Error in registration');
+
+                // todo implement function to tell client that register success without actually writing something in db;
+                // todo send email to user to say that someone registered with his email and that he has already an account
+                // todo in email provide link to login and how the password can be changed
+            }
+
+            $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+
+            // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
+            // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
+            $validatedData = [
+                'name' => $userData['name'],
+                'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
+                'password1' => $userData['password1'],
+                'password2' => $userData['password2'],
+            ];
+            $validationResult->setValidatedData($validatedData);
+
+            return $validationResult;
         }
-
-        $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+        $validationResult->setIsBadRequest(true);
         return $validationResult;
     }
 

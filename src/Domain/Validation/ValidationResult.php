@@ -9,6 +9,8 @@ class ValidationResult
 {
     protected $message;
     protected $errors = [];
+    protected $isBadRequest = false;
+    protected $validatedData = [];
 
     /**
      * ValidationResult constructor.
@@ -65,6 +67,53 @@ class ValidationResult
     }
 
     /**
+     * @return bool
+     */
+    public function isBadRequest(): bool
+    {
+        return $this->isBadRequest;
+    }
+
+    /**
+     * @param bool $isBadRequest
+     */
+    public function setIsBadRequest(bool $isBadRequest): void
+    {
+        $this->setError('unknown','Required request parameter empty or not formatted well');
+        $this->isBadRequest = $isBadRequest;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        if ($this->isBadRequest()){
+            return 400;
+        }
+
+        // Default status code on validation error is 422
+        return 422;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidatedData(): array
+    {
+        return $this->validatedData;
+    }
+
+    /**
+     * @param array $validatedData
+     */
+    public function setValidatedData(array $validatedData): void
+    {
+        $this->validatedData = $validatedData;
+    }
+
+
+    /**
      * Fail.
      *
      * Check if there are any errors
@@ -73,7 +122,7 @@ class ValidationResult
      */
     public function fails(): bool
     {
-        return !empty($this->errors);
+        return !empty($this->errors) || $this->isBadRequest();
     }
 
     /**
