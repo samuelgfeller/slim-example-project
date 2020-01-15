@@ -44,14 +44,15 @@ Lets say we expect the required elements `name`,`email`,`password1`,`password2`
   
 Get elements from request as array and give this data to the corresponding validation class which 
 will return the result
+```php
+public function register(Request $request, Response $response): Response
+{
+    $parsedBody = $request->getParsedBody();
+    $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
+    ...
+}
+ ```
 
-     public function register(Request $request, Response $response): Response
-     {
-         $parsedBody = $request->getParsedBody();
-         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-         ...
-     }
-    
 This method creates a validation result instance. At the beginning the `if isset` checks if the
 names are present in the array. If they are not the data is not even further validated and
 the function `setIsBadRequest` is called which will tell `ValidationResult` that the status is 
@@ -59,51 +60,51 @@ the function `setIsBadRequest` is called which will tell `ValidationResult` that
 If the names are all set the validation can proceed. At the end a new array 
 is created with the validated data. This allows different names and then use of these names in a 
 different key name in the application. 
+```php
+public function validateUserRegistration($userData): ValidationResult
+{
+    $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
+    if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
 
-    public function validateUserRegistration($userData): ValidationResult
-    {
-        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
-        if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
+        $this->validateName($userData['email'], $validationResult);
 
-            $this->validateName($userData['email'], $validationResult);
+        $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
 
-            $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+        // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
+        // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
+        $validatedData = [
+            'name' => $userData['name'],
+            'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
+            'password1' => $userData['password1'],
+            'password2' => $userData['password2'],
+        ];
+        $validationResult->setValidatedData($validatedData);
 
-            // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
-            // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
-            $validatedData = [
-                'name' => $userData['name'],
-                'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
-                'password1' => $userData['password1'],
-                'password2' => $userData['password2'],
-            ];
-            $validationResult->setValidatedData($validatedData);
-
-            return $validationResult;
-        }
-        $validationResult->setIsBadRequest(true);
         return $validationResult;
     }
-
+    $validationResult->setIsBadRequest(true);
+    return $validationResult;
+}
+```
 Back in the `register` function we have the validation result and can check if the validation failed.  
 If it's the case a response is returned to the client with the corresponding error message(s) and status
 code. `422` is the [default code for a validation error](https://stackoverflow.com/a/3291292/9013718) and 
 `400` for a bad request if the body is not set well. 
+```php
+$validationResult = $this->userValidation->validateUserRegistration($parsedBody);
+if ($validationResult->fails()) {
+    $responseData = [
+        'status' => 'error',
+        'validation' => $validationResult->toArray(),
+    ];
 
+    return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
+}
 
-    $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-    if ($validationResult->fails()) {
-        $responseData = [
-            'status' => 'error',
-            'validation' => $validationResult->toArray(),
-        ];
-    
-        return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
-    }
-    
-    $userData = $validationResult->getValidatedData();
-    
-    // code here
+$userData = $validationResult->getValidatedData();
+
+// code here
+```
 
 
 ### Returning error messages
