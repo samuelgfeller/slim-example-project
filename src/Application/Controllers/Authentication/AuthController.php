@@ -82,12 +82,11 @@ class AuthController extends Controller
     {
         // todo add check if already logged in
 
-        $data = $request->getParsedBody();
+        $parsedBody = $request->getParsedBody();
 
-        $loginData = [
-            'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
-            'password' => $data['password']
-        ];
+        $validationResult = $this->userValidation->validateUserLogin($parsedBody);
+
+        $loginData = $validationResult->getValidatedData();
 
         $user = $this->userService->findUserByEmail($loginData['email']);
         //$this->logger->info('users/' . $user . ' has been called');

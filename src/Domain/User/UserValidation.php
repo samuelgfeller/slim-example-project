@@ -102,7 +102,22 @@ class UserValidation extends AppValidation
         return $validationResult;
     }
 
+    public function validateUserLogin($rawData)
+    {
+        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
 
+        if (isset($userData['email'],$userData['password'])) {
+            $this->validateEmail($rawData['email'], $validationResult);
+
+            $loginData = [
+                'email' => filter_var($rawData['email'], FILTER_VALIDATE_EMAIL),
+                'password' => $rawData['password']
+            ];
+            $validationResult->setValidatedData($loginData);
+        }
+        $validationResult->setIsBadRequest(true);
+        return $validationResult;
+    }
 
     /**
      * Validate password
