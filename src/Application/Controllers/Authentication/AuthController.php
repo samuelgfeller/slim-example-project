@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
 
-                if ($validationResult->fails()){
+        if ($validationResult->fails()){
             return $this->respondValidationError($validationResult, $response);
         }
 
@@ -89,7 +89,7 @@ class AuthController extends Controller
 
         $user = $this->userService->findUserByEmail($loginData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
-        if (password_verify($loginData['password'], $user['password'])) {
+        if ($user !== [] && password_verify($loginData['password'], $user['password'])) {
             $durationInSec = 500; // In seconds
             $tokenId = base64_encode(random_bytes(32));
             $issuedAt = time();
@@ -116,6 +116,6 @@ class AuthController extends Controller
                 ['token' => $token, 'status' => 'success', 'message' => 'Logged in'], 200);
         }
         $this->logger->notice('Invalid login attempt from "' . $loginData['email'] . '"');
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 500);
+        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 401);
     }
 }
