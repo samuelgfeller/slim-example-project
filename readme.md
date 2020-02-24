@@ -95,6 +95,7 @@ $validationResult = $this->userValidation->validateUserRegistration($parsedBody)
 if ($validationResult->fails()) {
     $responseData = [
         'status' => 'error',
+        'message' => 'Validation error',
         'validation' => $validationResult->toArray(),
     ];
 

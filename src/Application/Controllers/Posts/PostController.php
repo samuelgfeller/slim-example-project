@@ -102,14 +102,8 @@ class PostController extends Controller
                 ];
 
                 $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-                if ($validationResult->fails()) {
-                    $responseData = [
-                        'status' => 'error',
-                        'validation' => $validationResult->toArray(),
-                    ];
+                $this->respondIfValidationFailed($validationResult, $response);
 
-                    return $this->respondWithJson($response, $responseData, 422);
-                }
 //        var_dump($data);
                 $updated = $this->postService->updatePost($id, $postData);
                 if ($updated) {
@@ -163,14 +157,8 @@ class PostController extends Controller
             ];
 
             $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'validation' => $validationResult->toArray(),
-                ];
+            $this->respondIfValidationFailed($validationResult, $response);
 
-                return $this->respondWithJson($response, $responseData, 422);
-            }
             $insertId = $this->postService->createPost($postData);
 
             if (null !== $insertId) {

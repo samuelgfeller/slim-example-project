@@ -85,6 +85,4 @@ interface UserRepositoryInterface
      */
     public function userExists(int $id): bool;
 
-
-
 }

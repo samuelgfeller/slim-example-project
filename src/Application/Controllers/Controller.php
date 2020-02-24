@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Controllers;
 
+use App\Domain\Validation\ValidationResult;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -55,6 +56,19 @@ abstract class Controller
         if (isset($request->getAttribute('token')['data'])) {
             // token 'data' is an stdClass and can be transformed into array with this function https://stackoverflow.com/a/18576902/9013718
             return (int)json_decode(json_encode($request->getAttribute('token')['data']), true)['userId'];
+        }
+        return null;
+    }
+
+    protected function respondIfValidationFailed(ValidationResult $validationResult, Response $response): ?Response
+    {
+        if ($validationResult->fails()) {
+            $responseData = [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'validation' => $validationResult->toArray(),
+            ];
+            return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
         }
         return null;
     }

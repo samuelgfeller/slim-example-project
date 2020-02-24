@@ -34,14 +34,8 @@ class AuthController extends Controller
         $parsedBody = $request->getParsedBody();
 
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-        if ($validationResult->fails()) {
-            $responseData = [
-                'status' => 'error',
-                'validation' => $validationResult->toArray(),
-            ];
 
-            return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
-        }
+        $this->respondIfValidationFailed($validationResult, $response);
 
         $userData = $validationResult->getValidatedData();
 

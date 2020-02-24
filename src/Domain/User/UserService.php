@@ -3,16 +3,21 @@
 
 namespace App\Domain\User;
 
-class UserService {
-    
+use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+
+class UserService
+{
+
     private $userRepositoryInterface;
-    
-    public function __construct(UserRepositoryInterface $userRepositoryInterface) { 
+
+    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    {
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
-    public function findAllUsers() {
-        $allUsers= $this->userRepositoryInterface->findAllUsers();
+    public function findAllUsers()
+    {
+        $allUsers = $this->userRepositoryInterface->findAllUsers();
         return $allUsers;
     }
 
@@ -42,22 +47,22 @@ class UserService {
      * @param $data array Data to update
      * @return bool
      */
-    public function updateUser($id,array $data): bool
+    public function updateUser($id, array $data): bool
     {
         $validatedData = [];
-        if (isset($data['name'])){
+        if (isset($data['name'])) {
             $validatedData['name'] = $data['name'];
         }
-        if (isset($data['email'])){
+        if (isset($data['email'])) {
             $validatedData['email'] = $data['email'];
         }
-        if (isset($data['password1'],$data['password2'])){
+        if (isset($data['password1'], $data['password2'])) {
             // passwords are already identical since they were validated in UserValidation.php
             $validatedData['password'] = password_hash($data['password1'], PASSWORD_DEFAULT);
         }
 
 
-        return $this->userRepositoryInterface->updateuser($validatedData,$id);
+        return $this->userRepositoryInterface->updateuser($validatedData, $id);
     }
 
     public function deleteUser($id): bool
@@ -68,14 +73,12 @@ class UserService {
     /**
      * Get user role
      *
-     * @param $id
+     * @param int $id
      * @return string
-     * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
      */
     public function getUserRole(int $id): string
     {
         return $this->userRepositoryInterface->getUserRole($id);
     }
-
 
 }

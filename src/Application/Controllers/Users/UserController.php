@@ -7,6 +7,7 @@ use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Validation\OutputEscapeService;
+use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -58,7 +59,7 @@ class UserController extends Controller
             $response->withHeader('Content-Type', 'application/json');
             return $this->respondWithJson($response, $allUsers);
         }
-        $this->logger->notice('User '.$loggedUserId.' tried to view all other users');
+        $this->logger->notice('User ' . $loggedUserId . ' tried to view all other users');
 
         return $this->respondWithJson($response,
             ['status' => 'error', 'message' => 'You have to be admin to view all users'], 403);
@@ -78,7 +79,7 @@ class UserController extends Controller
             $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
             return $this->respondWithJson($response, $user);
         }
-        $this->logger->notice('User '.$loggedUserId.' tried to view other user with id: '.$id);
+        $this->logger->notice('User ' . $loggedUserId . ' tried to view other user with id: ' . $id);
 
         return $this->respondWithJson($response,
             ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'], 403);
@@ -108,15 +109,7 @@ class UserController extends Controller
 
             $validationResult = $this->userValidation->validateUserUpdate($id, $rawData);
 
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'message' => 'Validation error',
-                    'validation' => $validationResult->toArray(),
-                ];
-
-                return $this->respondWithJson($response, $responseData, 422);
-            }
+            $this->respondIfValidationFailed($validationResult, $response);
 
             $updated = $this->userService->updateUser($id, $rawData);
 
@@ -125,7 +118,7 @@ class UserController extends Controller
             }
             return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User wasn\'t updated']);
         }
-        $this->logger->notice('User '.$loggedUserId.' tried to update other user with id: '.$id);
+        $this->logger->notice('User ' . $loggedUserId . ' tried to update other user with id: ' . $id);
 
         return $this->respondWithJson($response,
             ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to view others'], 403);
@@ -135,25 +128,22 @@ class UserController extends Controller
     {
         $loggedUserId = (int)$this->getUserIdFromToken($request);
         $id = (int)$args['id'];
+
         $userRole = $this->userService->getUserRole($loggedUserId);
+
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
             $validationResult = $this->userValidation->validateDeletion($id, $loggedUserId);
-            if ($validationResult->fails()) {
-                $responseData = [
-                    'status' => 'error',
-                    'validation' => $validationResult->toArray(),
-                ];
-                return $this->respondWithJson($response, $responseData, 422);
-            }
+            $this->respondIfValidationFailed($validationResult, $response);
+
             $deleted = $this->userService->deleteUser($id);
             if ($deleted) {
                 return $this->respondWithJson($response, ['status' => 'success', 'message' => 'User deleted']);
             }
             return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User not deleted']);
         }
-        $this->logger->notice('User '.$loggedUserId.' tried to delete other user with id: '.$id);
+        $this->logger->notice('User ' . $loggedUserId . ' tried to delete other user with id: ' . $id);
 
         return $this->respondWithJson($response,
             ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'], 403);
