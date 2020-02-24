@@ -27,10 +27,10 @@ interface UserRepositoryInterface
      * Return user with given email if it exists
      * otherwise null
      *
-     * @param string $email
-     * @return array
+     * @param string|null $email
+     * @return array|null
      */
-    public function findUserByEmail(string $email): array;
+    public function findUserByEmail(?string $email): ?array;
     
     /**
      * Retrieve user from database
@@ -46,7 +46,7 @@ interface UserRepositoryInterface
      * Insert user in database
      *
      * @param array $data
-     * @return int lastInsertId
+     * @return string lastInsertId
      */
     public function insertUser(array $data): string;
     
