@@ -95,7 +95,6 @@ class UserValidation extends AppValidation
                 'password2' => $userData['password2'],
             ];
             $validationResult->setValidatedData($validatedData);
-
             return $validationResult;
         }
         $validationResult->setIsBadRequest(true);
@@ -106,7 +105,7 @@ class UserValidation extends AppValidation
     {
         $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
 
-        if (isset($userData['email'],$userData['password'])) {
+        if (isset($rawData['email'],$rawData['password'])) {
             $this->validateEmail($rawData['email'], $validationResult);
 
             $loginData = [
@@ -114,6 +113,7 @@ class UserValidation extends AppValidation
                 'password' => $rawData['password']
             ];
             $validationResult->setValidatedData($loginData);
+            return $validationResult;
         }
         $validationResult->setIsBadRequest(true);
         return $validationResult;
