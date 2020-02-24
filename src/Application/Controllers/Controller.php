@@ -15,11 +15,12 @@ use Slim\Exception\HttpNotFoundException;
 abstract class Controller
 {
     protected $logger;
-
-    public function __construct(LoggerInterface $logger) {
+    
+    public function __construct(LoggerInterface $logger)
+    {
         $this->logger = $logger;
     }
-
+    
     /**
      * @param Response $response
      * @param array|object|null $data
@@ -32,7 +33,7 @@ abstract class Controller
         $response = $response->withStatus($status);
         return $response->withHeader('Content-Type', 'application/json');
     }
-
+    
     /**
      * @param Response $response
      * @param array|object|null $data
@@ -44,7 +45,7 @@ abstract class Controller
         $response->getBody()->write($json);
         return $response->withHeader('Content-Type', 'application/json');
     }
-
+    
     /**
      * If the user_id is in the JWT Token data it is returned
      *
@@ -59,18 +60,15 @@ abstract class Controller
         }
         return null;
     }
-
-    protected function respondIfValidationFailed(ValidationResult $validationResult, Response $response): ?Response
+    
+    protected function respondValidationError(ValidationResult $validationResult, Response $response): ?Response
     {
-        if ($validationResult->fails()) {
-            $responseData = [
-                'status' => 'error',
-                'message' => 'Validation error',
-                'validation' => $validationResult->toArray(),
-            ];
-            return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
-        }
-        return null;
+        $responseData = [
+            'status' => 'error',
+            'message' => 'Validation error',
+            'validation' => $validationResult->toArray(),
+        ];
+        return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
     }
-
+    
 }

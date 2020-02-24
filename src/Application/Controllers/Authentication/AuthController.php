@@ -35,7 +35,9 @@ class AuthController extends Controller
 
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
 
-        $this->respondIfValidationFailed($validationResult, $response);
+                if ($validationResult->fails()){
+            return $this->respondValidationError($validationResult, $response);
+        }
 
         $userData = $validationResult->getValidatedData();
 
@@ -79,6 +81,9 @@ class AuthController extends Controller
         $parsedBody = $request->getParsedBody();
 
         $validationResult = $this->userValidation->validateUserLogin($parsedBody);
+        if ($validationResult->fails()){
+            return $this->respondValidationError($validationResult, $response);
+        }
 
         $loginData = $validationResult->getValidatedData();
 
@@ -104,7 +109,7 @@ class AuthController extends Controller
 
             $token = JWT::encode($data, 'test', 'HS256'); // todo change test to settings
 
-            $this->logger->info('User "' . $loginData['email'] . '" logged in. 
+            $this->logger->info('User "' . $loginData['email'] . '" logged in.
                 Token leased for ' . $durationInSec . 'sec');
 
             return $this->respondWithJson($response,

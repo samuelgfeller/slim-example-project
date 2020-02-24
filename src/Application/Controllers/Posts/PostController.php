@@ -102,7 +102,9 @@ class PostController extends Controller
                 ];
 
                 $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-                $this->respondIfValidationFailed($validationResult, $response);
+                        if ($validationResult->fails()){
+            return $this->respondValidationError($validationResult, $response);
+        }
 
 //        var_dump($data);
                 $updated = $this->postService->updatePost($id, $postData);
@@ -157,7 +159,9 @@ class PostController extends Controller
             ];
 
             $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-            $this->respondIfValidationFailed($validationResult, $response);
+                    if ($validationResult->fails()){
+            return $this->respondValidationError($validationResult, $response);
+        }
 
             $insertId = $this->postService->createPost($postData);
 
