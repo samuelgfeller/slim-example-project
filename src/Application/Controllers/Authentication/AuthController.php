@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
 
-        if ($validationResult->fails()){
+        if ($validationResult->fails()) {
             return $this->respondValidationError($validationResult, $response);
         }
 
@@ -81,7 +81,7 @@ class AuthController extends Controller
         $parsedBody = $request->getParsedBody();
 
         $validationResult = $this->userValidation->validateUserLogin($parsedBody);
-        if ($validationResult->fails()){
+        if ($validationResult->fails()) {
             return $this->respondValidationError($validationResult, $response);
         }
 

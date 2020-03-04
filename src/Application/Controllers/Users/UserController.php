@@ -109,9 +109,9 @@ class UserController extends Controller
 
             $validationResult = $this->userValidation->validateUserUpdate($id, $rawData);
 
-                    if ($validationResult->fails()){
-            return $this->respondValidationError($validationResult, $response);
-        }
+            if ($validationResult->fails()) {
+                return $this->respondValidationError($validationResult, $response);
+            }
 
             $updated = $this->userService->updateUser($id, $rawData);
 
@@ -137,9 +137,9 @@ class UserController extends Controller
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
             $validationResult = $this->userValidation->validateDeletion($id, $loggedUserId);
-                    if ($validationResult->fails()){
-            return $this->respondValidationError($validationResult, $response);
-        }
+            if ($validationResult->fails()) {
+                return $this->respondValidationError($validationResult, $response);
+            }
 
             $deleted = $this->userService->deleteUser($id);
             if ($deleted) {

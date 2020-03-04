@@ -90,7 +90,7 @@ class PostController extends Controller
         $userRole = $this->userService->getUserRole($userId);
 
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int) $post['user_id'] === $userId) {
+        if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
 
 //      var_dump($request->getParsedBody());
 
@@ -102,9 +102,9 @@ class PostController extends Controller
                 ];
 
                 $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-                        if ($validationResult->fails()){
-            return $this->respondValidationError($validationResult, $response);
-        }
+                if ($validationResult->fails()) {
+                    return $this->respondValidationError($validationResult, $response);
+                }
 
 //        var_dump($data);
                 $updated = $this->postService->updatePost($id, $postData);
@@ -115,12 +115,13 @@ class PostController extends Controller
                     ['status' => 'warning', 'message' => 'The post was not updated']);
                 return $response->withAddedHeader('Warning', 'The post was not updated');
             }
-            $response = $this->respondWithJson($response,
-                ['status' => 'error', 'message' => 'Request body empty'], 400);
+            $response = $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty'],
+                400);
             return $response->withAddedHeader('Warning', '');
         }
-        $this->logger->notice('User '.$userId.' tried to update other post with id: '.$id);
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
+        $this->logger->notice('User ' . $userId . ' tried to update other post with id: ' . $id);
+        return $this->respondWithJson($response,
+            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -134,7 +135,7 @@ class PostController extends Controller
         $userRole = $this->userService->getUserRole($userId);
 
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int) $post['user_id'] === $userId) {
+        if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
 
             $deleted = $this->postService->deletePost($id);
             if ($deleted) {
@@ -143,8 +144,9 @@ class PostController extends Controller
             $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not deleted']);
             return $response->withAddedHeader('Warning', 'The post got not deleted');
         }
-        $this->logger->notice('User '.$userId.' tried to delete other post with id: '.$id);
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
+        $this->logger->notice('User ' . $userId . ' tried to delete other post with id: ' . $id);
+        return $this->respondWithJson($response,
+            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -159,9 +161,9 @@ class PostController extends Controller
             ];
 
             $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-                    if ($validationResult->fails()){
-            return $this->respondValidationError($validationResult, $response);
-        }
+            if ($validationResult->fails()) {
+                return $this->respondValidationError($validationResult, $response);
+            }
 
             $insertId = $this->postService->createPost($postData);
 

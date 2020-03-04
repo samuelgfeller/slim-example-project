@@ -18,7 +18,7 @@ return function (App $app) {
 
     $app->add(new \Tuupola\Middleware\JwtAuthentication([
 //      'path' => '/api', /* or ["/api", "/admin"] */
-        'ignore' => ['/frontend', '/login', '/register','/hello'],
+        'ignore' => ['/frontend', '/login', '/register', '/hello'],
         'secret' => 'test',//$settings['settings']['jwt']['secret'],
         'algorithm' => ['HS256'],
         'logger' => $logger,
@@ -27,9 +27,8 @@ return function (App $app) {
         'error' => function ($response, $arguments) {
             $data['status'] = 'error';
             $data['message'] = $arguments['message'];
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->getBody()->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            return $response->withHeader('Content-Type', 'application/json')->getBody()->write(json_encode($data,
+                    JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
         }
     ]));
 };

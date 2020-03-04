@@ -25,7 +25,8 @@ class PostValidation extends AppValidation
      * @param LoggerInterface $logger
      * @param PostRepositoryInterface $userRepositoryInterface
      */
-    public function __construct(LoggerInterface $logger, PostRepositoryInterface $userRepositoryInterface) {
+    public function __construct(LoggerInterface $logger, PostRepositoryInterface $userRepositoryInterface)
+    {
         parent::__construct($logger);
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
@@ -36,7 +37,8 @@ class PostValidation extends AppValidation
      * @param $postData
      * @return ValidationResult
      */
-    public function validatePostCreationOrUpdate($postData): ValidationResult {
+    public function validatePostCreationOrUpdate($postData): ValidationResult
+    {
         $validationResult = new ValidationResult('There is something in the post data which couldn\'t be validated');
 
         $this->validateLengthMax($postData['message'], 'message', $validationResult, 500);
