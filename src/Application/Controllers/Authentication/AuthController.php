@@ -20,13 +20,11 @@ use Firebase\JWT\JWT;
 class AuthController extends Controller
 {
     protected $userService;
-    protected $userValidation;
     
-    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation)
+    public function __construct(LoggerInterface $logger, UserService $userService)
     {
         parent::__construct($logger);
         $this->userService = $userService;
-        $this->userValidation = $userValidation;
     }
     
     public function register(Request $request, Response $response): Response
@@ -46,7 +44,6 @@ class AuthController extends Controller
         $plainPass = $userData['password1'];
         unset($userData['password1'], $userData['password2']);
         
-    
         try {
             $insertId = $this->userService->createUser($userData);
         } catch (ValidationException $exception) {

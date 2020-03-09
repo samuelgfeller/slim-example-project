@@ -95,6 +95,10 @@ class UserValidation extends AppValidation
                 'password2' => $userData['password2'],
             ];
             $validationResult->setValidatedData($validatedData);
+            
+            // If the validation failed, throw the exception which will be caught in the Controller
+            $this->throwOnError($validationResult);
+            
             return $validationResult;
         }
         $validationResult->setIsBadRequest(true);

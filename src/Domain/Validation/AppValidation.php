@@ -2,6 +2,7 @@
 
 namespace App\Domain\Validation;
 
+use App\Exception\ValidationException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,7 +20,19 @@ abstract class AppValidation
     {
         $this->logger = $logger;
     }
-
+    
+    /**
+     * Throw a validation exception if the validation result fails.
+     *
+     * @param ValidationResult $validationResult
+     */
+    protected function throwOnError(ValidationResult $validationResult): void
+    {
+        if ($validationResult->fails()) {
+            throw new ValidationException($validationResult);
+        }
+    }
+    
     /**
      * Check if a values string is less than a defined value.
      *
