@@ -20,73 +20,81 @@ use Firebase\JWT\JWT;
 class AuthController extends Controller
 {
     protected $userService;
-    protected $userValidation;
-
-    public function __construct(LoggerInterface $logger, UserService $userService, UserValidation $userValidation)
+    
+    public function __construct(LoggerInterface $logger, UserService $userService)
     {
         parent::__construct($logger);
         $this->userService = $userService;
-        $this->userValidation = $userValidation;
     }
-
+    
     public function register(Request $request, Response $response): Response
     {
         $parsedBody = $request->getParsedBody();
-
+        
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-
+        
         if ($validationResult->fails()) {
             return $this->respondValidationError($validationResult, $response);
         }
-
+        
         $userData = $validationResult->getValidatedData();
-
+        
         $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
         // used to give login function
         $plainPass = $userData['password1'];
         unset($userData['password1'], $userData['password2']);
-
-        $insertId = $this->userService->createUser($userData);
-
+        
+        try {
+            $insertId = $this->userService->createUser($userData);
+        } catch (ValidationException $exception) {
+            return $this->renderUserForm(
+                $request,
+                $response,
+                'users.add',
+                $user->all(),
+                $exception->getValidationResult()->getErrors()
+            );
+        }
+        
+        // Log user in
         if (null !== $insertId) {
             $this->logger->info('User "' . $userData['email'] . '" created');
-
+            
             // Add email and password like it is expected in the login function
             $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
             // Call login function to authenticate the user
             // todo check if that is good practice or bad
             $loginResponse = $this->login($request, $response);
-
+            
             $loginContent = json_decode($loginResponse->getBody(), true);
-
+            
             // Clear response body after body content is saved
             $response = new \Slim\Psr7\Response();
-
+            
             $responseContent = $loginContent;
-
+            
             // maybe there is already a message so it has to be transformed as array
             $responseContent['message'] = [$loginContent['message']];
             $responseContent['message'][] = 'User created and logged in';
-
+            
             return $this->respondWithJson($response, $responseContent);
         }
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User could not be registered']);
-
     }
-
+    
     public function login(Request $request, Response $response): Response
     {
         // todo add check if already logged in
-
+        
         $parsedBody = $request->getParsedBody();
-
+        
         $validationResult = $this->userValidation->validateUserLogin($parsedBody);
-        if ($validationResult->fails()){
+        if ($validationResult->fails()) {
             return $this->respondValidationError($validationResult, $response);
         }
-
+        
         $loginData = $validationResult->getValidatedData();
-
+        
         $user = $this->userService->findUserByEmail($loginData['email']);
         //$this->logger->info('users/' . $user . ' has been called');
         if ($user !== [] && password_verify($loginData['password'], $user['password'])) {
@@ -95,7 +103,7 @@ class AuthController extends Controller
             $issuedAt = time();
             $notBefore = $issuedAt + 2;             //Adding 2 seconds
             $expire = $notBefore + $durationInSec;            // Adding 300 seconds
-
+            
             $data = [
                 'iat' => $issuedAt,         // Issued at: time when the token was generated
                 'jti' => $tokenId,          // Json Token Id: an unique identifier for the token
@@ -106,14 +114,19 @@ class AuthController extends Controller
                     'userId' => $user['id'], // userid from the users table
                 ]
             ];
-
+            
             $token = JWT::encode($data, 'test', 'HS256'); // todo change test to settings
-
-            $this->logger->info('User "' . $loginData['email'] . '" logged in.
-                Token leased for ' . $durationInSec . 'sec');
-
-            return $this->respondWithJson($response,
-                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'], 200);
+            
+            $this->logger->info(
+                'User "' . $loginData['email'] . '" logged in.
+                Token leased for ' . $durationInSec . 'sec'
+            );
+            
+            return $this->respondWithJson(
+                $response,
+                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
+                200
+            );
         }
         $this->logger->notice('Invalid login attempt from "' . $loginData['email'] . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 401);
