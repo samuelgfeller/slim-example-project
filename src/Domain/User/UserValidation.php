@@ -41,7 +41,7 @@ class UserValidation extends AppValidation
      */
     public function validateUserUpdate(int $id, array $userData): ValidationResult
     {
-        $validationResult = new ValidationResult('Please check your data');
+        $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         $this->validateUser($id, $validationResult);
 
         if (isset($userData['name'])){
@@ -65,7 +65,7 @@ class UserValidation extends AppValidation
      */
     public function validateUserRegistration($userData): ValidationResult
     {
-        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
+        $validationResult = new ValidationResult('There was a validation error when trying to register a user');
 
         if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
 
@@ -95,6 +95,10 @@ class UserValidation extends AppValidation
                 'password2' => $userData['password2'],
             ];
             $validationResult->setValidatedData($validatedData);
+            
+            // If the validation failed, throw the exception which will be caught in the Controller
+            $this->throwOnError($validationResult);
+            
             return $validationResult;
         }
         $validationResult->setIsBadRequest(true);
@@ -103,7 +107,7 @@ class UserValidation extends AppValidation
 
     public function validateUserLogin($rawData)
     {
-        $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
+        $validationResult = new ValidationResult('There was a validation error when trying to login a user');
 
         if (isset($rawData['email'],$rawData['password'])) {
             $this->validateEmail($rawData['email'], $validationResult);
