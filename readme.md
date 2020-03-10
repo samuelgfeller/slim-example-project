@@ -21,7 +21,7 @@ return function (ContainerBuilder $containerBuilder) {
             ],
             'db' => [
                 'host' => 'localhost',
-                'database' => 'slim_api_skeleton',
+                'database' => 'slim-api-example',
                 'user' => 'root',
                 'pass' => '',
             ],

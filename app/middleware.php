@@ -4,6 +4,7 @@ use App\Application\Middleware\JsonBodyParserMiddleware;
 use App\Application\Middleware\SessionMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
+use Tuupola\Middleware\JwtAuthentication;
 
 return function (App $app) {
 
@@ -16,14 +17,14 @@ return function (App $app) {
     $app->add(SessionMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
 
-    $app->add(new \Tuupola\Middleware\JwtAuthentication([
+    $app->add(new JwtAuthentication([
 //      'path' => '/api', /* or ["/api", "/admin"] */
         'ignore' => ['/frontend', '/login', '/register', '/hello'],
         'secret' => 'test',//$settings['settings']['jwt']['secret'],
         'algorithm' => ['HS256'],
         'logger' => $logger,
         // HTTPS not mandatory for local development
-        'relaxed' => ['localhost', 'dev.slim_api_skeleton'],
+        'relaxed' => ['localhost', 'dev.slim-api-example'],
         'error' => function ($response, $arguments) {
             $data['status'] = 'error';
             $data['message'] = $arguments['message'];

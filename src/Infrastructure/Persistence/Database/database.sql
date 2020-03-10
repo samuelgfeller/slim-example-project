@@ -1,5 +1,5 @@
-create database `slim_api_skeleton`;
-use slim_api_skeleton;
+create database `slim-api-example`;
+use slim-api-example;
 CREATE TABLE `user`
 (
     `id`         INT          NOT NULL AUTO_INCREMENT,

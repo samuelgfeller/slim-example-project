@@ -12,11 +12,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Dumping database structure for slim_api_skeleton
-CREATE DATABASE IF NOT EXISTS `slim_api_skeleton` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `slim_api_skeleton`;
+-- Dumping database structure for slim-api-example
+CREATE DATABASE IF NOT EXISTS `slim-api-example` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `slim-api-example`;
 
--- Dumping structure for table slim_api_skeleton.user
+-- Dumping structure for table slim-api-example.user
 CREATE TABLE IF NOT EXISTS `user` (
                                       `id` int(11) NOT NULL AUTO_INCREMENT,
                                       `name` varchar(200) NOT NULL DEFAULT '',
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `user` (
                                       PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- Dumping data for table slim_api_skeleton.user: ~13 rows (approximately)
+-- Dumping data for table slim-api-example.user: ~13 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `updated_at`, `created_at`, `deleted_at`) VALUES
 (1, 'Samuel 2', 'samuelgfeller@bluewin.ch', '$2y$10$RKoLSet3bfPhl2ZwTxzG0uAU/fsLxWlLI/C6OMyOXoYi8j57A9VFa', '2019-09-16 11:17:19', '2019-07-23 03:11:13', NULL),

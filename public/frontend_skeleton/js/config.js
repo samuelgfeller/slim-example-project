@@ -1,4 +1,4 @@
 var config = {
-    'api_url': 'http://dev.slim_api_skeleton/',
-    'frontend_url': 'http://dev.slim_api_skeleton/frontend/',
+    'api_url': 'http://dev.slim-api-example/',
+    'frontend_url': 'http://dev.slim-api-example/frontend/',
 };
