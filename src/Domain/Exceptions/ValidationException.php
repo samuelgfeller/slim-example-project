@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exception;
+namespace App\Domain\Exception;
 
 use App\Domain\Validation\ValidationResult;
 use RuntimeException;
