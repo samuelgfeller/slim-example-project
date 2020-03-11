@@ -37,13 +37,13 @@ class UserService
     /**
      * Insert user in database
      *
-     * @param $data
+     * @param $user
      * @return string
      */
-    public function createUser($data): string
+    public function createUser(User $user): string
     {
-        $this->userValidation->validateUserRegistration($data);
-        return $this->userRepositoryInterface->insertUser($data);
+//        $this->userValidation->validateUserRegistration($data);
+        return $this->userRepositoryInterface->insertUser($user->toArray());
     }
     
     /**

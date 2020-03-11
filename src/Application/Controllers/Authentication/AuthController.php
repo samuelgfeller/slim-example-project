@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Application\Controllers\Controller;
+use App\Domain\Exception\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
@@ -31,6 +32,8 @@ class AuthController extends Controller
     
     public function register(Request $request, Response $response): Response
     {
+        // If a html form name changes, these changes have to be done in the Entities constructor
+        // too since these values will be the keys from the ArrayReader
         $parsedBody = $request->getParsedBody();
         
         $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
@@ -46,9 +49,10 @@ class AuthController extends Controller
         $plainPass = $userData['password1'];
         unset($userData['password1'], $userData['password2']);
 
-        $user = new User(new ArrayReader($parsedBody));
+        // Use Entity instead of DTO https://github.com/samuelgfeller/slim-api-example/issues/2#issuecomment-597245455
+        $user = new User(new ArrayReader($userData));
         try {
-            $insertId = $this->userService->createUser($userData);
+            $insertId = $this->userService->createUser($user);
         } catch (ValidationException $exception) {
             return $this->renderUserForm(
                 $request,

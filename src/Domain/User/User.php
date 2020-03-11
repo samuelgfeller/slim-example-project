@@ -11,16 +11,38 @@ class User
     private string $email;
     private string $password;
     private string $role;
-
-
-    public function __construct(ArrayReader $arrayReader) {
+    
+    
+    public function __construct(ArrayReader $arrayReader)
+    {
+        // These keys have to math the input key for the ArrayReader
         $this->id = $arrayReader->findInt('id');
         $this->name = $arrayReader->getString('name');
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->getString('password');
         $this->role = $arrayReader->findString('role');
     }
-
+    
+    
+    /**
+     * Returns all values of object as array.
+     * The array keys should match with the database
+     * column names since it is likely used to
+     * modify a database table
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password,
+            'role' => $this->role,
+        ];
+    }
+    
     /**
      * @return int|mixed|null
      */
@@ -28,7 +50,7 @@ class User
     {
         return $this->id;
     }
-
+    
     /**
      * @param int|mixed|null $id
      */
@@ -36,7 +58,7 @@ class User
     {
         $this->id = $id;
     }
-
+    
     /**
      * @return mixed|string|null
      */
@@ -44,7 +66,7 @@ class User
     {
         return $this->name;
     }
-
+    
     /**
      * @param mixed|string|null $name
      */
@@ -52,7 +74,7 @@ class User
     {
         $this->name = $name;
     }
-
+    
     /**
      * @return mixed|string|null
      */
@@ -60,7 +82,7 @@ class User
     {
         return $this->email;
     }
-
+    
     /**
      * @param mixed|string|null $email
      */
@@ -68,7 +90,7 @@ class User
     {
         $this->email = $email;
     }
-
+    
     /**
      * @return mixed|string|null
      */
@@ -76,7 +98,7 @@ class User
     {
         return $this->password;
     }
-
+    
     /**
      * @param mixed|string|null $password
      */
@@ -84,7 +106,7 @@ class User
     {
         $this->password = $password;
     }
-
+    
     /**
      * @return mixed|string|null
      */
@@ -92,7 +114,7 @@ class User
     {
         return $this->role;
     }
-
+    
     /**
      * @param mixed|string|null $role
      */
@@ -100,6 +122,6 @@ class User
     {
         $this->role = $role;
     }
-
-
+    
+    
 }
