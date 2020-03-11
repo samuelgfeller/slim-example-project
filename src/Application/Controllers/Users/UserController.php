@@ -8,7 +8,6 @@ use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Validation\OutputEscapeService;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -35,17 +34,15 @@ class UserController extends Controller
         $this->outputEscapeService = $outputEscapeService;
 
     }
-
+    
     /**
      * Returns all users
      *
      * @param Request $request
      * @param Response $response
-     * @param array $args
      * @return Response
-     * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
      */
-    public function list(Request $request, Response $response, array $args)
+    public function list(Request $request, Response $response): ResponseInterface
     {
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
@@ -93,7 +90,6 @@ class UserController extends Controller
      * @param Response $response
      * @param array $args
      * @return Response
-     * @throws \App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException
      */
     public function update(Request $request, Response $response, array $args): Response
     {
