@@ -13,7 +13,7 @@ class ValidationException extends RuntimeException
     /**
      * @var ValidationResult
      */
-    private $validationResult;
+    private ValidationResult $validationResult;
 
     /**
      * ValidationException constructor.
