@@ -4,8 +4,10 @@ namespace App\Controller;
 
 
 use App\Application\Controllers\Controller;
+use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
+use App\Domain\Utility\ArrayReader;
 use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -43,7 +45,8 @@ class AuthController extends Controller
         // used to give login function
         $plainPass = $userData['password1'];
         unset($userData['password1'], $userData['password2']);
-        
+
+        $user = new User(new ArrayReader($parsedBody));
         try {
             $insertId = $this->userService->createUser($userData);
         } catch (ValidationException $exception) {

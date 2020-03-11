@@ -1,59 +1,105 @@
 <?php
 
+namespace App\Domain\User;
+
+use App\Domain\Utility\ArrayReader;
 
 class User
 {
-    private $id;
-    private $name;
-    private $email;
-    private $password;
-    
+    private int $id;
+    private string $name;
+    private string $email;
+    private string $password;
+    private string $role;
+
+
+    public function __construct(ArrayReader $arrayReader) {
+        $this->id = $arrayReader->findInt('id');
+        $this->name = $arrayReader->getString('name');
+        $this->email = $arrayReader->getString('email');
+        $this->password = $arrayReader->getString('password');
+        $this->role = $arrayReader->findString('role');
+    }
+
     /**
-     * @return int
+     * @return int|mixed|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * @param int $id
+     * @param int|mixed|null $id
      */
     public function setId($id): void
     {
         $this->id = $id;
     }
-    
+
     /**
-     * @return string
+     * @return mixed|string|null
      */
-    public function getEmail(): string
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed|string|null $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed|string|null
+     */
+    public function getEmail()
     {
         return $this->email;
     }
-    
+
     /**
-     * @param string $email
+     * @param mixed|string|null $email
      */
     public function setEmail($email): void
     {
         $this->email = $email;
     }
-    
+
     /**
-     * @return string
+     * @return mixed|string|null
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }
-    
+
     /**
-     * @param string $password
-     * @return string
+     * @param mixed|string|null $password
      */
-    public function setPassword($password): string
+    public function setPassword($password): void
     {
         $this->password = $password;
     }
+
+    /**
+     * @return mixed|string|null
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed|string|null $role
+     */
+    public function setRole($role): void
+    {
+        $this->role = $role;
+    }
+
+
 }
