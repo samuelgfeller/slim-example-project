@@ -34,15 +34,7 @@ class AuthController extends Controller
     {
         // If a html form name changes, these changes have to be done in the Entities constructor
         // too since these values will be the keys from the ArrayReader
-        $parsedBody = $request->getParsedBody();
-        
-        $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-        
-        if ($validationResult->fails()) {
-            return $this->respondValidationError($validationResult, $response);
-        }
-        
-        $userData = $validationResult->getValidatedData();
+        $userData = $request->getParsedBody();
         
         $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
         // used to give login function
@@ -54,13 +46,7 @@ class AuthController extends Controller
         try {
             $insertId = $this->userService->createUser($user);
         } catch (ValidationException $exception) {
-            return $this->renderUserForm(
-                $request,
-                $response,
-                'users.add',
-                $user->all(),
-                $exception->getValidationResult()->getErrors()
-            );
+            return $this->respondValidationError($exception->getValidationResult(), $response);
         }
         
         // Log user in
