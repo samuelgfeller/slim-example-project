@@ -20,7 +20,7 @@ class User
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->findString('password');
-        $this->role = $arrayReader->findString('role');
+        $this->role = $arrayReader->findString('role') ?? 'user';
     }
     
     
