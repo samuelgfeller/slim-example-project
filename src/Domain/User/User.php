@@ -6,20 +6,20 @@ use App\Domain\Utility\ArrayReader;
 
 class User
 {
-    private int $id;
-    private string $name;
+    private ?int $id;
+    private ?string $name;
     private string $email;
-    private string $password;
-    private string $role;
+    private ?string $password;
+    private ?string $role;
     
     
     public function __construct(ArrayReader $arrayReader)
     {
         // These keys have to math the input key for the ArrayReader
         $this->id = $arrayReader->findInt('id');
-        $this->name = $arrayReader->getString('name');
+        $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
-        $this->password = $arrayReader->getString('password');
+        $this->password = $arrayReader->findString('password');
         $this->role = $arrayReader->findString('role');
     }
     
