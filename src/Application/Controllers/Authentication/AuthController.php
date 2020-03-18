@@ -87,7 +87,6 @@ class AuthController extends Controller
         try {
             if ($userWithId = $this->userService->userAllowedToLogin($user)) {
                 $token = $this->userService->generateToken($userWithId);
-
                 return $this->respondWithJson(
                     $response,
                     ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
@@ -97,7 +96,7 @@ class AuthController extends Controller
         } catch (ValidationException $exception) {
             return $this->respondValidationError($exception->getValidationResult(), $response);
         }
-
+        // todo catch invalidCredentialsException
         $this->logger->notice('Invalid login attempt from "' . $user->getEmail() . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 401);
     }

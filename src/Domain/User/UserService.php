@@ -102,6 +102,7 @@ class UserService
     
     public function deleteUser($id): bool
     {
+        // todo delete posts
         return $this->userRepositoryInterface->deleteUser($id);
     }
 
