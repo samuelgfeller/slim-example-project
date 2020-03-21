@@ -57,8 +57,12 @@ class PostService
         foreach ($posts as $post) {
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
-            $post['user_name'] = $user['name'];
-            $postsWithUser[] = $post;
+            // If user was deleted but post not
+            if (isset($user['name'])){
+                $post['user_name'] = $user['name'];
+                $postsWithUser[] = $post;
+            }
+
         }
         return $postsWithUser;
     }
