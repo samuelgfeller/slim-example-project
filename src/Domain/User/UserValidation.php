@@ -50,8 +50,8 @@ class UserValidation extends AppValidation
         if (isset($userData['email'])){
             $this->validateEmail($userData['email'], $validationResult);
         }
-        if (isset($userData['password1'],$userData['password2'])){
-            $this->validatePasswords([$userData['password1'],$userData['password2']], $validationResult);
+        if (isset($userData['password'],$userData['password2'])){
+            $this->validatePasswords([$userData['password'],$userData['password2']], $validationResult);
         }
 
         return $validationResult;
@@ -67,7 +67,7 @@ class UserValidation extends AppValidation
     {
         $validationResult = new ValidationResult('There was a validation error when trying to register a user');
 
-        if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
+        if (isset($userData['email'], $userData['name'],$userData['password'],$userData['password2'])) {
 
             $this->validateName($userData['name'], $validationResult);
             $this->validateEmail($userData['email'], $validationResult);
@@ -84,14 +84,14 @@ class UserValidation extends AppValidation
                 // todo in email provide link to login and how the password can be changed
             }
 
-            $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+            $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
 
             // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
             // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
             $validatedData = [
                 'name' => $userData['name'],
                 'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
-                'password1' => $userData['password1'],
+                'password' => $userData['password'],
                 'password2' => $userData['password2'],
             ];
             $validationResult->setValidatedData($validatedData);
@@ -126,7 +126,7 @@ class UserValidation extends AppValidation
     /**
      * Validate password
      *
-     * @param array $passwords [$password1, $password2]
+     * @param array $passwords [$password, $password2]
      * @param ValidationResult $validationResult
      */
     private function validatePasswords(array $passwords, ValidationResult $validationResult)
@@ -134,7 +134,7 @@ class UserValidation extends AppValidation
         if ($passwords[0] !== $passwords[1]) {
             $validationResult->setError('password2', 'Passwords do not match');
         }
-        $this->validateLengthMin($passwords[0], 'password1', $validationResult, 3);
+        $this->validateLengthMin($passwords[0], 'password', $validationResult, 3);
         $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
     }
 

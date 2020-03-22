@@ -12,7 +12,6 @@ return function (App $app) {
     $app->post('/login', AuthController::class . ':login')->setName('auth.login');
     $app->post('/register', AuthController::class . ':register')->setName('auth.register');
 
-
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->get('', UserController::class . ':list');
         $group->get('/{id:[0-9]+}', UserController::class . ':get');
@@ -35,7 +34,7 @@ return function (App $app) {
         $name = $args['name'];
         $response->getBody()->write("Hello, $name");
         $response->getBody()->write(json_encode($response->getStatusCode()));
-        throw new \HttpInternalServerErrorException('Nooooooooooooooo!');
+        throw new HttpInternalServerErrorException('Nooooooooooooooo!');
         return $response;
     });
 };

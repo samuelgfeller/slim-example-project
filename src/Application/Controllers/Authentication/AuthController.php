@@ -35,11 +35,11 @@ class AuthController extends Controller
         // If a html form name changes, these changes have to be done in the Entities constructor
         // too since these values will be the keys from the ArrayReader
         $userData = $request->getParsedBody();
+        $plainPass = $userData['password'];
 
-        $userData['password'] = password_hash($userData['password1'], PASSWORD_DEFAULT);
+        $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
         // used to give login function
-        $plainPass = $userData['password1'];
-        unset($userData['password1'], $userData['password2']);
+        unset($userData['password2']);
 
         // Use Entity instead of DTO for simplicity https://github.com/samuelgfeller/slim-api-example/issues/2#issuecomment-597245455
         $user = new User(new ArrayReader($userData));
@@ -60,7 +60,7 @@ class AuthController extends Controller
             // todo check if that is good practice or bad
             $loginResponse = $this->login($request, $response);
 
-            $loginContent = json_decode($loginResponse->getBody(), true);
+            $loginContent = json_decode($loginResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
             // Clear response body after body content is saved
             $response = new \Slim\Psr7\Response();
@@ -96,7 +96,7 @@ class AuthController extends Controller
         } catch (ValidationException $exception) {
             return $this->respondValidationError($exception->getValidationResult(), $response);
         }
-        // todo catch invalidCredentialsException
+        // todo prio1 catch invalidCredentialsException
         $this->logger->notice('Invalid login attempt from "' . $user->getEmail() . '"');
         return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 401);
     }

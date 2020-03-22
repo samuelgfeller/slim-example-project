@@ -40,7 +40,7 @@ response is sent to the client with the error status and the various
 errors as JSON.
   
 Here is how I check if the required values passed in the request are set and have the right name (key). 
-Lets say we expect the required elements `name`,`email`,`password1`,`password2`   
+Lets say we expect the required elements `name`,`email`,`password`,`password2`   
   
 Get elements from request as array and give this data to the corresponding validation class which 
 will return the result
@@ -64,18 +64,18 @@ different key name in the application.
 public function validateUserRegistration($userData): ValidationResult
 {
     $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
-    if (isset($userData['email'], $userData['name'],$userData['password1'],$userData['password2'])) {
+    if (isset($userData['email'], $userData['name'],$userData['password'],$userData['password2'])) {
 
         $this->validateName($userData['email'], $validationResult);
 
-        $this->validatePasswords([$userData['password1'], $userData['password2']], $validationResult);
+        $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
 
         // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
         // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
         $validatedData = [
             'name' => $userData['name'],
             'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
-            'password1' => $userData['password1'],
+            'password' => $userData['password'],
             'password2' => $userData['password2'],
         ];
         $validationResult->setValidatedData($validatedData);

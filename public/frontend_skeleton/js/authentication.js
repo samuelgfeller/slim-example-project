@@ -109,7 +109,7 @@ function register() {
         data: JSON.stringify({
             name: $('#registerNameInp').val(),
             email: $('#registerEmailInp').val(),
-            password1: $('#registerPassword1Inp').val(),
+            password: $('#registerPassword1Inp').val(),
             password2: $('#registerPassword2Inp').val(),
         }),
     }).done(function (output) {
@@ -132,7 +132,7 @@ function sha1(msg) {
     function rotate_left(n, s) {
         var t4 = (n << s) | (n >>> (32 - s));
         return t4;
-    };
+    }
 
     function lsb_hex(val) {
         var str = '';
@@ -145,7 +145,7 @@ function sha1(msg) {
             str += vh.toString(16) + vl.toString(16);
         }
         return str;
-    };
+    }
 
     function cvt_hex(val) {
         var str = '';
@@ -156,7 +156,7 @@ function sha1(msg) {
             str += v.toString(16);
         }
         return str;
-    };
+    }
 
     function Utf8Encode(string) {
         string = string.replace(/\r\n/g, '\n');
@@ -175,7 +175,7 @@ function sha1(msg) {
             }
         }
         return utftext;
-    };
+    }
     var blockstart;
     var i, j;
     var W = new Array(80);
@@ -188,7 +188,7 @@ function sha1(msg) {
     var temp;
     msg = Utf8Encode(msg);
     var msg_len = msg.length;
-    var word_array = new Array();
+    var word_array = [];
     for (i = 0; i < msg_len - 3; i += 4) {
         j = msg.charCodeAt(i) << 24 | msg.charCodeAt(i + 1) << 16 |
             msg.charCodeAt(i + 2) << 8 | msg.charCodeAt(i + 3);
@@ -261,4 +261,4 @@ function sha1(msg) {
     var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
 
     return temp.toLowerCase();
-};
+}
