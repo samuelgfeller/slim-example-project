@@ -10,6 +10,7 @@ class User
     private ?string $name;
     private string $email;
     private ?string $password;
+    private ?string $password2;
     private ?string $role;
     
     
@@ -20,6 +21,7 @@ class User
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->findString('password');
+        $this->password2 = $arrayReader->findString('password2');
         $this->role = $arrayReader->findString('role') ?? 'user';
     }
     
@@ -105,6 +107,22 @@ class User
     public function setPassword($password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassword2(): ?string
+    {
+        return $this->password2;
+    }
+
+    /**
+     * @param string|null $password2
+     */
+    public function setPassword2(?string $password2): void
+    {
+        $this->password2 = $password2;
     }
     
     /**

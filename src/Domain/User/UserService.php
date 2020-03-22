@@ -78,28 +78,28 @@ class UserService
     }
 
     /**
-     * @param $id
-     * @param $data array Data to update
+     * @param User $user
      * @return bool
      */
-    public function updateUser($id, array $data): bool
+    public function updateUser(User $user): bool
     {
-        $validatedData = [];
-        if (isset($data['name'])) {
-            $validatedData['name'] = $data['name'];
+//        $this->userValidation->validateUserUpdate($user);
+
+        $userData = [];
+        if ($user->getName()!== null) {
+            $userData['name'] = $user->getName();
         }
-        if (isset($data['email'])) {
-            $validatedData['email'] = $data['email'];
+        if ($user->getEmail() !== null) {
+            $userData['email'] = $user->getEmail();
         }
-        if (isset($data['password1'], $data['password2'])) {
+        if ($user->getPassword() !== null) {
             // passwords are already identical since they were validated in UserValidation.php
-            $validatedData['password'] = password_hash($data['password1'], PASSWORD_DEFAULT);
+            $userData['password'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         }
-        
-        
-        return $this->userRepositoryInterface->updateuser($validatedData, $id);
+
+        return $this->userRepositoryInterface->updateuser($userData, $user->getId());
     }
-    
+
     public function deleteUser($id): bool
     {
         // todo delete posts
