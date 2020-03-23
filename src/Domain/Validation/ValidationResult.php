@@ -67,6 +67,8 @@ class ValidationResult
     }
 
     /**
+     * Request parameter not correct
+     *
      * @return bool
      */
     public function isBadRequest(): bool
@@ -75,6 +77,8 @@ class ValidationResult
     }
 
     /**
+     * Request parameter faulty
+     *
      * @param bool $isBadRequest
      */
     public function setIsBadRequest(bool $isBadRequest): void
