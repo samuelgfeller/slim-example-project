@@ -3,10 +3,13 @@
 namespace App\Controllers\Posts;
 
 use App\Application\Controllers\Controller;
+use App\Domain\Exception\ValidationException;
+use App\Domain\Post\Post;
 use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\Post\PostService;
 use App\Domain\Post\PostValidation;
 use App\Domain\User\UserService;
+use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -85,29 +88,27 @@ class PostController extends Controller
 
         $id = (int)$args['id'];
 
-        $post = $this->postService->findPost($id);
+        $postFromDb = $this->postService->findPost($id);
+
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->userService->getUserRole($userId);
-
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
-
-//      var_dump($request->getParsedBody());
+        if ($userRole === 'admin' || (int)$postFromDb['user_id'] === $userId) {
 
             // todo check if parsedbody is empty everywhere
-            if (null !== $data = $request->getParsedBody()) {
+            if (null !== $postData = $request->getParsedBody()) {
+                // todo maybe add mapping a layer between client body and application logic
 
-                $postData = [
-                    'message' => $data['message'],
-                ];
+                $post = new Post(new ArrayReader($postData));
+                // Needed to tell repo what data to update
+                $post->setId($postFromDb['id']);
 
-                $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-                if ($validationResult->fails()) {
-                    return $this->respondValidationError($validationResult, $response);
+                try {
+                    $updated = $this->postService->updatePost($post);
+                } catch (ValidationException $exception) {
+                    return $this->respondValidationError($exception->getValidationResult(), $response);
                 }
 
-//        var_dump($data);
-                $updated = $this->postService->updatePost($id, $postData);
                 if ($updated) {
                     return $this->respondWithJson($response, ['status' => 'success']);
                 }

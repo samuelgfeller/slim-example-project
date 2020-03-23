@@ -79,13 +79,11 @@ class PostService
     }
 
 
-    public function updatePost($id, $data): bool
+    public function updatePost(Post $post): bool
     {
-        $userData = [
-            'message' => $data['message'],
-        ];
-
-        return $this->postRepositoryInterface->updatePost($userData, $id);
+        // todo validate
+        // $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
+        return $this->postRepositoryInterface->updatePost($post->toArray(), $post->getId());
     }
 
     public function deletePost($id): bool
