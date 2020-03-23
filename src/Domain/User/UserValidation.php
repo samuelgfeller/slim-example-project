@@ -60,48 +60,33 @@ class UserValidation extends AppValidation
     /**
      * Validate registration.
      *
-     * @param $userData
+     * @param User $user
      * @return ValidationResult
      */
-    public function validateUserRegistration($userData): ValidationResult
+    public function validateUserRegistration(User $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to register a user');
 
-        if (isset($userData['email'], $userData['name'],$userData['password'],$userData['password2'])) {
+        $this->validateName($user->getName(), true, $validationResult);
+        $this->validateEmail($user->getEmail(), true, $validationResult);
 
-            $this->validateName($userData['name'], $validationResult);
-            $this->validateEmail($userData['email'], $validationResult);
+        // First check if validation already failed. If not email is checked in db because we know its a valid email
+        if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($user->getEmail())) {
+            $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
 
-            // First check if validation already failed. If not email is checked in db because we know its a valid email
-            if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($userData['email'])) {
-                $this->logger->info('Account creation tried with existing email: "' . $userData['email'] . '"');
+            // todo remove that
+            $validationResult->setError('email', 'Error in registration');
 
-                // todo remove that
-                $validationResult->setError('email', 'Error in registration');
-
-                // todo implement function to tell client that register success without actually writing something in db;
-                // todo send email to user to say that someone registered with his email and that he has already an account
-                // todo in email provide link to login and how the password can be changed
-            }
-
-            $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
-
-            // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
-            // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
-            $validatedData = [
-                'name' => $userData['name'],
-                'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
-                'password' => $userData['password'],
-                'password2' => $userData['password2'],
-            ];
-            $validationResult->setValidatedData($validatedData);
-            
-            // If the validation failed, throw the exception which will be caught in the Controller
-            $this->throwOnError($validationResult);
-            
-            return $validationResult;
+            // todo implement function to tell client that register success without actually writing something in db;
+            // todo send email to user to say that someone registered with his email and that he has already an account
+            // todo in email provide link to login and how the password can be changed
         }
-        $validationResult->setIsBadRequest(true);
+
+        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], $validationResult);
+
+        // If the validation failed, throw the exception which will be caught in the Controller
+        $this->throwOnError($validationResult);
+
         return $validationResult;
     }
 
@@ -142,12 +127,17 @@ class UserValidation extends AppValidation
      * Validate email
      *
      * @param string $email
+     * @param bool $required
      * @param ValidationResult $validationResult
      */
-    private function validateEmail(string $email, ValidationResult $validationResult): void
+    private function validateEmail(string $email, bool $required, ValidationResult $validationResult): void
     {
+        // reversed, if true -> error
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $validationResult->setError('email', 'Email address could not be validated');
+        } elseif (true === $required) {
+            // If email is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true);
         }
     }
 
@@ -167,12 +157,18 @@ class UserValidation extends AppValidation
      * Validate Name.
      *
      * @param string $name
+     * @param bool $required on update the name doesn't have to be set but on creation it has
      * @param ValidationResult $validationResult
      */
-    private function validateName(string $name, ValidationResult $validationResult): void
+    private function validateName(string $name, bool $required, ValidationResult $validationResult): void
     {
-        $this->validateLengthMax($name, 'name', $validationResult, 200);
-        $this->validateLengthMin($name, 'name', $validationResult, 2);
+        if (null !== $name) {
+            $this->validateLengthMax($name, 'name', $validationResult, 200);
+            $this->validateLengthMin($name, 'name', $validationResult, 2);
+        } elseif (true === $required) {
+            // Name is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true);
+        }
     }
 
 
@@ -248,7 +244,6 @@ class UserValidation extends AppValidation
             $validationResult->setError('passwordOld', __('Does not match the old password'));
         }
     }
-
 
 
     /**

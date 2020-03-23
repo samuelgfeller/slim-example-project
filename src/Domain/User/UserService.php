@@ -50,8 +50,7 @@ class UserService
      */
     public function createUser(User $user): string
     {
-        // todo validate with object
-//        $this->userValidation->validateUserRegistration($data);
+        $this->userValidation->validateUserRegistration($user);
         return $this->userRepositoryInterface->insertUser($user->toArray());
     }
 
