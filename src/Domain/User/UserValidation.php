@@ -44,14 +44,14 @@ class UserValidation extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         $this->validateUser($id, $validationResult);
 
-        if (isset($userData['name'])){
+        if (isset($userData['name'])) {
             $this->validateName($userData['name'], $validationResult);
         }
-        if (isset($userData['email'])){
+        if (isset($userData['email'])) {
             $this->validateEmail($userData['email'], $validationResult);
         }
-        if (isset($userData['password'],$userData['password2'])){
-            $this->validatePasswords([$userData['password'],$userData['password2']], $validationResult);
+        if (isset($userData['password'], $userData['password2'])) {
+            $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
         }
 
         return $validationResult;
@@ -94,7 +94,7 @@ class UserValidation extends AppValidation
     {
         $validationResult = new ValidationResult('There was a validation error when trying to login a user');
 
-        if (isset($rawData['email'],$rawData['password'])) {
+        if (isset($rawData['email'], $rawData['password'])) {
             $this->validateEmail($rawData['email'], $validationResult);
 
             $loginData = [
@@ -148,8 +148,7 @@ class UserValidation extends AppValidation
             $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');
 
-            $this->logger->info('Check for user (id: '.$userId.') that didn\'t exist in validation');
-
+            $this->logger->info('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
         }
     }
 
