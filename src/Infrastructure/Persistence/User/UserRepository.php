@@ -8,7 +8,6 @@ use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\Persistence\DataManager;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
-use User;
 
 class UserRepository extends DataManager implements UserRepositoryInterface
 {
