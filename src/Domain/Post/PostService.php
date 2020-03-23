@@ -70,12 +70,14 @@ class PostService
     /**
      * Insert post in database
      *
-     * @param $data
+     * @param Post $post
      * @return string
      */
-    public function createPost($data): string
+    public function createPost(Post $post): string
     {
-        return $this->postRepositoryInterface->insertPost($data);
+        // todo validate
+        // $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
+        return $this->postRepositoryInterface->insertPost($post->toArray());
     }
 
 

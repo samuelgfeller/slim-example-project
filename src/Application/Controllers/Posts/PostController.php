@@ -150,23 +150,20 @@ class PostController extends Controller
             ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
-    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    public function create(Request $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $userId = (int)$this->getUserIdFromToken($request);
 
-        $data = $request->getParsedBody();
-        if (null !== $data) {
-            $postData = [
-                'message' => $data['message'],
-                'user_id' => $userId,
-            ];
+        if (null !== $postData = $request->getParsedBody()) {
 
-            $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
-            if ($validationResult->fails()) {
-                return $this->respondValidationError($validationResult, $response);
+            $post = new Post(new ArrayReader($postData));
+            $post->setUserId($userId);
+
+            try {
+                $insertId = $this->postService->createPost($post);
+            } catch (ValidationException $exception) {
+                return $this->respondValidationError($exception->getValidationResult(), $response);
             }
-
-            $insertId = $this->postService->createPost($postData);
 
             if (null !== $insertId) {
                 return $this->respondWithJson($response, ['status' => 'success'], 201);
