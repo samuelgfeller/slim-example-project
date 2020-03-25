@@ -38,7 +38,8 @@ class AuthController extends Controller
 
         // Use Entity instead of DTO for simplicity https://github.com/samuelgfeller/slim-api-example/issues/2#issuecomment-597245455
         $user = new User(new ArrayReader($userData));
-
+        // Password gets hashed in service createUser($user) but is needed plain to build up login request body
+        $plainPass = $user->getPassword();
         try {
             $insertId = $this->userService->createUser($user);
         } catch (ValidationException $exception) {
@@ -50,7 +51,7 @@ class AuthController extends Controller
             $this->logger->info('User "' . $userData['email'] . '" created');
 
             // Add email and password like it is expected in the login function
-            $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $user->getPassword()]);
+            $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
             // Call login function to authenticate the user
             // todo check if that is good practice or bad
             $loginResponse = $this->login($request, $response);
