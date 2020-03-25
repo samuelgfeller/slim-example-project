@@ -85,8 +85,7 @@ class PostService
 
     public function updatePost(Post $post): bool
     {
-        // todo validate
-        // $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
+         $this->postValidation->validatePostCreationOrUpdate($post);
         return $this->postRepositoryInterface->updatePost($post->toArray(), $post->getId());
     }
 
