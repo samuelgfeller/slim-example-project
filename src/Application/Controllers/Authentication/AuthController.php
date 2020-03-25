@@ -35,11 +35,6 @@ class AuthController extends Controller
         // If a html form name changes, these changes have to be done in the Entities constructor
         // too since these values will be the keys from the ArrayReader
         $userData = $request->getParsedBody();
-        $plainPass = $userData['password'];
-
-        $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
-        // used to give login function
-        unset($userData['password2']);
 
         // Use Entity instead of DTO for simplicity https://github.com/samuelgfeller/slim-api-example/issues/2#issuecomment-597245455
         $user = new User(new ArrayReader($userData));
@@ -55,7 +50,7 @@ class AuthController extends Controller
             $this->logger->info('User "' . $userData['email'] . '" created');
 
             // Add email and password like it is expected in the login function
-            $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $plainPass]);
+            $request = $request->withParsedBody(['email' => $userData['email'], 'password' => $user->getPassword()]);
             // Call login function to authenticate the user
             // todo check if that is good practice or bad
             $loginResponse = $this->login($request, $response);
