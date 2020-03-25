@@ -55,3 +55,20 @@ function handleFail(xhr){
     // Output error to user
     alert(errorMsg);
 }
+
+/**
+ * Check html validity of form and display browser default error
+ *
+ * Source: https://stackoverflow.com/a/11867013/9013718
+ *
+ * @param formId
+ */
+function formIsValid(formId){
+    if(!document.getElementById(formId).checkValidity()) {
+        // If the form is invalid, submit it. The form won't actually submit;
+        // this will just cause the browser to display the native HTML5 error messages.
+        $('<input type="submit">').hide().appendTo($('#'+formId)).click().remove();
+        return false;
+    }
+    return true;
+}
