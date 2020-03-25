@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     // Send login requests
     $('#submitBtnLogin').on('click', function () {
-        login();
+        login('loginForm');
     });
 
     $('#registerSubmitBtn').on('click', function () {
@@ -76,24 +76,26 @@ function isBreached(password) {
  * Leases jwt token and stores in localStorage
  *
  */
-function login() {
-    $.ajax({
-        url: config.api_url + 'login',
-        type: 'post',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({
-            email: $('#loginEmailInp').val(),
-            password: $('#loginPasswordInp').val(),
-        }),
-    }).done(function (output) {
-        localStorage.setItem('token', output.token);
-        $('.loggedInInfo').remove();
-        $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
+function login(formId) {
+    if(formIsValid(formId)){
+        $.ajax({
+            url: config.api_url + 'login',
+            type: 'post',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                email: $('#loginEmailInp').val(),
+                password: $('#loginPasswordInp').val(),
+            }),
+        }).done(function (output) {
+            localStorage.setItem('token', output.token);
+            $('.loggedInInfo').remove();
+            $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
 
-    }).fail(function (xhr) {
-        handleFail(xhr);
-    });
+        }).fail(function (xhr) {
+            handleFail(xhr);
+        });
+    }
 }
 
 /**
