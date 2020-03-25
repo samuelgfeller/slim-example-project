@@ -21,7 +21,7 @@ $(document).ready(function () {
     // Send update request
     $('#postsDiv').on('click', '#submitBtnEditPost', function () {
         let id = $(this).data('id');
-        submitUpdatedPost(id);
+        submitUpdatedPost(id, 'updatePostForm');
     });
 
     // Delete post
@@ -89,46 +89,6 @@ function getOwnPostBox(jsonData){
         '</div>' +
         '</div>');
 }
-/*
-/!**
- * Open modal to create a post
- *!/
-function openCreatePostForm() {
-    let header = '<h2>Post</h2>';
-    let body = '<form action="posts" class="blueForm modalForm" method="post" autocomplete="on">' +
-        '<textarea rows="4" cols="50" name="message" id="createMessageTextarea" placeholder="Your message here." minlength="4" maxlength="500" required></textarea>';
-    let footer = '<button type="button" id="submitBtnCreatePost" class="submitBtn modalSubmitBtn">Create post</button>' +
-        '<div class="clearfix"></div>' +
-        '</form>';
-    createModal(header,body,footer,$('#createPostDiv'));
-}
-
-function submitCreatePost() {
-    $.ajax({
-        url: config.api_url+'posts',
-        type: 'post',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function (xhr) {
-            /!* Authorization header *!/
-            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-        },
-        data: JSON.stringify({
-            message: $('#createMessageTextarea').val(),
-            user : localStorage.getItem("token"),
-        }),
-    }).done(function (output) {
-        closeModal();
-        if (output.status === 'success') {
-            loadAllPosts();
-        } else {
-            console.log(output.success);
-        }
-    }).fail(function (xhr) {
-        handleFail(xhr);
-
-    });
-}*/
 
 /**
  * Open Modalbox with form to edit the post data
@@ -137,7 +97,7 @@ function submitCreatePost() {
  */
 function openEditPostForm(id) {
     let header = '<h2>Edit post</h2>';
-    let body = '<form action="posts/' + id + '" class="blueForm modalForm" autocomplete="on">' +
+    let body = '<form action="posts/' + id + '" id="updatePostForm" class="blueForm modalForm" autocomplete="on">' +
         '<textarea name="message" id="createMessageTextarea" placeholder="Loading..." minlength="4" maxlength="500" required></textarea>';
     let footer = '<button type="button" id="submitBtnEditPost" data-id="" class="submitBtn modalSubmitBtn">Update post</button>' +
         '<div class="clearfix"></div>' +
@@ -169,33 +129,36 @@ function openEditPostForm(id) {
  * Send form data via put to update a post
  *
  * @param id
+ * @param formId
  */
-function submitUpdatedPost(id) {
-    $.ajax({
-        url: config.api_url+'posts/' + id,
-        // url: 'posts',
-        type: 'put',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function (xhr) {
-            /* Authorization header */
-            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-        },
-        data: JSON.stringify({
-            message: $('#createMessageTextarea').val(),
-            user : localStorage.getItem("token"),
-        }),
-    }).done(function (output) {
-        closeModal();
-        if (output.status === 'success') {
-            showLoader('loaderForPost'+id);
-            reloadPost(id);
-        } else {
-            console.log(output);
-        }
-    }).fail(function (xhr) {
-        handleFail(xhr);
-    });
+function submitUpdatedPost(id, formId) {
+    if (formIsValid(formId)) {
+        $.ajax({
+            url: config.api_url + 'posts/' + id,
+            // url: 'posts',
+            type: 'put',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                message: $('#createMessageTextarea').val(),
+                user: localStorage.getItem("token"),
+            }),
+        }).done(function (output) {
+            closeModal();
+            if (output.status === 'success') {
+                showLoader('loaderForPost' + id);
+                reloadPost(id);
+            } else {
+                console.log(output);
+            }
+        }).fail(function (xhr) {
+            handleFail(xhr);
+        });
+    }
 }
 
 /**
