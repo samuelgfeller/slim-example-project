@@ -1,5 +1,6 @@
 # Slim api template
 
+Project ongoing.   
 Description coming soon
   
   
