@@ -34,19 +34,18 @@ class PostValidation extends AppValidation
     /**
      * Validate post creation.
      *
-     * @param $postData
-     * @return ValidationResult
+     * @param Post $post
      */
-    public function validatePostCreationOrUpdate($postData): ValidationResult
+    public function validatePostCreationOrUpdate(Post $post): void
     {
         $validationResult = new ValidationResult('There is something in the post data which couldn\'t be validated');
 
-        $this->validateLengthMax($postData['message'], 'message', $validationResult, 500);
-        $this->validateLengthMin($postData['message'], 'message', $validationResult, 4);
+        $this->validateLengthMax($post->getMessage(), 'message', $validationResult, 500);
+        $this->validateLengthMin($post->getMessage(), 'message', $validationResult, 4);
 
         // todo does it make sense to check if user exists?
 
-        return $validationResult;
+        $this->throwOnError($validationResult);
     }
 
 }

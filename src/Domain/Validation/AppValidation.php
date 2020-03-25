@@ -25,6 +25,7 @@ abstract class AppValidation
      * Throw a validation exception if the validation result fails.
      *
      * @param ValidationResult $validationResult
+     * @throws ValidationException
      */
     protected function throwOnError(ValidationResult $validationResult): void
     {

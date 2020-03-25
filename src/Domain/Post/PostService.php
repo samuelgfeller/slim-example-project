@@ -13,11 +13,16 @@ class PostService
 
     private $postRepositoryInterface;
     private $userService;
+    protected $postValidation;
 
-    public function __construct(PostRepositoryInterface $postRepositoryInterface, UserService $userService)
-    {
+    public function __construct(
+        PostRepositoryInterface $postRepositoryInterface,
+        UserService $userService,
+        PostValidation $postValidation
+    ) {
         $this->postRepositoryInterface = $postRepositoryInterface;
         $this->userService = $userService;
+        $this->postValidation = $postValidation;
     }
 
     public function findAllPosts()
@@ -51,18 +56,16 @@ class PostService
      */
     private function populatePostsArrayWithUser($posts): array
     {
-
         // Add user name info to post
         $postsWithUser = [];
         foreach ($posts as $post) {
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
             // If user was deleted but post not
-            if (isset($user['name'])){
+            if (isset($user['name'])) {
                 $post['user_name'] = $user['name'];
                 $postsWithUser[] = $post;
             }
-
         }
         return $postsWithUser;
     }
@@ -75,8 +78,7 @@ class PostService
      */
     public function createPost(Post $post): string
     {
-        // todo validate
-        // $validationResult = $this->postValidation->validatePostCreationOrUpdate($postData);
+        $this->postValidation->validatePostCreationOrUpdate($post);
         return $this->postRepositoryInterface->insertPost($post->toArray());
     }
 

@@ -23,20 +23,17 @@ class PostController extends Controller
 {
 
     protected $postService;
-    protected $postValidation;
     protected $userService;
     protected $outputEscapeService;
 
     public function __construct(
         LoggerInterface $logger,
         PostService $postService,
-        PostValidation $postValidation,
         UserService $userService,
         OutputEscapeService $outputEscapeService
     ) {
         parent::__construct($logger);
         $this->postService = $postService;
-        $this->postValidation = $postValidation;
         $this->userService = $userService;
         $this->outputEscapeService = $outputEscapeService;
     }
