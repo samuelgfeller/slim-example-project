@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-    loadAllPosts();
+    loadAllOwnPosts();
     // Edit user open form modal
     $('#createPostBtn').on('click', function () {
         openCreatePostForm();
@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     // Send update request
     $('#createPostDiv').on('click', '#submitBtnCreatePost', function () {
-        submitCreatePost();
+        submitCreatePost('createPostForm', 'own');
     });
 
     // Edit post open form modal
@@ -35,7 +35,7 @@ $(document).ready(function () {
 /**
  * Populate #postsDiv with all posts in database
  */
-function loadAllPosts() {
+function loadAllOwnPosts() {
     // https://florimond.dev/blog/articles/2018/08/restful-api-design-13-best-practices-to-make-your-users-happy/
 
     //Load posts
@@ -56,7 +56,7 @@ function loadAllPosts() {
                 // let places = JSON.parse(output);
                 $('#postsDiv').empty();
                 $.each(posts, function (index, value) {
-                    getPostBox(value).appendTo($('#postsDiv'));
+                    getOwnPostBox(value).appendTo($('#postsDiv'));
                 });
             }
         } else {
@@ -68,7 +68,13 @@ function loadAllPosts() {
     });
 }
 
-function getPostBox(jsonData){
+/**
+ * Load own post box with edit and delete button
+ *
+ * @param jsonData
+ * @returns {jQuery|HTMLElement}
+ */
+function getOwnPostBox(jsonData){
     return $('<div class="singleBox" id="post' + jsonData.id + '">' +
         '<div class="boxContent">' +
         '<img src="/frontend_skeleton/img/edit_icon.svg" class="editIcon cursorPointer" data-id="' + jsonData.id + '" alt="edit">' +
@@ -83,10 +89,10 @@ function getPostBox(jsonData){
         '</div>' +
         '</div>');
 }
-
-/**
+/*
+/!**
  * Open modal to create a post
- */
+ *!/
 function openCreatePostForm() {
     let header = '<h2>Post</h2>';
     let body = '<form action="posts" class="blueForm modalForm" method="post" autocomplete="on">' +
@@ -104,7 +110,7 @@ function submitCreatePost() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         beforeSend: function (xhr) {
-            /* Authorization header */
+            /!* Authorization header *!/
             xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         },
         data: JSON.stringify({
@@ -118,11 +124,11 @@ function submitCreatePost() {
         } else {
             console.log(output.success);
         }
-    }).fail(function (output) {
+    }).fail(function (xhr) {
         handleFail(xhr);
 
     });
-}
+}*/
 
 /**
  * Open Modalbox with form to edit the post data
@@ -230,7 +236,7 @@ function reloadPost(id){
     }).done(function (output) {
         let post = output;
         hideLoader('loaderForPost'+id);
-        $('#post'+id).replaceWith(getPostBox(post))
+        $('#post'+id).replaceWith(getOwnPostBox(post))
     }).fail(function (xhr) {
         handleFail(xhr);
     });
