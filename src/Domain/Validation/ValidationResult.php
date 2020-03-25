@@ -80,10 +80,13 @@ class ValidationResult
      * Request parameter faulty
      *
      * @param bool $isBadRequest
+     * @param string $field
+     * @param string $message
      */
-    public function setIsBadRequest(bool $isBadRequest): void
+    public function setIsBadRequest(bool $isBadRequest, string $field = 'unknown',
+        string $message = 'Required request parameter empty or not formatted well'): void
     {
-        $this->setError('unknown','Required request parameter empty or not formatted well');
+        $this->setError($field, $message);
         $this->isBadRequest = $isBadRequest;
     }
 

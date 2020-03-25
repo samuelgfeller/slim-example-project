@@ -35,24 +35,20 @@ class UserValidation extends AppValidation
     /**
      * Validate updating the user.
      *
-     * @param int $id
-     * @param array $userData
+     * @param User $user
      * @return ValidationResult
      */
-    public function validateUserUpdate(int $id, array $userData): ValidationResult
+    public function validateUserUpdate(User $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
-        $this->validateUser($id, $validationResult);
+        $this->validateUserExistence($user->getId(), $validationResult);
 
-        if (isset($userData['name'])) {
-            $this->validateName($userData['name'], $validationResult);
-        }
-        if (isset($userData['email'])) {
-            $this->validateEmail($userData['email'], $validationResult);
-        }
-        if (isset($userData['password'], $userData['password2'])) {
-            $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
-        }
+        $this->validateName($user->getName(), false, $validationResult);
+        $this->validateEmail($user->getEmail(), false, $validationResult);
+        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], false, $validationResult);
+
+        // If the validation failed, throw the exception that will be caught in the Controller
+        $this->throwOnError($validationResult);
 
         return $validationResult;
     }
@@ -65,6 +61,7 @@ class UserValidation extends AppValidation
      */
     public function validateUserRegistration(User $user): ValidationResult
     {
+        // Instantiate ValidationResult Object with default message
         $validationResult = new ValidationResult('There was a validation error when trying to register a user');
 
         $this->validateName($user->getName(), true, $validationResult);
@@ -82,7 +79,7 @@ class UserValidation extends AppValidation
             // todo in email provide link to login and how the password can be changed
         }
 
-        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], $validationResult);
+        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult);
@@ -112,15 +109,21 @@ class UserValidation extends AppValidation
      * Validate password
      *
      * @param array $passwords [$password, $password2]
+     * @param bool $required
      * @param ValidationResult $validationResult
      */
-    private function validatePasswords(array $passwords, ValidationResult $validationResult)
+    private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult)
     {
-        if ($passwords[0] !== $passwords[1]) {
-            $validationResult->setError('password2', 'Passwords do not match');
+        if (null !== $passwords[0] && null !== $passwords[1]) {
+            if ($passwords[0] !== $passwords[1]) {
+                $validationResult->setError('passwords', 'Passwords do not match');
+            }
+            $this->validateLengthMin($passwords[0], 'password', $validationResult, 3);
+            $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
+        }elseif(true === $required){
+            // If it is null but required, the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true, 'passwords', 'Passwords are required and not given');
         }
-        $this->validateLengthMin($passwords[0], 'password', $validationResult, 3);
-        $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
     }
 
     /**
@@ -141,7 +144,7 @@ class UserValidation extends AppValidation
         }
     }
 
-    protected function validateUser($userId, ValidationResult $validationResult): void
+    protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
         $exists = $this->userRepositoryInterface->userExists($userId);
         if (!$exists) {
@@ -172,9 +175,6 @@ class UserValidation extends AppValidation
 
 
 
-
-
-
     // unused from björn original
 
     /**
@@ -186,7 +186,7 @@ class UserValidation extends AppValidation
     public function validateGet(string $userId): ValidationResult
     {
         $validationResult = new ValidationResult('User does not exist');
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         return $validationResult;
     }
@@ -202,7 +202,7 @@ class UserValidation extends AppValidation
     public function validateDeletion(string $userId, string $executorId): ValidationResult
     {
         $validationResult = new ValidationResult('Something went wrong');
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         return $validationResult;
     }

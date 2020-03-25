@@ -42,7 +42,7 @@ class PostValidation extends AppValidation
     {
         $validationResult = new ValidationResult(__('Please check your submission'));
 
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         $this->validateLengthMax($post, 'post', $validationResult, 1000);
         $this->validateLengthMin($post, 'post', $validationResult);
@@ -60,7 +60,7 @@ class PostValidation extends AppValidation
     {
         $validationResult = new ValidationResult(__('Like not possible'));
 
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         $existsPost = $this->postRepository->existPost($postId);
         if (!$existsPost) {
@@ -100,7 +100,7 @@ class PostValidation extends AppValidation
     {
         $validationResult = new ValidationResult(__('Like not possible'));
 
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         $existsPost = $this->postRepository->existPost($postId);
         if (!$existsPost) {
@@ -139,7 +139,7 @@ class PostValidation extends AppValidation
     public function validateDeletion(string $postId, string $userId): ValidationResult
     {
         $validationResult = new ValidationResult(__('You can not delete this post'));
-        $this->validateUser($userId, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
         if (!$this->postRepository->existPost($postId)) {
             $validationResult->setError('delete', __('Post does not exist.'));
         }

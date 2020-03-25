@@ -77,12 +77,13 @@ class UserService
     }
 
     /**
-     * @param User $user
+     * @param User $user id MUST be in object
      * @return bool
      */
     public function updateUser(User $user): bool
     {
-//        $this->userValidation->validateUserUpdate($user);
+
+        $this->userValidation->validateUserUpdate($user);
 
         $userData = [];
         if ($user->getName()!== null) {
