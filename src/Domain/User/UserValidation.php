@@ -2,6 +2,7 @@
 
 namespace App\Domain\User;
 
+use App\Domain\Exception\ValidationException;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
@@ -87,42 +88,64 @@ class UserValidation extends AppValidation
         return $validationResult;
     }
 
-    public function validateUserLogin($rawData)
+    /**
+     * Validate if user inputs for the login
+     * are valid
+     *
+     * @param User $user
+     * @return ValidationResult
+     * @throws ValidationException
+     */
+    public function validateUserLogin(User $user): ValidationResult
     {
-        $validationResult = new ValidationResult('There was a validation error when trying to login a user');
+        $validationResult = new ValidationResult('There was a validation error when trying to login');
 
-        if (isset($rawData['email'], $rawData['password'])) {
-            $this->validateEmail($rawData['email'], $validationResult);
+        $this->validateEmail($user->getEmail(), true, $validationResult);
+        $this->validatePassword($user->getPassword(), true, $validationResult);
 
-            $loginData = [
-                'email' => filter_var($rawData['email'], FILTER_VALIDATE_EMAIL),
-                'password' => $rawData['password']
-            ];
-            $validationResult->setValidatedData($loginData);
-            return $validationResult;
-        }
-        $validationResult->setIsBadRequest(true);
+        // If the validation failed, throw the exception which will be caught in the Controller
+        $this->throwOnError($validationResult);
+
         return $validationResult;
     }
 
     /**
-     * Validate password
+     * Validate password and password2
      *
      * @param array $passwords [$password, $password2]
      * @param bool $required
      * @param ValidationResult $validationResult
      */
-    private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult)
+    private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult): void
     {
         if (null !== $passwords[0] && null !== $passwords[1]) {
             if ($passwords[0] !== $passwords[1]) {
                 $validationResult->setError('passwords', 'Passwords do not match');
             }
-            $this->validateLengthMin($passwords[0], 'password', $validationResult, 3);
-            $this->validateLengthMin($passwords[1], 'password2', $validationResult, 3);
-        }elseif(true === $required){
+
+            // If come to this line, password is required
+            $this->validatePassword($passwords[0], true, $validationResult);
+            $this->validatePassword($passwords[1], true, $validationResult);
+        } elseif (true === $required) {
             // If it is null but required, the user input is faulty so bad request 400 return status is sent
             $validationResult->setIsBadRequest(true, 'passwords', 'Passwords are required and not given');
+        }
+    }
+
+    /**
+     * Validate single password
+     *
+     * @param string $password
+     * @param bool $required
+     * @param ValidationResult $validationResult
+     */
+    public function validatePassword(string $password, bool $required, ValidationResult $validationResult): void
+    {
+        if (null !== $password) {
+            $this->validateLengthMin($password, 'password', $validationResult, 3);
+        } elseif (true === $required) {
+            // If it is null but required, the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true, 'passwords', 'Password is required and not given');
         }
     }
 
@@ -138,9 +161,10 @@ class UserValidation extends AppValidation
         // reversed, if true -> error
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $validationResult->setError('email', 'Email address could not be validated');
-        } elseif (true === $required) {
+        } // Because reversed the null check is done here
+        elseif (true === $required && null === $email) {
             // If email is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true);
+            $validationResult->setIsBadRequest(true, 'email', 'email required but not given');
         }
     }
 
@@ -169,7 +193,7 @@ class UserValidation extends AppValidation
             $this->validateLengthMin($name, 'name', $validationResult, 2);
         } elseif (true === $required) {
             // Name is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true);
+            $validationResult->setIsBadRequest(true, 'name', 'name required but not given');
         }
     }
 

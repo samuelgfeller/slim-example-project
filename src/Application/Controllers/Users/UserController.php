@@ -123,7 +123,8 @@ class UserController extends Controller
             if ($updated) {
                 return $this->respondWithJson($response, ['status' => 'success']);
             }
-            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User wasn\'t updated']);
+            // If for example values didnt change
+            return $this->respondWithJson($response, ['status' => 'warning', 'message' => 'User wasn\'t updated']);
         }
         $this->logger->notice('User ' . $loggedUserId . ' tried to update other user with id: ' . $userData['id']);
 

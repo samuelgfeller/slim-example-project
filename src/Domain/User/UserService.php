@@ -3,6 +3,7 @@
 
 namespace App\Domain\User;
 
+use App\Domain\Exception\ValidationException;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
@@ -64,8 +65,7 @@ class UserService
      */
     public function userAllowedToLogin(User $user)
     {
-        // todo do validation
-//        $validationResult = $this->userValidation->validateUserLogin($parsedBody);
+        $this->userValidation->validateUserLogin($user);
 
         $dbUser = $this->findUserByEmail($user->getEmail());
         //$this->logger->info('users/' . $user . ' has been called');
