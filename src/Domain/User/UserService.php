@@ -52,6 +52,7 @@ class UserService
     public function createUser(User $user): string
     {
         $this->userValidation->validateUserRegistration($user);
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
         return $this->userRepositoryInterface->insertUser($user->toArray());
     }
 
