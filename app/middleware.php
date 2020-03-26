@@ -1,5 +1,6 @@
 <?php
 
+use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\JsonBodyParserMiddleware;
 use App\Application\Middleware\SessionMiddleware;
 use Psr\Log\LoggerInterface;
@@ -13,7 +14,7 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
-
+    $app->add(CorsMiddleware::class);
     $app->add(SessionMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
 
@@ -24,7 +25,7 @@ return function (App $app) {
         'algorithm' => ['HS256'],
         'logger' => $logger,
         // HTTPS not mandatory for local development
-        'relaxed' => ['localhost', 'dev.slim-api-example'],
+        'relaxed' => ['localhost', 'dev.slim-api-example','dev.frontend-example'],
         'error' => function ($response, $arguments) {
             $data['status'] = 'error';
             $data['message'] = $arguments['message'];
