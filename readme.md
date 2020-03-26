@@ -2,6 +2,10 @@
 
 Project ongoing.   
 Description coming soon
+
+## Frontend for testing
+https://github.com/samuelgfeller/frontend-example
+
   
   
 ### settings.php
