@@ -51,15 +51,6 @@ $app = AppFactory::create();
 $middleware = require __DIR__ . '/../app/middleware.php';
 $middleware($app);
 
-// Access Control headers
-/*$app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
-    return $response
-//		->withHeader('Access-Control-Allow-Origin', 'http://www.test-cors.org/')
-        ->withHeader('Access-Control-Allow-Origin', '*')
-//		->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});*/
 
 /*$container->set('LocationController', function (ContainerInterface $c) {
 //    return new LocationController($c);
@@ -82,11 +73,6 @@ $app->addRoutingMiddleware();
 // Routing
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
-
-// Frontend routing todo remove when separating frontend
-$routesFrontend = require __DIR__ . '/../app/routes_frontend.php';
-$routesFrontend($app);
-
 
 
 /*
