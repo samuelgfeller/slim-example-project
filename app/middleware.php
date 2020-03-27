@@ -13,6 +13,7 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
+    // JWT Middleware MUST be before other middlewares (especially CORS)
     $app->add(
         new JwtAuthentication(
             [
