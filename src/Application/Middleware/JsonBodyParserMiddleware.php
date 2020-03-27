@@ -17,7 +17,9 @@ class JsonBodyParserMiddleware implements MiddlewareInterface
                 $request = $request->withParsedBody($contents);
             }
         }
-        
-        return $handler->handle($request);
+
+        $response = $handler->handle($request);
+
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
