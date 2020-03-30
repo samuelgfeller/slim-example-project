@@ -5,33 +5,34 @@ namespace App\Domain\User;
 
 use App\Domain\Exception\ValidationException;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Persistence\User\UserRepository;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 
 class UserService
 {
     
-    private UserRepositoryInterface $userRepositoryInterface;
+    private UserRepository $userRepository;
     protected UserValidation $userValidation;
     protected LoggerInterface $logger;
 
     
-    public function __construct(UserRepositoryInterface $userRepositoryInterface, UserValidation $userValidation,LoggerInterface $logger)
+    public function __construct(UserRepository $userRepository, UserValidation $userValidation,LoggerInterface $logger)
     {
-        $this->userRepositoryInterface = $userRepositoryInterface;
+        $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
         $this->logger = $logger;
     }
     
     public function findAllUsers()
     {
-        $allUsers = $this->userRepositoryInterface->findAllUsers();
+        $allUsers = $this->userRepository->findAllUsers();
         return $allUsers;
     }
     
     public function findUser(int $id): array
     {
-        return $this->userRepositoryInterface->findUserById($id);
+        return $this->userRepository->findUserById($id);
     }
 
     /**
@@ -40,7 +41,7 @@ class UserService
      */
     public function findUserByEmail(string $email):? array
     {
-        return $this->userRepositoryInterface->findUserByEmail($email);
+        return $this->userRepository->findUserByEmail($email);
     }
     
     /**
@@ -53,7 +54,7 @@ class UserService
     {
         $this->userValidation->validateUserRegistration($user);
         $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
-        return $this->userRepositoryInterface->insertUser($user->toArray());
+        return $this->userRepository->insertUser($user->toArray());
     }
 
     /**
@@ -98,13 +99,13 @@ class UserService
             $userData['password'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         }
 
-        return $this->userRepositoryInterface->updateuser($userData, $user->getId());
+        return $this->userRepository->updateuser($userData, $user->getId());
     }
 
     public function deleteUser($id): bool
     {
         // todo delete posts
-        return $this->userRepositoryInterface->deleteUser($id);
+        return $this->userRepository->deleteUser($id);
     }
 
     /**
@@ -137,7 +138,7 @@ class UserService
 
 
     }
-    
+
     /**
      * Get user role
      *
@@ -146,7 +147,7 @@ class UserService
      */
     public function getUserRole(int $id): string
     {
-        return $this->userRepositoryInterface->getUserRole($id);
+        return $this->userRepository->getUserRole($id);
     }
     
 }

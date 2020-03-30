@@ -3,37 +3,36 @@
 
 namespace App\Domain\Post;
 
-use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\User\UserService;
-use Firebase\JWT\JWT;
+use App\Infrastructure\Persistence\Post\PostRepository;
 
 
 class PostService
 {
 
-    private $postRepositoryInterface;
+    private PostRepository $postRepository;
     private $userService;
     protected $postValidation;
 
     public function __construct(
-        PostRepositoryInterface $postRepositoryInterface,
+        PostRepository $postRepository,
         UserService $userService,
         PostValidation $postValidation
     ) {
-        $this->postRepositoryInterface = $postRepositoryInterface;
+        $this->postRepository = $postRepository;
         $this->userService = $userService;
         $this->postValidation = $postValidation;
     }
 
     public function findAllPosts()
     {
-        $allPosts = $this->postRepositoryInterface->findAllPosts();
+        $allPosts = $this->postRepository->findAllPosts();
         return $this->populatePostsArrayWithUser($allPosts);
     }
 
     public function findPost($id): array
     {
-        return $this->postRepositoryInterface->findPostById($id);
+        return $this->postRepository->findPostById($id);
     }
 
     /**
@@ -44,7 +43,7 @@ class PostService
      */
     public function findAllPostsFromUser($userId): array
     {
-        $posts = $this->postRepositoryInterface->findAllPostsByUserId($userId);
+        $posts = $this->postRepository->findAllPostsByUserId($userId);
         return $this->populatePostsArrayWithUser($posts);
     }
 
@@ -79,19 +78,19 @@ class PostService
     public function createPost(Post $post): string
     {
         $this->postValidation->validatePostCreationOrUpdate($post);
-        return $this->postRepositoryInterface->insertPost($post->toArray());
+        return $this->postRepository->insertPost($post->toArray());
     }
 
 
     public function updatePost(Post $post): bool
     {
          $this->postValidation->validatePostCreationOrUpdate($post);
-        return $this->postRepositoryInterface->updatePost($post->toArray(), $post->getId());
+        return $this->postRepository->updatePost($post->toArray(), $post->getId());
     }
 
     public function deletePost($id): bool
     {
-        return $this->postRepositoryInterface->deletePost($id);
+        return $this->postRepository->deletePost($id);
     }
 
 

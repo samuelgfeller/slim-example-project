@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Post;
 
 use App\Domain\Post\PostNotFoundException;
-use App\Domain\Post\PostRepositoryInterface;
 use App\Infrastructure\Persistence\DataManager;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
-class PostRepository extends DataManager implements PostRepositoryInterface
+class PostRepository extends DataManager
 {
 
     public function __construct(Connection $conn = null)

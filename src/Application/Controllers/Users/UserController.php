@@ -5,7 +5,6 @@ namespace App\Controllers\Users;
 use App\Application\Controllers\Controller;
 use App\Domain\Exception\ValidationException;
 use App\Domain\User\User;
-use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Utility\ArrayReader;

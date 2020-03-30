@@ -3,9 +3,9 @@
 namespace App\Domain\User;
 
 use App\Domain\Exception\ValidationException;
-use App\Domain\User\UserRepositoryInterface;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
+use App\Infrastructure\Persistence\User\UserRepository;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -16,20 +16,20 @@ use Psr\Log\LoggerInterface;
 class UserValidation extends AppValidation
 {
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
-    private $userRepositoryInterface;
+    private UserRepository $userRepository;
 
     /**
      * UserValidation constructor.
      *
      * @param LoggerInterface $logger
-     * @param UserRepositoryInterface $userRepositoryInterface
+     * @param UserRepository $userRepository
      */
-    public function __construct(LoggerInterface $logger, UserRepositoryInterface $userRepositoryInterface)
+    public function __construct(LoggerInterface $logger, UserRepository $userRepository)
     {
         parent::__construct($logger);
-        $this->userRepositoryInterface = $userRepositoryInterface;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -69,7 +69,7 @@ class UserValidation extends AppValidation
         $this->validateEmail($user->getEmail(), true, $validationResult);
 
         // First check if validation already failed. If not email is checked in db because we know its a valid email
-        if (!$validationResult->fails() && $this->userRepositoryInterface->findUserByEmail($user->getEmail())) {
+        if (!$validationResult->fails() && $this->userRepository->findUserByEmail($user->getEmail())) {
             $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
 
             // todo remove that
@@ -170,7 +170,7 @@ class UserValidation extends AppValidation
 
     protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
-        $exists = $this->userRepositoryInterface->userExists($userId);
+        $exists = $this->userRepository->userExists($userId);
         if (!$exists) {
             $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');
@@ -244,7 +244,7 @@ class UserValidation extends AppValidation
         if ($validationResult->fails()) {
             return;
         }
-        if ($this->userRepositoryInterface->existsUserByUsername($username)) {
+        if ($this->userRepository->existsUserByUsername($username)) {
             $validationResult->setError('username', __('Username already taken'));
         }
         if (preg_match('/((^|, )(admin|user|nicola|bjoern|björn|penis|69|420))+$/', $username)) {
@@ -262,7 +262,7 @@ class UserValidation extends AppValidation
      */
     private function validateOldPassword(string $userId, string $oldPassword, ValidationResult $validationResult)
     {
-        $correctPassword = $this->userRepositoryInterface->checkPassword($userId, $oldPassword);
+        $correctPassword = $this->userRepository->checkPassword($userId, $oldPassword);
         if (!$correctPassword) {
             $validationResult->setError('passwordOld', __('Does not match the old password'));
         }

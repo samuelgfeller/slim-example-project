@@ -2,33 +2,24 @@
 
 namespace App\Domain\Post;
 
-use App\Domain\Post\PostRepositoryInterface;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class UserValidation
- *
- * @package App\Service\Validation
  */
 class PostValidation extends AppValidation
 {
-    /**
-     * @var PostRepositoryInterface
-     */
-    private $userRepositoryInterface;
 
     /**
      * UserValidation constructor.
      *
      * @param LoggerInterface $logger
-     * @param PostRepositoryInterface $userRepositoryInterface
      */
-    public function __construct(LoggerInterface $logger, PostRepositoryInterface $userRepositoryInterface)
+    public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
-        $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
     /**

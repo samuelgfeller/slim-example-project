@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\User;
 
 use App\Domain\User\UserNotFoundException;
-use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\Persistence\DataManager;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
-class UserRepository extends DataManager implements UserRepositoryInterface
+class UserRepository extends DataManager
 {
     // Fields without password
     private $fields = ['id','name','email','updated_at','created_at'];
