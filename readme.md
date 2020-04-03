@@ -42,6 +42,7 @@ return function (ContainerBuilder $containerBuilder) {
 ```
 
 ### Validation
+**!! The Below has changed and is not valid anymore !!**
 The user inputs are intercepted in the controller. They are then passed to a validation class 
 which validates the data and returns an instance of `ValidationResult` which returns an array 
 with the errors with information about what failed in which field. The method 
