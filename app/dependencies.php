@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
-use DI\Container;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -21,10 +20,12 @@ return function (ContainerBuilder $containerBuilder) {
         
             $processor = new UidProcessor();
             $logger->pushProcessor($processor);
-        
-            $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
-            $logger->pushHandler($handler);
-        
+
+            foreach ($loggerSettings['enabled_log_levels'] as $logStreamSettings){
+                $handler = new StreamHandler($logStreamSettings['path'], $logStreamSettings['level'],false);
+                $logger->pushHandler($handler);
+            }
+
             return $logger;
         },
         Connection::class => function (ContainerInterface $c) {
