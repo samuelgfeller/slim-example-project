@@ -17,27 +17,83 @@ https://github.com/samuelgfeller/frontend-example
 ### settings.php
 ```php
 <?php
+
 use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
     // Global Settings Object
-    $containerBuilder->addDefinitions([
-        'settings' => [
-            'displayErrorDetails' => true, // Should be set to false in production
-            'logger' => [
-                'name' => 'event-log',
-                'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
-                'level' => Logger::DEBUG,
+    $containerBuilder->addDefinitions(
+        [
+            'settings' => [
+                // displayerror is at bottom of index.php
+                'db' => [
+                    'host' => 'localhost',
+                    'database' => 'slim-api-example',
+                    'user' => 'Admin',
+                    'pass' => '12345678',
+                ],
+                'logger' => [
+                    'name' => 'event-log',
+                    // The 8 possible levels are categorized into 4 files. Level can't be given as array in the StreamHandler so it has to be declared for each level
+                    'enabled_log_levels' => [
+                        // DEBUG
+                        [
+                            // Same file than INFO
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
+                            'level' => Logger::DEBUG
+                        ],
+                        // INFO
+                        [
+                            // Same file than DEBUG
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
+                            'level' => Logger::INFO
+                        ],
+
+                        // NOTICE
+                        [
+                            // Same file than WARNING
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
+                            'level' => Logger::NOTICE
+                        ],
+                        // WARNING
+                        [
+                            // Same file than NOTICE
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
+                            'level' => Logger::WARNING
+                        ],
+                        // ERROR
+                        [
+                            // Own file
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/error.log',
+                            'level' => Logger::ERROR
+                        ],
+                        // CRITICAL
+                        [
+                            // Same file than ALERT, EMERGENCY
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
+                            'level' => Logger::CRITICAL
+                        ],
+                        // ALERT
+                        [
+                            // Same file than CRITICAL, EMERGENCY
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
+                            'level' => Logger::ALERT
+                        ],
+                        // EMERGENCY
+                        [
+                            // Same file than CRITICAL, ALERT
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
+                            'level' => Logger::EMERGENCY
+                        ],
+
+                    ],
+                    // Ignored
+                    'disabled_log_levels' => [],
+                ],
             ],
-            'db' => [
-                'host' => 'localhost',
-                'database' => 'slim-api-example',
-                'user' => 'root',
-                'pass' => '',
-            ],
-        ],
-    ]);
+        ]
+    );
 };
 ```
 
