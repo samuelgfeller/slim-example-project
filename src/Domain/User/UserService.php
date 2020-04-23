@@ -75,6 +75,7 @@ class UserService
             $user->setId($dbUser['id']);
             return $user;
         }
+
         return null;
     }
 

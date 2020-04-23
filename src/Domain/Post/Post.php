@@ -31,7 +31,7 @@ class Post
         if($this->id !== null){ $post['id'] = $this->id;}
         if($this->userId !== null){ $post['user_id'] = $this->userId;}
 
-        // Message is nullable and null is a valid value so it has to be included
+        // Message is nullable and null is a valid value so it has to be included todo detect null values and add IS for cakequery builder IS NULL
         $post['message'] = $this->message;
 
         return $post;

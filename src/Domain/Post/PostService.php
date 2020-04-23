@@ -60,7 +60,7 @@ class PostService
         foreach ($posts as $post) {
             // Get user information connected to post
             $user = $this->userService->findUser($post['user_id']);
-            // If user was deleted but post not
+            // If user was deleted but post not, post should not be shown since it is also technically deleted
             if (isset($user['name'])) {
                 $post['user_name'] = $user['name'];
                 $postsWithUser[] = $post;

@@ -33,7 +33,7 @@ class AuthController extends Controller
     public function register(Request $request, Response $response): Response
     {
         // If a html form name changes, these changes have to be done in the Entities constructor
-        // too since these values will be the keys from the ArrayReader
+        // too since these names will be the keys from the ArrayReader
         $userData = $request->getParsedBody();
 
         // Use Entity instead of DTO for simplicity https://github.com/samuelgfeller/slim-api-example/issues/2#issuecomment-597245455
@@ -83,6 +83,7 @@ class AuthController extends Controller
         try {
             if ($userWithId = $this->userService->userAllowedToLogin($user)) {
                 $token = $this->userService->generateToken($userWithId);
+                $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
                 return $this->respondWithJson(
                     $response,
                     ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
