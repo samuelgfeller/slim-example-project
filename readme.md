@@ -45,20 +45,18 @@ return function (ContainerBuilder $containerBuilder) {
                         ],
                         // INFO
                         [
-                            // Same file than DEBUG
                             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
                             'level' => Logger::INFO
                         ],
 
                         // NOTICE
                         [
-                            // Same file than WARNING
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
+                            // Same file than INFO
+                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
                             'level' => Logger::NOTICE
                         ],
                         // WARNING
                         [
-                            // Same file than NOTICE
                             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
                             'level' => Logger::WARNING
                         ],
@@ -70,19 +68,18 @@ return function (ContainerBuilder $containerBuilder) {
                         ],
                         // CRITICAL
                         [
-                            // Same file than ALERT, EMERGENCY
                             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
                             'level' => Logger::CRITICAL
                         ],
                         // ALERT
                         [
-                            // Same file than CRITICAL, EMERGENCY
+                            // Same file than CRITICAL
                             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
                             'level' => Logger::ALERT
                         ],
                         // EMERGENCY
                         [
-                            // Same file than CRITICAL, ALERT
+                            // Same file than CRITICAL
                             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
                             'level' => Logger::EMERGENCY
                         ],
