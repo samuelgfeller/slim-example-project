@@ -2,7 +2,6 @@
 
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\JsonBodyParserMiddleware;
-use App\Application\Middleware\SessionMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Tuupola\Middleware\JwtAuthentication;
@@ -36,6 +35,5 @@ return function (App $app) {
     );
 
     $app->add(CorsMiddleware::class);
-    $app->add(SessionMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
 };
