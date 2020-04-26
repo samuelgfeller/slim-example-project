@@ -20,7 +20,7 @@ abstract class AppValidation
     {
         $this->logger = $logger;
     }
-    
+
     /**
      * Throw a validation exception if the validation result fails.
      *
@@ -30,10 +30,16 @@ abstract class AppValidation
     protected function throwOnError(ValidationResult $validationResult): void
     {
         if ($validationResult->fails()) {
+            $this->logger->notice(
+                'Validation failed: ' . $validationResult->getMessage() . "\n" . json_encode(
+                    $validationResult->getErrors(),
+                    JSON_THROW_ON_ERROR
+                )
+            );
             throw new ValidationException($validationResult);
         }
     }
-    
+
     /**
      * Check if a values string is less than a defined value.
      *
@@ -71,12 +77,12 @@ abstract class AppValidation
      * @param string $requiredPermissionLevel
      * @param ValidationResult $validationResult
      */
-/*    protected function validatePermissionLevel(string $userId, string $requiredPermissionLevel, ValidationResult $validationResult)
-    {
-        if ($this->hasPermissionLevel($userId, $requiredPermissionLevel)) {
-            $validationResult->setError('permission', __('You do not have the permission to execute this action'));
-        }
-    }*/
+    /*    protected function validatePermissionLevel(string $userId, string $requiredPermissionLevel, ValidationResult $validationResult)
+        {
+            if ($this->hasPermissionLevel($userId, $requiredPermissionLevel)) {
+                $validationResult->setError('permission', __('You do not have the permission to execute this action'));
+            }
+        }*/
 
     /**
      * Check if the user has the right permission level.
@@ -85,9 +91,9 @@ abstract class AppValidation
      * @param string $requiredPermissionLevel
      * @return bool
      */
-/*    protected function hasPermissionLevel(string $userId, string $requiredPermissionLevel)
-    {
-        $level = $this->userRepository->getUserPermissionLevel($userId);
-        return $level >= $requiredPermissionLevel;
-    }*/
+    /*    protected function hasPermissionLevel(string $userId, string $requiredPermissionLevel)
+        {
+            $level = $this->userRepository->getUserPermissionLevel($userId);
+            return $level >= $requiredPermissionLevel;
+        }*/
 }
