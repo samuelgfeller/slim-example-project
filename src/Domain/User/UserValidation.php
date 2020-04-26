@@ -175,7 +175,7 @@ class UserValidation extends AppValidation
             $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');
 
-            $this->logger->info('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
+            $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
         }
     }
 

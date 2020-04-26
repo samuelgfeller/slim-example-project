@@ -4,23 +4,12 @@ namespace App\Domain\Post;
 
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class UserValidation
  */
 class PostValidation extends AppValidation
 {
-
-    /**
-     * UserValidation constructor.
-     *
-     * @param LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        parent::__construct($logger);
-    }
 
     /**
      * Validate post creation or update since they are the same
