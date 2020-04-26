@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
@@ -81,20 +82,30 @@ class AuthController extends Controller
         $user = new User(new ArrayReader($userData));
 
         try {
-            if ($userWithId = $this->userService->userAllowedToLogin($user)) {
-                $token = $this->userService->generateToken($userWithId);
-                $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
-                return $this->respondWithJson(
-                    $response,
-                    ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
-                    200
-                );
-            }
+            // Throws error if not
+            $userWithId = $this->userService->getUserWithIdIfAllowedToLogin($user);
+
+            $token = $this->userService->generateToken($userWithId);
+
+            $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
+            return $this->respondWithJson(
+                $response,
+                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
+                200
+            );
         } catch (ValidationException $exception) {
+            // Validation error is logged in AppValidation.php
             return $this->respondValidationError($exception->getValidationResult(), $response);
+        } catch (InvalidCredentialsException $e) {
+            // Log error
+            $this->logger->notice('InvalidCredentialsException thrown with message: "'.$e->getMessage().'" user "'. $e->getUserEmail().'"');
+
+            // Respond to client
+            $responseData = [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+            return $this->respondWithJson($response, $responseData, 401);
         }
-        // todo prio1 catch invalidCredentialsException
-        $this->logger->notice('Invalid login attempt from "' . $user->getEmail() . '"');
-        return $this->respondWithJson($response, ['status' => 'error', 'message' => 'Invalid credentials'], 401);
     }
 }
