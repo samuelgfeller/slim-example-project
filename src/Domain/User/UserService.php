@@ -4,6 +4,7 @@
 namespace App\Domain\User;
 
 use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Persistence\User\UserRepository;
 use Firebase\JWT\JWT;
@@ -60,12 +61,15 @@ class UserService
     /**
      * Checks if user is allowed to login.
      * If yes, the user object is returned with id
-     * If no, null is returned
+     * If no, an InvalidCredentialsException is thrown
      *
      * @param User $user
-     * @return mixed|null
+     * @return User $user
+     *
+     * @throws InvalidCredentialsException
+     *
      */
-    public function userAllowedToLogin(User $user)
+    public function getUserWithIdIfAllowedToLogin(User $user): User
     {
         $this->userValidation->validateUserLogin($user);
 
@@ -76,7 +80,8 @@ class UserService
             return $user;
         }
 
-        return null;
+        // Throw exception if user is not returned to controller
+        throw new InvalidCredentialsException($user->getEmail());
     }
 
     /**
