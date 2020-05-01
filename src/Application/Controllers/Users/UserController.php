@@ -3,6 +3,7 @@
 namespace App\Controllers\Users;
 
 use App\Application\Controllers\Controller;
+use App\Domain\Auth\AuthService;
 use App\Domain\Exception\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
@@ -19,19 +20,22 @@ use Slim\Handlers\Strategies\RequestHandler;
 class UserController extends Controller
 {
 
-    protected $userService;
-    protected $userValidation;
-    protected $outputEscapeService;
+    protected UserService $userService;
+    protected UserValidation $userValidation;
+    protected OutputEscapeService $outputEscapeService;
+    protected AuthService $authService;
 
 
     public function __construct(
         LoggerInterface $logger,
         UserService $userService,
+        AuthService $authService,
         UserValidation $userValidation,
         OutputEscapeService $outputEscapeService
     ) {
         parent::__construct($logger);
         $this->userService = $userService;
+        $this->authService = $authService;
         $this->userValidation = $userValidation;
         $this->outputEscapeService = $outputEscapeService;
     }
@@ -47,7 +51,7 @@ class UserController extends Controller
     {
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $userRole = $this->userService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRole($loggedUserId);
 
         if ($userRole === 'admin') {
             $allUsers = $this->userService->findAllUsers();
@@ -72,7 +76,7 @@ class UserController extends Controller
 
         $id = (int)$args['id'];
 
-        $userRole = $this->userService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRole($loggedUserId);
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
@@ -106,7 +110,7 @@ class UserController extends Controller
 
         $userData['id'] = (int)$args['id'];
 
-        $userRole = $this->userService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRole($loggedUserId);
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $userData['id'] === $loggedUserId) {
@@ -139,7 +143,7 @@ class UserController extends Controller
         $loggedUserId = (int)$this->getUserIdFromToken($request);
         $id = (int)$args['id'];
 
-        $userRole = $this->userService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRole($loggedUserId);
 
 
         // Check if it's admin or if it's its own user

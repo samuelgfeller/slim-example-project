@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Application\Controllers\Controller;
+use App\Domain\Auth\AuthService;
 use App\Domain\Exception\ValidationException;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\User\User;
@@ -23,12 +24,14 @@ use Firebase\JWT\JWT;
  */
 class AuthController extends Controller
 {
-    protected $userService;
+    protected UserService $userService;
+    protected AuthService $authService;
 
-    public function __construct(LoggerInterface $logger, UserService $userService)
+    public function __construct(LoggerInterface $logger, UserService $userService, AuthService $authService)
     {
         parent::__construct($logger);
         $this->userService = $userService;
+        $this->authService = $authService;
     }
 
     public function register(Request $request, Response $response): Response
@@ -83,9 +86,9 @@ class AuthController extends Controller
 
         try {
             // Throws error if not
-            $userWithId = $this->userService->getUserWithIdIfAllowedToLogin($user);
+            $userWithId = $this->authService->getUserWithIdIfAllowedToLogin($user);
 
-            $token = $this->userService->generateToken($userWithId);
+            $token = $this->authService->generateToken($userWithId);
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
             return $this->respondWithJson(

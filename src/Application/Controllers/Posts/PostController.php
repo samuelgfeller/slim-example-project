@@ -3,6 +3,7 @@
 namespace App\Controllers\Posts;
 
 use App\Application\Controllers\Controller;
+use App\Domain\Auth\AuthService;
 use App\Domain\Exception\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
@@ -21,19 +22,22 @@ use Firebase\JWT\JWT;
 class PostController extends Controller
 {
 
-    protected $postService;
-    protected $userService;
-    protected $outputEscapeService;
+    protected PostService $postService;
+    protected UserService $userService;
+    protected OutputEscapeService $outputEscapeService;
+    protected AuthService $authService;
 
     public function __construct(
         LoggerInterface $logger,
         PostService $postService,
         UserService $userService,
+        AuthService $authService,
         OutputEscapeService $outputEscapeService
     ) {
         parent::__construct($logger);
         $this->postService = $postService;
         $this->userService = $userService;
+        $this->authService = $authService;
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -88,7 +92,7 @@ class PostController extends Controller
         $postFromDb = $this->postService->findPost($id);
 
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
-        $userRole = $this->userService->getUserRole($userId);
+        $userRole = $this->authService->getUserRole($userId);
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || (int)$postFromDb['user_id'] === $userId) {
 
@@ -130,7 +134,7 @@ class PostController extends Controller
 
         $post = $this->postService->findPost($id);
 
-        $userRole = $this->userService->getUserRole($userId);
+        $userRole = $this->authService->getUserRole($userId);
 
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
