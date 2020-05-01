@@ -64,6 +64,7 @@ class PostController extends Controller
 
     }
 
+    // used
     public function getOwnPosts(Request $request, Response $response, array $args): Response
     {
         // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id

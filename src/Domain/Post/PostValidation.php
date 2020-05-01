@@ -24,7 +24,6 @@ class PostValidation extends AppValidation
 
         // Validate message
         if (null !== $post->getMessage()) {
-
             $this->validateLengthMax($post->getMessage(), 'message', $validationResult, 500);
             $this->validateLengthMin($post->getMessage(), 'message', $validationResult, 4);
         } elseif (true === $required) {

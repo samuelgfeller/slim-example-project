@@ -13,10 +13,13 @@ abstract class AppValidation
     protected $logger;
 
     /**
-     * AppValidation constructor.
+     * AppValidation constructor. Very important that it is public
+     * because PostValidation inherits this constructor and can't
+     * be instantiated otherwise
+     *
      * @param LoggerInterface $logger
      */
-    protected function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
