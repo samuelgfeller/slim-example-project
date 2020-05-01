@@ -163,11 +163,4 @@ class UserController extends Controller
             403
         );
     }
-
-    /*    public function create(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-        {
-            // see register in authcontroller
-        }*/
-
-
 }
