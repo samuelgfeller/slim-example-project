@@ -3,9 +3,8 @@
 
 namespace App\Domain\User;
 
-use App\Domain\Exception\ValidationException;
 use App\Domain\Exceptions\InvalidCredentialsException;
-use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Domain\Settings;
 use App\Infrastructure\Persistence\User\UserRepository;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
@@ -16,13 +15,15 @@ class UserService
     private UserRepository $userRepository;
     protected UserValidation $userValidation;
     protected LoggerInterface $logger;
+    private array $jwtSettings;
 
     
-    public function __construct(UserRepository $userRepository, UserValidation $userValidation,LoggerInterface $logger)
+    public function __construct(UserRepository $userRepository, UserValidation $userValidation,LoggerInterface $logger, Settings $settings)
     {
         $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
         $this->logger = $logger;
+        $this->jwtSettings = $settings->get('jwt');
     }
     
     public function findAllUsers()
@@ -123,7 +124,7 @@ class UserService
      */
     public function generateToken(User $user)
     {
-        $durationInSec = 500; // In seconds
+        $durationInSec = 5000; // In seconds
         $tokenId = base64_encode(random_bytes(32));
         $issuedAt = time();
         $notBefore = $issuedAt + 2;             //Adding 2 seconds
@@ -140,11 +141,10 @@ class UserService
             ]
         ];
 
-        return JWT::encode($data, 'test', 'HS256'); // todo change test to settings
+        return JWT::encode($data, $this->jwtSettings['secret'], $this->jwtSettings['algorithm']);
 
 
     }
-
     /**
      * Get user role
      *

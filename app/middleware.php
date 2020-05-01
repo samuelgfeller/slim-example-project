@@ -12,14 +12,14 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
-    // JWT Middleware MUST be before other middlewares (especially CORS)
+    // JWT Middleware MUST be before other middlewares (especially CORS) because jwt response changes the header
     $app->add(
         new JwtAuthentication(
             [
                 //      'path' => '/api', /* or ["/api", "/admin"] */
                 'ignore' => ['/frontend', '/login', '/register', '/hello'],
-                'secret' => 'test',//$settings['settings']['jwt']['secret'],
-                'algorithm' => ['HS256'],
+                'secret' => $settings['jwt']['secret'],
+                'algorithm' => [$settings['jwt']['algorithm']],
                 'logger' => $logger,
                 // HTTPS not mandatory for local development
                 'relaxed' => ['localhost', 'dev.slim-api-example', 'dev.frontend-example'],
