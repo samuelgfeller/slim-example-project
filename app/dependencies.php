@@ -16,7 +16,7 @@ return function (ContainerBuilder $containerBuilder) {
         LoggerInterface::class => function (ContainerInterface $c)
         {
             $settings = $c->get('settings');
-            $loggerSettings = $settings['logger'];
+            $loggerSettings = $settings[LoggerInterface::class];
             $logger = new Logger($loggerSettings['name']);
         
             $processor = new UidProcessor();

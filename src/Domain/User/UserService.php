@@ -23,7 +23,7 @@ class UserService
         $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
         $this->logger = $logger;
-        $this->jwtSettings = $settings->get('jwt');
+        $this->jwtSettings = $settings->get(JWT::class);
     }
     
     public function findAllUsers()

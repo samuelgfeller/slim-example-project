@@ -2,6 +2,7 @@
 
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\JsonBodyParserMiddleware;
+use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Tuupola\Middleware\JwtAuthentication;
@@ -18,8 +19,8 @@ return function (App $app) {
             [
                 //      'path' => '/api', /* or ["/api", "/admin"] */
                 'ignore' => ['/frontend', '/login', '/register', '/hello'],
-                'secret' => $settings['jwt']['secret'],
-                'algorithm' => [$settings['jwt']['algorithm']],
+                'secret' => $settings[JWT::class]['secret'],
+                'algorithm' => [$settings[JWT::class]['algorithm']],
                 'logger' => $logger,
                 // HTTPS not mandatory for local development
                 'relaxed' => ['localhost', 'dev.slim-api-example', 'dev.frontend-example'],
