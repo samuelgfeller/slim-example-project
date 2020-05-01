@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Domain\Settings;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use DI\ContainerBuilder;
@@ -38,6 +39,9 @@ return function (ContainerBuilder $containerBuilder) {
             $connection = $c->get(Connection::class);
             $connection->getDriver()->connect();
             return $connection->getDriver()->getConnection();
+        },
+        Settings::class => function (ContainerInterface $c){
+            return new Settings($c->get('settings'));
         }
     ]);
 };
