@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\User;
+namespace App\Infrastructure\User;
 
 use App\Domain\User\UserNotFoundException;
-use App\Infrastructure\Persistence\DataManager;
-use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\DataManager;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
 class UserRepository extends DataManager

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Post;
+namespace App\Infrastructure\Post;
 
 use App\Domain\Post\PostNotFoundException;
-use App\Infrastructure\Persistence\DataManager;
-use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\DataManager;
+use App\Infrastructure\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
 class PostRepository extends DataManager

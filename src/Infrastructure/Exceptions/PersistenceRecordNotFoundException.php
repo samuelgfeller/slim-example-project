@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Exceptions;
+namespace App\Infrastructure\Exceptions;
 
 class PersistenceRecordNotFoundException extends PersistenceException
 {

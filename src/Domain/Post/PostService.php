@@ -4,7 +4,7 @@
 namespace App\Domain\Post;
 
 use App\Domain\User\UserService;
-use App\Infrastructure\Persistence\Post\PostRepository;
+use App\Infrastructure\Post\PostRepository;
 
 
 class PostService

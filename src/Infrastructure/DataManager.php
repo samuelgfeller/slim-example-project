@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Persistence;
+namespace App\Infrastructure;
 
-use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 use Cake\Database\Query;
 use Cake\Database\StatementInterface;

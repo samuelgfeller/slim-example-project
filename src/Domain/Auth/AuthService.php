@@ -8,7 +8,7 @@ use App\Domain\Settings;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
-use App\Infrastructure\Persistence\User\UserRepository;
+use App\Infrastructure\User\UserRepository;
 use Firebase\JWT\JWT;
 
 /**

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Infrastructure\Persistence\Post\PostRepository;
-use App\Infrastructure\Persistence\User\UserRepository;
+use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\User\UserRepository;
 use Cake\Database\Connection;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;

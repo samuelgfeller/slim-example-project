@@ -1,5 +1,5 @@
 <?php
-namespace App\Infrastructure\Persistence;
+namespace App\Infrastructure;
 
 use Cake\Database\Connection;
 use PDO;

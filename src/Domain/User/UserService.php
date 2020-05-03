@@ -5,7 +5,7 @@ namespace App\Domain\User;
 
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Settings;
-use App\Infrastructure\Persistence\User\UserRepository;
+use App\Infrastructure\User\UserRepository;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 

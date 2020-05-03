@@ -10,7 +10,7 @@ use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\OutputEscapeService;
-use App\Infrastructure\Persistence\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

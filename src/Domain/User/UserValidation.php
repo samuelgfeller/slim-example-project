@@ -5,7 +5,7 @@ namespace App\Domain\User;
 use App\Domain\Exception\ValidationException;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\Persistence\User\UserRepository;
+use App\Infrastructure\User\UserRepository;
 use Psr\Log\LoggerInterface;
 
 /**
