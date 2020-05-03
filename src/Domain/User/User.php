@@ -27,14 +27,13 @@ class User
     
     
     /**
-     * Returns all values of object as array.
-     * The array keys should match with the database
-     * column names since it is likely used to
-     * modify a database table
+     * Returns values of object as array for database (pw2 not included)
+     * The array keys should match with the database column names since it can
+     * be used to modify a database entry
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArrayForDatabase(): array
     {
         return [
             'id' => $this->id,
