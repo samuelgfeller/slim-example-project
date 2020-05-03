@@ -13,6 +13,7 @@ use DI\ContainerBuilder;
 // todo maybe put permission validation in a better place like UserValidation class?
 // todo testing junit
 // todo translation
+// todo https middleware https://odan.github.io/2020/04/07/slim4-https-middleware.html
 // todo use frontend framework
 
 
