@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Domain\User;
+namespace App\Test\Domain\User;
 
 
 use App\Domain\User\User;
@@ -13,21 +13,46 @@ class UserTest extends TestCase
 
     protected User $user;
 
-    public function userDataProvider(): array
+    public function getSampleUsers(): array
     {
         return [
-            [new ArrayReader(['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin'])],
-            [new ArrayReader(['id' => 2, 'name' => 'Steve Jobs', 'email' => 'jobs@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 3, 'name' => 'Mark Zuckerberg', 'email' => 'zuckerberg@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 4, 'name' => 'Evan Spiegel', 'email' => 'spiegel@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 5, 'name' => 'Jack Dorsey', 'email' => 'dorsey@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
+           ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin'],
+           ['id' => 2, 'name' => 'Steve Jobs', 'email' => 'jobs@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
+           ['id' => 3, 'name' => 'Mark Zuckerberg', 'email' => 'zuckerberg@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
+           ['id' => 4, 'name' => 'Evan Spiegel', 'email' => 'spiegel@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
+           ['id' => 5, 'name' => 'Jack Dorsey', 'email' => 'dorsey@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
         ];
     }
 
     /**
+     *
+     * @return array
+     */
+    public function userArrayReaderDataProvider(): array
+    {
+        $userValues = $this->getSampleUsers();
+
+        // Amount of times each test will be executed with different data
+        $maxAmountOfValuesToProvide = 5;
+        $i = 0;
+        $returnObjects = [];
+        foreach ($userValues as $userValue){
+            // User value has to be in additional array for dataProvider for the case where multiple arguments have to be passed through
+            $returnObjects[] = new ArrayReader($userValue);
+
+            $i++;
+            if ($maxAmountOfValuesToProvide >= $i){
+                break;
+            }
+        }
+        return [$returnObjects];
+    }
+
+
+    /**
      * Testing all getters of the class user
      *
-     * @dataProvider userDataProvider
+     * @dataProvider userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
     public function testSettersAndGetters(ArrayReader $userValues): void
@@ -45,7 +70,7 @@ class UserTest extends TestCase
     /**
      * Testing the function toArrayForDatabase()
      *
-     * @dataProvider userDataProvider
+     * @dataProvider userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
     public function testToArrayForDatabaseFunction(ArrayReader $userValues): void
