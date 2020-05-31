@@ -16,7 +16,7 @@ class User
     
     public function __construct(ArrayReader $arrayReader)
     {
-        // These keys have to math the input key for the ArrayReader
+        // These keys have to match the input key for the ArrayReader
         $this->id = $arrayReader->findInt('id');
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
