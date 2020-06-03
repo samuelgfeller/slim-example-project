@@ -13,7 +13,7 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
-    // JWT Middleware MUST be before other middlewares (especially CORS) because jwt response changes the header
+    // JWT Middleware MUST be before other middleware (especially CORS) because jwt response changes the header
     $app->add(
         new JwtAuthentication(
             [
@@ -37,4 +37,20 @@ return function (App $app) {
 
     $app->add(CorsMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
+    $app->addRoutingMiddleware();
+
+    /*
+     * Add Error Handling Middleware
+     *
+     * @param bool $displayErrorDetails -> Should be set to false in production
+     * @param bool $logErrors -> Parameter is passed to the default ErrorHandler
+     * @param bool $logErrorDetails -> Display error details in error log
+     * which can be replaced by a callable of your choice.
+
+     * Note: This middleware should be added last. It will not handle any exceptions/errors
+     * for middleware added after it.
+    */
+    $errorMiddleware = $app->addErrorMiddleware(true, true, true, $logger);
+//    $errorHandler = $errorMiddleware->getDefaultErrorHandler();
+//    $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 };
