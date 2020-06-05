@@ -37,9 +37,7 @@ return [
     },
     Connection::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['db'];
-        $settings['encoding'] = 'UTF8';
-        $driver = new Mysql($settings);
-        return new Connection(['driver' => $driver]);
+        return new Connection($settings);
     },
     PDO::class => function (ContainerInterface $container) {
         $connection = $container->get(Connection::class);

@@ -1,6 +1,5 @@
 /vendor/
 /.idea/
-/app/settings.php
 /app/env.php
 /logs/*
 /var/cache/*
