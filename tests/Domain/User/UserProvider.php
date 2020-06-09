@@ -35,6 +35,32 @@ class UserProvider
         ];
     }
 
+    /**
+     * Provide a set of users in a DataProvider format
+     *
+     * @return array
+     */
+    public function oneSetOfMultipleUsersProvider(): array
+    {
+        return [
+          [$this->getSampleUsers()]
+        ];
+    }
+
+    /**
+     * Provide one user in a DataProvider format
+     *
+     * @return array
+     */
+    public function oneUserProvider(): array
+    {
+        return [
+            [
+                ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin']
+            ]
+        ];
+    }
+
 
 
 

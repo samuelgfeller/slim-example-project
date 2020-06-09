@@ -13,11 +13,6 @@ class UserServiceTest extends TestCase
 {
     private array $users;
 
-    public function setUp()
-    {
-        $userProvider = new UserProvider();
-        $this->users = $userProvider->getSampleUsers();
-    }
 
     public function testFindAllUsers()
     {
