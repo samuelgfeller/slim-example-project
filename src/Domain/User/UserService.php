@@ -17,7 +17,7 @@ class UserService
     protected LoggerInterface $logger;
 
     
-    public function __construct(UserRepository $userRepository, UserValidation $userValidation,LoggerInterface $logger)
+    public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerInterface $logger)
     {
         $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
