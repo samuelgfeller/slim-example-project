@@ -4,8 +4,8 @@
 // instead the output is stored in an internal buffer
 ob_start();
 
-if (!defined('APP_ENV')) {
-    define('APP_ENV', 'integration');
-}
+//if (!defined('APP_ENV')) {
+//    define('APP_ENV', 'integration');
+//}
 
-$app = require __DIR__ . '/../app/bootstrap.php';
+return require __DIR__ . '/../app/bootstrap.php';

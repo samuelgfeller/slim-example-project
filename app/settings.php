@@ -11,7 +11,7 @@ if (file_exists(__DIR__ . '/../../env.php')) {
 }
 
 // Unit-test and integration environment (Travis CI)
-if (defined('APP_ENV')) {
-    require __DIR__ . '/' . basename(APP_ENV) . '.php';
-}
+//if (defined('APP_ENV')) {
+//    require __DIR__ . '/' . basename(APP_ENV) . '.php';
+//}
 return $settings;
