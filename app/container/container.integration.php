@@ -8,10 +8,9 @@ use Cake\Database\Connection;
 use Psr\Container\ContainerInterface;
 
 /**
- * Needed to give connection to the repositories
- *
+ * Needed to give connection to the repositories in the test environment
  */
-return [
+/*return [
     UserRepository::class => function (ContainerInterface $container) {
         $pdo = $container->get(Connection::class);
         return new UserRepository($pdo);
@@ -20,5 +19,4 @@ return [
         $pdo = $container->get(Connection::class);
         return new PostRepository($pdo);
     },
-
-];
+];*/

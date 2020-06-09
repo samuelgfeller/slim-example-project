@@ -25,9 +25,6 @@ $containerBuilder = new ContainerBuilder();
 // Add container definitions
 $containerBuilder->addDefinitions(__DIR__ . '/container/container.php');
 
-// Set up and add repositories
-$containerBuilder->addDefinitions(__DIR__ . '/container/repositories.php');
-
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
