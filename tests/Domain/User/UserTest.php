@@ -32,13 +32,13 @@ class UserTest extends TestCase
         $this->assertEquals($userValues->findString('role'), $user->getRole());
     }
 
-    /**y§
+    /**
      * Testing the function toArrayForDatabase()
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
-    public function testToArrayForDatabaseFunction(ArrayReader $userValues): void
+    public function testToArrayForDatabase(ArrayReader $userValues): void
     {
         // Instantiating the User object
         $user = new User($userValues);
