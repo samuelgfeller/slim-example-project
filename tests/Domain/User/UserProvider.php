@@ -22,7 +22,7 @@ class UserProvider
     /**
      * Provider of users in form of an ArrayReader
      *
-     * @return array
+     * @return array of User objects
      */
     public function userArrayReaderDataProvider(): array
     {
@@ -38,7 +38,7 @@ class UserProvider
     /**
      * Provide a set of users in a DataProvider format
      *
-     * @return array
+     * @return array of users
      */
     public function oneSetOfMultipleUsersProvider(): array
     {
@@ -56,8 +56,25 @@ class UserProvider
     {
         return [
             [
-                ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin']
+                ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']
             ]
+        ];
+    }
+
+    /**
+     * @return array of ArrayReader Instances
+     */
+    public function invalidUsersProvider(): array
+    {
+        return [
+            // Name too short
+            [['id' => 2, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            // Invalid Email
+            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@ema$il.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            // Not matching Passwords
+            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '123456789', 'password2' => '12345678', 'role' => 'user']],
+            // Required values not set
+            [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '', 'role' => 'user']],
         ];
     }
 
