@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Auth\AuthService;
-use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;

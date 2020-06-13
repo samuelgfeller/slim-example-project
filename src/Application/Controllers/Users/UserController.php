@@ -4,7 +4,7 @@ namespace App\Controllers\Users;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Auth\AuthService;
-use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;

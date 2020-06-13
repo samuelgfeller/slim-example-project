@@ -4,7 +4,7 @@ namespace App\Controllers\Posts;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Auth\AuthService;
-use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
 use App\Domain\Post\PostValidation;

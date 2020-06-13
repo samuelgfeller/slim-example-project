@@ -2,7 +2,7 @@
 
 namespace App\Domain\User;
 
-use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;

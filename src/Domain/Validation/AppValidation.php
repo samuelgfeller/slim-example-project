@@ -2,7 +2,7 @@
 
 namespace App\Domain\Validation;
 
-use App\Domain\Exception\ValidationException;
+use App\Domain\Exceptions\ValidationException;
 use Psr\Log\LoggerInterface;
 
 /**
