@@ -27,9 +27,7 @@ class UserServiceTest extends TestCase
     public function testFindAllUsers(array $users)
     {
         // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)
-            ->method('findAllUsers')
-            ->willReturn($users);
+        $this->mock(UserRepository::class)->method('findAllUsers')->willReturn($users);
 
         // Instantiate UserService where the autowire function used the previously defined custom mock
         $service = $this->container->get(UserService::class);
@@ -44,9 +42,7 @@ class UserServiceTest extends TestCase
     public function testFindUser(array $user)
     {
         // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)
-            ->method('findUserById')
-            ->willReturn($user);
+        $this->mock(UserRepository::class)->method('findUserById')->willReturn($user);
 
         // Instantiate UserService where the autowire function used the previously defined custom mock
         $service = $this->container->get(UserService::class);
@@ -61,9 +57,7 @@ class UserServiceTest extends TestCase
     public function testFindUserByEmail(array $user)
     {
         // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)
-            ->method('findUserByEmail')
-            ->willReturn($user);
+        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($user);
 
         // Instantiate UserService where the autowire function used the previously defined custom mock
         $service = $this->container->get(UserService::class);
@@ -78,9 +72,7 @@ class UserServiceTest extends TestCase
     public function testCreateUser(array $validUser)
     {
         // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)
-            ->method('insertUser')
-            ->willReturn((string)$validUser['id']);
+        $this->mock(UserRepository::class)->method('insertUser')->willReturn((string)$validUser['id']);
 
         // Instantiate UserService where the autowire function used the previously defined custom mock
         /** @var UserService $service */
@@ -107,9 +99,7 @@ class UserServiceTest extends TestCase
     {
         // Mock UserRepository because it is used by the validation logic.
         // Empty mock would do the trick as well it would just return null on non defined functions.
-        $this->mock(UserRepository::class)
-            ->method('findUserByEmail')
-            ->willReturn(null);
+        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
 
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
@@ -125,16 +115,15 @@ class UserServiceTest extends TestCase
      */
     public function testUpdateUser(array $validUser)
     {
-        $this->mock(UserRepository::class)
-            ->method('insertUser')
-            ->willReturn((string)$validUser['id']);
+        $userRepositoryMock = $this->mock(UserRepository::class);
+        $userRepositoryMock->method('updateUser')->willReturn(true);
+        // Used in Validation to check user existence
+        $userRepositoryMock->method('userExists')->willReturn(true);
 
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        $this->expectException(ValidationException::class);
-
-        $service->createUser(new User(new ArrayReader($validUser)));
+        $this->assertTrue($service->updateUser(new User(new ArrayReader($validUser))));
     }
 
     /**
@@ -146,9 +135,7 @@ class UserServiceTest extends TestCase
     public function testInvalidUpdateUser(array $invalidUser)
     {
         // Mock UserRepository because it is used by the validation logic
-        $this->mock(UserRepository::class)
-            ->method('findUserByEmail')
-            ->willReturn(null);
+        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
 
         /** @var UserService $service */
@@ -156,12 +143,13 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->createUser(new User(new ArrayReader($invalidUser)));
+        $service->updateUser(new User(new ArrayReader($invalidUser)));
     }
 
 
 //    public function testDeleteUser()
 //    {
+//
 //    }
 
 
