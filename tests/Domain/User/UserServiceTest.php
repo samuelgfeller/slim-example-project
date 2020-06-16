@@ -103,12 +103,13 @@ class UserServiceTest extends TestCase
      * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
      * @param array $invalidUser
      */
-    public function testCreateUserWithInvalid(array $invalidUser)
+    public function testInvalidCreateUser(array $invalidUser)
     {
-        // Mock UserRepository because it is used by the validation logic
+        // Mock UserRepository because it is used by the validation logic.
+        // Empty mock would do the trick as well it would just return null on non defined functions.
         $this->mock(UserRepository::class)
             ->method('findUserByEmail')
-            ->willReturn($invalidUser);
+            ->willReturn(null);
 
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
@@ -118,10 +119,46 @@ class UserServiceTest extends TestCase
         $service->createUser(new User(new ArrayReader($invalidUser)));
     }
 
-//    public function testUpdateUser()
-//    {
-//
-//    }
+    /**
+     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @param array $validUser
+     */
+    public function testUpdateUser(array $validUser)
+    {
+        $this->mock(UserRepository::class)
+            ->method('insertUser')
+            ->willReturn((string)$validUser['id']);
+
+        /** @var UserService $service */
+        $service = $this->container->get(UserService::class);
+
+        $this->expectException(ValidationException::class);
+
+        $service->createUser(new User(new ArrayReader($validUser)));
+    }
+
+    /**
+     * Test that updateUser calls the validation
+     *
+     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
+     * @param array $invalidUser
+     */
+    public function testInvalidUpdateUser(array $invalidUser)
+    {
+        // Mock UserRepository because it is used by the validation logic
+        $this->mock(UserRepository::class)
+            ->method('findUserByEmail')
+            ->willReturn(null);
+        // todo in validation testing do a specific unit test to test the behaviour when email already exists
+
+        /** @var UserService $service */
+        $service = $this->container->get(UserService::class);
+
+        $this->expectException(ValidationException::class);
+
+        $service->createUser(new User(new ArrayReader($invalidUser)));
+    }
+
 
 //    public function testDeleteUser()
 //    {

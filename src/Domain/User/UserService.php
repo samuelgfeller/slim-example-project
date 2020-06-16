@@ -78,7 +78,7 @@ class UserService
             $userData['password'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         }
 
-        return $this->userRepository->updateuser($userData, $user->getId());
+        return $this->userRepository->updateUser($userData, $user->getId());
     }
 
     public function deleteUser($id): bool

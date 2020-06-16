@@ -4,8 +4,9 @@
 // instead the output is stored in an internal buffer
 //ob_start();
 
-//if (!defined('APP_ENV')) {
-//    define('APP_ENV', 'integration');
-//}
+// Used in container-bootstrap
+if (!defined('APP_ENV')) {
+    define('APP_ENV', 'testing');
+}
 
 return require __DIR__ . '/../app/bootstrap.php';
