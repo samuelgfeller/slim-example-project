@@ -16,8 +16,6 @@
                 <directory>build</directory>
                 <directory>docs</directory>
                 <directory>public</directory>
-                <directory>resources</directory>
-                <directory>templates</directory>
                 <directory>tmp</directory>
                 <directory>vendor</directory>
             </exclude>
