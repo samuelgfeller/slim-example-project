@@ -23,7 +23,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $containerBuilder = new ContainerBuilder();
 
 // Add container definitions
-$containerBuilder->addDefinitions(__DIR__ . '/container/container.php');
+$containerBuilder->addDefinitions(__DIR__ . '/container/container.bootstrap.php');
 
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
@@ -31,8 +31,8 @@ $container = $containerBuilder->build();
 // Create App instance
 $app = $container->get(App::class);
 
-// Register middleware
-$middleware = require __DIR__ . '/container/middleware.php';
+// Register middleware (outside container)
+$middleware = require __DIR__ . '/middleware.php';
 $middleware($app);
 
 // Routing
