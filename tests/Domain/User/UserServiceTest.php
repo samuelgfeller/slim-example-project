@@ -99,7 +99,9 @@ class UserServiceTest extends TestCase
     {
         // Mock UserRepository because it is used by the validation logic.
         // Empty mock would do the trick as well it would just return null on non defined functions.
+        // If findUserByEmail returns null, validation thinks the user doesn't exist which should be the case when creating a new user.
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
+        // todo in validation testing do a specific unit test to test the behaviour when email already exists
 
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
@@ -135,9 +137,8 @@ class UserServiceTest extends TestCase
     public function testInvalidUpdateUser(array $invalidUser)
     {
         // Mock UserRepository because it is used by the validation logic
-        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
-        // todo in validation testing do a specific unit test to test the behaviour when email already exists
-
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+    
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
