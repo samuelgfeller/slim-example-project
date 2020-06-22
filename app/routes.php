@@ -2,8 +2,8 @@
 
 use App\Application\Actions\PreflightAction;
 use App\Application\Controllers\Authentication\AuthController;
-use App\Controllers\Posts\PostController;
-use App\Controllers\Users\UserController;
+use App\Application\Controllers\Posts\PostController;
+use App\Application\Controllers\Users\UserController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
