@@ -1,7 +1,7 @@
 <?php
 
 use App\Application\Actions\PreflightAction;
-use App\Controller\AuthController;
+use App\Application\Controllers\Authentication\AuthController;
 use App\Controllers\Posts\PostController;
 use App\Controllers\Users\UserController;
 use Psr\Http\Message\ResponseInterface as Response;

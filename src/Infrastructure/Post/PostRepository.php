@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Post;
 
-use App\Domain\Post\PostNotFoundException;
-use App\Infrastructure\DataManager;
-use App\Infrastructure\PersistenceRecordNotFoundException;
+                use App\Infrastructure\DataManager;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
 class PostRepository extends DataManager

@@ -9,15 +9,15 @@ use Cake\Database\StatementInterface;
 
 abstract class DataManager
 {
-    
+
     private $connection = null;
     protected $table = null;
-    
+
     public function __construct(Connection $connection = null)
     {
         $this->connection = $connection;
     }
-    
+
     /**
      * Get a query instance with target table already set
      *
@@ -117,7 +117,7 @@ abstract class DataManager
     {
         return $this->connection->insert($this->table, $row)->lastInsertId();
     }
-    
+
     /**
      * Update database
      * Data is an assoc array of columns to change
@@ -137,7 +137,7 @@ abstract class DataManager
             ]);
         return $query->execute()->rowCount() > 0;
     }
-    
+
     /**
      * Delete from database permanently (execute DELETE statement)
      *
@@ -149,7 +149,7 @@ abstract class DataManager
     {
         return $this->connection->delete($this->table, ['id' => $id])->rowCount() > 0;
     }
-    
+
     /**
      * Soft delete entry with given id from database
      *

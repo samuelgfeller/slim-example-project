@@ -5,7 +5,7 @@
          backupStaticAttributes="false">
     <testsuites>
         <testsuite name="Tests">
-            <directory suffix="Test.php">tests/TestCase</directory>
+            <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -23,6 +23,6 @@
     </filter>
     <php>
         <const name="APP_ENV" value="testing"/>
-		<const name="PHPUNIT_TEST_SUITE" value="1"/>
+        <const name="PHPUNIT_TEST_SUITE" value="1"/>
     </php>
 </phpunit>
