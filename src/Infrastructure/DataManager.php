@@ -164,7 +164,23 @@ abstract class DataManager
             ->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
-    
+
+    /**
+     * Soft delete entry matching given arguments
+     *
+     * @param array $conditions assoc array of where conditions
+     * Example: ['tbl_id' => 2, 'name' => 'nameToDelete']
+     * @return bool
+     */
+    protected function softDeleteWhere(array $conditions): bool
+    {
+        $query = $this->connection->newQuery();
+        $query->update($this->table)
+            ->set(['deleted_at' => date('Y-m-d H:i:s')])
+            ->where([$conditions]);
+        return $query->execute()->rowCount() > 0;
+    }
+
     /**
      * Check if value exists in database
      *

@@ -81,7 +81,17 @@ class PostRepository extends DataManager
     public function deletePost(int $id): bool {
         return $this->delete($id);
     }
-    
+
+    /**
+     * Delete post that are linked to user
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function deletePostsFromUser(int $userId): bool {
+        return $this->softDeleteWhere(['user_id' => $userId]);
+    }
+
     /**
      * Update values from post
      * Example of $data: ['name' => 'New name']

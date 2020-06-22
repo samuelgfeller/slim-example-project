@@ -3,10 +3,8 @@
 
 namespace App\Domain\User;
 
-use App\Domain\Exceptions\InvalidCredentialsException;
-use App\Domain\Settings;
+use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
-use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 
 class UserService
@@ -15,13 +13,16 @@ class UserService
     private UserRepository $userRepository;
     protected UserValidation $userValidation;
     protected LoggerInterface $logger;
+    protected PostRepository $postRepository;
 
     
-    public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerInterface $logger)
+    public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerInterface $logger,
+        PostRepository $postRepository)
     {
         $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
         $this->logger = $logger;
+        $this->postRepository = $postRepository;
     }
     
     public function findAllUsers()
@@ -83,7 +84,7 @@ class UserService
 
     public function deleteUser($id): bool
     {
-        // todo delete posts
+        $this->postRepository->deletePostsFromUser($id);
         return $this->userRepository->deleteUser($id);
     }
     
