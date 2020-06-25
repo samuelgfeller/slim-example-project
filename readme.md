@@ -1,7 +1,7 @@
 # Slim api template
 Lightweight example project of an API with the SLIM 4 Micro-Framework.  
   
-The functionalities include:
+## Functionalities include:
 * Authentication with JWT-Token (registration and login)
 * User mangement for a User with 'admin' role
 * Post creation for all user
@@ -12,87 +12,6 @@ The functionalities include:
 ## Frontend for testing
 https://github.com/samuelgfeller/frontend-example
 
-  
-  
-### settings.php
-```php
-<?php
-
-use DI\ContainerBuilder;
-use Monolog\Logger;
-
-return function (ContainerBuilder $containerBuilder) {
-    // Global Settings Object
-    $containerBuilder->addDefinitions(
-        [
-            'settings' => [
-                // displayerror is at bottom of index.php
-                'db' => [
-                    'host' => 'localhost',
-                    'database' => 'slim-api-example',
-                    'user' => 'Admin',
-                    'pass' => '12345678',
-                ],
-                'logger' => [
-                    'name' => 'event-log',
-                    // The 8 possible levels are categorized into 4 files. Level can't be given as array in the StreamHandler so it has to be declared for each level
-                    'enabled_log_levels' => [
-                        // DEBUG
-                        [
-                            // Same file than INFO
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
-                            'level' => Logger::DEBUG
-                        ],
-                        // INFO
-                        [
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
-                            'level' => Logger::INFO
-                        ],
-
-                        // NOTICE
-                        [
-                            // Same file than INFO
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
-                            'level' => Logger::NOTICE
-                        ],
-                        // WARNING
-                        [
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
-                            'level' => Logger::WARNING
-                        ],
-                        // ERROR
-                        [
-                            // Own file
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/error.log',
-                            'level' => Logger::ERROR
-                        ],
-                        // CRITICAL
-                        [
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-                            'level' => Logger::CRITICAL
-                        ],
-                        // ALERT
-                        [
-                            // Same file than CRITICAL
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-                            'level' => Logger::ALERT
-                        ],
-                        // EMERGENCY
-                        [
-                            // Same file than CRITICAL
-                            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-                            'level' => Logger::EMERGENCY
-                        ],
-
-                    ],
-                    // Ignored
-                    'disabled_log_levels' => [],
-                ],
-            ],
-        ]
-    );
-};
-```
 
 ### Validation
 **!! The below has changed and is not valid anymore !!**
