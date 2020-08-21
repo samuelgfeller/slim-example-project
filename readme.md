@@ -1,4 +1,4 @@
-# Slim api template
+# Slim api template [Work in progress]
 Lightweight example project of an API with the SLIM 4 Micro-Framework.  
   
 ## Functionalities include:
