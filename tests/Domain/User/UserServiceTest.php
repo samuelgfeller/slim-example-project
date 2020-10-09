@@ -3,11 +3,13 @@
 namespace App\Test\Domain\User;
 
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Post\Post;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\ValidationResult;
+use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\UnitTestUtil;
 use Cake\Datasource\RepositoryInterface;
@@ -89,7 +91,7 @@ class UserServiceTest extends TestCase
      * Test that no user is created when values are invalid
      * validateUserRegistration() will be tested separately but
      * here we ensure that this validation is going on in createUser
-     * but without specific error analysis just that it didn't create it
+     * but without specific error analysis. Only that it didn't create it.
      * The method is called with each value of the provider
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
@@ -138,7 +140,7 @@ class UserServiceTest extends TestCase
     {
         // Mock UserRepository because it is used by the validation logic
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
-    
+
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
@@ -147,11 +149,36 @@ class UserServiceTest extends TestCase
         $service->updateUser(new User(new ArrayReader($invalidUser)));
     }
 
+    /**
+     * Since in this function not much logic is going on
+     * I test if the repo method to delete all posts related
+     * to the user is called and the method to delete the user itself
+     */
+    public function testDeleteUser()
+    {
+        $userId = 1;
+        // Mock user repository and post repository
+        $this->mock(PostRepository::class)
+            ->expects($this->once())
+            ->method('deletePostsFromUser')
+            // With parameter user id
+            ->with($this->equalTo($userId))
+            ->willReturn(true);
 
-//    public function testDeleteUser()
-//    {
-//
-//    }
+        $this->mock(UserRepository::class)
+            ->expects($this->once())
+            ->method('deleteUser')
+            ->with($this->equalTo($userId))
+            ->willReturn(true);
+
+        // Instantiate UserService where the autowire function used the previously defined custom mock
+        /** @var UserService $service */
+        $service = $this->container->get(UserService::class);
+
+        $this->assertTrue($service->deleteUser($userId));
+    }
 
 
 }
+
+
