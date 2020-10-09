@@ -124,8 +124,8 @@ class UserValidation extends AppValidation
                 $validationResult->setError('passwords', 'Passwords do not match');
             }
 
-            $this->validatePassword($passwords[0], true, $validationResult);
-            $this->validatePassword($passwords[1], true, $validationResult);
+            $this->validatePassword($passwords[0], $validationResult);
+            $this->validatePassword($passwords[1], $validationResult);
         } elseif (true === $required) {
             // If both or one of the 2 passwords is null but required,
             // the user input is faulty so bad request 400 return status is sent
