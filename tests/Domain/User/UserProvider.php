@@ -76,6 +76,8 @@ class UserProvider
             // Required values not set
             [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '', 'role' => 'user']],
         ];
+        // Could add more rows with always 1 required missing because now error could be thrown
+        // by another missing field. I
     }
 
 

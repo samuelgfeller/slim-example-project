@@ -118,35 +118,31 @@ class UserValidation extends AppValidation
      */
     private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult): void
     {
-        if (null !== $passwords[0] && null !== $passwords[1]) {
+        // Check if both passwords are set
+        if ((null !== $passwords[0] && '' !== $passwords[0]) && (null !== $passwords[1] && '' !== $passwords[1])) {
             if ($passwords[0] !== $passwords[1]) {
                 $validationResult->setError('passwords', 'Passwords do not match');
             }
 
-            // If come to this line, password is required
             $this->validatePassword($passwords[0], true, $validationResult);
             $this->validatePassword($passwords[1], true, $validationResult);
         } elseif (true === $required) {
-            // If it is null but required, the user input is faulty so bad request 400 return status is sent
+            // If both or one of the 2 passwords is null but required,
+            // the user input is faulty so bad request 400 return status is sent
             $validationResult->setIsBadRequest(true, 'passwords', 'Passwords are required and not given');
         }
     }
 
     /**
      * Validate single password
+     * If passwords are not empty when required is already tested in validatePasswords
      *
      * @param string $password
-     * @param bool $required
      * @param ValidationResult $validationResult
      */
-    public function validatePassword(string $password, bool $required, ValidationResult $validationResult): void
+    public function validatePassword(string $password, ValidationResult $validationResult): void
     {
-        if (null !== $password) {
-            $this->validateLengthMin($password, 'password', $validationResult, 3);
-        } elseif (true === $required) {
-            // If it is null but required, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'passwords', 'Password is required and not given');
-        }
+        $this->validateLengthMin($password, 'password', $validationResult, 3);
     }
 
     /**
