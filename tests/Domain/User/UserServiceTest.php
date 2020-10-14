@@ -132,7 +132,8 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * Test that updateUser calls the validation
+     * Test that data from existing user is validated before being updated
+     * (updateUser)
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
      * @param array $invalidUser
@@ -140,6 +141,9 @@ class UserServiceTest extends TestCase
     public function testInvalidUpdateUser(array $invalidUser)
     {
         // Mock UserRepository because it is used by the validation logic
+        // In this test user exists so every invalid data from invalidUsersProvider() can throw
+        // its error. Otherwise there would be always the error because of the exist and each data
+        // could not be tested
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
 
         /** @var UserService $service */
@@ -148,6 +152,27 @@ class UserServiceTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $service->updateUser(new User(new ArrayReader($invalidUser)));
+    }
+
+    /**
+     * Test updateUser when user doesn't exist
+     * (updateUser)
+     *
+     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @param array $validUser
+     */
+    public function testNotExistingUpdateUser(array $validUser)
+    {
+        // Mock UserRepository because it is used by the validation logic
+        // Point of this test is not existing user
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
+
+        /** @var UserService $service */
+        $service = $this->container->get(UserService::class);
+
+        $this->expectException(ValidationException::class);
+
+        $service->updateUser(new User(new ArrayReader($validUser)));
     }
 
     /**

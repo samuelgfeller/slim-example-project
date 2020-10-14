@@ -71,6 +71,7 @@ class UserService
         if ($user->getName()!== null) {
             $userData['name'] = $user->getName();
         }
+        // todo test with empty email to see if it would remove the email
         if ($user->getEmail() !== null) {
             $userData['email'] = $user->getEmail();
         }

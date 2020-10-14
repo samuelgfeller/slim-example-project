@@ -67,6 +67,8 @@ class UserProvider
     public function invalidUsersProvider(): array
     {
         return [
+            // Not existing user
+            [['id' => 100000000, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
             // Name too short
             [['id' => 2, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
             // Invalid Email
@@ -77,7 +79,7 @@ class UserProvider
             [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '', 'role' => 'user']],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
-        // by another missing field. I
+        // by another missing field.
     }
 
 

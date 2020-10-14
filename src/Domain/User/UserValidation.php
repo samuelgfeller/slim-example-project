@@ -158,7 +158,7 @@ class UserValidation extends AppValidation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $validationResult->setError('email', 'Email address could not be validated');
         } // Because reversed the null check is done here
-        elseif (true === $required && null === $email) {
+        elseif (true === $required && (null === $email || '' === $email)) {
             // If email is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
             $validationResult->setIsBadRequest(true, 'email', 'email required but not given');
         }
@@ -184,7 +184,7 @@ class UserValidation extends AppValidation
      */
     private function validateName(string $name, bool $required, ValidationResult $validationResult): void
     {
-        if (null !== $name) {
+        if (null !== $name && '' !== $name) {
             $this->validateLengthMax($name, 'name', $validationResult, 200);
             $this->validateLengthMin($name, 'name', $validationResult, 2);
         } elseif (true === $required) {
