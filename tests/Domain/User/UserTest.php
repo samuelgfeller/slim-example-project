@@ -24,12 +24,12 @@ class UserTest extends TestCase
     {
         $user = new User($userValues);
 
-        $this->assertEquals($userValues->findInt('id'), $user->getId());
-        $this->assertEquals($userValues->findString('name'), $user->getName());
-        $this->assertEquals($userValues->getString('email'), $user->getEmail());
-        $this->assertEquals($userValues->findString('password'), $user->getPassword());
-        $this->assertEquals($userValues->findString('password2'), $user->getPassword2());
-        $this->assertEquals($userValues->findString('role'), $user->getRole());
+        self::assertEquals($userValues->findInt('id'), $user->getId());
+        self::assertEquals($userValues->findString('name'), $user->getName());
+        self::assertEquals($userValues->getString('email'), $user->getEmail());
+        self::assertEquals($userValues->findString('password'), $user->getPassword());
+        self::assertEquals($userValues->findString('password2'), $user->getPassword2());
+        self::assertEquals($userValues->findString('role'), $user->getRole());
     }
 
     /**
@@ -47,10 +47,10 @@ class UserTest extends TestCase
         $userAsArray = $user->toArrayForDatabase();
 
         // Check if values match
-        $this->assertEquals($userValues->findInt('id'), $userAsArray['id']);
-        $this->assertEquals($userValues->findString('name'), $userAsArray['name']);
-        $this->assertEquals($userValues->getString('email'), $userAsArray['email']);
-        $this->assertEquals($userValues->findString('password'), $userAsArray['password']);
-        $this->assertEquals($userValues->findString('role'), $userAsArray['role']);
+        self::assertEquals($userValues->findInt('id'), $userAsArray['id']);
+        self::assertEquals($userValues->findString('name'), $userAsArray['name']);
+        self::assertEquals($userValues->getString('email'), $userAsArray['email']);
+        self::assertEquals($userValues->findString('password'), $userAsArray['password']);
+        self::assertEquals($userValues->findString('role'), $userAsArray['role']);
     }
 }

@@ -44,27 +44,27 @@ class PostServiceTest extends TestCase
         // testFindAllPosts and other tests which use that function indirectly will fail since the user
         // is in the expected result of the assert
 
-        $this->assertEquals($postsWithUsers, $service->findAllPosts());
+        self::assertEquals($postsWithUsers, $service->findAllPosts());
 
     }
 
-    public function testFindPost()
-    {
-    }
-
-    public function testFindAllPostsFromUser()
-    {
-    }
-
-    public function testCreatePost()
-    {
-    }
-
-    public function testUpdatePost()
-    {
-    }
-
-    public function testDeletePost()
-    {
-    }
+//    public function testFindPost()
+//    {
+//    }
+//
+//    public function testFindAllPostsFromUser()
+//    {
+//    }
+//
+//    public function testCreatePost()
+//    {
+//    }
+//
+//    public function testUpdatePost()
+//    {
+//    }
+//
+//    public function testDeletePost()
+//    {
+//    }
 }

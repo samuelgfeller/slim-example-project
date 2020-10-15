@@ -35,7 +35,7 @@ class UserServiceTest extends TestCase
         // which is being tested. So we can take the autowired class instance from the container directly.
         $service = $this->container->get(UserService::class);
 
-        $this->assertEquals($users, $service->findAllUsers());
+        self::assertEquals($users, $service->findAllUsers());
     }
 
     /**
@@ -50,7 +50,7 @@ class UserServiceTest extends TestCase
         // Instantiate UserService where the autowire function used the previously defined custom mock
         $service = $this->container->get(UserService::class);
 
-        $this->assertEquals($user, $service->findUser($user['id']));
+        self::assertEquals($user, $service->findUser($user['id']));
     }
 
     /**
@@ -65,7 +65,7 @@ class UserServiceTest extends TestCase
         // Instantiate UserService where the autowire function used the previously defined custom mock
         $service = $this->container->get(UserService::class);
 
-        $this->assertEquals($user, $service->findUserByEmail($user['email']));
+        self::assertEquals($user, $service->findUserByEmail($user['email']));
     }
 
     /**
@@ -85,7 +85,7 @@ class UserServiceTest extends TestCase
         $userObj = new User(new ArrayReader($validUser));
 
         // Return type of insertUser is string
-        $this->assertEquals($validUser['id'], $service->createUser($userObj));
+        self::assertEquals($validUser['id'], $service->createUser($userObj));
     }
 
     /**
@@ -129,7 +129,7 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        $this->assertTrue($service->updateUser(new User(new ArrayReader($validUser))));
+        self::assertTrue($service->updateUser(new User(new ArrayReader($validUser))));
     }
 
     /**
@@ -202,7 +202,7 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        $this->assertTrue($service->deleteUser($userId));
+        self::assertTrue($service->deleteUser($userId));
     }
 }
 
