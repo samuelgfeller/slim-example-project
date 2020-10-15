@@ -101,7 +101,7 @@ class UserValidation extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         $this->validateEmail($user->getEmail(), true, $validationResult);
-        $this->validatePassword($user->getPassword(), true, $validationResult);
+        $this->validatePassword($user->getPassword(), $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult);

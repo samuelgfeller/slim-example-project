@@ -28,10 +28,11 @@ class UserServiceTest extends TestCase
      */
     public function testFindAllUsers(array $users)
     {
-        // Mock the required repository and configure relevant method return value
+        // Add mock class to container and define return value for method findAllPosts so the service can use it
         $this->mock(UserRepository::class)->method('findAllUsers')->willReturn($users);
 
-        // Instantiate UserService where the autowire function used the previously defined custom mock
+        // Here we don't need to specify what the function will do / return since its exactly that
+        // which is being tested. So we can take the autowired class instance from the container directly.
         $service = $this->container->get(UserService::class);
 
         $this->assertEquals($users, $service->findAllUsers());
