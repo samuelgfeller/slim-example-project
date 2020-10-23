@@ -25,24 +25,11 @@ class PostServiceTest extends TestCase
         $this->mock(PostRepository::class)->method('findAllPosts')->willReturn($posts);
 
         // findAllPosts returns posts with the name of the according user
-        // Only the name is relevant for the private function PostService:populatePostsArrayWithUser()
-        $userName = 'John Example';
-        $this->mock(UserService::class)->method('findUser')
-            ->willReturn(['name' => $userName]);
+        $postsWithUsersToCompare = $this->populatePostsArrayWithUserForTesting($posts);
 
         // Here we don't need to specify what the function will do / return since its exactly that
         // which is being tested. So we can take the autowired class instance from the container directly.
         $service = $this->container->get(PostService::class);
-
-        // Add name of user to posts array
-        $postsWithUsersToCompare = [];
-        foreach ($posts as $post){
-            $post['user_name'] = $userName;
-            $postsWithUsersToCompare[] = $post;
-        }
-        // Not needed to test PostService:populatePostsArrayWithUser because if that function screws up
-        // testFindAllPosts and other tests which use that function indirectly will fail since the user
-        // is in the expected result of the assert
 
         self::assertEquals($postsWithUsersToCompare, $service->findAllPosts());
 
@@ -94,9 +81,13 @@ class PostServiceTest extends TestCase
     /**
      * Replica of PostService:populatePostsArrayWithUser
      *
-     * [Not done in PostProvider because only one provider is possible
+     * User not added in PostProvider because only one provider is possible
      * and we need both one array of posts without users (to simulate
-     * what comes from the repo) and one with users to assert]
+     * what comes from the repo) and one with users to assert
+     *
+     * Not needed to test PostService:populatePostsArrayWithUser because if that function
+     * screws up testFindAllPosts and other tests which use that function indirectly will
+     * fail since the user is in the expected result of the assert
      *
      * @param array $posts
      * @return array
