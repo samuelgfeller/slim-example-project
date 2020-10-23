@@ -49,7 +49,7 @@ class PostServiceTest extends TestCase
     }
 
     /**
-     * Check if findPost() in PostService returns
+     * Check if findPost() from PostService returns
      * the post coming from the repository
      *
      * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
@@ -65,10 +65,57 @@ class PostServiceTest extends TestCase
 
         self::assertEquals($post, $service->findPost($post['id']));
     }
-//
-//    public function testFindAllPostsFromUser()
-//    {
-//    }
+
+    /**
+     * Check if findAllPostsFromUser() from PostService returns
+     * the posts coming from the repository AND
+     * if the user names are contained in the returned array
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::oneSetOfMultiplePostsProvider()
+     * @param array $posts
+     */
+    public function testFindAllPostsFromUser(array $posts)
+    {
+        // Add mock class PostRepository to container and define return value for method findPostById
+        // Posts are with different user_ids from provider and logically findAllPostsFromUser has to return
+        // posts with the same user_id since they belong to the same user. But this is not the point of the test.
+        // The same posts array will be used in the assertions
+        $this->mock(PostRepository::class)->method('findAllPostsByUserId')->willReturn($posts);
+
+        // findAllPosts returns posts with the name of the according user so they have to be added here as well
+        $postsWithUsersToCompare= $this->populatePostsArrayWithUserForTesting($posts);
+
+        $service = $this->container->get(PostService::class);
+
+        // User id not relevant because return values from repo is defined above
+        self::assertEquals($postsWithUsersToCompare, $service->findAllPostsFromUser(1));
+    }
+
+    /**
+     * Replica of PostService:populatePostsArrayWithUser
+     *
+     * [Not done in PostProvider because only one provider is possible
+     * and we need both one array of posts without users (to simulate
+     * what comes from the repo) and one with users to assert]
+     *
+     * @param array $posts
+     * @return array
+     */
+    private function populatePostsArrayWithUserForTesting(array $posts): array
+    {
+        // Only the name is relevant for the private function PostService:populatePostsArrayWithUser()
+        $userName = 'John Example';
+        $this->mock(UserService::class)->method('findUser')
+            ->willReturn(['name' => $userName]);
+
+        // Add name of user to posts array
+        $postsWithUsersToCompare = [];
+        foreach ($posts as $post){
+            $post['user_name'] = $userName;
+            $postsWithUsersToCompare[] = $post;
+        }
+        return $postsWithUsersToCompare;
+    }
 //
 //    public function testCreatePost()
 //    {

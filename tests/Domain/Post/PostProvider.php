@@ -36,16 +36,15 @@ class PostProvider
 //    }
 
     /**
-     * Provide a set of users in a DataProvider format
+     * Provide a set of posts in a DataProvider format
      *
-     * @return array of users
+     * @return array of posts
      */
     public function oneSetOfMultiplePostsProvider(): array
     {
         return [
           [
-              'posts_without_user_name' => $this->getSamplePosts(),
-              'posts_with_name_of_user' => $this->getSamplePosts()
+              $this->getSamplePosts(),
           ],
         ];
     }
