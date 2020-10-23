@@ -35,22 +35,36 @@ class PostServiceTest extends TestCase
         $service = $this->container->get(PostService::class);
 
         // Add name of user to posts array
-        $postsWithUsers = [];
+        $postsWithUsersToCompare = [];
         foreach ($posts as $post){
             $post['user_name'] = $userName;
-            $postsWithUsers[] = $post;
+            $postsWithUsersToCompare[] = $post;
         }
         // Not needed to test PostService:populatePostsArrayWithUser because if that function screws up
         // testFindAllPosts and other tests which use that function indirectly will fail since the user
         // is in the expected result of the assert
 
-        self::assertEquals($postsWithUsers, $service->findAllPosts());
+        self::assertEquals($postsWithUsersToCompare, $service->findAllPosts());
 
     }
 
-//    public function testFindPost()
-//    {
-//    }
+    /**
+     * Check if findPost() in PostService returns
+     * the post coming from the repository
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @param array $post
+     */
+    public function testFindPost(array $post)
+    {
+        // Add mock class PostRepository to container and define return value for method findPostById
+        $this->mock(PostRepository::class)->method('findPostById')->willReturn($post);
+
+        // Get an empty class instance from container
+        $service = $this->container->get(PostService::class);
+
+        self::assertEquals($post, $service->findPost($post['id']));
+    }
 //
 //    public function testFindAllPostsFromUser()
 //    {

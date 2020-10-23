@@ -49,6 +49,9 @@ class PostService
     public function findPost($id): array
     {
         return $this->postRepository->findPostById($id);
+        // If in the future there are more than 1 call to this function and users are needed
+        // Something similar to findAllPosts() could be done using populatePostsArrayWithUser().
+        // For one usage (PostController:get()) I didn't think it's necessary to create an extra func
     }
 
     /**
