@@ -6,13 +6,18 @@ namespace App\Domain\Post;
 use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 
-
+/**
+ * Business logic for post manipulation
+ *
+ * Class PostService
+ * @package App\Domain\Post
+ */
 class PostService
 {
 
     private PostRepository $postRepository;
-    private $userService;
-    protected $postValidation;
+    private UserService $userService;
+    protected PostValidation $postValidation;
 
     public function __construct(
         PostRepository $postRepository,
@@ -24,12 +29,23 @@ class PostService
         $this->postValidation = $postValidation;
     }
 
+    /**
+     * Gives all undeleted posts from db with name of user
+     *
+     * @return array
+     */
     public function findAllPosts()
     {
         $allPosts = $this->postRepository->findAllPosts();
         return $this->populatePostsArrayWithUser($allPosts);
     }
 
+    /**
+     * Find one post in the database
+     *
+     * @param $id
+     * @return array
+     */
     public function findPost($id): array
     {
         return $this->postRepository->findPostById($id);
@@ -81,13 +97,24 @@ class PostService
         return $this->postRepository->insertPost($post->toArray());
     }
 
-
+    /**
+     * Change something or multiple things on post
+     *
+     * @param Post $post
+     * @return bool if update was successful
+     */
     public function updatePost(Post $post): bool
     {
          $this->postValidation->validatePostCreationOrUpdate($post);
         return $this->postRepository->updatePost($post->toArray(), $post->getId());
     }
 
+    /**
+     * Mark one post as deleted
+     *
+     * @param $id
+     * @return bool
+     */
     public function deletePost($id): bool
     {
         return $this->postRepository->deletePost($id);
