@@ -92,6 +92,7 @@ class PostServiceTest extends TestCase
      */
     public function testCreatePost(array $validPost)
     {
+        // Return type of PostRepository:insertPost is string
         $postId = (string)$validPost['id'];
 
         // Removing id from post array because before post is created id is not known

@@ -47,7 +47,8 @@ class UserServiceTest extends TestCase
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserById')->willReturn($user);
 
-        // Instantiate UserService where the autowire function used the previously defined custom mock
+        // Instantiate autowired UserService which uses the function from the previously defined custom mock
+        /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
         self::assertEquals($user, $service->findUser($user['id']));
@@ -62,7 +63,8 @@ class UserServiceTest extends TestCase
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($user);
 
-        // Instantiate UserService where the autowire function used the previously defined custom mock
+        // Instantiate autowired UserService which uses the function from the previously defined custom mock
+        /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
         self::assertEquals($user, $service->findUserByEmail($user['email']));
@@ -74,18 +76,23 @@ class UserServiceTest extends TestCase
      */
     public function testCreateUser(array $validUser)
     {
-        // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)->method('insertUser')->willReturn((string)$validUser['id']);
+        // Return type of UserRepository:insertUser is string
+        $userId = (string)$validUser['id'];
 
-        // Instantiate UserService where the autowire function used the previously defined custom mock
+        // Removing id from user because before user is created id is not known
+        unset($validUser['id']);
+
+        // Mock the required repository and configure relevant method return value
+        $this->mock(UserRepository::class)->method('insertUser')->willReturn($userId);
+
+        // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
         // Create an user object
         $userObj = new User(new ArrayReader($validUser));
 
-        // Return type of insertUser is string
-        self::assertEquals($validUser['id'], $service->createUser($userObj));
+        self::assertEquals($userId, $service->createUser($userObj));
     }
 
     /**
@@ -198,7 +205,7 @@ class UserServiceTest extends TestCase
             ->with($this->equalTo($userId))
             ->willReturn(true);
 
-        // Instantiate UserService where the autowire function used the previously defined custom mock
+        // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
