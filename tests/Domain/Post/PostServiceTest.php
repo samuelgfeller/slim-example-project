@@ -2,8 +2,10 @@
 
 namespace App\Test\Domain\Post;
 
+use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
 use App\Domain\User\UserService;
+use App\Domain\Utility\ArrayReader;
 use App\Infrastructure\Post\PostRepository;
 use App\Test\UnitTestUtil;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +31,7 @@ class PostServiceTest extends TestCase
 
         // Here we don't need to specify what the function will do / return since its exactly that
         // which is being tested. So we can take the autowired class instance from the container directly.
+        /** @var PostService $postService */
         $service = $this->container->get(PostService::class);
 
         self::assertEquals($postsWithUsersToCompare, $service->findAllPosts());
@@ -48,6 +51,7 @@ class PostServiceTest extends TestCase
         $this->mock(PostRepository::class)->method('findPostById')->willReturn($post);
 
         // Get an empty class instance from container
+        /** @var PostService $postService */
         $service = $this->container->get(PostService::class);
 
         self::assertEquals($post, $service->findPost($post['id']));
@@ -72,11 +76,47 @@ class PostServiceTest extends TestCase
         // findAllPosts returns posts with the name of the according user so they have to be added here as well
         $postsWithUsersToCompare= $this->populatePostsArrayWithUserForTesting($posts);
 
+        /** @var PostService $postService */
         $service = $this->container->get(PostService::class);
 
         // User id not relevant because return values from repo is defined above
         self::assertEquals($postsWithUsersToCompare, $service->findAllPostsFromUser(1));
     }
+
+    /**
+     * Test that service method createPost() calls PostRepository:insertPost()
+     * and that (service) createPost() returns the id returned from (repo) insertPost()
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @param array $validPost
+     */
+    public function testCreatePost(array $validPost)
+    {
+        $postId = (string)$validPost['id'];
+
+        // Removing id from post array because before post is created id is not known
+        unset($validPost['id']);
+
+        // Mock the required repository and configure relevant method return value
+        $this->mock(PostRepository::class)->method('insertPost')->willReturn($postId);
+
+        /** @var PostService $postService */
+        $postService = $this->container->get(PostService::class);
+
+        $postObj = new Post(new ArrayReader($validPost));
+
+        $postService->createPost($postObj);
+
+        self::assertEquals($postId, $postService->createPost($postObj));
+    }
+//
+//    public function testUpdatePost()
+//    {
+//    }
+//
+//    public function testDeletePost()
+//    {
+//    }
 
     /**
      * Replica of PostService:populatePostsArrayWithUser
@@ -107,16 +147,4 @@ class PostServiceTest extends TestCase
         }
         return $postsWithUsersToCompare;
     }
-//
-//    public function testCreatePost()
-//    {
-//    }
-//
-//    public function testUpdatePost()
-//    {
-//    }
-//
-//    public function testDeletePost()
-//    {
-//    }
 }
