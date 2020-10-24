@@ -35,24 +35,32 @@ class PostValidation extends AppValidation
     public function validatePostCreationOrUpdate(Post $post): void
     {
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
-        // In case message gets validated in other function
-        $required = true;
 
-        $postMsg = $post->getMessage();
+        $this->validateMessage($post->getMessage(), $validationResult, true);
+        $this->validateUser($post->getUserId(), $validationResult, true);
 
-        // Validate message
-        if (null !== $postMsg && '' !== $postMsg){
+        $this->throwOnError($validationResult);
+    }
+
+    protected function validateMessage($postMsg, $validationResult, $required)
+    {
+        if (null !== $postMsg && '' !== $postMsg) {
             $this->validateLengthMax($postMsg, 'message', $validationResult, 500);
             $this->validateLengthMin($postMsg, 'message', $validationResult, 4);
         } elseif (true === $required) {
             // If it is null but required, the user input is faulty so bad request 400 return status is sent
             $validationResult->setIsBadRequest(true, 'message', 'Message is required but not given');
         }
+    }
 
-        // Check if user exists
-        $this->validateUserExistence($post->getUserId(), $validationResult);
-
-        $this->throwOnError($validationResult);
+    protected function validateUser($userId, $validationResult, $required)
+    {
+        if (null !== $userId && '' !== $userId) {
+            $this->validateUserExistence($userId, $validationResult);
+        } elseif (true === $required) {
+            // If it is null but required, the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true, 'user_id', 'user_id required but not given');
+        }
     }
 
     /**
