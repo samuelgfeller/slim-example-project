@@ -50,6 +50,8 @@ class PostServiceTest extends TestCase
     public function testFindPost(array $post)
     {
         // Add mock class PostRepository to container and define return value for method findPostById
+        // I dont see the necessity of expecting method to be called. If we get the result we want
+        // we can let the code free how it returns it (don't want annoying test that fails after slight code change)
         $this->mock(PostRepository::class)->method('findPostById')->willReturn($post);
 
         // Get an empty class instance from container
@@ -101,7 +103,14 @@ class PostServiceTest extends TestCase
         unset($validPost['id']);
 
         // Mock the required repository and configure relevant method return value
-        $this->mock(PostRepository::class)->method('insertPost')->willReturn($postId);
+        // Here I find expects relevant since the test is about if the method is called or not
+        // but should the expected parameter be tested as well? ->with($this->equalTo($validPost)) not included
+        // because I dont want an annoying test function that fails for nothing if code changes. Didn't see the
+        // real need for a test but maybe I'm wrong.
+        $this->mock(PostRepository::class)->expects(self::once())->method('insertPost')->willReturn($postId);
+
+        // Mock UserRepository because it is used in the validation logic.
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
 
         /** @var PostService $postService */
         $postService = $this->container->get(PostService::class);
@@ -129,7 +138,7 @@ class PostServiceTest extends TestCase
         // Empty mock would do the trick as well as it would just return null on non defined functions.
         // A post is linked to an user in all cases so user has to exist. What happens if user doesn't exist
         // will be tested in a different function otherwise this test would always fail and other invalid
-        // Values would not be noticed
+        // values would not be noticed
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
 
         /** @var PostService $service */
