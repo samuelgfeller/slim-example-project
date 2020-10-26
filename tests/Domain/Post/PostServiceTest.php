@@ -140,6 +140,25 @@ class PostServiceTest extends TestCase
         $service->createPost(new Post(new ArrayReader($invalidPost)));
         // If we wanted to test more detailed, the error messages could be tested, that the right message(s) appear
     }
+
+    /**
+     * Test createPost when user doesn't exist
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @param array $validPost
+     */
+    public function testNotExistingUserCreatePost(array $validPost)
+    {
+        // Point of this test is not existing user
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
+
+        /** @var PostService $service */
+        $service = $this->container->get(PostService::class);
+
+        $this->expectException(ValidationException::class);
+
+        $service->createPost(new Post(new ArrayReader($validPost)));
+    }
 //
 //    public function testUpdatePost()
 //    {
