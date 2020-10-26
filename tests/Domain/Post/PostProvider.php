@@ -79,21 +79,24 @@ class PostProvider
     }
 
     /**
-     * @return array of ArrayReader Instances
+     * @return array
      */
     public function invalidPostsProvider(): array
     {
+        $tooLongMsg = 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
         return [
-            // Not existing user
-            [['id' => 100000000, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
-            // Name too short
-            [['id' => 2, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
-            // Invalid Email
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@ema$il.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
-            // Not matching Passwords
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '123456789', 'password2' => '12345678', 'role' => 'user']],
-            // Required values not set
-            [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '', 'role' => 'user']],
+            // Msg too short (>4)
+            [['id' => 1, 'user_id' => 1, 'message' => 'aaa']],
+            // Msg too long (<500)
+            [['id' => 1, 'user_id' => 1, 'message' => $tooLongMsg]],
+            // Required msg empty
+            [['id' => 1, 'user_id' => 1, 'message' => '']],
+            // Required user_id missing
+            [['id' => 1, 'user_id' => '', 'message' => '']],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.

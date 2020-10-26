@@ -62,7 +62,7 @@ class UserProvider
     }
 
     /**
-     * @return array of ArrayReader Instances
+     * @return array
      */
     public function invalidUsersProvider(): array
     {

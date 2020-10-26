@@ -2,11 +2,13 @@
 
 namespace App\Test\Domain\Post;
 
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
 use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\User\UserRepository;
 use App\Test\UnitTestUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -109,6 +111,34 @@ class PostServiceTest extends TestCase
         $postService->createPost($postObj);
 
         self::assertEquals($postId, $postService->createPost($postObj));
+    }
+
+    /**
+     * Test that no post is created when values are invalid.
+     * validatePostCreationOrUpdate() will be tested separately but
+     * here it is ensured that this validation is called in createUser
+     * but without specific error analysis. Important is that it didn't create it.
+     * The method is called with each value of the provider
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::invalidPostsProvider()
+     * @param array $invalidPost
+     */
+    public function testInvalidCreatePost(array $invalidPost)
+    {
+        // Mock UserRepository because it is used by the validation logic.
+        // Empty mock would do the trick as well as it would just return null on non defined functions.
+        // A post is linked to an user in all cases so user has to exist. What happens if user doesn't exist
+        // will be tested in a different function otherwise this test would always fail and other invalid
+        // Values would not be noticed
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+
+        /** @var PostService $service */
+        $service = $this->container->get(PostService::class);
+
+        $this->expectException(ValidationException::class);
+
+        $service->createPost(new Post(new ArrayReader($invalidPost)));
+        // If we wanted to test more detailed, the error messages could be tested, that the right message(s) appear
     }
 //
 //    public function testUpdatePost()

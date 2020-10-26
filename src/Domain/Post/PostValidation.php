@@ -55,7 +55,7 @@ class PostValidation extends AppValidation
 
     protected function validateUser($userId, $validationResult, $required)
     {
-        if (null !== $userId && '' !== $userId) {
+        if (null !== $userId && '' !== $userId && $userId !== 0) {
             $this->validateUserExistence($userId, $validationResult);
         } elseif (true === $required) {
             // If it is null but required, the user input is faulty so bad request 400 return status is sent
