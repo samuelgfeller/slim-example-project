@@ -117,8 +117,6 @@ class PostServiceTest extends TestCase
 
         $postObj = new Post(new ArrayReader($validPost));
 
-        $postService->createPost($postObj);
-
         self::assertEquals($postId, $postService->createPost($postObj));
     }
 
@@ -210,6 +208,7 @@ class PostServiceTest extends TestCase
 
         self::assertTrue($service->deletePost($postId));
     }
+
 
     /**
      * Replica of PostService:populatePostsArrayWithUser
