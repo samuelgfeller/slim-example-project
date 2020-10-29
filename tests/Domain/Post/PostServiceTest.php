@@ -103,7 +103,7 @@ class PostServiceTest extends TestCase
         unset($validPost['id']);
 
         // Mock the required repository and configure relevant method return value
-        // Here I find expects relevant since the test is about if the method is called or not
+        // Here I find ->expects() relevant since the test is about if the method is called or not
         // but should the expected parameter be tested as well? ->with($this->equalTo($validPost)) not included
         // because I dont want an annoying test function that fails for nothing if code changes. Didn't see the
         // real need for a test but maybe I'm wrong.
@@ -168,11 +168,25 @@ class PostServiceTest extends TestCase
 
         $service->createPost(new Post(new ArrayReader($validPost)));
     }
-//
-//    public function testUpdatePost()
-//    {
-//    }
-//
+
+    /**
+     * Test that service method updatePost() calls PostRepository:updatePost()
+     * and that (service) updatePost() returns the bool true returned by repo
+     *
+     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @param array $validPost
+     */
+    public function testUpdatePost(array $validPost)
+    {
+        // With ->expects() to test if the method is called
+        $this->mock(PostRepository::class)->expects(self::once())->method('updatePost')->willReturn(true);
+
+        /** @var PostService $service */
+        $service = $this->container->get(PostService::class);
+
+        self::assertTrue($service->updatePost(new Post(new ArrayReader($validPost))));
+    }
+
 //    public function testDeletePost()
 //    {
 //    }
