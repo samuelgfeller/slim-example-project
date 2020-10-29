@@ -193,16 +193,16 @@ class UserServiceTest extends TestCase
         $userId = 1;
         // Mock user repository and post repository
         $this->mock(PostRepository::class)
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('deletePostsFromUser')
             // With parameter user id
-            ->with($this->equalTo($userId))
+            ->with(self::equalTo($userId))
             ->willReturn(true);
 
         $this->mock(UserRepository::class)
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('deleteUser')
-            ->with($this->equalTo($userId))
+            ->with(self::equalTo($userId))
             ->willReturn(true);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock

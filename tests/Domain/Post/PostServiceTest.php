@@ -173,6 +173,9 @@ class PostServiceTest extends TestCase
      * Test that service method updatePost() calls PostRepository:updatePost()
      * and that (service) updatePost() returns the bool true returned by repo
      *
+     * Invalid or not existing user don't have to be tested since it's the same
+     * validation as createUser() and it's already done there
+     *
      * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
      * @param array $validPost
      */
@@ -187,9 +190,26 @@ class PostServiceTest extends TestCase
         self::assertTrue($service->updatePost(new Post(new ArrayReader($validPost))));
     }
 
-//    public function testDeletePost()
-//    {
-//    }
+    /**
+     * Test that postRepository:deletePost() is called in
+     * post service
+     */
+    public function testDeletePost()
+    {
+        $postId = 1;
+
+        $this->mock(PostRepository::class)
+            ->expects(self::once())
+            ->method('deletePost')
+            // With parameter user id
+            ->with(self::equalTo($postId))
+            ->willReturn(true);
+
+        /** @var PostService $service */
+        $service = $this->container->get(PostService::class);
+
+        self::assertTrue($service->deletePost($postId));
+    }
 
     /**
      * Replica of PostService:populatePostsArrayWithUser
