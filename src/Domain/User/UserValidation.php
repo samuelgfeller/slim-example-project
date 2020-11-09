@@ -101,7 +101,7 @@ class UserValidation extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         $this->validateEmail($user->getEmail(), true, $validationResult);
-        $this->validatePassword($user->getPassword(), $validationResult);
+        $this->validatePassword($user->getPassword(), true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult);
@@ -118,19 +118,12 @@ class UserValidation extends AppValidation
      */
     private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult): void
     {
-        // Check if both passwords are set
-        if ((null !== $passwords[0] && '' !== $passwords[0]) && (null !== $passwords[1] && '' !== $passwords[1])) {
-            if ($passwords[0] !== $passwords[1]) {
-                $validationResult->setError('passwords', 'Passwords do not match');
-            }
-
-            $this->validatePassword($passwords[0], $validationResult);
-            $this->validatePassword($passwords[1], $validationResult);
-        } elseif (true === $required) {
-            // If both or one of the 2 passwords is null but required,
-            // the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'passwords', 'Passwords are required and not given');
+        if ($passwords[0] !== $passwords[1]) {
+            $validationResult->setError('passwords', 'Passwords do not match');
         }
+
+        $this->validatePassword($passwords[0], $required, $validationResult);
+        $this->validatePassword($passwords[1], $required, $validationResult);
     }
 
     /**
@@ -138,11 +131,19 @@ class UserValidation extends AppValidation
      * If passwords are not empty when required is already tested in validatePasswords
      *
      * @param string $password
+     * @param bool $required
      * @param ValidationResult $validationResult
      */
-    public function validatePassword(string $password, ValidationResult $validationResult): void
+    public function validatePassword(string $password, bool $required, ValidationResult $validationResult): void
     {
-        $this->validateLengthMin($password, 'password', $validationResult, 3);
+        // Required check done here (and not validatePasswords) because login validation uses it as well
+        if (null !== $password && '' !== $password) {
+            $this->validateLengthMin($password, 'password', $validationResult, 3);
+        } elseif (true === $required) {
+            // If password is required but not given
+            // the user input is faulty so bad request 400 return status is sent
+            $validationResult->setIsBadRequest(true, 'passwords', 'Password required but not given');
+        }
     }
 
     /**
