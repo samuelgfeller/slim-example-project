@@ -82,6 +82,20 @@ class UserProvider
         // by another missing field.
     }
 
+    /**
+     * @return array
+     */
+    public function invalidEmailAndPasswordsUsersProvider(): array
+    {
+        return [
+            // Invalid Email
+            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@ema$il.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            // Email not set
+            [['id' => 1, 'name' => 'Bill Gates', 'email' => '', 'password' => '', 'password2' => '12345678', 'role' => 'user']],
+            // Password not set
+            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '', 'password2' => '12345678', 'role' => 'user']],
+        ];
+    }
 
 
 

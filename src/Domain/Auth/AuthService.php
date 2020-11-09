@@ -49,8 +49,6 @@ class AuthService
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
         if($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password'])){
             $user->setId($dbUser['id']);
-            // Maybe would make sense to return hydrated obj with db values for the case that login data ->
-            // don't provide all infos for user obj
             return $user;
         }
 
