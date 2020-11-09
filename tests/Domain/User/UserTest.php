@@ -17,39 +17,24 @@ class UserTest extends TestCase
     /**
      * Testing all getters of the class user
      *
-     * Existence of this test is questionable because the relevant getters
-     * are used in other tests so coverage acknowledges it. This method basically
-     * just tests unused setters because functionality does not have to be tested
-     * since there isn't any logic.
-     *
      * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
-    public function testSettersAndGetters(ArrayReader $userValues): void
+    public function testGetters(ArrayReader $userValues): void
     {
-        $givenId = $userValues->findInt('id');
-        $givenName = $userValues->findString('name');
-        $givenEmail = $userValues->getString('email');
-        $givenPass1 = $userValues->findString('password');
-        $givenPass2 = $userValues->findString('password2');
-        $givenRole = $userValues->findString('role');
-
-        // Depending if data is required in constructor it makes more or less sense to test setters
         $user = new User($userValues);
 
-        $user->setId($givenId);
-        $user->setName($givenName);
-        $user->setEmail($givenEmail);
-        $user->setPassword($givenPass1);
-        $user->setPassword2($givenPass2);
-        $user->setRole($givenRole);
+        // Set possible values via setters
+        $user->setId($userValues->findInt('id'));
+        $user->setPassword($userValues->findString('password'));
+        $user->setRole($userValues->findString('role'));
 
-        self::assertEquals($givenId, $user->getId());
-        self::assertEquals($givenName, $user->getName());
-        self::assertEquals($givenEmail, $user->getEmail());
-        self::assertEquals($givenPass1, $user->getPassword());
-        self::assertEquals($givenPass2, $user->getPassword2());
-        self::assertEquals($givenRole, $user->getRole());
+        self::assertEquals($userValues->findInt('id'), $user->getId());
+        self::assertEquals($userValues->findString('name'), $user->getName());
+        self::assertEquals($userValues->getString('email'), $user->getEmail());
+        self::assertEquals($userValues->findString('password'), $user->getPassword());
+        self::assertEquals($userValues->findString('password2'), $user->getPassword2());
+        self::assertEquals($userValues->findString('role'), $user->getRole());
     }
 
     /**

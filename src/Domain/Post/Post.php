@@ -46,27 +46,11 @@ class Post
     }
 
     /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return int|null
      */
     public function getUserId(): ?int
     {
         return $this->userId;
-    }
-
-    /**
-     * @param int|null $userId
-     */
-    public function setUserId(?int $userId): void
-    {
-        $this->userId = $userId;
     }
 
     /**
@@ -76,14 +60,5 @@ class Post
     {
         return $this->message;
     }
-
-    /**
-     * @param string $message
-     */
-    public function setMessage(string $message): void
-    {
-        $this->message = $message;
-    }
-
 
 }

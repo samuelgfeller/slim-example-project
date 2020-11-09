@@ -69,27 +69,11 @@ class User
     }
     
     /**
-     * @param mixed|string|null $name
-     */
-    public function setName($name): void
-    {
-        $this->name = $name;
-    }
-    
-    /**
      * @return mixed|string|null
      */
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
     }
 
     /**
@@ -114,14 +98,6 @@ class User
     public function getPassword2(): ?string
     {
         return $this->password2;
-    }
-
-    /**
-     * @param string|null $password2
-     */
-    public function setPassword2(?string $password2): void
-    {
-        $this->password2 = $password2;
     }
     
     /**
