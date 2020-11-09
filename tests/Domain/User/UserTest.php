@@ -17,6 +17,11 @@ class UserTest extends TestCase
     /**
      * Testing all getters of the class user
      *
+     * I dont know if this method is actually useful since
+     * it doesn't improve coverage (methods are used in other tests)
+     * and there isn't any logic in these methods. This is an example
+     * but I won't do it for other objects.
+     *
      * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */

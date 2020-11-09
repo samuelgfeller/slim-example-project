@@ -51,11 +51,11 @@ class User
     {
         return $this->id;
     }
-    
+
     /**
-     * @param int|mixed|null $id
+     * @param int|null $id
      */
-    public function setId($id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -83,11 +83,11 @@ class User
     {
         return $this->password;
     }
-    
+
     /**
-     * @param mixed|string|null $password
+     * @param string|null $password
      */
-    public function setPassword($password): void
+    public function setPassword(?string $password): void
     {
         $this->password = $password;
     }
@@ -107,11 +107,11 @@ class User
     {
         return $this->role;
     }
-    
+
     /**
-     * @param mixed|string|null $role
+     * @param string|null $role
      */
-    public function setRole($role): void
+    public function setRole(?string $role): void
     {
         $this->role = $role;
     }
