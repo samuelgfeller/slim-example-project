@@ -49,12 +49,16 @@ class AuthService
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
         if($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password'])){
             $user->setId($dbUser['id']);
+            // Maybe would make sense to return hydrated obj with db values for the case that login data ->
+            // don't provide all infos for user obj
             return $user;
         }
 
-        // Throw exception if user is not returned to controller
+        // Throw InvalidCred exception if user doesn't exist or wrong password
+        // (vague exception on purpose for security)
         throw new InvalidCredentialsException($user->getEmail());
     }
+
     /**
      * Generates a JWT Token with user id
      * todo move to jwt service
