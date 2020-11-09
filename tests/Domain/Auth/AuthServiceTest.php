@@ -84,7 +84,29 @@ class AuthServiceTest extends TestCase
         $authService->getUserWithIdIfAllowedToLogin($userObj);
     }
 
+    /**
+     * Test getUserWithIdIfAllowedToLogin with invalid password
+     * important to test this method extensively for security
+     *
+     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @param array $validUser
+     */
+    public function testGetUserWithIdIfAllowedToLoginUserInvalidCreds(array $validUser)
+    {
+        // Add DIFFERENT password hash
+        $userWithHashPass = $validUser;
+        $userWithHashPass['password'] = password_hash($validUser['password'] . 'differentPass', PASSWORD_DEFAULT);
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userWithHashPass);
 
+        /** @var AuthService $authService */
+        $authService = $this->container->get(AuthService::class);
+
+        $userObj = new User(new ArrayReader($validUser));
+
+        $this->expectException(InvalidCredentialsException::class);
+
+        $authService->getUserWithIdIfAllowedToLogin($userObj);
+    }
 
     public function testGenerateToken()
     {
