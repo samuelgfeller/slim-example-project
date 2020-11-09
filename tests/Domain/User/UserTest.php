@@ -17,6 +17,11 @@ class UserTest extends TestCase
     /**
      * Testing all getters of the class user
      *
+     * Existence of this test is questionable because the relevant getters
+     * are used in other tests so coverage acknowledges it. This method basically
+     * just tests unused setters because functionality does not have to be tested
+     * since there isn't any logic.
+     *
      * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
