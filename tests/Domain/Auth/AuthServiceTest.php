@@ -3,6 +3,7 @@
 namespace App\Test\Domain\Auth;
 
 use App\Domain\Auth\AuthService;
+use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
@@ -16,6 +17,8 @@ class AuthServiceTest extends TestCase
     use UnitTestUtil;
 
     /**
+     * Test getUserWithIdIfAllowedToLogin
+     *
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
@@ -36,6 +39,8 @@ class AuthServiceTest extends TestCase
     }
 
     /**
+     * Test getUserWithIdIfAllowedToLogin with invalid user data
+     *
      * @dataProvider \App\Test\Domain\User\UserProvider::invalidEmailAndPasswordsUsersProvider()
      * @param array $validUser
      */
@@ -58,6 +63,28 @@ class AuthServiceTest extends TestCase
 
         $authService->getUserWithIdIfAllowedToLogin($userObj);
     }
+
+    /**
+     * Test getUserWithIdIfAllowedToLogin with not existing user
+     *
+     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @param array $validUser
+     */
+    public function testGetUserWithIdIfAllowedToLoginUserNotExisting(array $validUser)
+    {
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
+
+        /** @var AuthService $authService */
+        $authService = $this->container->get(AuthService::class);
+
+        $userObj = new User(new ArrayReader($validUser));
+
+        $this->expectException(InvalidCredentialsException::class);
+
+        $authService->getUserWithIdIfAllowedToLogin($userObj);
+    }
+
+
 
     public function testGenerateToken()
     {
