@@ -83,15 +83,15 @@ class User
     {
         return $this->email;
     }
-    
+
     /**
-     * @param mixed|string|null $email
+     * @param string $email
      */
-    public function setEmail($email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
-    
+
     /**
      * @return mixed|string|null
      */

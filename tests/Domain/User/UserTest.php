@@ -22,14 +22,29 @@ class UserTest extends TestCase
      */
     public function testSettersAndGetters(ArrayReader $userValues): void
     {
+        $givenId = $userValues->findInt('id');
+        $givenName = $userValues->findString('name');
+        $givenEmail = $userValues->getString('email');
+        $givenPass1 = $userValues->findString('password');
+        $givenPass2 = $userValues->findString('password2');
+        $givenRole = $userValues->findString('role');
+
+        // Depending if data is required in constructor it makes more or less sense to test setters
         $user = new User($userValues);
 
-        self::assertEquals($userValues->findInt('id'), $user->getId());
-        self::assertEquals($userValues->findString('name'), $user->getName());
-        self::assertEquals($userValues->getString('email'), $user->getEmail());
-        self::assertEquals($userValues->findString('password'), $user->getPassword());
-        self::assertEquals($userValues->findString('password2'), $user->getPassword2());
-        self::assertEquals($userValues->findString('role'), $user->getRole());
+        $user->setId($givenId);
+        $user->setName($givenName);
+        $user->setEmail($givenEmail);
+        $user->setPassword($givenPass1);
+        $user->setPassword2($givenPass2);
+        $user->setRole($givenRole);
+
+        self::assertEquals($givenId, $user->getId());
+        self::assertEquals($givenName, $user->getName());
+        self::assertEquals($givenEmail, $user->getEmail());
+        self::assertEquals($givenPass1, $user->getPassword());
+        self::assertEquals($givenPass2, $user->getPassword2());
+        self::assertEquals($givenRole, $user->getRole());
     }
 
     /**
