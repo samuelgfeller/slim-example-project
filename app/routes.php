@@ -4,6 +4,7 @@ use App\Application\Actions\PreflightAction;
 use App\Application\Controllers\Authentication\AuthController;
 use App\Application\Controllers\Posts\PostController;
 use App\Application\Controllers\Users\UserController;
+use App\Application\Middleware\JwtAuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -26,7 +27,7 @@ return function (App $app) {
         $group->get('/{id:[0-9]+}', UserController::class . ':get');
         $group->put('/{id:[0-9]+}', UserController::class . ':update');
         $group->delete('/{id:[0-9]+}', UserController::class . ':delete');
-    });
+    })->add(JwtAuthMiddleware::class);
 
     $app->group('/posts', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class);  // Allow preflight requests
@@ -37,13 +38,13 @@ return function (App $app) {
         $group->get('/{id:[0-9]+}', PostController::class . ':get');
         $group->put('/{id:[0-9]+}', PostController::class . ':update');
         $group->delete('/{id:[0-9]+}', PostController::class . ':delete');
-    });
+    })->add(JwtAuthMiddleware::class);
 
-    $app->options('/own-posts', PreflightAction::class); // Allow preflight requests
+    $app->options('/own-posts', PreflightAction::class)->add(JwtAuthMiddleware::class); // Allow preflight requests
 //    $app->options('/own-posts', function (Request $request, Response $response): Response {
 //        return $response;
 //    });
-    $app->get('/own-posts', PostController::class . ':getOwnPosts');
+    $app->get('/own-posts', PostController::class . ':getOwnPosts')->add(JwtAuthMiddleware::class);
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
         $name = $args['name'];
