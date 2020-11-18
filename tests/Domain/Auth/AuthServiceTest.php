@@ -91,7 +91,7 @@ class AuthServiceTest extends TestCase
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserWithIdIfAllowedToLoginUserInvalidCreds(array $validUser)
+    public function testGetUserWithIdIfAllowedToLoginInvalidCreds(array $validUser)
     {
         // Add DIFFERENT password hash
         $userWithHashPass = $validUser;
@@ -108,8 +108,16 @@ class AuthServiceTest extends TestCase
         $authService->getUserWithIdIfAllowedToLogin($userObj);
     }
 
-    public function testGenerateToken()
+    /**
+     *
+     *
+     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @param array $validUser
+     */
+    public function testGenerateToken(array $validUser)
     {
+        $user = new User(new ArrayReader($validUser));
+
     }
 
     public function testGetUserRole()

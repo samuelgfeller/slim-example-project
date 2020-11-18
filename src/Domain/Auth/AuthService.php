@@ -70,12 +70,12 @@ class AuthService
         $tokenId = base64_encode(random_bytes(32));
         $issuedAt = time();
         $notBefore = $issuedAt + 2;             //Adding 2 seconds
-        $expire = $notBefore + $durationInSec;            // Adding 300 seconds
+        $expire = $notBefore + $durationInSec;
 
         $data = [
             'iat' => $issuedAt,         // Issued at: time when the token was generated
             'jti' => $tokenId,          // Json Token Id: an unique identifier for the token
-            'iss' => 'MyApp',       // Issuer
+            'iss' => 'MyApp',           // Issuer
             'nbf' => $notBefore,        // Not before
             'exp' => $expire,           // Expire
             'data' => [                  // Data related to the signer user
