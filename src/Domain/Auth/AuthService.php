@@ -50,6 +50,7 @@ class AuthService
         if($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password'])){
             $user->setId($dbUser['id']);
             return $user;
+            // todo only return id
         }
 
         // Throw InvalidCred exception if user doesn't exist or wrong password

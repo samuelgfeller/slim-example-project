@@ -25,12 +25,15 @@ use Firebase\JWT\JWT;
 class AuthController extends Controller
 {
     protected UserService $userService;
+    protected JwtService $jwtService;
     protected AuthService $authService;
 
-    public function __construct(LoggerInterface $logger, UserService $userService, AuthService $authService)
+    public function __construct(LoggerInterface $logger, UserService $userService,
+        JwtService $jwtService, AuthService $authService)
     {
         parent::__construct($logger);
         $this->userService = $userService;
+        $this->jwtService = $jwtService;
         $this->authService = $authService;
     }
 
@@ -88,13 +91,23 @@ class AuthController extends Controller
             // Throws error if not
             $userWithId = $this->authService->getUserWithIdIfAllowedToLogin($user);
 
-            $token = $this->authService->generateToken($userWithId);
+            $token = $this->jwtService->createToken(['uid' => $user->getEmail()]);
+
+            $lifetime = $this->jwtService->getLifetime();
+
+            // Transform the result into a OAuh 2.0 Access Token Response
+            // https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
+            $result = [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'expires_in' => $lifetime,
+            ];
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
             return $this->respondWithJson(
                 $response,
                 ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
-                200
+                201
             );
         } catch (ValidationException $exception) {
             // Validation error is logged in AppValidation.php

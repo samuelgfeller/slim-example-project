@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Controllers\Authentication;
+namespace App\Domain\Auth;
 
 use Cake\Chronos\Chronos;
 use InvalidArgumentException;
@@ -72,7 +72,7 @@ final class JwtService
      * @throws UnexpectedValueException
      *
      */
-    public function createJwt(array $claims): string
+    public function createToken(array $claims): string
     {
         $issuedAt = Chronos::now()->getTimestamp();
 
