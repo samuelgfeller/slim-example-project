@@ -1,5 +1,6 @@
 <?php
 
+use App\Application\Controllers\Authentication\JwtService;
 use App\Domain\Settings;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
@@ -8,6 +9,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
@@ -34,6 +36,21 @@ return [
         }
 
         return $logger;
+    },
+    // For JWT Auth
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
+    },
+    // And add this entry
+    JwtService::class => function (ContainerInterface $container) {
+        $config = $container->get('settings')['jwt'];
+
+        $issuer = (string)$config['issuer'];
+        $lifetime = (int)$config['lifetime'];
+        $privateKey = (string)$config['private_key'];
+        $publicKey = (string)$config['public_key'];
+
+        return new JwtService($issuer, $lifetime, $privateKey, $publicKey);
     },
     Connection::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['db'];

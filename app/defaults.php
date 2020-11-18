@@ -35,13 +35,26 @@ $settings['db'] = [
         PDO::ATTR_EMULATE_PREPARES => true,
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        ]
+    ]
 ];
 
 // Secret values are overwritten in env.php
-$settings[JWT::class] = [
-    'secret' => 'secretkey',
-    'algorithm' => 'HS256',
+$settings['jwt'] = [
+    // The issuer name
+    'issuer' => 'www.example.com',
+
+    // Max lifetime in seconds
+    'lifetime' => 14400,
+
+    // openssl genrsa -out private.pem 2048
+    'private_key' => '-----BEGIN RSA PRIVATE KEY-----
+        ...
+        -----END RSA PRIVATE KEY-----',
+
+    // openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+    'public_key' => '-----BEGIN PUBLIC KEY-----
+        ...
+        -----END PUBLIC KEY-----',
 ];
 
 $settings[LoggerInterface::class] = [
