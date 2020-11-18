@@ -2,10 +2,9 @@
 
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\JsonBodyParserMiddleware;
-use Firebase\JWT\JWT;
+use App\Application\Middleware\JwtClaimMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
-use Tuupola\Middleware\JwtAuthentication;
 
 return function (App $app) {
     $container = $app->getContainer();
@@ -13,27 +12,7 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
-    // JWT Middleware MUST be before other middleware (especially CORS) because jwt response changes the header
-    $app->add(
-        new JwtAuthentication(
-            [
-                //      'path' => '/api', /* or ["/api", "/admin"] */
-                'ignore' => ['/frontend', '/login', '/register', '/hello'],
-                'secret' => $settings[JWT::class]['secret'],
-                'algorithm' => [$settings[JWT::class]['algorithm']],
-                'logger' => $logger,
-                // HTTPS not mandatory for local development
-                'relaxed' => ['localhost', 'dev.slim-api-example', 'dev.frontend-example'],
-                'error' => function ($response, $arguments) {
-                    $data['status'] = 'error';
-                    $data['message'] = $arguments['message'];
-                    return $response->getBody()->write(
-                        json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT, 512)
-                    );
-                }
-            ]
-        )
-    );
+    $app->add(JwtClaimMiddleware::class);
 
     $app->add(CorsMiddleware::class);
     $app->add(JsonBodyParserMiddleware::class);
