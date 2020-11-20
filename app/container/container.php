@@ -32,6 +32,10 @@ return [
 
         foreach ($loggerSettings['enabled_log_levels'] as $logStreamSettings) {
             $handler = new StreamHandler($logStreamSettings['path'], $logStreamSettings['level'], false);
+            // If dev then show error messages with line breaks
+            if ($settings['env'] === 'development' && $logStreamSettings['level'] === Logger::ERROR){
+                $handler->setFormatter(new LineFormatter(null,null,true,true));
+            }
             $logger->pushHandler($handler);
         }
 
