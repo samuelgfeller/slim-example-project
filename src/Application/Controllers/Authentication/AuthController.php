@@ -5,6 +5,7 @@ namespace App\Application\Controllers\Authentication;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Auth\AuthService;
+use App\Domain\Auth\JwtService;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\User\User;
@@ -17,7 +18,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
-use Firebase\JWT\JWT;
 
 /**
  * Class AuthController
@@ -106,7 +106,7 @@ class AuthController extends Controller
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
             return $this->respondWithJson(
                 $response,
-                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
+                ['token' => json_encode($result), 'status' => 'success', 'message' => 'Logged in'],
                 201
             );
         } catch (ValidationException $exception) {

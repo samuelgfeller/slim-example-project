@@ -1,10 +1,11 @@
 <?php
 
-use App\Application\Controllers\Authentication\JwtService;
+use App\Domain\Auth\JwtService;
 use App\Domain\Settings;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use DI\ContainerBuilder;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
