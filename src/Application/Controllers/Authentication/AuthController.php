@@ -18,6 +18,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
+use Firebase\JWT\JWT;
+
+use const http\Client\Curl\Features\LARGEFILE;
 
 /**
  * Class AuthController
@@ -89,7 +92,7 @@ class AuthController extends Controller
 
         try {
             // Throws error if not
-            $userWithId = $this->authService->getUserWithIdIfAllowedToLogin($user);
+            $this->authService->GetUserIdIfAllowedToLogin($user);
 
             $token = $this->jwtService->createToken(['uid' => $user->getEmail()]);
 

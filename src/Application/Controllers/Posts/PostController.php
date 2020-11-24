@@ -17,7 +17,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Handlers\Strategies\RequestHandler;
-use Firebase\JWT\JWT;
 
 class PostController extends Controller
 {

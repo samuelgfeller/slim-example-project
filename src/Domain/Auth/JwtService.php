@@ -70,7 +70,6 @@ final class JwtService
      *
      * @return string The JWT
      * @throws UnexpectedValueException
-     *
      */
     public function createToken(array $claims): string
     {

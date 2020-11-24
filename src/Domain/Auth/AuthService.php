@@ -27,7 +27,7 @@ class AuthService
         $this->userValidation = $userValidation;
         $this->userService = $userService;
         $this->userRepository = $userRepository;
-        $this->jwtSettings = $settings->get(JWT::class);
+        $this->jwtSettings = $settings->get('jwt');
     }
 
     /**
@@ -36,7 +36,7 @@ class AuthService
      * If no, an InvalidCredentialsException is thrown
      *
      * @param User $user
-     * @return User $user
+     * @return int id
      *
      * @throws InvalidCredentialsException
      *
