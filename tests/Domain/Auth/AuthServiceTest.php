@@ -17,12 +17,12 @@ class AuthServiceTest extends TestCase
     use UnitTestUtil;
 
     /**
-     * Test getUserWithIdIfAllowedToLogin
+     * Test GetUserIdIfAllowedToLogin
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserWithIdIfAllowedToLogin(array $validUser)
+    public function testGetUserIdIfAllowedToLogin(array $validUser)
     {
         // Service function uses password_verify which compares password with hash
         $userWithHashPass = $validUser;
@@ -35,16 +35,16 @@ class AuthServiceTest extends TestCase
 
         $userObj = new User(new ArrayReader($validUser));
 
-        self::assertEquals($userObj, $authService->getUserWithIdIfAllowedToLogin($userObj));
+        self::assertEquals($validUser['id'], $authService->GetUserIdIfAllowedToLogin($userObj));
     }
 
     /**
-     * Test getUserWithIdIfAllowedToLogin with invalid user data
+     * Test GetUserIdIfAllowedToLogin with invalid user data
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::invalidEmailAndPasswordsUsersProvider()
      * @param array $validUser
      */
-    public function testGetUserWithIdIfAllowedToLoginInvalidData(array $validUser)
+    public function testGetUserIdIfAllowedToLoginInvalidData(array $validUser)
     {
         // Technically not needed because if code works, it shouldn't go past the validation call line
         // But in case test fails (exception not thrown) error would not be accurate without this mock
@@ -61,16 +61,16 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $authService->getUserWithIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($userObj);
     }
 
     /**
-     * Test getUserWithIdIfAllowedToLogin with not existing user
+     * Test GetUserIdIfAllowedToLogin with not existing user
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserWithIdIfAllowedToLoginUserNotExisting(array $validUser)
+    public function testGetUserIdIfAllowedToLoginUserNotExisting(array $validUser)
     {
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
 
@@ -81,17 +81,17 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->getUserWithIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($userObj);
     }
 
     /**
-     * Test getUserWithIdIfAllowedToLogin with invalid password
+     * Test GetUserIdIfAllowedToLogin with invalid password
      * important to test this method extensively for security
      *
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserWithIdIfAllowedToLoginInvalidCreds(array $validUser)
+    public function testGetUserIdIfAllowedToLoginInvalidCreds(array $validUser)
     {
         // Add DIFFERENT password hash
         $userWithHashPass = $validUser;
@@ -105,7 +105,7 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->getUserWithIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($userObj);
     }
 
     /**
@@ -114,15 +114,15 @@ class AuthServiceTest extends TestCase
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGenerateToken(array $validUser)
-    {
-        $user = new User(new ArrayReader($validUser));
-
-    }
-
-    public function testGetUserRole()
-    {
-    }
+//    public function testGenerateToken(array $validUser)
+//    {
+//        $user = new User(new ArrayReader($validUser));
+//
+//    }
+//
+//    public function testGetUserRole()
+//    {
+//    }
 
 
 }
