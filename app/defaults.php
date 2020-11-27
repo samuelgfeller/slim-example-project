@@ -74,7 +74,7 @@ $settings[LoggerInterface::class] = [
         // NOTICE
         [
             // Same file than INFO
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
+            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
             'level' => Logger::NOTICE
         ],
         // WARNING

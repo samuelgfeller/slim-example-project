@@ -90,6 +90,8 @@ class AuthController extends Controller
 
         $user = new User(new ArrayReader($userData));
 
+//        echo $userData['wrong']; // notice
+//        $variable->method(); // Error
         try {
             // Throws error if not
             $this->authService->GetUserIdIfAllowedToLogin($user);
