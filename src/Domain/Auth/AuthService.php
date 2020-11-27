@@ -9,7 +9,6 @@ use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Infrastructure\User\UserRepository;
-use Firebase\JWT\JWT;
 
 /**
  * Authentication logic
@@ -28,7 +27,7 @@ class AuthService
         $this->userValidation = $userValidation;
         $this->userService = $userService;
         $this->userRepository = $userRepository;
-        $this->jwtSettings = $settings->get(JWT::class);
+        $this->jwtSettings = $settings->get('jwt');
     }
 
     /**
@@ -37,19 +36,18 @@ class AuthService
      * If no, an InvalidCredentialsException is thrown
      *
      * @param User $user
-     * @return User $user
+     * @return int id
      *
      * @throws InvalidCredentialsException
      *
      */
-    public function getUserWithIdIfAllowedToLogin(User $user): User
+    public function getUserIdIfAllowedToLogin(User $user): int
     {
         $this->userValidation->validateUserLogin($user);
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
         if($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password'])){
-            $user->setId($dbUser['id']);
-            return $user;
+            return $dbUser['id'];
         }
 
         // Throw InvalidCred exception if user doesn't exist or wrong password

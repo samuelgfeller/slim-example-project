@@ -1,7 +1,5 @@
 <?php
 
-use Firebase\JWT\JWT;
-
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -14,5 +12,5 @@ $settings['db']['database'] = 'slim-api-example';
 $settings['db']['username'] = 'Admin';
 $settings['db']['password'] = '12345678';
 
-$settings[JWT::class]['secret'] = 'secretPass';
+$settings['jwt']['secret'] = 'secretPass';
 

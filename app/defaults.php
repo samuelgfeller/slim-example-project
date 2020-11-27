@@ -1,11 +1,10 @@
 <?php
 
-// Error reporting
 use Cake\Database\Driver\Mysql;
-use Firebase\JWT\JWT;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
+// Error reporting
 error_reporting(0);
 ini_set('display_errors', '0');
 
@@ -35,13 +34,26 @@ $settings['db'] = [
         PDO::ATTR_EMULATE_PREPARES => true,
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        ]
+    ]
 ];
 
 // Secret values are overwritten in env.php
-$settings[JWT::class] = [
-    'secret' => 'secretkey',
-    'algorithm' => 'HS256',
+$settings['jwt'] = [
+    // The issuer name
+    'issuer' => 'www.example.com',
+
+    // Max lifetime in seconds
+    'lifetime' => 14400,
+
+    // openssl genrsa -out private.pem 2048
+    'private_key' => '-----BEGIN RSA PRIVATE KEY-----
+        ...
+        -----END RSA PRIVATE KEY-----',
+
+    // openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+    'public_key' => '-----BEGIN PUBLIC KEY-----
+        ...
+        -----END PUBLIC KEY-----',
 ];
 
 $settings[LoggerInterface::class] = [
@@ -62,7 +74,7 @@ $settings[LoggerInterface::class] = [
         // NOTICE
         [
             // Same file than INFO
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
+            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
             'level' => Logger::NOTICE
         ],
         // WARNING

@@ -1,0 +1,52 @@
+<?php
+
+
+namespace App\Application\Middleware;
+
+use App\Application\Exceptions\CorsMiddlewareException;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
+
+final class CorsMiddlewareExceptionMiddleware implements MiddlewareInterface
+{
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * The constructor.
+     *
+     * @param LoggerInterface $logger The logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * Invoke middleware.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param RequestHandlerInterface $handler The handler
+     *
+     * @return ResponseInterface The response
+     */
+    public function process(
+        ServerRequestInterface $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface {
+        try {
+            return $handler->handle($request);
+        } catch (CorsMiddlewareException $exception) {
+            // Logging
+            $this->logger->error($exception->getMessage());
+
+            // Return the CORS response
+            return $exception->getResponse();
+        }
+    }
+}

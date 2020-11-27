@@ -5,6 +5,7 @@ namespace App\Application\Controllers\Authentication;
 
 use App\Application\Controllers\Controller;
 use App\Domain\Auth\AuthService;
+use App\Domain\Auth\JwtService;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\User\User;
@@ -19,18 +20,23 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Firebase\JWT\JWT;
 
+use const http\Client\Curl\Features\LARGEFILE;
+
 /**
  * Class AuthController
  */
 class AuthController extends Controller
 {
     protected UserService $userService;
+    protected JwtService $jwtService;
     protected AuthService $authService;
 
-    public function __construct(LoggerInterface $logger, UserService $userService, AuthService $authService)
+    public function __construct(LoggerInterface $logger, UserService $userService,
+        JwtService $jwtService, AuthService $authService)
     {
         parent::__construct($logger);
         $this->userService = $userService;
+        $this->jwtService = $jwtService;
         $this->authService = $authService;
     }
 
@@ -84,17 +90,29 @@ class AuthController extends Controller
 
         $user = new User(new ArrayReader($userData));
 
+//        echo $userData['wrong']; // notice
+//        $variable->method(); // Error
         try {
             // Throws error if not
-            $userWithId = $this->authService->getUserWithIdIfAllowedToLogin($user);
+            $this->authService->GetUserIdIfAllowedToLogin($user);
 
-            $token = $this->authService->generateToken($userWithId);
+            $token = $this->jwtService->createToken(['uid' => $user->getEmail()]);
+
+            $lifetime = $this->jwtService->getLifetime();
+
+            // Transform the result into a OAuh 2.0 Access Token Response
+            // https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
+            $result = [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'expires_in' => $lifetime,
+            ];
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
             return $this->respondWithJson(
                 $response,
-                ['token' => $token, 'status' => 'success', 'message' => 'Logged in'],
-                200
+                ['token' => json_encode($result), 'status' => 'success', 'message' => 'Logged in'],
+                201
             );
         } catch (ValidationException $exception) {
             // Validation error is logged in AppValidation.php

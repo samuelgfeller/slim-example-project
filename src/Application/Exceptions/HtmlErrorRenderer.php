@@ -3,7 +3,7 @@
  * From https://akrabat.com/custom-error-rendering-in-slim-4/
  */
 
-namespace App\Application\Error;
+namespace App\Application\Exceptions;
 
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
