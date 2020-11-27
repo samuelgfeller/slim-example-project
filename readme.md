@@ -1,16 +1,15 @@
-# Slim api template [Work in progress]
-Lightweight example project of an API with the SLIM 4 Micro-Framework.  
+# Slim example project [Work in progress]
+Lightweight example project of a backend and frontend done with the SLIM 4 Micro-Framework.  
+This can be used as template when creating new projects.   
   
 ## Functionalities include:
-* Authentication with JWT-Token (registration and login)
-* User mangement for a User with 'admin' role
+* Authentication (registration and login)
+* User management for a User with 'admin' role
 * Post creation for all user
 * Own post management (edit and delete)
 * All user can see all posts 
 
 
-## Frontend for testing
-https://github.com/samuelgfeller/frontend-example
 
 
 ### Validation
