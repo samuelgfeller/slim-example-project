@@ -56,7 +56,6 @@ final class Responder
      *
      * @return ResponseInterface The response
      */
-//    todo in SLE-23
     public function render(ResponseInterface $response, string $template, array $data = []): ResponseInterface
     {
         return $this->twig->render($response, $template, $data);
