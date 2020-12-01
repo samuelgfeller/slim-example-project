@@ -59,45 +59,7 @@ class PostController extends Controller
 
     public function update(Request $request, Response $response, array $args): Response
     {
-        $userId = (int)$this->getUserIdFromToken($request);
 
-        $id = (int)$args['id'];
-
-        $postFromDb = $this->postService->findPost($id);
-
-        // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
-        $userRole = $this->authService->getUserRole($userId);
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int)$postFromDb['user_id'] === $userId) {
-
-            // todo check if parsedbody is empty everywhere
-            if (null !== $postData = $request->getParsedBody()) {
-                // todo maybe add mapping a layer between client body and application logic
-
-                $post = new Post(new ArrayReader($postData));
-                // Needed to tell repo what data to update
-                $post->setId($postFromDb['id']);
-
-                try {
-                    $updated = $this->postService->updatePost($post);
-                } catch (ValidationException $exception) {
-                    return $this->respondValidationError($exception->getValidationResult(), $response);
-                }
-
-                if ($updated) {
-                    return $this->respondWithJson($response, ['status' => 'success']);
-                }
-                $response = $this->respondWithJson($response,
-                    ['status' => 'warning', 'message' => 'The post was not updated']);
-                return $response->withAddedHeader('Warning', 'The post was not updated');
-            }
-            $response = $this->respondWithJson($response, ['status' => 'error', 'message' => 'Request body empty'],
-                400);
-            return $response->withAddedHeader('Warning', '');
-        }
-        $this->logger->notice('User ' . $userId . ' tried to update other post with id: ' . $id);
-        return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
