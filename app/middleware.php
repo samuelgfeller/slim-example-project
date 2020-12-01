@@ -7,6 +7,7 @@ use App\Application\Middleware\JsonBodyParserMiddleware;
 use App\Application\Middleware\JwtClaimMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
+use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
     $container = $app->getContainer();
@@ -16,7 +17,7 @@ return function (App $app) {
 
     $app->add(JwtClaimMiddleware::class);
     $app->add(CorsMiddleware::class);
-    $app->add(JsonBodyParserMiddleware::class);
+    $app->add(TwigMiddleware::class);
     $app->addRoutingMiddleware();
 
 

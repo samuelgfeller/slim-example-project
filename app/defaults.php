@@ -56,6 +56,20 @@ $settings['jwt'] = [
         -----END PUBLIC KEY-----',
 ];
 
+// Twig settings
+$settings['twig'] = [
+    // Template paths
+    'paths' => [
+        __DIR__ . '/../templates',
+    ],
+    // Twig environment options
+    'options' => [
+        // Should be set to true in production
+        'cache_enabled' => false,
+        'cache_path' => __DIR__ . '/../tmp/twig',
+    ],
+];
+
 $settings[LoggerInterface::class] = [
     'name' => 'event-log',
     // The 8 possible levels are categorized into 4 files. Level can't be given as array in the StreamHandler so it has to be declared for each level

@@ -14,6 +14,8 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
 return [
     'settings' => function () {
@@ -34,8 +36,8 @@ return [
         foreach ($loggerSettings['enabled_log_levels'] as $logStreamSettings) {
             $handler = new StreamHandler($logStreamSettings['path'], $logStreamSettings['level'], false);
             // If dev then show error messages with line breaks
-            if ($settings['env'] === 'development' && $logStreamSettings['level'] === Logger::ERROR){
-                $handler->setFormatter(new LineFormatter(null,null,true,true));
+            if ($settings['env'] === 'development' && $logStreamSettings['level'] === Logger::ERROR) {
+                $handler->setFormatter(new LineFormatter(null, null, true, true));
             }
             $logger->pushHandler($handler);
         }
@@ -68,5 +70,23 @@ return [
     },
     Settings::class => function (ContainerInterface $container) {
         return new Settings($container->get('settings'));
-    }
+    },
+
+    // Twig templates
+    Twig::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings');
+        $twigSettings = $settings['twig'];
+
+        $options = $twigSettings['options'];
+        $options['cache'] = $options['cache_enabled'] ? $options['cache_path'] : false;
+
+        return Twig::create($twigSettings['paths'], $options);
+    },
+
+    TwigMiddleware::class => function (ContainerInterface $container) {
+        return TwigMiddleware::createFromContainer(
+            $container->get(App::class),
+            Twig::class
+        );
+    },
 ];

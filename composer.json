@@ -9,7 +9,8 @@
         "cakephp/database": "^3.8",
         "lcobucci/jwt": "^3.3",
         "symfony/polyfill-uuid": "^1.20",
-        "cakephp/chronos": "^2.0"
+        "cakephp/chronos": "^2.0",
+        "slim/twig-view": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -22,6 +23,8 @@
         }
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master"
+        ,
         "phpunit/phpunit": "^7 || ^8"
     },
     "scripts": {

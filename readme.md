@@ -9,8 +9,12 @@ This can be used as template when creating new projects.
 * Own post management (edit and delete)
 * All user can see all posts 
 
-
-
+## Structure 
+```
+-- templates
+    -- assets // images, videos, audio files
+    -- user // js, css, html file about users
+```
 
 ### Validation
 **!! The below has changed and is not valid anymore !!**
