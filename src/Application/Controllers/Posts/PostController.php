@@ -42,18 +42,7 @@ class PostController extends Controller
 
     public function get(Request $request, Response $response, array $args): Response
     {
-        $id = $args['id'];
-        $post = $this->postService->findPost($id);
 
-        // Get user information connected to post
-        $user = $this->userService->findUser($post['user_id']);
-
-        // Add user name info to post
-        $postWithUser = $post;
-        $postWithUser['user_name'] = $user['name'];
-
-        $postWithUser = $this->outputEscapeService->escapeOneDimensionalArray($postWithUser);
-        return $this->respondWithJson($response, $postWithUser);
     }
 
     public function list(Request $request, Response $response, array $args)

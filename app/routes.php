@@ -36,7 +36,7 @@ return function (App $app) {
         $group->post('', PostController::class . ':create');
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-        $group->get('/{id:[0-9]+}', PostController::class . ':get');
+        $group->get('/{id:[0-9]+}', \App\Application\Actions\Auth\PostViewAction::class);
         $group->put('/{id:[0-9]+}', PostController::class . ':update');
         $group->delete('/{id:[0-9]+}', PostController::class . ':delete');
     })->add(JwtAuthMiddleware::class);
