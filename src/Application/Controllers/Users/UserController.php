@@ -73,31 +73,6 @@ class UserController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
-        $id = (int)$args['id'];
 
-        $userRole = $this->authService->getUserRole($loggedUserId);
-
-
-        // Check if it's admin or if it's its own user
-        if ($userRole === 'admin' || $id === $loggedUserId) {
-            $validationResult = $this->userValidation->validateDeletion($id, $loggedUserId);
-            if ($validationResult->fails()) {
-                return $this->respondValidationError($validationResult, $response);
-            }
-
-            $deleted = $this->userService->deleteUser($id);
-            if ($deleted) {
-                return $this->respondWithJson($response, ['status' => 'success', 'message' => 'User deleted']);
-            }
-            return $this->respondWithJson($response, ['status' => 'error', 'message' => 'User not deleted']);
-        }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to delete other user with id: ' . $id);
-
-        return $this->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'],
-            403
-        );
     }
 }

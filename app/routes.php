@@ -27,7 +27,7 @@ return function (App $app) {
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);
         $group->put('/{id:[0-9]+}', \App\Application\Actions\Users\UserUpdateAction::class);
-        $group->delete('/{id:[0-9]+}', UserController::class . ':delete');
+        $group->delete('/{id:[0-9]+}', \App\Application\Actions\Users\UserDeleteAction::class);
     })->add(JwtAuthMiddleware::class);
 
     $app->group('/posts', function (RouteCollectorProxy $group) {
