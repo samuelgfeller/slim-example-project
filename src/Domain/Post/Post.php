@@ -46,6 +46,14 @@ class Post
     }
 
     /**
+     * @param int|null $userId
+     */
+    public function setUserId(?int $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int

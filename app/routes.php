@@ -33,7 +33,7 @@ return function (App $app) {
     $app->group('/posts', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class);  // Allow preflight requests
         $group->get('', \App\Application\Actions\Posts\PostListAction::class);
-        $group->post('', PostController::class . ':create');
+        $group->post('', \App\Application\Actions\Posts\PostCreateAction::class);
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
