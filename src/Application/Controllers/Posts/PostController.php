@@ -25,6 +25,7 @@ class PostController extends Controller
     protected UserService $userService;
     protected OutputEscapeService $outputEscapeService;
     protected AuthService $authService;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoggerInterface $logger,
@@ -64,27 +65,7 @@ class PostController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $userId = (int)$this->getUserIdFromToken($request);
 
-        $id = (int)$args['id'];
-
-        $post = $this->postService->findPost($id);
-
-        $userRole = $this->authService->getUserRole($userId);
-
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
-
-            $deleted = $this->postService->deletePost($id);
-            if ($deleted) {
-                return $this->respondWithJson($response, ['status' => 'success']);
-            }
-            $response = $this->respondWithJson($response, ['status' => 'warning', 'message' => 'Post not deleted']);
-            return $response->withAddedHeader('Warning', 'The post got not deleted');
-        }
-        $this->logger->notice('User ' . $userId . ' tried to delete other post with id: ' . $id);
-        return $this->respondWithJson($response,
-            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'], 403);
     }
 
     public function create(Request $request, ResponseInterface $response, array $args): ResponseInterface
