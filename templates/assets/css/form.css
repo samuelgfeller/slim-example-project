@@ -1,0 +1,82 @@
+:root{
+    --outer-box-border-radius: 20px;
+    --input-boder-radius: 10px;
+    --formColor: black;
+    /* dark pink #660066*/
+}
+.formBox {
+    /*min-width: 400px;*/
+    width: 50%;
+    min-width: 400px;
+    border-radius: var(--outer-box-border-radius);
+    background-color: #f2f2f2;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+}
+
+.blueForm input, .blueForm textarea, .blueForm select, .blueForm textarea{
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    display: inline-block;
+    border: 1px solid var(--formColor);
+    border-radius: var(--input-boder-radius);
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.blueForm input[type=submit], .submitBtn {
+    width: 100%;
+    background-color: white;
+    border: 1px solid var(--formColor);
+    color: var(--formColor);
+    padding: 8px 15px;
+    margin: 15px 0 0;
+    border-radius: 4444px;
+    cursor: pointer;
+    font-size: 100%;
+}
+
+.blueForm input[type=submit]:hover, .submitBtn:hover {
+    background: var(--formColor);
+    color: white;
+}
+
+.blueForm input[type=submit]:disabled, .submitBtn:disabled {
+    border: 1px solid grey;
+    background: whitesmoke;
+    color: grey;
+    cursor: default;
+}
+
+.blueForm input:focus, .blueForm textarea:focus, .blueForm select:focus, .blueForm textarea:focus {
+    border: 2px solid var(--formColor);
+    outline: none;
+}
+.formLabel, .blueForm label {
+     margin-top: 15px;
+     margin-left: 4px;
+     margin-bottom: 4px;
+     vertical-align: top;
+     display: block;
+ }
+
+.blueForm label:first-child {
+    margin-top: 5px;
+}
+
+.wrongCredInput{
+    border: 2px solid #c0000a;
+}
+
+.errSpan{
+    color: #c0000a;
+}
+
+.inputWarning{
+    font-weight: 400;
+    margin-top: 10px;
+    display: inline-block;
+    color: #d66500;
+}

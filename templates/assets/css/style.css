@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css?family=DM+Sans&display=swap");
+
+* {
+    box-sizing: border-box;
+    font-family: 'DM Sans', sans-serif;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.wrapper {
+    width: 80%; /* Has to be the same than .outMenuDiv */
+    margin: auto;
+    min-width: 500px;
+}
+
+#pageContent {
+    width: 100%;
+}
+
+/*
+.profileForm input[type=submit]:after {
+    content: '';
+    display: block;
+    clear: both;
+}*/
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+#changeEmailDiv, #updatePasswordDiv {
+    /*display: none;*/
+}
+
+#ownPostBtn {
+    margin-bottom: 0;
+}
+
+/* Boxes */
+.boxesDiv {
+    /*background: lightpink;*/
+    width: 100%;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.singleBox {
+    /*overflow: hidden;*/
+    min-width: 300px;
+    display: inline-block;
+    float: left;
+    min-height: 100px;
+    margin-left: 2%;
+    margin-bottom: 40px;
+    /*box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1)!*, 3px 3px 3px 0 rgba(0, 0, 0, 0.05)*!;*/
+}
+
+.boxHeader {
+    /*font-size: 1.5em;*/
+    /*Remove default margin*/
+    padding: 0 70px 0 0;
+    margin: 0;
+}
+.boxContent {
+    padding: 20px;
+    position: relative;
+    display: inline-block;
+    background: #f2f2f2;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+.boxContent:hover{
+    box-shadow: inset 0 0 0 1px black;
+}
+.boxContent:hover > .delIcon,.boxContent:hover > .editIcon {
+    display: inline;
+}
+
+.infoInBoxSpan {
+    font-style: italic;
+    color: #575757;
+}
+
+.contactBtn {
+    width: 50%;
+    margin: auto;
+}
+
+.breakParagraph {
+    word-break: break-word;
+}
+
+/*Login*/
+.discreteLink{
+    text-decoration: none;
+    font-style: italic;
+    color: #575757;
+    font-size: 0.9em;
+}
+
+.delIcon {
+    display: none;
+    width: 20px;;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 20px;
+}
+.editIcon {
+    display: none;
+    width: 30px;;
+    position: absolute;
+    right: 40px;
+    top: 0px;
+    margin: 15px;
+}
+
+.editIcon:hover{
+
+}
+
+.greenText{
+    color: limegreen;
+}
