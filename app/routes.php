@@ -14,19 +14,18 @@ use Slim\Routing\RouteCollectorProxy;
 return function (App $app) {
 
     $app->options('/login', PreflightAction::class); // Allow preflight requests
-    $app->get('/login', \App\Application\Actions\Users\LoginAction::class)->setName('auth.login');
-    $app->post('/login', \App\Application\Actions\Users\LoginSubmitAction::class)->setName('auth.login');
+    $app->get('/login', \App\Application\Actions\Auth\LoginAction::class)->setName('auth.login');
+    $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('auth.login');
 
     $app->options('/register', PreflightAction::class); // Allow preflight requests
-    $app->post('/register', \App\Application\Actions\Users\RegistrationAction::class)->setName('auth.register');
+    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('auth.register');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('', \App\Application\Actions\Users\UserListAction::class);
-        $group->post('', UserController::class . ':create');
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-        $group->get('/{id:[0-9]+}', UserController::class . ':get');
+        $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);
         $group->put('/{id:[0-9]+}', UserController::class . ':update');
         $group->delete('/{id:[0-9]+}', UserController::class . ':delete');
     })->add(JwtAuthMiddleware::class);

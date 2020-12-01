@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Action.
  */
-final class UserListAction
+final class UserViewAction
 {
     private Responder $responder;
 
@@ -23,8 +23,8 @@ final class UserListAction
 
     protected UserService $userService;
 
+    // Needed only if request is ajax and doest go through twig
     protected OutputEscapeService $outputEscapeService;
-
 
     /**
      * The constructor.
@@ -41,6 +41,7 @@ final class UserListAction
         UserService $userService,
         AuthService $authService,
         OutputEscapeService $outputEscapeService
+
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
@@ -55,29 +56,33 @@ final class UserListAction
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      *
+     * @param array $args The routing arguments
      * @return ResponseInterface The response
+     * @throws \JsonException
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
         // getUserIdFromToken not transferred to action since it will be session based
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
+        $id = (int)$args['id'];
+
         $userRole = $this->authService->getUserRole($loggedUserId);
 
-        if ($userRole === 'admin') {
-            $allUsers = $this->userService->findAllUsers();
-
-            // Twig escapes automatically but if the data comes from ajax then it should be manually
-            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
-
-            $response->withHeader('Content-Type', 'application/json');
-            return $this->responder->respondWithJson($response, $allUsers);
+        // Check if it's admin or if it's its own user
+        if ($userRole === 'admin' || $id === $loggedUserId) {
+            $user = $this->userService->findUser($id);
+            $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
+            return $this->responder->respondWithJson($response, $user);
         }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to view all other users');
+        $this->logger->notice('User ' . $loggedUserId . ' tried to view other user with id: ' . $id);
 
         return $this->responder->respondWithJson(
             $response,
-            ['status' => 'error', 'message' => 'You have to be admin to view all users'],
+            ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'],
             403
         );
     }

@@ -54,25 +54,7 @@ class UserController extends Controller
 
     public function get(Request $request, Response $response, array $args): Response
     {
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $id = (int)$args['id'];
-
-        $userRole = $this->authService->getUserRole($loggedUserId);
-
-        // Check if it's admin or if it's its own user
-        if ($userRole === 'admin' || $id === $loggedUserId) {
-            $user = $this->userService->findUser($id);
-            $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
-            return $this->respondWithJson($response, $user);
-        }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to view other user with id: ' . $id);
-
-        return $this->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'],
-            403
-        );
     }
 
     /**
