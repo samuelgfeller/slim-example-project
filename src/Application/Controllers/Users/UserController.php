@@ -49,25 +49,7 @@ class UserController extends Controller
      */
     public function list(Request $request, Response $response): ResponseInterface
     {
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $userRole = $this->authService->getUserRole($loggedUserId);
-
-        if ($userRole === 'admin') {
-            $allUsers = $this->userService->findAllUsers();
-
-            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
-
-            $response->withHeader('Content-Type', 'application/json');
-            return $this->respondWithJson($response, $allUsers);
-        }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to view all other users');
-
-        return $this->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You have to be admin to view all users'],
-            403
-        );
     }
 
     public function get(Request $request, Response $response, array $args): Response

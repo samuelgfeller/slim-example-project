@@ -3,7 +3,12 @@
 
 namespace App\Domain\Validation;
 
-
+/**
+ * Twig escapes automatically but if the data is requested via ajax then it should be manually done
+ *
+ * Class OutputEscapeService
+ * @package App\Domain\Validation
+ */
 class OutputEscapeService
 {
 

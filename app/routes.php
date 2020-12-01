@@ -12,15 +12,17 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
+
     $app->options('/login', PreflightAction::class); // Allow preflight requests
-    $app->post('/login', AuthController::class . ':login')->setName('auth.login');
+    $app->get('/login', \App\Application\Actions\Users\LoginAction::class)->setName('auth.login');
+    $app->post('/login', \App\Application\Actions\Users\LoginSubmitAction::class)->setName('auth.login');
 
     $app->options('/register', PreflightAction::class); // Allow preflight requests
-    $app->post('/register', AuthController::class . ':register')->setName('auth.register');
+    $app->post('/register', \App\Application\Actions\Users\RegistrationAction::class)->setName('auth.register');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class); // Allow preflight requests
-        $group->get('', UserController::class . ':list');
+        $group->get('', \App\Application\Actions\Users\UserListAction::class);
         $group->post('', UserController::class . ':create');
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests

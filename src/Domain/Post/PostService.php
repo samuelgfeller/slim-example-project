@@ -19,6 +19,7 @@ class PostService
     private UserService $userService;
     protected PostValidation $postValidation;
 
+    // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
     public function __construct(
         PostRepository $postRepository,
         UserService $userService,

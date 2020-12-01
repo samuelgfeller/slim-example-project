@@ -15,7 +15,7 @@ class UserService
     protected LoggerInterface $logger;
     protected PostRepository $postRepository;
 
-    
+    // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
     public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerInterface $logger,
         PostRepository $postRepository)
     {

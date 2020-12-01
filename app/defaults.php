@@ -5,8 +5,8 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 // Error reporting
-error_reporting(0);
-ini_set('display_errors', '0');
+error_reporting(8);
+ini_set('display_errors', '1');
 
 // Init settings var
 $settings = [];
