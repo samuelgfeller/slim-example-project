@@ -26,7 +26,7 @@ return function (App $app) {
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);
-        $group->put('/{id:[0-9]+}', UserController::class . ':update');
+        $group->put('/{id:[0-9]+}', \App\Application\Actions\Users\UserUpdateAction::class);
         $group->delete('/{id:[0-9]+}', UserController::class . ':delete');
     })->add(JwtAuthMiddleware::class);
 

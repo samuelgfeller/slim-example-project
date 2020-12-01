@@ -109,7 +109,7 @@ final class Responder
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function respondWithJsonValidationError(ValidationResult $validationResult, ResponseInterface $response): ?ResponseInterface
+    public function respondWithJsonOnValidationError(ValidationResult $validationResult, ResponseInterface $response): ?ResponseInterface
     {
         $responseData = [
             'status' => 'error',

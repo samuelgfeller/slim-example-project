@@ -70,7 +70,7 @@ final class LoginSubmitAction
             );
         } catch (ValidationException $exception) {
             // Validation error is logged in AppValidation.php
-            return $this->responder->respondWithJsonValidationError($exception->getValidationResult(), $response);
+            return $this->responder->respondWithJsonOnValidationError($exception->getValidationResult(), $response);
         } catch (InvalidCredentialsException $e) {
             // Log error
             $this->logger->notice(

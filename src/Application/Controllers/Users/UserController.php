@@ -68,38 +68,7 @@ class UserController extends Controller
      */
     public function update(Request $request, Response $response, array $args): Response
     {
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $userData = $request->getParsedBody();
-
-        $userData['id'] = (int)$args['id'];
-
-        $userRole = $this->authService->getUserRole($loggedUserId);
-
-        // Check if it's admin or if it's its own user
-        if ($userRole === 'admin' || $userData['id'] === $loggedUserId) {
-
-            $user = new User(new ArrayReader($userData));
-
-            try {
-                $updated = $this->userService->updateUser($user);
-            } catch (ValidationException $exception) {
-                return $this->respondValidationError($exception->getValidationResult(), $response);
-            }
-
-            if ($updated) {
-                return $this->respondWithJson($response, ['status' => 'success']);
-            }
-            // If for example values didnt change
-            return $this->respondWithJson($response, ['status' => 'warning', 'message' => 'User wasn\'t updated']);
-        }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to update other user with id: ' . $userData['id']);
-
-        return $this->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to view others'],
-            403
-        );
     }
 
     public function delete(Request $request, Response $response, array $args): Response
