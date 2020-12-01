@@ -47,28 +47,14 @@ class PostController extends Controller
 
     public function list(Request $request, Response $response, array $args)
     {
-        $postsWithUsers = $this->postService->findAllPosts();
 
-        // output escaping only done here https://stackoverflow.com/a/20962774/9013718
-        $postsWithUsers = $this->outputEscapeService->escapeTwoDimensionalArray($postsWithUsers);
-
-        return $this->respondWithJson($response, $postsWithUsers);
 
     }
 
     // used
     public function getOwnPosts(Request $request, Response $response, array $args): Response
     {
-        // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
-        // option 2 /own-posts and get user id from token data body
 
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
-
-        $posts = $this->postService->findAllPostsFromUser($loggedUserId);
-
-        $posts = $this->outputEscapeService->escapeTwoDimensionalArray($posts);
-
-        return $this->respondWithJson($response, $posts);
     }
 
     public function update(Request $request, Response $response, array $args): Response

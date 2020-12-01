@@ -32,11 +32,11 @@ return function (App $app) {
 
     $app->group('/posts', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class);  // Allow preflight requests
-        $group->get('', PostController::class . ':list');
+        $group->get('', \App\Application\Actions\Posts\PostListAction::class);
         $group->post('', PostController::class . ':create');
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-        $group->get('/{id:[0-9]+}', \App\Application\Actions\Auth\PostViewAction::class);
+        $group->get('/{id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
         $group->put('/{id:[0-9]+}', PostController::class . ':update');
         $group->delete('/{id:[0-9]+}', PostController::class . ':delete');
     })->add(JwtAuthMiddleware::class);
@@ -45,7 +45,7 @@ return function (App $app) {
 //    $app->options('/own-posts', function (Request $request, Response $response): Response {
 //        return $response;
 //    });
-    $app->get('/own-posts', PostController::class . ':getOwnPosts')->add(JwtAuthMiddleware::class);
+    $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->add(JwtAuthMiddleware::class);
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
         $name = $args['name'];

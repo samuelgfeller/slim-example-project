@@ -12,14 +12,13 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class PostViewAction
+final class PostListAction
 {
     /**
      * @var Responder
      */
     private Responder $responder;
     protected PostService $postService;
-    protected UserService $userService;
     protected OutputEscapeService $outputEscapeService;
 
 
@@ -28,18 +27,15 @@ final class PostViewAction
      *
      * @param Responder $responder The responder
      * @param PostService $postService
-     * @param UserService $userService
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
         PostService $postService,
-        UserService $userService,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
         $this->postService = $postService;
-        $this->userService = $userService;
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -55,16 +51,11 @@ final class PostViewAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $id = $args['id'];
-        $post = $this->postService->findPost($id);
+        $postsWithUsers = $this->postService->findAllPosts();
 
-        // Get user information connected to post
-        $user = $this->userService->findUser($post['user_id']);
+        // output escaping only done here https://stackoverflow.com/a/20962774/9013718
+        $postsWithUsers = $this->outputEscapeService->escapeTwoDimensionalArray($postsWithUsers);
 
-        // Add user name info to post
-        $postWithUser = $post;
-        $postWithUser['user_name'] = $user['name'];
-
-        $postWithUser = $this->outputEscapeService->escapeOneDimensionalArray($postWithUser);
-        return $this->responder->respondWithJson($response, $postWithUser);    }
+        return $this->responder->respondWithJson($response, $postsWithUsers);
+    }
 }
