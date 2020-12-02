@@ -17,57 +17,61 @@ use App\Domain\Utility\ArrayReader;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 final class LoginSubmitAction
 {
     protected AuthService $authService;
     protected LoggerInterface $logger;
     protected Responder $responder;
+    protected Session $session;
 
 
-    public function __construct(Responder $responder, LoggerInterface $logger, AuthService $authService) {
+    public function __construct(
+        Responder $responder,
+        LoggerInterface $logger,
+        AuthService $authService,
+        Session $session
+    ) {
         $this->responder = $responder;
         $this->authService = $authService;
         $this->logger = $logger;
-
+        $this->session = $session;
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        // todo add check if already logged in
-
         $userData = $request->getParsedBody();
 
         $user = new User(new ArrayReader($userData));
 
-//        echo $userData['wrong']; // notice
-//        $variable->method(); // Error
+        // Clear all flash messages
+        $flash = $this->session->getFlashBag();
+        $flash->clear();
+
         try {
-            // Throws error if not
-            $this->authService->GetUserIdIfAllowedToLogin($user);
+            // Throws InvalidCredentialsException if not allowed
+            $userId = $this->authService->GetUserIdIfAllowedToLogin($user);
 
-            $token = $this->jwtService->createToken(['uid' => $user->getEmail()]);
+            // Clears all session data and regenerates session ID
+            $this->session->invalidate();
+            $this->session->start();
 
-            $lifetime = $this->jwtService->getLifetime();
-
-            // Transform the result into a OAuh 2.0 Access Token Response
-            // https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
-            $result = [
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'expires_in' => $lifetime,
-            ];
+            $this->session->set('user', $userId);
+            $flash->set('success', 'Login successful');
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
-            return $this->responder->respondWithJson(
-                $response,
-                ['token' => json_encode($result), 'status' => 'success', 'message' => 'Logged in'],
-                201
-            );
+
+            return $this->responder->redirect($response, 'post-list-own', ['status' => 'success', 'message' => 'Logged in']);
         } catch (ValidationException $exception) {
+            $flash->set('error', 'Validation error!');
+
             // Validation error is logged in AppValidation.php
-            return $this->responder->respondWithJsonOnValidationError($exception->getValidationResult(), $response);
+            return $this->responder->redirectOnValidationError($response, $exception->getValidationResult(), 'login-page');
         } catch (InvalidCredentialsException $e) {
+
+            $flash->set('error', 'Invalid credentials!');
+
             // Log error
             $this->logger->notice(
                 'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' . $e->getUserEmail(
@@ -79,7 +83,8 @@ final class LoginSubmitAction
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ];
-            return $this->responder->respondWithJson($response, $responseData, 401);
+
+            return $this->responder->redirect($response, 'login-page', $responseData);
         }
     }
 }
