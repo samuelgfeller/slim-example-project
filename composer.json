@@ -10,7 +10,8 @@
         "lcobucci/jwt": "^3.3",
         "symfony/polyfill-uuid": "^1.20",
         "cakephp/chronos": "^2.0",
-        "slim/twig-view": "^3.1"
+        "slim/twig-view": "^3.1",
+        "symfony/http-foundation": "^5.2"
     },
     "autoload": {
         "psr-4": {

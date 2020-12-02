@@ -3,6 +3,7 @@
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\CorsMiddlewareExceptionMiddleware;
 use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\SessionMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Views\TwigMiddleware;
@@ -14,7 +15,9 @@ return function (App $app) {
     $logger = $container->get(LoggerInterface::class);
 
     $app->add(CorsMiddleware::class);
+    $app->add(SessionMiddleware::class);
     $app->add(TwigMiddleware::class);
+
     $app->addRoutingMiddleware();
 
 

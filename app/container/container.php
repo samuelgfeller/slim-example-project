@@ -13,6 +13,10 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 return [
     'settings' => function () {
@@ -74,5 +78,19 @@ return [
             $container->get(App::class),
             Twig::class
         );
+    },
+
+    // Sessions
+    Session::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings')['session'];
+        if (PHP_SAPI === 'cli') {
+            return new Session(new MockArraySessionStorage());
+        }
+
+        return new Session(new NativeSessionStorage($settings));
+    },
+
+    SessionInterface::class => function (ContainerInterface $container) {
+        return $container->get(Session::class);
     },
 ];
