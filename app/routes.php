@@ -15,7 +15,7 @@ return function (App $app) {
 
     $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
 
-    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('auth-register');
+    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('registration-page');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class); // Allow preflight requests

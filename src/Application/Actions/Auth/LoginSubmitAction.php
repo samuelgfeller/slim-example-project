@@ -57,7 +57,7 @@ final class LoginSubmitAction
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
 
-            return $this->responder->redirect($response, 'post-list-own', ['status' => 'success', 'message' => 'Logged in']);
+            return $this->responder->redirect($response, 'post-list-own');
         } catch (ValidationException $exception) {
             $flash->set('error', 'Validation error!');
 
@@ -73,13 +73,7 @@ final class LoginSubmitAction
                 ) . '"'
             );
 
-            // Respond to client
-            $responseData = [
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-
-            return $this->responder->redirect($response, 'login-page', $responseData);
+            return $this->responder->redirect($response, 'login-page');
         }
     }
 }

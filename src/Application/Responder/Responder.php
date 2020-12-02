@@ -97,7 +97,8 @@ final class Responder
             'message' => 'Validation error',
             'validation' => $validationResult->toArray(),
         ];
-        return $this->redirect($response, $destination, $responseData);
+//        $flash->add()
+        return $this->redirect($response, $destination);
     }
 
     /**
