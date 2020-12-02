@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Action because it is used by many different modules
- * and Controller.php is an abstract class
- */
-
 namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;

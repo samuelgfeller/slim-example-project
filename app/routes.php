@@ -10,13 +10,11 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
 
-    $app->options('/login', PreflightAction::class); // Allow preflight requests
     $app->get('/login', \App\Application\Actions\Auth\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('login-submit-form');
 
     $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
 
-    $app->options('/register', PreflightAction::class); // Allow preflight requests
     $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('auth-register');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
@@ -31,17 +29,14 @@ return function (App $app) {
 
     // Post requests where user needs to be authenticated
     $app->group('/posts', function (RouteCollectorProxy $group) {
-        $group->options('', PreflightAction::class);  // Allow preflight requests
         $group->get('', \App\Application\Actions\Posts\PostListAction::class)->setName('post-list-all');
         $group->post('', \App\Application\Actions\Posts\PostCreateAction::class);
 
-        $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
         $group->put('/{id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class);
         $group->delete('/{id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class);
     })->add(UserAuthMiddleware::class);
 
-    $app->options('/own-posts', PreflightAction::class); // Allow preflight requests
     $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->setName('post-list-own');
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
