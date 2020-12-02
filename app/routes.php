@@ -1,6 +1,7 @@
 <?php
 
 use App\Application\Actions\PreflightAction;
+use App\Application\Middleware\UserAuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -26,8 +27,9 @@ return function (App $app) {
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);
         $group->put('/{id:[0-9]+}', \App\Application\Actions\Users\UserUpdateAction::class);
         $group->delete('/{id:[0-9]+}', \App\Application\Actions\Users\UserDeleteAction::class);
-    });
+    })->add(UserAuthMiddleware::class);
 
+    // Post requests where user needs to be authenticated
     $app->group('/posts', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class);  // Allow preflight requests
         $group->get('', \App\Application\Actions\Posts\PostListAction::class)->setName('post-list-all');
@@ -37,13 +39,10 @@ return function (App $app) {
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
         $group->put('/{id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class);
         $group->delete('/{id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class);
-    });
+    })->add(UserAuthMiddleware::class);
 
-    $app->options('/own-posts', PreflightAction::class)->setName('post-list-own'); // Allow preflight requests
-//    $app->options('/own-posts', function (Request $request, Response $response): Response {
-//        return $response;
-//    });
-    $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class);
+    $app->options('/own-posts', PreflightAction::class); // Allow preflight requests
+    $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->setName('post-list-own');
 
     $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
         $name = $args['name'];
