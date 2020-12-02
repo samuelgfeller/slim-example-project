@@ -13,6 +13,8 @@ return function (App $app) {
     $app->get('/login', \App\Application\Actions\Auth\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('login-submit-form');
 
+    $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
+
     $app->options('/register', PreflightAction::class); // Allow preflight requests
     $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('auth-register');
 
