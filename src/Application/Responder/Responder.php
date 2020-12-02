@@ -87,6 +87,19 @@ final class Responder
         return $response->withStatus(302)->withHeader('Location', $destination);
     }
 
+    public function redirectOnValidationError(
+        ResponseInterface $response,
+        ValidationResult $validationResult,
+        string $destination
+    ): ?ResponseInterface {
+        $responseData = [
+            'status' => 'error',
+            'message' => 'Validation error',
+            'validation' => $validationResult->toArray(),
+        ];
+        return $this->redirect($response, $destination, $responseData);
+    }
+
     /**
      * Write JSON to the response body.
      *
@@ -109,8 +122,10 @@ final class Responder
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function respondWithJsonOnValidationError(ValidationResult $validationResult, ResponseInterface $response): ?ResponseInterface
-    {
+    public function respondWithJsonOnValidationError(
+        ValidationResult $validationResult,
+        ResponseInterface $response
+    ): ?ResponseInterface {
         $responseData = [
             'status' => 'error',
             'message' => 'Validation error',
