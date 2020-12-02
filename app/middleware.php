@@ -3,8 +3,6 @@
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\CorsMiddlewareExceptionMiddleware;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Application\Middleware\JsonBodyParserMiddleware;
-use App\Application\Middleware\JwtClaimMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Views\TwigMiddleware;
@@ -15,7 +13,6 @@ return function (App $app) {
     $settings = $container->get('settings');
     $logger = $container->get(LoggerInterface::class);
 
-    $app->add(JwtClaimMiddleware::class);
     $app->add(CorsMiddleware::class);
     $app->add(TwigMiddleware::class);
     $app->addRoutingMiddleware();

@@ -9,7 +9,6 @@ namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
-use App\Domain\Auth\JwtService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
@@ -24,15 +23,12 @@ final class LoginSubmitAction
     protected AuthService $authService;
     protected LoggerInterface $logger;
     protected Responder $responder;
-    protected JwtService $jwtService;
 
 
-    public function __construct(Responder $responder, LoggerInterface $logger, AuthService $authService,
-        JwtService $jwtService) {
+    public function __construct(Responder $responder, LoggerInterface $logger, AuthService $authService) {
         $this->responder = $responder;
         $this->authService = $authService;
         $this->logger = $logger;
-        $this->jwtService = $jwtService;
 
     }
 
