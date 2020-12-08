@@ -1,6 +1,10 @@
 # Slim example project [Work in progress]
-Lightweight example project of a backend and frontend done with the SLIM 4 Micro-Framework.  
-This can be used as template when creating new projects.   
+Lightweight example project of a backend and frontend done with the SLIM 4 Micro-Framework.   
+This can be used as a base when creating new projects or just serve as inspiration.    
+I make it mainly for myself since I'm still junior and don't have the pretention to release something that I consider as a go to example for anyone.  
+   
+If you want to learn how to develop properly, I strongly suggest to head over the ressources from Daniel Opitz.
+In fact this whole project is greatly inspired by Daniel's fabulous [Blog articles](https://odan.github.io/) and his [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project.
   
 ## Functionalities include:
 * Authentication (registration and login)
@@ -11,100 +15,39 @@ This can be used as template when creating new projects.
 
 ## Structure 
 ```
--- templates
-    -- assets // images, videos, audio files
-    -- user // js, css, html file about users
+-- public
+   -- assets // images, videos, audio files
+-- templates 
+   -- user // js, css, html file about users
+   -- post // js, css, html file about posts
 ```
 
-### Validation
-**!! The below has changed and is not valid anymore !!**
-The user inputs are intercepted in the controller. They are then passed to a validation class 
-which validates the data and returns an instance of `ValidationResult` which returns an array 
-with the errors with information about what failed in which field. The method 
-`fails()` checks if the error array is empty and returns a boolean which is `true` if the error 
-array actually contains errors and therefore the validation failed. If this is the case, a 
-response is sent to the client with the error status and the various 
-errors as JSON.
-  
-Here is how I check if the required values passed in the request are set and have the right name (key). 
-Lets say we expect the required elements `name`,`email`,`password`,`password2`   
-  
-Get elements from request as array and give this data to the corresponding validation class which 
-will return the result
-```php
-public function register(Request $request, Response $response): Response
-{
-    $parsedBody = $request->getParsedBody();
-    $validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-    ...
-}
- ```
+## Technologies
+### Frontend
+#### Languages & libraries
+* Mainly **Vanilla JS** to be as "native" as possible and since E6 JavaScript supports a lot 
+* Avoiding the use of jQuery but rather add the needed missing components specifically one by one and then bundle it into 1 static file 
+#### Template renderer
+* Moved from twig to **[slimphp/PHP-View](https://github.com/slimphp/PHP-View)** 
+  * \+ Native PHP syntax
+  * \+ Text tanslation easier
+  * \+ Much more lightweight 
+  * \- I have to take care of XSS attack protection by escaping manually
+#### Asset management 
+After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do the following:
+* Link application specific ressources directly in template (which are located under `public/assets/*)
+* Not using any PHP asset library (like [symfony/asset](https://github.com/symfony/asset) or [odan/twig-assets](https://github.com/odan/twig-assets))
+* If during the developpment of a larger project many libraries are being used, I will
+    1. Install webpack and use it to download and compile/bundle my external dependencies (like jQuery, Bootstrap, etc..) into a single JS file.
+    1. Link this static file in my global layout template(s). For this I don't need an asset function.
+    1. And then I can update my external dependencies with `npx webpack --mode=production`
+  But I think most smaller projects wont need enough to justify it. Thats why I left it out in this example-project 
+### Backend
+* Framework: [slimphp/Slim](https://github.com/slimphp/Slim)
+* [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) logger [Monolog](https://github.com/Seldaek/monolog)
+* PSR-11 Dependency injection container: [PHP-DI](https://github.com/PHP-DI/PHP-DI)
 
-This method creates a validation result instance. At the beginning the `if isset` checks if the
-names are present in the array. If they are not the data is not even further validated and
-the function `setIsBadRequest` is called which will tell `ValidationResult` that the status is 
-`400 bad request`.   
-If the names are all set the validation can proceed. At the end a new array 
-is created with the validated data. This allows different names and then use of these names in a 
-different key name in the application. 
-```php
-public function validateUserRegistration($userData): ValidationResult
-{
-    $validationResult = new ValidationResult('There is something in the registration data which couldn\'t be validated');
-    if (isset($userData['email'], $userData['name'],$userData['password'],$userData['password2'])) {
-
-        $this->validateName($userData['email'], $validationResult);
-
-        $this->validatePasswords([$userData['password'], $userData['password2']], $validationResult);
-
-        // Create array with validated user input. Because a new array is created, the keys will always be the same and we don't have to worry if
-        // we want to change the requested name. Modification would only occur here and the application would still be able to use the same keys
-        $validatedData = [
-            'name' => $userData['name'],
-            'email' => filter_var($userData['email'], FILTER_VALIDATE_EMAIL),
-            'password' => $userData['password'],
-            'password2' => $userData['password2'],
-        ];
-        $validationResult->setValidatedData($validatedData);
-
-        return $validationResult;
-    }
-    $validationResult->setIsBadRequest(true);
-    return $validationResult;
-}
-```
-Back in the `register` function we have the validation result and can check if the validation failed.  
-If it's the case a response is returned to the client with the corresponding error message(s) and status
-code. `422` is the [default code for a validation error](https://stackoverflow.com/a/3291292/9013718) and 
-`400` for a bad request if the body is not set well. 
-```php
-$validationResult = $this->userValidation->validateUserRegistration($parsedBody);
-if ($validationResult->fails()) {
-    $responseData = [
-        'status' => 'error',
-        'message' => 'Validation error',
-        'validation' => $validationResult->toArray(),
-    ];
-
-    return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
-}
-
-$userData = $validationResult->getValidatedData();
-
-// code here
-```
-
-
-### Returning error messages
-Backend SHOULD return `"message":"errorMsg"` which MUST be a JSON response so the frontend has information 
-about the reason of the fail.   
-The javascript function `handleFail(xhr)` checks for `xhr.responseJSON.message` **if it finds it** so not 
-mandatory but is be good in some situations for clarity and user experience.
-
-
-
-
-
+* Sessions: [symfony/http-foundation](https://github.com/symfony/http-foundation)
 
 
 
