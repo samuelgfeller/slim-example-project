@@ -6,6 +6,9 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
+use Odan\Session\Middleware\SessionMiddleware;
+use Odan\Session\PhpSession;
+use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -13,10 +16,6 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 return [
     'settings' => function () {
@@ -81,16 +80,15 @@ return [
     },
 
     // Sessions
-    Session::class => function (ContainerInterface $container) {
-        $settings = $container->get('settings')['session'];
-        if (PHP_SAPI === 'cli') {
-            return new Session(new MockArraySessionStorage());
-        }
+    SessionInterface::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings');
+        $session = new PhpSession();
+        $session->setOptions((array)$settings['session']);
 
-        return new Session(new NativeSessionStorage($settings));
+        return $session;
     },
 
-    SessionInterface::class => function (ContainerInterface $container) {
-        return $container->get(Session::class);
+    SessionMiddleware::class => function (ContainerInterface $container) {
+        return new SessionMiddleware($container->get(SessionInterface::class));
     },
 ];

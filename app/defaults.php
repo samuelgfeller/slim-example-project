@@ -76,7 +76,6 @@ $settings['session'] = [
     'cache_expire' => 0,
 ];
 
-
 $settings[LoggerInterface::class] = [
     'name' => 'event-log',
     // The 8 possible levels are categorized into 4 files. Level can't be given as array in the StreamHandler so it has to be declared for each level
