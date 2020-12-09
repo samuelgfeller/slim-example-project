@@ -4,24 +4,24 @@ namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 final class LogoutAction
 {
     protected AuthService $authService;
     protected LoggerInterface $logger;
     protected Responder $responder;
-    protected Session $session;
+    protected SessionInterface $session;
 
 
     public function __construct(
         Responder $responder,
         LoggerInterface $logger,
         AuthService $authService,
-        Session $session
+        SessionInterface $session
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
@@ -32,7 +32,7 @@ final class LogoutAction
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         // Logout user
-        $this->session->invalidate();
+        $this->session->destroy();
 
         return $this->responder->redirect(
             $response,
