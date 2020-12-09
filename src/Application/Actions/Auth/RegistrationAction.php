@@ -9,10 +9,10 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 final class RegistrationAction
 {
@@ -20,19 +20,21 @@ final class RegistrationAction
     protected LoggerInterface $logger;
     protected Responder $responder;
     protected AuthService $authService;
-    private Session $session;
+    private SessionInterface $session;
 
 
     public function __construct(
         LoggerInterface $logger,
         UserService $userService,
         Responder $responder,
-        AuthService $authService
+        AuthService $authService,
+        SessionInterface $session
     ) {
         $this->userService = $userService;
         $this->logger = $logger;
         $this->responder = $responder;
         $this->authService = $authService;
+        $this->session = $session;
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response
@@ -54,8 +56,8 @@ final class RegistrationAction
             );
         }
 
-        // Clear all flash messages
-        $flash = $this->session->getFlashBag();
+        // Clear sessions
+        $flash = $this->session->getFlash();
         $flash->clear();
 
         if (null !== $insertId) {
@@ -68,27 +70,26 @@ final class RegistrationAction
                 $userId = $this->authService->GetUserIdIfAllowedToLogin($user);
 
                 // Clears all session data and regenerates session ID
-                $this->session->invalidate();
-                $this->session->start();
+                $this->session->regenerateId();
 
                 $this->session->set('user', $userId);
-                $flash->set('success', 'Login successful');
+                $flash->add('success', 'Login successful');
 
                 $this->logger->info('Successful register + login from user "' . $user->getEmail() . '"');
 
-                return $this->responder->redirect($response,'post-list-all');
-            }catch (InvalidCredentialsException $e){
-                $flash->set('error', 'Automatic login after registration failed!');
+                return $this->responder->redirect($response, 'post-list-all');
+            } catch (InvalidCredentialsException $e) {
+                $flash->add('error', 'Automatic login after registration failed!');
 
                 // Log error
                 $this->logger->notice(
-                    'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' . $e->getUserEmail(
-                    ) . '"'
+                    'InvalidCredentialsException thrown with message: "' . $e->getMessage(
+                    ) . '" user "' . $e->getUserEmail() . '"'
                 );
                 return $this->responder->redirect($response, 'login-page');
             }
         }
-        $flash->set('error', 'Registration failed');
+        $flash->add('error', 'Registration failed');
         return $this->responder->redirect($response, 'registration-page');
     }
 }
