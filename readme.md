@@ -46,8 +46,8 @@ After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do 
 * Framework: [slimphp/Slim](https://github.com/slimphp/Slim)
 * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) logger [Monolog](https://github.com/Seldaek/monolog)
 * PSR-11 Dependency injection container: [PHP-DI](https://github.com/PHP-DI/PHP-DI)
-* Sessions: For now I use classic PHP-Sessions but if in the future I need something more advanced I'll go with [Symfony Sessions](https://github.com/symfony/http-foundation) ([doc](https://odan.github.io/2020/08/09/slim4-http-session.html))
-* Flash messages: 
+* Sessions and Flash messages: For now I use the [odan/session](https://github.com/odan/session) library because it is so lightweight and has both session and flash. I think its definitely value added to the project and better than something I would do.   
+If in the future I need something more I'll consider [Symfony Sessions](https://github.com/symfony/http-foundation) ([doc](https://odan.github.io/2020/08/09/slim4-http-session.html)) 
 * Database access: [CakePHP Query Builder](https://book.cakephp.org/4/en/orm/query-builder.html)
 
 
