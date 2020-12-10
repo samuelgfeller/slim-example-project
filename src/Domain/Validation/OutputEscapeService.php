@@ -4,7 +4,8 @@
 namespace App\Domain\Validation;
 
 /**
- * Twig escapes automatically but if the data is requested via ajax then it should be manually done
+ * Twig escapes automatically but if the data is requested via ajax or if a PHP-Renderer like
+ * slimphp/PHP-View is used, escaping should be manually done
  *
  * Class OutputEscapeService
  * @package App\Domain\Validation
@@ -20,7 +21,7 @@ class OutputEscapeService
      */
     public function escapeValue($value)
     {
-        return htmlspecialchars($value);
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

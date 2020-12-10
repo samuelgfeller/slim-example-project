@@ -23,7 +23,6 @@ final class UserViewAction
 
     protected UserService $userService;
 
-    // Needed only if request is ajax and doest go through twig
     protected OutputEscapeService $outputEscapeService;
 
     /**

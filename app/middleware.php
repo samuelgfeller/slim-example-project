@@ -3,7 +3,6 @@
 use Odan\Session\Middleware\SessionMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
-use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
     $container = $app->getContainer();
@@ -12,7 +11,6 @@ return function (App $app) {
     $logger = $container->get(LoggerInterface::class);
 
     $app->add(SessionMiddleware::class);
-    $app->add(TwigMiddleware::class);
 
     $app->addRoutingMiddleware();
 

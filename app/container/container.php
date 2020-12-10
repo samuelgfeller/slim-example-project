@@ -14,8 +14,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
+use Slim\Views\PhpRenderer;
 
 return [
     'settings' => function () {
@@ -61,22 +60,12 @@ return [
         return new Settings($container->get('settings'));
     },
 
-    // Twig templates
-    Twig::class => function (ContainerInterface $container) {
+    // Template renderer
+    PhpRenderer::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
-        $twigSettings = $settings['twig'];
-
-        $options = $twigSettings['options'];
-        $options['cache'] = $options['cache_enabled'] ? $options['cache_path'] : false;
-
-        return Twig::create($twigSettings['paths'], $options);
-    },
-
-    TwigMiddleware::class => function (ContainerInterface $container) {
-        return TwigMiddleware::createFromContainer(
-            $container->get(App::class),
-            Twig::class
-        );
+        $rendererSettings = $settings['renderer'];
+        // As a second constructor value, global variables can be added
+        return new PhpRenderer($rendererSettings['path']);
     },
 
     // Sessions

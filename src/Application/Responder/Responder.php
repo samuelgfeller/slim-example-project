@@ -4,9 +4,10 @@ namespace App\Application\Responder;
 
 use App\Application\Responder\UrlGenerator;
 use App\Domain\Validation\ValidationResult;
+use JsonException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Views\Twig;
+use Slim\Views\PhpRenderer;
 
 /**
  * A generic responder.
@@ -18,23 +19,23 @@ final class Responder
 
     private ResponseFactoryInterface $responseFactory;
 
-    private Twig $twig;
+    private PhpRenderer $phpRenderer;
 
     /**
      * The constructor.
      *
      * @param UrlGenerator $urlGenerator The url generator
      * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param Twig $twig Twig engine
+     * @param PhpRenderer $phpRenderer slimphp/PHP-View renderer
      */
     public function __construct(
         UrlGenerator $urlGenerator,
         ResponseFactoryInterface $responseFactory,
-        Twig $twig
+        PhpRenderer $phpRenderer
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->responseFactory = $responseFactory;
-        $this->twig = $twig;
+        $this->phpRenderer = $phpRenderer;
     }
 
     /**
@@ -58,7 +59,9 @@ final class Responder
      */
     public function render(ResponseInterface $response, string $template, array $data = []): ResponseInterface
     {
-        return $this->twig->render($response, $template, $data);
+
+        return $this->phpRenderer->render($response, $template, $data);
+
     }
 
     /**
@@ -111,7 +114,7 @@ final class Responder
      * @param mixed $data The data
      * @param int $status
      * @return ResponseInterface The response
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function respondWithJson(
         ResponseInterface $response,

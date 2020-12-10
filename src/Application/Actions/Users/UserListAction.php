@@ -67,7 +67,7 @@ final class UserListAction
         if ($userRole === 'admin') {
             $allUsers = $this->userService->findAllUsers();
 
-            // Twig escapes automatically but if the data comes from ajax then it should be manually
+            // Output has to be escaped since PHP-View doesn't have a protection against XSS-attacks
             $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
 
             $response->withHeader('Content-Type', 'application/json');
