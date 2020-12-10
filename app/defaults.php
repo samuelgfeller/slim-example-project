@@ -4,12 +4,18 @@ use Cake\Database\Driver\Mysql;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
-// Error reporting
-error_reporting(8);
-ini_set('display_errors', '1');
-
 // Init settings var
 $settings = [];
+
+// Error handler
+$settings['error'] = [
+    // Should be set to false in production
+    'display_error_details' => true,
+    // Should be set to false for unit tests
+    'log_errors' => true,
+    // Display error details in error log
+    'log_error_details' => true,
+];
 
 // Secret values are overwritten in env.php
 $settings['db'] = [

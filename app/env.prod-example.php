@@ -1,10 +1,13 @@
 <?php
 
-
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+// error_reporting taken from server php.ini
+// display_errors value defined in server
 
 $settings['env'] = 'development';
+
+// Error handling
+$settings['error']['display_error_details'] = false;
+
 
 // Database
 $settings['db'] = [

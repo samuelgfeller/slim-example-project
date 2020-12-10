@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
 
 return [
@@ -47,6 +48,29 @@ return [
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
     },
+
+    // Error middleware
+    ErrorMiddleware::class => function (ContainerInterface $container) {
+        $config = $container->get('settings')['error'];
+        $app = $container->get(App::class);
+
+        $logger = $container->get(LoggerInterface::class);
+
+        $errorMiddleware = new ErrorMiddleware(
+            $app->getCallableResolver(),
+            $app->getResponseFactory(),
+            (bool)$config['display_error_details'],
+            (bool)$config['log_errors'],
+            (bool)$config['log_error_details'],
+            $logger
+        );
+
+//        $errorMiddleware->setDefaultErrorHandler($container->get(DefaultErrorHandler::class));
+
+        return $errorMiddleware;
+    },
+
+    // Database
     Connection::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['db'];
         return new Connection($settings);
