@@ -3,7 +3,8 @@
 
 namespace App\Application\Middleware;
 
-use App\Factory\LoggerFactory;
+use App\Application\Handler\DefaultErrorHandler;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -15,19 +16,32 @@ use Psr\Log\LoggerInterface;
  */
 final class ErrorHandlerMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
+
+    protected ResponseFactoryInterface $responseFactory;
+
+    protected bool $displayErrorDetails;
+
+    protected bool $logErrors;
+
+    protected LoggerInterface $logger;
+
+    protected DefaultErrorHandler $errorHandler;
+
+    protected ?\ErrorException $exception = null;
 
     /**
-     * The constructor.
-     *
-     * @param LoggerInterface $loggerInterface The logger
+     * @param bool $displayErrorDetails
+     * @param bool $logErrors
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $loggerInterface)
-    {
-        $this->logger = $loggerInterface;
+    public function __construct(
+        bool $displayErrorDetails,
+        bool $logErrors,
+        LoggerInterface $logger
+    ) {
+        $this->displayErrorDetails = $displayErrorDetails;
+        $this->logErrors = $logErrors;
+        $this->logger = $logger;
     }
 
     /**
@@ -42,46 +56,37 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        $errorTypes = E_ALL;
 
-        // Set custom php error handler
-        set_error_handler(
-            function ($errno, $errstr, $errfile, $errline) {
-                switch ($errno) {
-                    case E_ERROR:
-                    case E_CORE_ERROR:
-                    case E_COMPILE_ERROR:
-                    case E_PARSE:
-                    case E_USER_ERROR:
-                    case E_RECOVERABLE_ERROR:
-                    case E_STRICT:
-                        $this->logger->error(
-                            "Error number [$errno] $errstr on line $errline in file $errfile"
-                        );
-                        break;
-                    case E_WARNING:
-                    case E_CORE_WARNING:
-                    case E_COMPILE_WARNING:
-                    case E_USER_WARNING:
-                        $this->logger->warning(
-                            "Error Number [$errno] $errstr on line $errline in file $errfile"
-                        );
-                        break;
-                    default:
-                        $this->logger->notice(
-                            "Error number [$errno] $errstr on line $errline in file $errfile"
-                        );
-                        break;
+        // Only make notices / wantings to ErrorException's if error details should be displayed
+            // SLE-57 Making warnings and notices to exceptions in dev
+            // set_error_handler does not handle fatal errors so this function gets not called by fatal errors
+            set_error_handler(
+                function ($severity, $message, $file, $line) {
+                    if (error_reporting() & $severity) {
+                        // Log all non fatal errors
+                        if($this->logErrors){
+                            // If error is warning
+                            if ($severity === E_WARNING | E_CORE_WARNING | E_COMPILE_WARNING | E_USER_WARNING){
+                                $this->logger->warning(
+                                    "Warning [$severity] $message on line $line in file $file"
+                                );
+                            }
+                            // If error is non fatal but not warning (default)
+                            else{
+                                $this->logger->notice(
+                                    "Notice [$severity] $message on line $line in file $file"
+                                );
+                            }
+                        }
+                        // Throwing an exception allows us to have a stack trace and more error details useful in dev
+                        if ($this->displayErrorDetails === true) {
+                            // Logging for fatal errors happens in DefaultErrorHandler.php
+                            throw new \ErrorException($message, 0, $severity, $file, $line);
+                        }
+                    }
+                    return true;
                 }
-
-//                if(error_reporting()!==0) // Not error suppression operator @
-//                    throw new \ErrorException($strMessage, /*nExceptionCode*/ 0, $nSeverity, $strFilePath, $nLineNumber);
-
-                // Don't execute PHP internal error handler
-                return true;
-            },
-            $errorTypes
-        );
+            );
 
         return $handler->handle($request);
     }

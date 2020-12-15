@@ -1,12 +1,11 @@
 <?php
 
+use App\Application\Middleware\ErrorHandlerMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
-use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 
 return function (App $app) {
-    $container = $app->getContainer();
 
     $app->add(SessionMiddleware::class);
 
@@ -14,5 +13,6 @@ return function (App $app) {
 
 
     //Error middleware should be added last. It will not handle any exceptions/errors
+    $app->add(ErrorHandlerMiddleware::class); //
     $app->add(ErrorMiddleware::class);
 };

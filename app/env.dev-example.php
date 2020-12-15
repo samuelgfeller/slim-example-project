@@ -11,8 +11,11 @@ set_error_handler(function ($severity, $message, $file, $line) {
 });
 
 // It's mandatory to config every key by its own and not remap the entire array
-// like this $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal', ]
+// bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal', ]
+// good $settings['db]['key'] = 'val';
 
+// Error handler
+$settings['error']['display_error_details'] = true;
 
 // Env
 $settings['env'] = 'development';

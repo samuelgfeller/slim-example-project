@@ -2,8 +2,6 @@
 
 use App\Application\Actions\PreflightAction;
 use App\Application\Middleware\UserAuthMiddleware;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
@@ -39,24 +37,20 @@ return function (App $app) {
 
     $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->setName('post-list-own');
 
-    $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-        $name = $args['name'];
-        $response->getBody()->write("Hello, $name");
-        $response->getBody()->write(json_encode($response->getStatusCode()));
-        throw new HttpInternalServerErrorException('Nooooooooooooooo!');
-        return $response;
-    });
+    $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
 
-/*    $app->options('/{routes:.+}', function ($request, $response, $args) {
-        return $response;
-    });*/
-
+//    $app->get( '/favicon.ico', function ($request, $response) {
+//        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');
+//
+//        return $response;
+//    });
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
      * NOTE: make sure this route is defined last
      */
-    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
-        throw new HttpNotFoundException($request);
-    });
+//    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+//        throw new HttpNotFoundException($request, 'Route "'.
+//                                                $request->getUri()->getHost().$request->getUri()->getPath().'" not found.');
+//    });
 };
