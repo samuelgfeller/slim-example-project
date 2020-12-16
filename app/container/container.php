@@ -46,14 +46,14 @@ return [
 
         return $logger;
     },
-    // For Responder
+    // For Responder and error middleware
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
     },
 
+    // Error middlewares
     ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
-
         $logger = $container->get(LoggerInterface::class);
 
         return new ErrorHandlerMiddleware(
@@ -62,7 +62,6 @@ return [
             $logger,
         );
     },
-    // Error middleware
     ErrorMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);

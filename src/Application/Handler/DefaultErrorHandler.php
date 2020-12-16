@@ -91,7 +91,7 @@ class DefaultErrorHandler
         // Depending on displayErrorDetails different error infos will be shared
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
-            $errorTemplate = 'error/error-details.html.php';
+            $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
         } else {
             $errorMessage = sprintf('%s | %s', $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-page.html.php';
@@ -145,7 +145,7 @@ class DefaultErrorHandler
     }
 
     /**
-     * Get exception text.
+     * Build HTML with exception content and styling
      *
      * @param Throwable $exception Error
      *
@@ -189,7 +189,6 @@ class DefaultErrorHandler
             $line
         ); // close title div
 
-//        $error .= sprintf("\nBacktrace:\n%s", var_dump($trace));
         $error .= sprintf('<div id="traceDiv" class="%s"><table>', $errorCssClass); // opened trace div / opened table
         $error .= '<tr><th id="numTh">#</th><th>Function</th><th>Location</th></tr>';
         foreach ($trace as $key => $t) {
@@ -232,16 +231,9 @@ class DefaultErrorHandler
             .non-vendor{ font-weight: bold; } 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
             
-            @media screen and (max-width: 1200px) {
-              #traceDiv table { font-size: 1em; }
-            }           
-            @media screen and (max-width: 1100px) {
-              #traceDiv table td, #traceDiv table th { padding: 8px 30px; }
-            }
             @media screen and (max-width: 1000px) {
-              #traceDiv table td, #traceDiv table th { padding: 8px 1px; }
+                #traceDiv table { font-size: 1em; }
             }
-            
             </style>';
         $error .= '</body>'; // close body
 

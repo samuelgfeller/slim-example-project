@@ -10,7 +10,7 @@ $settings = [];
 // Error handler
 $settings['error'] = [
     // Should be set to false in production
-    'display_error_details' => true,
+    'display_error_details' => false,
     // Should be set to false for unit tests
     'log_errors' => true,
     // Display error details in error log
