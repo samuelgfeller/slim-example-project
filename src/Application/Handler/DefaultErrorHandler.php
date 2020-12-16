@@ -66,8 +66,9 @@ class DefaultErrorHandler
         bool $logErrors
     ): ResponseInterface {
         // Log error
-        // ErrorException was configured to be thrown with set_error_handler on non-fatal errors
-        // which are also logged within the ErrorHandlerMiddleware.php
+        // ErrorException was configured to be thrown with set_error_handler which is for non-fatal errors
+        // They are logged in ErrorHandlerMiddleware.php and not here because if displayErrorDetails is false
+        // ErrorException is not thrown and they wouldn't be logged in prod
         if ($logErrors && !$exception instanceof \ErrorException) {
             // Error with no stack trace https://stackoverflow.com/a/2520056/9013718
             $this->logger->error(
@@ -87,8 +88,7 @@ class DefaultErrorHandler
         $statusCode = $this->getHttpStatusCode($exception);
         $reasonPhrase = $this->responseFactory->createResponse()->withStatus($statusCode)->getReasonPhrase();
 
-
-        // Depending on displayErrorDetails different error infos will be created
+        // Depending on displayErrorDetails different error infos will be shared
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php';
@@ -164,7 +164,6 @@ class DefaultErrorHandler
         $file = $exception->getFile();
         $line = $exception->getLine();
         $message = $exception->getMessage();
-        $trace = $exception->getTraceAsString();
         $trace = $exception->getTrace();
 
 
@@ -227,7 +226,7 @@ class DefaultErrorHandler
             /*#traceDiv .warning{ } */    
             #traceDiv h2{ margin-top: 0; padding-top: 19px; text-align: center; }
             #traceDiv table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
-            #traceDiv table td, #traceDiv table th{  /*border-top: 6px solid red;*/ padding: 8px 5%; text-align: left;}
+            #traceDiv table td, #traceDiv table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
             #traceDiv table tr td:first-child, #traceDiv table tr th:first-child { padding-left: 20px; }
             #numTh { font-size: 2em; color: #a46856; margin-right: 50px;}
             .non-vendor{ font-weight: bold; } 

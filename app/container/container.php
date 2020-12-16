@@ -53,19 +53,14 @@ return [
 
     ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
-        $app = $container->get(App::class);
 
         $logger = $container->get(LoggerInterface::class);
 
-        $errorHandlerMiddleware = new ErrorHandlerMiddleware(
-            $app->getResponseFactory(),
+        return new ErrorHandlerMiddleware(
             (bool)$config['display_error_details'],
             (bool)$config['log_errors'],
-            (bool)$config['log_error_details'],
             $logger,
-            $container->get(PhpRenderer::class)
         );
-        return $errorHandlerMiddleware;
     },
     // Error middleware
     ErrorMiddleware::class => function (ContainerInterface $container) {
