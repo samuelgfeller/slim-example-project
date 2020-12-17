@@ -59,9 +59,7 @@ final class Responder
      */
     public function render(ResponseInterface $response, string $template, array $data = []): ResponseInterface
     {
-
         return $this->phpRenderer->render($response, $template, $data);
-
     }
 
     /**

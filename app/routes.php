@@ -37,7 +37,7 @@ return function (App $app) {
 
     $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->setName('post-list-own');
 
-    $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
+    $app->get('/[hello[/{name}]]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
 
 //    $app->get( '/favicon.ico', function ($request, $response) {
 //        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');

@@ -17,7 +17,7 @@ $(document).ready(function () {
     });
     $('#loginNavBtn').on('click', function () {
         // location.href = config.frontend_url + 'login';
-        location.href = config.frontend_url + 'pages/login.twig';
+        location.href = config.frontend_url + 'pages/login.html.php';
 
     });
     $('#registerNavBtn').on('click', function () {
@@ -38,5 +38,5 @@ $(document).ready(function () {
 });
 
 function redirectDefaultPage() {
-    location.href = config.frontend_url + 'pages/login.twig';
+    location.href = config.frontend_url + 'pages/login.html.php';
 }
