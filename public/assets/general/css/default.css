@@ -1,0 +1,41 @@
+/* Text */
+* {
+    box-sizing: border-box;
+    font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+.greenText{
+    color: limegreen;
+}
+
+.breakParagraph {
+    word-break: break-word;
+}
+
+/* Divs */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+
+
+
+
+
+

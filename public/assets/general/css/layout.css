@@ -1,0 +1,110 @@
+.wrapper {
+    width: 80%; /* Has to be the same than .outMenuDiv */
+    margin: auto;
+    min-width: 500px;
+}
+
+#pageContent {
+    width: 100%;
+}
+
+
+/* Nav */
+
+.nav {
+    overflow: hidden;
+    /*background-color: #defeff;*/
+    display: inline-flex;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+    background-color: #fff;
+    padding: 0 20px;
+    border-radius: 40px;
+    box-shadow: 0 10px 40px rgba(159, 162, 177, .8);
+
+}
+
+.nav a {
+    float: left;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    /*font-size: 17px;*/
+    transition: 0.3s;
+    position: relative;
+}
+.nav a:hover{
+    font-weight: normal; /*default hover over links makes it bold*/
+}
+.nav a:before {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #dfe2ea;
+    border-radius: 8px 8px 0 0;
+    opacity: 0;
+    transition: 0.3s;
+}
+/*.nav a:hover {*/
+/*    background-color: white;*/
+/*    color: black;*/
+/*}*/
+.nav a:not(.is-active):hover:before {
+    opacity: 1;
+    bottom: 0;
+}
+.nav a:not(.is-active):hover {
+    color: #333;
+}
+.nav-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    transition: 0.4s;
+    height: 5px;
+    z-index: 1;
+    border-radius: 8px 8px 0 0;
+}
+
+.nav a.active {
+    /*background-color: #4CAF50;*/
+    /*color: white;*/
+}
+
+.nav .icon {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .nav a:not(:first-child) {
+        display: none;
+    }
+
+    .nav a.icon {
+        float: right;
+        display: block;
+    }
+
+    .nav.mobile-view {
+        position: relative;
+    }
+
+    .nav.mobile-view .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .nav.mobile-view a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}
