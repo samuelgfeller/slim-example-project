@@ -173,7 +173,13 @@ class DefaultErrorHandler
         // prepare path to be more readable https://stackoverflow.com/a/9891884/9013718
         $lastBackslash = strrpos($file, '\\');
         $lastWord = substr($file, $lastBackslash + 1);
-        $firstChunk = substr($file, 0, $lastBackslash + 1);
+        $firstChunkFullPath =  substr($file, 0, $lastBackslash + 1);
+        // remove C:\xampp\htdocs\ and project name to keep only part starting with src\
+        $firstChunkMinusFilesystem = str_replace('C:\xampp\htdocs\\', '',$firstChunkFullPath);
+        // locate project name because it is right before the first backslash (after removing filesystem)
+        $projectName = substr($firstChunkMinusFilesystem, 0, strpos($firstChunkMinusFilesystem, '\\') + 1);
+        // remove project name from first chunk
+        $firstChunk = str_replace($projectName, '',$firstChunkMinusFilesystem);
 
         // build error html page
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
@@ -182,7 +188,7 @@ class DefaultErrorHandler
             $error .= sprintf('<p>%s | %s</p>', $statusCode, $reasonPhrase);
         }
         $error .= sprintf(
-            '<h1>%s in <span id="firstPathChunk">%s</span>%s on line %s.</h1></div>', // closed title div
+            '<h1>%s in <span id="firstPathChunk">%s </span>%s on line %s.</h1></div>', // closed title div
             $message,
             $firstChunk,
             $lastWord,

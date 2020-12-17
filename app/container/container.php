@@ -57,9 +57,7 @@ return [
         $logger = $container->get(LoggerInterface::class);
 
         return new ErrorHandlerMiddleware(
-            (bool)$config['display_error_details'],
-            (bool)$config['log_errors'],
-            $logger,
+            (bool)$config['display_error_details'], (bool)$config['log_errors'], $logger,
         );
     },
     ErrorMiddleware::class => function (ContainerInterface $container) {
@@ -101,7 +99,9 @@ return [
         $settings = $container->get('settings');
         $rendererSettings = $settings['renderer'];
         // As a second constructor value, global variables can be added
-        return new PhpRenderer($rendererSettings['path']);
+        return new PhpRenderer(
+            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout/layout.html.php'
+        );
     },
 
     // Sessions
