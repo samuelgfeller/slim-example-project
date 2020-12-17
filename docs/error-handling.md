@@ -314,7 +314,8 @@ CSS. E.g. paths in the stack trace that don't contain the word `vender` are emph
 they are much more relevant to me. I also like to make a distinction from a warning / notice 
 and I do that with the color red and orange. 
 
-File: `src/Application/Handler/DefaultErrorHandler.php`
+File: `src/Application/Handler/DefaultErrorHandler.php` (most up to date version can be
+found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/src/Application/Handler/DefaultErrorHandler.php))
 ```php
 <?php
 
@@ -409,7 +410,7 @@ class DefaultErrorHandler
         // Depending on displayErrorDetails different error infos will be shared
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
-            $errorTemplate = 'error/error-details.html.php';
+            $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
         } else {
             $errorMessage = sprintf('%s | %s', $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-page.html.php';
@@ -418,6 +419,8 @@ class DefaultErrorHandler
         // Create response
         $response = $this->responseFactory->createResponse();
 
+        // Remove default layout
+        $this->phpRenderer->setLayout('');
         // Render template
         $response = $this->phpRenderer->render(
             $response,
@@ -491,7 +494,13 @@ class DefaultErrorHandler
         // prepare path to be more readable https://stackoverflow.com/a/9891884/9013718
         $lastBackslash = strrpos($file, '\\');
         $lastWord = substr($file, $lastBackslash + 1);
-        $firstChunk = substr($file, 0, $lastBackslash + 1);
+        $firstChunkFullPath =  substr($file, 0, $lastBackslash + 1);
+        // remove C:\xampp\htdocs\ and project name to keep only part starting with src\
+        $firstChunkMinusFilesystem = str_replace('C:\xampp\htdocs\\', '',$firstChunkFullPath);
+        // locate project name because it is right before the first backslash (after removing filesystem)
+        $projectName = substr($firstChunkMinusFilesystem, 0, strpos($firstChunkMinusFilesystem, '\\') + 1);
+        // remove project name from first chunk
+        $firstChunk = str_replace($projectName, '',$firstChunkMinusFilesystem);
 
         // build error html page
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
@@ -500,7 +509,7 @@ class DefaultErrorHandler
             $error .= sprintf('<p>%s | %s</p>', $statusCode, $reasonPhrase);
         }
         $error .= sprintf(
-            '<h1>%s in <span id="firstPathChunk">%s</span>%s on line %s.</h1></div>', // closed title div
+            '<h1>%s in <span id="firstPathChunk">%s </span>%s on line %s.</h1></div>', // closed title div
             $message,
             $firstChunk,
             $lastWord,
@@ -536,7 +545,7 @@ class DefaultErrorHandler
             #titleDiv.warning { background: orange; box-shadow: 0 0 17px orange;}
             #titleDiv.error { background: tomato; box-shadow: 0 0 17px tomato;}
             #firstPathChunk{ font-size: 0.7em; }
-            #traceDiv{ margin: auto; width: 80%; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
+            #traceDiv{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
             #traceDiv.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
             #traceDiv.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }

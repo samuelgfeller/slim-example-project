@@ -100,6 +100,8 @@ class DefaultErrorHandler
         // Create response
         $response = $this->responseFactory->createResponse();
 
+        // Remove default layout
+        $this->phpRenderer->setLayout('');
         // Render template
         $response = $this->phpRenderer->render(
             $response,
@@ -224,7 +226,7 @@ class DefaultErrorHandler
             #titleDiv.warning { background: orange; box-shadow: 0 0 17px orange;}
             #titleDiv.error { background: tomato; box-shadow: 0 0 17px tomato;}
             #firstPathChunk{ font-size: 0.7em; }
-            #traceDiv{ margin: auto; width: 80%; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
+            #traceDiv{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
             #traceDiv.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
             #traceDiv.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
