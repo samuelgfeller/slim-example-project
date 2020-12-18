@@ -506,7 +506,8 @@ class DefaultErrorHandler
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
         $error .= sprintf('<div id="titleDiv" class="%s">', $errorCssClass); // opened title div
         if ($statusCode !== null && $reasonPhrase !== null) {
-            $error .= sprintf('<p>%s | %s</p>', $statusCode, $reasonPhrase);
+            $error .= sprintf('<p><span>%s | %s</span><span id="className">%s</span></p>',
+                              $statusCode, $reasonPhrase, get_class($exception));
         }
         $error .= sprintf(
             '<h1>%s in <span id="firstPathChunk">%s </span>%s on line %s.</h1></div>', // closed title div
@@ -520,9 +521,12 @@ class DefaultErrorHandler
         $error .= '<tr><th id="numTh">#</th><th>Function</th><th>Location</th></tr>';
         foreach ($trace as $key => $t) {
             // remove everything from file path before the last \
-            $fileWithoutPath = trim(substr($t['file'], strrpos($t['file'], '\\') + 1));
+            $fileWithoutPath = $this->removeEverythingBeforeChar($t['file']);
+            // Sometimes class and type not set e.g. pdfRenderer when var undefined in template
+            $t['class'] = $t['class'] ?? '';
+            $t['type'] = $t['type'] ?? '';
             // remove everything from class before late \
-            $classWithoutPath = trim(substr($t['class'], strrpos($t['class'], '\\') + 1));
+            $classWithoutPath = $this->removeEverythingBeforeChar($t['class']);
             // if file path has not vendor in it, a css class is added to indicate it because it's more relevant
             $nonVendorClass = !strpos($t['file'], 'vendor') ? ' class = "non-vendor"' : '';
             // adding html
@@ -557,7 +561,7 @@ class DefaultErrorHandler
             #numTh { font-size: 2em; color: #a46856; margin-right: 50px;}
             .non-vendor{ font-weight: bold; } 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
-            
+            #className { text-align: right}
             @media screen and (max-width: 1000px) {
                 #traceDiv table { font-size: 1em; }
             }
@@ -565,6 +569,15 @@ class DefaultErrorHandler
         $error .= '</body>'; // close body
 
         return $error;
+    }
+
+    private function removeEverythingBeforeChar(string $string, string $lastChar = '\\'): string
+    {
+        return trim(substr($string, strrpos($string, $lastChar) + 1));
+
+        // alternative
+//        $path = explode('\\', __CLASS__);
+//        return array_pop($path);
     }
 }
 ```

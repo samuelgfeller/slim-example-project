@@ -17,11 +17,11 @@ use Psr\Log\LoggerInterface;
 final class ErrorHandlerMiddleware implements MiddlewareInterface
 {
 
-    protected bool $displayErrorDetails;
+    private bool $displayErrorDetails;
 
-    protected bool $logErrors;
+    private bool $logErrors;
 
-    protected LoggerInterface $logger;
+    private LoggerInterface $logger;
 
     /**
      * @param bool $displayErrorDetails
