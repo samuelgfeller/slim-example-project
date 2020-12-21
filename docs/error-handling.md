@@ -506,7 +506,7 @@ class DefaultErrorHandler
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
         $error .= sprintf('<div id="titleDiv" class="%s">', $errorCssClass); // opened title div
         if ($statusCode !== null && $reasonPhrase !== null) {
-            $error .= sprintf('<p><span>%s | %s</span><span id="className">%s</span></p>',
+            $error .= sprintf('<p><span>%s | %s</span><span id="exception-name">%s</span></p>',
                               $statusCode, $reasonPhrase, get_class($exception));
         }
         $error .= sprintf(
@@ -561,7 +561,7 @@ class DefaultErrorHandler
             #numTh { font-size: 2em; color: #a46856; margin-right: 50px;}
             .non-vendor{ font-weight: bold; } 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
-            #className { text-align: right}
+            #exception-name { float: right}
             @media screen and (max-width: 1000px) {
                 #traceDiv table { font-size: 1em; }
             }
