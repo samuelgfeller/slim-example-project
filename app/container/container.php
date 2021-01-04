@@ -2,6 +2,7 @@
 
 use App\Application\Handler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Domain\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
@@ -14,6 +15,7 @@ use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
+use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
@@ -98,10 +100,10 @@ return [
     PhpRenderer::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         $rendererSettings = $settings['renderer'];
+
         // As a second constructor value, global variables can be added
         return new PhpRenderer(
-            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout/layout.html.php'
-        );
+            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout/layout.html.php');
     },
 
     // Sessions
@@ -116,4 +118,12 @@ return [
     SessionMiddleware::class => function (ContainerInterface $container) {
         return new SessionMiddleware($container->get(SessionInterface::class));
     },
+
+    BasePathMiddleware::class => function (ContainerInterface $container) {
+        return new BasePathMiddleware($container->get(App::class));
+    },
+    PhpViewExtensionMiddleware::class => function (ContainerInterface $container) {
+        return new PhpViewExtensionMiddleware($container->get(App::class), $container->get(PhpRenderer::class));
+    },
+
 ];
