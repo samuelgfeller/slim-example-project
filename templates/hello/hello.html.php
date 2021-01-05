@@ -16,4 +16,4 @@
 <!--<a href="{{ url_for('login-page') }}">Login page</a>-->
 <?php
 $ini = ini_get('error_reporting');
-var_dump($ini) ?>
+//var_dump($ini) ?>

@@ -52,7 +52,7 @@ final class RegistrationAction
             return $this->responder->redirectOnValidationError(
                 $response,
                 $exception->getValidationResult(),
-                'registration-page'
+                'register-page'
             );
         }
 
@@ -90,6 +90,6 @@ final class RegistrationAction
             }
         }
         $flash->add('error', 'Registration failed');
-        return $this->responder->redirect($response, 'registration-page');
+        return $this->responder->redirect($response, 'register-page');
     }
 }

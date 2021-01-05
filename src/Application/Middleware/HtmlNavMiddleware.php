@@ -60,6 +60,18 @@ final class HtmlNavMiddleware implements MiddlewareInterface
             'Register' => ['link' => $urlGenerator->urlFor('register-page'),
                 'active' => $rn === 'register-page'],
         ];
+        $routes = [ // temp
+            'Home' => ['link' => $urlGenerator->urlFor('hello'), 'active' => $rn === 'hello'],
+            'Users' => ['link' => $urlGenerator->urlFor('hello'), 'active' => $rn === 'user-list'],
+            'Profile' => ['link' => $urlGenerator->urlFor('hello'), 'active' => $rn === 'profile'],
+            'Own posts' => ['link' => $urlGenerator->urlFor('hello'),
+                'active' => $rn === 'post-list-own'],
+            'All posts' => ['link' => $urlGenerator->urlFor('hello'),
+                'active' => $rn === 'post-list-all'],
+            'Login' => ['link' => $urlGenerator->urlFor('hello'), 'active' => $rn === 'login-page'],
+            'Register' => ['link' => $urlGenerator->urlFor('hello'),
+                'active' => $rn === 'register-page'],
+        ];
 
         // chocolate
         $colors = ['darkred', 'red', 'firebrick', 'darkorange', 'orange', 'gold',

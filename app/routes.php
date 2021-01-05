@@ -13,11 +13,13 @@ return function (App $app) {
 
     $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
 
-    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('registration-page');
+    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('register-page');
+
+    $app->post('/profile', \App\Application\Actions\Hello\HelloAction::class)->setName('profile');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class); // Allow preflight requests
-        $group->get('', \App\Application\Actions\Users\UserListAction::class);
+        $group->get('', \App\Application\Actions\Users\UserListAction::class)->setName('user-list');
 
         $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);

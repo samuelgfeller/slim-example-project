@@ -1,110 +1,215 @@
-.wrapper {
-    width: 80%; /* Has to be the same than .outMenuDiv */
-    margin: auto;
-    min-width: 500px;
-}
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width:100px)  {
+    #wrapper{
+        margin: 1em;
+    }
+    #pageContent {
+        width: 100%;
+    }
 
-#pageContent {
-    width: 100%;
-}
+    /* Nav */
+    #brand-name-span{
+        letter-spacing: 1vw;
+        color: #757575;
+        width: 80%;
+        display: block;
+        text-align: center;
+        line-height: 50px;
+    }
 
+    #nav {
+        overflow: hidden;
+        /*background-color: #defeff;*/
+        white-space: nowrap;
+        position: relative;
+        max-width: 100%;
+        background-color: #fff;
+        padding: 0 20px;
+        margin-top: 20px;
+        border-radius: 25px;
+        box-shadow: 0 0 20px rgba(159, 162, 177, .3);
+        height: 50px; /* fixed height to center nav-icon and bypass transition movement when opened*/
+    }
 
-/* Nav */
+    #nav a {
+        float: left;
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 20px 16px;
+        text-decoration: none;
+        /*font-size: 17px;*/
+        transition: 0.3s;
+        width: 50%;
+        position: relative;
+    }
+    /* Vertically center first menu element when menu is closed */
+/*    #nav:not(.open) a{
+        top: 50%;
+        transform: translateY(-50%)
+    }*/
 
-.nav {
-    overflow: hidden;
-    /*background-color: #defeff;*/
-    display: inline-flex;
-    position: relative;
-    overflow: hidden;
-    max-width: 100%;
-    background-color: #fff;
-    padding: 0 20px;
-    border-radius: 40px;
-    box-shadow: 0 10px 40px rgba(159, 162, 177, .8);
+    #nav a:hover{
+        font-weight: normal; /*default hover over links makes it bold*/
+    }
 
-}
+/*    #nav a:first-child{
+        width: 80%;
+        text-align: left;
+    }*/
 
-.nav a {
-    float: left;
-    display: block;
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    /*font-size: 17px;*/
-    transition: 0.3s;
-    position: relative;
-}
-.nav a:hover{
-    font-weight: normal; /*default hover over links makes it bold*/
-}
-.nav a:before {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background-color: #dfe2ea;
-    border-radius: 8px 8px 0 0;
-    opacity: 0;
-    transition: 0.3s;
-}
-/*.nav a:hover {*/
-/*    background-color: white;*/
-/*    color: black;*/
-/*}*/
-.nav a:not(.is-active):hover:before {
-    opacity: 1;
-    bottom: 0;
-}
-.nav a:not(.is-active):hover {
-    color: #333;
-}
-.nav-indicator {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 4px;
-    transition: 0.4s;
-    height: 5px;
-    z-index: 1;
-    border-radius: 8px 8px 0 0;
-}
+    /* Similar than .nav-indicator */
+    #nav a:before {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 15%;
+        width: 70%;
+        height: 5px;
+        background-color: #dfe2ea;
+        border-radius: 8px 8px 0 0;
+        opacity: 0;
+        transition: 0.3s;
+    }
 
-.nav a.active {
-    /*background-color: #4CAF50;*/
-    /*color: white;*/
-}
-
-.nav .icon {
-    display: none;
-}
-
-@media screen and (max-width: 600px) {
-    .nav a:not(:first-child) {
+    #nav a/*:not(:first-child)*/ {
         display: none;
     }
 
-    .nav a.icon {
+    #nav a.icon {
         float: right;
         display: block;
     }
 
-    .nav.mobile-view {
-        position: relative;
+    #nav.open {
+        /*position: relative;*/
+        height: auto;
     }
 
-    .nav.mobile-view .icon {
+    #nav.open .icon {
         position: absolute;
         right: 0;
         top: 0;
     }
 
-    .nav.mobile-view a {
-        float: none;
+    #nav.open a {
         display: block;
-        text-align: left;
+    }
+
+
+    /*#nav a:hover {*/
+    /*    background-color: white;*/
+    /*    color: black;*/
+    /*}*/
+    #nav a:not(.is-active):hover:before {
+        opacity: 1;
+        bottom: 0;
+    }
+    #nav a:not(.is-active):hover {
+        color: #333;
+    }
+
+    /* Similar than #nav a:before */
+    #nav-indicator {
+        position: absolute;
+        left: 15%;
+        bottom: 0;
+        width: 70%;
+        margin: auto;
+        transition: 0.4s;
+        height: 5px;
+        z-index: 1;
+        border-radius: 8px 8px 0 0;
+    }
+
+    #nav a.active {
+        /*background-color: #4CAF50;*/
+        /*color: white;*/
+    }
+
+    :root{
+        /* With a 50px height on nav div */
+        --nav-icon-size: 0.8;
+    }
+    #nav-icon{
+        width: calc(40px * var(--nav-icon-size));
+        height: calc(30px * var(--nav-icon-size));
+        position: absolute;
+        right: 25px;
+        top: calc(10px/ var(--nav-icon-size));
+        float: right;
+        display: block;
+        transform: rotate(0deg);
+        transition: .5s ease-in-out;
+        cursor: pointer;
+    }
+
+    #nav-icon span{
+        display: block;
+        position: absolute;
+        height: calc(6px * var(--nav-icon-size));
+        width: 100%;
+        background: #d3531a;
+        border-radius: calc(6px * var(--nav-icon-size));
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: .25s ease-in-out;
+    }
+    #nav-icon span:nth-child(1) {
+        top: 0;
+    }
+
+    #nav-icon span:nth-child(2),#nav-icon span:nth-child(3) {
+        top: calc(12px * var(--nav-icon-size));
+    }
+
+    #nav-icon span:nth-child(4) {
+        top: calc(24px * var(--nav-icon-size));
+    }
+
+    #nav.open #nav-icon span:nth-child(1) {
+        top: calc(12px * var(--nav-icon-size));
+        width: 0;
+        left: 50%;
+    }
+
+    #nav.open #nav-icon span:nth-child(2) {
+        transform: rotate(45deg);
+    }
+
+    #nav.open #nav-icon span:nth-child(3) {
+        transform: rotate(-45deg);
+    }
+
+    #nav.open #nav-icon span:nth-child(4) {
+        top: calc(12px * var(--nav-icon-size));
+        width: 0;
+        left: 50%;
     }
 }
+
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    #wrapper{
+        margin: 2em;
+    }
+}
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #wrapper{
+        width: 80%;
+        margin: auto;
+    }
+    #nav{
+        /*display: inline-flex;*/
+        display: block;
+    }
+    #nav .icon {
+        display: none;
+    }
+}
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+
+
+
+
