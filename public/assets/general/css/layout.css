@@ -1,15 +1,15 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
     #wrapper{
-        margin: 1em;
+        margin: 0.5em;
     }
     #pageContent {
         width: 100%;
+        margin: 1.5em 0.5em 0.5em;
     }
 
     /* Nav */
     #brand-name-span{
-        letter-spacing: 1vw;
         color: #757575;
         width: 80%;
         display: block;
@@ -188,7 +188,12 @@
         left: 50%;
     }
 }
-
+@media (min-width:340px)  {
+    /* 340px enough wide to add letter-spacing*/
+    #brand-name-span {
+        letter-spacing: 1vw;
+    }
+}
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     #wrapper{
         margin: 2em;

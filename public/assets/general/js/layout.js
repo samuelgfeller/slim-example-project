@@ -13,18 +13,17 @@ function toggleMobileView() {
 */
 
 // Burger icon
-let navIcon = document.getElementById('nav-icon');
 let nav = document.getElementById("nav");
-navIcon.addEventListener("click", function () {
+// Open nav on click on entire nav bar not just icon for left handed people
+// Additional event listener on nav icon doesn't work because since its inside nav both events are triggered
+nav.addEventListener("click", function () {
     nav.classList.toggle('open');
 
     if (nav.className.includes('open')) {
         // If menu collapsed it should old loop over indicators when menu opened
         loopOverIndicators();
     }
-
 });
-
 // Underline
 let indicator = document.getElementById('nav-indicator');
 let items = document.querySelectorAll('#nav a');
@@ -55,7 +54,7 @@ function handleIndicator(el) {
     // Move indicator to clicked menu item or just append it.
     el.appendChild(indicator);
     indicator.style.backgroundColor = 'transparent';
-    window.setTimeout(function (){
+    window.setTimeout(function () {
         // Change indicator to new color
         indicator.style.backgroundColor = el.dataset.activeColor; // "-" become camel case
     }, 10);
