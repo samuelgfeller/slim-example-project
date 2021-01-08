@@ -15,6 +15,10 @@ let isMobile = true;
 if (window.matchMedia("(min-width: 1025px)").matches) {
     isMobile = false;
     loopOverItems();
+}else{
+    isMobile = true;
+    // Has to be called even if mobile because of the color change of the burger icon.
+    loopOverItems();
 }
 
 window.addEventListener('resize', function () {

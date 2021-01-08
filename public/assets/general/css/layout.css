@@ -147,7 +147,7 @@
         position: absolute;
         height: calc(6px * var(--nav-icon-size));
         width: 100%;
-        background: #d3531a;
+        background: transparent; /* Is tinted in js on page load */
         border-radius: calc(6px * var(--nav-icon-size));
         opacity: 1;
         left: 0;
