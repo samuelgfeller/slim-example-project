@@ -26,7 +26,7 @@
         background-color: #fff;
         padding: 0 20px;
         margin-top: 20px;
-        border-radius: 25px;
+        border-radius: 25px; /* Open borders shouldn't be too round*/
         box-shadow: 0 0 20px rgba(159, 162, 177, .3);
         height: 50px; /* fixed height to center nav-icon and bypass transition movement when opened*/
     }
@@ -58,18 +58,29 @@
         text-align: left;
     }*/
 
-    /* Similar than .nav-indicator */
-    #nav a:before {
-        content: "";
+    #nav a:before, #nav-indicator{
         position: absolute;
-        bottom: -6px;
         left: 15%;
         width: 70%;
         height: 5px;
-        background-color: #dfe2ea;
         border-radius: 8px 8px 0 0;
+    }
+
+    /* Similar than .nav-indicator */
+    #nav a:before {
+        content: "";
+        bottom: -6px;
+        background-color: #dfe2ea;
         opacity: 0;
         transition: 0.3s;
+    }
+
+    /* Here because it shares a lot with a:before*/
+    #nav-indicator {
+        bottom: 0;
+        margin: auto;
+        transition: 0.4s;
+        z-index: 1;
     }
 
     #nav a/*:not(:first-child)*/ {
@@ -107,19 +118,6 @@
     }
     #nav a:not(.is-active):hover {
         color: #333;
-    }
-
-    /* Similar than #nav a:before */
-    #nav-indicator {
-        position: absolute;
-        left: 15%;
-        bottom: 0;
-        width: 70%;
-        margin: auto;
-        transition: 0.4s;
-        height: 5px;
-        z-index: 1;
-        border-radius: 8px 8px 0 0;
     }
 
     #nav a.active {
@@ -212,7 +210,40 @@
         display: none;
     }
 }
-@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+/* Desktop / mobile nav breakpoint. If min-width changes, layout.js should be updated as well */
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+    /* Desktop Nav */
+    #brand-name-span{
+        display: none;
+    }
+    #nav-icon{
+        display: none;
+    }
+    #nav{
+        height: auto;
+        border-radius: 999px;
+    }
+    #nav a{
+        float: none;
+        display: inline-block;
+        color: black;
+        text-align: left;
+        padding: 20px 16px;
+        text-decoration: none;
+        /*font-size: 17px;*/
+        transition: 0.3s;
+        width: auto;
+        position: relative;
+        margin: 0 6px;
+    }
+    #nav a:before, #nav-indicator {
+        width: auto;
+        left: 0;
+
+    }
+
+
+}
 @media (min-width:1281px) { /* hi-res laptops and desktops */ }
 
 

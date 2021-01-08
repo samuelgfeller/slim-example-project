@@ -32,7 +32,7 @@
                 <span></span>
                 <span></span>
             </div>
-            <span class="nav-indicator" id="nav-indicator"></span>
+            <span class="nav-indicator noAnimationOnPageLoad" id="nav-indicator"></span>
         </div>
     </div>
 
@@ -46,6 +46,7 @@
     </div>
 </div>
 
+<script src="assets/general/js/default.js"></script>
 <script src="assets/general/js/layout.js"></script>
 </body>
 </html>

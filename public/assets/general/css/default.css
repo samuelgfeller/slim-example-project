@@ -40,10 +40,9 @@ a:hover {
     display: table;
 }
 
-
-
-
-
+.noAnimationOnPageLoad{
+    transition: none !important;
+}
 
 
 

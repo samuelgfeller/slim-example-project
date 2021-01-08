@@ -1,45 +1,58 @@
 // Navigation bar
-// Mobile view
-/*
-let toggleMenuBtn = document.getElementById("nav-icon");
-
-toggleMenuBtn.addEventListener("click", function () {
-    toggleMenuBtn.classList.toggle('open');
-});
-
-function toggleMobileView() {
-    nav.className === "nav" ? nav.className += " mobile-view" : nav.className = "nav";
-}
-*/
-
-// Burger icon
 let nav = document.getElementById("nav");
-// Open nav on click on entire nav bar not just icon for left handed people
-// Additional event listener on nav icon doesn't work because since its inside nav both events are triggered
-nav.addEventListener("click", function () {
-    nav.classList.toggle('open');
-
-    if (nav.className.includes('open')) {
-        // If menu collapsed it should old loop over indicators when menu opened
-        loopOverIndicators();
-    }
-});
-// Underline
 let indicator = document.getElementById('nav-indicator');
 let items = document.querySelectorAll('#nav a');
 
-// It is not necessary to position the indicator at page load when menu is collapsed
-// 641px is the breakpoint where menu is collapsed (layout.css)
-if (window.matchMedia("(min-width: 641px)").matches) {
-    // If its a browser and the menu is not collapsed, indicators should directly be looped over
-    loopOverIndicators();
+// Cannot use entire nav because then it collapses on each click on a menu element since its also in nav
+document.getElementById("nav-icon").addEventListener("click", toggleMobileNav);
+document.getElementById("brand-name-span").addEventListener("click", toggleMobileNav);
+
+// Cannot be passed as an argument when calling loopOverItems since on resize event listeners are added
+// multiple times on resize and there is a bug when click event calls handleIndicator with isMobile true [SLE-63]
+let isMobile = true;
+
+// At 1025px the menu is in desktop version and not collapsed.
+if (window.matchMedia("(min-width: 1025px)").matches) {
+    isMobile = false;
+    loopOverItems();
 }
 
-function loopOverIndicators() {
+window.addEventListener('resize', function () {
+    let oldIsMobile = isMobile;
+
+    isMobile = !window.matchMedia("(min-width: 1025px)").matches;
+
+    if (oldIsMobile !== isMobile) {
+        if (isMobile === false) {
+            // If menu was open close it
+            nav.classList.remove("open");
+            // Move indicator back to nav
+            nav.appendChild(indicator);
+        }
+
+        // Prevent to take mobile style to desktop or vice versa
+        // CSS style is overwritten by set element style from handleIndicator function
+        indicator.removeAttribute('style');
+        loopOverItems();
+    }
+});
+
+function toggleMobileNav() {
+    nav.classList.toggle('open');
+
+    if (nav.className.includes('open')) {
+        isMobile = true;
+        // If menu collapsed it should old loop over indicators when menu opened
+        loopOverItems();
+    }
+}
+
+function loopOverItems() {
     items.forEach(function (item, index) {
         item.addEventListener('click', function (e) {
-            handleIndicator(e.target);
+            handleIndicator(e.target)
         });
+
         // If contains is active, execute function
         item.classList.contains('is-active') && handleIndicator(item);
     });
@@ -51,21 +64,25 @@ function handleIndicator(el) {
         item.removeAttribute('style');
     });
 
-    // Move indicator to clicked menu item or just append it.
-    el.appendChild(indicator);
-    indicator.style.backgroundColor = 'transparent';
-    window.setTimeout(function () {
-        // Change indicator to new color
+    if (isMobile === true) {
+        // Move indicator to clicked menu item or just append it.
+        el.appendChild(indicator);
+        indicator.style.backgroundColor = 'transparent';
+        window.setTimeout(function () {
+            // Change indicator to new color
+            indicator.style.backgroundColor = el.dataset.activeColor; // "-" become camel case
+        }, 10);
+
+        // Tint hamburger icon bars to the active color
+        document.querySelectorAll('#nav-icon span').forEach(function (bar) {
+            bar.style.background = el.dataset.activeColor; // "-" become camel case
+        });
+    } else {
+        indicator.style.width = "".concat(el.offsetWidth, "px");
+        indicator.style.left = "".concat(el.offsetLeft, "px");
         indicator.style.backgroundColor = el.dataset.activeColor; // "-" become camel case
-    }, 10);
+    }
 
-
-    // console.log(document.querySelectorAll('#nav-icon span'));
-
-    // Tint hamburger icon bars to the active color
-    document.querySelectorAll('#nav-icon span').forEach(function (bar) {
-        bar.backgroundColor = el.dataset.activeColor; // "-" become camel case
-    });
     el.classList.add('is-active');
     el.style.color = el.dataset.activeColor;
 }
