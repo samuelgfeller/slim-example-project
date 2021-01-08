@@ -308,7 +308,7 @@ After that, the response body is created.
 If `$displayErrorDetails` is `false` the error message is made out of only the error code 
 and the reason phrase (e.g. *500 Internal Error* or *404 Not found* ). This is then 
 displayed in a nice user-friendly page.  
-If `$displayErrorDetails` is `true` a HTML page is built with the exception details including
+If `$displayErrorDetails` is `true` an HTML page is built with the exception details including
 the stack trace. I like to have it displayed in a clear and pretty format, so I added a lot of
 CSS. E.g. paths in the stack trace that don't contain the word `vender` are emphasised because
 they are much more relevant to me. I also like to make a distinction from a warning / notice 
@@ -504,7 +504,7 @@ class DefaultErrorHandler
 
         // build error html page
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
-        $error .= sprintf('<div id="titleDiv" class="%s">', $errorCssClass); // opened title div
+        $error .= sprintf('<div id="title-div" class="%s">', $errorCssClass); // opened title div
         if ($statusCode !== null && $reasonPhrase !== null) {
             $error .= sprintf('<p><span>%s | %s</span><span id="exception-name">%s</span></p>',
                               $statusCode, $reasonPhrase, get_class($exception));
@@ -517,21 +517,23 @@ class DefaultErrorHandler
             $line
         ); // close title div
 
-        $error .= sprintf('<div id="traceDiv" class="%s"><table>', $errorCssClass); // opened trace div / opened table
-        $error .= '<tr><th id="numTh">#</th><th>Function</th><th>Location</th></tr>';
+        $error .= sprintf('<div id="trace-div" class="%s"><table>', $errorCssClass); // opened trace div / opened table
+        $error .= '<tr><th id="num-th">#</th><th>Function</th><th>Location</th></tr>';
         foreach ($trace as $key => $t) {
-            // remove everything from file path before the last \
-            $fileWithoutPath = $this->removeEverythingBeforeChar($t['file']);
-            // Sometimes class and type not set e.g. pdfRenderer when var undefined in template
+            // Sometimes class, type, file and line not set e.g. pdfRenderer when var undefined in template
             $t['class'] = $t['class'] ?? '';
             $t['type'] = $t['type'] ?? '';
+            $t['file'] = $t['file'] ?? '';
+            $t['line'] = $t['line'] ?? '';
+            // remove everything from file path before the last \
+            $fileWithoutPath = $this->removeEverythingBeforeChar($t['file']);
             // remove everything from class before late \
             $classWithoutPath = $this->removeEverythingBeforeChar($t['class']);
             // if file path has not vendor in it, a css class is added to indicate it because it's more relevant
-            $nonVendorClass = !strpos($t['file'], 'vendor') ? ' class = "non-vendor"' : '';
+            $nonVendorClass = !strpos($t['file'], 'vendor') ? 'non-vendor' : '';
             // adding html
             $error .= sprintf(
-                '<tr><td>%s</td><td%s>%s</td><td%s>%s</td></tr>',
+                '<tr><td>%s</td><td class="function-td %s">%s</td><td class="%s">%s</td></tr>',
                 $key,
                 $nonVendorClass,
                 '...\\' . $classWithoutPath . $t['type'] . $t['function'] . '(...)', // only last 85 chars
@@ -544,27 +546,32 @@ class DefaultErrorHandler
             body { margin: 0; background: #ffd9d0; font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
             body.warning { background: #ffead0; }
             body.error { background: #ffd9d0; }
-            #titleDiv{ padding: 5px 10%; color: black; margin:30px; background: tomato; border-radius: 0 35px; box-shadow: 0 0 17px tomato; }
-            #titleDiv h1 { margin-top: 4px; }
-            #titleDiv.warning { background: orange; box-shadow: 0 0 17px orange;}
-            #titleDiv.error { background: tomato; box-shadow: 0 0 17px tomato;}
+            #title-div{ padding: 5px 10%; color: black; margin:30px; background: tomato; border-radius: 0 35px; box-shadow: 0 0 17px tomato; }
+            #title-div h1 { margin-top: 4px; }
+            #title-div.warning { background: orange; box-shadow: 0 0 17px orange;}
+            #title-div.error { background: tomato; box-shadow: 0 0 17px tomato;}
             #firstPathChunk{ font-size: 0.7em; }
-            #traceDiv{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
+            #trace-div{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
-            #traceDiv.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
-            #traceDiv.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
-            /*#traceDiv .warning{ } */    
-            #traceDiv h2{ margin-top: 0; padding-top: 19px; text-align: center; }
-            #traceDiv table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
-            #traceDiv table td, #traceDiv table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
-            #traceDiv table tr td:first-child, #traceDiv table tr th:first-child { padding-left: 20px; }
-            #numTh { font-size: 2em; color: #a46856; margin-right: 50px;}
+            #trace-div.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
+            #trace-div.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
+            /*#trace-div .warning{ } */    
+            #trace-div h2{ margin-top: 0; padding-top: 19px; text-align: center; }
+            #trace-div table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
+            #trace-div table td, #trace-div table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
+            #trace-div table tr td:first-child, #trace-div table tr th:first-child { padding-left: 20px; }
+            #num-th { font-size: 2em; color: #a46856; margin-right: 50px;}
             .non-vendor{ font-weight: bold; } 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
             #exception-name { float: right}
             @media screen and (max-width: 1000px) {
-                #traceDiv table { font-size: 1em; }
+                .function-td { font-size: 0.8em; }
             }
+            @media screen and (max-width: 810px) {
+                #trace-div table { font-size: 1.1em; }
+                #title-div { box-sizing: border-box; margin-left: 0; margin-right: 0; width: 100%; }
+            }
+            
             </style>';
         $error .= '</body>'; // close body
 
@@ -575,11 +582,12 @@ class DefaultErrorHandler
     {
         return trim(substr($string, strrpos($string, $lastChar) + 1));
 
-        // alternative
-//        $path = explode('\\', __CLASS__);
-//        return array_pop($path);
+        // alternative https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
+        //  $path = explode('\\', __CLASS__);
+        //  return array_pop($path);
     }
 }
+
 ```
 
 The template is basically just including the default layout and outputting the `$errorMessage`
