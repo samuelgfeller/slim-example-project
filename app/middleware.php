@@ -12,10 +12,6 @@ return function (App $app) {
 
     $app->add(SessionMiddleware::class);
 
-    // Has to be before routing middleware because Slim middlewares are LIFO (last in, first out)
-    // so when responding the order is backwards and this middleware is invoked after routing
-    $app->add(HtmlNavMiddleware::class);
-
     $app->addRoutingMiddleware();
 
     // Slim middlewares are LIFO (last in, first out) so when responding, the order is backwards

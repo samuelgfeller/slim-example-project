@@ -1,3 +1,8 @@
+:root {
+    /* With a 50px height on nav div */
+    --nav-color: #0033cc;
+}
+
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     /* Nav */
@@ -63,10 +68,16 @@
         margin: auto;
         transition: 0.4s;
         z-index: 1;
+        background: var(--nav-color);
+        display: none;
     }
 
     #nav a {
         display: none;
+    }
+
+    #nav a.is-active{
+        color: var(--nav-color);
     }
 
     #nav a.icon {
@@ -120,7 +131,7 @@
         position: absolute;
         height: calc(6px * var(--nav-icon-size));
         width: 100%;
-        background: transparent; /* Is tinted in js on page load */
+        background: black;
         border-radius: calc(6px * var(--nav-icon-size));
         opacity: 1;
         left: 0;
@@ -200,7 +211,6 @@
     #nav a {
         float: none;
         display: inline-block;
-        color: black;
         text-align: left;
         padding: 20px 16px;
         text-decoration: none;
@@ -214,7 +224,6 @@
     #nav a:before, #nav-indicator {
         width: auto;
         left: 0;
-
     }
 
 
