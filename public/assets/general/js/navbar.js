@@ -20,23 +20,17 @@ function toggleMobileNav() {
     }
 }
 
-items.forEach(function (item) {
-    if (item.className.includes("is-active")){
-        // alert('open');
-    }
-});
-
 // At 1025px the menu is in desktop version and not collapsed.
 if (window.matchMedia("(min-width: 1025px)").matches) {
     isMobile = false;
     loopOverItems();
 }
-
-window.addEventListener('resize', function () {
+window.onresize = function () {
     let oldIsMobile = isMobile;
 
     isMobile = !window.matchMedia("(min-width: 1025px)").matches;
 
+    // Only if previously isMobile had a different value
     if (oldIsMobile !== isMobile) {
         if (isMobile === false) {
             // If menu was open close it
@@ -48,16 +42,17 @@ window.addEventListener('resize', function () {
         // Prevent to take mobile style to desktop or vice versa
         // CSS style is overwritten by set element style from handleIndicator function
         indicator.removeAttribute('style');
-        loopOverItems();
+        // Wait 500ms before executing loopOverItems. Otherwise event listeners added to items have incorrect
+        // offsetLeft values and position of cursor not correct
+        setTimeout(loopOverItems, 500);
     }
-});
+};
 
 function loopOverItems() {
     items.forEach(function (item, index) {
         item.addEventListener('click', function (e) {
             handleIndicator(e.target)
         });
-
         item.className.includes("is-active") && handleIndicator(item);
     });
 }
