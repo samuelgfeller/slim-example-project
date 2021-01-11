@@ -67,9 +67,9 @@
     </main>
 
     <footer>
-        <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> <a
+        <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
                     href="https://github.com/samuelgfeller/slim-example-project" class="no-style-a" target="_blank">
-                by Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
+                 Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
                      class="footer-icon"></a></address>
     </footer>
 
