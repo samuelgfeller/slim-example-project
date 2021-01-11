@@ -3,9 +3,15 @@
     src: url(../fonts/CenturyGothic.ttf);
 }
 
-body{
+body, html {
+    min-height: 100vh;
     margin: 0;
+    padding: 0;
 }
+#wrapper{
+    min-height: 100vh;
+}
+
 /* Text */
 * {
     box-sizing: border-box;
@@ -21,7 +27,12 @@ a:hover {
     text-decoration: none;
 }
 
-.cursorPointer {
+.no-style-a, .no-style-a:hover{
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.cursor-pointer {
     cursor: pointer;
 }
 

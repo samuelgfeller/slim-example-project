@@ -1,25 +1,51 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
     #wrapper{
-        margin: 0.5em;
+        display: flex;
+        flex-direction: column;
+        /* No top/bottom margin on wrapper it makes body not touch the top */
     }
-    #pageContent {
+    header{
+        margin: 1.5em 0;
+        flex: none;
+    }
+    main {
         width: 100%;
-        margin: 1.5em 0.5em 0.5em;
+        padding: 1em 0.5em 0.5em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+        /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
+        flex: 1 0 auto;
+    }
+    footer{
+        flex: none;
+        /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
+        flex-shrink: 0;
+        background: #f6f6f6;
+        padding: 10px;
+        text-align: center;
+    }
+    .footer-icon{
+        width: 1em;
+        vertical-align: middle;
+    }
+    #github-icon{
+        width: 1.3em;
+    }
+    address{
+        font-style: normal;
     }
 }
 @media (min-width:340px)  {
 
 }
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-    #wrapper{
+    header{
         margin: 2em;
     }
 }
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
         width: 80%;
-        margin: 2.3em auto;
+        margin: auto;
     }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */

@@ -1,10 +1,12 @@
 <?php
 /**
  * @var string $basePath
- * @var string $title
+ * @var string $content PHP-View var page content
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Psr\Http\Message\UriInterface $uri
+ * @var string $title
  */
+
 ?>
 
 <!DOCTYPE html>
@@ -65,9 +67,13 @@
         <?= $content ?>
     </div>
 
-    <div id="footer">
+    <footer>
+        <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> <a
+                    href="https://github.com/samuelgfeller/slim-example-project" class="no-style-a" target="_blank">
+                by Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
+                     class="footer-icon"></a></address>
+    </footer>
 
-    </div>
 </div>
 
 <script src="assets/general/js/default.js"></script>
