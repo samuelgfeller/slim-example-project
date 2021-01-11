@@ -1,7 +1,7 @@
 // Navigation bar
-let nav = document.getElementById("nav");
+let nav = document.querySelector("nav");
 let indicator = document.getElementById('nav-indicator');
-let items = document.querySelectorAll('#nav a');
+let items = document.querySelectorAll('nav a');
 
 // Cannot be passed as an argument when calling loopOverItems since on resize event listeners are added
 // multiple times on resize and there is a bug when click event calls handleIndicator with isMobile true [SLE-63]
@@ -25,6 +25,7 @@ if (window.matchMedia("(min-width: 1025px)").matches) {
     isMobile = false;
     loopOverItems();
 }
+
 window.onresize = function () {
     let oldIsMobile = isMobile;
 

@@ -1,6 +1,8 @@
 :root {
+    --nav-color: #7fbbd0;
+    --nav-text-color: #65818d;
     /* With a 50px height on nav div */
-    --nav-color: #0033cc;
+    --nav-icon-size: 0.8;
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -14,7 +16,7 @@
         line-height: 50px;
     }
 
-    #nav {
+    nav {
         overflow: hidden;
         /*background-color: #defeff;*/
         white-space: nowrap;
@@ -22,16 +24,15 @@
         max-width: 100%;
         background-color: #fff;
         padding: 0 20px;
-        margin-top: 20px;
         border-radius: 25px; /* Open borders shouldn't be too round*/
         box-shadow: 0 0 20px rgba(159, 162, 177, .3);
         height: 50px; /* fixed height to center nav-icon and bypass transition movement when opened*/
     }
 
-    #nav a {
+    nav a {
         float: left;
         display: block;
-        color: black;
+        color: var(--nav-text-color);
         text-align: center;
         padding: 20px 16px;
         text-decoration: none;
@@ -41,11 +42,11 @@
         position: relative;
     }
 
-    #nav a:hover {
+    nav a:hover {
         font-weight: normal; /*default hover over links makes it bold*/
     }
 
-    #nav a:before, #nav-indicator {
+    nav a:before, #nav-indicator {
         position: absolute;
         left: 15%;
         width: 70%;
@@ -53,8 +54,8 @@
         border-radius: 8px 8px 0 0;
     }
 
-    /* Similar than .nav-indicator */
-    #nav a:before {
+    /* Similar than #nav-indicator */
+    nav a:before {
         content: "";
         bottom: -6px;
         background-color: #dfe2ea;
@@ -72,45 +73,40 @@
         display: none;
     }
 
-    #nav a {
+    nav a {
         display: none;
     }
 
-    #nav a.is-active{
-        color: var(--nav-color);
+    nav a.is-active{
+        color: black;
     }
 
-    #nav a.icon {
+    nav a.icon {
         float: right;
         display: block;
     }
 
-    #nav.open {
+    nav.open {
         height: auto;
     }
 
-    #nav.open .icon {
+    nav.open .icon {
         position: absolute;
         right: 0;
         top: 0;
     }
 
-    #nav.open a {
+    nav.open a {
         display: block;
     }
 
-    #nav a:not(.is-active):hover:before {
+    nav a:not(.is-active):hover:before {
         opacity: 1;
         bottom: 0;
     }
 
-    #nav a:not(.is-active):hover {
+    nav a:not(.is-active):hover {
         color: #333;
-    }
-
-    :root {
-        /* With a 50px height on nav div */
-        --nav-icon-size: 0.8;
     }
 
     #nav-icon {
@@ -151,21 +147,21 @@
         top: calc(24px * var(--nav-icon-size));
     }
 
-    #nav.open #nav-icon span:nth-child(1) {
+    nav.open #nav-icon span:nth-child(1) {
         top: calc(12px * var(--nav-icon-size));
         width: 0;
         left: 50%;
     }
 
-    #nav.open #nav-icon span:nth-child(2) {
+    nav.open #nav-icon span:nth-child(2) {
         transform: rotate(45deg);
     }
 
-    #nav.open #nav-icon span:nth-child(3) {
+    nav.open #nav-icon span:nth-child(3) {
         transform: rotate(-45deg);
     }
 
-    #nav.open #nav-icon span:nth-child(4) {
+    nav.open #nav-icon span:nth-child(4) {
         top: calc(12px * var(--nav-icon-size));
         width: 0;
         left: 50%;
@@ -182,11 +178,11 @@
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
 
-    #nav {
+    nav {
         display: block;
     }
 
-    #nav .icon {
+    nav .icon {
         display: none;
     }
 }
@@ -203,12 +199,12 @@
         display: none;
     }
 
-    #nav {
+    nav {
         height: auto;
         border-radius: 999px;
     }
 
-    #nav a {
+    nav a {
         float: none;
         display: inline-block;
         text-align: left;
@@ -221,7 +217,7 @@
         margin: 0 6px;
     }
 
-    #nav a:before, #nav-indicator {
+    nav a:before, #nav-indicator {
         width: auto;
         left: 0;
     }

@@ -47,6 +47,9 @@
         width: 80%;
         margin: auto;
     }
+    header{
+        margin: 2em 0 1em 0;
+    }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
 

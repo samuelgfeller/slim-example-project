@@ -51,7 +51,7 @@ a:hover {
     display: table;
 }
 
-.noAnimationOnPageLoad{
+.no-animation-on-page-load{
     transition: none !important;
 }
 

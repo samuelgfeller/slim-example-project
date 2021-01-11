@@ -25,32 +25,32 @@
     <title><?= $title ?></title>
 </head>
 <body>
+<!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
 <div id="wrapper">
-    <div id="header">
-        <!--Nav-->
-        <div id="nav" class="clearfix">
-            <span id="brand-name-span" class="cursorPointer">Slim Example Project</span>
-            <?php
-//            foreach ($routes as $name => $route) {
-//                echo '<a href="' . $route['link'] . '" ' . ($route['active'] ? 'class="is-active"' : '') . ' data-active-color="' . $route['color'] . '">' . $name . '</a>';
-//
-//            }
-            ?>
-
-            <a href="<?= $route->urlFor('hello') ?>" <?= $uri->getPath() === $route->urlFor('hello') ?
-                'class="is-active"' : '' ?>>Home</a>
-            <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor('user-list') ?
-                'class="is-active"' : '' ?>>Users</a>
-            <a href="<?= $route->urlFor('profile') ?>" <?= $uri->getPath() === $route->urlFor('profile') ?
-                'class="is-active"' : '' ?>>Profile</a>
-            <a href="<?= $route->urlFor('post-list-own') ?>" <?= $uri->getPath() === $route->urlFor('post-list-own') ?
-                'class="is-active"' : '' ?>>Own posts</a>
-            <a href="<?= $route->urlFor('post-list-all') ?>" <?= $uri->getPath() === $route->urlFor('post-list-all') ?
-                'class="is-active"' : '' ?>>All posts</a>
-            <a href="<?= $route->urlFor('login-page') ?>" <?= $uri->getPath() === $route->urlFor('login-page') ?
-                'class="is-active"' : '' ?>>Login</a>
-            <a href="<?= $route->urlFor('register-page') ?>" <?= $uri->getPath() === $route->urlFor('register-page') ?
-                'class="is-active"' : '' ?>>Register</a>
+    <header>
+        <nav class="clearfix">
+            <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
+            <a href="<?= $route->urlFor('hello') ?>" <?= $uri->getPath() === $route->urlFor(
+                'hello'
+            ) ? 'class="is-active"' : '' ?>>Home</a>
+            <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
+                'user-list'
+            ) ? 'class="is-active"' : '' ?>>Users</a>
+            <a href="<?= $route->urlFor('profile') ?>" <?= $uri->getPath() === $route->urlFor(
+                'profile'
+            ) ? 'class="is-active"' : '' ?>>Profile</a>
+            <a href="<?= $route->urlFor('post-list-own') ?>" <?= $uri->getPath() === $route->urlFor(
+                'post-list-own'
+            ) ? 'class="is-active"' : '' ?>>Own posts</a>
+            <a href="<?= $route->urlFor('post-list-all') ?>" <?= $uri->getPath() === $route->urlFor(
+                'post-list-all'
+            ) ? 'class="is-active"' : '' ?>>All posts</a>
+            <a href="<?= $route->urlFor('login-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'login-page'
+            ) ? 'class="is-active"' : '' ?>>Login</a>
+            <a href="<?= $route->urlFor('register-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'register-page'
+            ) ? 'class="is-active"' : '' ?>>Register</a>
 
             <div id="nav-icon">
                 <span></span>
@@ -58,14 +58,13 @@
                 <span></span>
                 <span></span>
             </div>
-            <span class="nav-indicator noAnimationOnPageLoad" id="nav-indicator"></span>
-        </div>
-    </div>
+            <span class="nav-indicator no-animation-on-page-load" id="nav-indicator"></span>
+        </nav>
+    </header>
 
-    <div id="pageContent">
-
+    <main>
         <?= $content ?>
-    </div>
+    </main>
 
     <footer>
         <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> <a
