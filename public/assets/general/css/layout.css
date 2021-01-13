@@ -6,14 +6,15 @@
         /* No top/bottom margin on wrapper it makes body not touch the top */
     }
     header{
-        margin-top: 1.5em;
+        margin: 1em 0 1em 0;
         flex: none;
     }
     main {
         width: 100%;
-        padding: 1em 0.5em 0.5em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+        padding: 1em 0.5em 0.5em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
         /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
         flex: 1 0 auto;
+        border-radius: 20px;
     }
     footer{
         flex: none;
@@ -24,6 +25,8 @@
         text-align: center;
         color: #9b9b9b;
         font-size: 0.9em;
+        margin-top: 1em; /* Same as margin-bottom on header */
+        border-radius: 999px 999px 0 0;
     }
     footer a{
         color: #9B9B9B;
@@ -42,8 +45,10 @@
         font-style: normal;
     }
 }
-@media (min-width:340px)  {
-
+@media (min-width:400px)  {
+    main {
+        padding: 1em 1em 1em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+    }
 }
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     header{

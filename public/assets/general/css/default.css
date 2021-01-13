@@ -9,13 +9,15 @@ body, html {
     padding: 0;
 }
 #wrapper{
-    min-height: 100vh;
+    /* --vh set in default.js and if not found 1vh is fallback value
+    https://css-tricks.com/the-trick-to-viewport-units-on-mobile */
+    height: calc(var(--vh, 2vh) * 100);
 }
 
 /* Text */
 * {
     box-sizing: border-box;
-    font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
+    font-family: CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 
 a {
@@ -23,7 +25,7 @@ a {
 }
 
 a:hover {
-    font-weight: bold;
+    text-shadow: 1px 0 0 black;
     text-decoration: none;
 }
 
@@ -55,5 +57,33 @@ a:hover {
     transition: none !important;
 }
 
+/* Button */
+.btn{
+    width: 100%;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    padding: 8px 15px;
+    margin: 15px 0 0;
+    border-radius: 4444px;
+    cursor: pointer;
+    font-size: 100%;
+}
+.btn:hover{
+    background: #c1c1c1;
+    border: #c1c1c1;
+    box-shadow: 0 0 10px #c1c1c1;
+}
+.btn:disabled{
+    border: 1px solid grey;
+    background: whitesmoke;
+    color: grey;
+    cursor: default;
+}
 
+@media (min-width: 961px) {
+    #wrapper{
+        height: 100vh;
+    }
+}
 

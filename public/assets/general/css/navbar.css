@@ -18,7 +18,6 @@
 
     nav {
         overflow: hidden;
-        /*background-color: #defeff;*/
         white-space: nowrap;
         position: relative;
         max-width: 100%;
@@ -36,7 +35,6 @@
         text-align: center;
         padding: 20px 16px;
         text-decoration: none;
-        /*font-size: 17px;*/
         transition: 0.3s;
         width: 50%;
         position: relative;
@@ -44,6 +42,7 @@
 
     nav a:hover {
         font-weight: normal; /*default hover over links makes it bold*/
+        text-shadow: none;
     }
 
     nav a:before, #nav-indicator {
@@ -175,8 +174,7 @@
     }
 }
 
-@media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+@media (min-width: 961px) {  /* tablet, landscape iPad, lo-res laptops ands desktops */
 
     nav {
         display: block;
