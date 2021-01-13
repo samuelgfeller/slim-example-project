@@ -6,7 +6,7 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var string $title
  */
-
+$r = random_int(0, 10000);
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +18,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
 
-    <link rel="stylesheet" href="assets/general/css/default.css">
-    <link rel="stylesheet" href="assets/general/css/layout.css">
-    <link rel="stylesheet" href="assets/general/css/navbar.css">
+    <link rel="stylesheet" href="assets/general/css/default.css?r=<?= $r ?>">
+    <link rel="stylesheet" href="assets/general/css/layout.css?r=<?= $r ?>">
+    <link rel="stylesheet" href="assets/general/css/navbar.css?r=<?= $r ?>">
 
     <title><?= $title ?></title>
 </head>
@@ -69,14 +69,14 @@
     <footer>
         <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
                     href="https://github.com/samuelgfeller/slim-example-project" class="no-style-a" target="_blank">
-                 Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
-                     class="footer-icon"></a></address>
+                Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
+                                    class="footer-icon"></a></address>
     </footer>
 
 </div>
 
-<script src="assets/general/js/default.js"></script>
-<script src="assets/general/js/navbar.js"></script>
+<script src="assets/general/js/default.js?r=<?= $r ?>"></script>
+<script src="assets/general/js/navbar.js?r=<?= $r ?>"></script>
 </body>
 </html>
 

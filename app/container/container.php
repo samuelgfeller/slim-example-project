@@ -103,7 +103,7 @@ return [
 
         // As a second constructor value, global variables can be added
         return new PhpRenderer(
-            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout/layout.html.php');
+            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout.html.php');
     },
 
     // Sessions
