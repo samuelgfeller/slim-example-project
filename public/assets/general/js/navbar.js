@@ -68,8 +68,10 @@ function handleIndicator(el) {
         // Move indicator to clicked menu item or just append it.
         el.appendChild(indicator);
     } else {
-        indicator.style.width = "".concat(el.offsetWidth, "px");
-        indicator.style.left = "".concat(el.offsetLeft, "px");
+        setTimeout(function () {
+            indicator.style.width = "".concat(el.offsetWidth, "px");
+            indicator.style.left = "".concat(el.offsetLeft, "px");
+        }, 200);
     }
     indicator.style.display = 'inline';
     el.classList.add('is-active');
