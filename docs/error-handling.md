@@ -412,15 +412,16 @@ class DefaultErrorHandler
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
         } else {
-            $errorMessage = sprintf('%s | %s', $statusCode, $reasonPhrase);
+            $errorMessage = ['statusCode' => $statusCode, 'reasonPhrase' => $reasonPhrase];
             $errorTemplate = 'error/error-page.html.php';
         }
+
+        // Add layout
+        $this->phpRenderer->setLayout('layout/layout.html.php');
 
         // Create response
         $response = $this->responseFactory->createResponse();
 
-        // Remove default layout
-        $this->phpRenderer->setLayout('');
         // Render template
         $response = $this->phpRenderer->render(
             $response,

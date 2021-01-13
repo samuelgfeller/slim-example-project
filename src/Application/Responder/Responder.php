@@ -54,7 +54,7 @@ final class Responder
      * @param ResponseInterface $response The response
      * @param string $template Template pathname relative to templates directory
      * @param array $data Associative array of template variables
-     * @param string $layout optional layout path default: layout/layout.html.php
+     * @param string $layout optional layout path default: layout.html.php
      *
      * @return ResponseInterface The response
      * @throws \Throwable
@@ -63,7 +63,7 @@ final class Responder
         ResponseInterface $response,
         string $template,
         array $data = [],
-        string $layout = 'layout/layout.html.php'
+        string $layout = 'layout.html.php'
     ): ResponseInterface {
         $this->phpRenderer->setLayout($layout);
         return $this->phpRenderer->render($response, $template, $data);
