@@ -20,11 +20,14 @@ function toggleMobileNav() {
     }
 }
 
+// Fix for indicator glitch at page load
+window.onload = function () {
 // At 1025px the menu is in desktop version and not collapsed.
-if (window.matchMedia("(min-width: 1025px)").matches) {
-    isMobile = false;
-    loopOverItems();
-}
+    if (window.matchMedia("(min-width: 1025px)").matches) {
+        isMobile = false;
+        loopOverItems();
+    }
+};
 
 window.onresize = function () {
     let oldIsMobile = isMobile;
@@ -68,10 +71,8 @@ function handleIndicator(el) {
         // Move indicator to clicked menu item or just append it.
         el.appendChild(indicator);
     } else {
-        setTimeout(function () {
-            indicator.style.width = "".concat(el.offsetWidth, "px");
-            indicator.style.left = "".concat(el.offsetLeft, "px");
-        }, 200);
+        indicator.style.width = "".concat(el.offsetWidth, "px");
+        indicator.style.left = "".concat(el.offsetLeft, "px");
     }
     indicator.style.display = 'inline';
     el.classList.add('is-active');
