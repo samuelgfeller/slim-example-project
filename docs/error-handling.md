@@ -411,13 +411,14 @@ class DefaultErrorHandler
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
+            // Remove layout if there was a default
+            $this->phpRenderer->setLayout('');
         } else {
             $errorMessage = ['statusCode' => $statusCode, 'reasonPhrase' => $reasonPhrase];
             $errorTemplate = 'error/error-page.html.php';
+            // Add layout
+            $this->phpRenderer->setLayout('layout.html.php');
         }
-
-        // Add layout
-        $this->phpRenderer->setLayout('layout/layout.html.php');
 
         // Create response
         $response = $this->responseFactory->createResponse();
@@ -511,7 +512,7 @@ class DefaultErrorHandler
                               $statusCode, $reasonPhrase, get_class($exception));
         }
         $error .= sprintf(
-            '<h1>%s in <span id="firstPathChunk">%s </span>%s on line %s.</h1></div>', // closed title div
+            '<h1>%s in <span id="first-path-chunk">%s </span>%s on line %s.</h1></div>', // closed title div
             $message,
             $firstChunk,
             $lastWord,
@@ -544,19 +545,19 @@ class DefaultErrorHandler
         }
         $error .= '</table></div>'; // close table
         $error .= '<style>
-            body { margin: 0; background: #ffd9d0; font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
+            @font-face { font-family: CenturyGothic; src: url(assets/general/fonts/CenturyGothic.ttf); }
+            body { margin: 0; background: #ffd9d0; font-family: "CenturyGothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
             body.warning { background: #ffead0; }
             body.error { background: #ffd9d0; }
             #title-div{ padding: 5px 10%; color: black; margin:30px; background: tomato; border-radius: 0 35px; box-shadow: 0 0 17px tomato; }
             #title-div h1 { margin-top: 4px; }
             #title-div.warning { background: orange; box-shadow: 0 0 17px orange;}
             #title-div.error { background: tomato; box-shadow: 0 0 17px tomato;}
-            #firstPathChunk{ font-size: 0.7em; }
+            #first-path-chunk{ font-size: 0.7em; }
             #trace-div{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
             #trace-div.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
             #trace-div.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
-            /*#trace-div .warning{ } */    
             #trace-div h2{ margin-top: 0; padding-top: 19px; text-align: center; }
             #trace-div table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
             #trace-div table td, #trace-div table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
@@ -566,7 +567,8 @@ class DefaultErrorHandler
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
             #exception-name { float: right}
             @media screen and (max-width: 1000px) {
-                .function-td { font-size: 0.8em; }
+                #trace-div { font-size: 0.8em; }
+                #title-div h1 { font-size: 1.6em; }
             }
             @media screen and (max-width: 810px) {
                 #trace-div table { font-size: 1.1em; }
@@ -584,25 +586,26 @@ class DefaultErrorHandler
         return trim(substr($string, strrpos($string, $lastChar) + 1));
 
         // alternative https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
-        //  $path = explode('\\', __CLASS__);
-        //  return array_pop($path);
+//        $path = explode('\\', __CLASS__);
+//        return array_pop($path);
     }
 }
-
 ```
 
 The template is basically just including the default layout and outputting the `$errorMessage`
 which is in HTML.   
 File: `errpr-detail.html.php`
 ```php
-// code coming soon.
+<?php
+/**
+ * @var array $errorMessage containing html error page
+ */
+
+echo $errorMessage;
 ```
 
-For the user-friendly error-page a little more styling is added.  
-File: `error-page.html.php`
-```php
-// code coming soon
-```
+For the user-friendly error-page a little more styling is added.   
+File: `error-page.html.php` code can be found [here](https://github.com/samuelgfeller/documentation/blob/master/html-css/pages/user-friendly-error-page.md).
 
 
 ## Conclusion
