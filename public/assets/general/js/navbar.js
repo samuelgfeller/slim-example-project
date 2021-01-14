@@ -21,13 +21,13 @@ function toggleMobileNav() {
 }
 
 // Fix for indicator glitch at page load
-window.onload = function () {
+window.addEventListener("load",function(event) {
 // At 1025px the menu is in desktop version and not collapsed.
     if (window.matchMedia("(min-width: 1025px)").matches) {
         isMobile = false;
         loopOverItems();
     }
-};
+});
 
 window.onresize = function () {
     let oldIsMobile = isMobile;

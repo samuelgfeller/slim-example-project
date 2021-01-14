@@ -1,4 +1,4 @@
-window.onload = function () {
+window.addEventListener("load",function(event) {
     // No animation on page load
     let elements = document.getElementsByClassName("no-animation-on-page-load");
     // elements is a HTMLCollection and does not have forEach method. It has to be converted as array before
@@ -11,4 +11,4 @@ window.onload = function () {
     let vh = window.innerHeight * 0.01;
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', vh + 'px');
-}
+});
