@@ -1,16 +1,13 @@
 <?php
 /**
+ * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $errorMessage containing statusCode and reasonPhrase
  */
 
 ?>
 <section id="cloud-section" class="">
-
-
     <div class="cloud small-cloud"><span><?= $errorMessage['statusCode'] ?></span></div>
     <div class="cloud big-cloud"><span>&#129301;</span></div>
-<!--        <div class="cloud small-cloud"><span>&#129301;</span></div>-->
-<!--        <div class="cloud big-cloud"><span>--><?//= $errorMessage['statusCode'] ?><!--</span></div>-->
 </section>
 <section id="error-description-section">
     <?php
@@ -44,6 +41,6 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
     <p><?= $message ?></p>
 </section>
 <section id="home-btn-section">
-    <button class="btn">Go back home</button>
+    <a href="<?= $route->urlFor('hello') ?>" class="btn">Go back home</a>
 </section>
 

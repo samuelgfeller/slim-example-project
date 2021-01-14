@@ -35,15 +35,18 @@
         width: 100%;
         text-align: center;
     }
-    #home-btn-section button{
+    #home-btn-section a{
         width: 80%;
         padding: 15px 15px;
         border: none;
         box-shadow: 0 5px 10px white;
+        display: inline-block; /* Needed to give the button a width */
+        text-decoration: none;
     }
-    #home-btn-section button:hover {
+    #home-btn-section a:hover {
         box-shadow: 0 0 10px white;
         background: white; /* Default changes color */
+        text-shadow: none;
     }
 
     .cloud {
@@ -153,7 +156,7 @@
         margin: 0;
         right: 0;
     }
-    #home-btn-section button{
+    #home-btn-section a{
         width: 200px;
     }
 }
