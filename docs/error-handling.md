@@ -73,7 +73,7 @@ is to transform it into an Exception. More specifically an ErrorException. [Docs
 This can be done in a function inside `set_error_handler()`. Example [here](https://www.php.net/manual/en/class.errorexception.php)    
 It's important to note that unless caught, any Exception thrown will halt the script so even 
 something harmless like `E_USER_NOTICE ` will do that.   
-This was one of my concerns and at first I tried to create the error, pass it through my  
+This was one of my concerns and at first I tried to create the error, pass it through my 
 `ErrorHandler` and display the notice / warning at the end of the execution. (Explained 
 [here](https://samuel-gfeller.atlassian.net/browse/SLE-57?focusedCommentId=10130). 
 Contact me if interested.) As I was exasperating I discovered that big frameworks like 
@@ -224,7 +224,7 @@ code but the `process` method (which is called by default) is interesting.
 Middlewares are the last things that are called before sending the response to the client and 
 this one is the last middleware to be called. If an error occurred that hasn't been caught 
 anywhere before it will finally be caught here.   
-The exception then is passed to the handler wich can work with it. 
+The exception then is passed to the handler wich can work with it.   
 File: `vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php`
 ```php
 // ...
@@ -240,7 +240,7 @@ File: `vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php`
 // ...
 ```
 
-Add the container definition with the right arguments. 
+Add the container definition with the right arguments.   
 File: `app/container/container.php`  
 ```php
 use App\Application\Handler\DefaultErrorHandler;
@@ -281,7 +281,7 @@ return [
 ```
 
 This should be the last middleware added since anything that happens afterwards will not
-be handled by this middleware.  
+be handled by this middleware.   
 File: `app/middleware.`
 ```php
 use Slim\App;
