@@ -6,6 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\User;
 use App\Domain\Utility\ArrayReader;
 use Odan\Session\SessionInterface;
@@ -23,13 +24,14 @@ final class LoginSubmitAction
 
     public function __construct(
         Responder $responder,
-        LoggerInterface $logger,
+        LoggerFactory $logger,
         AuthService $authService,
         SessionInterface $session
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('auth-login');
         $this->session = $session;
     }
 

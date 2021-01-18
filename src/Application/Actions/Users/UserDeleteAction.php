@@ -5,6 +5,7 @@ namespace App\Application\Actions\Users;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
@@ -27,19 +28,20 @@ final class UserDeleteAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      * @param UserService $userService
      * @param AuthService $authService
      */
     public function __construct(
         Responder $responder,
-        LoggerInterface $logger,
+        LoggerFactory $logger,
         UserService $userService,
         AuthService $authService
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('user-delete');
         $this->userService = $userService;
     }
 

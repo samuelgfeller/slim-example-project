@@ -12,9 +12,7 @@ ini_set('xdebug.var_display_max_data', '1024');
 // todo https middleware https://odan.github.io/2020/04/07/slim4-https-middleware.html
 // todo use frontend framework
 
-use Psr\Log\LoggerInterface;
 use Slim\App;
-use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 
 require __DIR__ . '/../vendor/autoload.php';

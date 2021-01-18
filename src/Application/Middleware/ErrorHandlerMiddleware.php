@@ -3,6 +3,7 @@
 
 namespace App\Application\Middleware;
 
+use App\Domain\Factory\LoggerFactory;
 use ErrorException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,16 +27,17 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
     /**
      * @param bool $displayErrorDetails
      * @param bool $logErrors
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      */
     public function __construct(
         bool $displayErrorDetails,
         bool $logErrors,
-        LoggerInterface $logger
+        LoggerFactory $logger
     ) {
         $this->displayErrorDetails = $displayErrorDetails;
         $this->logErrors = $logErrors;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('nonfatal-error');
     }
 
     /**

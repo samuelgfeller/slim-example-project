@@ -4,6 +4,7 @@ namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
@@ -30,21 +31,22 @@ final class UserListAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      * @param UserService $userService
      * @param AuthService $authService
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
-        LoggerInterface $logger,
+        LoggerFactory $logger,
         UserService $userService,
         AuthService $authService,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('user-list');
         $this->userService = $userService;
         $this->outputEscapeService = $outputEscapeService;
     }

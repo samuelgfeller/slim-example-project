@@ -5,6 +5,7 @@ namespace App\Application\Actions\Posts;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
 use App\Domain\User\UserService;
@@ -36,21 +37,22 @@ final class PostDeleteAction
      * @param PostService $postService
      * @param OutputEscapeService $outputEscapeService
      * @param AuthService $authService
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      */
     public function __construct(
         Responder $responder,
         PostService $postService,
         OutputEscapeService $outputEscapeService,
         AuthService $authService,
-        LoggerInterface $logger
+        LoggerFactory $logger
 
     ) {
         $this->responder = $responder;
         $this->postService = $postService;
         $this->outputEscapeService = $outputEscapeService;
         $this->authService = $authService;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('post-delete');
     }
 
     /**

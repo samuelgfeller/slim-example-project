@@ -3,6 +3,7 @@
 namespace App\Application\Handler;
 
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,16 +38,17 @@ class DefaultErrorHandler
      *
      * @param PhpRenderer $phpRenderer PHP-View renderer
      * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param LoggerInterface $logger Logger
+     * @param LoggerFactory $logger Logger
      */
     public function __construct(
         PhpRenderer $phpRenderer,
         ResponseFactoryInterface $responseFactory,
-        LoggerInterface $logger
+        LoggerFactory $logger
     ) {
         $this->phpRenderer = $phpRenderer;
         $this->responseFactory = $responseFactory;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('error');
     }
 
     /**
@@ -58,6 +60,7 @@ class DefaultErrorHandler
      * @param bool $logErrors Log errors
      *
      * @return ResponseInterface The response
+     * @throws Throwable
      */
     public function __invoke(
         ServerRequestInterface $request,

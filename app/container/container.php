@@ -3,18 +3,14 @@
 use App\Application\Handler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
 use Cake\Database\Connection;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Monolog\Processor\UidProcessor;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Log\LoggerInterface;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
@@ -29,9 +25,12 @@ return [
         AppFactory::setContainer($container);
         return AppFactory::create();
     },
-    LoggerInterface::class => function (ContainerInterface $container) {
+    LoggerFactory::class => function (ContainerInterface $container) {
+        return new LoggerFactory($container->get('settings')['logger']);
+    },
+/*    LoggerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
-        $loggerSettings = $settings[LoggerInterface::class];
+        $loggerSettings = $settings['logger'];
         $logger = new Logger($loggerSettings['name']);
 
         $processor = new UidProcessor();
@@ -47,7 +46,7 @@ return [
         }
 
         return $logger;
-    },
+    },*/
     // For Responder and error middleware
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
@@ -56,7 +55,7 @@ return [
     // Error middlewares
     ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
-        $logger = $container->get(LoggerInterface::class);
+        $logger = $container->get(LoggerFactory::class);
 
         return new ErrorHandlerMiddleware(
             (bool)$config['display_error_details'], (bool)$config['log_errors'], $logger,
@@ -66,7 +65,9 @@ return [
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);
 
-        $logger = $container->get(LoggerInterface::class);
+        $logger = $container->get(LoggerFactory::class)
+            ->addFileHandler('error.log')
+            ->createInstance('default-errorhandler');
 
         $errorMiddleware = new ErrorMiddleware(
             $app->getCallableResolver(),

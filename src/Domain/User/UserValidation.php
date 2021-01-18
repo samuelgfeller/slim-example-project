@@ -3,6 +3,7 @@
 namespace App\Domain\User;
 
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;
@@ -23,12 +24,13 @@ class UserValidation extends AppValidation
     /**
      * UserValidation constructor.
      *
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      * @param UserRepository $userRepository
      */
-    public function __construct(LoggerInterface $logger, UserRepository $userRepository)
+    public function __construct(LoggerFactory $logger, UserRepository $userRepository)
     {
-        parent::__construct($logger);
+        parent::__construct($logger->addFileHandler('error.log')
+            ->createInstance('user-validation'));
         $this->userRepository = $userRepository;
     }
 

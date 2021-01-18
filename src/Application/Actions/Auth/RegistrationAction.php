@@ -6,6 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
@@ -24,14 +25,15 @@ final class RegistrationAction
 
 
     public function __construct(
-        LoggerInterface $logger,
+        LoggerFactory $logger,
         UserService $userService,
         Responder $responder,
         AuthService $authService,
         SessionInterface $session
     ) {
         $this->userService = $userService;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('auth-register');
         $this->responder = $responder;
         $this->authService = $authService;
         $this->session = $session;

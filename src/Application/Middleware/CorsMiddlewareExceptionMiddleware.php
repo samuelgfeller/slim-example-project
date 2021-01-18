@@ -4,6 +4,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Exceptions\CorsMiddlewareException;
+use App\Domain\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,11 +21,12 @@ final class CorsMiddlewareExceptionMiddleware implements MiddlewareInterface
     /**
      * The constructor.
      *
-     * @param LoggerInterface $logger The logger
+     * @param LoggerFactory $logger The logger factory
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerFactory $logger)
     {
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('§-login');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Post;
 
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;
@@ -18,12 +19,13 @@ class PostValidation extends AppValidation
     /**
      * UserValidation constructor.
      *
-     * @param LoggerInterface $logger
+     * @param LoggerFactory $logger
      * @param UserRepository $userRepository
      */
-    public function __construct(LoggerInterface $logger, UserRepository $userRepository)
+    public function __construct(LoggerFactory $logger, UserRepository $userRepository)
     {
-        parent::__construct($logger);
+        parent::__construct($logger->addFileHandler('error.log')
+            ->createInstance('post-validation'));
         $this->userRepository = $userRepository;
     }
 

@@ -3,6 +3,7 @@
 
 namespace App\Domain\User;
 
+use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use Psr\Log\LoggerInterface;
@@ -16,12 +17,13 @@ class UserService
     protected PostRepository $postRepository;
 
     // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
-    public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerInterface $logger,
+    public function __construct(UserRepository $userRepository, UserValidation $userValidation, LoggerFactory $logger,
         PostRepository $postRepository)
     {
         $this->userRepository = $userRepository;
         $this->userValidation = $userValidation;
-        $this->logger = $logger;
+        $this->logger = $logger->addFileHandler('error.log')
+            ->createInstance('user-service');
         $this->postRepository = $postRepository;
     }
     

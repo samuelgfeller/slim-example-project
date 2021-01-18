@@ -1,8 +1,6 @@
 <?php
 
 use Cake\Database\Driver\Mysql;
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
 
 // Init settings var
 $settings = [];
@@ -74,57 +72,12 @@ $settings['session'] = [
     'cache_expire' => 0,
 ];
 
-$settings[LoggerInterface::class] = [
-    'name' => 'event-log',
-    // The 8 possible levels are categorized into 4 files. Level can't be given as array in the StreamHandler so it has to be declared for each level
-    'enabled_log_levels' => [
-        // DEBUG
-        [
-            // Same file than INFO
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
-            'level' => Logger::DEBUG
-        ],
-        // INFO
-        [
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/info.log',
-            'level' => Logger::INFO
-        ],
-        // NOTICE
-        [
-            // Same file than INFO
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
-            'level' => Logger::NOTICE
-        ],
-        // WARNING
-        [
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/warning.log',
-            'level' => Logger::WARNING
-        ],
-        // ERROR
-        [
-            // Own file
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/error.log',
-            'level' => Logger::ERROR
-        ],
-        // CRITICAL
-        [
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-            'level' => Logger::CRITICAL
-        ],
-        // ALERT
-        [
-            // Same file than CRITICAL
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-            'level' => Logger::ALERT
-        ],
-        // EMERGENCY
-        [
-            // Same file than CRITICAL
-            'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/critical.log',
-            'level' => Logger::EMERGENCY
-        ],
-
-    ],
+$settings['logger'] = [
+    'name' => 'app',
+    'path' => __DIR__ . '/../logs',
+    'filename' => 'app.log',
+    'level' => \Monolog\Logger::DEBUG,
+    'file_permission' => 0775,
 ];
 
 return $settings;

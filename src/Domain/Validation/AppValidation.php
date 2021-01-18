@@ -3,6 +3,7 @@
 namespace App\Domain\Validation;
 
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -17,10 +18,12 @@ abstract class AppValidation
      * because PostValidation inherits this constructor and can't
      * be instantiated otherwise
      *
-     * @param LoggerInterface $logger
+     * @param LoggerInterface $logger instance created via factory in child classes
+     * (like UserValidation.php)
      */
     public function __construct(LoggerInterface $logger)
     {
+        // Not LoggerFactory since the instance is created in child class
         $this->logger = $logger;
     }
 
