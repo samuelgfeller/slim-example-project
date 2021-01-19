@@ -2,6 +2,10 @@
     font-family: CenturyGothic;
     src: url(../fonts/CenturyGothic.ttf);
 }
+@font-face {
+    font-family: DM-Sans;
+    src: url(../fonts/DMSans-Regular.ttf);
+}
 
 body, html {
     min-height: 100vh;
@@ -9,15 +13,19 @@ body, html {
     padding: 0;
 }
 #wrapper{
-    /* --vh set in default.js and if not found 1vh is fallback value
-    https://css-tricks.com/the-trick-to-viewport-units-on-mobile */
+    /* --vh set in default.js
+    https://css-tricks.com/the-trick-to-viewport-units-on-mobile
+    if not found 1vh is fallback value, phpStorm warning can be ignored */
     height: calc(var(--vh, 2vh) * 100);
 }
 
 /* Text */
 * {
+    /* border-box specifies that the borders and padding should be attributed to element's width
+    and height and not overflowing to the parent.
+    https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
     box-sizing: border-box;
-    font-family: CenturyGothic, Geneva, AppleGothic, sans-serif;
+    font-family: DM-Sans, CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 
 a {
