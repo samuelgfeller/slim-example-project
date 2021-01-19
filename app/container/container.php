@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
 
@@ -28,28 +29,14 @@ return [
     LoggerFactory::class => function (ContainerInterface $container) {
         return new LoggerFactory($container->get('settings')['logger']);
     },
-/*    LoggerInterface::class => function (ContainerInterface $container) {
-        $settings = $container->get('settings');
-        $loggerSettings = $settings['logger'];
-        $logger = new Logger($loggerSettings['name']);
 
-        $processor = new UidProcessor();
-        $logger->pushProcessor($processor);
-
-        foreach ($loggerSettings['enabled_log_levels'] as $logStreamSettings) {
-            $handler = new StreamHandler($logStreamSettings['path'], $logStreamSettings['level'], false);
-            // If dev then show error messages with line breaks
-            if ($settings['env'] === 'development' && $logStreamSettings['level'] === Logger::ERROR) {
-                $handler->setFormatter(new LineFormatter(null, null, true, true));
-            }
-            $logger->pushHandler($handler);
-        }
-
-        return $logger;
-    },*/
     // For Responder and error middleware
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
+    },
+    // For Responder
+    RouteParserInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getRouteCollector()->getRouteParser();
     },
 
     // Error middlewares

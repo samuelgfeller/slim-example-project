@@ -2,12 +2,13 @@
 
 namespace App\Application\Responder;
 
-use App\Application\Responder\UrlGenerator;
 use App\Domain\Validation\ValidationResult;
 use JsonException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\PhpRenderer;
+use function http_build_query;
 
 /**
  * A generic responder.
@@ -15,7 +16,7 @@ use Slim\Views\PhpRenderer;
 final class Responder
 {
 
-    private UrlGenerator $urlGenerator;
+    private RouteParserInterface $routeParser;
 
     private ResponseFactoryInterface $responseFactory;
 
@@ -24,16 +25,16 @@ final class Responder
     /**
      * The constructor.
      *
-     * @param UrlGenerator $urlGenerator The url generator
+     * @param RouteParserInterface $routeParser The route parser
      * @param ResponseFactoryInterface $responseFactory The response factory
      * @param PhpRenderer $phpRenderer slimphp/PHP-View renderer
      */
     public function __construct(
-        UrlGenerator $urlGenerator,
+        RouteParserInterface $routeParser,
         ResponseFactoryInterface $responseFactory,
         PhpRenderer $phpRenderer
     ) {
-        $this->urlGenerator = $urlGenerator;
+        $this->routeParser = $routeParser;
         $this->responseFactory = $responseFactory;
         $this->phpRenderer = $phpRenderer;
     }
@@ -70,32 +71,56 @@ final class Responder
     }
 
     /**
-     * Creates a redirect for the given url / route name.
+     * Creates a redirect for the given url
      *
      * This method prepares the response object to return an HTTP Redirect
      * response to the client.
      *
      * @param ResponseInterface $response The response
      * @param string $destination The redirect destination (url or route name)
-     * @param array<mixed> $data Named argument replacement data
      * @param array<mixed> $queryParams Optional query string parameters
      *
      * @return ResponseInterface The response
      */
-    public function redirect(
+    public function redirectToUrl(
         ResponseInterface $response,
         string $destination,
-        array $data = [],
         array $queryParams = []
     ): ResponseInterface {
-        if (!filter_var($destination, FILTER_VALIDATE_URL)) {
-            $destination = $this->urlGenerator->fullUrlFor($destination, $data, $queryParams);
+        if ($queryParams) {
+            $destination = sprintf('%s?%s', $destination, http_build_query($queryParams));
         }
 
         return $response->withStatus(302)->withHeader('Location', $destination);
     }
 
-    public function redirectOnValidationError(
+    /**
+     * Creates a redirect for the given route name.
+     *
+     * This method prepares the response object to return an HTTP Redirect
+     * response to the client.
+     *
+     * @param ResponseInterface $response The response
+     * @param string $routeName The redirect route name
+     * @param array<mixed> $data Named argument replacement data
+     * @param array<mixed> $queryParams Optional query string parameters
+     *
+     * @return ResponseInterface The response
+     */
+    public function redirectToRouteName(
+        ResponseInterface $response,
+        string $routeName,
+        array $data = [],
+        array $queryParams = []
+    ): ResponseInterface {
+        return $this->redirectToUrl($response, $this->routeParser->urlFor($routeName, $data, $queryParams));
+    }
+
+
+
+    /* Below is temp @todo remove */
+
+    public function redirectForOnValidationError(
         ResponseInterface $response,
         ValidationResult $validationResult,
         string $destination
@@ -106,7 +131,7 @@ final class Responder
             'validation' => $validationResult->toArray(),
         ];
 //        $flash->add()
-        return $this->redirect($response, $destination);
+        return $this->redirectToRouteName($response, $destination);
     }
 
     /**

@@ -59,15 +59,15 @@ final class LoginSubmitAction
 
             $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
 
-            return $this->responder->redirect($response, 'post-list-all');
+            return $this->responder->redirectToRouteName($response, 'post-list-all');
         } catch (ValidationException $exception) {
             $flash->add('error', 'Validation error!');
 
             // Validation error is logged in AppValidation.php
-            return $this->responder->redirectOnValidationError($response, $exception->getValidationResult(), 'login-page');
+            return $this->responder->redirectForOnValidationError($response, $exception->getValidationResult(), 'login-page');
         } catch (InvalidCredentialsException $e) {
 
-            $flash->add('error', 'Invalid credentials!');
+            $flash->add('error', 'Invalid credentials.');
 
             // Log error
             $this->logger->notice(
@@ -75,7 +75,7 @@ final class LoginSubmitAction
                 ) . '"'
             );
 
-            return $this->responder->redirect($response, 'login-page');
+            return $this->responder->redirectToRouteName($response, 'login-page');
         }
     }
 }

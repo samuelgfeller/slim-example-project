@@ -36,7 +36,7 @@ final class LogoutAction
         // Logout user
         $this->session->destroy();
 
-        return $this->responder->redirect(
+        return $this->responder->redirectToRouteName(
             $response,
             'login-page',
             ['status' => 'success', 'message' => 'Logged out successfully']

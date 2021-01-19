@@ -79,7 +79,7 @@ final class RegistrationAction
 
                 $this->logger->info('Successful register + login from user "' . $user->getEmail() . '"');
 
-                return $this->responder->redirect($response, 'post-list-all');
+                return $this->responder->redirectToRouteName($response, 'post-list-all');
             } catch (InvalidCredentialsException $e) {
                 $flash->add('error', 'Automatic login after registration failed!');
 
@@ -88,10 +88,10 @@ final class RegistrationAction
                     'InvalidCredentialsException thrown with message: "' . $e->getMessage(
                     ) . '" user "' . $e->getUserEmail() . '"'
                 );
-                return $this->responder->redirect($response, 'login-page');
+                return $this->responder->redirectToRouteName($response, 'login-page');
             }
         }
         $flash->add('error', 'Registration failed');
-        return $this->responder->redirect($response, 'register-page');
+        return $this->responder->redirectToRouteName($response, 'register-page');
     }
 }

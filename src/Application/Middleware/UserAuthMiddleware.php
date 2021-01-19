@@ -40,6 +40,6 @@ final class UserAuthMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
-        return $this->responder->redirect($response, 'login-page');
+        return $this->responder->redirectToRouteName($response, 'login-page');
     }
 }
