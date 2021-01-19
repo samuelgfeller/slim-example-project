@@ -36,6 +36,6 @@ final class LoginAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->responder->render($response, 'pages/login.html.php');
+        return $this->responder->render($response, 'auth/login.html.php');
     }
 }

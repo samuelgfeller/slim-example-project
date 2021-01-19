@@ -111,7 +111,9 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
     PhpViewExtensionMiddleware::class => function (ContainerInterface $container) {
-        return new PhpViewExtensionMiddleware($container->get(App::class), $container->get(PhpRenderer::class));
+        return new PhpViewExtensionMiddleware($container->get(App::class),
+                                              $container->get(PhpRenderer::class),
+                                              $container->get(SessionInterface::class));
     },
 
 ];

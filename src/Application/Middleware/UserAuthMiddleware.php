@@ -4,12 +4,12 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\Responder;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Routing\RouteContext;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * User auth verification middleware
@@ -19,11 +19,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 final class UserAuthMiddleware implements MiddlewareInterface
 {
-    private Session $session;
+    private SessionInterface $session;
 
     protected Responder $responder;
 
-    public function __construct(Session $session, Responder $responder)
+    public function __construct(SessionInterface $session, Responder $responder)
     {
         $this->session = $session;
         $this->responder = $responder;

@@ -46,7 +46,7 @@ a:hover {
     cursor: pointer;
 }
 
-.greenText{
+.green-text{
     color: limegreen;
 }
 
@@ -87,6 +87,13 @@ a:hover {
     background: whitesmoke;
     color: grey;
     cursor: default;
+}
+
+.discrete-link{
+    text-decoration: none;
+    font-style: italic;
+    color: #575757;
+    font-size: 0.9em;
 }
 
 @media (min-width: 961px) {

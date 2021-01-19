@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
     // Send login requests
-    $('#submitBtnLogin').on('click', function () {
-        login('loginForm');
-    });
+    // $('#submitBtnLogin').on('click', function () {
+    //     login('login-form');
+    // });
 
     $('#registerSubmitBtn').on('click', function () {
-        register('registerForm');
+        register('register-form');
     });
 
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
         // check if warning already appended
         if (isBreached(registerPassword1Inp.val())) {
             if ($('#pwnedPasswordWarning').length === 0) {
-                registerPassword1Inp.after('<span class="inputWarning" id="pwnedPasswordWarning">This password is known to have been leaked and is unsafe to use</span>');
+                registerPassword1Inp.after('<span class="input-warning" id="pwnedPasswordWarning">This password is known to have been leaked and is unsafe to use</span>');
             }
         } else {
             $('#pwnedPasswordWarning').remove();
@@ -72,31 +72,6 @@ function isBreached(password) {
     return result;
 }
 
-/**
- * Leases jwt token and stores in localStorage
- *
- */
-function login(formId) {
-    if(formIsValid(formId)){
-        $.ajax({
-            url: config.api_url + 'login',
-            type: 'post',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({
-                email: $('#loginEmailInp').val(),
-                password: $('#loginPasswordInp').val(),
-            }),
-        }).done(function (output) {
-            localStorage.setItem('token', output.token);
-            $('.loggedInInfo').remove();
-            $("#loginFormBox").prepend("<b class='loggedInInfo greenText''>Logged in.</b>");
-
-        }).fail(function (xhr) {
-            handleFail(xhr);
-        });
-    }
-}
 
 /**
  * Leases jwt token and stores in localStorage
@@ -118,7 +93,7 @@ function register(formId) {
         }).done(function (output) {
             localStorage.setItem('token', output.token);
             $('.loggedInInfo').remove();
-            $("#registerFormBox").prepend("<b class='loggedInInfo greenText''>Registered and logged in.</b>");
+            $("#register-form-box").prepend("<b class='loggedInInfo green-text''>Registered and logged in.</b>");
 
         }).fail(function (xhr) {
             handleFail(xhr);
