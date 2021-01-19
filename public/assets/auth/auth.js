@@ -1,21 +1,10 @@
 $(document).ready(function () {
-
-    // Send login requests
-    // $('#submitBtnLogin').on('click', function () {
-    //     login('login-form');
-    // });
-
-    $('#registerSubmitBtn').on('click', function () {
-        register('register-form');
-    });
-
-
     let registerPassword1Inp = $('#registerPassword1Inp');
     let registerPassword2Inp = $('#registerPassword2Inp');
 
     $($('#registerPassword1Inp, #registerPassword2Inp')).on('keyup', function () {
         let submitBtn = $('#registerSubmitBtn');
-        console.log(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp));
+        // console.log(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp));
         if (inputHaveSameVal(registerPassword1Inp, registerPassword2Inp)) {
             submitBtn.attr("disabled", false);
         } else {
@@ -34,8 +23,6 @@ $(document).ready(function () {
             $('#pwnedPasswordWarning').remove();
         }
     });
-
-
 });
 
 /**

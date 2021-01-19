@@ -10,11 +10,12 @@ return function (App $app) {
     $app->redirect('/', 'hello', 301);
 
     $app->get('/login', \App\Application\Actions\Auth\LoginAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('login-submit-form');
+    $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('login-submit');
 
     $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
 
-    $app->post('/register', \App\Application\Actions\Auth\RegistrationAction::class)->setName('register-page');
+    $app->get('/register', \App\Application\Actions\Auth\RegisterAction::class)->setName('register-page');
+    $app->post('/register', \App\Application\Actions\Auth\RegisterSubmitAction::class)->setName('register-submit');
 
     $app->post('/profile', \App\Application\Actions\Hello\HelloAction::class)->setName('profile');
 
