@@ -11,11 +11,51 @@ class UserProvider
     public function getSampleUsers(): array
     {
         return [
-            ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin'],
-            ['id' => 2, 'name' => 'Steve Jobs', 'email' => 'jobs@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
-            ['id' => 3, 'name' => 'Mark Zuckerberg', 'email' => 'zuckerberg@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
-            ['id' => 4, 'name' => 'Evan Spiegel', 'email' => 'spiegel@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
-            ['id' => 5, 'name' => 'Jack Dorsey', 'email' => 'dorsey@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'],
+            [
+                'id' => 1,
+                'name' => 'Bill Gates',
+                'email' => 'gates@email.com',
+                'password' => '12345678',
+                'password2' => '12345678',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                'role' => 'admin'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Steve Jobs',
+                'email' => 'jobs@email.com',
+                'password' => '12345678',
+                'password2' => '12345678',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                'role' => 'user'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Mark Zuckerberg',
+                'email' => 'zuckerberg@email.com',
+                'password' => '12345678',
+                'password2' => '12345678',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                'role' => 'user'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Evan Spiegel',
+                'email' => 'spiegel@email.com',
+                'password' => '12345678',
+                'password2' => '12345678',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                'role' => 'user'
+            ],
+            [
+                'id' => 5,
+                'name' => 'Jack Dorsey',
+                'email' => 'dorsey@email.com',
+                'password' => '12345678',
+                'password2' => '12345678',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                'role' => 'user'
+            ],
         ];
     }
 
@@ -27,11 +67,71 @@ class UserProvider
     public function userArrayReaderDataProvider(): array
     {
         return [
-            [new ArrayReader(['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'admin'])],
-            [new ArrayReader(['id' => 2, 'name' => 'Steve Jobs', 'email' => 'jobs@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 3, 'name' => 'Mark Zuckerberg', 'email' => 'zuckerberg@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 4, 'name' => 'Evan Spiegel', 'email' => 'spiegel@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
-            [new ArrayReader(['id' => 5, 'name' => 'Jack Dorsey', 'email' => 'dorsey@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user'])],
+            [
+                new ArrayReader(
+                    [
+                        'id' => 1,
+                        'name' => 'Bill Gates',
+                        'email' => 'gates@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'admin'
+                    ]
+                )
+            ],
+            [
+                new ArrayReader(
+                    [
+                        'id' => 2,
+                        'name' => 'Steve Jobs',
+                        'email' => 'jobs@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'user'
+                    ]
+                )
+            ],
+            [
+                new ArrayReader(
+                    [
+                        'id' => 3,
+                        'name' => 'Mark Zuckerberg',
+                        'email' => 'zuckerberg@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'user'
+                    ]
+                )
+            ],
+            [
+                new ArrayReader(
+                    [
+                        'id' => 4,
+                        'name' => 'Evan Spiegel',
+                        'email' => 'spiegel@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'user'
+                    ]
+                )
+            ],
+            [
+                new ArrayReader(
+                    [
+                        'id' => 5,
+                        'name' => 'Jack Dorsey',
+                        'email' => 'dorsey@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'user'
+                    ]
+                )
+            ],
         ];
     }
 
@@ -43,7 +143,7 @@ class UserProvider
     public function oneSetOfMultipleUsersProvider(): array
     {
         return [
-          [$this->getSampleUsers()]
+            [$this->getSampleUsers()]
         ];
     }
 
@@ -56,7 +156,15 @@ class UserProvider
     {
         return [
             [
-                ['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
             ]
         ];
     }
@@ -68,15 +176,56 @@ class UserProvider
     {
         return [
             // Not existing user
-            [['id' => 100000000, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 100000000,
+                    'name' => 'B',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Name too short
-            [['id' => 2, 'name' => 'B', 'email' => 'gates@email.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 2,
+                    'name' => 'B',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Invalid Email
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@ema$il.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@ema$il.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Not matching Passwords
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '123456789', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '123456789',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Required values not set
-            [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '', 'role' => 'user']],
+            [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '',
+                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi', 'role' => 'user']],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.
@@ -89,11 +238,41 @@ class UserProvider
     {
         return [
             // Invalid Email
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@ema$il.com', 'password' => '12345678', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@ema$il.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Email not set
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => '', 'password' => '', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => '',
+                    'password' => '',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
             // Password not set
-            [['id' => 1, 'name' => 'Bill Gates', 'email' => 'gates@email.com', 'password' => '', 'password2' => '12345678', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
         ];
     }
 

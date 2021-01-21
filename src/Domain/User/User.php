@@ -11,6 +11,7 @@ class User
     private string $email;
     private ?string $password;
     private ?string $password2;
+    private ?string $passwordHash;
     private ?string $role;
     
     
@@ -22,13 +23,14 @@ class User
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->findString('password');
         $this->password2 = $arrayReader->findString('password2');
+        $this->passwordHash = $arrayReader->findString('password_hash');
         $this->role = $arrayReader->findString('role') ?? 'user';
     }
-    
-    
+
     /**
      * Returns values of object as array for database (pw2 not included)
-     * The array keys should match with the database column names since it can
+     *
+     * The array keys MUST match with the database column names since it can
      * be used to modify a database entry
      *
      * @return array
@@ -39,7 +41,7 @@ class User
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'password' => $this->password,
+            'password_hash' => $this->passwordHash,
             'role' => $this->role,
         ];
     }
@@ -50,14 +52,6 @@ class User
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
     
     /**
@@ -99,22 +93,12 @@ class User
     {
         return $this->password2;
     }
-    
-    /**
-     * @return mixed|string|null
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
 
     /**
-     * @param string|null $role
+     * @param string|null $passwordHash
      */
-    public function setRole(?string $role): void
+    public function setPasswordHash(?string $passwordHash): void
     {
-        $this->role = $role;
+        $this->passwordHash = $passwordHash;
     }
-    
-    
 }

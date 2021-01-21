@@ -50,7 +50,7 @@ class UserRepository extends DataManager
      */
     public function findUserByEmail(?string $email): ?array
     {
-        return $this->findOneBy('email', $email,['id','email','password']);
+        return $this->findOneBy('email', $email,['id','email','password_hash']);
     }
     
     /**

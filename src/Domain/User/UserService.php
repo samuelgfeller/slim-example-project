@@ -29,8 +29,7 @@ class UserService
     
     public function findAllUsers()
     {
-        $allUsers = $this->userRepository->findAllUsers();
-        return $allUsers;
+        return $this->userRepository->findAllUsers();
     }
     
     public function findUser(int $id): array
@@ -56,7 +55,7 @@ class UserService
     public function createUser(User $user): string
     {
         $this->userValidation->validateUserRegistration($user);
-        $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
+        $user->setPasswordHash(password_hash($user->getPassword(), PASSWORD_DEFAULT));
         return $this->userRepository->insertUser($user->toArrayForDatabase());
     }
 
@@ -79,7 +78,7 @@ class UserService
         }
         if ($user->getPassword() !== null) {
             // passwords are already identical since they were validated in UserValidation.php
-            $userData['password'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+            $userData['password_hash'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         }
 
         return $this->userRepository->updateUser($userData, $user->getId());

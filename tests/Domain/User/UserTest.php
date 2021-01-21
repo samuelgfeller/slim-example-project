@@ -30,16 +30,14 @@ class UserTest extends TestCase
         $user = new User($userValues);
 
         // Set possible values via setters
-        $user->setId($userValues->findInt('id'));
         $user->setPassword($userValues->findString('password'));
-        $user->setRole($userValues->findString('role'));
+        $user->setPasswordHash($userValues->findString('password_hash'));
 
         self::assertEquals($userValues->findInt('id'), $user->getId());
         self::assertEquals($userValues->findString('name'), $user->getName());
         self::assertEquals($userValues->getString('email'), $user->getEmail());
         self::assertEquals($userValues->findString('password'), $user->getPassword());
         self::assertEquals($userValues->findString('password2'), $user->getPassword2());
-        self::assertEquals($userValues->findString('role'), $user->getRole());
     }
 
     /**
@@ -54,13 +52,13 @@ class UserTest extends TestCase
         $user = new User($userValues);
 
         // Call said function to get the values as array
-        $userAsArray = $user->toArrayForDatabase();
+        $userAsDbArray = $user->toArrayForDatabase();
 
         // Check if values match
-        self::assertEquals($userValues->findInt('id'), $userAsArray['id']);
-        self::assertEquals($userValues->findString('name'), $userAsArray['name']);
-        self::assertEquals($userValues->getString('email'), $userAsArray['email']);
-        self::assertEquals($userValues->findString('password'), $userAsArray['password']);
-        self::assertEquals($userValues->findString('role'), $userAsArray['role']);
+        self::assertEquals($userValues->findInt('id'), $userAsDbArray['id']);
+        self::assertEquals($userValues->findString('name'), $userAsDbArray['name']);
+        self::assertEquals($userValues->getString('email'), $userAsDbArray['email']);
+        self::assertEquals($userValues->findString('password_hash'), $userAsDbArray['password_hash']);
+        self::assertEquals($userValues->findString('role'), $userAsDbArray['role']);
     }
 }

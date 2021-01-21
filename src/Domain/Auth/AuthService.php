@@ -47,7 +47,7 @@ class AuthService
         $this->userValidation->validateUserLogin($user);
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
-        if ($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password'])) {
+        if ($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
             return $dbUser['id'];
         }
 

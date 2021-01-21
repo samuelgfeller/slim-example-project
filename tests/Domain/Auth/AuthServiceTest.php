@@ -24,11 +24,8 @@ class AuthServiceTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLogin(array $validUser)
     {
-        // Service function uses password_verify which compares password with hash
-        $userWithHashPass = $validUser;
-        $userWithHashPass['password'] = password_hash($validUser['password'], PASSWORD_DEFAULT);
-
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userWithHashPass);
+        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
@@ -46,13 +43,8 @@ class AuthServiceTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLoginInvalidData(array $validUser)
     {
-        // Technically not needed because if code works, it shouldn't go past the validation call line
-        // But in case test fails (exception not thrown) error would not be accurate without this mock
-        // Service function uses password_verify which compares password with hash
-        $userWithHashPass = $validUser;
-        $userWithHashPass['password'] = password_hash($validUser['password'], PASSWORD_DEFAULT);
-
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userWithHashPass);
+        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
@@ -72,6 +64,7 @@ class AuthServiceTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLoginUserNotExisting(array $validUser)
     {
+        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
 
         /** @var AuthService $authService */
@@ -91,12 +84,13 @@ class AuthServiceTest extends TestCase
      * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserIdIfAllowedToLoginInvalidCreds(array $validUser)
+    public function testGetUserIdIfAllowedToLoginInvalidPass(array $validUser)
     {
         // Add DIFFERENT password hash
-        $userWithHashPass = $validUser;
-        $userWithHashPass['password'] = password_hash($validUser['password'] . 'differentPass', PASSWORD_DEFAULT);
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userWithHashPass);
+        $validUser['password_hash'] = password_hash($validUser['password'] . 'differentPass', PASSWORD_DEFAULT);
+
+        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
