@@ -36,8 +36,7 @@
                minlength="3" required>
         <!--                <br><a class="discrete-link" href="login/password/reset/mail">Lost password?</a>-->
 
-        <input type="submit" class="submitBtn" id="submitBtnLogin" value="Login">
-        <!--        <button type="button" class="submitBtn" id="submitBtnLogin">Login</button>-->
+        <input type="submit" class="submit-btn" id="submitBtnLogin" value="Login">
     </form>
     <br>Not registered? <a href="register">Register</a>
 </div>

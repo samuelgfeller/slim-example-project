@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    let registerPassword1Inp = $('#registerPassword1Inp');
-    let registerPassword2Inp = $('#registerPassword2Inp');
+    let registerPassword1Inp = $('#register-password1-inp');
+    let registerPassword2Inp = $('#register-password2-inp');
 
-    $($('#registerPassword1Inp, #registerPassword2Inp')).on('keyup', function () {
-        let submitBtn = $('#registerSubmitBtn');
+    $($('#register-password1-inp, #register-password2-inp')).on('keyup', function () {
+        let submitBtn = $('#register-submit-btn');
         // console.log(inputHaveSameVal(registerPassword1Inp, registerPassword2Inp));
         if (inputHaveSameVal(registerPassword1Inp, registerPassword2Inp)) {
             submitBtn.attr("disabled", false);
@@ -16,11 +16,11 @@ $(document).ready(function () {
     $(registerPassword1Inp).on('change', function () {
         // check if warning already appended
         if (isBreached(registerPassword1Inp.val())) {
-            if ($('#pwnedPasswordWarning').length === 0) {
-                registerPassword1Inp.after('<span class="input-warning" id="pwnedPasswordWarning">This password is known to have been leaked and is unsafe to use</span>');
+            if ($('#pwned-password-warning').length === 0) {
+                registerPassword1Inp.after('<span class="input-warning" id="pwned-password-warning">This password is known to have been leaked and is unsafe to use</span>');
             }
         } else {
-            $('#pwnedPasswordWarning').remove();
+            $('#pwned-password-warning').remove();
         }
     });
 });
@@ -57,35 +57,6 @@ function isBreached(password) {
     });
 
     return result;
-}
-
-
-/**
- * Leases jwt token and stores in localStorage
- *
- */
-function register(formId) {
-    if (formIsValid(formId)) {
-        $.ajax({
-            url: config.api_url + 'register',
-            type: 'post',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({
-                name: $('#registerNameInp').val(),
-                email: $('#registerEmailInp').val(),
-                password: $('#registerPassword1Inp').val(),
-                password2: $('#registerPassword2Inp').val(),
-            }),
-        }).done(function (output) {
-            localStorage.setItem('token', output.token);
-            $('.loggedInInfo').remove();
-            $("#register-form-box").prepend("<b class='loggedInInfo green-text''>Registered and logged in.</b>");
-
-        }).fail(function (xhr) {
-            handleFail(xhr);
-        });
-    }
 }
 
 /**

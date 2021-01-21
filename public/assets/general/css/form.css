@@ -26,7 +26,7 @@
     font-size: 16px;
 }
 
-.form input[type=submit], .submitBtn {
+.form input[type=submit], .submit-btn {
     width: 100%;
     background-color: white;
     border: 1px solid var(--formColor);
@@ -38,12 +38,12 @@
     font-size: 100%;
 }
 
-.form input[type=submit]:hover, .submitBtn:hover {
+.form input[type=submit]:hover, .submit-btn:hover {
     background: var(--formColor);
     color: white;
 }
 
-.form input[type=submit]:disabled, .submitBtn:disabled {
+.form input[type=submit]:disabled, .submit-btn:disabled {
     border: 1px solid grey;
     background: whitesmoke;
     color: grey;
