@@ -16,16 +16,6 @@
     <form action="<?= $route->urlFor('login-submit') ?>"
           id="login-form" class="form" method="post" autocomplete="on">
 
-<!--    Display errors if there are some -->
-        <?php $errClass = null;
-        // Error messages
-        foreach ($flash->get('error') as $errMsg) {
-            echo '<span class="err-msg">' . $errMsg . '</span> <br>';
-        }
-        // Success messages
-        foreach ($flash->get('success') as $msg) {
-            echo '<span class="success-msg green-text">' . $msg . '</span> <br>';
-        } ?>
         <label for="loginEmailInp">Email</label>
         <input type="email" name="email" id="loginEmailInp"
                placeholder="your@email.com"

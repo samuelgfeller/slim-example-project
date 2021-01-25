@@ -1,0 +1,146 @@
+/* General style */
+#flash-container{
+    float: right;
+}
+.flash{
+    width: 300px;
+    min-height: 70px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 20px 0 20px 0;
+    background: white;
+    display: flex;
+    margin: 30px 0 30px 30px;
+
+    /* Revert default styling of <dialog> */
+    position: relative;
+    border: none;
+    padding: 0;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.flash-fig{ /* Flex item */
+    position: relative;
+    width: 80px;
+    /*height: 50px;*/
+    /*border-radius: 10px;*/
+    margin: 0;
+    z-index: 1;
+    /*background: red;*/
+    flex-shrink: 0;
+}
+.flash-fig img{
+    width: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.flash-fig img.open {
+    /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css*/
+    display: block;
+}
+.flash-fig.success{
+    background: #60c67e;
+}
+.flash-fig.success img{
+    content: url("/assets/general/img/checkmark.svg");
+}
+
+.flash-fig.error{
+    background: tomato;
+}
+.flash-fig.error img{
+    content: url("/assets/general/img/cross.svg");
+}
+
+.flash-message{ /* Flex item */
+    flex-grow: 1;
+    /*background: .60c67e;*/
+}
+.flash-message h3{
+    margin: 8px;
+    font-size: 1rem;
+}
+.flash-message p{
+    margin: 8px;
+    font-size: 0.8rem;
+    width: 200px;
+}
+
+
+/* Boxes */
+/*
+.boxesDiv {
+    !*background: lightpink;*!
+    width: 100%;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.singleBox {
+    !*overflow: hidden;*!
+    min-width: 300px;
+    display: inline-block;
+    float: left;
+    min-height: 100px;
+    margin-left: 2%;
+    margin-bottom: 40px;
+    !*box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1)!*, 3px 3px 3px 0 rgba(0, 0, 0, 0.05)*!;*!
+}
+
+.boxHeader {
+    !*font-size: 1.5em;*!
+    !*Remove default margin*!
+    padding: 0 70px 0 0;
+    margin: 0;
+}
+.boxContent {
+    padding: 20px;
+    position: relative;
+    display: inline-block;
+    background: #f2f2f2;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+.boxContent:hover{
+    box-shadow: inset 0 0 0 1px black;
+}
+.boxContent:hover > .delIcon,.boxContent:hover > .editIcon {
+    display: inline;
+}
+
+.infoInBoxSpan {
+    font-style: italic;
+    color: #575757;
+}
+
+.contactBtn {
+    width: 50%;
+    margin: auto;
+}
+
+.breakParagraph {
+    word-break: break-word;
+}
+
+.delIcon {
+    display: none;
+    width: 20px;;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 20px;
+}
+.editIcon {
+    display: none;
+    width: 30px;;
+    position: absolute;
+    right: 40px;
+    top: 0px;
+    margin: 15px;
+}*/

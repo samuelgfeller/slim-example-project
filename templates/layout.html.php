@@ -4,6 +4,7 @@
  * @var string $content PHP-View var page content
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Psr\Http\Message\UriInterface $uri
+ * @var \Odan\Session\FlashInterface $flash
  * @var string $title
  */
 $r = random_int(0, 10000);
@@ -23,7 +24,7 @@ $r = random_int(0, 10000);
     <link rel="stylesheet" href="assets/general/css/navbar.css?r=<?= $r ?>">
     <link rel="stylesheet" href="assets/general/css/general.css?r=<?= $r ?>">
 
-<!--    Will be removed with SLE-81 -->
+    <!--    Will be removed with SLE-81 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <title><?= $title ?></title>
@@ -67,6 +68,31 @@ $r = random_int(0, 10000);
     </header>
 
     <main>
+        <aside id="flash-container">
+            <!--    Display errors if there are some -->
+            <?php
+            $flash->add('error', 'This is an error message a');
+            $flash->add('success', 'This is a success message This is a success message a');
+            foreach ($flash->all() as $key => $flashCategory) {
+            foreach ($flashCategory as $msg) { ?>
+                <dialog class="flash">
+                    <figure class="flash-fig <?= $key /* success, error, info, warning */ ?>">
+                        <!-- Sadly I cannot use the `content:` tag because its impossible set basepath for css -->
+                        <img class="<?= $key === "success" ?  "open" : '' ?>" src="assets/general/img/checkmark.svg" alt="info">
+                        <img class="<?= $key === "error" ?  "open" : '' ?>" src="assets/general/img/cross.svg" alt="info">
+                        <img class="<?= $key === "info" ?  "open" : '' ?>" src="assets/general/img/info-icon.svg" alt="info">
+                        <img class="<?= $key === "warning-icon" ?  "open" : '' ?>" src="assets/general/img/warning-icon.svg" alt="info">
+                    </figure>
+                    <div class="flash-message">
+                        <h3><?= ucfirst($key) /* Success, Error, Info, Warning */ ?> message</h3>
+                        <p><?= $msg ?></p>
+                    </div>
+                </dialog>
+            <?php }
+            } ?>
+        </aside>
+
+
         <?= $content ?>
     </main>
 
