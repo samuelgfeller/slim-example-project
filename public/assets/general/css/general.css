@@ -1,27 +1,42 @@
 /* General style */
-#flash-container{
+#flash-container {
     float: right;
+    /*overflow: hidden;*/
 }
-.flash{
-    width: 300px;
+
+.flash {
+    width: 340px;
     min-height: 70px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 20px 0 20px 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 30px 0 30px 0;
     background: white;
     display: flex;
-    margin: 30px 0 30px 30px;
+    margin: 25px 0 10px 25px;
+    transform: translateX(130%);
+    opacity: 0;
+    overflow: hidden;
 
     /* Revert default styling of <dialog> */
     position: relative;
     border: none;
     padding: 0;
     align-items: stretch;
-    overflow: hidden;
 }
 
-.flash-fig{ /* Flex item */
+.close-btn {
+    position: absolute;
+    top: -10px; /* Large font size and time symbol pretty small it has to be pushed upwards*/
+    right: 10px;
+    height: 30px;
+    font-size: 40px;
+    font-weight: lighter;
+    color: lightgrey;
+    cursor: pointer;
+}
+
+.flash-fig { /* Flex item */
     position: relative;
-    width: 80px;
+    width: 100px;
     /*height: 50px;*/
     /*border-radius: 10px;*/
     margin: 0;
@@ -29,8 +44,9 @@
     /*background: red;*/
     flex-shrink: 0;
 }
-.flash-fig img{
-    width: 40px;
+
+.flash-fig img {
+    height: 40px; /* More relevant than width to have all images with the same size */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -42,32 +58,68 @@
     /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css*/
     display: block;
 }
-.flash-fig.success{
-    background: #60c67e;
-}
-.flash-fig.success img{
-    content: url("/assets/general/img/checkmark.svg");
+
+.flash.success .flash-fig {
+    background: #3fcb64;
 }
 
-.flash-fig.error{
+.flash.error .flash-fig {
     background: tomato;
 }
-.flash-fig.error img{
-    content: url("/assets/general/img/cross.svg");
-}
 
-.flash-message{ /* Flex item */
+.flash-message { /* Flex item */
     flex-grow: 1;
     /*background: .60c67e;*/
 }
-.flash-message h3{
-    margin: 8px;
+
+.flash-message h3 {
+    margin: 10px 10px 6px 10px;
     font-size: 1rem;
+    text-indent:-9999px; /* Change h3 text in css https://stackoverflow.com/a/26889106/9013718 */
 }
-.flash-message p{
-    margin: 8px;
-    font-size: 0.8rem;
+.flash.success .flash-message h3:before{
+    text-indent:0;
+    float:left;
+    content: 'YAY! Success!';
+    color: #28a548;
+}
+.flash.error .flash-message h3:before{
+    text-indent:0;
+    float:left;
+    content: 'OOPS! Error...';
+    color: #ae4931;
+}
+
+.flash-message p {
+    margin: 3px 10px 10px 10px;
+    font-size: 0.9rem;
     width: 200px;
+}
+
+.slide-in {
+    animation: slide-in 0.9s forwards;
+}
+
+.slide-out {
+    animation: slide-out 0.9s forwards;
+}
+
+@keyframes slide-in {
+    100% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(130%);
+        opacity: 0;
+    }
 }
 
 
