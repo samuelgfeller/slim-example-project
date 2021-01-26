@@ -22,7 +22,7 @@ $r = random_int(0, 10000);
     <link rel="stylesheet" href="assets/general/css/default.css?r=<?= $r ?>">
     <link rel="stylesheet" href="assets/general/css/layout.css?r=<?= $r ?>">
     <link rel="stylesheet" href="assets/general/css/navbar.css?r=<?= $r ?>">
-    <link rel="stylesheet" href="assets/general/css/general.css?r=<?= $r ?>">
+    <link rel="stylesheet" href="assets/general/css/flash.css?r=<?= $r ?>">
 
     <!--    Will be removed with SLE-81 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
