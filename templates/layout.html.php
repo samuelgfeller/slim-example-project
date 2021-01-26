@@ -85,8 +85,8 @@ $r = random_int(0, 10000);
                                  src="assets/general/img/warning-icon.svg" alt="warning">
                         </figure>
                         <div class="flash-message">
-                            <h3><?= ucfirst($key) /* Success, Error, Info, Warning */ ?> message</h3>
-                            <p><?= $msg ?></p>
+                            <h3><?= html(ucfirst($key)) /* Success, Error, Info, Warning */ ?> message</h3>
+                            <p><?= html($msg) ?></p>
                         </div>
                         <span class="flash-close-btn">&times;</span>
                     </dialog>

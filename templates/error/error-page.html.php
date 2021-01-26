@@ -37,8 +37,8 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
             break;
     }
     ?>
-    <h2 id="title"><?= $title ?></h2>
-    <p><?= $message ?></p>
+    <h2 id="title"><?= html($title) ?></h2>
+    <p><?= html($message) ?></p>
 </section>
 <section id="home-btn-section">
     <a href="<?= $route->urlFor('hello') ?>" class="btn">Go back home</a>

@@ -11,9 +11,11 @@
            {% if is_current_url('hello', { 'name': 'patrick' }) %}class="active"{% endif %}>Patrick</a></li>
 </ul>
 -->
-<h1>Hello <?= $name ?>!</h1>
-<p>You have new notification(s).</p>
-<!--<a href="{{ url_for('login-page') }}">Login page</a>-->
-<?php
-$ini = ini_get('error_reporting');
-//var_dump($ini) ?>
+<h1>Hello Preview<?php html($name) ?>!</h1>
+<p>On the right side is the flash preview.</p>
+<br><br><br>
+
+
+
+
+
