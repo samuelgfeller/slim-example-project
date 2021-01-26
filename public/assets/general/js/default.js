@@ -22,15 +22,20 @@ window.addEventListener("load",function(event) {
         }else {
             setTimeout(function () {
                 flash.className += ' slide-in'
-            }, 1000);
+            }, index * 1000); // https://stackoverflow.com/a/45500721/9013718 (second snippet)
         }
-        let closeBtn = flash.querySelector('.close-btn');
+        let closeBtn = flash.querySelector('.flash-close-btn');
         closeBtn.addEventListener('click', function () {
-            flash.className = flash.className.replace('slide-in', "slide-out");
+            slideFlashOut(flash)
         });
 
-        setTimeout(function () {
-            flash.className = flash.className.replace('slide-in', "slide-out");
-        }, 7000);
+        setTimeout(slideFlashOut, (index * 1000) + 8000, flash);
     });
+    function slideFlashOut(flash){
+        flash.className = flash.className.replace('slide-in', "slide-out");
+        // Hide after 1sec so that page content can go to its place again
+        setTimeout(function () {
+            flash.style.display = 'none';
+        }, 800); // .slide-out animation is 0.9s
+    }
 });

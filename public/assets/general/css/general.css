@@ -1,7 +1,6 @@
 /* General style */
 #flash-container {
     float: right;
-    /*overflow: hidden;*/
 }
 
 .flash {
@@ -14,7 +13,7 @@
     margin: 25px 0 10px 25px;
     transform: translateX(130%);
     opacity: 0;
-    overflow: hidden;
+    overflow: hidden; /* Prevent color from overflowing rounded border */
 
     /* Revert default styling of <dialog> */
     position: relative;
@@ -23,7 +22,7 @@
     align-items: stretch;
 }
 
-.close-btn {
+.flash-close-btn {
     position: absolute;
     top: -10px; /* Large font size and time symbol pretty small it has to be pushed upwards*/
     right: 10px;
@@ -34,14 +33,12 @@
     cursor: pointer;
 }
 
+/* Color / icon part of flash */
 .flash-fig { /* Flex item */
     position: relative;
     width: 100px;
-    /*height: 50px;*/
-    /*border-radius: 10px;*/
     margin: 0;
     z-index: 1;
-    /*background: red;*/
     flex-shrink: 0;
 }
 
@@ -52,42 +49,58 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: none;
+    filter: drop-shadow(5px 5px 7px rgba(0, 0, 0, 0.25));
 }
 
 .flash-fig img.open {
-    /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css*/
+    /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css */
     display: block;
 }
 
 .flash.success .flash-fig {
-    background: #3fcb64;
+    background: #43c566;
 }
-
 .flash.error .flash-fig {
-    background: tomato;
+    background: #e65e45;
+}
+.flash.info .flash-fig {
+    background: #45bdd4;
+}
+.flash.warning .flash-fig {
+    background: #eaa030;
 }
 
+/* Text part of flash */
 .flash-message { /* Flex item */
     flex-grow: 1;
-    /*background: .60c67e;*/
 }
-
 .flash-message h3 {
     margin: 10px 10px 6px 10px;
     font-size: 1rem;
+}
+.flash.success h3, .flash.error h3, .flash.info h3, .flash.warning h3{
+    /* Only remove title for those defined with CSS below */
     text-indent:-9999px; /* Change h3 text in css https://stackoverflow.com/a/26889106/9013718 */
 }
-.flash.success .flash-message h3:before{
+.flash.success h3:before, .flash.error h3:before, .flash.info h3:before, .flash.warning h3:before{
     text-indent:0;
     float:left;
+}
+.flash.success h3:before{
     content: 'YAY! Success!';
     color: #28a548;
 }
-.flash.error .flash-message h3:before{
-    text-indent:0;
-    float:left;
+.flash.error h3:before{
     content: 'OOPS! Error...';
     color: #ae4931;
+}
+.flash.info h3:before{
+    content: 'Information.';
+    color: #008fa2;
+}
+.flash.warning h3:before{
+    content: 'Caution!';
+    color: #bc6500;
 }
 
 .flash-message p {

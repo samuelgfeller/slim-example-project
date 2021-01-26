@@ -70,30 +70,27 @@ $r = random_int(0, 10000);
     <main>
         <aside id="flash-container">
             <!--    Display errors if there are some -->
-            <?php
-                        $flash->add('error', 'This is an error message a');
-                        $flash->add('success', 'This is a success message a');
-            foreach ($flash->all() as $key => $flashCategory) {
+            <?php foreach ($flash->all() as $key => $flashCategory) {
                 foreach ($flashCategory as $msg) { ?>
                     <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
                         <figure class="flash-fig">
                             <!-- Sadly I cannot use the `content:` tag because its impossible set basepath for css -->
                             <img class="<?= $key === "success" ? "open" : '' ?>" src="assets/general/img/checkmark.svg"
-                                 alt="info">
-                            <img class="<?= $key === "error" ? "open" : '' ?>" src="assets/general/img/cross.svg"
-                                 alt="info">
+                                 alt="success">
+                            <img class="<?= $key === "error" ? "open" : '' ?>" src="assets/general/img/cross-icon.svg"
+                                 alt="error">
                             <img class="<?= $key === "info" ? "open" : '' ?>" src="assets/general/img/info-icon.svg"
                                  alt="info">
-                            <img class="<?= $key === "warning-icon" ? "open" : '' ?>"
-                                 src="assets/general/img/warning-icon.svg" alt="info">
+                            <img class="<?= $key === "warning" ? "open" : '' ?>"
+                                 src="assets/general/img/warning-icon.svg" alt="warning">
                         </figure>
                         <div class="flash-message">
                             <h3><?= ucfirst($key) /* Success, Error, Info, Warning */ ?> message</h3>
                             <p><?= $msg ?></p>
                         </div>
-                        <span class="close-btn">&times;</span>
+                        <span class="flash-close-btn">&times;</span>
                     </dialog>
-                <?php
+                    <?php
                 }
             } ?>
         </aside>
@@ -111,7 +108,6 @@ $r = random_int(0, 10000);
 
 <script src="assets/general/js/default.js?r=<?= $r ?>"></script>
 <script src="assets/general/js/navbar.js?r=<?= $r ?>"></script>
-<script src="assets/general/js/general.js?r=<?= $r ?>"></script>
 </body>
 </html>
 
