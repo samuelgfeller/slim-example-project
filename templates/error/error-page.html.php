@@ -5,8 +5,11 @@
  */
 
 ?>
+<!--Temp solution to include css until SLE-77 found a solution -->
+<style><?php require_once 'assets/error/error.css' ?></style>
+
 <section id="cloud-section" class="">
-    <div class="cloud small-cloud"><span><?= $errorMessage['statusCode'] ?></span></div>
+    <div class="cloud small-cloud"><span><?= html($errorMessage['statusCode']) ?></span></div>
     <div class="cloud big-cloud"><span>&#129301;</span></div>
 </section>
 <section id="error-description-section">
@@ -38,7 +41,7 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
     }
     ?>
     <h2 id="title"><?= html($title) ?></h2>
-    <p><?= html($message) ?></p>
+    <p><?= $message /* Not escape with html() because message contains html that should be interpreted*/ ?></p>
 </section>
 <section id="home-btn-section">
     <a href="<?= $route->urlFor('hello') ?>" class="btn">Go back home</a>

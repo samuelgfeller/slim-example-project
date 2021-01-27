@@ -33,7 +33,7 @@ window.addEventListener("load",function(event) {
     });
     function slideFlashOut(flash){
         flash.className = flash.className.replace('slide-in', "slide-out");
-        // Hide after 1sec so that page content can go to its place again
+        // Hide a bit later so that page content can go to its place again
         setTimeout(function () {
             flash.style.display = 'none';
         }, 800); // .slide-out animation is 0.9s
