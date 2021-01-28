@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AppValidation
 {
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * AppValidation constructor. Very important that it is public
@@ -23,7 +23,7 @@ abstract class AppValidation
      */
     public function __construct(LoggerInterface $logger)
     {
-        // Not LoggerFactory since the instance is created in child class
+        // Not LoggerFactory since the instance is created in child class. AppValidation is never instantiated
         $this->logger = $logger;
     }
 

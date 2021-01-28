@@ -9,6 +9,9 @@ use Psr\Container\ContainerInterface;
 use Slim\App;
 use UnexpectedValueException;
 
+/**
+ * Handles slim app for testing
+ */
 trait AppHandler
 {
     protected ?ContainerInterface $container;

@@ -6,6 +6,8 @@
 
 // Used in container-bootstrap
 if (!defined('APP_ENV')) {
+    // APP_ENV value has to be similar to the testing container file name
+    // If test container is named "container.testing.php" APP_ENV has to be "testing"
     define('APP_ENV', 'testing');
 }
 

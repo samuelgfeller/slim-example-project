@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Factory.
  */
-final class LoggerFactory
+class LoggerFactory
 {
     private string $path;
 
