@@ -102,7 +102,7 @@ class UserServiceTest extends TestCase
      * but without specific error analysis. Only that it didn't create it.
      * The method is called with each value of the provider
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
+     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
     public function testInvalidCreateUser(array $invalidUser)
@@ -143,13 +143,13 @@ class UserServiceTest extends TestCase
      * Test that data from existing user is validated before being updated
      * (updateUser)
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUsersProvider()
+     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
     public function testInvalidUpdateUser(array $invalidUser)
     {
         // Mock UserRepository because it is used by the validation logic
-        // In this test user exists so every invalid data from invalidUsersProvider() can throw
+        // In this test user exists so every invalid data from invalidUserProvider() can throw
         // its error. Otherwise there would be always the error because of the exist and each data
         // could not be tested
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);

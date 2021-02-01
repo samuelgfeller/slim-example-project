@@ -9,6 +9,7 @@ use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
 use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\User\UserRepository;
 use App\Test\UnitTestUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -103,20 +104,20 @@ class AuthServiceTest extends TestCase
     }
 
     /**
+     * Test testGetUserRole with different roles
      *
-     *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
-     * @param array $validUser
+     * @dataProvider \App\Test\Domain\User\UserProvider::validUserProvider()
+     * @param array $user
      */
-//    public function testGenerateToken(array $validUser)
-//    {
-//        $user = new User(new ArrayReader($validUser));
-//
-//    }
-//
-//    public function testGetUserRole()
-//    {
-//    }
+    public function testGetUserRole(array $user)
+    {
+        $this->mock(UserRepository::class)->method('getUserRole')->willReturn($user['role']);
+
+        /** @var AuthService $authService */
+        $authService = $this->container->get(AuthService::class);
+
+        self::assertEquals($user['role'], $authService->getUserRole($user['id']));
+    }
 
 
 }

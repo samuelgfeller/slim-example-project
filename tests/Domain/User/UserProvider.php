@@ -59,6 +59,12 @@ class UserProvider
         ];
     }
 
+    public function validUserProvider(): array
+    {
+        return [
+            $this->getSampleUsers(),
+        ];
+    }
     /**
      * Provider of users in form of an ArrayReader
      *
@@ -163,7 +169,7 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ]
         ];
@@ -172,7 +178,7 @@ class UserProvider
     /**
      * @return array
      */
-    public function invalidUsersProvider(): array
+    public function invalidUserProvider(): array
     {
         return [
             // Not existing user
@@ -184,7 +190,7 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Name too short
@@ -196,7 +202,7 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Invalid Email
@@ -208,7 +214,7 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Not matching Passwords
@@ -220,7 +226,7 @@ class UserProvider
                     'password' => '123456789',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Required values not set
@@ -246,7 +252,7 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Email not set
@@ -258,7 +264,7 @@ class UserProvider
                     'password' => '',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
             // Password not set
@@ -270,7 +276,7 @@ class UserProvider
                     'password' => '',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
+                    'role' => 'admin'
                 ]
             ],
         ];
