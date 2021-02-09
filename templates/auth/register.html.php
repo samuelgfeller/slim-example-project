@@ -1,5 +1,5 @@
-<?php /**
- * @var \Odan\Session\FlashInterface $flash
+<?php $this->setLayout('layout.html.php');
+/**@var \Odan\Session\FlashInterface $flash
  * @var \Slim\Interfaces\RouteParserInterface $route
  */
 ?>

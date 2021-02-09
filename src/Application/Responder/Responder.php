@@ -63,10 +63,8 @@ final class Responder
     public function render(
         ResponseInterface $response,
         string $template,
-        array $data = [],
-        string $layout = 'layout.html.php'
+        array $data = []
     ): ResponseInterface {
-        $this->phpRenderer->setLayout($layout);
         return $this->phpRenderer->render($response, $template, $data);
     }
 

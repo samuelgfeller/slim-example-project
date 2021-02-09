@@ -95,13 +95,10 @@ class DefaultErrorHandler
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
-            // Remove layout if there was a default
-            $this->phpRenderer->setLayout('');
+            // Layout removed in error detail template
         } else {
             $errorMessage = ['statusCode' => $statusCode, 'reasonPhrase' => $reasonPhrase];
             $errorTemplate = 'error/error-page.html.php';
-            // Add layout
-            $this->phpRenderer->setLayout('layout.html.php');
         }
 
         // Create response

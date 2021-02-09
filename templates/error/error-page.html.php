@@ -1,9 +1,8 @@
-<?php
+<?php $this->setLayout('layout.html.php');
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $errorMessage containing statusCode and reasonPhrase
  */
-
 ?>
 <!--Temp solution to include css until SLE-77 found a solution -->
 <style><?php require_once 'assets/error/error.css' ?></style>

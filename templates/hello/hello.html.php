@@ -1,3 +1,4 @@
+<?php $this->setLayout('layout.html.php'); ?>
 
 <!--https://samuel-gfeller.ch/favicon.ico-->
 <!--<img src="/assets/hello/slim-icon.png" alt="favicon">-->

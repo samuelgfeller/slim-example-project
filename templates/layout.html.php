@@ -70,7 +70,8 @@ $r = random_int(0, 10000);
     <main>
         <aside id="flash-container">
             <!--    Display errors if there are some -->
-            <?php foreach ($flash->all() as $key => $flashCategory) {
+            <?php
+            foreach ($flash->all() as $key => $flashCategory) {
                 foreach ($flashCategory as $msg) { ?>
                     <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
                         <figure class="flash-fig">
@@ -85,7 +86,7 @@ $r = random_int(0, 10000);
                                  src="assets/general/img/warning-icon.svg" alt="warning">
                         </figure>
                         <div class="flash-message">
-                            <h3><?= html(ucfirst($key)) /* Success, Error, Info, Warning */ ?> message</h3>
+                            <h3><?= html(ucfirst($key)) /* Gets overwritten in css, serves as default */ ?> message</h3>
                             <p><?= html($msg) ?></p>
                         </div>
                         <span class="flash-close-btn">&times;</span>
