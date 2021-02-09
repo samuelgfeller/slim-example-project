@@ -52,9 +52,9 @@ return [
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);
 
-        $logger = $container->get(LoggerFactory::class)
-            ->addFileHandler('error.log')
-            ->createInstance('default-errorhandler');
+        $logger = $container->get(LoggerFactory::class)->addFileHandler('error.log')->createInstance(
+            'default-errorhandler'
+        );
 
         $errorMiddleware = new ErrorMiddleware(
             $app->getCallableResolver(),
@@ -91,7 +91,10 @@ return [
 
         // As a second constructor value, global variables can be added
         return new PhpRenderer(
-            $rendererSettings['path'], ['title' => 'Slim Example Project'], 'layout.html.php');
+            $rendererSettings['path'],
+            ['title' => 'Slim Example Project', 'dev' => $settings['dev']],
+            'layout.html.php',
+        );
     },
 
     // Sessions
@@ -111,9 +114,9 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
     PhpViewExtensionMiddleware::class => function (ContainerInterface $container) {
-        return new PhpViewExtensionMiddleware($container->get(App::class),
-                                              $container->get(PhpRenderer::class),
-                                              $container->get(SessionInterface::class));
+        return new PhpViewExtensionMiddleware(
+            $container->get(App::class), $container->get(PhpRenderer::class), $container->get(SessionInterface::class)
+        );
     },
 
 ];
