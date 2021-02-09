@@ -7,7 +7,6 @@
  * @var \Odan\Session\FlashInterface $flash
  * @var string $title
  */
-$r = random_int(0, 10000);
 ?>
 
 <!DOCTYPE html>
@@ -19,13 +18,27 @@ $r = random_int(0, 10000);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
 
-    <link rel="stylesheet" href="assets/general/css/default.css?r=<?= $r ?>">
-    <link rel="stylesheet" href="assets/general/css/layout.css?r=<?= $r ?>">
-    <link rel="stylesheet" href="assets/general/css/navbar.css?r=<?= $r ?>">
-    <link rel="stylesheet" href="assets/general/css/flash.css?r=<?= $r ?>">
+    <?php
+    // Define layout assets
+    $layoutCss = [
+        'assets/general/css/default.css',
+        'assets/general/css/layout.css',
+        'assets/general/css/navbar.css',
+        'assets/general/css/flash.css'
+    ];
+    $layoutJs = [
+        'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
+        'assets/general/js/default.js',
+        'assets/general/js/navbar.js'
+    ];
 
-    <!--    Will be removed with SLE-81 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    // fetch() includes another template into the current template
+    // Include template which contains HTML to include assets
+    echo $this->fetch(
+        'assets.html.php',
+        ['stylesheets' => array_merge($layoutCss, $css ?? []), 'scripts' => array_merge($layoutJs, $js ?? [])]
+    );
+    ?>
 
     <title><?= $title ?></title>
 </head>
@@ -107,8 +120,6 @@ $r = random_int(0, 10000);
 
 </div>
 
-<script src="assets/general/js/default.js?r=<?= $r ?>"></script>
-<script src="assets/general/js/navbar.js?r=<?= $r ?>"></script>
 </body>
 </html>
 

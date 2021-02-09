@@ -4,9 +4,9 @@
  */
 ?>
 
-<!-- Include stylesheets temp solution to include css until SLE-77 found a solution -->
-<style><?php require_once 'assets/general/css/form.css' ?></style>
-
+<!-- Define assets that should be included -->
+<?php $this->addAttribute('css', ['assets/general/css/form.css']); ?>
+<?php $this->addAttribute('js', ['assets/auth/auth.js']); ?>
 
 <div class="verticalCenter">
     <h2 style="display:inline-block;">Register</h2>
@@ -38,5 +38,3 @@
     </form>
     <br>Do you already have an account? <a href="<?= $route->urlFor('login-page') ?>">Login</a>
 </div>
-
-<script src="assets/auth/auth.js"></script>

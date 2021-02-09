@@ -4,8 +4,9 @@
  * @var array $errorMessage containing statusCode and reasonPhrase
  */
 ?>
-<!--Temp solution to include css until SLE-77 found a solution -->
-<style><?php require_once 'assets/error/error.css' ?></style>
+<!-- Define assets that should be included -->
+<?php $this->addAttribute('css', ['assets/error/error.css']); ?>
+
 
 <section id="cloud-section" class="">
     <div class="cloud small-cloud"><span><?= html($errorMessage['statusCode']) ?></span></div>

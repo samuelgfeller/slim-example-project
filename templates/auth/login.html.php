@@ -5,8 +5,8 @@
  */
 ?>
 
-<!-- Include stylesheets temp solution to include css until SLE-77 found a solution -->
-<style><?php require_once 'assets/general/css/form.css' ?></style>
+<!-- Define assets that should be included -->
+<?php $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
 <!--    Display all users an user     -->
 <div class="verticalCenter">
