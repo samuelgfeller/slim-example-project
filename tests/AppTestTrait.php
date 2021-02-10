@@ -60,6 +60,11 @@ trait AppTestTrait
         return $mock;
     }
 
+    protected function urlFor(string $routeName): string
+    {
+        return $this->app->getRouteCollector()->getRouteParser()->urlFor($routeName);
+    }
+
     /**
      * Create a server request.
      *
