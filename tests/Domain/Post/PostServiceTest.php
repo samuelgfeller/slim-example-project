@@ -9,12 +9,12 @@ use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
-use App\Test\UnitTestUtil;
+use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class PostServiceTest extends TestCase
 {
-    use UnitTestUtil;
+    use AppTestTrait;
 
     /**
      * Test function findAllPosts from PostService which returns

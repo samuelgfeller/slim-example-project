@@ -11,14 +11,14 @@ use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
-use App\Test\UnitTestUtil;
+use App\Test\AppTestTrait;
 use Cake\Datasource\RepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Slim\Logger;
 
 class UserServiceTest extends TestCase
 {
-    use UnitTestUtil;
+    use AppTestTrait;
 
     /**
      * Test function findAllUsers from UserService
