@@ -106,6 +106,7 @@ class AuthServiceTest extends TestCase
     /**
      * Test testGetUserRole with different roles
      *
+     * Test with multiple users to have different roles
      * @dataProvider \App\Test\Domain\User\UserProvider::validUserProvider()
      * @param array $user
      */

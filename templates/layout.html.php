@@ -36,6 +36,7 @@
     // Include template which contains HTML to include assets
     echo $this->fetch(
         'assets.html.php',
+        // Merge layout assets and from sub templates
         ['stylesheets' => array_merge($layoutCss, $css ?? []), 'scripts' => array_merge($layoutJs, $js ?? [])]
     );
     ?>
