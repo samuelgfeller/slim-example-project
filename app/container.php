@@ -20,7 +20,7 @@ use Slim\Views\PhpRenderer;
 
 return [
     'settings' => function () {
-        return require __DIR__ . '/../settings.php';
+        return require __DIR__ . '/settings.php';
     },
     App::class => function (ContainerInterface $container) {
         AppFactory::setContainer($container);

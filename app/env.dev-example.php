@@ -1,23 +1,29 @@
 <?php
+/**
+ * Environment specific configuration values
+ *
+ * Make sure env.php file is added to .gitignore and ideally place the env.php outside
+ * the project root directory, to protect against overwriting at deployment.
+ *
+ * How to set values
+ * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * good $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
+ * It's mandatory to set every key by its own and not remap the entire array
+ */
+
+// False for production
+// Present in development env.php to simulate production environment
+$settings['dev'] = true;
 
 error_reporting(E_ALL);
-ini_set('display_errors', '1'); // In case error handler (below) does not work
+// In case error is not caught by error handler (below)
+ini_set('display_errors', $settings['dev'] ? '1' : '0');
 
-// It's mandatory to config every key by its own and not remap the entire array
-// bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal', ]
-// good $settings['db]['key'] = 'val';
-
-// Error handler
-$settings['error']['display_error_details'] = true;
-
-// Env
-$settings['env'] = 'development';
+// Error handler. More controlled than ini
+$settings['error']['display_error_details'] = $settings['dev'];
 
 // Database
 $settings['db']['host'] = 'localhost';
-$settings['db']['database'] = 'slim-api-example';
-$settings['db']['username'] = 'Admin';
-$settings['db']['password'] = '12345678';
-
-$settings['jwt']['secret'] = 'secretPass';
-
+$settings['db']['database'] = 'slim-example-project';
+$settings['db']['username'] = 'root';
+$settings['db']['password'] = '';

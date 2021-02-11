@@ -1,9 +1,19 @@
 <?php
-
-use Cake\Database\Driver\Mysql;
+/**
+ * Default configuration values
+ *
+ * This file should contain all keys even secret ones to serve as template
+ *
+ * This is the first file loaded in settings.php and can as such safely define arrays
+ * without the risk of overwriting something.
+ * Permitted to do the following: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ */
 
 // Init settings var
 $settings = [];
+
+// Bool if env is dev. Used in phpRenderer when rendering resources to break cache always for mobile
+$settings['dev'] = false;
 
 // Error handler
 $settings['error'] = [
@@ -18,10 +28,10 @@ $settings['error'] = [
 // Secret values are overwritten in env.php
 $settings['db'] = [
     'host' => 'localhost',
-    'database' => 'slim-api-example',
+    'database' => 'slim-example-project',
     'username' => 'root',
     'password' => '',
-    'driver' => Mysql::class,
+    'driver' => \Cake\Database\Driver\Mysql::class,
     'encoding' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     // Enable identifier quoting
@@ -39,25 +49,6 @@ $settings['db'] = [
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]
-];
-
-// Secret values are overwritten in env.php
-$settings['jwt'] = [
-    // The issuer name
-    'issuer' => 'www.example.com',
-
-    // Max lifetime in seconds
-    'lifetime' => 14400,
-
-    // openssl genrsa -out private.pem 2048
-    'private_key' => '-----BEGIN RSA PRIVATE KEY-----
-        ...
-        -----END RSA PRIVATE KEY-----',
-
-    // openssl rsa -in private.pem -outform PEM -pubout -out public.pem
-    'public_key' => '-----BEGIN PUBLIC KEY-----
-        ...
-        -----END PUBLIC KEY-----',
 ];
 
 // Template renderer settings

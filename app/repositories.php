@@ -8,8 +8,8 @@ use Cake\Database\Connection;
 use Psr\Container\ContainerInterface;
 
 /**
- * Needed to give connection to the repositories
- *
+ * Giving db connection to repositories here because
+ * there can be quickly a lot in bigger projects.
  */
 return [
     UserRepository::class => function (ContainerInterface $container) {

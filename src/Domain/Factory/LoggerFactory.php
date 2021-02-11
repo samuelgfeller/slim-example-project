@@ -8,7 +8,8 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 /**
- * Factory.
+ * Logger factory
+ * Not final because it is mocked in testing but this class shall NOT be extended
  */
 class LoggerFactory
 {

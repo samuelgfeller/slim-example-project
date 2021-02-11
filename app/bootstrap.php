@@ -21,7 +21,9 @@ require __DIR__ . '/../vendor/autoload.php';
 $containerBuilder = new ContainerBuilder();
 
 // Add container definitions
-$containerBuilder->addDefinitions(__DIR__ . '/container/container.bootstrap.php');
+$containerBuilder->addDefinitions(__DIR__ . '/container.php');
+// Add repositories to container
+$containerBuilder->addDefinitions(__DIR__ . '/repositories.php');
 
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
