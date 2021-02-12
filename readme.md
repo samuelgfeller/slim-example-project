@@ -63,7 +63,7 @@ If in the future I need something more I'll consider [Symfony Sessions](https://
 ```
 
 
-## License
+## Licence
 The MIT Licence (MIT). Please see [Licence File](https://github.com/samuelgfeller/slim-example-project/blob/master/LICENCE.txt) for more information.
 
 
