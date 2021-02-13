@@ -28,7 +28,7 @@ $settings['error'] = [
 // Secret values are overwritten in env.php
 $settings['db'] = [
     'host' => 'localhost',
-    'database' => 'slim-example-project',
+    'database' => 'slim_example_project',
     'username' => 'root',
     'password' => '',
     'driver' => \Cake\Database\Driver\Mysql::class,
