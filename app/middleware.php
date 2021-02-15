@@ -21,6 +21,6 @@ return function (App $app) {
 
 
     //Error middleware should be added last. It will not handle any exceptions/errors
-    $app->add(ErrorHandlerMiddleware::class); //
+    $app->add(ErrorHandlerMiddleware::class);
     $app->add(ErrorMiddleware::class);
 };

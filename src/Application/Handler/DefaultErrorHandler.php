@@ -47,8 +47,7 @@ class DefaultErrorHandler
     ) {
         $this->phpRenderer = $phpRenderer;
         $this->responseFactory = $responseFactory;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('error');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('error');
     }
 
     /**
@@ -85,6 +84,20 @@ class DefaultErrorHandler
                     $request->getUri()->getPath()
                 )
             );
+        }
+
+        // Error output if script is called via cli (e.g. testing)
+        if (PHP_SAPI === 'cli') {
+            $traceString = '';
+            // Display only path and line number
+            foreach ($exception->getTrace() as $key => $t) {
+                // Only display trace if file is set and path is not in phpunit
+                $traceString .= isset($t['file']) && strpos(
+                    $t['file'],
+                    'phpunit\phpunit'
+                ) === false ? $t['file'] . ':' . ($t['line'] ?? '') . "\n" : '';
+            }
+            fwrite(STDERR, $exception->getMessage() . "\n" . $traceString);
         }
 
         // Detect status code
@@ -177,20 +190,24 @@ class DefaultErrorHandler
         // prepare path to be more readable https://stackoverflow.com/a/9891884/9013718
         $lastBackslash = strrpos($file, '\\');
         $lastWord = substr($file, $lastBackslash + 1);
-        $firstChunkFullPath =  substr($file, 0, $lastBackslash + 1);
+        $firstChunkFullPath = substr($file, 0, $lastBackslash + 1);
         // remove C:\xampp\htdocs\ and project name to keep only part starting with src\
-        $firstChunkMinusFilesystem = str_replace('C:\xampp\htdocs\\', '',$firstChunkFullPath);
+        $firstChunkMinusFilesystem = str_replace('C:\xampp\htdocs\\', '', $firstChunkFullPath);
         // locate project name because it is right before the first backslash (after removing filesystem)
         $projectName = substr($firstChunkMinusFilesystem, 0, strpos($firstChunkMinusFilesystem, '\\') + 1);
         // remove project name from first chunk
-        $firstChunk = str_replace($projectName, '',$firstChunkMinusFilesystem);
+        $firstChunk = str_replace($projectName, '', $firstChunkMinusFilesystem);
 
         // build error html page
         $error .= sprintf('<body class="%s">', $errorCssClass); // open body
         $error .= sprintf('<div id="title-div" class="%s">', $errorCssClass); // opened title div
         if ($statusCode !== null && $reasonPhrase !== null) {
-            $error .= sprintf('<p><span>%s | %s</span><span id="exception-name">%s</span></p>',
-                              $statusCode, $reasonPhrase, get_class($exception));
+            $error .= sprintf(
+                '<p><span>%s | %s</span><span id="exception-name">%s</span></p>',
+                $statusCode,
+                $reasonPhrase,
+                get_class($exception)
+            );
         }
         $error .= sprintf(
             '<h1>%s in <span id="first-path-chunk">%s </span>%s on line %s.</h1></div>', // closed title div
