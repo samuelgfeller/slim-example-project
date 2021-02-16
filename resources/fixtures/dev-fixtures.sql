@@ -1,70 +1,3 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.4.11-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             11.1.0.6116
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
--- Dumping database structure for slim-example-project
-CREATE DATABASE IF NOT EXISTS `slim-example-project` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `slim-example-project`;
-
--- Dumping structure for table slim-example-project.post
-CREATE TABLE IF NOT EXISTS `post` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `message` varchar(500) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `deleted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK__user` (`user_id`),
-  CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table slim-example-project.post: ~15 rows (approximately)
-/*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` (`id`, `user_id`, `message`, `updated_at`, `created_at`, `deleted_at`) VALUES
-	(1, 1, 'Test post from user samuelgfeller@bluewin.ch edit', '2020-10-09 11:55:02', '2020-03-18 10:18:32', '2020-10-09 11:55:02'),
-	(2, 1, 'Second post from Samuel 8', '2020-10-09 11:55:02', '2020-03-18 10:18:56', '2020-10-09 11:55:02'),
-	(7, 18, 'Test post für die Präsentation', '2020-10-09 11:59:00', '2020-03-19 13:31:55', '2020-10-09 11:59:00'),
-	(8, 18, '2. Post für den Test ; edit', '2020-10-09 11:59:00', '2020-03-19 13:33:15', '2020-10-09 11:59:00'),
-	(9, 1, 'test post ', '2020-10-09 11:55:02', '2020-03-23 11:50:59', '2020-10-09 11:55:02'),
-	(10, 1, 'asdf', '2020-10-09 11:55:02', '2020-03-25 12:32:15', '2020-10-09 11:55:02'),
-	(11, 1, 'New post', '2020-10-09 11:55:02', '2020-03-25 17:15:39', '2020-10-09 11:55:02'),
-	(12, 1, 'New 2', '2020-10-09 11:55:02', '2020-03-25 17:18:08', '2020-10-09 11:55:02'),
-	(13, 1, 'asdf', '2020-10-09 11:55:02', '2020-03-25 17:18:31', '2020-10-09 11:55:02'),
-	(14, 1, 'new 3', '2020-10-09 11:55:02', '2020-03-25 17:19:06', '2020-10-09 11:55:02'),
-	(15, 1, 'asdfadsf', '2020-10-09 11:55:02', '2020-03-25 17:19:12', '2020-10-09 11:55:02'),
-	(16, 1, 'asdfasdf', '2020-10-09 11:55:02', '2020-03-25 17:19:17', '2020-10-09 11:55:02'),
-	(17, 1, 'new from all', '2020-10-09 11:55:02', '2020-03-25 17:20:03', '2020-10-09 11:55:02'),
-	(18, 1, 'dadff', '2020-10-09 11:55:02', '2020-03-25 17:22:33', '2020-10-09 11:55:02'),
-	(19, 1, 'New authservice\n', '2020-10-09 11:55:02', '2020-05-01 17:12:29', '2020-10-09 11:55:02');
-/*!40000 ALTER TABLE `post` ENABLE KEYS */;
-
--- Dumping structure for table slim-example-project.user
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL DEFAULT '',
-  `email` varchar(254) NOT NULL DEFAULT '',
-  `password_hash` varchar(300) NOT NULL DEFAULT '',
-  `role` varchar(50) NOT NULL DEFAULT 'user',
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created_at` datetime DEFAULT current_timestamp(),
-  `deleted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table slim-example-project.user: ~26 rows (approximately)
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `email`, `password_hash`, `role`, `updated_at`, `created_at`, `deleted_at`) VALUES
 	(1, 'Samuel', 'samuelgfeller@bluewin.ch', '$2y$10$RKoLSet3bfPhl2ZwTxzG0uAU/fsLxWlLI/C6OMyOXoYi8j57A9VFa', 'admin', '2020-03-27 12:54:42', '2019-07-23 03:11:13', NULL),
 	(2, 'Samuel 143', 'samuelgfeller143@gmail.com', '$2y$10$OFqSLOfk/EMWUtwN9lA0POSvXFPOju6e2zy7ZJmdCpHsT/LXHqe9G', 'user', '2020-03-27 12:54:58', '2019-07-23 16:16:11', NULL),
@@ -93,9 +26,20 @@ INSERT INTO `user` (`id`, `name`, `email`, `password_hash`, `role`, `updated_at`
 	(29, 'Rudi 2', 'testmail2@gmail.com', '$2y$10$6/uMN3j4N2p6bIV1ZWf7Eu3OWxFEYETHt4.EzoLEOPXxgng2qu2kC', 'user', '2020-04-02 10:55:51', '2020-04-02 10:55:51', NULL),
 	(30, 'Rudi 3', 'admin@test.ch', '$2y$10$ZSCoDJkDCSlbl1/8fScmS.0jiCIiCV6oGjqWZloCGWzTYV6rd1WoS', 'user', '2020-04-02 10:56:49', '2020-04-02 10:56:49', NULL),
 	(35, 'Samuel Biz', 'contact@samuel-gfeller.ch', '$2y$10$yoaIVZjxcrDNSSxB7JfYaOX94nM2YnxqiMkgRLAHuKuOXZnCghY/K', 'user', '2021-01-20 10:18:15', '2021-01-20 10:18:15', NULL);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+INSERT INTO `post` (`id`, `user_id`, `message`, `updated_at`, `created_at`, `deleted_at`) VALUES
+	(1, 1, 'Test post from user samuelgfeller@bluewin.ch edit', '2020-10-09 11:55:02', '2020-03-18 10:18:32', '2020-10-09 11:55:02'),
+	(2, 1, 'Second post from Samuel 8', '2020-10-09 11:55:02', '2020-03-18 10:18:56', '2020-10-09 11:55:02'),
+	(7, 18, 'Test post für die Präsentation', '2020-10-09 11:59:00', '2020-03-19 13:31:55', '2020-10-09 11:59:00'),
+	(8, 18, '2. Post für den Test ; edit', '2020-10-09 11:59:00', '2020-03-19 13:33:15', '2020-10-09 11:59:00'),
+	(9, 1, 'test post ', '2020-10-09 11:55:02', '2020-03-23 11:50:59', '2020-10-09 11:55:02'),
+	(10, 1, 'asdf', '2020-10-09 11:55:02', '2020-03-25 12:32:15', '2020-10-09 11:55:02'),
+	(11, 1, 'New post', '2020-10-09 11:55:02', '2020-03-25 17:15:39', '2020-10-09 11:55:02'),
+	(12, 1, 'New 2', '2020-10-09 11:55:02', '2020-03-25 17:18:08', '2020-10-09 11:55:02'),
+	(13, 1, 'asdf', '2020-10-09 11:55:02', '2020-03-25 17:18:31', '2020-10-09 11:55:02'),
+	(14, 1, 'new 3', '2020-10-09 11:55:02', '2020-03-25 17:19:06', '2020-10-09 11:55:02'),
+	(15, 1, 'asdfadsf', '2020-10-09 11:55:02', '2020-03-25 17:19:12', '2020-10-09 11:55:02'),
+	(16, 1, 'asdfasdf', '2020-10-09 11:55:02', '2020-03-25 17:19:17', '2020-10-09 11:55:02'),
+	(17, 1, 'new from all', '2020-10-09 11:55:02', '2020-03-25 17:20:03', '2020-10-09 11:55:02'),
+	(18, 1, 'dadff', '2020-10-09 11:55:02', '2020-03-25 17:22:33', '2020-10-09 11:55:02'),
+	(19, 1, 'New authservice\n', '2020-10-09 11:55:02', '2020-05-01 17:12:29', '2020-10-09 11:55:02');

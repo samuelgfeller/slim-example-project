@@ -1,20 +1,16 @@
 <?php
 
-
 namespace App\Test;
 
-
 use App\Domain\Factory\LoggerFactory;
-use DI\Container;
+use Odan\Session\MemorySession;
+use Odan\Session\SessionInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Psr\Log\NullLogger;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Slim\App;
 use InvalidArgumentException;
-use Slim\Psr7\Factory\ServerRequestFactory;
 use UnexpectedValueException;
 
 /**
@@ -25,6 +21,8 @@ use UnexpectedValueException;
 trait AppTestTrait
 {
 
+    use HttpTestTrait;
+
     protected ContainerInterface $container;
 
     protected App $app;
@@ -34,17 +32,33 @@ trait AppTestTrait
      */
     protected function setUp(): void
     {
-        $this->app = require __DIR__ . '/bootstrap.php';
+        // Start slim app
+        $this->app = require __DIR__ . '/../app/bootstrap.php';
 
+        // Set $this->container to container instance
         $container = $this->app->getContainer();
         if ($container === null) {
             throw new UnexpectedValueException('Container must be initialized');
         }
         $this->container = $container;
 
+        $this->container->set(SessionInterface::class, new MemorySession());
+
         // Mock LoggerFactory so that createInstance() returns NullLogger
         // addFileHandler() automatically returns a stub of its return type which is the mock instance itself
         $this->mock(LoggerFactory::class)->method('createInstance')->willReturn(new NullLogger());
+
+        // If setUp() is called in a testClass that uses DatabaseTestTrait, the method setUpDatabase() exists
+        if (method_exists($this, 'setUpDatabase')) {
+            // Check that database name in config contains the the word "test"
+            // This is a double security check to prevent unwanted use of dev db for testing
+            if (strpos($container->get('settings')['db']['database'], 'test') === false) {
+                throw new UnexpectedValueException('Test database name MUST contain the word "test"');
+            }
+
+            // Create tables, truncate old ones
+            $this->setUpDatabase(__DIR__ . '/../resources/schema/schema.sql');
+        }
     }
 
     protected function mock(string $class): MockObject
@@ -60,63 +74,18 @@ trait AppTestTrait
         return $mock;
     }
 
-    protected function urlFor(string $routeName): string
-    {
-        return $this->app->getRouteCollector()->getRouteParser()->urlFor($routeName);
-    }
-
-    /**
-     * Create a server request.
-     *
-     * @param string $method The HTTP method
-     * @param string|UriInterface $uri The URI
-     * @param array $serverParams The server parameters
-     *
-     * @return ServerRequestInterface
-     */
-    protected function createRequest(
-        string $method,
-        $uri,
-        array $serverParams = []
-    ): ServerRequestInterface {
-        return (new ServerRequestFactory())->createServerRequest($method, $uri, $serverParams);
-    }
-
     /**
      * Create a JSON request.
      *
-     * @param string $method The HTTP method
-     * @param string|UriInterface $uri The URI
-     * @param array|null $data The json data
+     * @param string $routeName Route name
+     * @param string[] $data Named argument replacement data
+     * @param string[] $queryParams Optional query string parameters
      *
-     * @return ServerRequestInterface
+     * @return string route with base path
      */
-    protected function createJsonRequest(
-        string $method,
-        $uri,
-        array $data = null
-    ): ServerRequestInterface {
-        $request = $this->createRequest($method, $uri);
-
-        if ($data !== null) {
-            $request = $request->withParsedBody($data);
-        }
-
-        return $request->withHeader('Content-Type', 'application/json');
-    }
-
-    /**
-     * Verify that the given array is an exact match for the JSON returned.
-     *
-     * @param array $expected The expected array
-     * @param ResponseInterface $response The response
-     *
-     * @return void
-     * @throws \JsonException
-     */
-    protected function assertJsonData(array $expected, ResponseInterface $response): void
+    protected function urlFor(string $routeName, array $data = [], array $queryParams = []): string
     {
-        $actual = (string)$response->getBody();
-        self::assertSame($expected, (array)json_decode($actual, true, 512, JSON_THROW_ON_ERROR));
+        return $this->app->getRouteCollector()->getRouteParser()->urlFor($routeName, $data, $queryParams);
     }
+
 }
