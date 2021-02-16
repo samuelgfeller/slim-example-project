@@ -1,13 +1,12 @@
 {
     "require": {
-        "slim/slim": "^4.2",
-        "slim/psr7": "^0.5.0",
+        "slim/slim": "^4.7.1",
+        "slim/psr7": "^1.3.0",
         "monolog/monolog": "^1.24",
         "php-di/php-di": "^6.0",
         "ext-pdo": "*",
         "ext-json": "*",
-        "cakephp/database": "^3.8",
-        "lcobucci/jwt": "^3.3",
+        "cakephp/database": "^4.2.3",
         "symfony/polyfill-uuid": "^1.20",
         "cakephp/chronos": "^2.0",
         "odan/session": "^5.0",
@@ -29,7 +28,9 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "phpunit/phpunit": "^7 || ^8"
+        "phpunit/phpunit": "^8 || ^9",
+        "selective/test-traits": "^1",
+        "phpstan/phpstan": "^0.12.76"
     },
     "scripts": {
         "test": "phpunit --configuration phpunit.xml",
