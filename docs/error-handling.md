@@ -405,19 +405,11 @@ class DefaultErrorHandler
                 )
             );
         }
-
+        
         // Error output if script is called via cli (e.g. testing)
         if (PHP_SAPI === 'cli') {
-            $traceString = '';
-            // Display only path and line number
-            foreach ($exception->getTrace() as $key => $t) {
-                // Only display trace if file is set and path is not in phpunit
-                $traceString .= isset($t['file']) && strpos(
-                    $t['file'],
-                    'phpunit\phpunit'
-                ) === false ? $t['file'] . ':' . ($t['line'] ?? '') . "\n" : '';
-            }
-            fwrite(STDERR, $exception->getMessage() . "\n" . $traceString);
+            // The exception is thrown to have the standard behaviour (important for testing)
+            throw $exception;
         }
 
         // Detect status code
