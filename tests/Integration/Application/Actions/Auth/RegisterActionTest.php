@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Test\Application\Actions\Auth;
+namespace App\Test\Integration\Application\Actions\Auth;
 
 use App\Test\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
+use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * Integration test of RegisterAction
@@ -12,27 +14,30 @@ use PHPUnit\Framework\TestCase;
 class RegisterActionTest extends TestCase
 {
     use AppTestTrait;
+    use RouteTestTrait;
 
     public function testAction(): void
     {
         $request = $this->createRequest('GET', $this->urlFor('register-page'));
         $response = $this->app->handle($request);
 
-        // Assert: Redirect
-        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
+        // Assert: 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
     }
 
     /**
      * Test invalid link
+     * It has to be done only once for Actions without logic
      *
      * @return void
      */
     public function testPageNotFound(): void
     {
         $request = $this->createRequest('GET', '/not-existing-page');
-        $response = $this->app->handle($request);
 
-        // Assert: Not found
-        self::assertSame(StatusCodeInterface::STATUS_NOT_FOUND, $response->getStatusCode());
+        // Assert with STATUS_NOT_FOUND is not possible because HttpNotFoundException is thrown and stops the test
+        $this->expectException(HttpNotFoundException::class);
+
+        $this->app->handle($request);
     }
 }
