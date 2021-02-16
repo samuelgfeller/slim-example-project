@@ -1,11 +1,11 @@
 @font-face {
     font-family: ExpletusSans;
-    src: url(assets/error/ExpletusSans.ttf);
+    src: url(/assets/error/ExpletusSans.ttf);
 }
 
 @font-face {
     font-family: Montserrat;
-    src: url(assets/general/fonts/Montserrat.ttf);
+    src: url(/assets/general/fonts/Montserrat.ttf);
 }
 
 :root {
