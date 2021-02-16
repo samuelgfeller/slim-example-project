@@ -8,63 +8,62 @@ use App\Domain\Utility\ArrayReader;
 
 class UserProvider
 {
-    public function getSampleUsers(): array
-    {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Bill Gates',
-                'email' => 'gates@email.com',
-                'password' => '12345678',
-                'password2' => '12345678',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                'role' => 'admin'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Steve Jobs',
-                'email' => 'jobs@email.com',
-                'password' => '12345678',
-                'password2' => '12345678',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                'role' => 'user'
-            ],
-            [
-                'id' => 3,
-                'name' => 'Mark Zuckerberg',
-                'email' => 'zuckerberg@email.com',
-                'password' => '12345678',
-                'password2' => '12345678',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                'role' => 'user'
-            ],
-            [
-                'id' => 4,
-                'name' => 'Evan Spiegel',
-                'email' => 'spiegel@email.com',
-                'password' => '12345678',
-                'password2' => '12345678',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                'role' => 'user'
-            ],
-            [
-                'id' => 5,
-                'name' => 'Jack Dorsey',
-                'email' => 'dorsey@email.com',
-                'password' => '12345678',
-                'password2' => '12345678',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                'role' => 'user'
-            ],
-        ];
-    }
+    public array $sampleUsers = [
+        [
+            'id' => 1,
+            'name' => 'Admin Example',
+            'email' => 'admin@example.com',
+            'password' => '12345678',
+            'password2' => '12345678',
+            'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+            'role' => 'admin'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Steve Jobs',
+            'email' => 'jobs@email.com',
+            'password' => '12345678',
+            'password2' => '12345678',
+            'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+            'role' => 'user'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Mark Zuckerberg',
+            'email' => 'zuckerberg@email.com',
+            'password' => '12345678',
+            'password2' => '12345678',
+            'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+            'role' => 'user'
+        ],
+        [
+            'id' => 4,
+            'name' => 'Evan Spiegel',
+            'email' => 'spiegel@email.com',
+            'password' => '12345678',
+            'password2' => '12345678',
+            'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+            'role' => 'user'
+        ],
+        [
+            'id' => 5,
+            'name' => 'Jack Dorsey',
+            'email' => 'dorsey@email.com',
+            'password' => '12345678',
+            'password2' => '12345678',
+            'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+            'role' => 'user'
+        ],
+    ];
+
 
     public function validUserProvider(): array
     {
         return [
-            $this->getSampleUsers(),
+            $this->sampleUsers,
         ];
     }
+
     /**
      * Provider of users in form of an ArrayReader
      *
@@ -149,7 +148,7 @@ class UserProvider
     public function oneSetOfMultipleUsersProvider(): array
     {
         return [
-            [$this->getSampleUsers()]
+            [$this->sampleUsers]
         ];
     }
 
@@ -230,8 +229,17 @@ class UserProvider
                 ]
             ],
             // Required values not set
-            [['id' => 1, 'name' => '', 'email' => '', 'password' => '', 'password2' => '',
-                'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi', 'role' => 'user']],
+            [
+                [
+                    'id' => 1,
+                    'name' => '',
+                    'email' => '',
+                    'password' => '',
+                    'password2' => '',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'user'
+                ]
+            ],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.
@@ -304,7 +312,7 @@ class UserProvider
      */
     /*public function userArrayReaderDataProvider(): array
     {
-        $userValues = $this->getSampleUsers();
+        $userValues = $this->sampleUsers;
 
         // Amount of times each test will be executed with different data
         $maxAmountOfValuesToProvide = 5;

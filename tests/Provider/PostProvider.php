@@ -8,16 +8,14 @@ use App\Domain\Utility\ArrayReader;
 
 class PostProvider
 {
-    public function getSamplePosts(): array
-    {
-        return [
-            ['id' => 1, 'user_id' => 1, 'message' => 'This is the first test message'],
-            ['id' => 2, 'user_id' => 2, 'message' => 'This is the second test message'],
-            ['id' => 3, 'user_id' => 3, 'message' => 'This is the third test message'],
-            ['id' => 4, 'user_id' => 4, 'message' => 'This is the fourth test message'],
-            ['id' => 5, 'user_id' => 5, 'message' => 'This is the fifth test message'],
-        ];
-    }
+    public array $samplePosts = [
+        ['id' => 1, 'user_id' => 1, 'message' => 'This is the first test message'],
+        ['id' => 2, 'user_id' => 2, 'message' => 'This is the second test message'],
+        ['id' => 3, 'user_id' => 3, 'message' => 'This is the third test message'],
+        ['id' => 4, 'user_id' => 4, 'message' => 'This is the fourth test message'],
+        ['id' => 5, 'user_id' => 5, 'message' => 'This is the fifth test message'],
+    ];
+
 
     /**
      * Provider of users in form of an ArrayReader
@@ -43,9 +41,9 @@ class PostProvider
     public function oneSetOfMultiplePostsProvider(): array
     {
         return [
-          [
-              $this->getSamplePosts(),
-          ],
+            [
+                $this->samplePosts,
+            ],
         ];
     }
 
