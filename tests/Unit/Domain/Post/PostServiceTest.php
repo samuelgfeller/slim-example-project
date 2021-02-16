@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Domain\Post;
+namespace App\Test\Unit\Domain\Post;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
@@ -20,7 +20,7 @@ class PostServiceTest extends TestCase
      * Test function findAllPosts from PostService which returns
      * Post array including the name of users
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::oneSetOfMultiplePostsProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
      * @param array $posts
      */
     public function testFindAllPosts(array $posts)
@@ -44,7 +44,7 @@ class PostServiceTest extends TestCase
      * Check if findPost() from PostService returns
      * the post coming from the repository
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $post
      */
     public function testFindPost(array $post)
@@ -66,7 +66,7 @@ class PostServiceTest extends TestCase
      * the posts coming from the repository AND
      * if the user names are contained in the returned array
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::oneSetOfMultiplePostsProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
      * @param array $posts
      */
     public function testFindAllPostsFromUser(array $posts)
@@ -91,7 +91,7 @@ class PostServiceTest extends TestCase
      * Test that service method createPost() calls PostRepository:insertPost()
      * and that (service) createPost() returns the id returned from (repo) insertPost()
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
     public function testCreatePost(array $validPost)
@@ -127,7 +127,7 @@ class PostServiceTest extends TestCase
      * but without specific error analysis. Important is that it didn't create it.
      * The method is called with each value of the provider
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::invalidPostsProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::invalidPostsProvider()
      * @param array $invalidPost
      */
     public function testInvalidCreatePost(array $invalidPost)
@@ -151,7 +151,7 @@ class PostServiceTest extends TestCase
     /**
      * Test createPost when user doesn't exist
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
     public function testNotExistingUserCreatePost(array $validPost)
@@ -174,7 +174,7 @@ class PostServiceTest extends TestCase
      * Invalid or not existing user don't have to be tested since it's the same
      * validation as createUser() and it's already done there
      *
-     * @dataProvider \App\Test\Domain\Post\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
     public function testUpdatePost(array $validPost)

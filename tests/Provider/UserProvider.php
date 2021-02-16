@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Test\Domain\User;
+namespace App\Test\Provider;
 
 
 use App\Domain\Utility\ArrayReader;

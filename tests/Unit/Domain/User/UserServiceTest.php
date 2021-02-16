@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Domain\User;
+namespace App\Test\Unit\Domain\User;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
@@ -23,7 +23,7 @@ class UserServiceTest extends TestCase
     /**
      * Test function findAllUsers from UserService
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneSetOfMultipleUsersProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneSetOfMultipleUsersProvider()
      * @param array $users
      */
     public function testFindAllUsers(array $users)
@@ -39,7 +39,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $user
      */
     public function testFindUser(array $user)
@@ -55,7 +55,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $user
      */
     public function testFindUserByEmail(array $user)
@@ -71,7 +71,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testCreateUser(array $validUser)
@@ -102,7 +102,7 @@ class UserServiceTest extends TestCase
      * but without specific error analysis. Only that it didn't create it.
      * The method is called with each value of the provider
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
     public function testInvalidCreateUser(array $invalidUser)
@@ -123,7 +123,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testUpdateUser(array $validUser)
@@ -143,7 +143,7 @@ class UserServiceTest extends TestCase
      * Test that data from existing user is validated before being updated
      * (updateUser)
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::invalidUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
     public function testInvalidUpdateUser(array $invalidUser)
@@ -166,7 +166,7 @@ class UserServiceTest extends TestCase
      * Test updateUser when user doesn't exist
      * (updateUser)
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testNotExistingUpdateUser(array $validUser)

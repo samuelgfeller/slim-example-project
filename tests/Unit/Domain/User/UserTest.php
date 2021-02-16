@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Test\Domain\User;
+namespace App\Test\Unit\Domain\User;
 
 
 use App\Domain\User\User;
@@ -22,7 +22,7 @@ class UserTest extends TestCase
      * and there isn't any logic in these methods. This is an example
      * but I won't do it for other objects.
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
+     * @dataProvider \App\Test\Provider\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
     public function testGetters(ArrayReader $userValues): void
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     /**
      * Testing the function toArrayForDatabase()
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::userArrayReaderDataProvider
+     * @dataProvider \App\Test\Provider\UserProvider::userArrayReaderDataProvider
      * @param ArrayReader $userValues
      */
     public function testToArrayForDatabase(ArrayReader $userValues): void

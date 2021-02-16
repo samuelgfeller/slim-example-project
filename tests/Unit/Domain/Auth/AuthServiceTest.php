@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Domain\Auth;
+namespace App\Test\Unit\Domain\Auth;
 
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
@@ -20,7 +20,7 @@ class AuthServiceTest extends TestCase
     /**
      * Test GetUserIdIfAllowedToLogin
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testGetUserIdIfAllowedToLogin(array $validUser)
@@ -39,7 +39,7 @@ class AuthServiceTest extends TestCase
     /**
      * Test GetUserIdIfAllowedToLogin with invalid user data
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::invalidEmailAndPasswordsUsersProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::invalidEmailAndPasswordsUsersProvider()
      * @param array $validUser
      */
     public function testGetUserIdIfAllowedToLoginInvalidData(array $validUser)
@@ -60,7 +60,7 @@ class AuthServiceTest extends TestCase
     /**
      * Test GetUserIdIfAllowedToLogin with not existing user
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testGetUserIdIfAllowedToLoginUserNotExisting(array $validUser)
@@ -82,7 +82,7 @@ class AuthServiceTest extends TestCase
      * Test GetUserIdIfAllowedToLogin with invalid password
      * important to test this method extensively for security
      *
-     * @dataProvider \App\Test\Domain\User\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testGetUserIdIfAllowedToLoginInvalidPass(array $validUser)
@@ -107,7 +107,7 @@ class AuthServiceTest extends TestCase
      * Test testGetUserRole with different roles
      *
      * Test with multiple users to have different roles
-     * @dataProvider \App\Test\Domain\User\UserProvider::validUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
      * @param array $user
      */
     public function testGetUserRole(array $user)
