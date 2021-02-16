@@ -5,13 +5,12 @@ namespace App\Infrastructure;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 use Cake\Database\Query;
-use Cake\Database\StatementInterface;
 
 abstract class DataManager
 {
 
-    private $connection = null;
-    protected $table = null;
+    private ?Connection $connection = null;
+    protected ?string $table = null;
 
     public function __construct(Connection $connection = null)
     {
@@ -68,11 +67,11 @@ abstract class DataManager
      * Searches entry in table with given value at given column
      *
      * @param string $column
-     * @param $value
+     * @param mixed $value
      * @param array $fields
      * @return array
      */
-    public function findOneBy(string $column, $value, array $fields = ['*']): array
+    public function findOneBy(string $column, mixed $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
         // Retrieving a single Row
@@ -89,11 +88,11 @@ abstract class DataManager
      * Searches entry in table with given value at given column
      *
      * @param string $column
-     * @param $value
+     * @param mixed $value
      * @param array $fields
      * @return array
      */
-    public function findAllBy(string $column, $value, array $fields = ['*']): array
+    public function findAllBy(string $column, mixed $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
         // Retrieving a single Row
@@ -124,16 +123,16 @@ abstract class DataManager
      * Example: ['name' => 'New name']
      *
      * @param array $data
-     * @param $whereIdIs
+     * @param string|int $whereId
      * @return bool
      */
-    protected function update(array $data, $whereIdIs): bool
+    protected function update(array $data, int|string $whereId): bool
     {
         $query = $this->connection->newQuery();
         $query->update($this->table)
             ->set($data)
             ->where([
-                'id' => $whereIdIs
+                'id' => $whereId
             ]);
         return $query->execute()->rowCount() > 0;
     }
@@ -141,11 +140,11 @@ abstract class DataManager
     /**
      * Delete from database permanently (execute DELETE statement)
      *
-     * @param $id
+     * @param string|int $id
      *
      * @return bool
      */
-    protected function hardDelete($id): bool
+    protected function hardDelete(string|int $id): bool
     {
         return $this->connection->delete($this->table, ['id' => $id])->rowCount() > 0;
     }
@@ -153,10 +152,10 @@ abstract class DataManager
     /**
      * Soft delete entry with given id from database
      *
-     * @param $id
+     * @param string|int $id
      * @return bool
      */
-    protected function delete($id): bool
+    protected function delete(string|int $id): bool
     {
         $query = $this->connection->newQuery();
         $query->update($this->table)
@@ -185,10 +184,10 @@ abstract class DataManager
      * Check if value exists in database
      *
      * @param string $column
-     * @param string $value
+     * @param mixed $value
      * @return bool
      */
-    public function exists(string $column, $value): bool
+    public function exists(string $column, mixed $value): bool
     {
         $query = $this->newSelectQuery();
         $query->select(1)->where([$column => $value]);
