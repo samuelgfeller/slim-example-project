@@ -33,7 +33,7 @@ class PostServiceTest extends TestCase
 
         // Here we don't need to specify what the function will do / return since its exactly that
         // which is being tested. So we can take the autowired class instance from the container directly.
-        /** @var PostService $postService */
+        /** @var PostService $service */
         $service = $this->container->get(PostService::class);
 
         self::assertEquals($postsWithUsersToCompare, $service->findAllPosts());

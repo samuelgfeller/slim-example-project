@@ -49,7 +49,7 @@ class UserService
     /**
      * Insert user in database
      *
-     * @param $user
+     * @param User $user
      * @return string
      */
     public function createUser(User $user): string

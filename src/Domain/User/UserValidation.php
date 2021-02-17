@@ -230,65 +230,65 @@ class UserValidation extends AppValidation
         return $validationResult;
     }
 
-    /**
-     * Validate username.
-     *
-     * @param string $username
-     * @param ValidationResult $validationResult
-     */
-    private function validateUsername(string $username, ValidationResult $validationResult)
-    {
-        $this->validateLengthMax($username, 'username', $validationResult, 80);
-        $this->validateLengthMin($username, 'username', $validationResult, 3);
-        if ($validationResult->fails()) {
-            return;
-        }
-        if ($this->userRepository->existsUserByUsername($username)) {
-            $validationResult->setError('username', __('Username already taken'));
-        }
-        if (preg_match('/((^|, )(admin|user|nicola|bjoern|björn|penis|69|420))+$/', $username)) {
-            $validationResult->setError('username', __('OOOOH you filthy one...'));
-        }
-    }
-
-    /**
-     * Validate the old password
-     *
-     * @param string $userId
-     * @param string $oldPassword
-     * @param ValidationResult $validationResult
-     * @return void
-     */
-    private function validateOldPassword(string $userId, string $oldPassword, ValidationResult $validationResult)
-    {
-        $correctPassword = $this->userRepository->checkPassword($userId, $oldPassword);
-        if (!$correctPassword) {
-            $validationResult->setError('passwordOld', __('Does not match the old password'));
-        }
-    }
-
-
-    /**
-     * Validate firstname.
-     *
-     * @param string $firstName
-     * @param ValidationResult $validationResult
-     */
-    private function validateFirstname(string $firstName, ValidationResult $validationResult)
-    {
-        $this->validateLengthMax($firstName, 'firstname', $validationResult, 80);
-        $this->validateLengthMin($firstName, 'firstname', $validationResult, 3);
-    }
-
-    /**
-     * Validate lastname.
-     *
-     * @param string $lastName
-     * @param ValidationResult $validationResult
-     */
-    private function validateLastname(string $lastName, ValidationResult $validationResult)
-    {
-        $this->validateLengthMax($lastName, 'lastname', $validationResult, 80);
-        $this->validateLengthMin($lastName, 'lastname', $validationResult, 3);
-    }
+//    /**
+//     * Validate username.
+//     *
+//     * @param string $username
+//     * @param ValidationResult $validationResult
+//     */
+//    private function validateUsername(string $username, ValidationResult $validationResult)
+//    {
+//        $this->validateLengthMax($username, 'username', $validationResult, 80);
+//        $this->validateLengthMin($username, 'username', $validationResult, 3);
+//        if ($validationResult->fails()) {
+//            return;
+//        }
+//        if ($this->userRepository->existsUserByUsername($username)) {
+//            $validationResult->setError('username', __('Username already taken'));
+//        }
+//        if (preg_match('/((^|, )(admin|user|nicola|bjoern|björn|penis|69|420))+$/', $username)) {
+//            $validationResult->setError('username', __('OOOOH you filthy one...'));
+//        }
+//    }
+//
+//    /**
+//     * Validate the old password
+//     *
+//     * @param string $userId
+//     * @param string $oldPassword
+//     * @param ValidationResult $validationResult
+//     * @return void
+//     */
+//    private function validateOldPassword(string $userId, string $oldPassword, ValidationResult $validationResult)
+//    {
+//        $correctPassword = $this->userRepository->checkPassword($userId, $oldPassword);
+//        if (!$correctPassword) {
+//            $validationResult->setError('passwordOld', __('Does not match the old password'));
+//        }
+//    }
+//
+//
+//    /**
+//     * Validate firstname.
+//     *
+//     * @param string $firstName
+//     * @param ValidationResult $validationResult
+//     */
+//    private function validateFirstname(string $firstName, ValidationResult $validationResult)
+//    {
+//        $this->validateLengthMax($firstName, 'firstname', $validationResult, 80);
+//        $this->validateLengthMin($firstName, 'firstname', $validationResult, 3);
+//    }
+//
+//    /**
+//     * Validate lastname.
+//     *
+//     * @param string $lastName
+//     * @param ValidationResult $validationResult
+//     */
+//    private function validateLastname(string $lastName, ValidationResult $validationResult)
+//    {
+//        $this->validateLengthMax($lastName, 'lastname', $validationResult, 80);
+//        $this->validateLengthMin($lastName, 'lastname', $validationResult, 3);
+//    }
 }

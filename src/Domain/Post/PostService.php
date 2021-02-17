@@ -70,10 +70,10 @@ class PostService
     /**
      * Add user infos to post array
      *
-     * @param $posts
+     * @param array $posts
      * @return array
      */
-    private function populatePostsArrayWithUser($posts): array
+    private function populatePostsArrayWithUser(array $posts): array
     {
         // Add user name info to post
         $postsWithUser = [];

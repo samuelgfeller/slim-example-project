@@ -58,7 +58,7 @@ final class RegisterSubmitAction
             );
         }
 
-        // Clear sessions
+        // Clear flash
         $flash = $this->session->getFlash();
         $flash->clear();
 
