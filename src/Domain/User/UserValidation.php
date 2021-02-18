@@ -29,8 +29,9 @@ class UserValidation extends AppValidation
      */
     public function __construct(LoggerFactory $logger, UserRepository $userRepository)
     {
-        parent::__construct($logger->addFileHandler('error.log')
-            ->createInstance('user-validation'));
+        parent::__construct(
+            $logger->addFileHandler('error.log')->createInstance('user-validation')
+        );
         $this->userRepository = $userRepository;
     }
 
@@ -65,7 +66,7 @@ class UserValidation extends AppValidation
     public function validateUserRegistration(User $user): ValidationResult
     {
         // Instantiate ValidationResult Object with default message
-        $validationResult = new ValidationResult('There was a validation error when trying to register a user');
+        $validationResult = new ValidationResult('There was a validation error when trying to register');
 
         $this->validateName($user->getName(), true, $validationResult);
         $this->validateEmail($user->getEmail(), true, $validationResult);
@@ -125,7 +126,7 @@ class UserValidation extends AppValidation
         }
 
         $this->validatePassword($passwords[0], $required, $validationResult);
-        $this->validatePassword($passwords[1], $required, $validationResult);
+        $this->validatePassword($passwords[1], $required, $validationResult, 'password2');
     }
 
     /**
@@ -135,16 +136,21 @@ class UserValidation extends AppValidation
      * @param string $password
      * @param bool $required
      * @param ValidationResult $validationResult
+     * @param string $fieldName Optional e.g. password2
      */
-    public function validatePassword(string $password, bool $required, ValidationResult $validationResult): void
-    {
+    public function validatePassword(
+        string $password,
+        bool $required,
+        ValidationResult $validationResult,
+        string $fieldName = 'password'
+    ): void {
         // Required check done here (and not validatePasswords) because login validation uses it as well
         if (null !== $password && '' !== $password) {
-            $this->validateLengthMin($password, 'password', $validationResult, 3);
+            $this->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required but not given
             // the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'passwords', 'Password required but not given');
+            $validationResult->setIsBadRequest(true, $fieldName, 'Password required but not given');
         }
     }
 

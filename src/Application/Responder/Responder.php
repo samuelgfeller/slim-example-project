@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\PhpRenderer;
+
 use function http_build_query;
 
 /**
@@ -55,7 +56,6 @@ final class Responder
      * @param ResponseInterface $response The response
      * @param string $template Template pathname relative to templates directory
      * @param array $data Associative array of template variables
-     * @param string $layout optional layout path default: layout.html.php
      *
      * @return ResponseInterface The response
      * @throws \Throwable
@@ -114,22 +114,25 @@ final class Responder
         return $this->redirectToUrl($response, $this->routeParser->urlFor($routeName, $data, $queryParams));
     }
 
-
-
-    /* Below is temp @todo remove */
-
-    public function redirectForOnValidationError(
+    /**
+     * Render template with validation errors
+     *
+     * @param ResponseInterface $response
+     * @param string $template
+     * @param ValidationResult $validationResult
+     * @return ResponseInterface|null
+     * @throws \Throwable
+     */
+    public function renderOnValidationError(
         ResponseInterface $response,
-        ValidationResult $validationResult,
-        string $destination
+        string $template,
+        ValidationResult $validationResult
     ): ?ResponseInterface {
-        $responseData = [
-            'status' => 'error',
-            'message' => 'Validation error',
-            'validation' => $validationResult->toArray(),
-        ];
-//        $flash->add()
-        return $this->redirectToRouteName($response, $destination);
+        // Add the validation errors to phpRender attributes
+        $this->phpRenderer->addAttribute('validation', $validationResult->toArray());
+
+        // Render template with status code
+        return $this->render($response->withStatus($validationResult->getStatusCode()), $template);
     }
 
     /**

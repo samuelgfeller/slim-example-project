@@ -66,12 +66,14 @@
     margin-top: 5px;
 }
 
-.form input.wrong-cred-input{
+.form-box.wrong-cred-input, input.wrong-cred-input{
     border: 2px solid #c0000a;
 }
 
 .err-msg{
-    color: #c0000a;
+    padding-top: 5px;
+    display: block;
+    color: #9f0009;
 }
 .success-msg{
     font-weight: bold;

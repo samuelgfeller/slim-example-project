@@ -37,12 +37,13 @@ class AuthService
      * If no, an InvalidCredentialsException is thrown
      *
      * @param User $user
-     * @return int id
+     * @return string id
      *
      * @throws InvalidCredentialsException
      *
+     *
      */
-    public function getUserIdIfAllowedToLogin(User $user): int
+    public function getUserIdIfAllowedToLogin(User $user): string
     {
         $this->userValidation->validateUserLogin($user);
 
