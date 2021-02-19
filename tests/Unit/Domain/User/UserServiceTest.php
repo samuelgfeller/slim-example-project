@@ -3,30 +3,25 @@
 namespace App\Test\Unit\Domain\User;
 
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\Post;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
-use App\Domain\User\UserValidation;
 use App\Domain\Utility\ArrayReader;
-use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
-use Cake\Datasource\RepositoryInterface;
 use PHPUnit\Framework\TestCase;
-use Slim\Logger;
 
 class UserServiceTest extends TestCase
 {
     use AppTestTrait;
 
     /**
-     * Test function findAllUsers from UserService
+     * Test findAllUsers() from UserService
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneSetOfMultipleUsersProvider()
      * @param array $users
      */
-    public function testFindAllUsers(array $users)
+    public function testFindAllUsers(array $users): void
     {
         // Add mock class to container and define return value for method findAllPosts so the service can use it
         $this->mock(UserRepository::class)->method('findAllUsers')->willReturn($users);
@@ -39,10 +34,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test findUser() from UserService
+     *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $user
      */
-    public function testFindUser(array $user)
+    public function testFindUser(array $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserById')->willReturn($user);
@@ -55,10 +52,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test findUserByEmail() from UserService
+     *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $user
      */
-    public function testFindUserByEmail(array $user)
+    public function testFindUserByEmail(array $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($user);
@@ -71,10 +70,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test createUser() from UserService
+     *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testCreateUser(array $validUser)
+    public function testCreateUser(array $validUser): void
     {
         // Return type of UserRepository:insertUser is string
         $userId = (string)$validUser['id'];
@@ -96,6 +97,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test createUser() with invalid values
      * Test that no user is created when values are invalid
      * validateUserRegistration() will be tested separately but
      * here we ensure that this validation is going on in createUser
@@ -105,7 +107,7 @@ class UserServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
-    public function testInvalidCreateUser(array $invalidUser)
+    public function testCreateUser_invalid(array $invalidUser): void
     {
         // Mock UserRepository because it is used by the validation logic.
         // Empty mock would do the trick as well it would just return null on non defined functions.
@@ -123,6 +125,8 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test updateUser() from UserService
+     *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
@@ -140,13 +144,13 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test updateUser() with invalid users
      * Test that data from existing user is validated before being updated
-     * (updateUser)
      *
      * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
-    public function testInvalidUpdateUser(array $invalidUser)
+    public function testUpdateUser_invalid(array $invalidUser)
     {
         // Mock UserRepository because it is used by the validation logic
         // In this test user exists so every invalid data from invalidUserProvider() can throw
@@ -163,13 +167,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * Test updateUser when user doesn't exist
-     * (updateUser)
+     * Test updateUser() when user doesn't exist
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testNotExistingUpdateUser(array $validUser)
+    public function testUpdateUser_notExisting(array $validUser)
     {
         // Mock UserRepository because it is used by the validation logic
         // Point of this test is not existing user
@@ -184,6 +187,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
+     * Test deleteUser()
      * Since in this function not much logic is going on
      * I test if the repo method to delete all posts related
      * to the user is called and the method to delete the user itself

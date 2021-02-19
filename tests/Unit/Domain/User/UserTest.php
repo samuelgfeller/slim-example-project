@@ -13,7 +13,6 @@ class UserTest extends TestCase
 
     protected User $user;
 
-
     /**
      * Testing all getters of the class user
      *

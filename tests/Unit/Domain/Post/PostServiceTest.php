@@ -23,7 +23,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
      * @param array $posts
      */
-    public function testFindAllPosts(array $posts)
+    public function testFindAllPosts(array $posts): void
     {
         // Add mock class PostRepository to container and define return value for method findAllPosts
         $this->mock(PostRepository::class)->method('findAllPosts')->willReturn($posts);
@@ -47,7 +47,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $post
      */
-    public function testFindPost(array $post)
+    public function testFindPost(array $post): void
     {
         // Add mock class PostRepository to container and define return value for method findPostById
         // I dont see the necessity of expecting method to be called. If we get the result we want
@@ -55,7 +55,7 @@ class PostServiceTest extends TestCase
         $this->mock(PostRepository::class)->method('findPostById')->willReturn($post);
 
         // Get an empty class instance from container
-        /** @var PostService $postService */
+        /** @var PostService $service */
         $service = $this->container->get(PostService::class);
 
         self::assertEquals($post, $service->findPost($post['id']));
@@ -69,7 +69,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
      * @param array $posts
      */
-    public function testFindAllPostsFromUser(array $posts)
+    public function testFindAllPostsFromUser(array $posts): void
     {
         // Add mock class PostRepository to container and define return value for method findPostById
         // Posts are with different user_ids from provider and logically findAllPostsFromUser has to return
@@ -80,7 +80,7 @@ class PostServiceTest extends TestCase
         // findAllPosts returns posts with the name of the according user so they have to be added here as well
         $postsWithUsersToCompare= $this->populatePostsArrayWithUserForTesting($posts);
 
-        /** @var PostService $postService */
+        /** @var PostService $service */
         $service = $this->container->get(PostService::class);
 
         // User id not relevant because return values from repo is defined above
@@ -94,7 +94,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
-    public function testCreatePost(array $validPost)
+    public function testCreatePost(array $validPost): void
     {
         // Return type of PostRepository:insertPost is string
         $postId = (string)$validPost['id'];
@@ -130,7 +130,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::invalidPostsProvider()
      * @param array $invalidPost
      */
-    public function testInvalidCreatePost(array $invalidPost)
+    public function testCreatePost_invalid(array $invalidPost): void
     {
         // Mock UserRepository because it is used by the validation logic.
         // Empty mock would do the trick as well as it would just return null on non defined functions.
@@ -154,7 +154,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
-    public function testNotExistingUserCreatePost(array $validPost)
+    public function testCreatePost_notExistingUser(array $validPost): void
     {
         // Point of this test is not existing user
         $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
@@ -177,7 +177,7 @@ class PostServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost
      */
-    public function testUpdatePost(array $validPost)
+    public function testUpdatePost(array $validPost): void
     {
         // With ->expects() to test if the method is called
         $this->mock(PostRepository::class)->expects(self::once())->method('updatePost')->willReturn(true);
@@ -192,7 +192,7 @@ class PostServiceTest extends TestCase
      * Test that postRepository:deletePost() is called in
      * post service
      */
-    public function testDeletePost()
+    public function testDeletePost(): void
     {
         $postId = 1;
 

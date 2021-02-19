@@ -1,11 +1,12 @@
 <?php
 
-
 namespace App\Test\Provider;
-
 
 use App\Domain\Utility\ArrayReader;
 
+/**
+ * Provide users to fill entities
+ */
 class UserProvider
 {
     public array $sampleUsers = [

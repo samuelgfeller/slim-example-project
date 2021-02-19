@@ -18,12 +18,12 @@ class AuthServiceTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test GetUserIdIfAllowedToLogin
+     * Test getUserIdIfAllowedToLogin()
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserIdIfAllowedToLogin(array $validUser)
+    public function testGetUserIdIfAllowedToLogin(array $validUser): void
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
@@ -37,12 +37,12 @@ class AuthServiceTest extends TestCase
     }
 
     /**
-     * Test GetUserIdIfAllowedToLogin with invalid user data
+     * Test getUserIdIfAllowedToLogin() with invalid user data
      *
      * @dataProvider \App\Test\Provider\UserProvider::invalidEmailAndPasswordsUsersProvider()
      * @param array $validUser
      */
-    public function testGetUserIdIfAllowedToLoginInvalidData(array $validUser)
+    public function testGetUserIdIfAllowedToLogin_invalidData(array $validUser): void
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
@@ -58,12 +58,12 @@ class AuthServiceTest extends TestCase
     }
 
     /**
-     * Test GetUserIdIfAllowedToLogin with not existing user
+     * Test getUserIdIfAllowedToLogin() with not existing user
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserIdIfAllowedToLoginUserNotExisting(array $validUser)
+    public function testGetUserIdIfAllowedToLogin_userNotExisting(array $validUser): void
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
@@ -79,13 +79,13 @@ class AuthServiceTest extends TestCase
     }
 
     /**
-     * Test GetUserIdIfAllowedToLogin with invalid password
+     * Test getUserIdIfAllowedToLogin() with invalid password
      * important to test this method extensively for security
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testGetUserIdIfAllowedToLoginInvalidPass(array $validUser)
+    public function testGetUserIdIfAllowedToLogin_invalidPass(array $validUser): void
     {
         // Add DIFFERENT password hash
         $validUser['password_hash'] = password_hash($validUser['password'] . 'differentPass', PASSWORD_DEFAULT);
@@ -104,13 +104,13 @@ class AuthServiceTest extends TestCase
     }
 
     /**
-     * Test testGetUserRole with different roles
+     * Test getUserRole() with different roles
      *
      * Test with multiple users to have different roles
      * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
      * @param array $user
      */
-    public function testGetUserRole(array $user)
+    public function testGetUserRole(array $user): void
     {
         $this->mock(UserRepository::class)->method('getUserRole')->willReturn($user['role']);
 
@@ -119,6 +119,4 @@ class AuthServiceTest extends TestCase
 
         self::assertEquals($user['role'], $authService->getUserRole($user['id']));
     }
-
-
 }
