@@ -66,5 +66,9 @@ If in the future I need something more I'll consider [Symfony Sessions](https://
 ## Licence
 The MIT Licence (MIT). Please see [Licence File](https://github.com/samuelgfeller/slim-example-project/blob/master/LICENCE.txt) for more information.
 
+### Credits
+Daniel made developping this project so much more fun. Thanks to his [knowledgebase](https://odan.github.io/), his [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project and the answers to my multiple questions he made me save countless hours. [Follow him](https://twitter.com/dopitz) on twitter.
 
+
+Big thanks to [JetBrains](https://jb.gg/OpenSource) as well for supporting this project. PHPStorm is by far [the best PHP IDE](https://www.cloudways.com/blog/top-ide-and-code-editors-php-development/). 
 
