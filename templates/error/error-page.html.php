@@ -1,11 +1,14 @@
-<?php $this->setLayout('layout.html.php');
+<?php
+
+$this->setLayout('layout.html.php');
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
- * @var array $errorMessage containing statusCode and reasonPhrase
+ * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
  */
 ?>
 <!-- Define assets that should be included -->
-<?php $this->addAttribute('css', ['assets/error/error.css']); ?>
+<?php
+$this->addAttribute('css', ['assets/error/error.css']); ?>
 
 
 <section id="cloud-section" class="">
@@ -42,6 +45,7 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
     ?>
     <h2 id="title"><?= html($title) ?></h2>
     <p><?= $message /* Not escape with html() because message contains html that should be interpreted*/ ?></p>
+    <?= $errorMessage['exceptionMessage'] !== null ? '<p>Error message: <b>' . $errorMessage['exceptionMessage'] . '</b></p>' : '' ?>
 </section>
 <section id="home-btn-section">
     <a href="<?= $route->urlFor('hello') ?>" class="btn">Go back home</a>

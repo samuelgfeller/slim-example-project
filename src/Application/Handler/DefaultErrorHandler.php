@@ -4,7 +4,7 @@ namespace App\Application\Handler;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use InvalidArgumentException;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -100,9 +100,14 @@ class DefaultErrorHandler
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
-            // Layout removed in error detail template
         } else {
-            $errorMessage = ['statusCode' => $statusCode, 'reasonPhrase' => $reasonPhrase];
+            // If its a HttpException it's safe to show the error message to the user (used for custom )
+            $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
+            $errorMessage = [
+                'exceptionMessage' => $exceptionMessage,
+                'statusCode' => $statusCode,
+                'reasonPhrase' => $reasonPhrase
+            ];
             $errorTemplate = 'error/error-page.html.php';
         }
 
@@ -129,25 +134,19 @@ class DefaultErrorHandler
     private function getHttpStatusCode(Throwable $exception): int
     {
         // Detect status code
-        $statusCode = 500;
+        $statusCode = StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR; // 500
 
         if ($exception instanceof HttpException) {
             $statusCode = (int)$exception->getCode();
         }
 
-        if ($exception instanceof \DomainException || $exception instanceof InvalidArgumentException) {
-            // Bad request
-            $statusCode = 400;
-        }
-
         if ($exception instanceof ValidationException) {
-            // Unprocessable Entity
-            $statusCode = 422;
+            $statusCode = StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY; // 422
         }
 
         $file = basename($exception->getFile());
         if ($file === 'CallableResolver.php') {
-            $statusCode = 404;
+            $statusCode = StatusCodeInterface::STATUS_NOT_FOUND; // 404
         }
 
         return $statusCode;
