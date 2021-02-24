@@ -6,7 +6,6 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class UserValidation
@@ -44,24 +43,24 @@ class PostValidation extends AppValidation
         $this->throwOnError($validationResult);
     }
 
-    protected function validateMessage($postMsg, $validationResult, $required)
+    protected function validateMessage($postMsg, ValidationResult $validationResult, bool $required): void
     {
         if (null !== $postMsg && '' !== $postMsg) {
             $this->validateLengthMax($postMsg, 'message', $validationResult, 500);
             $this->validateLengthMin($postMsg, 'message', $validationResult, 4);
         } elseif (true === $required) {
-            // If it is null but required, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'message', 'Message is required but not given');
+            // If it is null or empty string and required
+            $validationResult->setError('message', 'Message is required but not given');
         }
     }
 
-    protected function validateUser($userId, $validationResult, $required)
+    protected function validateUser($userId, ValidationResult $validationResult, bool $required): void
     {
         if (null !== $userId && '' !== $userId && $userId !== 0) {
             $this->validateUserExistence($userId, $validationResult);
         } elseif (true === $required) {
-            // If it is null but required, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'user_id', 'user_id required but not given');
+            // If it is null or empty string and required
+            $validationResult->setError('user_id', 'user_id required but not given');
         }
     }
 

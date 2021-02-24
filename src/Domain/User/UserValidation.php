@@ -86,7 +86,7 @@ class UserValidation extends AppValidation
         $this->validatePasswords([$user->getPassword(), $user->getPassword2()], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
-        $this->throwOnError($validationResult);
+        $this->throwOnError($validationResult); // Thrown at the end so all errors are included
 
         return $validationResult;
     }
@@ -149,8 +149,7 @@ class UserValidation extends AppValidation
             $this->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required but not given
-            // the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, $fieldName, 'Password required but not given');
+            $validationResult->setError($fieldName, 'Password required but not given');
         }
     }
 
@@ -168,8 +167,8 @@ class UserValidation extends AppValidation
             $validationResult->setError('email', 'Email address could not be validated');
         } // Because reversed the null check is done here
         elseif (true === $required && (null === $email || '' === $email)) {
-            // If email is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'email', 'email required but not given');
+            // If it is null or empty string and required
+            $validationResult->setError('email', 'email required but not given');
         }
     }
 
@@ -196,9 +195,10 @@ class UserValidation extends AppValidation
         if (null !== $name && '' !== $name) {
             $this->validateLengthMax($name, 'name', $validationResult, 200);
             $this->validateLengthMin($name, 'name', $validationResult, 2);
-        } elseif (true === $required) {
-            // Name is mandatory. If it is null, the user input is faulty so bad request 400 return status is sent
-            $validationResult->setIsBadRequest(true, 'name', 'name required but not given');
+        }
+        // elseif only executed if previous "if" is falsy
+        elseif (true === $required) {
+            $validationResult->setError('name', 'Name required but not given');
         }
     }
 

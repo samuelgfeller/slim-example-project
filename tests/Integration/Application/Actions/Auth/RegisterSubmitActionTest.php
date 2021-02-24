@@ -37,8 +37,6 @@ class RegisterSubmitActionTest extends TestCase
                 'email' => 'admin@example.com',
                 'password' => '12345678',
                 'password2' => '12345678',
-                // Send admin but it has to be ignored and user should be in db. Client is not allowed to set its role
-                'role' => 'admin',
             ]
         );
 
@@ -55,7 +53,6 @@ class RegisterSubmitActionTest extends TestCase
             'id' => '1',
             'name' => 'Admin Example',
             'email' => 'admin@example.com',
-            'role' => 'user', // Has to be user even if admin is passed
             // Not password since the hash value always changes, it's asserted later
         ];
 

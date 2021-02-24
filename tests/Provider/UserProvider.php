@@ -293,6 +293,7 @@ class UserProvider
 
 
     // For integration tests
+
     /**
      * Providing arrays of how malformed request body can look like
      * Error messages have to be identical to RegisterSubmitAction.php
@@ -314,9 +315,20 @@ class UserProvider
                 'message' => 'Request body is empty',
             ],
             [
-                // Leaving out 'name'
+                // 5th parameter and client trying to set role
                 'body' => [
                     // Same keys than HTML form
+                    'name' => '',
+                    'email' => '',
+                    'password' => '',
+                    'password2' => '',
+                    'user_role' => 'admin',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'name'
+                'body' => [
                     'email' => '',
                     'password' => '',
                     'password2' => '',

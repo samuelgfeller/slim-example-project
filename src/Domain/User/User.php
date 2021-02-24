@@ -24,7 +24,9 @@ class User
         $this->password = $arrayReader->findString('password');
         $this->password2 = $arrayReader->findString('password2');
         $this->passwordHash = $arrayReader->findString('password_hash');
-        $this->role = $arrayReader->findString('role') ?? 'user';
+        // Making sure that role is always user to prevent that someone tries to have admin access by adding
+        // role in request body
+        $this->role = 'user';
     }
 
     /**

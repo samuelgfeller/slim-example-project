@@ -7,17 +7,16 @@ namespace App\Domain\Validation;
  */
 class ValidationResult
 {
-    protected $message;
-    protected $errors = [];
-    protected $isBadRequest = false;
-    protected $validatedData = [];
+    protected string $message;
+    protected array $errors = [];
+    protected array $validatedData = [];
 
     /**
      * ValidationResult constructor.
      *
      * @param string $message
      */
-    public function __construct(string $message = 'Please check your data')
+    public function __construct(string $message = 'Validation failed.')
     {
         $this->message = $message;
     }
@@ -67,43 +66,6 @@ class ValidationResult
     }
 
     /**
-     * Request parameter not correct
-     *
-     * @return bool
-     */
-    public function isBadRequest(): bool
-    {
-        return $this->isBadRequest;
-    }
-
-    /**
-     * Request parameter faulty
-     *
-     * @param bool $isBadRequest
-     * @param string $field
-     * @param string $message
-     */
-    public function setIsBadRequest(bool $isBadRequest, string $field = 'unknown',
-        string $message = 'Required request parameter empty or not formatted well'): void
-    {
-        $this->setError($field, $message);
-        $this->isBadRequest = $isBadRequest;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode(): int
-    {
-        if ($this->isBadRequest()){
-            return 400;
-        }
-
-        // Default status code on validation error is 422
-        return 422;
-    }
-
-    /**
      * @return array
      */
     public function getValidatedData(): array
@@ -119,6 +81,11 @@ class ValidationResult
         $this->validatedData = $validatedData;
     }
 
+    public function getStatusCode(): int
+    {
+        // If anytime in the future status code would somehow change
+        return 422;
+    }
 
     /**
      * Fail.
@@ -129,7 +96,7 @@ class ValidationResult
      */
     public function fails(): bool
     {
-        return !empty($this->errors) || $this->isBadRequest();
+        return !empty($this->errors);
     }
 
     /**
