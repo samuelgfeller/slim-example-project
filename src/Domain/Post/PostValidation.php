@@ -2,6 +2,7 @@
 
 namespace App\Domain\Post;
 
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
@@ -32,6 +33,7 @@ class PostValidation extends AppValidation
      * Validate post creation or update since they are the same
      *
      * @param Post $post
+     * @throws ValidationException
      */
     public function validatePostCreationOrUpdate(Post $post): void
     {

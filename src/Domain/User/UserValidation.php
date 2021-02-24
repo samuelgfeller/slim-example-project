@@ -41,6 +41,7 @@ class UserValidation extends AppValidation
      *
      * @param User $user
      * @return ValidationResult
+     * @throws ValidationException
      */
     public function validateUserUpdate(User $user): ValidationResult
     {
@@ -62,6 +63,7 @@ class UserValidation extends AppValidation
      *
      * @param User $user
      * @return ValidationResult
+     * @throws ValidationException
      */
     public function validateUserRegistration(User $user): ValidationResult
     {
