@@ -111,3 +111,13 @@ The directory structure looks like this:
             └── FooAwesomeClassTest.php
     └── AppTestTrait.php      
 ```
+
+## Visual Component testing
+For various reasons it's very hard to automate the testing of visual components, but I think it's very important
+to test at least the form validation errors, flash messages etc.
+
+To facilitate this, I'm using a great tool called [insomnia](https://insomnia.rest/). I have my list of saved
+requests that I can click on, and the wanted request body is sent with the corresponding HTTP method.
+
+The export of these requests are located in `/resources/insomnia/Insomnia-export_dd-mm-yyyy.json`. This file can simple
+be importe in [Insomnia Core](https://insomnia.rest/download).
