@@ -68,7 +68,7 @@ class UserProvider
     /**
      * Provider of users in form of an ArrayReader
      *
-     * @return array of User objects
+     * @return array of ArrayReader objects containing user values
      */
     public function userArrayReaderDataProvider(): array
     {
@@ -292,6 +292,66 @@ class UserProvider
     }
 
 
+    // For integration tests
+    /**
+     * Providing arrays of how malformed request body can look like
+     * Error messages have to be identical to RegisterSubmitAction.php
+     * asserting error message to differentiate empty body and malformed body
+     *
+     * @return array[][]
+     */
+    public function malformedRequestBodyProvider(): array
+    {
+        return [
+            [
+                // Empty body
+                'body' => [],
+                'message' => 'Request body is empty',
+            ],
+            [
+                // Body "null" (because both can happen )
+                'body' => null,
+                'message' => 'Request body is empty',
+            ],
+            [
+                // Leaving out 'name'
+                'body' => [
+                    // Same keys than HTML form
+                    'email' => '',
+                    'password' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'email'
+                'body' => [
+                    'name' => '',
+                    'password' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'password'
+                'body' => [
+                    'name' => '',
+                    'email' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'password2'
+                'body' => [
+                    'name' => '',
+                    'email' => '',
+                    'password' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+        ];
+    }
 
 
 

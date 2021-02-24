@@ -1,0 +1,6 @@
+POST http://dev.slim-example-project/register
+Content-Type: application/x-www-form-urlencoded
+
+#id=99&content=new-element
+
+###

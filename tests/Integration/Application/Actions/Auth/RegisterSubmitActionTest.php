@@ -8,7 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpBadRequestException;
 
+/**
+ * Integration testing user registrations
+ */
 class RegisterSubmitActionTest extends TestCase
 {
 
@@ -18,19 +22,22 @@ class RegisterSubmitActionTest extends TestCase
     use DatabaseTestTrait;
 
     /**
-     * Test.
+     * Test user creation
      *
      * @return void
      */
-    public function testCreateUser(): void
+    public function testRegister(): void
     {
-        $request = $this->createFormRequest('POST', $this->urlFor('register-submit'),
+        $request = $this->createFormRequest(
+            'POST',
+            $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
                 'name' => 'Admin Example',
                 'email' => 'admin@example.com',
-                'password' => '123',
-                'password2' => '123',
+                'password' => '12345678',
+                'password2' => '12345678',
+                // Send admin but it has to be ignored and user should be in db. Client is not allowed to set its role
                 'role' => 'admin',
             ]
         );
@@ -48,8 +55,8 @@ class RegisterSubmitActionTest extends TestCase
             'id' => '1',
             'name' => 'Admin Example',
             'email' => 'admin@example.com',
-            'role' => 'admin',
-            // Not password since the hash value always changes
+            'role' => 'user', // Has to be user even if admin is passed
+            // Not password since the hash value always changes, it's asserted later
         ];
 
         // Assert that content of selected fields (which are the keys of the $expected array) are same as expected
@@ -61,11 +68,95 @@ class RegisterSubmitActionTest extends TestCase
         // Password
         $password = $this->getTableRowById('user', 1)['password_hash'];
         // Assert that password_hash starts with the beginning of a BCRYPT hash
+        // Hash algo may change in the future but it's not a big deal to update if tests fail
         self::assertStringStartsWith(
             '$2y$10$',
             $password,
             'password_hash not starting with beginning of bcrypt hash'
         );
+        // Verify that hash matches the given password
+        self::assertTrue(password_verify('12345678', $password));
     }
 
+    /**
+     * Test invalid user creation
+     * When validation fails the ValidationException is caught and errors
+     * are given to phpRenderer as attribute called $validation.
+     *
+     * This is not possible to test however because I can’t just access the body of a
+     * response object. The content is in a so called “stream”. Well I could with __toString()
+     * a plain string doesn't help for testing.
+     *
+     * That’s why I will only assert that the Response status is the right one on a validation
+     * exception (422) or 400 Bad request
+     */
+    public function testRegister_invalidData(): void
+    {
+        // Test with required values not set
+        $requestRequiredNotSet = $this->createFormRequest(
+            'POST',
+            $this->urlFor('register-submit'),
+            // Same keys than HTML form
+            [
+                'name' => '',
+                'email' => '',
+                'password' => '',
+                'password2' => '',
+            ]
+        );
+
+        $responseRequiredNotSet = $this->app->handle($requestRequiredNotSet);
+        // Request body syntax is right and server understands the content but it's not able (doesn't want) to process it
+        // https://stackoverflow.com/a/3291292/9013718 422 Unprocessable Entity is the right status code
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $responseRequiredNotSet->getStatusCode());
+
+        $requestInvalid = $this->createFormRequest(
+            'POST',
+            $this->urlFor('register-submit'),
+            // Same keys than HTML form
+            [
+                'name' => 'Ad', /* Name too short */
+                'email' => 'admi$n@exampl$e.com', /* Invalid E-Mail */
+                'password' => '123', /* Password too short */
+                'password2' => '12', /* Password 2 not matching and too short */
+            ]
+        );
+
+        $responseInvalid = $this->app->handle($requestInvalid);
+        // Assert that response has error status 422
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $responseInvalid->getStatusCode());
+    }
+
+    /**
+     * Empty or malformed request body is when parameters
+     * are not set or have the wrong name ("key").
+     * Example: Server needs the argument "email" to process
+     * the request but "email" is not present in the body or
+     * misspelled.
+     * Good: "email: valid_or_invalid@data.com"
+     * Bad: "emal: valid_or_invalid@data.com"
+     *
+     * If the request contains a different body than expected, HttpBadRequestException
+     * is thrown and an error page is displayed to the user because that means that
+     * there is an error with the client sending the request that has to be fixed.
+     *
+     * @dataProvider \App\Test\Provider\UserProvider::malformedRequestBodyProvider()
+     *
+     * @param array|null $malformedBody null for the case that request body is null
+     * @param string $message
+     */
+    public function testRegister_malformedRequestBody(null|array $malformedBody, string $message): void
+    {
+        // Test with required values not set
+        $malformedRequest = $this->createFormRequest(
+            'POST',
+            $this->urlFor('register-submit'),
+            $malformedBody,
+        );
+
+        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        $this->expectException(HttpBadRequestException::class);
+        $this->expectExceptionMessage($message);
+        $this->app->handle($malformedRequest);
+    }
 }
