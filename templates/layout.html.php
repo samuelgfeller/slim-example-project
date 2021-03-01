@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var \Slim\Views\PhpRenderer $this
  * @var string $basePath
  * @var string $content PHP-View var page content
  * @var \Slim\Interfaces\RouteParserInterface $route

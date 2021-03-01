@@ -2,7 +2,6 @@
 
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Application\Middleware\HtmlNavMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;

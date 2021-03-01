@@ -9,6 +9,7 @@ use Cake\Database\Connection;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
+use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
@@ -93,7 +94,6 @@ return [
         return new PhpRenderer(
             $rendererSettings['path'],
             ['title' => 'Slim Example Project', 'dev' => $settings['dev']],
-            'layout.html.php',
         );
     },
 
@@ -117,6 +117,19 @@ return [
         return new PhpViewExtensionMiddleware(
             $container->get(App::class), $container->get(PhpRenderer::class), $container->get(SessionInterface::class)
         );
+    },
+
+    PHPMailer::class => function (ContainerInterface $container) {
+        $smtp = $container->get('settings')['smtp'];
+        $phpMailer = new PHPMailer(true);
+        $phpMailer->isSMTP();
+        $phpMailer->Host = $smtp['host'];
+        $phpMailer->SMTPAuth = true; // Enable SMTP authentication
+        $phpMailer->Username = $smtp['username'];
+        $phpMailer->Password = $smtp['password'];
+        $phpMailer->SMTPSecure = $smtp['encryption'];
+        $phpMailer->Port = $smtp['port'];
+        return $phpMailer;
     },
 
 ];

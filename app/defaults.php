@@ -71,4 +71,13 @@ $settings['logger'] = [
     'file_permission' => 0775,
 ];
 
+// Email settings
+$settings['smtp'] = [
+    'host' => 'smtp.example.com',
+    'username' => 'user@example.com',
+    'password' => 'secret',
+    'encryption' => \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS, // ENCRYPTION_SMTPS for ssl but not recommended
+    'port' => '587', // TLS: 587; SSL: 465
+];
+
 return $settings;
