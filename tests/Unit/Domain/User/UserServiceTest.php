@@ -2,6 +2,7 @@
 
 namespace App\Test\Unit\Domain\User;
 
+use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
@@ -70,12 +71,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * Test createUser() from UserService
+     * Test registerUser() from UserService
      *
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testCreateUser(array $validUser): void
+    public function testRegisterUser(array $validUser): void
     {
         // Return type of UserRepository:insertUser is string
         $userId = (string)$validUser['id'];
@@ -87,13 +88,13 @@ class UserServiceTest extends TestCase
         $this->mock(UserRepository::class)->method('insertUser')->willReturn($userId);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
-        /** @var UserService $service */
-        $service = $this->container->get(UserService::class);
+        /** @var AuthService $service */
+        $service = $this->container->get(AuthService::class);
 
         // Create an user object
         $userObj = new User(new ArrayReader($validUser));
 
-        self::assertEquals($userId, $service->createUser($userObj));
+        self::assertEquals($userId, $service->registerUser($userObj));
     }
 
     /**

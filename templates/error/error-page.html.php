@@ -1,10 +1,10 @@
 <?php
-
-$this->setLayout('layout.html.php');
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
+ * @var \Slim\Views\PhpRenderer $this
  */
+$this->setLayout('layout.html.php');
 ?>
 <!-- Define assets that should be included -->
 <?php

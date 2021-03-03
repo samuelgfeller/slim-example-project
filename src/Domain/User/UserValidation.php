@@ -6,33 +6,24 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\User\UserRepository;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class UserValidation
- *
- * @package App\Service\Validation
  */
 class UserValidation extends AppValidation
 {
-    /**
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
 
     /**
      * UserValidation constructor.
      *
      * @param LoggerFactory $logger
-     * @param UserRepository $userRepository
      */
-    public function __construct(LoggerFactory $logger, UserRepository $userRepository)
-    {
+    public function __construct(
+        LoggerFactory $logger,
+    ) {
         parent::__construct(
             $logger->addFileHandler('error.log')->createInstance('user-validation')
         );
-        $this->userRepository = $userRepository;
     }
 
 
@@ -72,19 +63,6 @@ class UserValidation extends AppValidation
 
         $this->validateName($user->getName(), true, $validationResult);
         $this->validateEmail($user->getEmail(), true, $validationResult);
-
-        // First check if validation already failed. If not email is checked in db because we know its a valid email
-        if (!$validationResult->fails() && $this->userRepository->findUserByEmail($user->getEmail())) {
-            $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
-
-            // todo remove that
-            $validationResult->setError('email', 'Error in registration');
-
-            // todo implement function to tell client that register success without actually writing something in db;
-            // todo send email to user to say that someone registered with his email and that he has already an account
-            // todo in email provide link to login and how the password can be changed
-        }
-
         $this->validatePasswords([$user->getPassword(), $user->getPassword2()], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
@@ -197,8 +175,7 @@ class UserValidation extends AppValidation
         if (null !== $name && '' !== $name) {
             $this->validateLengthMax($name, 'name', $validationResult, 200);
             $this->validateLengthMin($name, 'name', $validationResult, 2);
-        }
-        // elseif only executed if previous "if" is falsy
+        } // elseif only executed if previous "if" is falsy
         elseif (true === $required) {
             $validationResult->setError('name', 'Name required but not given');
         }

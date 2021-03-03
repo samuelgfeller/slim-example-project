@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Post;
 
-                use App\Infrastructure\DataManager;
+use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
 
@@ -30,10 +30,10 @@ class PostRepository extends DataManager
      * Return post with given id if it exists
      * otherwise null
      *
-     * @param int $id
+     * @param string $id
      * @return array
      */
-    public function findPostById(int $id): array
+    public function findPostById(string $id): array
     {
         return $this->findById($id);
     }
@@ -89,7 +89,7 @@ class PostRepository extends DataManager
      * @return bool
      */
     public function deletePostsFromUser(int $userId): bool {
-        return $this->softDeleteWhere(['user_id' => $userId]);
+        return $this->deleteWhere(['user_id' => $userId]);
     }
 
     /**

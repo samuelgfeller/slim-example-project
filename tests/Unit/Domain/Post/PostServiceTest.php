@@ -123,7 +123,7 @@ class PostServiceTest extends TestCase
     /**
      * Test that no post is created when values are invalid.
      * validatePostCreationOrUpdate() will be tested separately but
-     * here it is ensured that this validation is called in createUser
+     * here it is ensured that this validation is called in registerUser
      * but without specific error analysis. Important is that it didn't create it.
      * The method is called with each value of the provider
      *
@@ -172,7 +172,7 @@ class PostServiceTest extends TestCase
      * and that (service) updatePost() returns the bool true returned by repo
      *
      * Invalid or not existing user don't have to be tested since it's the same
-     * validation as createUser() and it's already done there
+     * validation as registerUser() and it's already done there
      *
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
      * @param array $validPost

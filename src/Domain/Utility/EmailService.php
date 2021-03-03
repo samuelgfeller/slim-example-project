@@ -36,7 +36,6 @@ class EmailService
      *
      * @param string $templatePath PHP-View path relative to template path defined in config
      * @param array $templateData['varName' => 'data', 'otherVarName' => 'otherData',]
-     * @throws \Throwable
      */
     public function setContentFromTemplate(string $templatePath, array $templateData): void
     {

@@ -37,10 +37,11 @@ abstract class DataManager
     public function findAll(array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select($fields)
-            ->where([
-                'deleted_at IS' => null
-            ]);
+        $query = $query->select($fields)->where(
+                [
+                    'deleted_at IS' => null
+                ]
+            );
         return $query->execute()->fetchAll('assoc') ?: [];
     }
 
@@ -48,18 +49,19 @@ abstract class DataManager
      * Searches entry in table which has given id
      * If not found it returns an empty array
      *
-     * @param int $id
+     * @param string $id
      * @param array $fields
-     * @return array []
+     * @return array
      */
-    public function findById(int $id, array $fields = ['*']): array
+    public function findById(string $id, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select($fields)
-            ->where([
-                'deleted_at IS' => null,
-                'id' => $id
-            ]);
+        $query = $query->select($fields)->where(
+                [
+                    'deleted_at IS' => null,
+                    'id' => $id
+                ]
+            );
         return $query->execute()->fetch('assoc') ?: [];
     }
 
@@ -69,18 +71,37 @@ abstract class DataManager
      * @param string $column
      * @param mixed $value
      * @param array $fields
-     * @return array
+     * @return array first match to given condition
      */
     public function findOneBy(string $column, mixed $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
         // Retrieving a single Row
-        $query = $query->select($fields)
-            ->andWhere([
-                'deleted_at IS' => null,
-                $column => $value
-            ]);
+        $query = $query->select($fields)->andWhere(
+                [
+                    'deleted_at IS' => null,
+                    $column => $value
+                ]
+            );
+        // return first entry from result with fetch
         // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
+        return $query->execute()->fetch('assoc') ?: [];
+    }
+
+    /**
+     * Searches one entry in table with given where conditions
+     *
+     * @param string $where ['column' => value, 'otherColumn' => value] (test against null -> ['column IS' => null,])
+     * deleted_at is already in the where clause as a default
+     * @param array $fields
+     * @return array
+     */
+    public function findOneWhere(string $where, array $fields = ['*']): array
+    {
+        $query = $this->newSelectQuery();
+        // retrieving rows
+        $query = $query->select($fields)->andWhere(array_merge(['deleted_at IS' => null], $where));
+        // return first entry from result with fetch
         return $query->execute()->fetch('assoc') ?: [];
     }
 
@@ -95,13 +116,31 @@ abstract class DataManager
     public function findAllBy(string $column, mixed $value, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        // Retrieving a single Row
-        $query = $query->select($fields)
-            ->andWhere([
-                'deleted_at IS' => null,
-                $column => $value
-            ]);
-        // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
+        // retrieving rows
+        $query = $query->select($fields)->andWhere(
+                [
+                    'deleted_at IS' => null,
+                    $column => $value
+                ]
+            );
+
+        return $query->execute()->fetchAll('assoc') ?: [];
+    }
+
+    /**
+     * Searches all entries in table matching given where conditions
+     *
+     * @param string $where ['column' => value, 'otherColumn' => value] (test against null -> ['column IS' => null,])
+     * deleted_at is already in the where clause as a default
+     * @param array $fields
+     * @return array
+     */
+    public function findAllWhere(string $where, array $fields = ['*']): array
+    {
+        $query = $this->newSelectQuery();
+        // retrieving rows
+        $query = $query->select($fields)->andWhere(array_merge(['deleted_at IS' => null], $where));
+
         return $query->execute()->fetchAll('assoc') ?: [];
     }
 
@@ -112,7 +151,7 @@ abstract class DataManager
      * @param array $row with data to insert
      * @return string
      */
-    protected function insert(array $row): string
+    public function insert(array $row): string
     {
         return $this->connection->insert($this->table, $row)->lastInsertId();
     }
@@ -129,11 +168,11 @@ abstract class DataManager
     protected function update(array $data, int|string $whereId): bool
     {
         $query = $this->connection->newQuery();
-        $query->update($this->table)
-            ->set($data)
-            ->where([
-                'id' => $whereId
-            ]);
+        $query->update($this->table)->set($data)->where(
+                [
+                    'id' => $whereId
+                ]
+            );
         return $query->execute()->rowCount() > 0;
     }
 
@@ -155,12 +194,10 @@ abstract class DataManager
      * @param string|int $id
      * @return bool
      */
-    protected function delete(string|int $id): bool
+    public function delete(string|int $id): bool
     {
         $query = $this->connection->newQuery();
-        $query->update($this->table)
-            ->set(['deleted_at' => date('Y-m-d H:i:s')])
-            ->where(['id' => $id]);
+        $query->update($this->table)->set(['deleted_at' => date('Y-m-d H:i:s')])->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 
@@ -171,12 +208,10 @@ abstract class DataManager
      * Example: ['tbl_id' => 2, 'name' => 'nameToDelete']
      * @return bool
      */
-    protected function softDeleteWhere(array $conditions): bool
+    public function deleteWhere(array $conditions): bool
     {
         $query = $this->connection->newQuery();
-        $query->update($this->table)
-            ->set(['deleted_at' => date('Y-m-d H:i:s')])
-            ->where([$conditions]);
+        $query->update($this->table)->set(['deleted_at' => date('Y-m-d H:i:s')])->where([$conditions]);
         return $query->execute()->rowCount() > 0;
     }
 
@@ -207,11 +242,12 @@ abstract class DataManager
     public function getById(int $id, array $fields = ['*']): array
     {
         $query = $this->newSelectQuery();
-        $query = $query->select($fields)
-            ->where([
-                'deleted_at IS' => null,
-                'id' => $id
-            ]);
+        $query = $query->select($fields)->where(
+                [
+                    'deleted_at IS' => null,
+                    'id' => $id
+                ]
+            );
         $entry = $query->execute()->fetch('assoc');
         if (!$entry) {
             $err = new PersistenceRecordNotFoundException();
@@ -219,6 +255,19 @@ abstract class DataManager
             throw $err;
         }
         return $entry;
+    }
+
+    /**
+     * Find with query
+     * For joins and other complex queries
+     * https://book.cakephp.org/3/en/orm/query-builder.html#adding-joins
+     *
+     * @param Query $query
+     * @return array
+     */
+    public function findByQuery(Query $query): array
+    {
+        return $query->execute()->fetchAll('assoc') ?: [];
     }
 
 }

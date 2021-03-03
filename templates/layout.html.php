@@ -8,6 +8,7 @@
  * @var \Odan\Session\FlashInterface $flash
  * @var string $title
  */
+
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +103,8 @@
                         </figure>
                         <div class="flash-message">
                             <h3><?= html(ucfirst($key)) /* Gets overwritten in css, serves as default */ ?> message</h3>
-                            <p><?= html($msg) ?></p>
+                            <p><?= /* Flash messages are written serverside so no xss risk and html should be interpreted*/
+                                $msg ?></p>
                         </div>
                         <span class="flash-close-btn">&times;</span>
                     </dialog>

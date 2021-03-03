@@ -6,19 +6,26 @@ use App\Domain\Utility\ArrayReader;
 
 class User
 {
-    private ?int $id;
+
+    private ?string $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     private ?string $name;
     private string $email;
     private ?string $password;
     private ?string $password2;
     private ?string $passwordHash;
+    private ?string $status;
     private ?string $role;
-    
+
+    public const STATUS_UNVERIFIED = 'unverified'; // Default after registration
+    public const STATUS_ACTIVE = 'active'; // Verified via token received in email
+    public const STATUS_LOCKED = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
+    public const STATUS_SUSPENDED = 'suspended'; // User suspended, account holder not allowed to login even via email
     
     public function __construct(ArrayReader $arrayReader)
     {
-        // These keys have to match the input key for the ArrayReader
-        $this->id = $arrayReader->findInt('id');
+        // Values directly taken from client form. It should be made sure that non-allowed keys are not set but
+        // better be safe than sorry. Sensitive values like role and status can be changed later.
+        $this->id = $arrayReader->findString('id');
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->findString('password');
@@ -27,6 +34,7 @@ class User
         // Making sure that role is always user to prevent that someone tries to have admin access by adding
         // role in request body
         $this->role = 'user';
+        $this->status = self::STATUS_UNVERIFIED;
     }
 
     /**
@@ -45,13 +53,22 @@ class User
             'email' => $this->email,
             'password_hash' => $this->passwordHash,
             'role' => $this->role,
+            'status' => $this->status,
         ];
     }
-    
+
     /**
-     * @return int|mixed|null
+     * @param string|null $id
      */
-    public function getId()
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -103,4 +120,14 @@ class User
     {
         $this->passwordHash = $passwordHash;
     }
+
+    /**
+     * @param string|null $status
+     */
+    public function setStatus(?string $status): void
+    {
+        $this->status = $status;
+    }
+
+
 }

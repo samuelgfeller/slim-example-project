@@ -61,11 +61,11 @@ final class UserUpdateAction
         array $args
     ): ResponseInterface {
         // getUserIdFromToken not transferred to action since it will be session based
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
+        $loggedUserId = $this->getUserIdFromToken($request);
 
         $userData = $request->getParsedBody();
 
-        $userData['id'] = (int)$args['id'];
+        $userData['id'] = $args['id'];
 
         $userRole = $this->authService->getUserRole($loggedUserId);
 

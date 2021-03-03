@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\User;
 
-use App\Domain\User\UserNotFoundException;
+use App\Domain\User\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use Cake\Database\Connection;
@@ -11,7 +11,7 @@ use Cake\Database\Connection;
 class UserRepository extends DataManager
 {
     // Fields without password
-    private $fields = ['id','name','email','updated_at','created_at'];
+    private array $fields = ['id','name','email','updated_at','created_at'];
 
     public function __construct(Connection $conn = null)
     {
@@ -33,10 +33,10 @@ class UserRepository extends DataManager
      * Return user with given id if it exists
      * otherwise null
      *
-     * @param int $id
+     * @param string $id
      * @return array
      */
-    public function findUserById(int $id): array
+    public function findUserById(string $id): array
     {
         return $this->findById($id,$this->fields);
     }
@@ -50,7 +50,7 @@ class UserRepository extends DataManager
      */
     public function findUserByEmail(?string $email): ?array
     {
-        return $this->findOneBy('email', $email,['id','email','password_hash']);
+        return $this->findOneBy('email', $email,['id','name','email','status','password_hash']);
     }
     
     /**
@@ -75,7 +75,7 @@ class UserRepository extends DataManager
     public function insertUser(array $data): string {
         return $this->insert($data);
     }
-    
+
     /**
      * Delete user from database
      *
@@ -121,6 +121,14 @@ class UserRepository extends DataManager
         return $this->exists('id',$id);
     }
 
-
+    /**
+     * Set user status to verified
+     * @param string $userId
+     * @return bool
+     */
+    public function setUserToVerified(string $userId): bool
+    {
+        return $this->update(['status' => User::STATUS_ACTIVE], $userId);
+    }
 
 }

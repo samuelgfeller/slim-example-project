@@ -2,12 +2,10 @@
 
 namespace App\Domain\Exceptions;
 
-use RuntimeException;
-
 /**
  * Class ValidationException.
  */
-class AuthenticationException extends RuntimeException
+class AuthenticationException extends \RuntimeException
 {
 
     public function __construct($message)
