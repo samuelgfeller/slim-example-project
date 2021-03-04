@@ -18,13 +18,23 @@ abstract class DataManager
     }
 
     /**
-     * Get a query instance with target table already set
+     * Get a select query instance with target table already set
      *
      * @return Query
      */
     public function newSelectQuery(): Query
     {
         return $this->connection->newQuery()->from($this->table);
+    }
+
+    /**
+     * Get an insert query instance with target table already set
+     *
+     * @return Query
+     */
+    public function newInsertQuery(): Query
+    {
+        return $this->connection->newQuery()->into($this->table);
     }
 
     /**

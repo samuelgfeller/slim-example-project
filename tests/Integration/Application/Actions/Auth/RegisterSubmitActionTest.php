@@ -28,13 +28,16 @@ class RegisterSubmitActionTest extends TestCase
      */
     public function testRegister(): void
     {
+        // Per default not set when script executed with cli
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
                 'name' => 'Admin Example',
-                'email' => 'admin@example.com',
+                'email' => 'contact@samuel-gfeller.ch',
                 'password' => '12345678',
                 'password2' => '12345678',
             ]
@@ -52,7 +55,7 @@ class RegisterSubmitActionTest extends TestCase
             // CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
             'id' => '1',
             'name' => 'Admin Example',
-            'email' => 'admin@example.com',
+            'email' => 'contact@samuel-gfeller.ch',
             // Not password since the hash value always changes, it's asserted later
         ];
 

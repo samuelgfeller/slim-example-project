@@ -9,6 +9,7 @@ use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
 use App\Domain\Utility\EmailService;
+use App\Infrastructure\Security\RequestTrackRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Infrastructure\User\UserVerificationRepository;
 
@@ -22,10 +23,11 @@ class AuthService
 
     public function __construct(
         private UserValidation $userValidation,
-        private UserRepository $userRepository,
         private UserService $userService,
+        private EmailService $emailService,
+        private UserRepository $userRepository,
         private UserVerificationRepository $userVerificationRepository,
-        private EmailService $emailService
+        private RequestTrackRepository $requestTrackRepository
     ) {
     }
 
@@ -91,6 +93,7 @@ class AuthService
                     );
                     $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
                     $this->emailService->sendTo($dbUser['email'], $dbUser['name']);
+                    $this->requestTrackRepository->newRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
                 } catch (\PHPMailer\PHPMailer\Exception $e) {
                     // We try to hide if an email already exists or not so if email fails, nothing is done
                 } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -103,10 +106,13 @@ class AuthService
 
         $user->setStatus(User::STATUS_UNVERIFIED);
 
+        // Insert new user into database
         $user->setId($this->userRepository->insertUser($user->toArrayForDatabase()));
 
         // Create, insert and send token to user
         $this->createAndSendUserVerification($user);
+
+        $this->requestTrackRepository->newRequest($user->getEmail(), $_SERVER['REMOTE_ADDR'], true);
 
         return $user->getId();
     }

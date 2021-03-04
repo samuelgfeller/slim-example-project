@@ -14,8 +14,8 @@ $this->setLayout('layout.email.php');
     <br>
     Someone tried to create an account with your email address. <br>
     If this was you, then you can login with your credentials by navigating to the
-    <a href="<?= $route->fullUrlFor($uri,'login-page') ?>">Login section</a> or if you forgot your
-    password, you can reset it there. <br>
+    <a href="<?= $route->fullUrlFor($uri,'login-page') ?>">login section</a> or if you forgot your
+    password, you can reset it here. <br>
     <br>
     Best regards <br>
     Slim Example Project
