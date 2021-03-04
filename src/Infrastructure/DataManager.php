@@ -32,16 +32,17 @@ abstract class DataManager
      * Reason why empty array is returned if nothing: https://stackoverflow.com/a/11536281/9013718
      *
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array
      */
-    public function findAll(array $fields = ['*']): array
+    public function findAll(array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
-        $query = $query->select($fields)->where(
-                [
-                    'deleted_at IS' => null
-                ]
-            );
+        $query = $query->select($fields)->where($deletedAtIsNull);
+
         return $query->execute()->fetchAll('assoc') ?: [];
     }
 
@@ -51,17 +52,17 @@ abstract class DataManager
      *
      * @param string $id
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array
      */
-    public function findById(string $id, array $fields = ['*']): array
+    public function findById(string $id, array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
-        $query = $query->select($fields)->where(
-                [
-                    'deleted_at IS' => null,
-                    'id' => $id
-                ]
-            );
+        $query = $query->select($fields)->where(array_merge($deletedAtIsNull, ['id' => $id]));
+
         return $query->execute()->fetch('assoc') ?: [];
     }
 
@@ -71,18 +72,17 @@ abstract class DataManager
      * @param string $column
      * @param mixed $value
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array first match to given condition
      */
-    public function findOneBy(string $column, mixed $value, array $fields = ['*']): array
+    public function findOneBy(string $column, mixed $value, array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
         // Retrieving a single Row
-        $query = $query->select($fields)->andWhere(
-                [
-                    'deleted_at IS' => null,
-                    $column => $value
-                ]
-            );
+        $query = $query->select($fields)->andWhere(array_merge($deletedAtIsNull, [$column => $value]));
         // return first entry from result with fetch
         // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
         return $query->execute()->fetch('assoc') ?: [];
@@ -94,13 +94,17 @@ abstract class DataManager
      * @param string $where ['column' => value, 'otherColumn' => value] (test against null -> ['column IS' => null,])
      * deleted_at is already in the where clause as a default
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array
      */
-    public function findOneWhere(string $where, array $fields = ['*']): array
+    public function findOneWhere(string $where, array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
         // retrieving rows
-        $query = $query->select($fields)->andWhere(array_merge(['deleted_at IS' => null], $where));
+        $query = $query->select($fields)->andWhere(array_merge($deletedAtIsNull, $where));
         // return first entry from result with fetch
         return $query->execute()->fetch('assoc') ?: [];
     }
@@ -111,18 +115,17 @@ abstract class DataManager
      * @param string $column
      * @param mixed $value
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array
      */
-    public function findAllBy(string $column, mixed $value, array $fields = ['*']): array
+    public function findAllBy(string $column, mixed $value, array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
         // retrieving rows
-        $query = $query->select($fields)->andWhere(
-                [
-                    'deleted_at IS' => null,
-                    $column => $value
-                ]
-            );
+        $query = $query->select($fields)->andWhere(array_merge($deletedAtIsNull, [$column => $value]));
 
         return $query->execute()->fetchAll('assoc') ?: [];
     }
@@ -133,16 +136,48 @@ abstract class DataManager
      * @param string $where ['column' => value, 'otherColumn' => value] (test against null -> ['column IS' => null,])
      * deleted_at is already in the where clause as a default
      * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
      * @return array
      */
-    public function findAllWhere(string $where, array $fields = ['*']): array
+    public function findAllWhere(string $where, array $fields = ['*'], bool $withDeletedAtCheck = true): array
     {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
         $query = $this->newSelectQuery();
         // retrieving rows
-        $query = $query->select($fields)->andWhere(array_merge(['deleted_at IS' => null], $where));
+        $query = $query->select($fields)->andWhere(array_merge($deletedAtIsNull, $where));
 
         return $query->execute()->fetchAll('assoc') ?: [];
     }
+
+    /**
+     * Retrieve entry from table which has given id
+     * If it doesn't find anything an error is thrown
+     *
+     * @param int $id
+     * @param array $fields
+     * @param bool $withDeletedAtCheck with the condition that deleted_at IS NULL
+     *
+     * @return array
+     * @throws PersistenceRecordNotFoundException
+     */
+    public function getById(int $id, array $fields = ['*'], bool $withDeletedAtCheck = true): array
+    {
+        $deletedAtIsNull = true === $withDeletedAtCheck ? ['deleted_at IS' => null] : [];
+
+        $query = $this->newSelectQuery();
+        $query = $query->select($fields)->where(array_merge($deletedAtIsNull, ['id' => $id]));
+        $entry = $query->execute()->fetch('assoc');
+        if (!$entry) {
+            $err = new PersistenceRecordNotFoundException();
+            $err->setNotFoundElement($this->table);
+            throw $err;
+        }
+        return $entry;
+    }
+
+
 
 
     /**
@@ -169,10 +204,10 @@ abstract class DataManager
     {
         $query = $this->connection->newQuery();
         $query->update($this->table)->set($data)->where(
-                [
-                    'id' => $whereId
-                ]
-            );
+            [
+                'id' => $whereId
+            ]
+        );
         return $query->execute()->rowCount() > 0;
     }
 
@@ -228,33 +263,6 @@ abstract class DataManager
         $query->select(1)->where([$column => $value]);
         $row = $query->execute()->fetch();
         return !empty($row);
-    }
-
-    /**
-     * Retrieve entry from table which has given id
-     * If it doesn't find anything an error is thrown
-     *
-     * @param int $id
-     * @param array $fields
-     * @return array
-     * @throws PersistenceRecordNotFoundException
-     */
-    public function getById(int $id, array $fields = ['*']): array
-    {
-        $query = $this->newSelectQuery();
-        $query = $query->select($fields)->where(
-                [
-                    'deleted_at IS' => null,
-                    'id' => $id
-                ]
-            );
-        $entry = $query->execute()->fetch('assoc');
-        if (!$entry) {
-            $err = new PersistenceRecordNotFoundException();
-            $err->setNotFoundElement($this->table);
-            throw $err;
-        }
-        return $entry;
     }
 
     /**
