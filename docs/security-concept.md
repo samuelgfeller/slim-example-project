@@ -1,5 +1,13 @@
 # Security Concept
 
+## Validation
+Sensitive values submitted by users are validated before being interpreted and worked with. 
+
+## Escaping
+Values displayed to the user in are first escaped to prevent XSS attacks. 
+
+# Throttling
+
 ## Authentication
 
 ### Login requests on specific user or coming from specific IP
@@ -44,3 +52,4 @@
 ### Resources
 * https://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication
 * https://stackoverflow.com/questions/2090910/how-can-i-throttle-user-login-attempts-in-php
+* https://stackoverflow.com/questions/479233/what-is-the-best-distributed-brute-force-countermeasure
