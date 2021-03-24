@@ -51,6 +51,28 @@ $settings['db'] = [
     ]
 ];
 
+// Security
+$settings['security'] = [
+    /**
+     * Protection against rapid fire and distributed brute force attacks
+     * If changed, RequestTrackFixture has to be updated accordingly
+     */
+    // Seconds in the past relevant for global, user and ip request throttle
+    'timespan' => 3600,
+
+    // key = request amount; value = delay; Lowest to highest
+    // ! When changed, update RequestTrackProvider and RequestTrackFixture as well
+    // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
+    'login_throttle' => [4 => 10, 9 => 120, 12 => 'captcha'],
+    'user_email_throttle' => [5 => 2, 10 => 4, 20 => 'captcha'],
+    // Percentage of login requests that may be failures (threshold)
+    'login_failure_percentage' => 20,
+
+    'global_daily_email_threshold' => 300, // optional
+    // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
+    'global_monthly_email_threshold' => 1000, // optional
+];
+
 // Template renderer settings
 $settings['renderer'] = [
     // Template path

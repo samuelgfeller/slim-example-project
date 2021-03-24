@@ -7,6 +7,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
@@ -26,7 +27,8 @@ final class RegisterSubmitAction
         protected UserService $userService,
         protected Responder $responder,
         protected AuthService $authService,
-        private SessionInterface $session
+        private SessionInterface $session,
+        private SecurityService $securityService
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-register');
     }
@@ -46,8 +48,10 @@ final class RegisterSubmitAction
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
+                    $this->securityService->performSecurityCheck($userData['email']);
                     // Throws exception if there is error and returns false if user already exists
                     $insertId = $this->authService->registerUser($user);
+                    // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email has been sent.');
                 } catch (ValidationException $exception) {
                     $flash->add('error', $exception->getMessage());
@@ -58,6 +62,7 @@ final class RegisterSubmitAction
                     );
                 } catch (\PHPMailer\PHPMailer\Exception $e) {
                     $flash->add('error', 'Email error. Please try again. Message: ' . "\n" . $e->getMessage());
+                    $this->logger->error('PHPMailer exception: '. $e->getMessage());
                     $response = $response->withStatus(500);
                     return $this->responder->render($response, 'auth/register.html.php');
                 }
@@ -68,6 +73,7 @@ final class RegisterSubmitAction
                     $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
                 }
                 // Redirect for new user and if email already exists is the same
+//                return $response;
                 return $this->responder->redirectToRouteName($response, 'register-check-email-page');
             }
             $flash->add('error', 'Malformed request body syntax');

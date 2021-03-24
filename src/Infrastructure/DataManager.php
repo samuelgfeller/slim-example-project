@@ -22,7 +22,7 @@ abstract class DataManager
      *
      * @return Query
      */
-    public function newSelectQuery(): Query
+    protected function newSelectQuery(): Query
     {
         return $this->connection->newQuery()->from($this->table);
     }
@@ -94,7 +94,7 @@ abstract class DataManager
         // Retrieving a single Row
         $query = $query->select($fields)->andWhere(array_merge($deletedAtIsNull, [$column => $value]));
         // return first entry from result with fetch
-        // ?: returns the value on the left only if it is set and truthy (if not set it gives a notice)
+        // "?:" returns the value on the left only if it is set and truthy (if not set it gives a notice)
         return $query->execute()->fetch('assoc') ?: [];
     }
 

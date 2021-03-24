@@ -35,6 +35,8 @@ class UserService
     }
 
     /**
+     * Find active user via email
+     *
      * @param string $email
      * @return array|null
      */

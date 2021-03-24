@@ -48,9 +48,18 @@ class AuthService
         $this->userValidation->validateUserLogin($user);
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
-        // Check failed login attempts
-        if ($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
-            return $dbUser['id'];
+        if ($dbUser['status'] === User::STATUS_UNVERIFIED) {
+            // todo inform user when he tries to login that account is unverified and he should click on the link in his inbox
+            // maybe send verification email again
+        } elseif ($dbUser['status'] === User::STATUS_SUSPENDED) {
+            // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
+        } elseif ($dbUser['status'] === User::STATUS_LOCKED) {
+            // Todo login fail and inform user (only via mail) that he is locked
+        } elseif ($dbUser['status'] === User::STATUS_ACTIVE){
+            // Check failed login attempts
+            if ($dbUser !== null && $dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
+                return $dbUser['id'];
+            }
         }
 
         // unverified exception
@@ -130,7 +139,7 @@ class AuthService
         $token = random_bytes(50);
 
         // Token expiration
-        $expires = new \DateTime('NOW');
+        $expires = new \DateTime('now');
         $expires->add(new \DateInterval('PT01H')); // 1 hour
 
         // Soft delete any existing tokens for this user
