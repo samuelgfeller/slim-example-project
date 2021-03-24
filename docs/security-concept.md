@@ -1,8 +1,8 @@
 # Security Concept
 
-# Authentication
+## Authentication
 
-## Login requests on specific user or coming from specific IP
+### Login requests on specific user or coming from specific IP
 
 * `$settings['security']['login_throttle'] => [4 => 10, 9 => 120, 12 => 'captcha']` defines the threshold values (key)
   and delay in seconds (value) when threshold is reached
@@ -10,14 +10,14 @@
   `$settings['security']['timespan']` (at the time, it's enough to wait [timespan] to be able to try to log in again
   without throttling)
 
-## Global login rules (distributed brute force)
+### Global login rules (distributed brute force)
 
 * `$settings['security']['login_failure_percentage'] => 20` is the login failure threshold ratio in percentage meaning that
   failed login requests to total login requests have to be less than the given percentage.
 * If the threshold is reached, all users have to fill out captcha before being able to login.
 * Total logins value is taken from past month
 
-## Registration
+### Registration
 * After filling out the registration form, user is created with status `unverified`.
 * Email is sent with verification token.
 * After the link is opened, it will set the status of the user on `active` and user may log in. 
