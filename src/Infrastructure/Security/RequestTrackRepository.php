@@ -204,9 +204,9 @@ class RequestTrackRepository extends DataManager
      * Gives sent email amount globally in the last given amount of days
      *
      * @param int $days
-     * @return int
+     * @return string sent email amount
      */
-    public function getGlobalSentEmailAmount(int $days): int
+    public function getGlobalSentEmailAmount(int $days): string
     {
         $query = $this->newSelectQuery();
         $query->select(['sent_email_amount' => $query->func()->sum('sent_email')])->where(
@@ -214,7 +214,7 @@ class RequestTrackRepository extends DataManager
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)')
             ]
         )->bind(':days', $days, 'integer');
-        return $query->execute()->fetch('assoc')['sent_email_amount'];
+        return $query->execute()->fetch('assoc')['sent_email_amount'] ?? '0';
     }
 
 

@@ -2,7 +2,9 @@
 
 namespace App\Test\Integration\Application\Actions\Auth;
 
+use App\Domain\Utility\EmailService;
 use App\Test\AppTestTrait;
+use App\Test\Fixture\RequestTrackFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -31,13 +33,18 @@ class RegisterSubmitActionTest extends TestCase
         // Per default not set when script executed with cli
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 
+        $this->insertFixtures([RequestTrackFixture::class]);
+
+        // Prevent email from being sent
+        $this->mock(EmailService::class);
+
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
                 'name' => 'Admin Example',
-                'email' => 'contact@samuel-gfeller.ch',
+                'email' => 'contact@samuel-gfeller.ch', // Has to be valid for mailgun test servers
                 'password' => '12345678',
                 'password2' => '12345678',
             ]
@@ -52,7 +59,7 @@ class RegisterSubmitActionTest extends TestCase
         $this->assertTableRowCount(1, 'user');
 
         $expected = [
-            // CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
+            // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
             'id' => '1',
             'name' => 'Admin Example',
             'email' => 'contact@samuel-gfeller.ch',

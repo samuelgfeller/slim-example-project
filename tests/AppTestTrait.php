@@ -42,6 +42,7 @@ trait AppTestTrait
         }
         $this->container = $container;
 
+        // Set memory sessions
         $this->container->set(SessionInterface::class, new MemorySession());
 
         // Mock LoggerFactory so that createInstance() returns NullLogger
@@ -59,6 +60,9 @@ trait AppTestTrait
             // Create tables, truncate old ones
             $this->setUpDatabase(__DIR__ . '/../resources/schema/schema.sql');
         }
+
+        // Per default not set when script executed with cli and used in all security checks
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     }
 
     protected function mock(string $class): MockObject

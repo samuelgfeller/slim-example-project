@@ -58,6 +58,7 @@ class UserTest extends TestCase
         self::assertEquals($userValues->findString('name'), $userAsDbArray['name']);
         self::assertEquals($userValues->getString('email'), $userAsDbArray['email']);
         self::assertEquals($userValues->findString('password_hash'), $userAsDbArray['password_hash']);
-        self::assertEquals($userValues->findString('role'), $userAsDbArray['role']);
+        // role defaults to user and cannot be set via constructor
+        self::assertEquals('user', $userAsDbArray['role']);
     }
 }

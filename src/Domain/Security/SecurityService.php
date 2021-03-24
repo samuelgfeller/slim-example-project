@@ -39,17 +39,23 @@ class SecurityService
      */
     public function performSecurityCheck(string $email): void
     {
-        // All stats in last timespan
-        $this->globalRequests = $this->requestTrackRepository->getGlobalRequestStats($this->settings['timespan']);
+        // All stats in last timespan (and cast to int)
+        $this->globalRequests = array_map(
+            'intval',
+            $this->requestTrackRepository->getGlobalRequestStats($this->settings['timespan'])
+        );
 
-        // Stats coming from ip in last timespan
-        $this->ipRequests = $this->requestTrackRepository->getIpRequestStats(
-            $_SERVER['REMOTE_ADDR'],
-            $this->settings['timespan']
+        // Stats coming from ip in last timespan (and cast to int)
+        $this->ipRequests = array_map(
+            'intval',
+            $this->requestTrackRepository->getIpRequestStats($_SERVER['REMOTE_ADDR'], $this->settings['timespan'])
         );
 
         // Stats concerning given email in last timespan
-        $this->userRequests = $this->requestTrackRepository->getUserRequestStats($email, $this->settings['timespan']);
+        $this->userRequests = array_map(
+            'intval',
+            $this->requestTrackRepository->getUserRequestStats($email, $this->settings['timespan'])
+        );
 
         // Fail check (failed login attempt)
         // Most strict. Very low limit on failed requests for specific emails or coming from a specific ip
@@ -166,7 +172,9 @@ class SecurityService
      */
     private function performGlobalLoginCheck(): void
     {
-        $loginAmountStats = $this->requestTrackRepository->getLoginAmountStats();
+        // Cast all array values from string (what cake query builder returns) to int
+        $loginAmountStats = array_map('intval', $this->requestTrackRepository->getLoginAmountStats());
+
         // Calc integer allowed failure amount from given percentage and total login
         $failureThreshold = $loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage'];
         // Actual failure amount have to be LESS than allowed failures amount (tested this way)
@@ -186,7 +194,7 @@ class SecurityService
 
         // Check emails for daily threshold
         if (!empty($this->settings['global_daily_email_threshold'])) {
-            $sentEmailAmountInLastDay = $this->requestTrackRepository->getGlobalSentEmailAmount(1);
+            $sentEmailAmountInLastDay = (int)$this->requestTrackRepository->getGlobalSentEmailAmount(1);
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastDay >= $this->settings['global_daily_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending daily reached site-wide.';
@@ -196,7 +204,7 @@ class SecurityService
 
         // Check emails for monthly threshold
         if (!empty($this->settings['global_monthly_email_threshold'])) {
-            $sentEmailAmountInLastMonth = $this->requestTrackRepository->getGlobalSentEmailAmount(30);
+            $sentEmailAmountInLastMonth = (int)$this->requestTrackRepository->getGlobalSentEmailAmount(30);
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastMonth >= $this->settings['global_monthly_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending monthly reached site-wide.';

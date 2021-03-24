@@ -2,6 +2,7 @@
 
 namespace App\Test\Provider;
 
+use App\Domain\User\User;
 use App\Domain\Utility\ArrayReader;
 
 /**
@@ -169,7 +170,8 @@ class UserProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin'
+                    'role' => 'admin',
+                    'status' => User::STATUS_ACTIVE,
                 ]
             ]
         ];

@@ -179,6 +179,8 @@ class PostServiceTest extends TestCase
      */
     public function testUpdatePost(array $validPost): void
     {
+        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+
         // With ->expects() to test if the method is called
         $this->mock(PostRepository::class)->expects(self::once())->method('updatePost')->willReturn(true);
 

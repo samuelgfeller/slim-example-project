@@ -7,8 +7,11 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
+use App\Domain\Utility\EmailService;
 use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Security\RequestTrackRepository;
 use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -81,11 +84,16 @@ class UserServiceTest extends TestCase
         // Return type of UserRepository:insertUser is string
         $userId = (string)$validUser['id'];
 
-        // Removing id from user because before user is created id is not known
+        // Removing id from user because before user is created; id is not known
         unset($validUser['id']);
 
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('insertUser')->willReturn($userId);
+        // findUserByEmail automatically returns null as class is mocked and no return value is set
+
+        $this->mock(RequestTrackRepository::class);
+        $this->mock(UserVerificationRepository::class);
+        $this->mock(EmailService::class);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var AuthService $service */
@@ -116,13 +124,16 @@ class UserServiceTest extends TestCase
         // when creating a new user.
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
+        $this->mock(RequestTrackRepository::class);
+        $this->mock(UserVerificationRepository::class);
+        $this->mock(EmailService::class);
 
-        /** @var UserService $service */
-        $service = $this->container->get(UserService::class);
+        /** @var AuthService $service */
+        $service = $this->container->get(AuthService::class);
 
         $this->expectException(ValidationException::class);
 
-        $service->createUser(new User(new ArrayReader($invalidUser)));
+        $service->registerUser(new User(new ArrayReader($invalidUser)));
     }
 
     /**

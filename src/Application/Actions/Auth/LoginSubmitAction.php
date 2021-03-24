@@ -78,6 +78,7 @@ final class LoginSubmitAction
                     return $this->responder->redirectToRouteName($response, 'login-page');
                 } catch (SecurityException $se){
                     // todo inform user that they have to wait or fill out captcha
+                    throw $se;
                 }
             }
             $flash->add('error', 'Malformed request body syntax');

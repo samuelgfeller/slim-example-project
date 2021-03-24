@@ -6,7 +6,7 @@
         "php-di/php-di": "^6.0",
         "ext-pdo": "*",
         "ext-json": "*",
-        "cakephp/database": "^4.2.3",
+        "cakephp/database": "^4",
         "symfony/polyfill-uuid": "^1.20",
         "cakephp/chronos": "^2.0",
         "odan/session": "^5.0",
@@ -31,10 +31,12 @@
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^8 || ^9",
         "selective/test-traits": "^1",
-        "phpstan/phpstan": "^0.12.76"
+        "phpstan/phpstan": "^0.12.81"
     },
     "scripts": {
         "test": "phpunit --configuration phpunit.xml",
         "test:coverage": "phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml --coverage-html build/coverage"
-    }
+    },
+    "name": "samuelgfeller/slim-example-project",
+    "description": "Extensive example project"
 }

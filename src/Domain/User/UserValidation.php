@@ -6,6 +6,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
+use App\Infrastructure\User\UserRepository;
 
 /**
  * Class UserValidation
@@ -17,9 +18,11 @@ class UserValidation extends AppValidation
      * UserValidation constructor.
      *
      * @param LoggerFactory $logger
+     * @param UserRepository $userRepository
      */
     public function __construct(
         LoggerFactory $logger,
+        private UserRepository $userRepository
     ) {
         parent::__construct(
             $logger->addFileHandler('error.log')->createInstance('user-validation')
@@ -136,11 +139,11 @@ class UserValidation extends AppValidation
     /**
      * Validate email
      *
-     * @param string $email
+     * @param string|null $email
      * @param bool $required
      * @param ValidationResult $validationResult
      */
-    private function validateEmail(string $email, bool $required, ValidationResult $validationResult): void
+    private function validateEmail(string|null $email, bool $required, ValidationResult $validationResult): void
     {
         // reversed, if true -> error
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -185,35 +188,35 @@ class UserValidation extends AppValidation
 
     // unused from björn original
 
-    /**
-     * Validate loading the user.
-     *
-     * @param string $userId
-     * @return ValidationResult
-     */
-    public function validateGet(string $userId): ValidationResult
-    {
-        $validationResult = new ValidationResult('User does not exist');
-        $this->validateUserExistence($userId, $validationResult);
-
-        return $validationResult;
-    }
-
-
-    /**
-     * Validate deletion.
-     *
-     * @param string $userId
-     * @param string $executorId
-     * @return ValidationResult
-     */
-    public function validateDeletion(string $userId, string $executorId): ValidationResult
-    {
-        $validationResult = new ValidationResult('Something went wrong');
-        $this->validateUserExistence($userId, $validationResult);
-
-        return $validationResult;
-    }
+//    /**
+//     * Validate loading the user.
+//     *
+//     * @param string $userId
+//     * @return ValidationResult
+//     */
+//    public function validateGet(string $userId): ValidationResult
+//    {
+//        $validationResult = new ValidationResult('User does not exist');
+//        $this->validateUserExistence($userId, $validationResult);
+//
+//        return $validationResult;
+//    }
+//
+//
+//    /**
+//     * Validate deletion.
+//     *
+//     * @param string $userId
+//     * @param string $executorId
+//     * @return ValidationResult
+//     */
+//    public function validateDeletion(string $userId, string $executorId): ValidationResult
+//    {
+//        $validationResult = new ValidationResult('Something went wrong');
+//        $this->validateUserExistence($userId, $validationResult);
+//
+//        return $validationResult;
+//    }
 
 //    /**
 //     * Validate username.
