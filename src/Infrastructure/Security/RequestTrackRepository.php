@@ -184,7 +184,7 @@ class RequestTrackRepository extends DataManager
      *
      * @return array
      */
-    public function getLoginAmountStats(): array
+    public function getGlobalLoginAmountStats(): array
     {
         $query = $this->newSelectQuery();
         $query->select(

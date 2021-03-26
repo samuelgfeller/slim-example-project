@@ -48,7 +48,7 @@ final class RegisterSubmitAction
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
-                    $this->securityService->performSecurityCheck($userData['email']);
+                    $this->securityService->performEmailAbuseCheck($userData['email']);
                     // Throws exception if there is error and returns false if user already exists
                     $insertId = $this->authService->registerUser($user);
                     // Say email has been sent even when user exists as it should be kept secret

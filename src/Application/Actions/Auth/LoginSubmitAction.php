@@ -44,7 +44,7 @@ final class LoginSubmitAction
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
-                    $this->securityService->performSecurityCheck($userData['email']);
+                    $this->securityService->performLoginSecurityCheck($userData['email']);
                     // Throws InvalidCredentialsException if not allowed
                     $userId = $this->authService->GetUserIdIfAllowedToLogin($user);
 

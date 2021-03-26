@@ -8,15 +8,18 @@ use App\Domain\Settings;
 use App\Infrastructure\Security\RequestTrackRepository;
 use App\Infrastructure\User\UserRepository;
 
+/**
+ * Sensitive requests are stored in table request_track.
+ */
 class SecurityService
 {
     private array $settings;
 
-    private array $globalRequests;
     // Coming from ip
     private array $ipRequests;
-    // Concerning specific email
+    // Concerning specific user/email
     private array $userRequests;
+    private string $email;
 
     public function __construct(
         private UserRepository $userRepository,
@@ -27,24 +30,10 @@ class SecurityService
     }
 
     /**
-     * Sensitive requests are stored in table request_track.
-     *  - register (failed or not)
-     *  - login (failed or not)
-     *  - password recovery submit
-     *  - all requests that send an email
-     *
-     * @param string $email User
-     *
-     * @throws SecurityException
+     * Retrieve and populate attributes with stats from database
      */
-    public function performSecurityCheck(string $email): void
+    private function retrieveAndSetStats(): void
     {
-        // All stats in last timespan (and cast to int)
-        $this->globalRequests = array_map(
-            'intval',
-            $this->requestTrackRepository->getGlobalRequestStats($this->settings['timespan'])
-        );
-
         // Stats coming from ip in last timespan (and cast to int)
         $this->ipRequests = array_map(
             'intval',
@@ -54,21 +43,76 @@ class SecurityService
         // Stats concerning given email in last timespan
         $this->userRequests = array_map(
             'intval',
-            $this->requestTrackRepository->getUserRequestStats($email, $this->settings['timespan'])
+            $this->requestTrackRepository->getUserRequestStats($this->email, $this->settings['timespan'])
         );
+    }
 
-        // Fail check (failed login attempt)
+    /**
+     * Threats:
+     * - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
+     * - Distributed brute force attacks (try to log in 1000 different users with most common password)
+     *
+     * Throttle behaviour: Limit log in attempts per user
+     * - After x amount of login requests or sent emails in an hour, user has to wait a certain delay before trying again
+     * - For each next login request or next email sent in the same hour, the user has to wait the same delay
+     * - Until it eventually increases after value y
+     * - If login or email requests continue, at amount z captcha is required from the user
+     * - This rule applies to login requests on a specific user or login requests coming from a specific ip
+     *
+     * Perform security check for login requests
+     * - coming from the same ip address
+     * - concerning a specific user account
+     * - global login requests (throttle after x percent of login failures)
+     *
+     * @param string $email
+     *
+     * @throws SecurityException
+     */
+    public function performLoginSecurityCheck(string $email): void
+    {
+        // Set attributes
+        $this->email = $email;
+        $this->retrieveAndSetStats();
+
         // Most strict. Very low limit on failed requests for specific emails or coming from a specific ip
-        $this->performLoginRequestCheck($email);
-        // Global fail check
+        $this->performLoginCheck();
+        // Global login check
         $this->performGlobalLoginCheck();
+    }
+
+    /**
+     * Threat: Email abuse (sending a lot of emails may be costly)
+     *
+     * Throttle behaviour: Limit email sending
+     * - After x amount of emails sent from ip or user they have 3 thresholds with
+     *    different waiting times
+     * - After the last threshold is reached, captcha is required for every email sent
+     * - Limit applies to last [timespan]. If waited enough, users can send unrestricted emails again
+     * - Globally there are two optional rules:
+     *   1. Defined daily limit - after it is reached, captcha is required for every user
+     *   2. Monthly limit - after it is reached, captcha is required for every user (mailgun resets after 1st)
+     *
+     * Perform email abuse check
+     * - coming from the same ip address
+     * - concerning a specific email address
+     * - global email requests
+     *
+     * @param string $email
+     *
+     * @throws SecurityException
+     */
+    public function performEmailAbuseCheck(string $email): void
+    {
+        // Set attributes
+        $this->email = $email;
+        $this->retrieveAndSetStats();
 
         // Email checks (register, password recovery, other with email)
-        $this->performEmailRequestsCheck($email);
+        $this->performEmailRequestsCheck();
         // Global email check
         $this->performGlobalEmailCheck();
-        // Global sensitive request check not implemented yet as there are none that are nor fail or email
     }
+
 
     /**
      * Check that login requests in last [timespan] do not exceed the set threshold.
@@ -78,10 +122,8 @@ class SecurityService
      * the same limit on failed login attempts per user is used also for successful logins.
      * If the user has 4 unsuccessful login attempts before throttling, he has also 4 successful login requests in
      * given timespan before experiencing the same throttling.
-     *
-     * @param string $email
      */
-    private function performLoginRequestCheck(string $email): void
+    private function performLoginCheck(): void
     {
         // Reverse order to compare fails longest delay first and then go down from there
         krsort($this->settings['login_throttle']);
@@ -99,7 +141,7 @@ class SecurityService
 
                 // Retrieve latest email sent for specific email or coming from ip
                 $latestLoginRequest = $this->requestTrackRepository->findLatestLoginRequestFromUserOrIp(
-                    $email,
+                    $this->email,
                     $_SERVER['REMOTE_ADDR']
                 );
 
@@ -121,11 +163,12 @@ class SecurityService
     }
 
     /**
-     * @param string $email
+     * Make email abuse check for requests coming from same ip
+     * or concerning the same email address
      *
      * @throws SecurityException
      */
-    private function performEmailRequestsCheck(string $email): void
+    private function performEmailRequestsCheck(): void
     {
         // Reverse order to compare fails longest delay first and then go down from there
         krsort($this->settings['user_email_throttle']);
@@ -138,7 +181,7 @@ class SecurityService
             ) {
                 // Retrieve latest email sent for specific email or coming from ip
                 $latestEmailRequestFromUser = $this->requestTrackRepository->findLatestEmailRequestFromUserOrIp(
-                    $email,
+                    $this->email,
                     $_SERVER['REMOTE_ADDR']
                 );
 
@@ -173,7 +216,7 @@ class SecurityService
     private function performGlobalLoginCheck(): void
     {
         // Cast all array values from string (what cake query builder returns) to int
-        $loginAmountStats = array_map('intval', $this->requestTrackRepository->getLoginAmountStats());
+        $loginAmountStats = array_map('intval', $this->requestTrackRepository->getGlobalLoginAmountStats());
 
         // Calc integer allowed failure amount from given percentage and total login
         $failureThreshold = $loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage'];
