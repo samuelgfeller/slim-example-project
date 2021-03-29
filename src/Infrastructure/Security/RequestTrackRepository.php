@@ -18,12 +18,13 @@ class RequestTrackRepository extends DataManager
     }
 
     /**
+     * Insert new request where an email was sent
+     *
      * @param string $email
      * @param string $ip
-     * @param bool $sentEmail whether an email was sent or not
      * @return string
      */
-    public function newRequest(string $email, string $ip, bool $sentEmail): string
+    public function newEmailRequest(string $email, string $ip): string
     {
         $query = $this->newInsertQuery();
 
@@ -32,12 +33,43 @@ class RequestTrackRepository extends DataManager
                 'email',
                 'ip_address',
                 'sent_email',
+                'is_login',
             ]
         )->values(
             [
                 'email' => $email,
                 'ip_address' => $query->newExpr("INET_ATON(:ip)"),
-                'sent_email' => $sentEmail,
+                'sent_email' => true,
+                'is_login' => null,
+            ]
+        )->bind(':ip', $ip, 'string')->execute()->lastInsertId();
+    }
+
+    /**
+     * Insert new login request
+     *
+     * @param string $email
+     * @param string $ip
+     * @param bool $success whether login request was a successful login or not
+     * @return string
+     */
+    public function newLoginRequest(string $email, string $ip, bool $success): string
+    {
+        $query = $this->newInsertQuery();
+
+        return $query->insert(
+            [
+                'email',
+                'ip_address',
+                'sent_email',
+                'is_login',
+            ]
+        )->values(
+            [
+                'email' => $email,
+                'ip_address' => $query->newExpr("INET_ATON(:ip)"),
+                'sent_email' => false,
+                'is_login' => $success === true ? 'success' : 'failure',
             ]
         )->bind(':ip', $ip, 'string')->execute()->lastInsertId();
     }

@@ -4,7 +4,6 @@
 namespace App\Domain\Auth;
 
 use App\Domain\Exceptions\InvalidCredentialsException;
-use App\Domain\Settings;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
@@ -59,12 +58,13 @@ class AuthService
             } elseif ($dbUser['status'] === User::STATUS_ACTIVE) {
                 // Check failed login attempts
                 if ($dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
+                    $this->requestTrackRepository->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
                     return $dbUser['id'];
                 }
             }
         }
 
-        // unverified exception
+        $this->requestTrackRepository->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], false);
 
         // Throw InvalidCred exception if user doesn't exist or wrong password
         // (vague exception on purpose for security)
@@ -104,7 +104,7 @@ class AuthService
                     );
                     $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
                     $this->emailService->sendTo($dbUser['email'], $dbUser['name']);
-                    $this->requestTrackRepository->newRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
+                    $this->requestTrackRepository->newEmailRequest($dbUser['email'], $_SERVER['REMOTE_ADDR']);
                 } catch (\PHPMailer\PHPMailer\Exception $e) {
                     // We try to hide if an email already exists or not so if email fails, nothing is done
                 } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -123,7 +123,7 @@ class AuthService
         // Create, insert and send token to user
         $this->createAndSendUserVerification($user);
 
-        $this->requestTrackRepository->newRequest($user->getEmail(), $_SERVER['REMOTE_ADDR'], true);
+        $this->requestTrackRepository->newEmailRequest($user->getEmail(), $_SERVER['REMOTE_ADDR']);
 
         return $user->getId();
     }
