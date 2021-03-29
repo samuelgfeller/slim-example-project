@@ -7,7 +7,6 @@ use App\Domain\Security\SecurityService;
 use App\Infrastructure\Security\RequestTrackRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
  * Threats:
@@ -209,7 +208,7 @@ class SecurityServiceTest extends TestCase
      * @param string $dailyEmailAmount too many daily emails
      * @param string $monthlyEmailAmount too many monthly emails
      */
-    public function testPerformSecurityCheck_globalEmailAbuse(
+    public function testPerformEmailAbuseCheck_global(
         string $dailyEmailAmount,
         string $monthlyEmailAmount
     ): void {
