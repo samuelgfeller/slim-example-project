@@ -51,7 +51,7 @@ class SecurityServiceTest extends TestCase
 
         // Very important to return stats otherwise global check fails
         $requestTrackRepository->method('getGlobalLoginAmountStats')->willReturn(
-            ['login_total' => 10, 'login_failures' => 0] // 0 percent failures so global check won't fail
+            ['login_total' => 21, 'login_failures' => 0] // 0 percent failures so global check won't fail
         );
 
         // Actual test
@@ -109,7 +109,8 @@ class SecurityServiceTest extends TestCase
 
         // Actual test starts here
         // Login amount stats used to calculate threshold
-        $totalLogins = 1000; // This amount doesn't matter (could be other int); the later calculated ratio does
+        // This amount doesn't matter (could be other int as long as calculated threshold from it is more than 20)
+        $totalLogins = 1000; // If failure percentage is 20%, min val (for exception) is 105 as it gives a threshold of 21
         $loginAmountStats = [
             'login_total' => $totalLogins,
             // Allowed failures amount have to be LESS than actual failures so this should trigger exception as its same

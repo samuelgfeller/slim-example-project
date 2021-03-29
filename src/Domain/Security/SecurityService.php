@@ -131,10 +131,12 @@ class SecurityService
         foreach ($this->settings['login_throttle'] as $requestLimit => $delay) {
             // Check that there aren't more login successes or failures than tolerated
             if (
-                (int)$this->ipRequests['login_failures'] >= $requestLimit ||
-                (int)$this->ipRequests['login_successes'] >= $requestLimit ||
-                (int)$this->userRequests['login_failures'] >= $requestLimit ||
-                (int)$this->userRequests['login_successes'] >= $requestLimit
+                ($this->ipRequests['login_failures'] >= $requestLimit && $this->ipRequests['login_failures'] !== 0) ||
+                ($this->ipRequests['login_successes'] >= $requestLimit && $this->ipRequests['login_successes'] !== 0) ||
+                ($this->userRequests['login_failures'] >= $requestLimit &&
+                    $this->userRequests['login_failures'] !== 0) ||
+                ($this->userRequests['login_successes'] >= $requestLimit &&
+                    $this->userRequests['login_successes'] !== 0)
             ) {
                 // If truthy means: too many ip fails OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user
@@ -176,8 +178,7 @@ class SecurityService
         foreach ($this->settings['user_email_throttle'] as $requestLimit => $delay) {
             // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
             if (
-                (int)$this->ipRequests['sent_emails'] >= $requestLimit ||
-                (int)$this->userRequests['sent_emails'] >= $requestLimit
+                $this->ipRequests['sent_emails'] >= $requestLimit || $this->userRequests['sent_emails'] >= $requestLimit
             ) {
                 // Retrieve latest email sent for specific email or coming from ip
                 $latestEmailRequestFromUser = $this->requestTrackRepository->findLatestEmailRequestFromUserOrIp(
@@ -219,9 +220,9 @@ class SecurityService
         $loginAmountStats = array_map('intval', $this->requestTrackRepository->getGlobalLoginAmountStats());
 
         // Calc integer allowed failure amount from given percentage and total login
-        $failureThreshold = $loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage'];
+        $failureThreshold = floor($loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage']);
         // Actual failure amount have to be LESS than allowed failures amount (tested this way)
-        if (!($loginAmountStats['login_failures'] < $failureThreshold) && $loginAmountStats['login_failures'] !== 0) {
+        if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';
             throw new SecurityException('captcha', SecurityException::GLOBAL_LOGIN, $msg);

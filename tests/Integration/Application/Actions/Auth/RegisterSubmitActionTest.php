@@ -30,8 +30,6 @@ class RegisterSubmitActionTest extends TestCase
      */
     public function testRegister(): void
     {
-        // Per default not set when script executed with cli
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 
         $this->insertFixtures([RequestTrackFixture::class]);
 

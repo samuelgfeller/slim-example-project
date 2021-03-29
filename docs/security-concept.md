@@ -24,6 +24,8 @@ Values displayed to the user in are first escaped to prevent XSS attacks.
   failed login requests to total login requests have to be less than the given percentage.
 * If the threshold is reached, all users have to fill out captcha before being able to login.
 * Total logins value is taken from past month
+* This throttle kicks in **only if the calculated failure threshold is more than 20** meaning that
+if the defined failure ratio is 20%, there need to be at least 105 globally failed login attempts
 
 ### Registration
 * After filling out the registration form, user is created with status `unverified`.
