@@ -5,6 +5,7 @@ namespace App\Test\Unit\Domain\Auth;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
@@ -27,6 +28,7 @@ class AuthServiceTest extends TestCase
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
@@ -46,6 +48,7 @@ class AuthServiceTest extends TestCase
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
@@ -67,6 +70,7 @@ class AuthServiceTest extends TestCase
     {
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
+        $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
@@ -92,6 +96,7 @@ class AuthServiceTest extends TestCase
 
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
         $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);

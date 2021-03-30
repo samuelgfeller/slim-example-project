@@ -37,14 +37,13 @@ final class LoginSubmitAction
         $userData = $request->getParsedBody();
 
         if (null !== $userData && [] !== $userData) {
-            /** If a html form name changes, these changes have to be done in the entities constructor
-             * (and if isset condition below) too since these names will be the keys from the ArrayReader */
+            // ? If a html form name changes, these changes have to be done in the entities constructor
+            // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
             // Check that request body syntax is formatted right
             if (count($userData) === 2 && isset($userData['email'], $userData['password'])) {
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
-                    $this->securityService->performLoginSecurityCheck($userData['email']);
                     // Throws InvalidCredentialsException if not allowed
                     $userId = $this->authService->GetUserIdIfAllowedToLogin($user);
 

@@ -30,6 +30,29 @@ class SecurityService
     }
 
     /**
+     * Register new login request
+     *
+     * @param string $email
+     * @param string $ip
+     * @param bool $success if login was successful or a failure
+     */
+    public function newLoginRequest(string $email, string $ip, bool $success): void
+    {
+        $this->requestTrackRepository->insertLoginRequest($email, $ip, $success);
+    }
+
+    /**
+     * Register new request where an email has been sent
+     *
+     * @param string $email
+     * @param string $ip
+     */
+    public function newEmailRequest(string $email, string $ip): void
+    {
+        $this->requestTrackRepository->insertEmailRequest($email, $ip);
+    }
+
+    /**
      * Retrieve and populate attributes with stats from database
      */
     private function retrieveAndSetStats(): void
@@ -52,17 +75,17 @@ class SecurityService
      * - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
      * - Distributed brute force attacks (try to log in 1000 different users with most common password)
      *
+     * Perform security check for login requests:
+     * - coming from the same ip address
+     * - concerning a specific user account
+     * - global login requests (throttle after x percent of login failures)
+     *
      * Throttle behaviour: Limit log in attempts per user
      * - After x amount of login requests or sent emails in an hour, user has to wait a certain delay before trying again
      * - For each next login request or next email sent in the same hour, the user has to wait the same delay
      * - Until it eventually increases after value y
      * - If login or email requests continue, at amount z captcha is required from the user
      * - This rule applies to login requests on a specific user or login requests coming from a specific ip
-     *
-     * Perform security check for login requests
-     * - coming from the same ip address
-     * - concerning a specific user account
-     * - global login requests (throttle after x percent of login failures)
      *
      * @param string $email
      *

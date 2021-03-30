@@ -4,6 +4,7 @@
 namespace App\Domain\Auth;
 
 use App\Domain\Exceptions\InvalidCredentialsException;
+use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\User\UserValidation;
@@ -26,7 +27,7 @@ class AuthService
         private EmailService $emailService,
         private UserRepository $userRepository,
         private UserVerificationRepository $userVerificationRepository,
-        private RequestTrackRepository $requestTrackRepository
+        private SecurityService $securityService
     ) {
     }
 
@@ -39,18 +40,19 @@ class AuthService
      * @return string id
      *
      * @throws InvalidCredentialsException
-     *
-     *
      */
     public function getUserIdIfAllowedToLogin(User $user): string
     {
+        // Validate entries coming from client
         $this->userValidation->validateUserLogin($user);
+        // Perform login security check
+        $this->securityService->performLoginSecurityCheck($user->getEmail());
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
         if (isset($dbUser)) {
             if ($dbUser['status'] === User::STATUS_UNVERIFIED) {
                 // todo inform user when he tries to login that account is unverified and he should click on the link in his inbox
-                // maybe send verification email again
+                // maybe send verification email again and newEmailRequest (not login as its same as register)
             } elseif ($dbUser['status'] === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             } elseif ($dbUser['status'] === User::STATUS_LOCKED) {
@@ -58,16 +60,16 @@ class AuthService
             } elseif ($dbUser['status'] === User::STATUS_ACTIVE) {
                 // Check failed login attempts
                 if ($dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
-                    $this->requestTrackRepository->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
+                    $this->securityService->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
                     return $dbUser['id'];
                 }
             }
         }
 
-        $this->requestTrackRepository->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], false);
+        $this->securityService->newLoginRequest($user->getEmail(), $_SERVER['REMOTE_ADDR'], false);
 
         // Throw InvalidCred exception if user doesn't exist or wrong password
-        // (vague exception on purpose for security)
+        // Vague exception on purpose for security
         throw new InvalidCredentialsException($user->getEmail());
     }
 
@@ -80,7 +82,7 @@ class AuthService
      */
     public function registerUser(User $user): bool|string
     {
-        // Validate user entries
+        // Validate entries coming from client
         $this->userValidation->validateUserRegistration($user);
 
         // If user already exists
@@ -104,7 +106,7 @@ class AuthService
                     );
                     $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
                     $this->emailService->sendTo($dbUser['email'], $dbUser['name']);
-                    $this->requestTrackRepository->newEmailRequest($dbUser['email'], $_SERVER['REMOTE_ADDR']);
+                    $this->securityService->newEmailRequest($dbUser['email'], $_SERVER['REMOTE_ADDR']);
                 } catch (\PHPMailer\PHPMailer\Exception $e) {
                     // We try to hide if an email already exists or not so if email fails, nothing is done
                 } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -123,7 +125,7 @@ class AuthService
         // Create, insert and send token to user
         $this->createAndSendUserVerification($user);
 
-        $this->requestTrackRepository->newEmailRequest($user->getEmail(), $_SERVER['REMOTE_ADDR']);
+        $this->securityService->newEmailRequest($user->getEmail(), $_SERVER['REMOTE_ADDR']);
 
         return $user->getId();
     }

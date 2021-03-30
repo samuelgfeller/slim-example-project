@@ -86,6 +86,7 @@ class UserValidation extends AppValidation
     {
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
+        // Intentionally not validating user existence as invalid login should be vague
         $this->validateEmail($user->getEmail(), true, $validationResult);
         $this->validatePassword($user->getPassword(), true, $validationResult);
 
