@@ -70,14 +70,20 @@ final class LoginSubmitAction
 
                     // Log error
                     $this->logger->notice(
-                        'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' . $e->getUserEmail(
-                        ) . '"'
+                        'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
+                        $e->getUserEmail() . '"'
                     );
-
-                    return $this->responder->redirectToRouteName($response, 'login-page');
-                } catch (SecurityException $se){
-                    // todo inform user that they have to wait or fill out captcha
-                    throw $se;
+                    return $this->responder->render($response->withStatus(401), 'auth/login.html.php');
+                } catch (SecurityException $se) {
+                    if (PHP_SAPI === 'cli') {
+                        // If script is called from commandline (e.g. testing) throw error instead of rendering page
+                        throw $se;
+                    }
+                    return $this->responder->respondWithThrottle(
+                        $response,
+                        $se->getRemainingDelay(),
+                        'auth/login.html.php'
+                    );
                 }
             }
             $flash->add('error', 'Malformed request body syntax');

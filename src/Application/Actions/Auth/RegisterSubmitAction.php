@@ -7,6 +7,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Security\SecurityException;
 use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
@@ -39,12 +40,14 @@ final class RegisterSubmitAction
         $userData = $request->getParsedBody();
 
         if (null !== $userData && [] !== $userData) {
-            /** If a html form name changes, these changes have to be done in the entities constructor
-             * (and if isset condition below) too since these names will be the keys from the ArrayReader */
+            // ? If a html form name changes, these changes have to be done in the entities constructor
+            // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
             // Check that request body syntax is formatted right
-            if (count($userData) === 4 && isset(
+            if (
+                count($userData) === 4 && isset(
                     $userData['name'], $userData['email'], $userData['password'], $userData['password2']
-                )) {
+                )
+            ) {
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
@@ -53,18 +56,28 @@ final class RegisterSubmitAction
                     $insertId = $this->authService->registerUser($user);
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email has been sent.');
-                } catch (ValidationException $exception) {
-                    $flash->add('error', $exception->getMessage());
+                } catch (ValidationException $ve) {
+                    $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
                         'auth/register.html.php',
-                        $exception->getValidationResult()
+                        $ve->getValidationResult()
                     );
-                } catch (\PHPMailer\PHPMailer\Exception $e) {
+                } catch (\PHPMailer\PHPMailer\Exception $e) { // Not import for clarity
                     $flash->add('error', 'Email error. Please try again. Message: ' . "\n" . $e->getMessage());
-                    $this->logger->error('PHPMailer exception: '. $e->getMessage());
+                    $this->logger->error('PHPMailer exception: ' . $e->getMessage());
                     $response = $response->withStatus(500);
                     return $this->responder->render($response, 'auth/register.html.php');
+                } catch (SecurityException $se) {
+                    if (PHP_SAPI === 'cli') {
+                        // If script is called from commandline (e.g. testing) throw error instead of rendering page
+                        throw $se;
+                    }
+                    return $this->responder->respondWithThrottle(
+                        $response,
+                        $se->getRemainingDelay(),
+                        'auth/login.html.php'
+                    );
                 }
 
                 if ($insertId !== false) {

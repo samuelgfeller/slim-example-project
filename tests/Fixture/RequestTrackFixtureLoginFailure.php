@@ -7,7 +7,7 @@ namespace App\Test\Fixture;
  * Exception should be thrown because:
  *  - Too many login requests on the same user
  *  - Too many login requests coming from the same IP
- * ! If threshold changes, failed login entries should be added or removed accordingly
+ * ! If threshold changes, success login entries should be added or removed accordingly
  */
 class RequestTrackFixtureLoginFailure
 {
@@ -17,7 +17,7 @@ class RequestTrackFixtureLoginFailure
     // Database records in 2d array
     public array $records = [
         // 6 old successful login requests to make sure that request doesn't fail because the ratio of failures to
-        // total requests is too low
+        // total requests is too low (global)
         [
             'id' => 1,
             'email' => 'admin@example.com',
@@ -67,55 +67,55 @@ class RequestTrackFixtureLoginFailure
             'created_at' => '2021-01-01 00:00:01', // will be less than 1h ago
         ],
         // 5 login requests all done within last second
-        [
-            'id' => 7,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 0,
-            'is_login' => 'failure',
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
-        [
-            'id' => 8,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 0,
-            'is_login' => 'failure',
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
-        [
-            'id' => 9,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 0,
-            'is_login' => 'failure',
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
-        [
-            'id' => 10,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 0,
-            'is_login' => 'failure',
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
-        [
-            'id' => 11,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 0,
-            'is_login' => 'failure',
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
-        // Other non failed request after 5 last failed requests to see if security check picks them up anyways
-        [
-            'id' => 12,
-            'email' => 'toomanylogin.attempts@security.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 1,
-            'is_login' => null,
-            'created_at' => '2021-01-01 00:00:01', // will be in the present second
-        ],
+//        [
+//            'id' => 7,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 0,
+//            'is_login' => 'failure',
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
+//        [
+//            'id' => 8,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 0,
+//            'is_login' => 'failure',
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
+//        [
+//            'id' => 9,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 0,
+//            'is_login' => 'failure',
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
+//        [
+//            'id' => 10,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 0,
+//            'is_login' => 'failure',
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
+//        [
+//            'id' => 11,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 0,
+//            'is_login' => 'failure',
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
+//        // Other non failed request after 5 last failed requests to see if security check picks them up anyways
+//        [
+//            'id' => 12,
+//            'email' => 'toomanylogin.attempts@security.com',
+//            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+//            'sent_email' => 1,
+//            'is_login' => null,
+//            'created_at' => '2021-01-01 00:00:01', // will be in the present second
+//        ],
 
 
     ];
@@ -139,11 +139,11 @@ class RequestTrackFixtureLoginFailure
         $this->records[5]['created_at'] = $recentDate->format('Y-m-d H:i:s');
 
         // Requests created 1sec ago
-        $recentDate = new \DateTime();
-        $recentDate->sub(new \DateInterval('PT01S')); // P - period, T - to indicate that next is time, S - seconds
-
-        for ($i = 7; $i <= 11; $i++) { // key 11 ist 12th array entry as it starts with 0
-            $this->records[$i]['created_at'] = $recentDate->format('Y-m-d H:i:s');
-        }
+//        $recentDate = new \DateTime();
+//        $recentDate->sub(new \DateInterval('PT01S')); // P - period, T - to indicate that next is time, S - seconds
+//
+//        for ($i = 7; $i <= 11; $i++) { // key 11 ist 12th array entry as it starts with 0
+//            $this->records[$i]['created_at'] = $recentDate->format('Y-m-d H:i:s');
+//        }
     }
 }

@@ -38,6 +38,16 @@ abstract class DataManager
     }
 
     /**
+     * Get a query instance
+     *
+     * @return Query
+     */
+    protected function newQuery(): Query
+    {
+        return $this->connection->newQuery();
+    }
+
+    /**
      * Return all rows in a database
      * Reason why empty array is returned if nothing: https://stackoverflow.com/a/11536281/9013718
      *

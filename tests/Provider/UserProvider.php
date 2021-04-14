@@ -367,7 +367,33 @@ class UserProvider
         ];
     }
 
-
+    /**
+     * Provides one time valid user login values matching the password
+     * of tests/Fixture/UserFixture.php and one time not
+     *
+     * @return array[]
+     */
+    public function loginUserProvider(): array
+    {
+        return [
+            // Invalid
+            [
+                [
+                    // Same keys than HTML form
+                    'email' => 'admin@example.com',
+                    'password' => 'abcdefg',
+                ],
+            ],
+            // Correct credentials
+            [
+                [
+                    // Same keys than HTML form
+                    'email' => 'admin@example.com',
+                    'password' => '12345678',
+                ],
+            ]
+        ];
+    }
 
 
 

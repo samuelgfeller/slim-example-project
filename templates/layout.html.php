@@ -5,7 +5,6 @@
  * @var string $content PHP-View var page content
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Psr\Http\Message\UriInterface $uri
- * @var \Odan\Session\FlashInterface $flash
  * @var string $title
  */
 
@@ -84,40 +83,14 @@
     </header>
 
     <main>
-        <aside id="flash-container">
-            <!--    Display errors if there are some -->
-            <?php
-            foreach ($flash->all() as $key => $flashCategory) {
-                foreach ($flashCategory as $msg) { ?>
-                    <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
-                        <figure class="flash-fig">
-                            <!-- Sadly I cannot use the `content:` tag because its impossible set basepath for css -->
-                            <img class="<?= $key === "success" ? "open" : '' ?>" src="assets/general/img/checkmark.svg"
-                                 alt="success">
-                            <img class="<?= $key === "error" ? "open" : '' ?>" src="assets/general/img/cross-icon.svg"
-                                 alt="error">
-                            <img class="<?= $key === "info" ? "open" : '' ?>" src="assets/general/img/info-icon.svg"
-                                 alt="info">
-                            <img class="<?= $key === "warning" ? "open" : '' ?>"
-                                 src="assets/general/img/warning-icon.svg" alt="warning">
-                        </figure>
-                        <div class="flash-message">
-                            <h3><?= html(ucfirst($key)) /* Gets overwritten in css, serves as default */ ?> message</h3>
-                            <p><?= /* Flash messages are written serverside so no xss risk and html should be interpreted*/
-                                $msg ?></p>
-                        </div>
-                        <span class="flash-close-btn">&times;</span>
-                    </dialog>
-                    <?php
-                }
-            } ?>
-        </aside>
+        <?= $this->fetch('layout/flash-messages.html.php') ?>
+        <?= $this->fetch('layout/request-throttle.html.php') ?>
         <?= $content ?>
     </main>
 
     <footer>
         <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
-                    href="https://github.com/samuelgfeller/slim-example-project" class="no-style-a" target="_blank">
+                    href="https://samuel-gfeller.ch" class="no-style-a" target="_blank">
                 Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
                                     class="footer-icon"></a></address>
     </footer>

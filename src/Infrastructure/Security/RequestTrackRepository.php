@@ -29,13 +29,13 @@ class RequestTrackRepository extends DataManager
         $query = $this->newInsertQuery();
 
         return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->values(
-                [
-                    'email' => $email,
-                    'ip_address' => $query->newExpr("INET_ATON(:ip)"),
-                    'sent_email' => true,
-                    'is_login' => null,
-                ]
-            )->bind(':ip', $ip, 'string')->execute()->lastInsertId();
+            [
+                'email' => $email,
+                'ip_address' => $query->newExpr("INET_ATON(:ip)"),
+                'sent_email' => true,
+                'is_login' => null,
+            ]
+        )->bind(':ip', $ip, 'string')->execute()->lastInsertId();
     }
 
     /**
@@ -50,13 +50,13 @@ class RequestTrackRepository extends DataManager
     {
         $query = $this->newInsertQuery();
         $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->values(
-                [
-                    'email' => $email,
-                    'ip_address' => $query->newExpr("INET_ATON(:ip)"),
-                    'sent_email' => 0,
-                    'is_login' => $success === true ? 'success' : 'failure',
-                ]
-            )->bind(':ip', $ip, 'string');
+            [
+                'email' => $email,
+                'ip_address' => $query->newExpr("INET_ATON(:ip)"),
+                'sent_email' => 0,
+                'is_login' => $success === true ? 'success' : 'failure',
+            ]
+        )->bind(':ip', $ip, 'string');
         return $query->execute()->lastInsertId();
     }
 
@@ -235,5 +235,22 @@ class RequestTrackRepository extends DataManager
         return $query->execute()->fetch('assoc')['sent_email_amount'] ?? '0';
     }
 
+    /**
+     * Set the created_at time to x amount of seconds earlier
+     * Used in testing to simulate waiting delay
+     *
+     * @param int $seconds
+     * @return bool
+     */
+    public function preponeLastRequest(int $seconds): bool
+    {
+        $query = $this->newQuery();
+        $query->update($this->table)->set(
+            [
+                'created_at' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
+            ]
+        )->orderDesc('id')->limit(1)->bind(':sec', $seconds, 'integer');
+        return $query->execute()->rowCount() > 0;
+    }
 
 }

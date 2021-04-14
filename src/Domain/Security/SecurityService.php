@@ -170,17 +170,20 @@ class SecurityService
                     $_SERVER['REMOTE_ADDR']
                 );
 
-                $msg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
+                $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
                     // created_at in seconds
                     $latest = (int)date('U', strtotime($latestLoginRequest['created_at']));
-                    $remainingDelay = $latest - time() + $delay;
 
-                    throw new SecurityException($remainingDelay, SecurityException::USER_LOGIN, $msg);
+                    // Check that time is in the future by comparing actual time with forced delay + to latest request
+                    if (($time = time()) < ($timeForNextLogin = $delay + $latest)) {
+                        $remainingDelay = $timeForNextLogin - $time;
+                        throw new SecurityException($remainingDelay, SecurityException::USER_LOGIN, $errMsg);
+                    }
+                } elseif ($delay === 'captcha') {
+                    // If delay not int, it means that 'captcha' is the delay
+                    throw new SecurityException($delay, SecurityException::USER_LOGIN, $errMsg);
                 }
-
-                // If delay not int, it means that 'captcha' is the delay
-                throw new SecurityException($delay, SecurityException::USER_LOGIN, $msg);
             }
         }
         // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
@@ -209,17 +212,19 @@ class SecurityService
                     $_SERVER['REMOTE_ADDR']
                 );
 
-                $msg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
+                $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
                     // created_at in seconds
                     $latest = (int)date('U', strtotime($latestEmailRequestFromUser['created_at']));
-                    $remainingDelay = $latest - time() + $delay;
 
-                    throw new SecurityException($remainingDelay, SecurityException::USER_EMAIL, $msg);
+                    // Check that time is in the future by comparing actual time with forced delay + to latest request
+                    if (time() < ($timeForNextRequest = $delay + $latest)) {
+                        $remainingDelay = $timeForNextRequest - time();
+                        throw new SecurityException($remainingDelay, SecurityException::USER_EMAIL, $errMsg);
+                    }
+                } elseif ($delay === 'captcha') {
+                    throw new SecurityException($delay, SecurityException::USER_EMAIL, $errMsg);
                 }
-
-                // If delay not int, it means that 'captcha' is the delay
-                throw new SecurityException($delay, SecurityException::USER_EMAIL, $msg);
             }
         }
         // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
@@ -243,8 +248,10 @@ class SecurityService
         $loginAmountStats = array_map('intval', $this->requestTrackRepository->getGlobalLoginAmountStats());
 
         // Calc integer allowed failure amount from given percentage and total login
-        $failureThreshold = floor($loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage']);
-        // Actual failure amount have to be LESS than allowed failures amount (tested this way)
+        $failureThreshold = floor(
+            $loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage']
+        );
+        // Actual failure amount have to be LESS than allowed    failures amount (tested this way)
         if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';

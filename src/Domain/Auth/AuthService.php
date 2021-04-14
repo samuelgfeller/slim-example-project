@@ -49,7 +49,7 @@ class AuthService
         $this->securityService->performLoginSecurityCheck($user->getEmail());
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
-        if (isset($dbUser)) {
+        if (isset($dbUser) && $dbUser !== []) {
             if ($dbUser['status'] === User::STATUS_UNVERIFIED) {
                 // todo inform user when he tries to login that account is unverified and he should click on the link in his inbox
                 // maybe send verification email again and newEmailRequest (not login as its same as register)
@@ -59,7 +59,7 @@ class AuthService
                 // Todo login fail and inform user (only via mail) that he is locked
             } elseif ($dbUser['status'] === User::STATUS_ACTIVE) {
                 // Check failed login attempts
-                if ($dbUser !== [] && password_verify($user->getPassword(), $dbUser['password_hash'])) {
+                if (password_verify($user->getPassword(), $dbUser['password_hash'])) {
                     $this->securityService->newLoginRequest($dbUser['email'], $_SERVER['REMOTE_ADDR'], true);
                     return $dbUser['id'];
                 }

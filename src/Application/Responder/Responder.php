@@ -136,6 +136,24 @@ final class Responder
     }
 
     /**
+     * Respond with delay user has to wait or action that needs to be made before repeating the action
+     *
+     * @param ResponseInterface $response
+     * @param int|string $remainingDelay
+     * @param string $template
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function respondWithThrottle(
+        ResponseInterface $response,
+        int|string $remainingDelay,
+        string $template
+    ): ResponseInterface {
+        $this->phpRenderer->addAttribute('throttleDelay', $remainingDelay);
+        return $this->render($response->withStatus(422), $template);
+    }
+
+    /**
      * Write JSON to the response body.
      *
      * This method prepares the response object to return an HTTP JSON

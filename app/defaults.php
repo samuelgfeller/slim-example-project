@@ -60,9 +60,11 @@ $settings['security'] = [
     // Seconds in the past relevant for global, user and ip request throttle
     'timespan' => 3600,
 
-    // key = request amount; value = delay; Lowest to highest
+    // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest
     // ! When changed, update RequestTrackProvider and RequestTrackFixture as well
     // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
+    // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
+    // login request, the next check will be at the beginning of the the 5th
     'login_throttle' => [4 => 10, 9 => 120, 12 => 'captcha'],
     'user_email_throttle' => [5 => 2, 10 => 4, 20 => 'captcha'],
     // Percentage of login requests that may be failures (threshold)
