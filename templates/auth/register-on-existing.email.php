@@ -6,7 +6,7 @@
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $user already existing registered user (result of findUserByEmail())
  */
-$this->setLayout('layout.email.php');
+$this->setLayout('layout/layout.email.php');
 ?>
 
 <p>

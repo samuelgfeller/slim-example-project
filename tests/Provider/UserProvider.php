@@ -384,7 +384,7 @@ class UserProvider
                     'password' => 'abcdefg',
                 ],
             ],
-            // Correct credentials
+            // Correct credentials (inserted with tests/Fixture/UserFixture.php)
             [
                 [
                     // Same keys than HTML form
