@@ -19,7 +19,7 @@ function html(string $text = null): string
  * @param string $field Name given in validation class where error messages are made (may differ from HTML)
  * @return string|null
  */
-function field_error(array $validation, string $field): string|null
+function get_field_error(array $validation, string $field): string|null
 {
     $key = array_search($field, array_column($validation['errors'], 'field'), false);
     if ($key !== false){

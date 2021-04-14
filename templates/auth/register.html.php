@@ -24,7 +24,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
                maxlength="200" minlength="1" autofocus required
             <?php
             // If name validation failed (ternary not possible here as it doesn't allow to assign var in condition)
-            if (isset($validation) && $nameErr = field_error($validation, 'name')) {
+            if (isset($validation) && $nameErr = get_field_error($validation, 'name')) {
                 echo 'class = "wrong-cred-input"';
             } ?>>
         <?= isset($nameErr) ? '<strong class="err-msg">' . $nameErr . '</strong>' : '' ?>
@@ -36,7 +36,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
                required
             <?php
             // If email validation failed (ternary not possible here as it doesn't allow to assign var in condition)
-            if (isset($validation) && $emailErr = field_error($validation, 'email')) {
+            if (isset($validation) && $emailErr = get_field_error($validation, 'email')) {
                 echo 'class = "wrong-cred-input"';
             } ?>>
         <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
@@ -44,7 +44,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
         <input type="password" name="password" id="register-password1-inp" minlength="3" required
             <?php
             // If password validation failed
-            if (isset($validation) && $passwordErr = field_error($validation, 'password')) {
+            if (isset($validation) && $passwordErr = get_field_error($validation, 'password')) {
                 echo 'class = "wrong-cred-input"';
             } ?>>
         <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
@@ -52,12 +52,12 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
         <input type="password" name="password2" id="register-password2-inp" minlength="3" required
             <?php
             // If password2 validation failed
-            if (isset($validation) && $password2Err = field_error($validation, 'password2')) {
+            if (isset($validation) && $password2Err = get_field_error($validation, 'password2')) {
                 echo 'class = "wrong-cred-input"';
             }
             // If there is error with both passwords (has to be in a separate if as it wont
             // continue the condition and execute any function after first OR is truthy)
-            if (isset($validation) && $passwordsErr = field_error($validation, 'passwords')) {
+            if (isset($validation) && $passwordsErr = get_field_error($validation, 'passwords')) {
                 echo 'class = "wrong-cred-input"';
             } ?>>
         <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
