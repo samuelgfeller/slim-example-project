@@ -44,6 +44,9 @@
     address{
         font-style: normal;
     }
+    #throttle-div{
+        margin-top: 20px;
+    }
 }
 @media (min-width:400px)  {
     main {

@@ -84,8 +84,8 @@
 
     <main>
         <?= $this->fetch('layout/flash-messages.html.php') ?>
-        <?= $this->fetch('layout/request-throttle.html.php') ?>
         <?= $content ?>
+        <?= $this->fetch('layout/request-throttle.html.php') ?>
     </main>
 
     <footer>

@@ -97,6 +97,13 @@ a:hover {
     font-size: 0.9em;
 }
 
+#recaptcha{
+    display: none;
+}
+#recaptcha > div:first-of-type{
+    margin-top: 15px;
+}
+
 @media (min-width: 961px) {
     #wrapper{
         height: 100vh;

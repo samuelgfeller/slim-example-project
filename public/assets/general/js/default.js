@@ -38,4 +38,20 @@ window.addEventListener("load",function(event) {
             flash.style.display = 'none';
         }, 800); // .slide-out animation is 0.9s
     }
+
+    /** Throttle time countdown */
+    let timeSpan = document.getElementById('delay-time');
+    if (timeSpan !== null) {
+        let timeInSec = parseInt(timeSpan.innerHTML);
+        let timer = setInterval(function () {
+            timeSpan.textContent = timeInSec;
+            if (--timeInSec < 0) {
+                timeInSec = 0;
+                document.getElementById('throttle-delay-msg').style.display = 'none';
+                clearInterval(timer)
+            }
+        }, 1000);
+    }
+
+
 });
