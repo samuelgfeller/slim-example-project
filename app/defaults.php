@@ -104,4 +104,8 @@ $settings['smtp'] = [
     'port' => '587', // TLS: 587; SSL: 465
 ];
 
+$settings['google'] = [
+    'recaptcha' => 'secretKey',
+];
+
 return $settings;

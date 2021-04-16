@@ -39,13 +39,18 @@ final class LoginSubmitAction
         if (null !== $userData && [] !== $userData) {
             // ? If a html form name changes, these changes have to be done in the entities constructor
             // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
-            // Check that request body syntax is formatted right
-            if (count($userData) === 2 && isset($userData['email'], $userData['password'])) {
+            // Check that request body syntax is formatted right (3 when with captcha)
+            if (
+                (count($userData) === 2 || count($userData) === 3) && isset($userData['email'], $userData['password'])
+            ) {
+                // Populate $captcha var if reCAPTCHA response is given
+                $captcha = $userData['g-recaptcha-response'] ?? null;
+
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
                     // Throws InvalidCredentialsException if not allowed
-                    $userId = $this->authService->GetUserIdIfAllowedToLogin($user);
+                    $userId = $this->authService->GetUserIdIfAllowedToLogin($user, $captcha);
 
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();
@@ -79,6 +84,7 @@ final class LoginSubmitAction
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
                         throw $se;
                     }
+                    $flash->add('error', $se->getPublicMessage());
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),

@@ -37,16 +37,17 @@ class AuthService
      * If no, an InvalidCredentialsException is thrown
      *
      * @param User $user
+     * @param string|null $captcha user captcha response if filled out
      * @return string id
      *
      * @throws InvalidCredentialsException
      */
-    public function getUserIdIfAllowedToLogin(User $user): string
+    public function getUserIdIfAllowedToLogin(User $user, string|null $captcha = null): string
     {
         // Validate entries coming from client
         $this->userValidation->validateUserLogin($user);
         // Perform login security check
-        $this->securityService->performLoginSecurityCheck($user->getEmail());
+        $this->securityService->performLoginSecurityCheck($user->getEmail(), $captcha);
 
         $dbUser = $this->userService->findUserByEmail($user->getEmail());
         if (isset($dbUser) && $dbUser !== []) {
@@ -77,13 +78,16 @@ class AuthService
      * Insert user in database
      *
      * @param User $user
+     * @param string|null $captcha user captcha response if filled out
      * @return string|bool insert id, false if user already exists
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function registerUser(User $user): bool|string
+    public function registerUser(User $user, string|null $captcha = null): bool|string
     {
         // Validate entries coming from client
         $this->userValidation->validateUserRegistration($user);
+
+        $this->securityService->performEmailAbuseCheck($user->getEmail(), $captcha);
 
         // If user already exists
         if ($dbUser = $this->userRepository->findUserByEmail($user->getEmail())) {

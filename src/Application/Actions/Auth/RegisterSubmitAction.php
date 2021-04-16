@@ -4,11 +4,9 @@ namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
-use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
-use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Domain\Utility\ArrayReader;
@@ -22,14 +20,12 @@ final class RegisterSubmitAction
 {
     protected LoggerInterface $logger;
 
-
     public function __construct(
         LoggerFactory $logger,
         protected UserService $userService,
         protected Responder $responder,
         protected AuthService $authService,
-        private SessionInterface $session,
-        private SecurityService $securityService
+        private SessionInterface $session
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-register');
     }
@@ -42,18 +38,20 @@ final class RegisterSubmitAction
         if (null !== $userData && [] !== $userData) {
             // ? If a html form name changes, these changes have to be done in the entities constructor
             // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
-            // Check that request body syntax is formatted right
+            // Check that request body syntax is formatted right (one more when captcha)
             if (
-                count($userData) === 4 && isset(
+                (count($userData) === 4 || count($userData) === 6) && isset(
                     $userData['name'], $userData['email'], $userData['password'], $userData['password2']
                 )
             ) {
+                // Populate $captcha var if reCAPTCHA response is given
+                $captcha = $userData['g-recaptcha-response'] ?? null;
+
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
                 $user = new User(new ArrayReader($userData));
                 try {
-                    $this->securityService->performEmailAbuseCheck($userData['email']);
                     // Throws exception if there is error and returns false if user already exists
-                    $insertId = $this->authService->registerUser($user);
+                    $insertId = $this->authService->registerUser($user, $captcha);
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email has been sent.');
                 } catch (ValidationException $ve) {
@@ -73,10 +71,11 @@ final class RegisterSubmitAction
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
                         throw $se;
                     }
+                    $flash->add('error', $se->getPublicMessage());
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'auth/login.html.php'
+                        'auth/register.html.php'
                     );
                 }
 

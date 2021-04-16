@@ -13,7 +13,8 @@ use App\Infrastructure\User\UserRepository;
  */
 class SecurityService
 {
-    private array $settings;
+    private array $securitySettings;
+    private array $googleSettings;
 
     // Coming from ip
     private array $ipRequests;
@@ -26,7 +27,8 @@ class SecurityService
         private RequestTrackRepository $requestTrackRepository,
         Settings $settings
     ) {
-        $this->settings = $settings->get('security');
+        $this->securitySettings = $settings->get('security');
+        $this->googleSettings = $settings->get('google');
     }
 
     /**
@@ -60,13 +62,16 @@ class SecurityService
         // Stats coming from ip in last timespan (and cast to int)
         $this->ipRequests = array_map(
             'intval',
-            $this->requestTrackRepository->getIpRequestStats($_SERVER['REMOTE_ADDR'], $this->settings['timespan'])
+            $this->requestTrackRepository->getIpRequestStats(
+                $_SERVER['REMOTE_ADDR'],
+                $this->securitySettings['timespan']
+            )
         );
 
         // Stats concerning given email in last timespan
         $this->userRequests = array_map(
             'intval',
-            $this->requestTrackRepository->getUserRequestStats($this->email, $this->settings['timespan'])
+            $this->requestTrackRepository->getUserRequestStats($this->email, $this->securitySettings['timespan'])
         );
     }
 
@@ -88,19 +93,26 @@ class SecurityService
      * - This rule applies to login requests on a specific user or login requests coming from a specific ip
      *
      * @param string $email
-     *
-     * @throws SecurityException
+     * @param string|null $reCaptchaResponse
      */
-    public function performLoginSecurityCheck(string $email): void
+    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null): void
     {
-        // Set attributes
-        $this->email = $email;
-        $this->retrieveAndSetStats();
+        // reCAPTCHA verification
+        $validCaptcha = false;
+        if ($reCaptchaResponse !== null) {
+            $validCaptcha = $this->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_LOGIN);
+        }
+        // If captcha is valid the other security checks don't have to be made
+        if ($validCaptcha !== true) {
+            // Set attributes
+            $this->email = $email;
+            $this->retrieveAndSetStats();
 
-        // Most strict. Very low limit on failed requests for specific emails or coming from a specific ip
-        $this->performLoginCheck();
-        // Global login check
-        $this->performGlobalLoginCheck();
+            // Most strict. Very low limit on failed requests for specific emails or coming from a specific ip
+            $this->performLoginCheck();
+            // Global login check
+            $this->performGlobalLoginCheck();
+        }
     }
 
     /**
@@ -121,19 +133,52 @@ class SecurityService
      * - global email requests
      *
      * @param string $email
+     * @param string|null $reCaptchaResponse
+     */
+    public function performEmailAbuseCheck(string $email, string|null $reCaptchaResponse = null): void
+    {
+        $validCaptcha = false;
+        // reCAPTCHA verification
+        if ($reCaptchaResponse !== null) {
+            $this->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_EMAIL);
+        }
+        // If captcha is valid the other security checks don't have to be made
+        if ($validCaptcha !== true) {
+            // Set attributes
+            $this->email = $email;
+            $this->retrieveAndSetStats();
+
+            // Email checks (register, password recovery, other with email)
+            $this->performEmailRequestsCheck();
+            // Global email check
+            $this->performGlobalEmailCheck();
+        }
+    }
+
+
+    // -- Private methods --
+
+    /**
+     * Ask google API if reCAPTCHA user response is correct or not
      *
+     * @param string $reCaptchaResponse
+     * @param string $type
+     * @return bool true when correct otherwise SecurityException
      * @throws SecurityException
      */
-    public function performEmailAbuseCheck(string $email): void
+    private function verifyReCaptcha(string $reCaptchaResponse, string $type): bool
     {
-        // Set attributes
-        $this->email = $email;
-        $this->retrieveAndSetStats();
-
-        // Email checks (register, password recovery, other with email)
-        $this->performEmailRequestsCheck();
-        // Global email check
-        $this->performGlobalEmailCheck();
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' .
+            urlencode($this->googleSettings['recaptcha']) . '&response=' . urlencode($reCaptchaResponse);
+        $verificationResponse = file_get_contents($url);
+        if (
+            $verificationResponse !== false &&
+            json_decode($verificationResponse, true, 512, JSON_THROW_ON_ERROR)['success']
+        ) {
+            return true;
+        }
+        $errMsg = 'reCAPTCHA verification failed';
+        throw new SecurityException('captcha', $type, $errMsg);
     }
 
 
@@ -149,9 +194,9 @@ class SecurityService
     private function performLoginCheck(): void
     {
         // Reverse order to compare fails longest delay first and then go down from there
-        krsort($this->settings['login_throttle']);
+        krsort($this->securitySettings['login_throttle']);
         // Fails on specific user or coming from specific IP
-        foreach ($this->settings['login_throttle'] as $requestLimit => $delay) {
+        foreach ($this->securitySettings['login_throttle'] as $requestLimit => $delay) {
             // Check that there aren't more login successes or failures than tolerated
             if (
                 ($this->ipRequests['login_failures'] >= $requestLimit && $this->ipRequests['login_failures'] !== 0) ||
@@ -187,7 +232,7 @@ class SecurityService
             }
         }
         // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
-        ksort($this->settings['login_throttle']);
+        ksort($this->securitySettings['login_throttle']);
     }
 
     /**
@@ -199,9 +244,9 @@ class SecurityService
     private function performEmailRequestsCheck(): void
     {
         // Reverse order to compare fails longest delay first and then go down from there
-        krsort($this->settings['user_email_throttle']);
+        krsort($this->securitySettings['user_email_throttle']);
         // Fails on specific user or coming from specific IP
-        foreach ($this->settings['user_email_throttle'] as $requestLimit => $delay) {
+        foreach ($this->securitySettings['user_email_throttle'] as $requestLimit => $delay) {
             // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
             if (
                 $this->ipRequests['sent_emails'] >= $requestLimit || $this->userRequests['sent_emails'] >= $requestLimit
@@ -228,7 +273,7 @@ class SecurityService
             }
         }
         // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
-        ksort($this->settings['login_throttle']);
+        ksort($this->securitySettings['login_throttle']);
     }
 
     /**
@@ -249,7 +294,7 @@ class SecurityService
 
         // Calc integer allowed failure amount from given percentage and total login
         $failureThreshold = floor(
-            $loginAmountStats['login_total'] / 100 * $this->settings['login_failure_percentage']
+            $loginAmountStats['login_total'] / 100 * $this->securitySettings['login_failure_percentage']
         );
         // Actual failure amount have to be LESS than allowed    failures amount (tested this way)
         if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
@@ -267,20 +312,20 @@ class SecurityService
         // Order of calls on getGlobalSentEmailAmount() matters in test. First daily and then monthly should be called
 
         // Check emails for daily threshold
-        if (!empty($this->settings['global_daily_email_threshold'])) {
+        if (!empty($this->securitySettings['global_daily_email_threshold'])) {
             $sentEmailAmountInLastDay = (int)$this->requestTrackRepository->getGlobalSentEmailAmount(1);
             // If sent emails exceed or equal the given threshold
-            if ($sentEmailAmountInLastDay >= $this->settings['global_daily_email_threshold']) {
+            if ($sentEmailAmountInLastDay >= $this->securitySettings['global_daily_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending daily reached site-wide.';
                 throw new SecurityException('captcha', SecurityException::GLOBAL_EMAIL, $msg);
             }
         }
 
         // Check emails for monthly threshold
-        if (!empty($this->settings['global_monthly_email_threshold'])) {
+        if (!empty($this->securitySettings['global_monthly_email_threshold'])) {
             $sentEmailAmountInLastMonth = (int)$this->requestTrackRepository->getGlobalSentEmailAmount(30);
             // If sent emails exceed or equal the given threshold
-            if ($sentEmailAmountInLastMonth >= $this->settings['global_monthly_email_threshold']) {
+            if ($sentEmailAmountInLastMonth >= $this->securitySettings['global_monthly_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending monthly reached site-wide.';
                 throw new SecurityException('captcha', SecurityException::GLOBAL_EMAIL, $msg);
             }
