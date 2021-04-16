@@ -69,6 +69,19 @@ final class Responder
     }
 
     /**
+     * Add global variable accessible in templates
+     *
+     * @param string $key
+     * @param $value
+     *
+     * @return void
+     */
+    public function addAttribute(string $key, $value): void
+    {
+        $this->phpRenderer->addAttribute($key, $value);
+    }
+
+    /**
      * Creates a redirect for the given url
      *
      * This method prepares the response object to return an HTTP Redirect
@@ -130,6 +143,7 @@ final class Responder
     ): ?ResponseInterface {
         // Add the validation errors to phpRender attributes
         $this->phpRenderer->addAttribute('validation', $validationResult->toArray());
+        $this->phpRenderer->addAttribute('formError', true);
 
         // Render template with status code
         return $this->render($response->withStatus($validationResult->getStatusCode()), $template);
@@ -150,6 +164,7 @@ final class Responder
         string $template
     ): ResponseInterface {
         $this->phpRenderer->addAttribute('throttleDelay', $remainingDelay);
+        $this->phpRenderer->addAttribute('formError', true);
         return $this->render($response->withStatus(422), $template);
     }
 

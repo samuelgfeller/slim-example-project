@@ -146,13 +146,15 @@ class UserValidation extends AppValidation
      */
     private function validateEmail(string|null $email, bool $required, ValidationResult $validationResult): void
     {
-        // reversed, if true -> error
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $validationResult->setError('email', 'Email address could not be validated');
-        } // Because reversed the null check is done here
-        elseif (true === $required && (null === $email || '' === $email)) {
+        // Email filter will fail if email is empty and if it's optional it shouldn't throw an error
+        if (null !== $email && '' !== $email) {
+            // reversed, if true -> error
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $validationResult->setError('email', 'Email address could not be validated');
+            }
+        } elseif (true === $required && (null === $email || '' === $email)) {
             // If it is null or empty string and required
-            $validationResult->setError('email', 'email required but not given');
+            $validationResult->setError('email', 'Email required but not given');
         }
     }
 

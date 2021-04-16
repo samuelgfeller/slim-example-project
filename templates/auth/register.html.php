@@ -17,7 +17,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
     <h2 style="display:inline-block;">Register</h2>
 </div>
 
-<div class="form-box<?= isset($validation) ? ' wrong-cred-input' : '' ?>" id="register-form-box">
+<div class="form-box<?= isset($formError) ? ' wrong-cred-input' : '' ?>" id="register-form-box">
     <form class="form" autocomplete="on" id="<?= $route->urlFor('register-submit') ?>" method="post">
         <label for="register-name-inp">Name</label>
         <input type="text" name="name" id="register-name-inp" placeholder="John Doe"

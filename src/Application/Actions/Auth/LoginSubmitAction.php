@@ -63,21 +63,21 @@ final class LoginSubmitAction
                     $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
 
                     return $this->responder->redirectToRouteName($response, 'hello');
-                } catch (ValidationException $exception) {
-                    $flash->add('error', $exception->getMessage());
+                } catch (ValidationException $ve) {
+                    $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
                         'auth/login.html.php',
-                        $exception->getValidationResult()
+                        $ve->getValidationResult()
                     );
                 } catch (InvalidCredentialsException $e) {
                     $flash->add('error', 'Invalid credentials.');
-
                     // Log error
                     $this->logger->notice(
                         'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
                         $e->getUserEmail() . '"'
                     );
+                    $this->responder->addAttribute('formError', true);
                     return $this->responder->render($response->withStatus(401), 'auth/login.html.php');
                 } catch (SecurityException $se) {
                     if (PHP_SAPI === 'cli') {

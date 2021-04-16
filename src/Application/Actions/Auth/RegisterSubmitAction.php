@@ -65,6 +65,7 @@ final class RegisterSubmitAction
                     $flash->add('error', 'Email error. Please try again. Message: ' . "\n" . $e->getMessage());
                     $this->logger->error('PHPMailer exception: ' . $e->getMessage());
                     $response = $response->withStatus(500);
+                    $this->responder->addAttribute('formError', true);
                     return $this->responder->render($response, 'auth/register.html.php');
                 } catch (SecurityException $se) {
                     if (PHP_SAPI === 'cli') {
