@@ -23,7 +23,8 @@ In fact this whole project is greatly inspired by Daniel's fabulous [Blog articl
   * \+ Native PHP syntax
   * \+ Text translation easier
   * \+ Much more lightweight 
-  * \- I have to take care of XSS attack protection by escaping manually
+  * \- I have to take care of XSS attack protection by escaping manually (easily solvable)
+  * \- Much smaller than twig which means less well maintained, limited documentation, possibly limited features (tool-wise not syntax)
 #### Asset management 
 After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do the following:
 * Link application specific resources directly in template (which are located under `public/assets/*`)
