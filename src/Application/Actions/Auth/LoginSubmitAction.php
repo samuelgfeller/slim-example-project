@@ -88,7 +88,8 @@ final class LoginSubmitAction
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'auth/login.html.php'
+                        'auth/login.html.php',
+                        ['email' => $user->getEmail()]
                     );
                 }
             }

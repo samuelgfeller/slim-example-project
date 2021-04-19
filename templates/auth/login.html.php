@@ -24,7 +24,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <input type="email" name="email" id="loginEmailInp"
                placeholder="your@email.com"
                maxlength="254"
-               required
+               required value="<?= $preloadValues['email'] ?? '' ?>"
             <?php
             // If name validation failed (ternary not possible here as it doesn't allow to assign var in condition)
             if (isset($validation) && $nameErr = get_field_error($validation, 'email')) {

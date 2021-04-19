@@ -155,15 +155,18 @@ final class Responder
      * @param ResponseInterface $response
      * @param int|string $remainingDelay
      * @param string $template
+     * @param array|null $preloadValues
      * @return ResponseInterface
      * @throws \Throwable
      */
     public function respondWithThrottle(
         ResponseInterface $response,
         int|string $remainingDelay,
-        string $template
+        string $template,
+        array $preloadValues = null
     ): ResponseInterface {
         $this->phpRenderer->addAttribute('throttleDelay', $remainingDelay);
+        $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
         $this->phpRenderer->addAttribute('formError', true);
         return $this->render($response->withStatus(422), $template);
     }

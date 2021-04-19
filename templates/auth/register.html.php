@@ -21,7 +21,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
     <form class="form" autocomplete="on" id="<?= $route->urlFor('register-submit') ?>" method="post">
         <label for="register-name-inp">Name</label>
         <input type="text" name="name" id="register-name-inp" placeholder="John Doe"
-               maxlength="200" minlength="1" autofocus required
+               maxlength="200" minlength="1" autofocus required value="<?= $preloadValues['name'] ?? '' ?>"
             <?php
             // If name validation failed (ternary not possible here as it doesn't allow to assign var in condition)
             if (isset($validation) && $nameErr = get_field_error($validation, 'name')) {
@@ -33,7 +33,7 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
         <input type="email" name="email" id="register-email-inp"
                placeholder="your@email.com"
                maxlength="254"
-               required
+               required value="<?= $preloadValues['email'] ?? '' ?>"
             <?php
             // If email validation failed (ternary not possible here as it doesn't allow to assign var in condition)
             if (isset($validation) && $emailErr = get_field_error($validation, 'email')) {
@@ -62,6 +62,9 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
             } ?>>
         <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
         <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
+
+        <!-- reCaptcha -->
+        <div class="g-recaptcha" id="recaptcha" data-sitekey="6LcctKoaAAAAAAcqzzgz-19OULxNxtwNPPS35DOU"></div>
 
         <input type="submit" class="submit-btn" id="register-submit-btn" value="Create account">
 

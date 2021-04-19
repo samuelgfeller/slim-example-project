@@ -40,7 +40,7 @@ final class RegisterSubmitAction
             // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
             // Check that request body syntax is formatted right (one more when captcha)
             if (
-                (count($userData) === 4 || count($userData) === 6) && isset(
+                (count($userData) === 4 || count($userData) === 5) && isset(
                     $userData['name'], $userData['email'], $userData['password'], $userData['password2']
                 )
             ) {
@@ -53,7 +53,9 @@ final class RegisterSubmitAction
                     // Throws exception if there is error and returns false if user already exists
                     $insertId = $this->authService->registerUser($user, $captcha);
                     // Say email has been sent even when user exists as it should be kept secret
-                    $flash->add('success', 'Email has been sent.');
+                    $flash->add('success', 'Email sent successfully.');
+                    $flash->add('warning',
+                                'Please click on the link in the email to finnish the registration.');
                 } catch (ValidationException $ve) {
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
@@ -76,12 +78,13 @@ final class RegisterSubmitAction
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'auth/register.html.php'
+                        'auth/register.html.php',
+                        ['name' => $user->getName(), 'email' => $user->getEmail()]
                     );
                 }
 
                 if ($insertId !== false) {
-                    $this->logger->info('User "' . $userData['email'] . '" created');
+                    $this->logger->info('User "' . $user->getEmail() . '" created');
                 } else {
                     $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
                 }

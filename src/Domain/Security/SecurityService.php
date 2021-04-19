@@ -140,7 +140,7 @@ class SecurityService
         $validCaptcha = false;
         // reCAPTCHA verification
         if ($reCaptchaResponse !== null) {
-            $this->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_EMAIL);
+            $validCaptcha = $this->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_EMAIL);
         }
         // If captcha is valid the other security checks don't have to be made
         if ($validCaptcha !== true) {
