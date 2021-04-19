@@ -57,10 +57,14 @@ If in the future I need something more I'll consider [Symfony Sessions](https://
 -- templates 
    -- user // js, css, html file about users
    -- post // js, css, html file about posts
+   -- layout // default, "parent" layout of contents
 -- tests
-   -- Application // application testing
-   -- Domain // service testing
-   -- Infrastructure // repository testing
+   -- Fixture // database content to be added as preparation in test db for integration tests
+   -- Integration // integration tests
+      -- Application // action class testing which test all layers (integration testing)
+   -- Provider // data provider to run same tests with different data
+   -- Unit
+      -- Domain // service testing
 ```
 
 
