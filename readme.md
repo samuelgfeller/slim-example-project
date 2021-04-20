@@ -23,7 +23,8 @@ In fact this whole project is greatly inspired by Daniel's fabulous [Blog articl
   * \+ Native PHP syntax
   * \+ Text translation easier
   * \+ Much more lightweight 
-  * \- I have to take care of XSS attack protection by escaping manually
+  * \- I have to take care of XSS attack protection by escaping manually (easily solvable)
+  * \- Much smaller than twig which means less well maintained, limited documentation, possibly limited features (tool-wise not syntax)
 #### Asset management 
 After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do the following:
 * Link application specific resources directly in template (which are located under `public/assets/*`)
@@ -56,10 +57,14 @@ If in the future I need something more I'll consider [Symfony Sessions](https://
 -- templates 
    -- user // js, css, html file about users
    -- post // js, css, html file about posts
+   -- layout // default, "parent" layout of contents
 -- tests
-   -- Application // application testing
-   -- Domain // service testing
-   -- Infrastructure // repository testing
+   -- Fixture // database content to be added as preparation in test db for integration tests
+   -- Integration // integration tests
+      -- Application // action class testing which test all layers (integration testing)
+   -- Provider // data provider to run same tests with different data
+   -- Unit
+      -- Domain // service testing
 ```
 
 
