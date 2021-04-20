@@ -24,5 +24,7 @@ class DebuggingTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $response = $this->app->handle($request);
+
+        self::assertTrue(true);
     }
 }

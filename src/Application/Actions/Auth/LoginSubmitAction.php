@@ -40,8 +40,10 @@ final class LoginSubmitAction
             // ? If a html form name changes, these changes have to be done in the entities constructor
             // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
             // Check that request body syntax is formatted right (3 when with captcha)
+            $requiredAreSet = isset($userData['email'], $userData['password']);
             if (
-                (count($userData) === 2 || count($userData) === 3) && isset($userData['email'], $userData['password'])
+                ($requiredAreSet && count($userData) === 2) ||
+                ($requiredAreSet && (count($userData) === 3 && isset($userData['g-recaptcha-response'])))
             ) {
                 // Populate $captcha var if reCAPTCHA response is given
                 $captcha = $userData['g-recaptcha-response'] ?? null;

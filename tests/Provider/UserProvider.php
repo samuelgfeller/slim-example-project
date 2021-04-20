@@ -183,18 +183,7 @@ class UserProvider
     public function invalidUserProvider(): array
     {
         return [
-            // Not existing user
-            [
-                [
-                    'id' => 100000000,
-                    'name' => 'B',
-                    'email' => 'gates@email.com',
-                    'password' => '12345678',
-                    'password2' => '12345678',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin'
-                ]
-            ],
+            // Not existing user not unit tested
             // Name too short
             [
                 [
@@ -231,18 +220,7 @@ class UserProvider
                     'role' => 'admin'
                 ]
             ],
-            // Required values not set
-            [
-                [
-                    'id' => 1,
-                    'name' => '',
-                    'email' => '',
-                    'password' => '',
-                    'password2' => '',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'user'
-                ]
-            ],
+            // Required values not set not in this provider as for updateUser nothing is required
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.

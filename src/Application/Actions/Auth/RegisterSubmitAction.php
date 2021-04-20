@@ -39,10 +39,10 @@ final class RegisterSubmitAction
             // ? If a html form name changes, these changes have to be done in the entities constructor
             // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
             // Check that request body syntax is formatted right (one more when captcha)
+            $requiredAreSet = isset($userData['name'], $userData['email'], $userData['password'], $userData['password2']);
             if (
-                (count($userData) === 4 || count($userData) === 5) && isset(
-                    $userData['name'], $userData['email'], $userData['password'], $userData['password2']
-                )
+                ($requiredAreSet && count($userData) === 4) ||
+                ($requiredAreSet && (count($userData) === 5 && isset($userData['g-recaptcha-response'])))
             ) {
                 // Populate $captcha var if reCAPTCHA response is given
                 $captcha = $userData['g-recaptcha-response'] ?? null;
@@ -54,8 +54,10 @@ final class RegisterSubmitAction
                     $insertId = $this->authService->registerUser($user, $captcha);
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email sent successfully.');
-                    $flash->add('warning',
-                                'Please click on the link in the email to finnish the registration.');
+                    $flash->add(
+                        'warning',
+                        'Please click on the link in the email to finnish the registration.'
+                    );
                 } catch (ValidationException $ve) {
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
