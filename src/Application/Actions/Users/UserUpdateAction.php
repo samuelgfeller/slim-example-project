@@ -8,8 +8,6 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
-use App\Domain\Utility\ArrayReader;
-use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -72,7 +70,7 @@ final class UserUpdateAction
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $userData['id'] === $loggedUserId) {
 
-            $user = new User(new ArrayReader($userData));
+            $user = new User($userData);
 
             try {
                 $updated = $this->userService->updateUser($user);

@@ -8,7 +8,6 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
-use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -82,7 +81,7 @@ final class PostUpdateAction
             if (null !== $postData = $request->getParsedBody()) {
                 // todo maybe add mapping a layer between client body and application logic
 
-                $post = new Post(new ArrayReader($postData));
+                $post = new Post($postData);
                 // Needed to tell repo what data to update
                 $post->setId($postFromDb['id']);
 

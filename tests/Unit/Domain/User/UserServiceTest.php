@@ -7,7 +7,6 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
-use App\Domain\Utility\ArrayReader;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
@@ -100,7 +99,7 @@ class UserServiceTest extends TestCase
         $service = $this->container->get(AuthService::class);
 
         // Create an user object
-        $userObj = new User(new ArrayReader($validUser));
+        $userObj = new User($validUser);
 
         self::assertEquals($userId, $service->registerUser($userObj));
     }
@@ -133,7 +132,7 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->registerUser(new User(new ArrayReader($invalidUser)));
+        $service->registerUser(new User($invalidUser));
     }
 
     /**
@@ -142,7 +141,7 @@ class UserServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testUpdateUser(array $validUser)
+    public function testUpdateUser(array $validUser): void
     {
         $userRepositoryMock = $this->mock(UserRepository::class);
         $userRepositoryMock->method('updateUser')->willReturn(true);
@@ -152,7 +151,7 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        self::assertTrue($service->updateUser(new User(new ArrayReader($validUser))));
+        self::assertTrue($service->updateUser(new User($validUser)));
     }
 
     /**
@@ -162,7 +161,7 @@ class UserServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
      * @param array $invalidUser
      */
-    public function testUpdateUser_invalid(array $invalidUser)
+    public function testUpdateUser_invalid(array $invalidUser): void
     {
         // Mock UserRepository because it is used by the validation logic
         // In this test user exists so every invalid data from invalidUserProvider() can throw
@@ -175,7 +174,7 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser(new User(new ArrayReader($invalidUser)));
+        $service->updateUser(new User($invalidUser));
     }
 
     /**
@@ -184,7 +183,7 @@ class UserServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
      * @param array $validUser
      */
-    public function testUpdateUser_notExisting(array $validUser)
+    public function testUpdateUser_notExisting(array $validUser): void
     {
         // Mock UserRepository because it is used by the validation logic
         // Point of this test is not existing user
@@ -195,7 +194,7 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser(new User(new ArrayReader($validUser)));
+        $service->updateUser(new User($validUser));
     }
 
     /**
@@ -204,7 +203,7 @@ class UserServiceTest extends TestCase
      * I test if the repo method to delete all posts related
      * to the user is called and the method to delete the user itself
      */
-    public function testDeleteUser()
+    public function testDeleteUser(): void
     {
         $userId = 1;
         // Mock user repository and post repository

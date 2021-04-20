@@ -11,7 +11,12 @@ class Post
     private ?int $userId;
     private string $message;
 
-    public function __construct(ArrayReader $arrayReader) {
+    /**
+     * Post constructor.
+     * @param array|null $postData
+     */
+    public function __construct(array $postData = null) {
+        $arrayReader = new ArrayReader($postData);
         $this->id = $arrayReader->findInt('id');
         $this->userId = $arrayReader->findInt('user_id');
         $this->message = $arrayReader->getString('message');

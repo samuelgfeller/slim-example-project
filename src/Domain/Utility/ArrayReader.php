@@ -10,10 +10,8 @@ use InvalidArgumentException;
  */
 final class ArrayReader
 {
-    /**
-     * @var array The data
-     */
-    private $data;
+
+    private array $data;
 
     /**
      * Constructor.
@@ -54,7 +52,7 @@ final class ArrayReader
      *
      * @return int|null The value
      */
-    public function findInt(string $key, int $default = null)
+    public function findInt(string $key, int $default = null): ?int
     {
         $result = $this->find($key, $default);
 
@@ -90,7 +88,7 @@ final class ArrayReader
      * Get value as string or null.
      *
      * @param string $key The key
-     * @param string $default The default value
+     * @param string|null $default The default value
      *
      * @return string|null The value
      */
@@ -130,7 +128,7 @@ final class ArrayReader
      * Get value as array or null.
      *
      * @param string $key The key
-     * @param array $default The default value
+     * @param array|null $default The default value
      *
      * @return array|null The value
      */
@@ -170,7 +168,7 @@ final class ArrayReader
      * Get value as float or null.
      *
      * @param string $key The key
-     * @param float $default The default value
+     * @param float|null $default The default value
      *
      * @return float|null The value
      */
@@ -231,9 +229,9 @@ final class ArrayReader
      * @param string $path The path
      * @param mixed|null $default The default value
      *
-     * @return mixed|null The value
+     * @return mixed The value
      */
-    public function find(string $path, $default = null)
+    public function find(string $path, $default = null): mixed
     {
         $pathKeys = explode('.', $path);
 

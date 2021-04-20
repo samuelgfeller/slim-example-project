@@ -10,7 +10,6 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
 use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
-use App\Domain\Utility\ArrayReader;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -38,7 +37,7 @@ final class LoginSubmitAction
 
         if (null !== $userData && [] !== $userData) {
             // ? If a html form name changes, these changes have to be done in the entities constructor
-            // ? (and if isset condition below) too since these names will be the keys from the ArrayReader
+            // ? (and if isset condition below) too since these names will be the keys of the ArrayReader
             // Check that request body syntax is formatted right (3 when with captcha)
             $requiredAreSet = isset($userData['email'], $userData['password']);
             if (
@@ -49,7 +48,7 @@ final class LoginSubmitAction
                 $captcha = $userData['g-recaptcha-response'] ?? null;
 
                 // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
-                $user = new User(new ArrayReader($userData));
+                $user = new User($userData);
                 try {
                     // Throws InvalidCredentialsException if not allowed
                     $userId = $this->authService->GetUserIdIfAllowedToLogin($user, $captcha);

@@ -9,7 +9,7 @@ class User
 
     private ?string $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     private ?string $name;
-    private string $email;
+    private ?string $email;
     private ?string $password;
     private ?string $password2;
     private ?string $passwordHash;
@@ -21,8 +21,9 @@ class User
     public const STATUS_LOCKED = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
     public const STATUS_SUSPENDED = 'suspended'; // User suspended, account holder not allowed to login even via email
     
-    public function __construct(ArrayReader $arrayReader)
+    public function __construct(array $userData = [])
     {
+        $arrayReader = new ArrayReader($userData);
         // Values directly taken from client form. It should be made sure that non-allowed keys are not set but
         // better be safe than sorry. Sensitive values like role and status can be changed later.
         $this->id = $arrayReader->findString('id');
@@ -32,7 +33,7 @@ class User
         $this->password2 = $arrayReader->findString('password2');
         $this->passwordHash = $arrayReader->findString('password_hash');
         // Making sure that role is always user to prevent that someone tries to have admin access by adding
-        // role in request body
+        // role in request body; default values are set
         $this->role = 'user';
         $this->status = self::STATUS_UNVERIFIED;
     }

@@ -8,8 +8,6 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
-use App\Domain\Utility\ArrayReader;
-use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +31,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User(new ArrayReader($validUser));
+        $userObj = new User($validUser);
 
         self::assertEquals($validUser['id'], $authService->GetUserIdIfAllowedToLogin($userObj));
     }
@@ -53,7 +51,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User(new ArrayReader($validUser));
+        $userObj = new User($validUser);
 
         $this->expectException(ValidationException::class);
 
@@ -75,7 +73,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User(new ArrayReader($validUser));
+        $userObj = new User($validUser);
 
         $this->expectException(InvalidCredentialsException::class);
 
@@ -101,7 +99,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User(new ArrayReader($validUser));
+        $userObj = new User($validUser);
 
         $this->expectException(InvalidCredentialsException::class);
 

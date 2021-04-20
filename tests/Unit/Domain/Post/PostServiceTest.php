@@ -6,7 +6,6 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
 use App\Domain\User\UserService;
-use App\Domain\Utility\ArrayReader;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
@@ -115,7 +114,7 @@ class PostServiceTest extends TestCase
         /** @var PostService $postService */
         $postService = $this->container->get(PostService::class);
 
-        $postObj = new Post(new ArrayReader($validPost));
+        $postObj = new Post($validPost);
 
         self::assertEquals($postId, $postService->createPost($postObj));
     }
@@ -144,7 +143,7 @@ class PostServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->createPost(new Post(new ArrayReader($invalidPost)));
+        $service->createPost(new Post($invalidPost));
         // If we wanted to test more detailed, the error messages could be tested, that the right message(s) appear
     }
 
@@ -164,7 +163,7 @@ class PostServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->createPost(new Post(new ArrayReader($validPost)));
+        $service->createPost(new Post($validPost));
     }
 
     /**
@@ -187,7 +186,7 @@ class PostServiceTest extends TestCase
         /** @var PostService $service */
         $service = $this->container->get(PostService::class);
 
-        self::assertTrue($service->updatePost(new Post(new ArrayReader($validPost))));
+        self::assertTrue($service->updatePost(new Post($validPost)));
     }
 
     /**

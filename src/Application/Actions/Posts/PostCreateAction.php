@@ -6,8 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
-use App\Domain\User\UserService;
-use App\Domain\Utility\ArrayReader;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -55,7 +53,7 @@ final class PostCreateAction
 
         if (null !== $postData = $request->getParsedBody()) {
 
-            $post = new Post(new ArrayReader($postData));
+            $post = new Post($postData);
             $post->setUserId($userId);
 
             try {
