@@ -93,9 +93,9 @@ class PostService
      * Insert post in database
      *
      * @param Post $post
-     * @return string
+     * @return int insert id
      */
-    public function createPost(Post $post): string
+    public function createPost(Post $post): int
     {
         $this->postValidation->validatePostCreationOrUpdate($post);
         return $this->postRepository->insertPost($post->toArray());

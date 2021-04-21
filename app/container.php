@@ -5,6 +5,7 @@ use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
+use App\Infrastructure\DataManager;
 use Cake\Database\Connection;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
@@ -80,6 +81,9 @@ return [
         $connection = $container->get(Connection::class);
         $connection->getDriver()->connect();
         return $connection->getDriver()->getConnection();
+    },
+    DataManager::class => function (ContainerInterface $container) {
+        return new DataManager($container->get(Connection::class));
     },
     Settings::class => function (ContainerInterface $container) {
         return new Settings($container->get('settings'));

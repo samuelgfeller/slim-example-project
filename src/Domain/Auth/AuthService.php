@@ -96,7 +96,7 @@ class AuthService
             if ($dbUser['status'] === User::STATUS_UNVERIFIED) {
                 // Soft delete user so that new one can be inserted properly
                 $this->userRepository->deleteUser($dbUser['id']);
-                $this->userVerificationRepository->deleteWhere(['user_id' => $dbUser['id']]);
+                $this->userVerificationRepository->deleteVerificationToken($dbUser['id']);
             } elseif ($dbUser['status'] === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
                 return false;
@@ -151,10 +151,10 @@ class AuthService
         $expires->add(new \DateInterval('PT01H')); // 1 hour
 
         // Soft delete any existing tokens for this user
-        $this->userVerificationRepository->deleteWhere(['user_id' => $user->getId()]);
+        $this->userVerificationRepository->deleteVerificationToken($user->getId());
 
         // Insert verification token into database
-        $tokenId = $this->userVerificationRepository->insert(
+        $tokenId = $this->userVerificationRepository->insertUserVerification(
             [
                 'user_id' => $user->getId(),
                 'token' => password_hash($token, PASSWORD_DEFAULT),
@@ -178,15 +178,15 @@ class AuthService
 
     /**
      * Verify token
-     * @param string $verificationId
+     * @param int $verificationId
      * @param string $token
      * @return bool
      */
-    public function verifyUser(string $verificationId, string $token): bool
+    public function verifyUser(int $verificationId, string $token): bool
     {
-        $verification = $this->userVerificationRepository->findById($verificationId);
+        $verification = $this->userVerificationRepository->findUserVerification($verificationId);
         if (([] !== $verification) && true === password_verify($token, $verification['token'])) {
-            return $this->userRepository->setUserToVerified($verification['user_id']);
+            return $this->userRepository->changeUserStatus(User::STATUS_ACTIVE, $verification['user_id']);
         }
         return false;
     }

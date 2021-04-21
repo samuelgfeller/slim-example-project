@@ -1,22 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\User;
 
-use App\Domain\User\User;
+use App\Common\Hydrator;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
-use Cake\Database\Connection;
 
-class UserRepository extends DataManager
+class UserRepository
 {
     // Fields without password
-    private array $fields = ['id','name','email','updated_at','created_at'];
+    private array $fields = ['id', 'name', 'email', 'updated_at', 'created_at'];
 
-    public function __construct(Connection $conn = null)
+    public function __construct(private DataManager $dataManager, private Hydrator $hydrator)
     {
-        parent::__construct($conn);
-        $this->table = 'user';
     }
 
     /**
@@ -26,9 +24,9 @@ class UserRepository extends DataManager
      */
     public function findAllUsers(): array
     {
-        return $this->findAll($this->fields);
+        return $this->dataManager->findAll('user', $this->fields);
     }
-    
+
     /**
      * Return user with given id if it exists
      * otherwise null
@@ -38,7 +36,7 @@ class UserRepository extends DataManager
      */
     public function findUserById(string $id): array
     {
-        return $this->findById($id,$this->fields);
+        return $this->dataManager->findById('user', $id, $this->fields);
     }
 
     /**
@@ -50,9 +48,14 @@ class UserRepository extends DataManager
      */
     public function findUserByEmail(?string $email): ?array
     {
-        return $this->findOneBy('email', $email,['id','name','email','status','password_hash']);
+        return $this->dataManager->findOneBy(
+            'user',
+            'email',
+            $email,
+            $this->fields
+        );
     }
-    
+
     /**
      * Retrieve user from database
      * If not found error is thrown
@@ -63,17 +66,18 @@ class UserRepository extends DataManager
      */
     public function getUserById(int $id): array
     {
-        return $this->getById($id,$this->fields);
+        return $this->dataManager->getById('user', $id, $this->fields);
     }
 
     /**
      * Insert user in database
      *
      * @param array $data
-     * @return string lastInsertId
+     * @return int lastInsertId
      */
-    public function insertUser(array $data): string {
-        return $this->insert($data);
+    public function insertUser(array $data): int
+    {
+        return (int)$this->dataManager->newInsert($data)->into('user')->execute()->lastInsertId();
     }
 
     /**
@@ -82,10 +86,12 @@ class UserRepository extends DataManager
      * @param int $id
      * @return bool
      */
-    public function deleteUser(int $id): bool {
-        return $this->delete($id);
+    public function deleteUser(int $id): bool
+    {
+        $query = $this->dataManager->newDelete('user')->where(['id' => $id]);
+        return $query->execute()->rowCount() > 0;
     }
-    
+
     /**
      * Update values from user
      * Example of $data: ['name' => 'New name']
@@ -94,9 +100,10 @@ class UserRepository extends DataManager
      * @param array $data
      * @return bool
      */
-    public function updateUser(array $data,int $id): bool {
-//        return true;
-        return $this->update($data, $id);
+    public function updateUser(array $data, int $id): bool
+    {
+        $query = $this->dataManager->newQuery()->update('user')->set($data)->where(['id' => $id]);
+        return $query->execute()->rowCount() > 0;
     }
 
     /**
@@ -106,9 +113,10 @@ class UserRepository extends DataManager
      * @return string
      * @throws PersistenceRecordNotFoundException
      */
-    public function getUserRole(int $id) : string{
+    public function getUserRole(int $id): string
+    {
         // todo put role in separate tables
-        return $this->getById($id,['role'])['role'];
+        return $this->dataManager->getById('user', $id, ['role'])['role'];
     }
 
     /**
@@ -117,18 +125,24 @@ class UserRepository extends DataManager
      * @param int $id
      * @return bool
      */
-    public function userExists(int $id) : bool{
-        return $this->exists('id',$id);
+    public function userExists(int $id): bool
+    {
+        return $this->dataManager->exists('user', 'id', $id);
     }
 
     /**
-     * Set user status to verified
+     * Change user status
+     *
+     * @param string $status
      * @param string $userId
      * @return bool
      */
-    public function setUserToVerified(string $userId): bool
+    public function changeUserStatus(string $status, string $userId): bool
     {
-        return $this->update(['status' => User::STATUS_ACTIVE], $userId);
+        $query = $this->dataManager->newQuery()->update('user')->set(['status' => $status])->where(
+            ['id' => $userId]
+        );
+        return $query->execute()->rowCount() > 0;
     }
 
 }

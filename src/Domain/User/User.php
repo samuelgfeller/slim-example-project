@@ -7,7 +7,7 @@ use App\Domain\Utility\ArrayReader;
 class User
 {
 
-    private ?string $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
+    private ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     private ?string $name;
     private ?string $email;
     private ?string $password;
@@ -26,7 +26,7 @@ class User
         $arrayReader = new ArrayReader($userData);
         // Values directly taken from client form. It should be made sure that non-allowed keys are not set but
         // better be safe than sorry. Sensitive values like role and status can be changed later.
-        $this->id = $arrayReader->findString('id');
+        $this->id = $arrayReader->findInt('id');
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->getString('email');
         $this->password = $arrayReader->findString('password');
@@ -59,17 +59,17 @@ class User
     }
 
     /**
-     * @param string|null $id
+     * @param int|null $id
      */
-    public function setId(?string $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -81,7 +81,7 @@ class UserServiceTest extends TestCase
     public function testRegisterUser(array $validUser): void
     {
         // Return type of UserRepository:insertUser is string
-        $userId = (string)$validUser['id'];
+        $userId = (int)$validUser['id'];
 
         // Removing id from user because before user is created; id is not known
         unset($validUser['id']);

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Security;
 
-use App\Domain\User\User;
+use App\Common\Hydrator;
 use App\Infrastructure\DataManager;
-use Cake\Database\Connection;
 
-class RequestTrackRepository extends DataManager
+class RequestTrackRepository
 {
 
-    public function __construct(Connection $conn = null)
+    public function __construct(private DataManager $dataManager, private Hydrator $hydrator)
     {
-        parent::__construct($conn);
-        $this->table = 'request_track';
     }
 
     /**
@@ -26,9 +23,9 @@ class RequestTrackRepository extends DataManager
      */
     public function insertEmailRequest(string $email, string $ip): string
     {
-        $query = $this->newInsertQuery();
+        $query = $this->dataManager->newQuery();
 
-        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->values(
+        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
             [
                 'email' => $email,
                 'ip_address' => $query->newExpr("INET_ATON(:ip)"),
@@ -48,8 +45,8 @@ class RequestTrackRepository extends DataManager
      */
     public function insertLoginRequest(string $email, string $ip, bool $success): string
     {
-        $query = $this->newInsertQuery();
-        $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->values(
+        $query = $this->dataManager->newQuery();
+        $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
             [
                 'email' => $email,
                 'ip_address' => $query->newExpr("INET_ATON(:ip)"),
@@ -73,7 +70,7 @@ class RequestTrackRepository extends DataManager
      */
     public function getGlobalRequestStats(int $seconds): array
     {
-        $query = $this->newSelectQuery();
+        $query = $this->dataManager->newQuery();
         $query->select(
             [
                 'request_amount' => $query->func()->count(1),
@@ -81,7 +78,7 @@ class RequestTrackRepository extends DataManager
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
                 'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
             ]
-        )->where(
+        )->from('request_track')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
@@ -105,7 +102,7 @@ class RequestTrackRepository extends DataManager
      */
     public function getIpRequestStats(string $ip, int $seconds): array
     {
-        $query = $this->newSelectQuery();
+        $query = $this->dataManager->newQuery();
         $query->select(
             [
                 'request_amount' => $query->func()->count(1),
@@ -113,7 +110,7 @@ class RequestTrackRepository extends DataManager
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
                 'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
             ]
-        )->where(
+        )->from('request_track')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
@@ -142,7 +139,7 @@ class RequestTrackRepository extends DataManager
      */
     public function getUserRequestStats(string $email, int $seconds): array
     {
-        $query = $this->newSelectQuery();
+        $query = $this->dataManager->newQuery();
         $query->select(
             [
                 'request_amount' => $query->func()->count(1),
@@ -150,7 +147,7 @@ class RequestTrackRepository extends DataManager
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
                 'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
             ]
-        )->where(
+        )->from('request_track')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
@@ -174,8 +171,8 @@ class RequestTrackRepository extends DataManager
      */
     public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): array
     {
-        $query = $this->newSelectQuery();
-        $query->select('*')->where(
+        $query = $this->dataManager->newQuery();
+        $query->select('*')->from('request_track')->where(
             [
                 'is_login IS NOT' => null,
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
@@ -187,8 +184,8 @@ class RequestTrackRepository extends DataManager
 
     public function findLatestEmailRequestFromUserOrIp(string $email, string $ip): array
     {
-        $query = $this->newSelectQuery();
-        $query->select('*')->where(
+        $query = $this->dataManager->newQuery();
+        $query->select('*')->from('request_track')->where(
             [
                 'sent_email' => 1,
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
@@ -204,13 +201,13 @@ class RequestTrackRepository extends DataManager
      */
     public function getGlobalLoginAmountStats(): array
     {
-        $query = $this->newSelectQuery();
+        $query = $this->dataManager->newQuery();
         $query->select(
             [
                 'login_total' => $query->func()->count(1),
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
             ]
-        )->where(
+        )->from('request_track')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL 1 MONTH)')
             ]
@@ -226,8 +223,8 @@ class RequestTrackRepository extends DataManager
      */
     public function getGlobalSentEmailAmount(int $days): string
     {
-        $query = $this->newSelectQuery();
-        $query->select(['sent_email_amount' => $query->func()->sum('sent_email')])->where(
+        $query = $this->dataManager->newQuery();
+        $query->select(['sent_email_amount' => $query->func()->sum('sent_email')])->from('request_track')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)')
             ]
@@ -244,8 +241,8 @@ class RequestTrackRepository extends DataManager
      */
     public function preponeLastRequest(int $seconds): bool
     {
-        $query = $this->newQuery();
-        $query->update($this->table)->set(
+        $query = $this->dataManager->newQuery();
+        $query->update('request_track')->set(
             [
                 'created_at' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
             ]
