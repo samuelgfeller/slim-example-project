@@ -9,6 +9,7 @@ class User
 
     private ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     private ?string $name;
+    // Email has to be default null as it is indicator that user obj is empty in AuthService register function
     private ?string $email;
     private ?string $password;
     private ?string $password2;
@@ -28,7 +29,7 @@ class User
         // better be safe than sorry. Sensitive values like role and status can be changed later.
         $this->id = $arrayReader->findInt('id');
         $this->name = $arrayReader->findString('name');
-        $this->email = $arrayReader->getString('email');
+        $this->email = $arrayReader->findString('email');
         $this->password = $arrayReader->findString('password');
         $this->password2 = $arrayReader->findString('password2');
         $this->passwordHash = $arrayReader->findString('password_hash');
@@ -83,9 +84,9 @@ class User
     }
     
     /**
-     * @return mixed|string|null
+     * @return string|null
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -130,5 +131,12 @@ class User
         $this->status = $status;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
 
 }

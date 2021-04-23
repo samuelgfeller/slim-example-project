@@ -89,28 +89,30 @@ class AuthService
 
         $this->securityService->performEmailAbuseCheck($user->getEmail(), $captcha);
 
-        // If user already exists
-        if ($dbUser = $this->userRepository->findUserByEmail($user->getEmail())) {
+        $existingUser = $this->userRepository->findUserByEmail($user->getEmail());
+        // Check if user already exists
+        if ($existingUser->getEmail() !== null) {
             // If unverified and registered again, old user should be deleted and replaced with new input and verification
             // Reason: User could have lost the email or someone else tried to register under someone elses name
-            if ($dbUser['status'] === User::STATUS_UNVERIFIED) {
+            if ($existingUser->getStatus() === User::STATUS_UNVERIFIED) {
                 // Soft delete user so that new one can be inserted properly
-                $this->userRepository->deleteUser($dbUser['id']);
-                $this->userVerificationRepository->deleteVerificationToken($dbUser['id']);
-            } elseif ($dbUser['status'] === User::STATUS_SUSPENDED) {
+                $this->userRepository->deleteUser($existingUser->getId());
+                $this->userVerificationRepository->deleteVerificationToken($existingUser->getId());
+            } elseif ($existingUser->getStatus() === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
                 return false;
             } else {
                 try {
                     // Send info mail to email address holder
+                    // Subject asserted in testRegisterUser_alreadyExistingActiveUser
                     $this->emailService->setSubject('Someone tried to create an account with your address');
                     $this->emailService->setContentFromTemplate(
                         'auth/register-on-existing.email.php',
-                        ['user' => $dbUser]
+                        ['user' => $existingUser]
                     );
                     $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
-                    $this->emailService->sendTo($dbUser['email'], $dbUser['name']);
-                    $this->securityService->newEmailRequest($dbUser['email'], $_SERVER['REMOTE_ADDR']);
+                    $this->emailService->sendTo($existingUser->getEmail(), $existingUser->getName());
+                    $this->securityService->newEmailRequest($existingUser->getEmail(), $_SERVER['REMOTE_ADDR']);
                 } catch (\PHPMailer\PHPMailer\Exception $e) {
                     // We try to hide if an email already exists or not so if email fails, nothing is done
                 } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -164,7 +166,7 @@ class AuthService
         );
 
         // Send verification mail
-        $this->emailService->setSubject('One more step to register');
+        $this->emailService->setSubject('One more step to register'); // Subject asserted in testRegisterUser
         $this->emailService->setContentFromTemplate(
             'auth/register.email.php',
             ['user' => $user, 'token' => $token, 'id' => $tokenId]

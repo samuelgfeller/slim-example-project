@@ -31,7 +31,7 @@ final class RegisterVerifyAction
         $flash = $this->session->getFlash();
 
         if (isset($queryParams['id'], $queryParams['token'])) {
-            if (true === $this->authService->verifyUser($queryParams['id'], $queryParams['token'])) {
+            if (true === $this->authService->verifyUser((int)$queryParams['id'], $queryParams['token'])) {
                 $flash->add('success', 'Congratulations! Account verified! <br><b>You are now logged in.</b>');
 
                 // Log user in

@@ -27,10 +27,10 @@ class OutputEscapeService
     /**
      * Output escape values in an array
      *
-     * @param array $array
+     * @param string[] $array
      * @return array
      */
-    public function escapeOneDimensionalArray(array $array)
+    public function escapeOneDimensionalArray(array $array): array
     {
         $escapedArr = [];
         foreach ($array as $key => $value){
@@ -42,7 +42,7 @@ class OutputEscapeService
     /**
      * Output escape all values of a two dimensional array
      *
-     * @param array $twoDArr
+     * @param array[] $twoDArr
      * @return array
      */
     public function escapeTwoDimensionalArray(array $twoDArr)

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\User;
 
 use App\Common\Hydrator;
+use App\Domain\User\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 
@@ -20,11 +21,13 @@ class UserRepository
     /**
      * Return all users
      *
-     * @return array
+     * @return User[]
      */
     public function findAllUsers(): array
     {
-        return $this->dataManager->findAll('user', $this->fields);
+        $usersRows = $this->dataManager->findAll('user', $this->fields);
+        // Convert to list of objects
+        return $this->hydrator->hydrate($usersRows, User::class);
     }
 
     /**
@@ -32,28 +35,34 @@ class UserRepository
      * otherwise null
      *
      * @param string $id
-     * @return array
+     * @return User
      */
-    public function findUserById(string $id): array
+    public function findUserById(string $id): User
     {
-        return $this->dataManager->findById('user', $id, $this->fields);
+        $userRows = $this->dataManager->findById('user', $id, $this->fields);
+        // Empty user object if not found
+        return new User($userRows);
     }
 
     /**
      * Return user with given id if it exists
-     * otherwise null
+     * If there is no user, an empty object is returned because:
+     * > It is considered a best practice to NEVER return null when returning a collection or enumerable
+     * Source: https://stackoverflow.com/a/1970001/9013718
      *
      * @param string|null $email
-     * @return array|null
+     * @return User
      */
-    public function findUserByEmail(?string $email): ?array
+    public function findUserByEmail(?string $email): User
     {
-        return $this->dataManager->findOneBy(
+        $userRows = $this->dataManager->findOneBy(
             'user',
             'email',
             $email,
             $this->fields
         );
+        // Empty user object if not found
+        return new User($userRows);
     }
 
     /**

@@ -24,7 +24,10 @@ class UserService
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
     }
 
-    public function findAllUsers()
+    /**
+     * @return User[]
+     */
+    public function findAllUsers(): array
     {
         return $this->userRepository->findAllUsers();
     }
