@@ -9,6 +9,9 @@ use App\Domain\User\User;
  */
 class UserProvider
 {
+
+    use TestHydrator;
+
     public array $sampleUsers = [
         [
             'id' => 1,
@@ -78,6 +81,38 @@ class UserProvider
     }
 
     /**
+     * Provide a set of user objects
+     *
+     * @return User[]
+     */
+    public function oneSetOfMultipleUserObjectsProvider(): array
+    {
+        return [
+            [
+                $this->hydrate($this->sampleUsers, User::class)
+            ]
+        ];
+    }
+
+    /**
+     * Hydrate User objects.
+     * Placed in each provider as I'm unsure about
+     * @param array $rows
+     * @return User[]
+     */
+    public function hydrateUsers(array $rows): array
+    {
+        /** @var User[] $result */
+        $result = [];
+
+        foreach ($rows as $row) {
+            $result[] = new User($row);
+        }
+
+        return $result;
+    }
+
+    /**
      * Provide one user in a DataProvider format
      *
      * @return array
@@ -96,6 +131,29 @@ class UserProvider
                     'role' => 'admin',
                     'status' => User::STATUS_ACTIVE,
                 ]
+            ]
+        ];
+    }
+
+    /**
+     * Provide one user in a DataProvider format
+     *
+     * @return array
+     */
+    public function oneUserObjectProvider(): array
+    {
+        return [
+            [
+                new User([
+                    'id' => 1,
+                    'name' => 'Bill Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'admin',
+                    'status' => User::STATUS_ACTIVE,
+                ])
             ]
         ];
     }

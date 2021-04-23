@@ -61,7 +61,7 @@ trait AppTestTrait
             $this->setUpDatabase(__DIR__ . '/../resources/schema/schema.sql');
         }
 
-        // Per default not set when script executed with cli and used in all security checks
+        // Per default not set when script executed with cli and used at least in all security checks
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     }
 

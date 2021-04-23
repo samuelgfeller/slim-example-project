@@ -5,6 +5,7 @@ namespace App\Test\Integration\Application\Actions\Auth;
 use App\Domain\Utility\EmailService;
 use App\Test\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixture;
+use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -28,7 +29,7 @@ class RegisterSubmitActionTest extends TestCase
      *
      * @return void
      */
-    public function testRegister(): void
+    public function testRegisterUser(): void
     {
 
         $this->insertFixtures([RequestTrackFixture::class]);
@@ -84,6 +85,41 @@ class RegisterSubmitActionTest extends TestCase
     }
 
     /**
+     * Test that user can't be registered twice but client should not notice any difference
+     * For further tests, breakpoint can be set inside the register function
+     */
+    public function testRegisterUser_alreadyExisting()
+    {
+        $this->insertFixtures([UserFixture::class]);
+        // User amount in fixture can be changed and it still can be asserted that after the action there's the same
+        // amount of users in the db
+        $userAmountInFixture = count((new UserFixture())->records);
+
+        // Prevent email from being sent
+        $this->mock(EmailService::class);
+
+        $request = $this->createFormRequest(
+            'POST',
+            $this->urlFor('register-submit'),
+            // Same keys than HTML form
+            [
+                'name' => 'Admin Example',
+                'email' => 'contact@samuel-gfeller.ch', // Has to be valid for mailgun test servers
+                'password' => '12345678',
+                'password2' => '12345678',
+            ]
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert: 302 Found (redirect)
+        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
+
+        // Check that there are not more users in the database
+        $this->assertTableRowCount($userAmountInFixture, 'user');
+    }
+
+    /**
      * Test invalid user creation
      * When validation fails the ValidationException is caught and errors
      * are given to phpRenderer as attribute called $validation.
@@ -95,7 +131,7 @@ class RegisterSubmitActionTest extends TestCase
      * That’s why I will only assert that the Response status is the right one on a validation
      * exception (422) or 400 Bad request
      */
-    public function testRegister_invalidData(): void
+    public function testRegisterUser_invalidData(): void
     {
         // Test with required values not set
         $requestRequiredNotSet = $this->createFormRequest(
@@ -150,7 +186,7 @@ class RegisterSubmitActionTest extends TestCase
      * @param array|null $malformedBody null for the case that request body is null
      * @param string $message
      */
-    public function testRegister_malformedRequestBody(null|array $malformedBody, string $message): void
+    public function testRegisterUser_malformedRequestBody(null|array $malformedBody, string $message): void
     {
         // Test with required values not set
         $malformedRequest = $this->createFormRequest(
