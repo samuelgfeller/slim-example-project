@@ -47,11 +47,9 @@ final class LoginSubmitAction
                 // Populate $captcha var if reCAPTCHA response is given
                 $captcha = $userData['g-recaptcha-response'] ?? null;
 
-                // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
-                $user = new User($userData);
                 try {
                     // Throws InvalidCredentialsException if not allowed
-                    $userId = $this->authService->GetUserIdIfAllowedToLogin($user, $captcha);
+                    $userId = $this->authService->GetUserIdIfAllowedToLogin($userData, $captcha);
 
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();
@@ -60,8 +58,6 @@ final class LoginSubmitAction
 
                     // Add success message to flash
                     $flash->add('success', 'Login successful');
-
-                    $this->logger->info('Successful login from user "' . $user->getEmail() . '"');
 
                     return $this->responder->redirectToRouteName($response, 'hello');
                 } catch (ValidationException $ve) {

@@ -135,9 +135,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User($validUser);
-
-        self::assertEquals($validUser['id'], $authService->GetUserIdIfAllowedToLogin($userObj));
+        self::assertEquals($validUser['id'], $authService->GetUserIdIfAllowedToLogin($validUser));
     }
 
     /**
@@ -155,11 +153,9 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User($validUser);
-
         $this->expectException(ValidationException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($validUser);
     }
 
     /**
@@ -177,11 +173,9 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User($validUser);
-
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($validUser);
     }
 
     /**
@@ -203,11 +197,9 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        $userObj = new User($validUser);
-
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($userObj);
+        $authService->GetUserIdIfAllowedToLogin($validUser);
     }
 
     /**
