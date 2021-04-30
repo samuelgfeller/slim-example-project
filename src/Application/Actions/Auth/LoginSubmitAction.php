@@ -56,7 +56,7 @@ final class LoginSubmitAction
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();
                     // Add user to session
-                    $this->session->set('user', $userId);
+                    $this->session->set('user_id', $userId);
 
                     // Add success message to flash
                     $flash->add('success', 'Login successful');

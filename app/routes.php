@@ -23,7 +23,7 @@ return function (App $app) {
         'register-check-email-page'
     );
 
-    $app->post('/profile', \App\Application\Actions\Hello\HelloAction::class)->setName('profile');
+    $app->get('/profile', \App\Application\Actions\Hello\HelloAction::class)->setName('profile');
 
     $app->group(
         '/users',
@@ -31,10 +31,12 @@ return function (App $app) {
             $group->options('', PreflightAction::class); // Allow preflight requests
             $group->get('', \App\Application\Actions\Users\UserListAction::class)->setName('user-list');
 
-            $group->options('/{id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-            $group->get('/{id:[0-9]+}', \App\Application\Actions\Users\UserViewAction::class);
-            $group->put('/{id:[0-9]+}', \App\Application\Actions\Users\UserUpdateAction::class);
-            $group->delete('/{id:[0-9]+}', \App\Application\Actions\Users\UserDeleteAction::class);
+            $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
+            $group->get('/{user_id:[0-9]+}', \App\Application\Actions\Users\UserViewProfileAction::class);
+            $group->put('/{user_id:[0-9]+}', \App\Application\Actions\Users\UserSubmitUpdateAction::class)->setName(
+                'user-update-submit'
+            );
+            $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\Users\UserDeleteAction::class);
         }
     )->add(UserAuthMiddleware::class);
 

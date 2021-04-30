@@ -39,7 +39,7 @@ final class RegisterVerifyAction
                 // Clear all session data and regenerate session ID
                 $this->session->regenerateId();
                 // Add user to session
-                $this->session->set('user', $userId);
+                $this->session->set('user_id', $userId);
 
                 return $this->responder->redirectToRouteName($response, 'home');
             }

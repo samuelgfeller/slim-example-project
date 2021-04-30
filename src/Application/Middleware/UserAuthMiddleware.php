@@ -33,7 +33,7 @@ final class UserAuthMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface{
-        if ($this->session->get('user')) {
+        if ($this->session->get('user_id')) {
             // User is logged in
             return $handler->handle($request);
         }

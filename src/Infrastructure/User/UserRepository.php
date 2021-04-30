@@ -70,34 +70,36 @@ class UserRepository
      * If not found error is thrown
      *
      * @param int $id
-     * @return array
+     * @return User
      * @throws PersistenceRecordNotFoundException
      */
-    public function getUserById(int $id): array
+    public function getUserById(int $id): User
     {
-        return $this->dataManager->getById('user', $id, $this->fields);
+        $userRows = $this->dataManager->getById('user', $id, $this->fields);
+        return new User($userRows);
     }
 
     /**
      * Insert user in database
      *
-     * @param array $data
+     * @param User $user
      * @return int lastInsertId
      */
-    public function insertUser(array $data): int
+    public function insertUser(User $user): int
     {
-        return (int)$this->dataManager->newInsert($data)->into('user')->execute()->lastInsertId();
+        $userRows = $user->toArrayForDatabase();
+        return (int)$this->dataManager->newInsert($userRows)->into('user')->execute()->lastInsertId();
     }
 
     /**
      * Delete user from database
      *
-     * @param int $id
+     * @param int $userId
      * @return bool
      */
-    public function deleteUser(int $id): bool
+    public function deleteUserById(int $userId): bool
     {
-        $query = $this->dataManager->newDelete('user')->where(['id' => $id]);
+        $query = $this->dataManager->newDelete('user')->where(['id' => $userId]);
         return $query->execute()->rowCount() > 0;
     }
 

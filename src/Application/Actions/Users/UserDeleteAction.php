@@ -60,7 +60,7 @@ final class UserDeleteAction
         $loggedUserId = (int)$this->getUserIdFromToken($request);
         $id = (int)$args['id'];
 
-        $userRole = $this->authService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRoleById($loggedUserId);
 
 
         // Check if it's admin or if it's its own user

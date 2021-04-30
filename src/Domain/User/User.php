@@ -4,9 +4,12 @@ namespace App\Domain\User;
 
 use App\Domain\Utility\ArrayReader;
 
+/**
+ * Class User also serving as DTO for simplicity reasons
+ * More details on slim-api-example/issues/2
+ */
 class User
 {
-
     private ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     private ?string $name;
     // Email has to be default null as it is indicator that user obj is empty in AuthService register function
@@ -82,6 +85,14 @@ class User
     {
         return $this->name;
     }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
     
     /**
      * @return string|null
@@ -89,6 +100,14 @@ class User
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
     }
 
     /**

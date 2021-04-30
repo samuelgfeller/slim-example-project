@@ -93,7 +93,7 @@ class AuthServiceTest extends TestCase
      * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
      * @param User $existingUser
      */
-    public function testRegisterUser_alreadyExistingActiveUser(User $existingUser): void
+    public function testRegisterUser_existingActiveUser(User $existingUser): void
     {
         // Set user to active
         $existingUser->setStatus(User::STATUS_ACTIVE);
@@ -211,19 +211,19 @@ class AuthServiceTest extends TestCase
     }
 
     /**
-     * Test getUserRole() with different roles
+     * Test getUserRoleById() with different roles
      *
      * Test with multiple users to have different roles
      * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
      * @param array $user
      */
-    public function testGetUserRole(array $user): void
+    public function testGetUserRoleById(array $user): void
     {
         $this->mock(UserRepository::class)->method('getUserRole')->willReturn($user['role']);
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        self::assertEquals($user['role'], $authService->getUserRole($user['id']));
+        self::assertEquals($user['role'], $authService->getUserRoleById($user['id']));
     }
 }

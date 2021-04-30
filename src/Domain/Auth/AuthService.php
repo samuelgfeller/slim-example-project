@@ -96,7 +96,7 @@ class AuthService
             // Reason: User could have lost the email or someone else tried to register under someone elses name
             if ($existingUser->getStatus() === User::STATUS_UNVERIFIED) {
                 // Soft delete user so that new one can be inserted properly
-                $this->userRepository->deleteUser($existingUser->getId());
+                $this->userRepository->deleteUserById($existingUser->getId());
                 $this->userVerificationRepository->deleteVerificationToken($existingUser->getId());
             } elseif ($existingUser->getStatus() === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
@@ -126,7 +126,7 @@ class AuthService
         $user->setStatus(User::STATUS_UNVERIFIED);
 
         // Insert new user into database
-        $user->setId($this->userRepository->insertUser($user->toArrayForDatabase()));
+        $user->setId($this->userRepository->insertUser($user));
 
         // Create, insert and send token to user
         $this->createAndSendUserVerification($user);
@@ -204,11 +204,11 @@ class AuthService
     /**
      * Get user role
      *
-     * @param int $id
+     * @param int $userId
      * @return string
      */
-    public function getUserRole(int $id): string
+    public function getUserRoleById(int $userId): string
     {
-        return $this->userRepository->getUserRole($id);
+        return $this->userRepository->getUserRole($userId);
     }
 }

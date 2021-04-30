@@ -64,13 +64,13 @@ final class UserListAction
         // getUserIdFromToken not transferred to action since it will be session based
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $userRole = $this->authService->getUserRole($loggedUserId);
+        $userRole = $this->authService->getUserRoleById($loggedUserId);
 
         if ($userRole === 'admin') {
             $allUsers = $this->userService->findAllUsers();
 
             // Output has to be escaped since PHP-View doesn't have a protection against XSS-attacks
-            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
+//            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);
 
             $response->withHeader('Content-Type', 'application/json');
             return $this->responder->respondWithJson($response, $allUsers);

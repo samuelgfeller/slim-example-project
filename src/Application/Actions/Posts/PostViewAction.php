@@ -59,7 +59,7 @@ final class PostViewAction
         $post = $this->postService->findPost($id);
 
         // Get user information connected to post
-        $user = $this->userService->findUser($post['user_id']);
+        $user = $this->userService->findUserById($post['user_id']);
 
         // Add user name info to post
         $postWithUser = $post;

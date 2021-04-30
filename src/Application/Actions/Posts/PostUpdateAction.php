@@ -74,7 +74,7 @@ final class PostUpdateAction
         $postFromDb = $this->postService->findPost($id);
 
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
-        $userRole = $this->authService->getUserRole($userId);
+        $userRole = $this->authService->getUserRoleById($userId);
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || (int)$postFromDb['user_id'] === $userId) {
             // todo check if parsedbody is empty everywhere

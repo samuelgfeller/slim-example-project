@@ -37,12 +37,12 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * Test findUser() from UserService
+     * Test findUserById() from UserService
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
-     * @param array $user
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
+     * @param User $user
      */
-    public function testFindUser(array $user): void
+    public function testFindUserById(User $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserById')->willReturn($user);
@@ -51,7 +51,7 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        self::assertEquals($user, $service->findUser($user['id']));
+        self::assertEquals($user, $service->findUserById($user['id']));
     }
 
     /**
@@ -140,7 +140,7 @@ class UserServiceTest extends TestCase
      * I test if the repo method to delete all posts related
      * to the user is called and the method to delete the user itself
      */
-    public function testDeleteUser(): void
+    public function testDeleteUserById(): void
     {
         $userId = 1;
         // Mock user repository and post repository

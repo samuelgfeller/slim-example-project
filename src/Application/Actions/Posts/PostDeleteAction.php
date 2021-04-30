@@ -72,7 +72,7 @@ final class PostDeleteAction
 
         $post = $this->postService->findPost($id);
 
-        $userRole = $this->authService->getUserRole($userId);
+        $userRole = $this->authService->getUserRoleById($userId);
 
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
