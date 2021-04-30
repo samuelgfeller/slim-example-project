@@ -7,9 +7,9 @@ use App\Domain\Utility\ArrayReader;
 
 class Post
 {
-    private ?int $id;
-    private ?int $userId;
-    private string $message;
+    public ?int $id;
+    public ?int $userId;
+    public string $message;
 
     /**
      * Post constructor.
@@ -41,45 +41,4 @@ class Post
 
         return $post;
     }
-
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @param int|null $userId
-     */
-    public function setUserId(?int $userId): void
-    {
-        $this->userId = $userId;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
 }

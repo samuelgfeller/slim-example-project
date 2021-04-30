@@ -86,7 +86,7 @@ final class LoginSubmitAction
                         $response,
                         $se->getRemainingDelay(),
                         'auth/login.html.php',
-                        ['email' => $user->getEmail()]
+                        ['email' => $userData['email']]
                     );
                 }
             }

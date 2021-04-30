@@ -40,11 +40,11 @@ class UserValidation extends AppValidation
     public function validateUserUpdate(User $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
-        $this->validateUserExistence($user->getId(), $validationResult);
+        $this->validateUserExistence($user->id, $validationResult);
 
-        $this->validateName($user->getName(), false, $validationResult);
-        $this->validateEmail($user->getEmail(), false, $validationResult);
-        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], false, $validationResult);
+        $this->validateName($user->name, false, $validationResult);
+        $this->validateEmail($user->email, false, $validationResult);
+        $this->validatePasswords([$user->password, $user->password2], false, $validationResult);
 
         // If the validation failed, throw the exception that will be caught in the Controller
         $this->throwOnError($validationResult);
@@ -64,9 +64,9 @@ class UserValidation extends AppValidation
         // Instantiate ValidationResult Object with default message
         $validationResult = new ValidationResult('There was a validation error when trying to register');
 
-        $this->validateName($user->getName(), true, $validationResult);
-        $this->validateEmail($user->getEmail(), true, $validationResult);
-        $this->validatePasswords([$user->getPassword(), $user->getPassword2()], true, $validationResult);
+        $this->validateName($user->name, true, $validationResult);
+        $this->validateEmail($user->email, true, $validationResult);
+        $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult); // Thrown at the end so all errors are included
@@ -87,8 +87,8 @@ class UserValidation extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
-        $this->validateEmail($user->getEmail(), true, $validationResult);
-        $this->validatePassword($user->getPassword(), true, $validationResult);
+        $this->validateEmail($user->password, true, $validationResult);
+        $this->validatePassword($user->password, true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult);

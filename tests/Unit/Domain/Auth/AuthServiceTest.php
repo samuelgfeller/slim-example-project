@@ -96,9 +96,9 @@ class AuthServiceTest extends TestCase
     public function testRegisterUser_existingActiveUser(User $existingUser): void
     {
         // Set user to active
-        $existingUser->setStatus(User::STATUS_ACTIVE);
+        $existingUser->status = User::STATUS_ACTIVE;
         // Removing id from user because before user is created; id is not known
-        $existingUser->setId(null);
+        $existingUser->id = null;
 
         // Set findUserByEmail to return user. That means that it already exists
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($existingUser);

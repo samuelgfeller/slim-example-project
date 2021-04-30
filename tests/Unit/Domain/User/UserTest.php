@@ -28,14 +28,14 @@ class UserTest extends TestCase
         $user = new User($userValues);
 
         // Set possible values via setters
-        $user->setPassword($userValues['password']);
-        $user->setPasswordHash($userValues['password_hash']);
+        $user->password = $userValues['password'];
+        $user->passwordHash = $userValues['password_hash'];
 
-        self::assertEquals($userValues['id'], $user->getId());
-        self::assertEquals($userValues['name'], $user->getName());
-        self::assertEquals($userValues['email'], $user->getEmail());
-        self::assertEquals($userValues['password'], $user->getPassword());
-        self::assertEquals($userValues['password2'], $user->getPassword2());
+        self::assertEquals($userValues['id'], $user->id);
+        self::assertEquals($userValues['name'], $user->name);
+        self::assertEquals($userValues['email'], $user->email);
+        self::assertEquals($userValues['password'], $user->password);
+        self::assertEquals($userValues['password2'], $user->password2);
     }
 
     /**

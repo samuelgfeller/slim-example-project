@@ -39,8 +39,8 @@ class PostValidation extends AppValidation
     {
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
-        $this->validateMessage($post->getMessage(), $validationResult, true);
-        $this->validateUser($post->getUserId(), $validationResult, true);
+        $this->validateMessage($post->message, $validationResult, true);
+        $this->validateUser($post->userId, $validationResult, true);
 
         $this->throwOnError($validationResult);
     }

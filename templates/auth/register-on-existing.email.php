@@ -11,7 +11,7 @@ $this->setLayout('layout/layout.email.php');
 ?>
 
 <p>
-    Hello <?= $user->getName() ?><br>
+    Hello <?= $user->name ?><br>
     <br>
     Someone tried to create an account with your email address. <br>
     If this was you, then you can login with your credentials by navigating to the

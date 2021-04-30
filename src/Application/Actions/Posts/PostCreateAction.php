@@ -54,7 +54,7 @@ final class PostCreateAction
         if (null !== $postData = $request->getParsedBody()) {
 
             $post = new Post($postData);
-            $post->setUserId($userId);
+            $post->userId = $userId;
 
             try {
                 $insertId = $this->postService->createPost($post);

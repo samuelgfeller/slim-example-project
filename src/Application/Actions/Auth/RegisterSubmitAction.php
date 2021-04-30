@@ -80,14 +80,14 @@ final class RegisterSubmitAction
                         $response,
                         $se->getRemainingDelay(),
                         'auth/register.html.php',
-                        ['name' => $user->getName(), 'email' => $user->getEmail()]
+                        ['name' => $user->name, 'email' => $user->email]
                     );
                 }
 
                 if ($insertId !== false) {
-                    $this->logger->info('User "' . $user->getEmail() . '" created');
+                    $this->logger->info('User "' . $user->email . '" created');
                 } else {
-                    $this->logger->info('Account creation tried with existing email: "' . $user->getEmail() . '"');
+                    $this->logger->info('Account creation tried with existing email: "' . $user->email . '"');
                 }
                 // Redirect for new user and if email already exists is the same
 //                return $response;

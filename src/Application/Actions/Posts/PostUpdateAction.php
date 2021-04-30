@@ -83,7 +83,7 @@ final class PostUpdateAction
 
                 $post = new Post($postData);
                 // Needed to tell repo what data to update
-                $post->setId($postFromDb['id']);
+                $post->id = $postFromDb['id'];
 
                 try {
                     $updated = $this->postService->updatePost($post);

@@ -110,7 +110,7 @@ class PostService
     public function updatePost(Post $post): bool
     {
         $this->postValidation->validatePostCreationOrUpdate($post);
-        return $this->postRepository->updatePost($post->toArray(), $post->getId());
+        return $this->postRepository->updatePost($post->toArray(), $post->id);
     }
 
     /**

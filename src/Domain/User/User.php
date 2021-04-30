@@ -5,20 +5,23 @@ namespace App\Domain\User;
 use App\Domain\Utility\ArrayReader;
 
 /**
- * Class User also serving as DTO for simplicity reasons
- * More details on slim-api-example/issues/2
+ * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
+ * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
+ * sense to keep them private otherwise not really.
+ *
  */
 class User
 {
-    private ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
-    private ?string $name;
+    public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
+    public ?string $name;
     // Email has to be default null as it is indicator that user obj is empty in AuthService register function
-    private ?string $email;
-    private ?string $password;
-    private ?string $password2;
-    private ?string $passwordHash;
-    private ?string $status;
-    private ?string $role;
+    public ?string $email;
+    public ?string $password;
+    public ?string $password2;
+    public ?string $passwordHash;
+    public ?string $status;
+    public ?string $role;
+    // When adding a new attribute that should be editable with updateUser() it has to be added there
 
     public const STATUS_UNVERIFIED = 'unverified'; // Default after registration
     public const STATUS_ACTIVE = 'active'; // Verified via token received in email
@@ -60,102 +63,6 @@ class User
             'role' => $this->role,
             'status' => $this->status,
         ];
-    }
-
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-    
-    /**
-     * @return mixed|string|null
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string|null $name
-     */
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-    
-    /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return mixed|string|null
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string|null $password
-     */
-    public function setPassword(?string $password): void
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPassword2(): ?string
-    {
-        return $this->password2;
-    }
-
-    /**
-     * @param string|null $passwordHash
-     */
-    public function setPasswordHash(?string $passwordHash): void
-    {
-        $this->passwordHash = $passwordHash;
-    }
-
-    /**
-     * @param string|null $status
-     */
-    public function setStatus(?string $status): void
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->status;
     }
 
 }
