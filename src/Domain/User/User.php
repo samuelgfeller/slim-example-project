@@ -19,8 +19,8 @@ class User
     public ?string $password;
     public ?string $password2;
     public ?string $passwordHash;
-    public ?string $status;
-    public ?string $role;
+    public ?string $status = null;
+    public ?string $role = null;
     // When adding a new attribute that should be editable with updateUser() it has to be added there
 
     public const STATUS_UNVERIFIED = 'unverified'; // Default after registration
@@ -39,10 +39,7 @@ class User
         $this->password = $arrayReader->findString('password');
         $this->password2 = $arrayReader->findString('password2');
         $this->passwordHash = $arrayReader->findString('password_hash');
-        // Making sure that role is always user to prevent that someone tries to have admin access by adding
-        // role in request body; default values are set
-        $this->role = 'user';
-        $this->status = self::STATUS_UNVERIFIED;
+        // To make sure that role and status aren't filled with malicious data, it is not possible to set them via constructor
     }
 
     /**
