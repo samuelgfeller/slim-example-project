@@ -200,7 +200,7 @@ final class Responder
         $responseData = [
             'status' => 'error',
             'message' => 'Validation error',
-            'validation' => $validationResult->toArray(),
+            'data' => $validationResult->toArray(),
         ];
         return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
     }

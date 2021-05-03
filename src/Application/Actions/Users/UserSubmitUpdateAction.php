@@ -4,6 +4,7 @@ namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\UserService;
@@ -64,36 +65,28 @@ final class UserSubmitUpdateAction
             $userIdToChange = (int)$args['user_id'];
             $userValuesToChange = $request->getParsedBody();
 
-            $userRole = $this->authService->getUserRoleById($loggedInUserId);
-
-            // Check if it's admin or if it's its own user
-            if ($userRole === 'admin' || $userIdToChange === $loggedInUserId) {
-                try {
-                    $updated = $this->userService->updateUser($loggedInUserId, $userValuesToChange);
-                } catch (ValidationException $exception) {
-                    return $this->responder->respondWithJsonOnValidationError(
-                        $exception->getValidationResult(),
-                        $response
-                    );
-                }
-
-                if ($updated) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success']);
-                }
-                // If for example values didnt change
+            try {
+                $updated = $this->userService->updateUser($userIdToChange, $userValuesToChange, $loggedInUserId);
+            } catch (ValidationException $exception) {
+                return $this->responder->respondWithJsonOnValidationError(
+                    $exception->getValidationResult(),
+                    $response
+                );
+            } catch (ForbiddenException $fe){
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'warning', 'message' => 'User wasn\'t updated']
+                    ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to edit others'],
+                    403
                 );
             }
-            $this->logger->notice(
-                'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
-            );
 
+            if ($updated) {
+                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            }
+            // If for example values didnt change
             return $this->responder->respondWithJson(
                 $response,
-                ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to edit others'],
-                403
+                ['status' => 'warning', 'message' => 'User wasn\'t updated']
             );
         }
         return $this->responder->respondWithJson(

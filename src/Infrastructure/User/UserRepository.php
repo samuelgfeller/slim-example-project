@@ -122,9 +122,9 @@ class UserRepository
      *
      * @param int $id
      * @return string
-     * @throws PersistenceRecordNotFoundException
+     * Throws PersistenceRecordNotFoundException if entry not found
      */
-    public function getUserRole(int $id): string
+    public function getUserRoleById(int $id): string
     {
         // todo put role in separate tables
         return $this->dataManager->getById('user', $id, ['role'])['role'];

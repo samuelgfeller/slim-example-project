@@ -3,8 +3,8 @@
 
 namespace App\Domain\User;
 
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Utility\EmailService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use Psr\Log\LoggerInterface;
@@ -32,7 +32,7 @@ class UserService
         return $this->userRepository->findAllUsers();
     }
 
-    public function findUser(string $id): array
+    public function findUserById(string $id): User
     {
         return $this->userRepository->findUserById($id);
     }
@@ -41,9 +41,9 @@ class UserService
      * Find active user via email
      *
      * @param string $email
-     * @return array|null
+     * @return User
      */
-    public function findUserByEmail(string $email): ?array
+    public function findUserByEmail(string $email): User
     {
         return $this->userRepository->findUserByEmail($email);
     }
@@ -53,14 +53,25 @@ class UserService
      * This function is intended for changes coming from a user
      * therefore it changes only "user changeable" general info (not password)
      *
-     * @param int $userId
+     * @param int $userIdToChange user id on which the change is requested to be made
      * @param array $userValues values to change
+     * @param int $loggedInUserId
      * @return bool
      */
-    public function updateUser(int $userId, array $userValues): bool
+    public function updateUser(int $userIdToChange, array $userValues, int $loggedInUserId): bool
     {
-        $user = new User($userValues);
-        $this->userValidation->validateUserUpdate($userId, $user);
+        $user = new User($userValues, true);
+        $this->userValidation->validateUserUpdate($userIdToChange, $user);
+
+        $userRole = $this->userRepository->getUserRoleById($loggedInUserId);
+        // Check if it's admin or if it's its own user
+        if ($userRole === 'admin' || $userIdToChange === $loggedInUserId) {
+            // User does not have needed rights to access area or function
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
+            );
+            throw new ForbiddenException('Not allowed to change that user');
+        }
 
         // User values to change (cannot use object as unset values would be "null" and remove values in db)
         $validUpdateValues = [];
@@ -78,7 +89,7 @@ class UserService
     public function deleteUser($id): bool
     {
         $this->postRepository->deletePostsFromUser($id);
-        return $this->userRepository->deleteUser($id);
+        return $this->userRepository->deleteUserById($id);
     }
 
 }

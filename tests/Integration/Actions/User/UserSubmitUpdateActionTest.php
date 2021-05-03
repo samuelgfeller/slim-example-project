@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Integration\Application\Actions\User;
+namespace App\Test\Integration\Actions\User;
 
 use App\Test\AppTestTrait;
 use App\Test\Fixture\UserFixture;
@@ -31,11 +31,10 @@ class UserSubmitUpdateActionTest extends TestCase
      */
     public function testUpdateUser(): void
     {
-
         $this->insertFixtures([UserFixture::class]);
-        $session = $this->container->get(SessionInterface::class);
+
         // Simulate logged in user with id 1
-        $session->set('user_id', 1);
+        $this->container->get(SessionInterface::class)->set('user_id', 1);
 
         $request = $this->createJsonRequest(
             'PUT',
@@ -69,40 +68,60 @@ class UserSubmitUpdateActionTest extends TestCase
     }
 
     /**
-     * Test that user can't be registered twice but client should not notice any difference
-     * For further tests, breakpoint can be set inside the register function
+     * Test behaviour when trying to exist a user that doesn't exist
      */
-//    public function testRegisterUser_alreadyExisting()
-//    {
-//        $this->insertFixtures([UserFixture::class]);
-//        // User amount in fixture can be changed and it still can be asserted that after the action there's the same
-//        // amount of users in the db
-//        $userAmountInFixture = count((new UserFixture())->records);
-//
-//        // Prevent email from being sent
-//        $this->mock(EmailService::class);
-//
-//        $request = $this->createFormRequest(
-//            'POST',
-//            $this->urlFor('register-submit'),
-//            // Same keys than HTML form
-//            [
-//                'name' => 'Admin Example',
-//                'email' => 'contact@samuel-gfeller.ch', // Has to be valid for mailgun test servers
-//                'password' => '12345678',
-//                'password2' => '12345678',
-//            ]
-//        );
-//
-//        $response = $this->app->handle($request);
-//
-//        // Assert: 302 Found (redirect)
-//        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-//
-//        // Check that there are not more users in the database
-//        $this->assertTableRowCount($userAmountInFixture, 'user');
-//    }
-//
+    public function testUpdateUser_invalidData(): void
+    {
+        $this->insertFixtures([UserFixture::class]);
+
+        // Simulate logged in user with id 1
+        $this->container->get(SessionInterface::class)->set('user_id', 1);
+
+        $request = $this->createJsonRequest(
+            'PUT',
+            // Request to change non-existent user with id 999
+            $this->urlFor('user-update-submit', ['user_id' => 999]),
+            // Same keys than HTML form
+            [
+                'name' => 'A',
+                'email' => 'edited@samuel-gf$eller.ch'
+            ]
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert HTTP status code
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        $this->assertJsonContentType($response);
+
+        // Response standard: SLE-134
+        $this->assertJsonData(
+            [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'data' => [
+                    'message' => 'User not found',
+                    'errors' => [
+                        0 => [
+                            'field' => 'user',
+                            'message' => 'User not existing',
+                        ],
+                        1 => [
+                            'field' => 'name',
+                            'message' => 'Required minimum length is 2',
+                        ],
+                        2 => [
+                            'field' => 'email',
+                            'message' => 'Invalid email address',
+                        ],
+                    ],
+                ],
+            ],
+            $response
+        );
+    }
+
 //    /**
 //     * Test invalid user creation
 //     * When validation fails the ValidationException is caught and errors
@@ -140,10 +159,11 @@ class UserSubmitUpdateActionTest extends TestCase
 //            $this->urlFor('register-submit'),
 //            // Same keys than HTML form
 //            [
-//                'name' => 'Ad', /* Name too short */
-//                'email' => 'admi$n@exampl$e.com', /* Invalid E-Mail */
-//                'password' => '123', /* Password too short */
-//                'password2' => '12', /* Password 2 not matching and too short */
+//                'name' => 'Ad',
+//                /* Name too short */ 'email' => 'admi$n@exampl$e.com',
+//                /* Invalid E-Mail */ 'password' => '123',
+//                /* Password too short */ 'password2' => '12',
+//                /* Password 2 not matching and too short */
 //            ]
 //        );
 //
