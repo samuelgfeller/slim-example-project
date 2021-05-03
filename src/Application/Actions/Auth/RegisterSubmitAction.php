@@ -7,7 +7,6 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
-use App\Domain\User\User;
 use App\Domain\User\UserService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -46,11 +45,9 @@ final class RegisterSubmitAction
                 // Populate $captcha var if reCAPTCHA response is given
                 $captcha = $userData['g-recaptcha-response'] ?? null;
 
-                // Use Entity instead of DTO to avoid redundancy (slim-api-example/issues/2)
-                $user = new User($userData);
                 try {
                     // Throws exception if there is error and returns false if user already exists
-                    $insertId = $this->authService->registerUser($user, $captcha);
+                    $insertId = $this->authService->registerUser($userData, $captcha);
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email sent successfully.');
                     $flash->add(
@@ -80,21 +77,21 @@ final class RegisterSubmitAction
                         $response,
                         $se->getRemainingDelay(),
                         'auth/register.html.php',
-                        ['name' => $user->name, 'email' => $user->email]
+                        ['name' => $userData['name'], 'email' => $userData['email']]
                     );
                 }
 
                 if ($insertId !== false) {
-                    $this->logger->info('User "' . $user->email . '" created');
+                    $this->logger->info('User "' . $userData['email'] . '" created');
                 } else {
-                    $this->logger->info('Account creation tried with existing email: "' . $user->email . '"');
+                    $this->logger->info('Account creation tried with existing email: "' . $userData['email'] . '"');
                 }
                 // Redirect for new user and if email already exists is the same
 //                return $response;
                 return $this->responder->redirectToRouteName($response, 'register-check-email-page');
             }
             $flash->add('error', 'Malformed request body syntax');
-            // Prevent to log passwords
+            // Prevent to log passwords; if keys not set unset() will not trigger notice or warning
             unset($userData['password'], $userData['password2']);
             $this->logger->error('POST request body malformed: ' . json_encode($userData));
             // Caught in error handler which displays error page because if POST request body is empty frontend has error

@@ -114,7 +114,6 @@ class UserRepository
     public function updateUser(int $userId, array $userValues): bool
     {
         $query = $this->dataManager->newQuery()->update('user')->set($userValues)->where(['id' => $userId]);
-        $str = $query->sql();
         return $query->execute()->rowCount() > 0;
     }
 

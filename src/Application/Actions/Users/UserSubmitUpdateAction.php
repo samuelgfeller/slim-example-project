@@ -41,8 +41,7 @@ final class UserSubmitUpdateAction
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('user-update');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-update');
         $this->userService = $userService;
     }
 
@@ -61,8 +60,7 @@ final class UserSubmitUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null){
-
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userIdToChange = (int)$args['user_id'];
             $userValuesToChange = $request->getParsedBody();
 
@@ -73,16 +71,24 @@ final class UserSubmitUpdateAction
                 try {
                     $updated = $this->userService->updateUser($loggedInUserId, $userValuesToChange);
                 } catch (ValidationException $exception) {
-                    return $this->responder->respondWithJsonOnValidationError($exception->getValidationResult(), $response);
+                    return $this->responder->respondWithJsonOnValidationError(
+                        $exception->getValidationResult(),
+                        $response
+                    );
                 }
 
                 if ($updated) {
                     return $this->responder->respondWithJson($response, ['status' => 'success']);
                 }
                 // If for example values didnt change
-                return $this->responder->respondWithJson($response, ['status' => 'warning', 'message' => 'User wasn\'t updated']);
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'warning', 'message' => 'User wasn\'t updated']
+                );
             }
-            $this->logger->notice('User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange);
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
+            );
 
             return $this->responder->respondWithJson(
                 $response,
@@ -95,6 +101,5 @@ final class UserSubmitUpdateAction
             ['status' => 'error', 'message' => 'Please login to make the changes'],
             403
         );
-
     }
 }
