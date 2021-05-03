@@ -107,13 +107,14 @@ class UserRepository
      * Update values from user
      * Example of $data: ['name' => 'New name']
      *
-     * @param int $id
-     * @param array $data
+     * @param int $userId
+     * @param array $userValues has to be only allowed changes for this function
      * @return bool
      */
-    public function updateUser(array $data, int $id): bool
+    public function updateUser(int $userId, array $userValues): bool
     {
-        $query = $this->dataManager->newQuery()->update('user')->set($data)->where(['id' => $id]);
+        $query = $this->dataManager->newQuery()->update('user')->set($userValues)->where(['id' => $userId]);
+        $str = $query->sql();
         return $query->execute()->rowCount() > 0;
     }
 

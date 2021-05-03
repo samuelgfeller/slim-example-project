@@ -49,27 +49,30 @@ class UserService
     }
 
     /**
-     * @param User $user id MUST be in object
+     * Update user values.
+     * This function is intended for changes coming from a user
+     * therefore it changes only "user changeable" general info (not password)
+     *
+     * @param int $userId
+     * @param array $userValues values to change
      * @return bool
      */
-    public function updateUser(User $user): bool
+    public function updateUser(int $userId, array $userValues): bool
     {
-        $this->userValidation->validateUserUpdate($user);
+        $user = new User($userValues);
+        $this->userValidation->validateUserUpdate($userId, $user);
 
-        $userData = [];
-        if ($user->getName() !== null) {
-            $userData['name'] = $user->getName();
+        // User values to change (cannot use object as unset values would be "null" and remove values in db)
+        $validUpdateValues = [];
+        // Data to be changed is set here. It can easily be controlled which data this function is allowed to change here
+        // instead of removing the fields that are not allowed to be edited with this function (password, role etc.)
+        if ($user->name !== null) {
+            $validUpdateValues['name'] = $user->name;
         }
-        // todo test with empty email to see if it would remove the email
-        if ($user->getEmail() !== null) {
-            $userData['email'] = $user->getEmail();
+        if ($user->email !== null) {
+            $validUpdateValues['email'] = $user->email;
         }
-        if ($user->getPassword() !== null) {
-            // passwords are already identical since they were validated in UserValidation.php
-            $userData['password_hash'] = password_hash($user->getPassword(), PASSWORD_DEFAULT);
-        }
-
-        return $this->userRepository->updateUser($userData, $user->getId());
+        return $this->userRepository->updateUser($userId, $validUpdateValues);
     }
 
     public function deleteUser($id): bool

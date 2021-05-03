@@ -33,18 +33,17 @@ class UserValidation extends AppValidation
     /**
      * Validate updating the user.
      *
+     * @param int $userId
      * @param User $user
      * @return ValidationResult
-     * @throws ValidationException
      */
-    public function validateUserUpdate(User $user): ValidationResult
+    public function validateUserUpdate(int $userId, User $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
-        $this->validateUserExistence($user->id, $validationResult);
+        $this->validateUserExistence($userId, $validationResult);
 
         $this->validateName($user->name, false, $validationResult);
         $this->validateEmail($user->email, false, $validationResult);
-        $this->validatePasswords([$user->password, $user->password2], false, $validationResult);
 
         // If the validation failed, throw the exception that will be caught in the Controller
         $this->throwOnError($validationResult);
@@ -117,13 +116,13 @@ class UserValidation extends AppValidation
      * Validate single password
      * If passwords are not empty when required is already tested in validatePasswords
      *
-     * @param string $password
+     * @param string|null $password
      * @param bool $required
      * @param ValidationResult $validationResult
      * @param string $fieldName Optional e.g. password2
      */
     public function validatePassword(
-        string $password,
+        ?string $password,
         bool $required,
         ValidationResult $validationResult,
         string $fieldName = 'password'

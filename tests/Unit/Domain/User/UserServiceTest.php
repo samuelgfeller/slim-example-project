@@ -2,15 +2,11 @@
 
 namespace App\Test\Unit\Domain\User;
 
-use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Security\SecurityService;
 use App\Domain\User\User;
 use App\Domain\User\UserService;
-use App\Domain\Utility\EmailService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
-use App\Infrastructure\User\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -51,16 +47,16 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        self::assertEquals($user, $service->findUserById($user['id']));
+        self::assertEquals($user, $service->findUserById($user->id));
     }
 
     /**
      * Test findUserByEmail() from UserService
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
-     * @param array $user
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
+     * @param User $user
      */
-    public function testFindUserByEmail(array $user): void
+    public function testFindUserByEmail(User $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($user);
@@ -69,7 +65,7 @@ class UserServiceTest extends TestCase
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        self::assertEquals($user, $service->findUserByEmail($user['email']));
+        self::assertEquals($user, $service->findUserByEmail($user->email));
     }
 
     /**
@@ -81,21 +77,21 @@ class UserServiceTest extends TestCase
     public function testUpdateUser(array $validUser): void
     {
         $userRepositoryMock = $this->mock(UserRepository::class);
-        $userRepositoryMock->method('updateUser')->willReturn(true);
+        $userRepositoryMock->expects(self::once())->method('updateUser')->willReturn(true);
         // Used in Validation to check user existence
         $userRepositoryMock->method('userExists')->willReturn(true);
 
         /** @var UserService $service */
         $service = $this->container->get(UserService::class);
 
-        self::assertTrue($service->updateUser(new User($validUser)));
+        self::assertTrue($service->updateUser($validUser['id'], $validUser));
     }
 
     /**
      * Test updateUser() with invalid users
      * Test that data from existing user is validated before being updated
      *
-     * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
+     * @dataProvider \App\Test\Provider\UserProvider::invalidUserForUpdate()
      * @param array $invalidUser
      */
     public function testUpdateUser_invalid(array $invalidUser): void
@@ -111,7 +107,7 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser(new User($invalidUser));
+        $service->updateUser($invalidUser['id'], $invalidUser);
     }
 
     /**
@@ -131,7 +127,7 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser(new User($validUser));
+        $service->updateUser($validUser['id'], $validUser);
     }
 
     /**

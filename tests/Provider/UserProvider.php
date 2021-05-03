@@ -207,6 +207,36 @@ class UserProvider
         // by another missing field.
     }
 
+    public function invalidUserForUpdate(): array
+    {
+        return [
+            // Name too short
+            [
+                [
+                    'id' => 1,
+                    'name' => 'B',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'admin'
+                ]
+            ],
+            // Invalid Email
+            [
+                [
+                    'id' => 2,
+                    'name' => 'B',
+                    'email' => 'gates@e$mail.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'admin'
+                ]
+            ],
+            ];
+    }
+
     /**
      * @return array
      */
