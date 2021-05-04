@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\User;
 
 use App\Common\Hydrator;
+use App\Domain\Auth\DTO\UserVerification;
 use App\Infrastructure\DataManager;
 
 /**
@@ -37,11 +39,12 @@ class UserVerificationRepository
      * Search and return user verification entry with token
      *
      * @param int $id
-     * @return array
+     * @return UserVerification
      */
-    public function findUserVerification(int $id): array
+    public function findUserVerification(int $id): UserVerification
     {
-        return $this->dataManager->findById('user_verification', $id);
+        $userVerificationRow = $this->dataManager->findById('user_verification', $id);
+        return new UserVerification($userVerificationRow);
     }
 
     /**
@@ -64,4 +67,21 @@ class UserVerificationRepository
         $query = $this->dataManager->newDelete('user_verification')->where(['user_id' => $userId]);
         return $query->execute()->rowCount() > 0;
     }
+
+    /**
+     * Delete verification entry with user id
+     *
+     * @param int $verificationId
+     * @return bool
+     */
+    public function setVerificationEntryToUsed(int $verificationId): bool
+    {
+        $query = $this->dataManager->newQuery();
+        $query->update('user_verification')->set(['used_at' => $query->newExpr('NOW()')])->where(
+            ['id' => $verificationId]
+        );
+        return $query->execute()->rowCount() > 0;
+    }
+
+
 }

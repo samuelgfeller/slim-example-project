@@ -89,10 +89,11 @@ final class UserSubmitUpdateAction
                 ['status' => 'warning', 'message' => 'User wasn\'t updated']
             );
         }
+        // Status 401 when not authenticated and 403 when not allowed (logged in but missing right)
         return $this->responder->respondWithJson(
             $response,
-            ['status' => 'error', 'message' => 'Please login to make the changes'],
-            403
+            ['status' => 'error', 'message' => 'Please login to make the changes.'],
+            401
         );
     }
 }

@@ -21,6 +21,7 @@ CREATE TABLE `user_verification`
     `user_id`    INT(11) UNSIGNED NOT NULL,
     `token`      VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,
     `expires`    BIGINT(20) NOT NULL,
+    `used_at`    DATETIME NULL DEFAULT NULL,
     `created_at` DATETIME NULL DEFAULT current_timestamp (),
     `deleted_at` DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`),

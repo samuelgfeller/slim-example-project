@@ -59,13 +59,18 @@ final class LoginSubmitAction
                     // Add success message to flash
                     $flash->add('success', 'Login successful');
 
+                    // After register and login success, check if user should be redirected
+                    if (isset($request->getQueryParams()['redirect'])) {
+                        return $this->responder->redirectToUrl($response, $request->getQueryParams()['redirect']);
+                    }
                     return $this->responder->redirectToRouteName($response, 'hello');
                 } catch (ValidationException $ve) {
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
                         'auth/login.html.php',
-                        $ve->getValidationResult()
+                        $ve->getValidationResult(),
+                        $request->getQueryParams()
                     );
                 } catch (InvalidCredentialsException $e) {
                     $flash->add('error', 'Invalid credentials.');
@@ -75,7 +80,12 @@ final class LoginSubmitAction
                         $e->getUserEmail() . '"'
                     );
                     $this->responder->addAttribute('formError', true);
-                    return $this->responder->render($response->withStatus(401), 'auth/login.html.php');
+                    return $this->responder->render(
+                        $response->withStatus(401),
+                        'auth/login.html.php',
+                        // Provide same query params passed to login page to be added to the login submit request
+                        ['queryParams' => $request->getQueryParams()]
+                    );
                 } catch (SecurityException $se) {
                     if (PHP_SAPI === 'cli') {
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
@@ -86,7 +96,8 @@ final class LoginSubmitAction
                         $response,
                         $se->getRemainingDelay(),
                         'auth/login.html.php',
-                        ['email' => $userData['email']]
+                        ['email' => $userData['email']],
+                        $request->getQueryParams()
                     );
                 }
             }

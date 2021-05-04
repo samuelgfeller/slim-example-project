@@ -61,6 +61,7 @@ final class UserListAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        return $this->responder->render($response, 'hello/hello.html.php');
         // getUserIdFromToken not transferred to action since it will be session based
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 

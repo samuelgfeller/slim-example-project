@@ -47,7 +47,7 @@ final class RegisterSubmitAction
 
                 try {
                     // Throws exception if there is error and returns false if user already exists
-                    $insertId = $this->authService->registerUser($userData, $captcha);
+                    $insertId = $this->authService->registerUser($userData, $captcha, $request->getQueryParams());
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email sent successfully.');
                     $flash->add(
@@ -59,14 +59,20 @@ final class RegisterSubmitAction
                     return $this->responder->renderOnValidationError(
                         $response,
                         'auth/register.html.php',
-                        $ve->getValidationResult()
+                        $ve->getValidationResult(),
+                        $request->getQueryParams()
                     );
                 } catch (\PHPMailer\PHPMailer\Exception $e) { // Not import for clarity
                     $flash->add('error', 'Email error. Please try again. Message: ' . "\n" . $e->getMessage());
                     $this->logger->error('PHPMailer exception: ' . $e->getMessage());
                     $response = $response->withStatus(500);
                     $this->responder->addAttribute('formError', true);
-                    return $this->responder->render($response, 'auth/register.html.php');
+                    return $this->responder->render(
+                        $response,
+                        'auth/register.html.php',
+                        // Provide same query params passed to register page to be added again to the submit request
+                        ['queryParams' => $request->getQueryParams()]
+                    );
                 } catch (SecurityException $se) {
                     if (PHP_SAPI === 'cli') {
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
@@ -77,7 +83,8 @@ final class RegisterSubmitAction
                         $response,
                         $se->getRemainingDelay(),
                         'auth/register.html.php',
-                        ['name' => $userData['name'], 'email' => $userData['email']]
+                        ['name' => $userData['name'], 'email' => $userData['email']],
+                        $request->getQueryParams()
                     );
                 }
 

@@ -14,7 +14,8 @@ final class RegisterAction
      * RegisterAction constructor.
      * @param Responder $responder
      */
-    public function __construct(Responder $responder) {
+    public function __construct(Responder $responder)
+    {
         $this->responder = $responder;
     }
 
@@ -26,6 +27,11 @@ final class RegisterAction
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        return $this->responder->render($response, 'auth/register.html.php');
+        return $this->responder->render(
+            $response,
+            'auth/register.html.php',
+            // Provide same query params passed to register page to be added to the register submit request
+            ['queryParams' => $request->getQueryParams()]
+        );
     }
 }

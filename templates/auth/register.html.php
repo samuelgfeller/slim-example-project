@@ -3,6 +3,7 @@
 /**@var \Odan\Session\FlashInterface $flash
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Slim\Views\PhpRenderer $this
+ * @var array $queryParams query params that should be added to form submit (e.g. redirect)
  */
 
 $this->setLayout('layout.html.php');
@@ -18,7 +19,8 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
 </div>
 
 <div class="form-box<?= isset($formError) ? ' wrong-cred-input' : '' ?>" id="register-form-box">
-    <form class="form" autocomplete="on" id="<?= $route->urlFor('register-submit') ?>" method="post">
+    <form class="form" autocomplete="on"
+          id="<?= $route->urlFor('register-submit', [], $queryParams ?? []) ?>" method="post">
         <label for="register-name-inp">Name</label>
         <input type="text" name="name" id="register-name-inp" placeholder="John Doe"
                maxlength="200" minlength="1" autofocus required value="<?= $preloadValues['name'] ?? '' ?>"
@@ -69,5 +71,6 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
         <input type="submit" class="submit-btn" id="register-submit-btn" value="Create account">
 
     </form>
-    <br>Do you already have an account? <a href="<?= $route->urlFor('login-page') ?>">Login</a>
+    <br>Do you already have an account?
+    <a href="<?= $route->urlFor('login-page', [], $queryParams ?? []) ?>">Login</a>
 </div>

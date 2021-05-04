@@ -12,7 +12,7 @@
            {% if is_current_url('hello', { 'name': 'patrick' }) %}class="active"{% endif %}>Patrick</a></li>
 </ul>
 -->
-<h1>Hello Preview<?php html($name) ?>!</h1>
+<h1>Hello <?php html($name ?? 'fellow guest!') ?>!</h1>
 <p>On the right side is the flash preview.</p>
 <br><br><br>
 

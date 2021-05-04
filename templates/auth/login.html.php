@@ -4,6 +4,7 @@ $this->setLayout('layout.html.php');
 /**
  * @var \Odan\Session\FlashInterface $flash
  * @var \Slim\Interfaces\RouteParserInterface $route
+ * @var array $queryParams query params that should be added to form submit (e.g. redirect)
  */
 ?>
 
@@ -18,7 +19,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
 <!-- If error flash array is not empty, error class is added to div -->
 <div class="form-box <?= isset($formError) ? ' wrong-cred-input' : '' ?>" id="login-form-box">
-    <form action="<?= $route->urlFor('login-submit') ?>"
+    <form action="<?= $route->urlFor('login-submit', [], $queryParams ?? []) ?>"
           id="login-form" class="form" method="post" autocomplete="on">
         <label for="loginEmailInp">Email</label>
         <input type="email" name="email" id="loginEmailInp"
@@ -46,5 +47,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
         <input type="submit" class="submit-btn" id="submitBtnLogin" value="Login">
     </form>
-    <br>Not registered? <a href="register">Register</a>
+    <br>Not registered?
+    <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">Register</a>
+
 </div>

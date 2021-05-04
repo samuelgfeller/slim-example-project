@@ -9,7 +9,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Routing\RouteContext;
 
 /**
  * User auth verification middleware
@@ -32,7 +31,7 @@ final class UserAuthMiddleware implements MiddlewareInterface
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
-    ): ResponseInterface{
+    ): ResponseInterface {
         if ($this->session->get('user_id')) {
             // User is logged in
             return $handler->handle($request);
@@ -40,6 +39,14 @@ final class UserAuthMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
-        return $this->responder->redirectToRouteName($response, 'login-page');
+        // Inform user that he/she has to login first
+        $this->session->getFlash()->add('warning', 'Please login to access this page.');
+
+        return $this->responder->redirectToRouteName(
+            $response,
+            'login-page',
+            [],
+            ['redirect' => $request->getUri()->getPath()]
+        );
     }
 }

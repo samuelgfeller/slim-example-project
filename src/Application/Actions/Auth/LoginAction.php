@@ -36,6 +36,11 @@ final class LoginAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->responder->render($response, 'auth/login.html.php');
+        return $this->responder->render(
+            $response,
+            'auth/login.html.php',
+            // Provide same query params passed to login page to be added to the login submit request
+            ['queryParams' => $request->getQueryParams()]
+        );
     }
 }

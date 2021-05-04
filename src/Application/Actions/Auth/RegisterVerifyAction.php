@@ -4,6 +4,8 @@ namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Exception\InvalidTokenException;
+use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -31,9 +33,13 @@ final class RegisterVerifyAction
         $flash = $this->session->getFlash();
 
         if (isset($queryParams['id'], $queryParams['token'])) {
-            if (true === $this->authService->verifyUser((int)$queryParams['id'], $queryParams['token'])) {
-                $flash->add('success', 'Congratulations! Account verified! <br><b>You are now logged in.</b>');
+            try {
+                $this->authService->verifyUser((int)$queryParams['id'], $queryParams['token']);
 
+                $flash->add(
+                    'success',
+                    'Congratulations! <br> You\'re account has been  verified! <br>' . '<b>You are now logged in.</b>'
+                );
                 // Log user in
                 $userId = $this->authService->getUserIdFromVerification($queryParams['id']);
                 // Clear all session data and regenerate session ID
@@ -41,16 +47,27 @@ final class RegisterVerifyAction
                 // Add user to session
                 $this->session->set('user_id', $userId);
 
+                if (isset($queryParams['redirect'])) {
+                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
+                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                }
+                return $this->responder->redirectToRouteName($response, 'home');
+            } catch (InvalidTokenException $ite) {
+                $flash->add('error', '<b>Invalid or expired link. <br>Please register again.</b>');
+                $this->logger->error('Invalid or expired token ' . json_encode($queryParams));
+                $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+                // Redirect to register page with redirect query param if set
+                return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
+            } catch (UserAlreadyVerifiedException $uave) {
+                $flash->add('info', 'You are already verified and should be able to log in.');
+                $this->logger->info('Already verified user tried to verify again.');
                 return $this->responder->redirectToRouteName($response, 'home');
             }
-            $flash->add('error', 'Invalid token');
-            $this->logger->error('Invalid token ' . json_encode($queryParams));
-            throw new HttpForbiddenException($request,'Invalid token');
         }
 
         $flash->add('error', 'Please click on the link you received via email.');
         // Prevent to log passwords
-        $this->logger->error('GET request body malformed: ' . json_encode($queryParams));
+        $this->logger->error('GET request malformed: ' . json_encode($queryParams));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
         // Error message same as in tests/Provider/UserProvider->malformedRequestBodyProvider()
         throw new HttpBadRequestException($request, 'Query params malformed.');

@@ -39,7 +39,7 @@ class UserRepository
      */
     public function findUserById(string $id): User
     {
-        $userRows = $this->dataManager->findById('user', $id, $this->fields);
+        $userRows = $this->dataManager->findById('user', $id);
         // Empty user object if not found
         return new User($userRows);
     }
@@ -58,8 +58,7 @@ class UserRepository
         $userRows = $this->dataManager->findOneBy(
             'user',
             'email',
-            $email,
-            $this->fields
+            $email
         );
         // Empty user object if not found
         return new User($userRows);
