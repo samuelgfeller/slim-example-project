@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Integration\Application\Actions\Auth;
+namespace App\Test\Integration\Actions\Auth;
 
 use App\Domain\Security\SecurityException;
 use App\Infrastructure\Security\RequestTrackRepository;

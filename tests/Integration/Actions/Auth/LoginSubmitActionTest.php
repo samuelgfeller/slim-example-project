@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Test\Integration\Application\Actions\Auth;
+namespace App\Test\Integration\Actions\Auth;
 
-use App\Application\Actions\Auth\LoginSubmitAction;
 use App\Test\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use PHPUnit\Framework\TestCase;

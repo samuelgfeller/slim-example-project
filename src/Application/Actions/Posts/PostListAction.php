@@ -53,9 +53,6 @@ final class PostListAction
     {
         $postsWithUsers = $this->postService->findAllPosts();
 
-        // output escaping only done here https://stackoverflow.com/a/20962774/9013718
-        $postsWithUsers = $this->outputEscapeService->escapeTwoDimensionalArray($postsWithUsers);
-
         return $this->responder->respondWithJson($response, $postsWithUsers);
     }
 }

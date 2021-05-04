@@ -62,7 +62,8 @@ class UserValidation extends AppValidation
     {
         // Instantiate ValidationResult Object with default message
         $validationResult = new ValidationResult('There was a validation error when trying to register');
-
+        // If user obj has null values that are validated, TypeError is thrown and that's correct as these are values
+        // coming from the client and it needs to be checked earlier (in action) that they are set accordingly
         $this->validateName($user->name, true, $validationResult);
         $this->validateEmail($user->email, true, $validationResult);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
@@ -86,7 +87,7 @@ class UserValidation extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
-        $this->validateEmail($user->password, true, $validationResult);
+        $this->validateEmail($user->email, true, $validationResult);
         $this->validatePassword($user->password, true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
@@ -149,7 +150,7 @@ class UserValidation extends AppValidation
         if (null !== $email && '' !== $email) {
             // reversed, if true -> error
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $validationResult->setError('email', 'Email address could not be validated');
+                $validationResult->setError('email', 'Invalid email address');
             }
         } elseif (true === $required && (null === $email || '' === $email)) {
             // If it is null or empty string and required

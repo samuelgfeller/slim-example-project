@@ -144,16 +144,49 @@ class UserProvider
     {
         return [
             [
-                new User([
-                    'id' => 1,
+                new User(
+                    [
+                        'id' => 1,
+                        'name' => 'Bill Gates',
+                        'email' => 'gates@email.com',
+                        'password' => '12345678',
+                        'password2' => '12345678',
+                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                        'role' => 'admin',
+                        'status' => User::STATUS_ACTIVE,
+                    ]
+                )
+            ]
+        ];
+    }
+
+    /**
+     * Provide one user in a DataProvider format
+     *
+     * @return array
+     */
+    public function oneUserObjectAndClientDataProvider(): array
+    {
+        return [
+            [
+                // User values from client form submit
+                'userData' => [
                     'name' => 'Bill Gates',
                     'email' => 'gates@email.com',
                     'password' => '12345678',
                     'password2' => '12345678',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin',
-                    'status' => User::STATUS_ACTIVE,
-                ])
+                ],
+                // User object from repository
+                'userObj' => new User(
+                    [
+                        'id' => 1,
+                        'name' => 'Bill Gates',
+                        'email' => 'gates@email.com',
+                        'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
+                        'role' => 'admin',
+                        'status' => User::STATUS_ACTIVE,
+                    ]
+                )
             ]
         ];
     }
@@ -234,7 +267,7 @@ class UserProvider
                     'role' => 'admin'
                 ]
             ],
-            ];
+        ];
     }
 
     /**
@@ -251,8 +284,6 @@ class UserProvider
                     'email' => 'gates@ema$il.com',
                     'password' => '12345678',
                     'password2' => '12345678',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin'
                 ]
             ],
             // Email not set
@@ -263,8 +294,6 @@ class UserProvider
                     'email' => '',
                     'password' => '',
                     'password2' => '12345678',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin'
                 ]
             ],
             // Password not set
@@ -275,8 +304,6 @@ class UserProvider
                     'email' => 'gates@email.com',
                     'password' => '',
                     'password2' => '12345678',
-                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                    'role' => 'admin'
                 ]
             ],
         ];
@@ -298,12 +325,12 @@ class UserProvider
             [
                 // Empty body
                 'body' => [],
-                'message' => 'Request body is empty',
+                'message' => 'Request body is empty.',
             ],
             [
                 // Body "null" (because both can happen )
                 'body' => null,
-                'message' => 'Request body is empty',
+                'message' => 'Request body is empty.',
             ],
             [
                 // 5th parameter and client trying to set role

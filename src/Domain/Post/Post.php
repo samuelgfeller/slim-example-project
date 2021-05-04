@@ -3,13 +3,15 @@
 namespace App\Domain\Post;
 
 
+use App\Domain\User\User;
 use App\Domain\Utility\ArrayReader;
 
 class Post
 {
     public ?int $id;
     public ?int $userId;
-    public string $message;
+    public ?string $message;
+    public ?User $user;
 
     /**
      * Post constructor.

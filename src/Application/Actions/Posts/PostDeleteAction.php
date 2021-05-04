@@ -75,7 +75,7 @@ final class PostDeleteAction
         $userRole = $this->authService->getUserRoleById($userId);
 
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || (int)$post['user_id'] === $userId) {
+        if ($userRole === 'admin' || $post->userId === $userId) {
             $deleted = $this->postService->deletePost($id);
             if ($deleted) {
                 return $this->responder->respondWithJson($response, ['status' => 'success']);

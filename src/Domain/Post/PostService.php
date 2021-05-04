@@ -33,9 +33,9 @@ class PostService
     /**
      * Gives all undeleted posts from db with name of user
      *
-     * @return array
+     * @return Post[]
      */
-    public function findAllPosts()
+    public function findAllPosts(): array
     {
         $allPosts = $this->postRepository->findAllPosts();
         return $this->populatePostsArrayWithUser($allPosts);
@@ -45,14 +45,13 @@ class PostService
      * Find one post in the database
      *
      * @param $id
-     * @return array
+     * @return Post
      */
-    public function findPost($id): array
+    public function findPost($id): Post
     {
-        return $this->postRepository->findPostById($id);
-        // If in the future there are more than 1 call to this function and users are needed
-        // Something similar to findAllPosts() could be done using populatePostsArrayWithUser().
-        // For one usage (PostController:get()) I didn't think it's necessary to create an extra func
+        $post = $this->postRepository->findPostById($id);
+        $post->user = $this->userService->findUserById($post->userId);
+        return $post;
     }
 
     /**
@@ -70,7 +69,7 @@ class PostService
     /**
      * Add user infos to post array
      *
-     * @param array $posts
+     * @param Post[] $posts
      * @return array
      */
     private function populatePostsArrayWithUser(array $posts): array
@@ -81,8 +80,8 @@ class PostService
             // Get user information connected to post
             $user = $this->userService->findUserById($post['user_id']);
             // If user was deleted but post not, post should not be shown since it is also technically deleted
-            if (isset($user['name'])) {
-                $post['user_name'] = $user['name'];
+            if ($user->name !== null) {
+                $post->user = $user;
                 $postsWithUser[] = $post;
             }
         }

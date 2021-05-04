@@ -12,7 +12,6 @@ use App\Domain\Utility\EmailService;
 use App\Infrastructure\User\UserRepository;
 use App\Infrastructure\User\UserVerificationRepository;
 use App\Test\AppTestTrait;
-use phpDocumentor\Reflection\Types\Self_;
 use PHPUnit\Framework\TestCase;
 
 class AuthServiceTest extends TestCase
@@ -34,8 +33,9 @@ class AuthServiceTest extends TestCase
         unset($validUser['id']);
 
         // Mock the required repository and configure relevant method return value
-        $this->mock(UserRepository::class)->method('insertUser')->willReturn($userId);
-        // findUserByEmail automatically returns null as class is mocked and no return value is set
+        $userRepo = $this->mock(UserRepository::class);
+        $userRepo->method('insertUser')->willReturn($userId);
+        $userRepo->method('findUserByEmail')->willReturn(new User());
 
         $this->mock(SecurityService::class)->expects(self::once())->method('performEmailAbuseCheck');
         $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
@@ -49,10 +49,7 @@ class AuthServiceTest extends TestCase
         /** @var AuthService $service */
         $service = $this->container->get(AuthService::class);
 
-        // Create an user object
-        $userObj = new User($validUser);
-
-        self::assertEquals($userId, $service->registerUser($userObj));
+        self::assertEquals($userId, $service->registerUser($validUser));
     }
 
     /**
@@ -72,7 +69,7 @@ class AuthServiceTest extends TestCase
         // Empty mock would do the trick as well it would just return null on non defined functions.
         // If findUserByEmail returns null, validation thinks the user doesn't exist which has to be the case
         // when creating a new user.
-        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(null);
+        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(new User());
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
         $this->mock(SecurityService::class);
         $this->mock(UserVerificationRepository::class);
@@ -83,22 +80,22 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->registerUser(new User($invalidUser));
+        $service->registerUser($invalidUser);
     }
 
     /**
      * Test registerUser() from UserService with already existing user with same email
+     * @param array $userData values from client
+     * @param User $existingUser values from repository
+     * @throws \PHPMailer\PHPMailer\Exception
      * @todo test with different statuses of existing user
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
-     * @param User $existingUser
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
      */
-    public function testRegisterUser_existingActiveUser(User $existingUser): void
+    public function testRegisterUser_existingActiveUser(array $userData, User $existingUser): void
     {
-        // Set user to active
+        // Set user to active just to make sure
         $existingUser->status = User::STATUS_ACTIVE;
-        // Removing id from user because before user is created; id is not known
-        $existingUser->id = null;
 
         // Set findUserByEmail to return user. That means that it already exists
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($existingUser);
@@ -116,38 +113,38 @@ class AuthServiceTest extends TestCase
         $service = $this->container->get(AuthService::class);
 
         // registerUser returns false when user creation failed
-        self::assertFalse($service->registerUser($existingUser));
+        self::assertFalse($service->registerUser($userData));
     }
 
 
     /**
      * Test getUserIdIfAllowedToLogin()
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
-     * @param array $validUser
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @param array $validUserData
+     * @param User $repoUser
      */
-    public function testGetUserIdIfAllowedToLogin(array $validUser): void
+    public function testGetUserIdIfAllowedToLogin(array $validUserData, User $repoUser): void
     {
-        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($repoUser);
         $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);
 
-        self::assertEquals($validUser['id'], $authService->GetUserIdIfAllowedToLogin($validUser));
+        self::assertEquals($repoUser->id, $authService->GetUserIdIfAllowedToLogin($validUserData));
     }
 
     /**
      * Test getUserIdIfAllowedToLogin() with invalid user data
      *
      * @dataProvider \App\Test\Provider\UserProvider::invalidEmailAndPasswordsUsersProvider()
-     * @param array $validUser
+     * @param array $invalidUser
      */
-    public function testGetUserIdIfAllowedToLogin_invalidData(array $validUser): void
+    public function testGetUserIdIfAllowedToLogin_invalidData(array $invalidUser): void
     {
-        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        // In case validationException is not thrown
+        $this->mock(UserRepository::class); // Not relevant what findUserByEmail returns
         $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
@@ -155,7 +152,7 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($validUser);
+        $authService->GetUserIdIfAllowedToLogin($invalidUser);
     }
 
     /**
@@ -166,8 +163,7 @@ class AuthServiceTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLogin_userNotExisting(array $validUser): void
     {
-        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn(null);
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn(new User());
         $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
@@ -182,16 +178,17 @@ class AuthServiceTest extends TestCase
      * Test getUserIdIfAllowedToLogin() with invalid password
      * important to test this method extensively for security
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
-     * @param array $validUser
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @param array $userData values from client
+     * @param User $userObj values from repository
      */
-    public function testGetUserIdIfAllowedToLogin_invalidPass(array $validUser): void
+    public function testGetUserIdIfAllowedToLogin_invalidPass(array $userData, User $userObj): void
     {
         // Add DIFFERENT password hash
-        $validUser['password_hash'] = password_hash($validUser['password'] . 'differentPass', PASSWORD_DEFAULT);
+        $userData['password_hash'] = password_hash('differentPass', PASSWORD_DEFAULT);
 
         // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($validUser);
+        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userObj);
         $this->mock(SecurityService::class); // Return null on security checks
 
         /** @var AuthService $authService */
@@ -199,7 +196,7 @@ class AuthServiceTest extends TestCase
 
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($validUser);
+        $authService->GetUserIdIfAllowedToLogin($userData);
     }
 
     /**

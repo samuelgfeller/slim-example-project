@@ -66,24 +66,24 @@ class UserService
         $userRole = $this->userRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $userIdToChange === $loggedInUserId) {
-            // User does not have needed rights to access area or function
-            $this->logger->notice(
-                'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
-            );
-            throw new ForbiddenException('Not allowed to change that user');
+            // User values to change (cannot use object as unset values would be "null" and remove values in db)
+            $validUpdateValues = [];
+            // Data to be changed is set here. It can easily be controlled which data this function is allowed to change here
+            // instead of removing the fields that are not allowed to be edited with this function (password, role etc.)
+            if ($user->name !== null) {
+                $validUpdateValues['name'] = $user->name;
+            }
+            if ($user->email !== null) {
+                $validUpdateValues['email'] = $user->email;
+            }
+            return $this->userRepository->updateUser($userIdToChange, $validUpdateValues);
         }
 
-        // User values to change (cannot use object as unset values would be "null" and remove values in db)
-        $validUpdateValues = [];
-        // Data to be changed is set here. It can easily be controlled which data this function is allowed to change here
-        // instead of removing the fields that are not allowed to be edited with this function (password, role etc.)
-        if ($user->name !== null) {
-            $validUpdateValues['name'] = $user->name;
-        }
-        if ($user->email !== null) {
-            $validUpdateValues['email'] = $user->email;
-        }
-        return $this->userRepository->updateUser($userId, $validUpdateValues);
+        // User does not have needed rights to access area or function
+        $this->logger->notice(
+            'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
+        );
+        throw new ForbiddenException('Not allowed to change that user');
     }
 
     public function deleteUser($id): bool

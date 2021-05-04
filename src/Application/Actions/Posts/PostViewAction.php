@@ -58,13 +58,10 @@ final class PostViewAction
         $id = $args['id'];
         $post = $this->postService->findPost($id);
 
-        // Get user information connected to post
-        $user = $this->userService->findUserById($post['user_id']);
-
         // Add user name info to post
         $postWithUser = $post;
-        $postWithUser['user_name'] = $user['name'];
+        $postWithUser['user_name'] = $post->user->name;
 
-        $postWithUser = $this->outputEscapeService->escapeOneDimensionalArray($postWithUser);
-        return $this->responder->respondWithJson($response, $postWithUser);    }
+        return $this->responder->respondWithJson($response, $postWithUser);
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Post;
 
 use App\Common\Hydrator;
+use App\Domain\Post\Post;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 
@@ -18,11 +19,13 @@ class PostRepository
     /**
      * Return all posts
      *
-     * @return array
+     * @return Post[]
      */
     public function findAllPosts(): array
     {
-        return $this->dataManager->findAll('post');
+        $postRows = $this->dataManager->findAll('post');
+        // Convert to list of objects
+        return $this->hydrator->hydrate($postRows, Post::class);
     }
 
     /**
@@ -30,11 +33,12 @@ class PostRepository
      * otherwise null
      *
      * @param string|int $id
-     * @return array
+     * @return Post
      */
-    public function findPostById(string|int $id): array
+    public function findPostById(string|int $id): Post
     {
-        return $this->dataManager->findById('post', $id);
+        $postRow = $this->dataManager->findById('post', $id);
+        return new Post($postRow);
     }
 
     /**

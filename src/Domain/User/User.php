@@ -27,19 +27,29 @@ class User
     public const STATUS_ACTIVE = 'active'; // Verified via token received in email
     public const STATUS_LOCKED = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
     public const STATUS_SUSPENDED = 'suspended'; // User suspended, account holder not allowed to login even via email
-    
-    public function __construct(array $userData = [])
+
+    /**
+     * User constructor.
+     * @param array $userData
+     * @param bool $limited With or without security related attributes (has to be default false e.g. for hydrate())
+     */
+    public function __construct(array $userData = [], bool $limited = false)
     {
         $arrayReader = new ArrayReader($userData);
-        // Values directly taken from client form. It should be made sure that non-allowed keys are not set but
-        // better be safe than sorry. Sensitive values like role and status can be changed later.
+        // Keys may be taken from client form or database so they have to correspond to both; otherwise use mapper
+        // ArrayReader findDatatype casts the values in the wanted format too
         $this->id = $arrayReader->findInt('id');
         $this->name = $arrayReader->findString('name');
         $this->email = $arrayReader->findString('email');
         $this->password = $arrayReader->findString('password');
         $this->password2 = $arrayReader->findString('password2');
         $this->passwordHash = $arrayReader->findString('password_hash');
-        // To make sure that role and status aren't filled with malicious data, it is not possible to set them via constructor
+
+        // Making sure that role and status aren't filled with malicious data
+        if ($limited === false){
+            $this->status = $arrayReader->findString('status');
+            $this->role = $arrayReader->findString('role');
+        }
     }
 
     /**
