@@ -54,13 +54,19 @@ final class RegisterVerifyAction
                 return $this->responder->redirectToRouteName($response, 'home');
             } catch (InvalidTokenException $ite) {
                 $flash->add('error', '<b>Invalid or expired link. <br>Please register again.</b>');
-                $this->logger->error('Invalid or expired token ' . json_encode($queryParams));
+                $this->logger->error('Invalid or expired token user_verification' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
                 // Redirect to register page with redirect query param if set
                 return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
                 $flash->add('info', 'You are already verified and should be able to log in.');
-                $this->logger->info('Already verified user tried to verify again.');
+                $this->logger->info(
+                    'Already verified user tried to verify again. user_verification id: ' . $queryParams['id']
+                );
+                if (isset($queryParams['redirect'])) {
+                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
+                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                }
                 return $this->responder->redirectToRouteName($response, 'home');
             }
         }

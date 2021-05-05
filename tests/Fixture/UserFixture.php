@@ -16,7 +16,7 @@ class UserFixture
             'id' => 1,
             'name' => 'Admin Example',
             'email' => 'admin@example.com',
-            // Cleartext password is 12345678 and is used in
+            // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1uLrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
             'role' => 'admin',
             'updated_at' => null,

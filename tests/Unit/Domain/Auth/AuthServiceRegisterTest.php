@@ -83,6 +83,7 @@ class AuthServiceRegisterTest extends TestCase
 
     /**
      * Test registerUser() from UserService with already existing user with same email
+     *
      * @param array $userData values from client
      * @param User $existingUser values from repository
      * @throws \PHPMailer\PHPMailer\Exception
