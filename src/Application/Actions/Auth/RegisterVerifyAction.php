@@ -31,7 +31,7 @@ final class RegisterVerifyAction
     {
         $queryParams = $request->getQueryParams();
         $flash = $this->session->getFlash();
-
+        // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
             try {
                 $this->authService->verifyUser((int)$queryParams['id'], $queryParams['token']);

@@ -20,12 +20,11 @@ class UserVerification
     public ?string $createdAt;
 
     /**
-     * User constructor.
-     * @param array $userData
+     * @param array $verificationData
      */
-    public function __construct(array $userData = [])
+    public function __construct(array $verificationData = [])
     {
-        $arrayReader = new ArrayReader($userData);
+        $arrayReader = new ArrayReader($verificationData);
         // ArrayReader find*() casts the values in the given format
         $this->id = $arrayReader->findInt('id');
         $this->userId = $arrayReader->findInt('user_id');
