@@ -8,6 +8,7 @@ use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
+use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 
 class UserServiceTest extends TestCase
@@ -81,10 +82,10 @@ class UserServiceTest extends TestCase
         // Used in Validation to check user existence
         $userRepositoryMock->method('userExists')->willReturn(true);
 
-        /** @var UserService $service */
+        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
-        self::assertTrue($service->updateUser($validUser['id'], $validUser));
+        self::assertTrue($service->updateUser($validUser['id'], $validUser, $loggedInUserId));
     }
 
     /**
@@ -102,12 +103,12 @@ class UserServiceTest extends TestCase
         // could not be tested
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
 
-        /** @var UserService $service */
+        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser($invalidUser['id'], $invalidUser);
+        $service->updateUser($invalidUser['id'], $invalidUser, $loggedInUserId);
     }
 
     /**
@@ -122,12 +123,12 @@ class UserServiceTest extends TestCase
         // Point of this test is not existing user
         $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
 
-        /** @var UserService $service */
+        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser($validUser['id'], $validUser);
+        $service->updateUser($validUser['id'], $validUser, $loggedInUserId);
     }
 
     /**
@@ -149,7 +150,7 @@ class UserServiceTest extends TestCase
 
         $this->mock(UserRepository::class)
             ->expects(self::once())
-            ->method('deleteUser')
+            ->method('deleteUserById')
             ->with(self::equalTo($userId))
             ->willReturn(true);
 

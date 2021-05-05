@@ -104,7 +104,7 @@ class RegisterSubmitActionTest extends TestCase
             // Same keys than HTML form
             [
                 'name' => 'Admin Example',
-                'email' => 'contact@samuel-gfeller.ch', // Has to be valid for mailgun test servers
+                'email' => 'admin@example.com', // Has to be valid for mailgun test servers
                 'password' => '12345678',
                 'password2' => '12345678',
             ]

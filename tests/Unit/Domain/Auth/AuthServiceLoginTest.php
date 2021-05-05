@@ -107,7 +107,7 @@ class AuthServiceLoginTest extends TestCase
      */
     public function testGetUserRoleById(array $user): void
     {
-        $this->mock(UserRepository::class)->method('getUserRole')->willReturn($user['role']);
+        $this->mock(UserRepository::class)->method('getUserRoleById')->willReturn($user['role']);
 
         /** @var AuthService $authService */
         $authService = $this->container->get(AuthService::class);

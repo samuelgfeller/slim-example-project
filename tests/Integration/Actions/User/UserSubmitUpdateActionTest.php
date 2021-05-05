@@ -11,6 +11,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing user update Process
@@ -185,8 +186,11 @@ class UserSubmitUpdateActionTest extends TestCase
         $response = $this->app->handle($request);
         // Before it even accesses the action class, the UserAuthMiddleware catches the request and redirects to login
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-        // Assert that it redirected to the login page
-        self::assertSame($this->urlFor('login-page'), $response->getHeaderLine('Location'));
+        // Assert that it redirected to the login page with correct redirect get param back to users/1
+        self::assertSame(
+            $this->urlFor('login-page', [], ['redirect' => '/users/1']),
+            $response->getHeaderLine('Location')
+        );
 
         // Admin user should be unchanged (same as in fixture)
         $expected = [

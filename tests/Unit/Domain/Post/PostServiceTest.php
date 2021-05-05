@@ -51,7 +51,7 @@ class PostServiceTest extends TestCase
         // Add mock class PostRepository to container and define return value for method findPostById
         // I dont see the necessity of expecting method to be called. If we get the result we want
         // we can let the code free how it returns it (don't want annoying test that fails after slight code change)
-        $this->mock(PostRepository::class)->method('findPostById')->willReturn($post);
+        $this->mock(PostRepository::class)->method('findPostById')->willReturn(new Post($post));
 
         // Get an empty class instance from container
         /** @var PostService $service */
@@ -229,7 +229,7 @@ class PostServiceTest extends TestCase
     {
         // Only the name is relevant for the private function PostService:populatePostsArrayWithUser()
         $userName = 'John Example';
-        $this->mock(UserService::class)->method('findUser')
+        $this->mock(UserService::class)->method('findUserById')
             ->willReturn(['name' => $userName]);
 
         // Add name of user to posts array

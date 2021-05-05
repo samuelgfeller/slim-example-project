@@ -392,7 +392,7 @@ class UserProvider
     public function loginUserProvider(): array
     {
         return [
-            // Invalid
+            // Invalid password
             [
                 [
                     // Same keys than HTML form
