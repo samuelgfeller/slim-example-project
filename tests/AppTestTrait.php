@@ -5,12 +5,11 @@ namespace App\Test;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\MockTestTrait;
 use Slim\App;
-use InvalidArgumentException;
 use UnexpectedValueException;
 
 /**
@@ -22,6 +21,7 @@ trait AppTestTrait
 {
 
     use HttpTestTrait;
+    use MockTestTrait;
 
     protected ContainerInterface $container;
 
@@ -71,18 +71,5 @@ trait AppTestTrait
             $_ENV['AUTO_XDEBUG_DISABLED'] = true;
 //            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
         }
-    }
-
-    protected function mock(string $class): MockObject
-    {
-        if (!class_exists($class)) {
-            throw new InvalidArgumentException(sprintf('Class not found: %s', $class));
-        }
-
-        $mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
-
-        $this->container->set($class, $mock);
-
-        return $mock;
     }
 }
