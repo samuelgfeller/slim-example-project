@@ -118,7 +118,7 @@ class ValidationResult
      */
     public function clear(): void
     {
-        $this->message = null;
+        $this->message = '';
         $this->errors = [];
     }
 

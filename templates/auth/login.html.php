@@ -5,6 +5,7 @@ $this->setLayout('layout.html.php');
  * @var \Odan\Session\FlashInterface $flash
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams query params that should be added to form submit (e.g. redirect)
+ * @var null|array $validation validation errors and messages (may be undefined, MUST USE NULL COALESCING)
  */
 ?>
 
@@ -26,20 +27,16 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
                placeholder="your@email.com"
                maxlength="254"
                required value="<?= $preloadValues['email'] ?? '' ?>"
-            <?php
-            // If name validation failed (ternary not possible here as it doesn't allow to assign var in condition)
-            if (isset($validation) && $nameErr = get_field_error($validation, 'email')) {
-                echo 'class = "wrong-cred-input"';
-            } ?>>
-        <?= isset($nameErr) ? '<strong class="err-msg">' . $nameErr . '</strong>' : '' ?>
+               class="<?= //If there is an error on a specific field, echo error class
+               ($emailErr = get_field_error(($validation ?? []), 'email')) ? 'wrong-cred-input' : '' ?>"
+        >
+        <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
 
         <label for="loginPasswordInp">Password</label>
         <input type="password" name="password" id="loginPasswordInp" minlength="3" required
-            <?php
-            // If password validation failed
-            if (isset($validation) && $passwordErr = get_field_error($validation, 'password')) {
-                echo 'class = "wrong-cred-input"';
-            } ?>>
+               class="<?= //If there is an error on a specific field, echo error class
+               ($passwordErr = get_field_error(($validation ?? []), 'password')) ? 'wrong-cred-input' : '' ?>"
+        >
         <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
         <!--                <br><a class="discrete-link" href="login/password/reset/mail">Lost password?</a>-->
         <!-- reCaptcha -->

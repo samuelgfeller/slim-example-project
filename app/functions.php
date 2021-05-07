@@ -21,9 +21,11 @@ function html(string $text = null): string
  */
 function get_field_error(array $validation, string $field): string|null
 {
-    $key = array_search($field, array_column($validation['errors'], 'field'), false);
-    if ($key !== false){
-        return $validation['errors'][$key]['message'];
+    if ($validation !== []) {
+        $key = array_search($field, array_column($validation['errors'], 'field'), false);
+        if ($key !== false) {
+            return $validation['errors'][$key]['message'];
+        }
     }
     return null;
 }
