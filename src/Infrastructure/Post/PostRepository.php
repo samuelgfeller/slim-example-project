@@ -6,6 +6,7 @@ namespace App\Infrastructure\Post;
 
 use App\Common\Hydrator;
 use App\Domain\Post\Post;
+use App\Domain\User\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 
@@ -17,15 +18,29 @@ class PostRepository
     }
 
     /**
-     * Return all posts
+     * Return all posts with users attribute loaded
      *
      * @return Post[]
      */
-    public function findAllPosts(): array
+    public function findAllPostsWithUsers(): array
     {
-        $postRows = $this->dataManager->findAll('post');
-        // Convert to list of objects
-        return $this->hydrator->hydrate($postRows, Post::class);
+        $query = $this->dataManager->newQuery()->from('post');
+        $query->select(
+            [
+                'post_message' => 'post.message',
+                'post_updated_at' => 'post.updated_at',
+                'post_created_at' => 'post.created_at',
+                'user_name' => 'user.name',
+                'user_email' => 'user.email',
+                'user_role' => 'user.role',
+                'user_status' => 'user.status',
+            ]
+        )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
+            ['post.deleted_at IS' => null]
+        );
+        $resultRows = $query->execute()->fetchAll('assoc');
+        // Convert to list of Post objects with associated User
+        return $this->hydrator->hydrateAggregates($resultRows, [Post::class, 'post_'], [[User::class, 'user_', 'user']]);
     }
 
     /**
@@ -57,12 +72,14 @@ class PostRepository
     /**
      * Return all posts which are linked to the given user
      *
-     * @param $userId
-     * @return array
+     * @param int $userId
+     * @return Post[]
      */
     public function findAllPostsByUserId(int $userId): array
     {
-        return $this->dataManager->findAllBy('post', 'user_id', $userId);
+        $postRows = $this->dataManager->findAllBy('post', 'user_id', $userId);
+        // Convert to list of objects
+        return $this->hydrator->hydrate($postRows, Post::class);
     }
 
     /**
