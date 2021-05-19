@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\User;
 
 use App\Common\Hydrator;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 

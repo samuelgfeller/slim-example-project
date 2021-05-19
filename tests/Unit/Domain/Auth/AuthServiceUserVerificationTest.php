@@ -6,7 +6,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Auth\DTO\UserVerification;
 use App\Domain\Auth\Exception\InvalidTokenException;
 use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
 use App\Infrastructure\User\UserVerificationRepository;
 use App\Test\AppTestTrait;

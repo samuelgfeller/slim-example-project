@@ -4,7 +4,7 @@ namespace App\Test\Unit\Domain\Post;
 
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostFinder;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 use App\Test\AppTestTrait;

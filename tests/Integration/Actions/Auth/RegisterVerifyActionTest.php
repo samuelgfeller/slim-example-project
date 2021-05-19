@@ -3,7 +3,7 @@
 namespace App\Test\Integration\Actions\Auth;
 
 use App\Domain\Auth\DTO\UserVerification;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use App\Test\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;

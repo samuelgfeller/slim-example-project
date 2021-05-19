@@ -5,6 +5,7 @@ namespace App\Application\Actions\Users;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Service\UserFinder;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
@@ -24,13 +25,13 @@ final class UserViewProfileAction
      *
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
-     * @param UserService $userService
+     * @param UserFinder $userFinder
      * @param SessionInterface $session
      */
     public function __construct(
         private Responder $responder,
         LoggerFactory $logger,
-        private UserService $userService,
+        private UserFinder $userFinder,
         private SessionInterface $session
     ) {
         $this->logger = $logger->addFileHandler('error.log')
@@ -56,14 +57,14 @@ final class UserViewProfileAction
 
 
         if (($userId = $this->session->get('user_id')) !== null){
-            $user = $this->userService->findUserById($userId);
+            $user = $this->userFinder->findUserById($userId);
         }
 
         $userRole = $this->authService->getUserRoleById($loggedUserId);
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
-            $user = $this->userService->findUserById($id);
+            $user = $this->userFinder->findUserById($id);
             $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
             return $this->responder->respondWithJson($response, $user);
         }

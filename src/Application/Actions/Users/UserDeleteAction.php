@@ -5,6 +5,7 @@ namespace App\Application\Actions\Users;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Service\UserDeleter;
 use App\Domain\User\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,27 +19,24 @@ final class UserDeleteAction
 
     protected LoggerInterface $logger;
 
-    protected UserService $userService;
-
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
-     * @param UserService $userService
+     * @param UserDeleter $userDeleter
      * @param AuthService $authService
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
-        UserService $userService,
+        private UserDeleter $userDeleter,
         AuthService $authService
     ) {
         $this->responder = $responder;
         $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('user-delete');
-        $this->userService = $userService;
     }
 
     /**
@@ -71,7 +69,7 @@ final class UserDeleteAction
                 return $this->responder->respondWithJsonOnValidationError($validationResult, $response);
             }
 
-            $deleted = $this->userService->deleteUser($id);
+            $deleted = $this->userDeleter->deleteUser($id);
             if ($deleted) {
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'message' => 'User deleted']);
             }

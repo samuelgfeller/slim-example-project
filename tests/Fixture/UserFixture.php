@@ -2,7 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 
 /**
  * User values that can be inserted into the database

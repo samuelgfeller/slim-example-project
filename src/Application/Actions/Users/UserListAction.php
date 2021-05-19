@@ -5,6 +5,7 @@ namespace App\Application\Actions\Users;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Service\UserFinder;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
@@ -22,8 +23,6 @@ final class UserListAction
 
     protected LoggerInterface $logger;
 
-    protected UserService $userService;
-
     protected OutputEscapeService $outputEscapeService;
 
 
@@ -32,14 +31,14 @@ final class UserListAction
      *
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
-     * @param UserService $userService
+     * @param UserFinder $userFinder
      * @param AuthService $authService
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
-        UserService $userService,
+        private UserFinder $userFinder,
         AuthService $authService,
         OutputEscapeService $outputEscapeService
     ) {
@@ -47,7 +46,6 @@ final class UserListAction
         $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('user-list');
-        $this->userService = $userService;
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -68,7 +66,7 @@ final class UserListAction
         $userRole = $this->authService->getUserRoleById($loggedUserId);
 
         if ($userRole === 'admin') {
-            $allUsers = $this->userService->findAllUsers();
+            $allUsers = $this->userFinder->findAllUsers();
 
             // Output has to be escaped since PHP-View doesn't have a protection against XSS-attacks
 //            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);

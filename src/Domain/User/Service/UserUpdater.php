@@ -1,51 +1,25 @@
 <?php
 
 
-namespace App\Domain\User;
+namespace App\Domain\User\Service;
+
 
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Infrastructure\Post\PostRepository;
+use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
 use Psr\Log\LoggerInterface;
 
-class UserService
+class UserUpdater
 {
+    private LoggerInterface $logger;
 
-    protected LoggerInterface $logger;
-
-    // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
     public function __construct(
+        private UserValidator $userValidator,
         private UserRepository $userRepository,
-        protected UserValidator $userValidator,
-        LoggerFactory $logger,
-        protected PostRepository $postRepository
+        LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
-    }
-
-    /**
-     * @return User[]
-     */
-    public function findAllUsers(): array
-    {
-        return $this->userRepository->findAllUsers();
-    }
-
-    public function findUserById(string $id): User
-    {
-        return $this->userRepository->findUserById($id);
-    }
-
-    /**
-     * Find active user via email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function findUserByEmail(string $email): User
-    {
-        return $this->userRepository->findUserByEmail($email);
     }
 
     /**
@@ -85,11 +59,4 @@ class UserService
         );
         throw new ForbiddenException('Not allowed to change that user');
     }
-
-    public function deleteUser($id): bool
-    {
-        $this->postRepository->deletePostsFromUser($id);
-        return $this->userRepository->deleteUserById($id);
-    }
-
 }

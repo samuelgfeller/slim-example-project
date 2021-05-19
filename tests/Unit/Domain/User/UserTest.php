@@ -4,7 +4,7 @@
 namespace App\Test\Unit\Domain\User;
 
 
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase

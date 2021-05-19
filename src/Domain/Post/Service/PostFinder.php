@@ -5,9 +5,16 @@ namespace App\Domain\Post\Service;
 
 
 use App\Domain\Post\DTO\Post;
+use App\Domain\User\Service\UserFinder;
+use App\Infrastructure\Post\PostRepository;
 
 class PostFinder
 {
+    public function __construct(
+        private PostRepository $postRepository,
+        private UserFinder $userFinder
+    ) { }
+
     /**
      * Gives all undeleted posts from db with name of user
      *
@@ -28,7 +35,7 @@ class PostFinder
     public function findPost($id): Post
     {
         $post = $this->postRepository->findPostById($id);
-        $post->user = $this->userService->findUserById($post->userId);
+        $post->user = $this->userFinder->findUserById($post->userId);
         return $post;
     }
 
@@ -56,7 +63,7 @@ class PostFinder
         $postsWithUser = [];
         foreach ($posts as $post) {
             // Get user information connected to post
-            $user = $this->userService->findUserById($post['user_id']);
+            $user = $this->userFinder->findUserById($post['user_id']);
             // If user was deleted but post not, post should not be shown since it is also technically deleted
             if ($user->name !== null) {
                 $post->user = $user;

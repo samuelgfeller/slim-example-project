@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Domain\User;
+namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\DTO\User;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;

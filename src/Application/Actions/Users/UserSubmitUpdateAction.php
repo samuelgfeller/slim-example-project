@@ -7,6 +7,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Service\UserUpdater;
 use App\Domain\User\UserService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,21 +22,19 @@ final class UserSubmitUpdateAction
 
     protected LoggerInterface $logger;
 
-    protected UserService $userService;
-
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
-     * @param UserService $userService
+     * @param UserUpdater $userUpdater
      * @param AuthService $authService
      * @param SessionInterface $session
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
-        UserService $userService,
+        private UserUpdater $userUpdater,
         AuthService $authService,
         private SessionInterface $session
 
@@ -43,7 +42,6 @@ final class UserSubmitUpdateAction
         $this->responder = $responder;
         $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-update');
-        $this->userService = $userService;
     }
 
     /**
@@ -66,7 +64,7 @@ final class UserSubmitUpdateAction
             $userValuesToChange = $request->getParsedBody();
 
             try {
-                $updated = $this->userService->updateUser($userIdToChange, $userValuesToChange, $loggedInUserId);
+                $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange, $loggedInUserId);
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),

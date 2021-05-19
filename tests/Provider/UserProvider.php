@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider;
 
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 
 /**
  * Provide users to fill entities

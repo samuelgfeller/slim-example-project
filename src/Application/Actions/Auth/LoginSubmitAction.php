@@ -9,7 +9,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
 use App\Domain\Security\SecurityService;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;

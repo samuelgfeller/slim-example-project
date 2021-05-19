@@ -6,7 +6,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\SecurityService;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use App\Domain\User\UserService;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;

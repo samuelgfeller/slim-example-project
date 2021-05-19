@@ -3,7 +3,7 @@
 namespace App\Test\Provider;
 
 use App\Domain\Post\DTO\Post;
-use App\Domain\User\User;
+use App\Domain\User\DTO\User;
 use JetBrains\PhpStorm\ArrayShape;
 
 class PostProvider

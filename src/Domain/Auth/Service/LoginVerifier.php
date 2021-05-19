@@ -5,8 +5,8 @@ namespace App\Domain\Auth\Service;
 
 
 use App\Domain\Exceptions\InvalidCredentialsException;
-use App\Domain\User\User;
-use App\Domain\User\UserValidator;
+use App\Domain\User\DTO\User;
+use App\Domain\User\Service\UserValidator;
 
 class LoginVerifier
 {
