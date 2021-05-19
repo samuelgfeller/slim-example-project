@@ -8,6 +8,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostFinder;
+use App\Domain\Post\Service\PostUpdater;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,7 +23,6 @@ final class PostUpdateAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
     protected LoggerInterface $logger;
     protected OutputEscapeService $outputEscapeService;
     protected AuthService $authService;
@@ -33,6 +33,7 @@ final class PostUpdateAction
      *
      * @param Responder $responder The responder
      * @param PostFinder $postFinder
+     * @param PostUpdater $postUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
      * @param AuthService $authService
@@ -40,6 +41,7 @@ final class PostUpdateAction
     public function __construct(
         Responder $responder,
         private PostFinder $postFinder,
+        private PostUpdater $postUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
         AuthService $authService
@@ -85,7 +87,7 @@ final class PostUpdateAction
                 $post->id = $postFromDb['id'];
 
                 try {
-                    $updated = $this->postService->updatePost($post);
+                    $updated = $this->postUpdater->updatePost($post);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),

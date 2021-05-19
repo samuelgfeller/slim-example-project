@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider;
 
-use App\Domain\Post\Post;
+use App\Domain\Post\DTO\Post;
 use App\Domain\User\User;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -42,7 +42,7 @@ class PostProvider
      */
     #[ArrayShape([
         [
-            'posts' => "\App\Domain\Post\Post[]",
+            'posts' => "\App\Domain\Post\DTO\Post[]",
             'user' => "\App\Domain\User\User"
         ]
     ])] public function oneSetOfMultiplePostsProvider(): array

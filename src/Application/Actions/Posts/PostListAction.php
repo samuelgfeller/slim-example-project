@@ -3,9 +3,7 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\PostFinder;
 use App\Domain\Post\Service\PostFinder;
-use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +17,6 @@ final class PostListAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostFinder $postService;
     protected OutputEscapeService $outputEscapeService;
 
 

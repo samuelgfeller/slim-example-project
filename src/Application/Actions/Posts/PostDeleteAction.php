@@ -5,7 +5,6 @@ namespace App\Application\Actions\Posts;
 use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\PostService;
 use App\Domain\Post\Service\PostDeleter;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\Validation\OutputEscapeService;

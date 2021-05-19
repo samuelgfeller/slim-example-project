@@ -3,8 +3,7 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\PostService;
-use App\Domain\User\UserService;
+use App\Domain\Post\Service\PostFinder;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,7 +17,6 @@ final class PostViewOwnAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
     protected OutputEscapeService $outputEscapeService;
 
 
@@ -26,16 +24,15 @@ final class PostViewOwnAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostFinder $postFinder
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
-        PostService $postService,
+        private PostFinder $postFinder,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -56,7 +53,7 @@ final class PostViewOwnAction
 
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $posts = $this->postService->findAllPostsFromUser($loggedUserId);
+        $posts = $this->postFinder->findAllPostsFromUser($loggedUserId);
 
         $posts = $this->outputEscapeService->escapeTwoDimensionalArray($posts);
 

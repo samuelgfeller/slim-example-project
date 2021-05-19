@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\PostService;
+use App\Domain\Post\Service\PostFinder;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
@@ -18,7 +18,6 @@ final class PostViewAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
     protected UserService $userService;
     protected OutputEscapeService $outputEscapeService;
 
@@ -27,18 +26,17 @@ final class PostViewAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostFinder $postFinder
      * @param UserService $userService
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
-        PostService $postService,
+        private PostFinder $postFinder,
         UserService $userService,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
         $this->userService = $userService;
         $this->outputEscapeService = $outputEscapeService;
     }
@@ -56,7 +54,7 @@ final class PostViewAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = $args['id'];
-        $post = $this->postService->findPost($id);
+        $post = $this->postFinder->findPost($id);
 
         // Add user name info to post
         $postWithUser = $post;
