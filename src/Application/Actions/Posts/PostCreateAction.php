@@ -4,8 +4,8 @@ namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\Post;
-use App\Domain\Post\PostService;
+use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Service\PostCreator;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,6 @@ final class PostCreateAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
     protected OutputEscapeService $outputEscapeService;
 
 
@@ -27,14 +26,13 @@ final class PostCreateAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostCreator $postCreator
      */
     public function __construct(
         Responder $responder,
-        PostService $postService
+        private PostCreator $postCreator
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
     }
 
     /**
@@ -57,7 +55,7 @@ final class PostCreateAction
             $post->userId = $userId;
 
             try {
-                $insertId = $this->postService->createPost($post);
+                $insertId = $this->postCreator->createPost($post);
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError($exception->getValidationResult(), $response);
             }

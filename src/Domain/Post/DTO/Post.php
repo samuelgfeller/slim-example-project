@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Post;
+namespace App\Domain\Post\DTO;
 
 
 use App\Domain\User\User;
@@ -11,6 +11,9 @@ class Post
     public ?int $id;
     public ?int $userId;
     public ?string $message;
+    public ?string $createdAt;
+    public ?string $updatedAt;
+    public ?string $deletedAt;
     public ?User $user;
 
     /**
@@ -21,7 +24,10 @@ class Post
         $arrayReader = new ArrayReader($postData);
         $this->id = $arrayReader->findInt('id');
         $this->userId = $arrayReader->findInt('user_id');
-        $this->message = $arrayReader->getString('message');
+        $this->message = $arrayReader->findString('message');
+        $this->createdAt = $arrayReader->findString('created_at');
+        $this->updatedAt = $arrayReader->findString('updated_at');
+        $this->deletedAt = $arrayReader->findString('deleted_at');
     }
 
     /**

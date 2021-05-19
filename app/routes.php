@@ -47,9 +47,9 @@ return function (App $app) {
             $group->get('', \App\Application\Actions\Posts\PostListAction::class)->setName('post-list-all');
             $group->post('', \App\Application\Actions\Posts\PostCreateAction::class);
 
-            $group->get('/{id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
-            $group->put('/{id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class);
-            $group->delete('/{id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class);
+            $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostViewAction::class);
+            $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class);
+            $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class);
         }
     )->add(UserAuthMiddleware::class);
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Post;
 
 use App\Common\Hydrator;
-use App\Domain\Post\Post;
+use App\Domain\Post\DTO\Post;
 use App\Domain\User\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;

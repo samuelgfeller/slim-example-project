@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Post;
+namespace App\Domain\Post\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
@@ -9,15 +9,15 @@ use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;
 
 /**
- * Class UserValidation
+ * Class PostValidator
  */
-class PostValidation extends AppValidation
+class PostValidator extends AppValidation
 {
     /** @var UserRepository */
     private UserRepository $userRepository;
 
     /**
-     * UserValidation constructor.
+     * PostValidator constructor.
      *
      * @param LoggerFactory $logger
      * @param UserRepository $userRepository
@@ -68,7 +68,7 @@ class PostValidation extends AppValidation
 
     /**
      * Check if user exists
-     * Same function than in UserValidation. Here again because as the functionalities
+     * Same function than in UserValidator. Here again because as the functionalities
      * grow, there could be other uses for the UserRepository. Maybe not though.
      *
      * @param $userId

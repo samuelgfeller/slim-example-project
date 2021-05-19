@@ -19,7 +19,7 @@ abstract class AppValidation
      * be instantiated otherwise
      *
      * @param LoggerInterface $logger instance created via factory in child classes
-     * (like UserValidation.php)
+     * (like UserValidator.php)
      */
     public function __construct(LoggerInterface $logger)
     {

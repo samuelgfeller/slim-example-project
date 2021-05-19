@@ -7,7 +7,7 @@ CREATE TABLE `user`
     `role`          VARCHAR(50)  NOT NULL DEFAULT 'user' COLLATE utf8mb4_unicode_ci,
     `status`        ENUM('active','locked', 'unverified', 'suspended') NULL DEFAULT 'unverified' COLLATE utf8mb4_unicode_ci,
     `updated_at`    DATETIME NULL DEFAULT current_timestamp () ON UPDATE current_timestamp (),
-    `created_at`    DATETIME NULL DEFAULT current_timestamp (),
+    `created_at`    DATETIME NOT NULL DEFAULT current_timestamp (),
     `deleted_at`    DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) COLLATE=utf8mb4_unicode_ci
@@ -51,7 +51,7 @@ CREATE TABLE `post`
     `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`    INT(11) UNSIGNED NOT NULL,
     `message`    VARCHAR(500) NULL DEFAULT NULL,
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP (),
+    `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP (),
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     `deleted_at` DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`),

@@ -66,7 +66,7 @@ final class UserDeleteAction
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
             // todo [SLE-30] Validate User deletion in Domain instead of Action
-            $validationResult = $this->userValidation->validateDeletion($id, $loggedUserId);
+            $validationResult = $this->userValidator->validateDeletion($id, $loggedUserId);
             if ($validationResult->fails()) {
                 return $this->responder->respondWithJsonOnValidationError($validationResult, $response);
             }

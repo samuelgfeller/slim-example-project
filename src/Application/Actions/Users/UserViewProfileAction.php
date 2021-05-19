@@ -7,6 +7,7 @@ use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -14,17 +15,9 @@ use Psr\Log\LoggerInterface;
 /**
  * Action.
  */
-final class UserViewAction
+final class UserViewProfileAction
 {
-    private Responder $responder;
-
-    protected AuthService $authService;
-
     protected LoggerInterface $logger;
-
-    protected UserService $userService;
-
-    protected OutputEscapeService $outputEscapeService;
 
     /**
      * The constructor.
@@ -32,23 +25,16 @@ final class UserViewAction
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
      * @param UserService $userService
-     * @param AuthService $authService
-     * @param OutputEscapeService $outputEscapeService
+     * @param SessionInterface $session
      */
     public function __construct(
-        Responder $responder,
+        private Responder $responder,
         LoggerFactory $logger,
-        UserService $userService,
-        AuthService $authService,
-        OutputEscapeService $outputEscapeService
-
+        private UserService $userService,
+        private SessionInterface $session
     ) {
-        $this->responder = $responder;
-        $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('auth-view');
-        $this->userService = $userService;
-        $this->outputEscapeService = $outputEscapeService;
     }
 
     /**
@@ -67,15 +53,17 @@ final class UserViewAction
         array $args
     ): ResponseInterface {
         // getUserIdFromToken not transferred to action since it will be session based
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $id = (int)$args['id'];
 
-        $userRole = $this->authService->getUserRole($loggedUserId);
+        if (($userId = $this->session->get('user_id')) !== null){
+            $user = $this->userService->findUserById($userId);
+        }
+
+        $userRole = $this->authService->getUserRoleById($loggedUserId);
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
-            $user = $this->userService->findUser($id);
+            $user = $this->userService->findUserById($id);
             $user = $this->outputEscapeService->escapeOneDimensionalArray($user);
             return $this->responder->respondWithJson($response, $user);
         }

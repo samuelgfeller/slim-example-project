@@ -3,7 +3,8 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\PostService;
+use App\Domain\Post\PostFinder;
+use App\Domain\Post\Service\PostFinder;
 use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
@@ -18,7 +19,7 @@ final class PostListAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
+    protected PostFinder $postService;
     protected OutputEscapeService $outputEscapeService;
 
 
@@ -26,16 +27,15 @@ final class PostListAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostFinder $postFinder
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
-        PostService $postService,
+        private PostFinder $postFinder,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -51,7 +51,7 @@ final class PostListAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $postsWithUsers = $this->postService->findAllPosts();
+        $postsWithUsers = $this->postFinder->findAllPostsWithUsers();
 
         return $this->responder->respondWithJson($response, $postsWithUsers);
     }

@@ -2,6 +2,10 @@
 
 namespace App\Test\Provider;
 
+use App\Domain\Post\Post;
+use App\Domain\User\User;
+use JetBrains\PhpStorm\ArrayShape;
+
 class PostProvider
 {
     public array $samplePosts = [
@@ -13,15 +17,47 @@ class PostProvider
     ];
 
     /**
+     * Most of the functions returning posts are expected to automatically
+     * populate the Post object with its according user
+     * @return User
+     */
+    private function getGenericUser(): User
+    {
+        return new User(
+            [
+                'id' => 1,
+                'name' => 'John Wick',
+                'email' => 'john@wick.com',
+                'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
+                'status' => User::STATUS_ACTIVE,
+                'role' => 'admin',
+            ]
+        );
+    }
+
+    /**
      * Provide a set of posts in a DataProvider format
      *
-     * @return array of posts
+     * @return array<array<string, Post[]|User>>
      */
-    public function oneSetOfMultiplePostsProvider(): array
+    #[ArrayShape([
+        [
+            'posts' => "\App\Domain\Post\Post[]",
+            'user' => "\App\Domain\User\User"
+        ]
+    ])] public function oneSetOfMultiplePostsProvider(): array
     {
+        // Array that is expected for repository functions like findAllPostsWithUsers()
         return [
             [
-                $this->samplePosts,
+                'posts' => [
+                    new Post(['id' => 1, 'user_id' => 1, 'message' => 'This is the first test message',]),
+                    new Post(['id' => 2, 'user_id' => 1, 'message' => 'This is the second test message',]),
+                    new Post(['id' => 3, 'user_id' => 1, 'message' => 'This is the third test message',]),
+                    new Post(['id' => 4, 'user_id' => 1, 'message' => 'This is the fourth test message',]),
+                    new Post(['id' => 5, 'user_id' => 1, 'message' => 'This is the fifth test message',]),
+                ],
+                'user' => $this->getGenericUser(), // Linked user
             ],
         ];
     }
@@ -29,13 +65,13 @@ class PostProvider
     /**
      * Provide one user in a DataProvider format
      *
-     * @return array
+     * @return array<array<Post>>
      */
     public function onePostProvider(): array
     {
         return [
             [
-                ['id' => 1, 'user_id' => 1, 'message' => 'This is the first test message'],
+                new Post(['id' => 1, 'user_id' => 1, 'message' => 'Test message', 'user' => $this->getGenericUser()]),
             ]
         ];
     }

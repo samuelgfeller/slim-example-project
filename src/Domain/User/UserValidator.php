@@ -9,13 +9,13 @@ use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserRepository;
 
 /**
- * Class UserValidation
+ * Class UserValidator
  */
-class UserValidation extends AppValidation
+class UserValidator extends AppValidation
 {
 
     /**
-     * UserValidation constructor.
+     * UserValidator constructor.
      *
      * @param LoggerFactory $logger
      * @param UserRepository $userRepository

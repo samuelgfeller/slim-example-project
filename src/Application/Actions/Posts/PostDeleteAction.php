@@ -6,6 +6,8 @@ use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\PostService;
+use App\Domain\Post\Service\PostDeleter;
+use App\Domain\Post\Service\PostFinder;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,7 +22,6 @@ final class PostDeleteAction
      * @var Responder
      */
     private Responder $responder;
-    protected PostService $postService;
     protected OutputEscapeService $outputEscapeService;
     protected AuthService $authService;
     protected LoggerInterface $logger;
@@ -30,21 +31,22 @@ final class PostDeleteAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostFinder $postFinder
+     * @param PostDeleter $postDeleter
      * @param OutputEscapeService $outputEscapeService
      * @param AuthService $authService
      * @param LoggerFactory $logger
      */
     public function __construct(
         Responder $responder,
-        PostService $postService,
+        private PostFinder $postFinder,
+        private PostDeleter $postDeleter,
         OutputEscapeService $outputEscapeService,
         AuthService $authService,
         LoggerFactory $logger
 
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
         $this->outputEscapeService = $outputEscapeService;
         $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
@@ -70,13 +72,13 @@ final class PostDeleteAction
 
         $id = (int)$args['id'];
 
-        $post = $this->postService->findPost($id);
+        $post = $this->postFinder->findPost($id);
 
         $userRole = $this->authService->getUserRoleById($userId);
 
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || $post->userId === $userId) {
-            $deleted = $this->postService->deletePost($id);
+            $deleted = $this->postDeleter->deletePost($id);
             if ($deleted) {
                 return $this->responder->respondWithJson($response, ['status' => 'success']);
             }

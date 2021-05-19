@@ -8,7 +8,6 @@ use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
-use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 
 class UserServiceTest extends TestCase
@@ -23,7 +22,7 @@ class UserServiceTest extends TestCase
      */
     public function testFindAllUsers(array $users): void
     {
-        // Add mock class to container and define return value for method findAllPosts so the service can use it
+        // Add mock class to container and define return value for method findAllPostsWithUsers so the service can use it
         $this->mock(UserRepository::class)->method('findAllUsers')->willReturn($users);
 
         // Here we don't need to specify what the function will do / return since its exactly that
@@ -82,10 +81,9 @@ class UserServiceTest extends TestCase
         // Used in Validation to check user existence
         $userRepositoryMock->method('userExists')->willReturn(true);
 
-        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
-        self::assertTrue($service->updateUser($validUser['id'], $validUser, $loggedInUserId));
+        self::assertTrue($service->updateUser($validUser['id'], $validUser, 1));
     }
 
     /**
@@ -103,12 +101,11 @@ class UserServiceTest extends TestCase
         // could not be tested
         $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
 
-        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser($invalidUser['id'], $invalidUser, $loggedInUserId);
+        $service->updateUser($invalidUser['id'], $invalidUser, 1);
     }
 
     /**
@@ -123,12 +120,11 @@ class UserServiceTest extends TestCase
         // Point of this test is not existing user
         $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
 
-        $loggedInUserId = $this->container->get(SessionInterface::class)->get('user_id');
         $service = $this->container->get(UserService::class);
 
         $this->expectException(ValidationException::class);
 
-        $service->updateUser($validUser['id'], $validUser, $loggedInUserId);
+        $service->updateUser($validUser['id'], $validUser, 1);
     }
 
     /**

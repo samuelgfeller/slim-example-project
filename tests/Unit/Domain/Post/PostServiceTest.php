@@ -5,6 +5,7 @@ namespace App\Test\Unit\Domain\Post;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\Post;
 use App\Domain\Post\PostService;
+use App\Domain\User\User;
 use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserRepository;
@@ -16,26 +17,28 @@ class PostServiceTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test function findAllPosts from PostService which returns
-     * Post array including the name of users
+     * Test function findAllPostsWithUsers from PostService which returns
+     * Post array including the the associated user
      *
      * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
-     * @param array $posts
+     * @param Post[] $posts
+     * @param User $user
      */
-    public function testFindAllPosts(array $posts): void
+    public function testFindAllPosts(array $posts, User $user): void
     {
-        // Add mock class PostRepository to container and define return value for method findAllPosts
-        $this->mock(PostRepository::class)->method('findAllPosts')->willReturn($posts);
+        // Add mock class PostRepository to container and define return value for method findAllPostsWithUsers
+        $this->mock(PostRepository::class)->method('findAllPostsWithUsers')->willReturn($posts);
+        // Service class findAllPostsWithUsers calls addUserToPosts
+        $this->mock(UserService::class)->method('findUserById')->willReturn($user);
 
-        // findAllPosts returns posts with the name of the according user
-        $postsWithUsersToCompare = $this->populatePostsArrayWithUserForTesting($posts);
 
-        // Here we don't need to specify what the function will do / return since its exactly that
+        // Here we don't need to specify what the service function will do / return since its exactly that
         // which is being tested. So we can take the autowired class instance from the container directly.
         /** @var PostService $service */
         $service = $this->container->get(PostService::class);
 
-        self::assertEquals($postsWithUsersToCompare, $service->findAllPosts());
+
+        self::assertEquals($posts, $service->findAllPostsWithUsers());
 
     }
 
@@ -66,7 +69,7 @@ class PostServiceTest extends TestCase
      * if the user names are contained in the returned array
      *
      * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultiplePostsProvider()
-     * @param array $posts
+     * @param Post[] $posts
      */
     public function testFindAllPostsFromUser(array $posts): void
     {
@@ -76,8 +79,8 @@ class PostServiceTest extends TestCase
         // The same posts array will be used in the assertions
         $this->mock(PostRepository::class)->method('findAllPostsByUserId')->willReturn($posts);
 
-        // findAllPosts returns posts with the name of the according user so they have to be added here as well
-        $postsWithUsersToCompare= $this->populatePostsArrayWithUserForTesting($posts);
+        // findAllPostsWithUsers returns posts with the name of the according user so they have to be added here as well
+        $postsWithUsersToCompare= $this->addUserToPostsForTesting($posts);
 
         /** @var PostService $service */
         $service = $this->container->get(PostService::class);
@@ -212,25 +215,22 @@ class PostServiceTest extends TestCase
 
 
     /**
-     * Replica of PostService:populatePostsArrayWithUser
+     * Replica of PostService:addUserToPosts
      *
      * User not added in PostProvider because only one provider is possible
      * and we need both one array of posts without users (to simulate
      * what comes from the repo) and one with users to assert
      *
-     * Not needed to test PostService:populatePostsArrayWithUser because if that function
-     * screws up testFindAllPosts and other tests which use that function indirectly will
+     * Not needed to test PostService:addUserToPosts because if that function
+     * screws up testfindAllPostsWithUsers and other tests which use that function indirectly will
      * fail since the user is in the expected result of the assert
      *
      * @param array $posts
+     * @param User $user to be added to post
      * @return array
      */
-    private function populatePostsArrayWithUserForTesting(array $posts): array
+    private function addUserToPostsForTesting(array $posts, User $user): array
     {
-        // Only the name is relevant for the private function PostService:populatePostsArrayWithUser()
-        $userName = 'John Example';
-        $this->mock(UserService::class)->method('findUserById')
-            ->willReturn(['name' => $userName]);
 
         // Add name of user to posts array
         $postsWithUsersToCompare = [];

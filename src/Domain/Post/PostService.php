@@ -3,6 +3,7 @@
 
 namespace App\Domain\Post;
 
+use App\Domain\Post\Service\PostValidator;
 use App\Domain\User\UserService;
 use App\Infrastructure\Post\PostRepository;
 
@@ -17,13 +18,13 @@ class PostService
 
     private PostRepository $postRepository;
     private UserService $userService;
-    protected PostValidation $postValidation;
+    protected PostValidator $postValidation;
 
     // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
     public function __construct(
         PostRepository $postRepository,
         UserService $userService,
-        PostValidation $postValidation
+        PostValidator $postValidation
     ) {
         $this->postRepository = $postRepository;
         $this->userService = $userService;
@@ -35,10 +36,10 @@ class PostService
      *
      * @return Post[]
      */
-    public function findAllPosts(): array
+    public function findAllPostsWithUsers(): array
     {
-        $allPosts = $this->postRepository->findAllPosts();
-        return $this->populatePostsArrayWithUser($allPosts);
+        $allPosts = $this->postRepository->findAllPostsWithUsers();
+        return $this->addUserToPosts($allPosts);
     }
 
     /**
@@ -63,7 +64,7 @@ class PostService
     public function findAllPostsFromUser($userId): array
     {
         $posts = $this->postRepository->findAllPostsByUserId($userId);
-        return $this->populatePostsArrayWithUser($posts);
+        return $this->addUserToPosts($posts);
     }
 
     /**
@@ -72,7 +73,7 @@ class PostService
      * @param Post[] $posts
      * @return array
      */
-    private function populatePostsArrayWithUser(array $posts): array
+    private function addUserToPosts(array $posts): array
     {
         // Add user name info to post
         $postsWithUser = [];

@@ -6,8 +6,8 @@ use App\Application\Responder\Responder;
 use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Post;
-use App\Domain\Post\PostService;
+use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Service\PostFinder;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,20 +32,19 @@ final class PostUpdateAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostService $postService
+     * @param PostFinder $postFinder
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
      * @param AuthService $authService
      */
     public function __construct(
         Responder $responder,
-        PostService $postService,
+        private PostFinder $postFinder,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
         AuthService $authService
     ) {
         $this->responder = $responder;
-        $this->postService = $postService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('post-update');
         $this->outputEscapeService = $outputEscapeService;
@@ -71,7 +70,7 @@ final class PostUpdateAction
 
         $id = (int)$args['id'];
 
-        $postFromDb = $this->postService->findPost($id);
+        $postFromDb = $this->postFinder->findPost($id);
 
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->authService->getUserRoleById($userId);

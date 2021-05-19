@@ -17,7 +17,7 @@ class UserService
     // Service (and repo) should be split in more specific parts if it gets too big or has a lot of dependencies
     public function __construct(
         private UserRepository $userRepository,
-        protected UserValidation $userValidation,
+        protected UserValidator $userValidator,
         LoggerFactory $logger,
         protected PostRepository $postRepository
     ) {
@@ -61,7 +61,7 @@ class UserService
     public function updateUser(int $userIdToChange, array $userValues, int $loggedInUserId): bool
     {
         $user = new User($userValues, true);
-        $this->userValidation->validateUserUpdate($userIdToChange, $user);
+        $this->userValidator->validateUserUpdate($userIdToChange, $user);
 
         $userRole = $this->userRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own user
