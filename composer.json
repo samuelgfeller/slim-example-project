@@ -31,7 +31,8 @@
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^8 || ^9",
         "selective/test-traits": "^1",
-        "phpstan/phpstan": "^0.12.81"
+        "phpstan/phpstan": "^0.12.81",
+        "jetbrains/phpstorm-attributes": "^1.0"
     },
     "scripts": {
         "test": "phpunit --configuration phpunit.xml",

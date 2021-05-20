@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRoleFinder;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\Service\PostDeleter;
 use App\Domain\Post\Service\PostFinder;
@@ -22,7 +22,6 @@ final class PostDeleteAction
      */
     private Responder $responder;
     protected OutputEscapeService $outputEscapeService;
-    protected AuthService $authService;
     protected LoggerInterface $logger;
 
 
@@ -33,7 +32,7 @@ final class PostDeleteAction
      * @param PostFinder $postFinder
      * @param PostDeleter $postDeleter
      * @param OutputEscapeService $outputEscapeService
-     * @param AuthService $authService
+     * @param UserRoleFinder $userRoleFinder
      * @param LoggerFactory $logger
      */
     public function __construct(
@@ -41,13 +40,12 @@ final class PostDeleteAction
         private PostFinder $postFinder,
         private PostDeleter $postDeleter,
         OutputEscapeService $outputEscapeService,
-        AuthService $authService,
+        private UserRoleFinder $userRoleFinder,
         LoggerFactory $logger
 
     ) {
         $this->responder = $responder;
         $this->outputEscapeService = $outputEscapeService;
-        $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('post-delete');
     }
@@ -73,7 +71,7 @@ final class PostDeleteAction
 
         $post = $this->postFinder->findPost($id);
 
-        $userRole = $this->authService->getUserRoleById($userId);
+        $userRole = $this->userRoleFinder->getUserRoleById($userId);
 
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || $post->userId === $userId) {

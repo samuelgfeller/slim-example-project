@@ -3,12 +3,10 @@
 namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserUpdater;
-use App\Domain\User\UserService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

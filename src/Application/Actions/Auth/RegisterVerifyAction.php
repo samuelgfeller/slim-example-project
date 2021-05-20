@@ -3,9 +3,9 @@
 namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
 use App\Domain\Auth\Exception\InvalidTokenException;
 use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
+use App\Domain\Auth\Service\RegisterTokenVerifier;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,8 +21,8 @@ final class RegisterVerifyAction
     public function __construct(
         LoggerFactory $logger,
         protected Responder $responder,
-        protected AuthService $authService,
-        private SessionInterface $session
+        private SessionInterface $session,
+        private RegisterTokenVerifier $registerTokenVerifier
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-verify-register');
     }
@@ -34,14 +34,16 @@ final class RegisterVerifyAction
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
             try {
-                $this->authService->verifyUser((int)$queryParams['id'], $queryParams['token']);
+                $userId = $this->registerTokenVerifier->getUserIdIfTokenIsValid(
+                    (int)$queryParams['id'],
+                    $queryParams['token']
+                );
 
                 $flash->add(
                     'success',
                     'Congratulations! <br> You\'re account has been  verified! <br>' . '<b>You are now logged in.</b>'
                 );
                 // Log user in
-                $userId = $this->authService->getUserIdFromVerification($queryParams['id']);
                 // Clear all session data and regenerate session ID
                 $this->session->regenerateId();
                 // Add user to session

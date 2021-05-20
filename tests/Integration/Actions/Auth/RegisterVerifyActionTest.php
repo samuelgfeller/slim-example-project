@@ -89,7 +89,7 @@ class RegisterVerifyActionTest extends TestCase
         self::assertSame($redirectLocation, $response->getHeaderLine('Location'));
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
-        // Here it's important that no assertion is thrown when user is already verified. There is only a flash info.
+        // Here it's important that no exception is thrown when user is already verified. There is only a flash info.
     }
 
 

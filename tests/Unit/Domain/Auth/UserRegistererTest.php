@@ -2,9 +2,9 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRegisterer;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Security\SecurityService;
+use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\User\UserRepository;
@@ -12,7 +12,7 @@ use App\Infrastructure\User\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
-class AuthServiceRegisterTest extends TestCase
+class UserRegistererTest extends TestCase
 {
     use AppTestTrait;
 
@@ -35,7 +35,7 @@ class AuthServiceRegisterTest extends TestCase
         $userRepo->method('insertUser')->willReturn($userId);
         $userRepo->method('findUserByEmail')->willReturn(new User());
 
-        $this->mock(SecurityService::class)->expects(self::once())->method('performEmailAbuseCheck');
+        $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
         $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
         $userVerificationRepositoryMock->expects(self::once())->method('deleteVerificationToken');
         $userVerificationRepositoryMock->expects(self::once())->method('insertUserVerification');
@@ -44,8 +44,8 @@ class AuthServiceRegisterTest extends TestCase
         );
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
-        /** @var AuthService $service */
-        $service = $this->container->get(AuthService::class);
+        /** @var UserRegisterer $service */
+        $service = $this->container->get(UserRegisterer::class);
 
         self::assertEquals($userId, $service->registerUser($validUser));
     }
@@ -69,12 +69,12 @@ class AuthServiceRegisterTest extends TestCase
         // when creating a new user.
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(new User());
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
-        $this->mock(SecurityService::class);
+        $this->mock(SecurityEmailChecker::class);
         $this->mock(UserVerificationRepository::class);
         $this->mock(EmailService::class);
 
-        /** @var AuthService $service */
-        $service = $this->container->get(AuthService::class);
+        /** @var UserRegisterer $service */
+        $service = $this->container->get(UserRegisterer::class);
 
         $this->expectException(ValidationException::class);
 
@@ -99,7 +99,7 @@ class AuthServiceRegisterTest extends TestCase
         // Set findUserByEmail to return user. That means that it already exists
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($existingUser);
 
-        $this->mock(SecurityService::class)->expects(self::once())->method('performEmailAbuseCheck');
+        $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
         $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
         $userVerificationRepositoryMock->expects(self::never())->method('deleteVerificationToken');
         $userVerificationRepositoryMock->expects(self::never())->method('insertUserVerification');
@@ -108,8 +108,8 @@ class AuthServiceRegisterTest extends TestCase
         );
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
-        /** @var AuthService $service */
-        $service = $this->container->get(AuthService::class);
+        /** @var UserRegisterer $service */
+        $service = $this->container->get(UserRegisterer::class);
 
         // registerUser returns false when user creation failed
         self::assertFalse($service->registerUser($userData));

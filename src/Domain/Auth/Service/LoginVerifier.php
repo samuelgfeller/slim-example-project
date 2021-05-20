@@ -5,14 +5,20 @@ namespace App\Domain\Auth\Service;
 
 
 use App\Domain\Exceptions\InvalidCredentialsException;
+use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
+use App\Infrastructure\Security\RequestCreatorRepository;
+use App\Infrastructure\User\UserRepository;
 
 class LoginVerifier
 {
 
     public function __construct(
         private UserValidator $userValidator,
+        private SecurityLoginChecker $loginSecurityChecker,
+        private UserRepository $userRepository,
+        private RequestCreatorRepository $requestCreatorRepo,
     ) { }
 
     /**
@@ -22,10 +28,10 @@ class LoginVerifier
      *
      * @param array $userData
      * @param string|null $captcha user captcha response if filled out
-     * @return string id
+     * @return int id
      *
      */
-    public function getUserIdIfAllowedToLogin(array $userData, string|null $captcha = null): string
+    public function getUserIdIfAllowedToLogin(array $userData, string|null $captcha = null): int
     {
         $user = new User($userData, true);
 
@@ -33,7 +39,7 @@ class LoginVerifier
         $this->userValidator->validateUserLogin($user);
 
         // Perform login security check
-        $this->securityService->performLoginSecurityCheck($user->email, $captcha);
+        $this->loginSecurityChecker->performLoginSecurityCheck($user->email, $captcha);
 
         $dbUser = $this->userRepository->findUserByEmail($user->email);
         // Check if user already exists
@@ -48,7 +54,7 @@ class LoginVerifier
             } elseif ($dbUser->status === User::STATUS_ACTIVE) {
                 // Check failed login attempts
                 if (password_verify($user->password, $dbUser->passwordHash)) {
-                    $this->securityService->newLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
+                    $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
                     return $dbUser->id;
                 }
             } else {
@@ -57,7 +63,7 @@ class LoginVerifier
             }
         }
 
-        $this->securityService->newLoginRequest($user->email, $_SERVER['REMOTE_ADDR'], false);
+        $this->requestCreatorRepo->insertLoginRequest($user->email, $_SERVER['REMOTE_ADDR'], false);
 
         // Throw InvalidCred exception if user doesn't exist or wrong password
         // Vague exception on purpose for security

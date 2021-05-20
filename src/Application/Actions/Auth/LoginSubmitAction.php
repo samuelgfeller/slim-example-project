@@ -3,13 +3,12 @@
 namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
 use App\Domain\Security\SecurityService;
-use App\Domain\User\DTO\User;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -23,8 +22,7 @@ final class LoginSubmitAction
     public function __construct(
         protected Responder $responder,
         LoggerFactory $logger,
-        private AuthService $authService,
-        private SecurityService $securityService,
+        private LoginVerifier $loginVerifier,
         private SessionInterface $session
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login');
@@ -49,7 +47,7 @@ final class LoginSubmitAction
 
                 try {
                     // Throws InvalidCredentialsException if not allowed
-                    $userId = $this->authService->GetUserIdIfAllowedToLogin($userData, $captcha);
+                    $userId = $this->loginVerifier->GetUserIdIfAllowedToLogin($userData, $captcha);
 
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();

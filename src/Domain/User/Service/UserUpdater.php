@@ -10,7 +10,7 @@ use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
 use Psr\Log\LoggerInterface;
 
-class UserUpdater
+final class UserUpdater
 {
     private LoggerInterface $logger;
 

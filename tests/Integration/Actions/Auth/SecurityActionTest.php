@@ -3,7 +3,8 @@
 namespace App\Test\Integration\Actions\Auth;
 
 use App\Domain\Security\SecurityException;
-use App\Infrastructure\Security\RequestTrackRepository;
+use App\Infrastructure\Security\RequestFinderRepository;
+use App\Infrastructure\Security\RequestPreponerRepository;
 use App\Test\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixtureLoginFailure;
 use App\Test\Fixture\UserFixture;
@@ -44,7 +45,7 @@ class SecurityActionTest extends TestCase
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginFormValues);
 
         // Needed to prepone request date to simulate waiting delay
-        $requestTrackRepository = $this->container->get(RequestTrackRepository::class);
+        $requestPreponerRepository = $this->container->get(RequestPreponerRepository::class);
 
         $lowestThreshold = array_key_first($throttleArr);
         // It should be tested with the most strict throttle as well. This means that last run should exceed last threshold
@@ -76,7 +77,7 @@ class SecurityActionTest extends TestCase
                     // Highest throttle is probably captcha not a numeric delay that could be preponed
                     if (!($i >= $amountForStrictestThrottle)) {
                         // Reset to time to simulate waiting
-                        $requestTrackRepository->preponeLastRequest($delay);
+                        $requestPreponerRepository->preponeLastRequest($delay);
                         // After waiting the delay, user is allowed to make new login request
                         $responseAfterWaiting = $this->app->handle($request);
                         // Now it could be asserted that response an either successful or failed login
@@ -113,7 +114,7 @@ class SecurityActionTest extends TestCase
                     self::assertEqualsWithDelta(120, $se->getRemainingDelay(), 1);
                     self::assertSame(SecurityException::USER_LOGIN, $se->getType());
                     // Reset to time to simulate waiting
-                    $requestTrackRepository->preponeLastRequest(120);
+                    $requestPreponerRepository->preponeLastRequest(120);
                 }
 
                 // After waiting the delay, user is allowed to make new login request
@@ -129,7 +130,7 @@ class SecurityActionTest extends TestCase
                     self::assertEqualsWithDelta(10, $se->getRemainingDelay(), 1);
                     self::assertSame(SecurityException::USER_LOGIN, $se->getType());
                     // Reset to time to simulate waiting
-                    $requestTrackRepository->preponeLastRequest(10);
+                    $requestPreponerRepository->preponeLastRequest(10);
                 }
 
                 // After waiting the delay, user is allowed to make new login request

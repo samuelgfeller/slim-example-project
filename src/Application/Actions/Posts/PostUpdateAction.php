@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRoleFinder;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\DTO\Post;
@@ -25,7 +25,6 @@ final class PostUpdateAction
     private Responder $responder;
     protected LoggerInterface $logger;
     protected OutputEscapeService $outputEscapeService;
-    protected AuthService $authService;
 
 
     /**
@@ -36,7 +35,7 @@ final class PostUpdateAction
      * @param PostUpdater $postUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
-     * @param AuthService $authService
+     * @param UserRoleFinder $userRoleFinder
      */
     public function __construct(
         Responder $responder,
@@ -44,13 +43,12 @@ final class PostUpdateAction
         private PostUpdater $postUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
-        AuthService $authService
+        private UserRoleFinder $userRoleFinder
     ) {
         $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('post-update');
         $this->outputEscapeService = $outputEscapeService;
-        $this->authService = $authService;
     }
 
     /**
@@ -75,7 +73,7 @@ final class PostUpdateAction
         $postFromDb = $this->postFinder->findPost($id);
 
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
-        $userRole = $this->authService->getUserRoleById($userId);
+        $userRole = $this->userRoleFinder->getUserRoleById($userId);
         // Check if it's admin or if it's its own post
         if ($userRole === 'admin' || $postFromDb->userId === $userId) {
             // todo check if parsedbody is empty everywhere

@@ -48,12 +48,14 @@ class UserVerificationRepository
     }
 
     /**
-     * @param $verificationId
-     * @return string
+     * @param int $verificationId
+     *
+     * @return int
      */
-    public function getUserIdFromVerification($verificationId): string
+    public function getUserIdFromVerification(int $verificationId): int
     {
-        return $this->dataManager->findById('user_verification', $verificationId, ['user_id'])['user_id'];
+        // Cake query builder return value is string
+        return (int)$this->dataManager->findById('user_verification', $verificationId, ['user_id'])['user_id'];
     }
 
     /**

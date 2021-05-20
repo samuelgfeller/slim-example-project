@@ -3,11 +3,10 @@
 namespace App\Application\Actions\Auth;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRegisterer;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\SecurityException;
-use App\Domain\User\UserService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -20,9 +19,8 @@ final class RegisterSubmitAction
 
     public function __construct(
         LoggerFactory $logger,
-        protected UserService $userService,
         protected Responder $responder,
-        protected AuthService $authService,
+        protected UserRegisterer $userRegisterer,
         private SessionInterface $session
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-register');
@@ -47,7 +45,7 @@ final class RegisterSubmitAction
 
                 try {
                     // Throws exception if there is error and returns false if user already exists
-                    $insertId = $this->authService->registerUser($userData, $captcha, $request->getQueryParams());
+                    $insertId = $this->userRegisterer->registerUser($userData, $captcha, $request->getQueryParams());
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email sent successfully.');
                     $flash->add(

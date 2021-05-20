@@ -2,17 +2,17 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Security\SecurityService;
+use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\DTO\User;
-use App\Domain\User\UserService;
+use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
-class AuthServiceLoginTest extends TestCase
+class LoginVerifierTest extends TestCase
 {
     use AppTestTrait;
 
@@ -26,12 +26,12 @@ class AuthServiceLoginTest extends TestCase
     public function testGetUserIdIfAllowedToLogin(array $validUserData, User $repoUser): void
     {
         $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($repoUser);
-        $this->mock(SecurityService::class); // Return null on security checks
+        $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
-        /** @var AuthService $authService */
-        $authService = $this->container->get(AuthService::class);
+        /** @var LoginVerifier $loginVerifier */
+        $loginVerifier = $this->container->get(LoginVerifier::class);
 
-        self::assertEquals($repoUser->id, $authService->GetUserIdIfAllowedToLogin($validUserData));
+        self::assertEquals($repoUser->id, $loginVerifier->GetUserIdIfAllowedToLogin($validUserData));
     }
 
     /**
@@ -44,14 +44,14 @@ class AuthServiceLoginTest extends TestCase
     {
         // In case validationException is not thrown
         $this->mock(UserRepository::class); // Not relevant what findUserByEmail returns
-        $this->mock(SecurityService::class); // Return null on security checks
+        $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
-        /** @var AuthService $authService */
-        $authService = $this->container->get(AuthService::class);
+        /** @var LoginVerifier $loginVerifier */
+        $loginVerifier = $this->container->get(LoginVerifier::class);
 
         $this->expectException(ValidationException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($invalidUser);
+        $loginVerifier->GetUserIdIfAllowedToLogin($invalidUser);
     }
 
     /**
@@ -62,15 +62,15 @@ class AuthServiceLoginTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLogin_userNotExisting(array $validUser): void
     {
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn(new User());
-        $this->mock(SecurityService::class); // Return null on security checks
+        $this->mock(UserFinder::class)->method('findUserByEmail')->willReturn(new User());
+        $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
-        /** @var AuthService $authService */
-        $authService = $this->container->get(AuthService::class);
+        /** @var LoginVerifier $loginVerifier */
+        $loginVerifier = $this->container->get(LoginVerifier::class);
 
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($validUser);
+        $loginVerifier->GetUserIdIfAllowedToLogin($validUser);
     }
 
     /**
@@ -86,32 +86,15 @@ class AuthServiceLoginTest extends TestCase
         // Add DIFFERENT password hash
         $userData['password_hash'] = password_hash('differentPass', PASSWORD_DEFAULT);
 
-        // findUserByEmail() used in $authService->GetUserIdIfAllowedToLogin()
-        $this->mock(UserService::class)->method('findUserByEmail')->willReturn($userObj);
-        $this->mock(SecurityService::class); // Return null on security checks
+        // findUserByEmail() used in $loginVerifier->GetUserIdIfAllowedToLogin()
+        $this->mock(UserFinder::class)->method('findUserByEmail')->willReturn($userObj);
+        $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
-        /** @var AuthService $authService */
-        $authService = $this->container->get(AuthService::class);
+        /** @var LoginVerifier $loginVerifier */
+        $loginVerifier = $this->container->get(LoginVerifier::class);
 
         $this->expectException(InvalidCredentialsException::class);
 
-        $authService->GetUserIdIfAllowedToLogin($userData);
-    }
-
-    /**
-     * Test getUserRoleById() with different roles
-     *
-     * Test with multiple users to have different roles
-     * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
-     * @param array $user
-     */
-    public function testGetUserRoleById(array $user): void
-    {
-        $this->mock(UserRepository::class)->method('getUserRoleById')->willReturn($user['role']);
-
-        /** @var AuthService $authService */
-        $authService = $this->container->get(AuthService::class);
-
-        self::assertEquals($user['role'], $authService->getUserRoleById($user['id']));
+        $loginVerifier->GetUserIdIfAllowedToLogin($userData);
     }
 }

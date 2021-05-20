@@ -5,7 +5,7 @@ namespace App\Test\Unit\Domain\Post;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\User\DTO\User;
-use App\Domain\User\UserService;
+use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +27,7 @@ class PostFinderTest extends TestCase
         // Add mock class PostRepository to container and define return value for method findAllPostsWithUsers
         $this->mock(PostRepository::class)->method('findAllPostsWithUsers')->willReturn($posts);
         // Service class findAllPostsWithUsers calls addUserToPosts
-        $this->mock(UserService::class)->method('findUserById')->willReturn($user);
+        $this->mock(UserFinder::class)->method('findUserById')->willReturn($user);
 
 
         // Here we don't need to specify what the service function will do / return since its exactly that

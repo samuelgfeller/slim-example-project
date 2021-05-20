@@ -3,10 +3,9 @@
 namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRoleFinder;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserDeleter;
-use App\Domain\User\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -14,8 +13,6 @@ use Psr\Log\LoggerInterface;
 final class UserDeleteAction
 {
     private Responder $responder;
-
-    protected AuthService $authService;
 
     protected LoggerInterface $logger;
 
@@ -25,16 +22,15 @@ final class UserDeleteAction
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
      * @param UserDeleter $userDeleter
-     * @param AuthService $authService
+     * @param UserRoleFinder $userRoleFinder
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
         private UserDeleter $userDeleter,
-        AuthService $authService
+        private UserRoleFinder $userRoleFinder
     ) {
         $this->responder = $responder;
-        $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('user-delete');
     }
@@ -58,7 +54,7 @@ final class UserDeleteAction
         $loggedUserId = (int)$this->getUserIdFromToken($request);
         $id = (int)$args['id'];
 
-        $userRole = $this->authService->getUserRoleById($loggedUserId);
+        $userRole = $this->userRoleFinder->getUserRoleById($loggedUserId);
 
 
         // Check if it's admin or if it's its own user

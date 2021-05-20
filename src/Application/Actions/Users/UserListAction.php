@@ -3,10 +3,9 @@
 namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
+use App\Domain\Auth\Service\UserRoleFinder;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,8 +18,6 @@ final class UserListAction
 {
     private Responder $responder;
 
-    protected AuthService $authService;
-
     protected LoggerInterface $logger;
 
     protected OutputEscapeService $outputEscapeService;
@@ -32,18 +29,17 @@ final class UserListAction
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
      * @param UserFinder $userFinder
-     * @param AuthService $authService
+     * @param UserRoleFinder $userRoleFinder
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
         private UserFinder $userFinder,
-        AuthService $authService,
+        private UserRoleFinder $userRoleFinder,
         OutputEscapeService $outputEscapeService
     ) {
         $this->responder = $responder;
-        $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('user-list');
         $this->outputEscapeService = $outputEscapeService;
@@ -63,7 +59,7 @@ final class UserListAction
         // getUserIdFromToken not transferred to action since it will be session based
         $loggedUserId = (int)$this->getUserIdFromToken($request);
 
-        $userRole = $this->authService->getUserRoleById($loggedUserId);
+        $userRole = $this->userRoleFinder->getUserRoleById($loggedUserId);
 
         if ($userRole === 'admin') {
             $allUsers = $this->userFinder->findAllUsers();

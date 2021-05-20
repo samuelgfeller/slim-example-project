@@ -3,11 +3,8 @@
 namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\AuthService;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\User\UserService;
-use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -4,7 +4,6 @@ namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
 use App\Domain\Post\Service\PostFinder;
-use App\Domain\User\UserService;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

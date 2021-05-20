@@ -2,10 +2,10 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\AuthService;
 use App\Domain\Auth\DTO\UserVerification;
 use App\Domain\Auth\Exception\InvalidTokenException;
 use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
+use App\Domain\Auth\Service\RegisterTokenVerifier;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
 use App\Infrastructure\User\UserVerificationRepository;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Email verification test (after user clicked on link)
  */
-class AuthServiceUserVerificationTest extends TestCase
+class RegisterTokenVerifierTest extends TestCase
 {
     use AppTestTrait;
 
@@ -26,7 +26,7 @@ class AuthServiceUserVerificationTest extends TestCase
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
-    public function testVerifyUser(UserVerification $verification, string $clearTextToken): void
+    public function testGetUserIdIfTokenIsValid(UserVerification $verification, string $clearTextToken): void
     {
         // Create mocks
         $userVerificationRepository = $this->mock(UserVerificationRepository::class);
@@ -34,10 +34,12 @@ class AuthServiceUserVerificationTest extends TestCase
 
         // Return valid verification object from repository
         $userVerificationRepository->method('findUserVerification')->willReturn($verification);
+        // Set user id that should be returned by the function under test for a success
+        $userVerificationRepository->method('getUserIdFromVerification')->willReturn(1);
 
         // Return unverified user (empty user, only status is populated)
         $userRepository->expects(self::once())->method('findUserById')->willReturn(
-            // IMPORTANT: user has to be unverified for the test to succeed
+        // IMPORTANT: user has to be unverified for the test to succeed
             new User(['status' => User::STATUS_UNVERIFIED])
         );
         // Making sure that changeUserStatus is called
@@ -45,9 +47,9 @@ class AuthServiceUserVerificationTest extends TestCase
         // Assert that setVerificationEntryToUsed is called
         $userVerificationRepository->expects(self::once())->method('setVerificationEntryToUsed')->willReturn(true);
 
-        $authService = $this->container->get(AuthService::class);
+        $tokenVerifier = $this->container->get(RegisterTokenVerifier::class);
         // Call function under test
-        self::assertTrue($authService->verifyUser($verification->id, $clearTextToken));
+        self::assertSame(1, $tokenVerifier->getUserIdIfTokenIsValid($verification->id, $clearTextToken));
     }
 
     /**
@@ -57,15 +59,17 @@ class AuthServiceUserVerificationTest extends TestCase
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
-    public function testVerifyUser_alreadyVerified(UserVerification $verification, string $clearTextToken): void
-    {
+    public function testGetUserIdIfTokenIsValid_alreadyVerified(
+        UserVerification $verification,
+        string $clearTextToken
+    ): void {
         // Return valid verification object from repository
         $this->mock(UserVerificationRepository::class)->expects(self::once())->method(
             'findUserVerification'
         )->willReturn($verification);
         // Return active user (empty user, only status is populated)
         $this->mock(UserRepository::class)->expects(self::once())->method('findUserById')->willReturn(
-            // IMPORTANT: user has to be already active for exception to be thrown
+        // IMPORTANT: user has to be already active for exception to be thrown
             new User(['status' => User::STATUS_ACTIVE])
         );
 
@@ -73,14 +77,17 @@ class AuthServiceUserVerificationTest extends TestCase
         $this->expectExceptionMessage('User has not status "' . User::STATUS_UNVERIFIED . '"');
 
         // Call function under test
-        $this->container->get(AuthService::class)->verifyUser($verification->id, $clearTextToken);
+        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfTokenIsValid(
+            $verification->id,
+            $clearTextToken
+        );
     }
 
     /**
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
      * according exception should be thrown
      */
-    public function testRegisterUser_notExistingToken(): void
+    public function testGetUserIdIfTokenIsValid_notExistingToken(): void
     {
         // Return empty verification object from repository. That means that entry was not found
         $this->mock(UserVerificationRepository::class)->expects(self::once())->method(
@@ -95,7 +102,10 @@ class AuthServiceUserVerificationTest extends TestCase
         $this->expectExceptionMessage('No token was found for id "' . $verificationId . '".');
 
         // Call function under test with invalid verification id (token doesn't matter in this test)
-        $this->container->get(AuthService::class)->verifyUser($verificationId, 'wrongTokenButItDoesntMatter');
+        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfTokenIsValid(
+            $verificationId,
+            'wrongTokenButItDoesntMatter'
+        );
     }
 
     /**
@@ -107,8 +117,10 @@ class AuthServiceUserVerificationTest extends TestCase
      * @param UserVerification $verification Once expired
      * @param string $clearTextToken Once valid, once invalid
      */
-    public function testRegisterUser_invalidExpiredToken(UserVerification $verification, string $clearTextToken): void
-    {
+    public function testGetUserIdIfTokenIsValid_invalidExpiredToken(
+        UserVerification $verification,
+        string $clearTextToken
+    ): void {
         // Return valid verification object from repository
         $this->mock(UserVerificationRepository::class)->expects(self::once())->method(
             'findUserVerification'
@@ -123,6 +135,9 @@ class AuthServiceUserVerificationTest extends TestCase
         $this->expectExceptionMessage('Invalid or expired token.');
 
         // Call function under test
-        $this->container->get(AuthService::class)->verifyUser($verification->id, $clearTextToken);
+        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfTokenIsValid(
+            $verification->id,
+            $clearTextToken
+        );
     }
 }
