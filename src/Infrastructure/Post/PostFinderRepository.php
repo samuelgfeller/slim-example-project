@@ -6,6 +6,7 @@ namespace App\Infrastructure\Post;
 
 use App\Common\Hydrator;
 use App\Domain\Post\DTO\Post;
+use App\Domain\Post\DTO\UserPost;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
@@ -21,27 +22,28 @@ class PostFinderRepository
     /**
      * Return all posts with users attribute loaded
      *
-     * @return Post[]
+     * @return UserPost[]
      */
     public function findAllPostsWithUsers(): array
     {
         $query = $this->dataManager->newQuery()->from('post');
         $query->select(
             [
+                'post_id' => 'post.id',
+                'user_id' => 'user.id',
                 'post_message' => 'post.message',
-                'post_updated_at' => 'post.updated_at',
                 'post_created_at' => 'post.created_at',
+                'post_updated_at' => 'post.updated_at',
                 'user_name' => 'user.name',
                 'user_email' => 'user.email',
                 'user_role' => 'user.role',
-                'user_status' => 'user.status',
             ]
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
             ['post.deleted_at IS' => null]
         );
         $resultRows = $query->execute()->fetchAll('assoc');
-        // Convert to list of Post objects with associated User
-        return $this->hydrator->hydrateAggregates($resultRows, [Post::class, 'post_'], [[User::class, 'user_', 'user']]);
+        // Convert to list of Post objects with associated User info
+        return $this->hydrator->hydrate($resultRows, UserPost::class);
     }
 
     /**
@@ -56,6 +58,34 @@ class PostFinderRepository
         $postRow = $this->dataManager->findById('post', $id);
         return new Post($postRow);
     }
+
+    /**
+     * Return all posts with users attribute loaded
+     *
+     * @param int $id
+     * @return UserPost
+     */
+    public function findUserPostById(int $id): UserPost
+    {
+        $query = $this->dataManager->newQuery()->from('post');
+        $query->select(
+            [
+                'post_id' => 'post.id',
+                'user_id' => 'user.id',
+                'post_message' => 'post.message',
+                'post_created_at' => 'post.created_at',
+                'post_updated_at' => 'post.updated_at',
+                'user_name' => 'user.name',
+                'user_role' => 'user.role',
+            ]
+        )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
+            ['post.id' => $id,'post.deleted_at IS' => null]
+        );
+        $resultRows = $query->execute()->fetch('assoc');
+        // Instantiate UserPost DTO
+        return new UserPost($resultRows);
+    }
+
 
     /**
      * Retrieve post from database

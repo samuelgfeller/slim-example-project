@@ -5,6 +5,7 @@ namespace App\Domain\Post\Service;
 
 
 use App\Domain\Post\DTO\Post;
+use App\Domain\Post\DTO\UserPost;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostFinderRepository;
 
@@ -22,8 +23,7 @@ class PostFinder
      */
     public function findAllPostsWithUsers(): array
     {
-        $allPosts = $this->postFinderRepository->findAllPostsWithUsers();
-        return $this->addUserToPosts($allPosts);
+        return $this->postFinderRepository->findAllPostsWithUsers();
     }
 
     /**
@@ -40,6 +40,17 @@ class PostFinder
     }
 
     /**
+     * Find specific post with user info
+     *
+     * @param int $id
+     * @return UserPost
+     */
+    public function findPostWithUserById(int $id): UserPost
+    {
+        return $this->postFinderRepository->findUserPostById($id);
+    }
+
+    /**
      * Return all posts which are linked to the given user
      *
      * @param $userId
@@ -49,27 +60,5 @@ class PostFinder
     {
         $posts = $this->postFinderRepository->findAllPostsByUserId($userId);
         return $this->addUserToPosts($posts);
-    }
-
-    /**
-     * Add user infos to post array
-     *
-     * @param Post[] $posts
-     * @return array
-     */
-    private function addUserToPosts(array $posts): array
-    {
-        // Add user name info to post
-        $postsWithUser = [];
-        foreach ($posts as $post) {
-            // Get user information connected to post
-            $user = $this->userFinder->findUserById($post['user_id']);
-            // If user was deleted but post not, post should not be shown since it is also technically deleted
-            if ($user->name !== null) {
-                $post->user = $user;
-                $postsWithUser[] = $post;
-            }
-        }
-        return $postsWithUser;
     }
 }

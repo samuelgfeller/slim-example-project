@@ -41,7 +41,6 @@ class PostListActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'GET',
-            // Request to change user with id 1
             $this->urlFor('post-list-all')
         );
 
