@@ -2,8 +2,11 @@
 
 namespace App\Test\Unit\Domain\Security;
 
+use App\Domain\Security\DTO\RequestData;
+use App\Domain\Security\DTO\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
+use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Infrastructure\Security\RequestFinderRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -38,13 +41,13 @@ class SecurityLoginCheckerTest extends TestCase
      * @dataProvider \App\Test\Provider\RequestTrackProvider::userLoginProvider()
      *
      * @param int|string $delay
-     * @param array $ipRequestStats
-     * @param array $userRequestStats
+     * @param RequestStatsData $ipRequestStats
+     * @param RequestStatsData $userRequestStats
      */
     public function testPerformLoginSecurityCheck_user(
         int|string $delay,
-        array $ipRequestStats,
-        array $userRequestStats
+        RequestStatsData $ipRequestStats,
+        RequestStatsData $userRequestStats
     ): void {
         $requestFinderRepository = $this->mock(RequestFinderRepository::class);
 
@@ -60,17 +63,19 @@ class SecurityLoginCheckerTest extends TestCase
         $requestFinderRepository->method('getUserRequestStats')->willReturn($userRequestStats);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
-        $lastRequest = [
-            'id' => 12,
-            'email' => 'email.does@not-matter.com',
-            'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-            'sent_email' => 1,
-            'is_login' => 'success', // Not relevant for individual login and email test
-            'created_at' => date('Y-m-d H:i:s'), // Current time so delay will be the original length
-        ];
+        $lastRequest = new RequestData(
+            [
+                'id' => 12,
+                'email' => 'email.does@not-matter.com',
+                'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
+                'sent_email' => 1,
+                'is_login' => 'success', // Not relevant for individual login and email test
+                'created_at' => date('Y-m-d H:i:s'), // Current time so delay will be the original length
+            ]
+        );
         $requestFinderRepository->method('findLatestLoginRequestFromUserOrIp')->willReturn($lastRequest);
 
-        $securityService = $this->container->get(SecurityEmailChecker::class);
+        $securityService = $this->container->get(SecurityLoginChecker::class);
 
         // Assert
         $this->expectException(SecurityException::class);
@@ -101,7 +106,9 @@ class SecurityLoginCheckerTest extends TestCase
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here
-        $emptyStats = ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0];
+        $emptyStats = new RequestStatsData(
+            ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0]
+        );
         $requestFinderRepository->method('getIpRequestStats')->willReturn($emptyStats);
         $requestFinderRepository->method('getUserRequestStats')->willReturn($emptyStats);
 
@@ -117,7 +124,8 @@ class SecurityLoginCheckerTest extends TestCase
         ];
         $requestFinderRepository->method('getGlobalLoginAmountStats')->willReturn($loginAmountStats);
 
-        $securityService = $this->container->get(SecurityEmailChecker::class);
+        /** @var SecurityLoginChecker $securityService */
+        $securityService = $this->container->get(SecurityLoginChecker::class);
 
         // Exception assertions
         $this->expectException(SecurityException::class);
@@ -125,7 +133,7 @@ class SecurityLoginCheckerTest extends TestCase
 
         // In try catch to assert exception attributes
         try {
-            $securityService->performEmailAbuseCheck('email.does@not-matter.com');
+            $securityService->performLoginSecurityCheck('email.does@not-matter.com');
         } catch (SecurityException $se) {
             self::assertSame(SecurityException::GLOBAL_LOGIN, $se->getType());
             self::assertSame('captcha', $se->getRemainingDelay());

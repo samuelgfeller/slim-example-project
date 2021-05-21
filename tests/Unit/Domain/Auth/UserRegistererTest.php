@@ -9,7 +9,9 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\Authentication\UserRegistererRepository;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
+use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -37,8 +39,10 @@ class UserRegistererTest extends TestCase
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
-        $this->mock(VerificationTokenDeleterRepository::class)->expects(self::once())->method('deleteVerificationToken');
-        $this->mock(VerificationTokenCreator::class)->expects(self::once())->method('insertUserVerification');
+        $this->mock(VerificationTokenDeleterRepository::class)->expects(self::once())->method(
+            'deleteVerificationToken'
+        );
+        $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
         $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
             'One more step to register'
         );
@@ -69,9 +73,12 @@ class UserRegistererTest extends TestCase
         // when creating a new user.
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
-        $this->mock(SecurityEmailChecker::class);
-        $this->mock(UserVerificationRepository::class);
-        $this->mock(EmailService::class);
+        $this->mock(SecurityEmailChecker::class); // used in UserRegisterer
+        // used in VerificationTokenCreator and UserAlreadyExistingHandler
+        $this->mock(VerificationTokenDeleterRepository::class);
+        $this->mock(VerificationTokenCreatorRepository::class); // used in VerificationTokenCreator
+        $this->mock(RequestCreatorRepository::class); // used UserAlreadyExistingHandler and UserRegisterer
+        $this->mock(EmailService::class); // used in VerificationTokenCreator
 
         /** @var UserRegisterer $service */
         $service = $this->container->get(UserRegisterer::class);
