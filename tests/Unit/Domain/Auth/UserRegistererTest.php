@@ -7,7 +7,8 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\EmailService;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\Authentication\UserRegistererRepository;
+use App\Infrastructure\User\UserFinderRepository;
 use App\Infrastructure\Authentication\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -24,16 +25,15 @@ class UserRegistererTest extends TestCase
      */
     public function testRegisterUser(array $validUser): void
     {
-        // Return type of UserRepository:insertUser is string
+        // Return type of UserFinderRepository:insertUser is string
         $userId = (int)$validUser['id'];
 
         // Removing id from user because before user is created; id is not known
         unset($validUser['id']);
 
         // Mock the required repository and configure relevant method return value
-        $userRepo = $this->mock(UserRepository::class);
-        $userRepo->method('insertUser')->willReturn($userId);
-        $userRepo->method('findUserByEmail')->willReturn(new User());
+        $this->mock(UserRegistererRepository::class)->method('insertUser')->willReturn($userId);
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
         $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
@@ -63,11 +63,11 @@ class UserRegistererTest extends TestCase
      */
     public function testRegisterUser_invalid(array $invalidUser): void
     {
-        // Mock UserRepository because it is used by the validation logic.
+        // Mock UserFinderRepository because it is used by the validation logic.
         // Empty mock would do the trick as well it would just return null on non defined functions.
         // If findUserByEmail returns null, validation thinks the user doesn't exist which has to be the case
         // when creating a new user.
-        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn(new User());
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
         $this->mock(SecurityEmailChecker::class);
         $this->mock(UserVerificationRepository::class);
@@ -97,7 +97,7 @@ class UserRegistererTest extends TestCase
         $existingUser->status = User::STATUS_ACTIVE;
 
         // Set findUserByEmail to return user. That means that it already exists
-        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($existingUser);
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
         $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);

@@ -7,27 +7,28 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserExistenceCheckerRepository;
 
 /**
  * Class PostValidator
  */
 class PostValidator extends AppValidation
 {
-    /** @var UserRepository */
-    private UserRepository $userRepository;
 
     /**
      * PostValidator constructor.
      *
      * @param LoggerFactory $logger
-     * @param UserRepository $userRepository
+     * @param UserExistenceCheckerRepository $userExistenceCheckerRepository
      */
-    public function __construct(LoggerFactory $logger, UserRepository $userRepository)
+    public function __construct(
+        LoggerFactory $logger,
+        private UserExistenceCheckerRepository $userExistenceCheckerRepository
+    )
     {
         parent::__construct($logger->addFileHandler('error.log')
             ->createInstance('post-validation'));
-        $this->userRepository = $userRepository;
+
     }
 
     /**
@@ -69,15 +70,14 @@ class PostValidator extends AppValidation
 
     /**
      * Check if user exists
-     * Same function than in UserValidator. Here again because as the functionalities
-     * grow, there could be other uses for the UserRepository. Maybe not though.
+     * Same function than in UserValidator.
      *
      * @param $userId
      * @param ValidationResult $validationResult
      */
     protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
-        $exists = $this->userRepository->userExists($userId);
+        $exists = $this->userExistenceCheckerRepository->userExists($userId);
         if (!$exists) {
             $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');

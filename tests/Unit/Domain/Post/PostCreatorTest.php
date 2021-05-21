@@ -6,7 +6,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostCreator;
 use App\Infrastructure\Post\PostRepository;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -19,13 +19,10 @@ class PostCreatorTest extends TestCase
      * and that (service) createPost() returns the id returned from (repo) insertPost()
      *
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
-     * @param array $validPost
+     * @param Post $validPost
      */
-    public function testCreatePost(array $validPost): void
+    public function testCreatePost(Post $validPost): void
     {
-        // Return type of PostRepository:insertPost is string
-        $postId = (int)$validPost['id'];
-
         // Removing id from post array because before post is created id is not known
         unset($validPost['id']);
 
@@ -36,8 +33,8 @@ class PostCreatorTest extends TestCase
         // real need for a test but maybe I'm wrong.
         $this->mock(PostRepository::class)->expects(self::once())->method('insertPost')->willReturn($postId);
 
-        // Mock UserRepository because it is used in the validation logic.
-        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+        // Mock because it is used in the validation logic.
+        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 
         /** @var PostCreator $postCreator */
         $postCreator = $this->container->get(PostCreator::class);
@@ -59,12 +56,12 @@ class PostCreatorTest extends TestCase
      */
     public function testCreatePost_invalid(array $invalidPost): void
     {
-        // Mock UserRepository because it is used by the validation logic.
+        // Mock because it is used by the validation logic.
         // Empty mock would do the trick as well as it would just return null on non defined functions.
         // A post is linked to an user in all cases so user has to exist. What happens if user doesn't exist
         // will be tested in a different function otherwise this test would always fail and other invalid
         // values would not be noticed
-        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 
         /** @var PostCreator $service */
         $service = $this->container->get(PostCreator::class);
@@ -84,7 +81,7 @@ class PostCreatorTest extends TestCase
     public function testCreatePost_notExistingUser(array $validPost): void
     {
         // Point of this test is not existing user
-        $this->mock(UserRepository::class)->method('userExists')->willReturn(false);
+        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(false);
 
         /** @var PostCreator $service */
         $service = $this->container->get(PostCreator::class);

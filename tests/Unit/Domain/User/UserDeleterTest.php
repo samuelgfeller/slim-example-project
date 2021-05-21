@@ -4,7 +4,7 @@ namespace App\Test\Unit\Domain\User;
 
 use App\Domain\User\Service\UserDeleter;
 use App\Infrastructure\Post\PostRepository;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserDeleterRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +29,7 @@ class UserDeleterTest extends TestCase
             ->with(self::equalTo($userId))
             ->willReturn(true);
 
-        $this->mock(UserRepository::class)
+        $this->mock(UserDeleterRepository::class)
             ->expects(self::once())
             ->method('deleteUserById')
             ->with(self::equalTo($userId))

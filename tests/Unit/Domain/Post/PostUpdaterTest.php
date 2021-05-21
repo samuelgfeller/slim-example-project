@@ -5,7 +5,7 @@ namespace App\Test\Unit\Domain\Post;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostUpdater;
 use App\Infrastructure\Post\PostRepository;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +25,7 @@ class PostUpdaterTest extends TestCase
      */
     public function testUpdatePost(array $validPost): void
     {
-        $this->mock(UserRepository::class)->method('userExists')->willReturn(true);
+        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 
         // With ->expects() to test if the method is called
         $this->mock(PostRepository::class)->expects(self::once())->method('updatePost')->willReturn(true);

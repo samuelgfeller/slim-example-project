@@ -7,14 +7,16 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\User\DTO\User;
-use App\Infrastructure\User\UserRepository;
-use App\Infrastructure\User\UserVerificationRepository;
+use App\Infrastructure\User\UserFinderRepository;
+use App\Infrastructure\Authentication\UserVerificationRepository;
+use App\Infrastructure\User\UserUpdaterRepository;
 
 final class RegisterTokenVerifier
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private UserVerificationRepository $userVerificationRepository
+        private UserFinderRepository $userFinderRepository,
+        private UserVerificationRepository $userVerificationRepository,
+        private UserUpdaterRepository $userUpdaterRepository
     ) { }
 
     /**
@@ -29,7 +31,7 @@ final class RegisterTokenVerifier
         $verification = $this->userVerificationRepository->findUserVerification($verificationId);
 
         if ($verification->token !== null) {
-            $userStatus = $this->userRepository->findUserById($verification->userId)->status;
+            $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
             // Check if user is already verified
             if (User::STATUS_UNVERIFIED !== $userStatus) {
                 // User is not unverified anymore, that means that user already clicked on the link
@@ -37,7 +39,7 @@ final class RegisterTokenVerifier
             } // Verify given token with token in database
             elseif ($verification->expires > time() && true === password_verify($token, $verification->token)) {
                 // Change user status to active
-                $hasUpdated = $this->userRepository->changeUserStatus(User::STATUS_ACTIVE, $verification->userId);
+                $hasUpdated = $this->userUpdaterRepository->changeUserStatus(User::STATUS_ACTIVE, $verification->userId);
                 if ($hasUpdated === true) {
                     // Mark token as being used only after making sure that user is active
                     $this->userVerificationRepository->setVerificationEntryToUsed($verificationId);

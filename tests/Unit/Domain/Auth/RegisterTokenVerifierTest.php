@@ -7,8 +7,9 @@ use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use App\Domain\User\DTO\User;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserFinderRepository;
 use App\Infrastructure\Authentication\UserVerificationRepository;
+use App\Infrastructure\User\UserUpdaterRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -30,20 +31,21 @@ class RegisterTokenVerifierTest extends TestCase
     {
         // Create mocks
         $userVerificationRepository = $this->mock(UserVerificationRepository::class);
-        $userRepository = $this->mock(UserRepository::class);
+        $userUpdaterRepository = $this->mock(UserUpdaterRepository::class);
+        $userFinderRepository = $this->mock(UserFinderRepository::class);
 
         // Return valid verification object from repository
-        $userVerificationRepository->method('findUserVerification')->willReturn($verification);
+        $userFinderRepository->method('findUserVerification')->willReturn($verification);
         // Set user id that should be returned by the function under test for a success
-        $userVerificationRepository->method('getUserIdFromVerification')->willReturn(1);
+        $userFinderRepository->method('getUserIdFromVerification')->willReturn(1);
 
         // Return unverified user (empty user, only status is populated)
-        $userRepository->expects(self::once())->method('findUserById')->willReturn(
+        $userFinderRepository->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be unverified for the test to succeed
             new User(['status' => User::STATUS_UNVERIFIED])
         );
         // Making sure that changeUserStatus is called
-        $userRepository->expects(self::once())->method('changeUserStatus')->willReturn(true);
+        $userUpdaterRepository->expects(self::once())->method('changeUserStatus')->willReturn(true);
         // Assert that setVerificationEntryToUsed is called
         $userVerificationRepository->expects(self::once())->method('setVerificationEntryToUsed')->willReturn(true);
 
@@ -68,7 +70,7 @@ class RegisterTokenVerifierTest extends TestCase
             'findUserVerification'
         )->willReturn($verification);
         // Return active user (empty user, only status is populated)
-        $this->mock(UserRepository::class)->expects(self::once())->method('findUserById')->willReturn(
+        $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be already active for exception to be thrown
             new User(['status' => User::STATUS_ACTIVE])
         );
@@ -93,9 +95,6 @@ class RegisterTokenVerifierTest extends TestCase
         $this->mock(UserVerificationRepository::class)->expects(self::once())->method(
             'findUserVerification'
         )->willReturn(new UserVerification()); // Empty class means nothing was found
-
-        // Code should never have to user user repo but if it does, it is mocked to prevent db change
-        $this->mock(UserRepository::class);
 
         $verificationId = 1;
         $this->expectException(InvalidTokenException::class);
@@ -126,7 +125,7 @@ class RegisterTokenVerifierTest extends TestCase
             'findUserVerification'
         )->willReturn($verification);
         // Return active user (empty user, only status is populated)
-        $this->mock(UserRepository::class)->expects(self::once())->method('findUserById')->willReturn(
+        $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // User has to be unverified as this is the default value and its not purpose of this test
             new User(['status' => User::STATUS_UNVERIFIED])
         );

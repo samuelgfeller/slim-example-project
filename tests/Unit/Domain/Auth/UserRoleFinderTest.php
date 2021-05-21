@@ -4,7 +4,7 @@
 namespace App\Test\Unit\Domain\Auth;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class UserRoleFinderTest extends TestCase
      */
     public function testGetUserRoleById(array $user): void
     {
-        $this->mock(UserRepository::class)->method('getUserRoleById')->willReturn($user['role']);
+        $this->mock(UserRoleFinderRepository::class)->method('getUserRoleById')->willReturn($user['role']);
 
         $userRoleFinder = $this->container->get(UserRoleFinder::class);
 

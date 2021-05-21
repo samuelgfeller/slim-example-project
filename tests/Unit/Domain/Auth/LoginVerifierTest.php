@@ -8,7 +8,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserFinderRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +25,7 @@ class LoginVerifierTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLogin(array $validUserData, User $repoUser): void
     {
-        $this->mock(UserRepository::class)->method('findUserByEmail')->willReturn($repoUser);
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($repoUser);
         $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
         /** @var LoginVerifier $loginVerifier */
@@ -43,7 +43,7 @@ class LoginVerifierTest extends TestCase
     public function testGetUserIdIfAllowedToLogin_invalidData(array $invalidUser): void
     {
         // In case validationException is not thrown
-        $this->mock(UserRepository::class); // Not relevant what findUserByEmail returns
+        $this->mock(UserFinderRepository::class); // Not relevant what findUserByEmail returns
         $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
         /** @var LoginVerifier $loginVerifier */

@@ -9,7 +9,7 @@ use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Security\RequestCreatorRepository;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserFinderRepository;
 
 class LoginVerifier
 {
@@ -17,7 +17,7 @@ class LoginVerifier
     public function __construct(
         private UserValidator $userValidator,
         private SecurityLoginChecker $loginSecurityChecker,
-        private UserRepository $userRepository,
+        private UserFinderRepository $userFinderRepository,
         private RequestCreatorRepository $requestCreatorRepo,
     ) { }
 
@@ -41,7 +41,7 @@ class LoginVerifier
         // Perform login security check
         $this->loginSecurityChecker->performLoginSecurityCheck($user->email, $captcha);
 
-        $dbUser = $this->userRepository->findUserByEmail($user->email);
+        $dbUser = $this->userFinderRepository->findUserByEmail($user->email);
         // Check if user already exists
         if ($dbUser->email !== null) {
             if ($dbUser->status === User::STATUS_UNVERIFIED) {

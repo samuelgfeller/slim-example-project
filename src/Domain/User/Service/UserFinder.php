@@ -5,12 +5,12 @@ namespace App\Domain\User\Service;
 
 
 use App\Domain\User\DTO\User;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserFinderRepository;
 
 class UserFinder
 {
     public function __construct(
-        private UserRepository $userRepository
+        private UserFinderRepository $userFinderRepository
     ) { }
 
     /**
@@ -18,7 +18,7 @@ class UserFinder
      */
     public function findAllUsers(): array
     {
-        return $this->userRepository->findAllUsers();
+        return $this->userFinderRepository->findAllUsers();
     }
 
     /**
@@ -27,7 +27,7 @@ class UserFinder
      */
     public function findUserById(string $id): User
     {
-        return $this->userRepository->findUserById($id);
+        return $this->userFinderRepository->findUserById($id);
     }
 
     /**
@@ -38,6 +38,6 @@ class UserFinder
      */
     public function findUserByEmail(string $email): User
     {
-        return $this->userRepository->findUserByEmail($email);
+        return $this->userFinderRepository->findUserByEmail($email);
     }
 }

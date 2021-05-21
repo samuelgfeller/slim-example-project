@@ -7,7 +7,8 @@ namespace App\Domain\User\Service;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\DTO\User;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
 final class UserUpdater
@@ -16,7 +17,8 @@ final class UserUpdater
 
     public function __construct(
         private UserValidator $userValidator,
-        private UserRepository $userRepository,
+        private UserRoleFinderRepository $userRoleFinderRepository,
+        private UserUpdaterRepository $userUpdaterRepository,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
@@ -37,7 +39,7 @@ final class UserUpdater
         $user = new User($userValues, true);
         $this->userValidator->validateUserUpdate($userIdToChange, $user);
 
-        $userRole = $this->userRepository->getUserRoleById($loggedInUserId);
+        $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $userIdToChange === $loggedInUserId) {
             // User values to change (cannot use object as unset values would be "null" and remove values in db)
@@ -50,7 +52,7 @@ final class UserUpdater
             if ($user->email !== null) {
                 $validUpdateValues['email'] = $user->email;
             }
-            return $this->userRepository->updateUser($userIdToChange, $validUpdateValues);
+            return $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateValues);
         }
 
         // User does not have needed rights to access area or function

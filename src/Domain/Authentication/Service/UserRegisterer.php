@@ -8,8 +8,10 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\EmailService;
+use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
-use App\Infrastructure\User\UserRepository;
+use App\Infrastructure\User\UserDeleterRepository;
+use App\Infrastructure\User\UserFinderRepository;
 use App\Infrastructure\Authentication\UserVerificationRepository;
 
 class UserRegisterer
@@ -17,7 +19,9 @@ class UserRegisterer
     public function __construct(
         private UserValidator $userValidator,
         private SecurityEmailChecker $emailSecurityChecker,
-        private UserRepository $userRepository,
+        private UserDeleterRepository $userDeleterRepository,
+        private UserFinderRepository $userFinderRepository,
+        private UserRegistererRepository $userRegistererRepository,
         private UserVerificationRepository $userVerificationRepository,
         private EmailService $emailService,
         private RequestCreatorRepository $requestCreatorRepo
@@ -30,10 +34,10 @@ class UserRegisterer
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
-     * @return string|bool insert id, false if user already exists
+     * @return int|bool insert id, false if user already exists
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function registerUser(array $userData, string|null $captcha = null, array $queryParams = []): bool|string
+    public function registerUser(array $userData, string|null $captcha = null, array $queryParams = []): bool|int
     {
         $user = new User($userData, true);
 
@@ -42,14 +46,14 @@ class UserRegisterer
 
         $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
 
-        $existingUser = $this->userRepository->findUserByEmail($user->email);
+        $existingUser = $this->userFinderRepository->findUserByEmail($user->email);
         // Check if user already exists
         if ($existingUser->email !== null) {
             // If unverified and registered again, old user should be deleted and replaced with new input and verification
             // Reason: User could have lost the email or someone else tried to register under someone elses name
             if ($existingUser->status === User::STATUS_UNVERIFIED) {
                 // Soft delete user so that new one can be inserted properly
-                $this->userRepository->deleteUserById($existingUser->id);
+                $this->userDeleterRepository->deleteUserById($existingUser->id);
                 $this->userVerificationRepository->deleteVerificationToken($existingUser->id);
             } elseif ($existingUser->status === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
@@ -87,7 +91,7 @@ class UserRegisterer
         $user->role = 'user';
 
         // Insert new user into database
-        $user->id = $this->userRepository->insertUser($user);
+        $user->id = $this->userRegistererRepository->insertUser($user);
 
         // Create, insert and send token to user
         $this->createAndSendUserVerification($user, $queryParams);

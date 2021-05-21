@@ -2,9 +2,7 @@
 
 namespace App\Test\Provider;
 
-use App\Domain\Security\DTO\RequestData;
 use App\Domain\Security\DTO\RequestStatsData;
-use App\Domain\Security\SecurityException;
 
 class RequestTrackProvider
 {
@@ -32,37 +30,37 @@ class RequestTrackProvider
      *
      * @param int|string $requestAmount
      * @param string $type
-     * @return array
+     * @return RequestStatsData
      */
-    public function stats(int|string $requestAmount, string $type): array
+    public function stats(int|string $requestAmount, string $type): RequestStatsData
     {
         if ($type === 'email') {
-            return [
+            return new RequestStatsData([
                 'request_amount' => $requestAmount,
                 'sent_emails' => $requestAmount,
                 'login_failures' => 0,
                 'login_successes' => 0,
-            ];
+            ]);
         }
         // To test that exception is thrown for failure but also for success, they have to be tested each
         if ($type === 'loginF') {
-            return [
+            return new RequestStatsData([
                 'request_amount' => $requestAmount,
                 'sent_emails' => 0,
                 'login_failures' => $requestAmount,
                 'login_successes' => 0,
-            ];
+            ]);
         }
         if ($type === 'loginS') {
-            return [
+            return new RequestStatsData([
                 'request_amount' => $requestAmount,
                 'sent_emails' => 0,
                 'login_failures' => 0,
                 'login_successes' => $requestAmount,
-            ];
+            ]);
         }
 
-        return [];
+        return new RequestStatsData();
     }
 
     /**
@@ -85,70 +83,70 @@ class RequestTrackProvider
             [
                 // request limit not needed as it's expected that error is thrown and that only happens if limit reached
                 'delay' => $firstDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($firstL, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
+                'ip_request_stats' => $this->stats($firstL, 'loginF'),
+                'user_request_stats' => $this->stats(0, 'loginF'),
             ],
             [
                 'delay' => $secondDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($secondL, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
+                'ip_request_stats' => $this->stats($secondL, 'loginF'),
+                'user_request_stats' => $this->stats(0, 'loginF'),
             ],
             [
                 'delay' => $thirdDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($thirdL, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
+                'ip_request_stats' => $this->stats($thirdL, 'loginF'),
+                'user_request_stats' => $this->stats(0, 'loginF'),
             ],
 
             // ? Next are to test login requests made on one user
             [
                 'delay' => $firstDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats($firstL, 'loginF')),
+                'ip_request_stats' => $this->stats(0, 'loginF'),
+                'user_request_stats' => $this->stats($firstL, 'loginF'),
             ],
             [
                 'delay' => $secondDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats($secondL, 'loginF')),
+                'ip_request_stats' => $this->stats(0, 'loginF'),
+                'user_request_stats' => $this->stats($secondL, 'loginF'),
             ],
             [
                 'delay' => $thirdDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginF')),
-                'user_request_stats' => new RequestStatsData($this->stats($thirdL, 'loginF')),
+                'ip_request_stats' => $this->stats(0, 'loginF'),
+                'user_request_stats' => $this->stats($thirdL, 'loginF'),
             ],
             // ! LOGIN SUCCESS VALUES
             // ? First three are to test ip request stats
             [
                 // request limit not needed as it's expected that error is thrown and that only happens if limit reached
                 'delay' => $firstDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($firstL, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
+                'ip_request_stats' => $this->stats($firstL, 'loginS'),
+                'user_request_stats' => $this->stats(0, 'loginS'),
             ],
             [
                 'delay' => $secondDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($secondL, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
+                'ip_request_stats' => $this->stats($secondL, 'loginS'),
+                'user_request_stats' => $this->stats(0, 'loginS'),
             ],
             [
                 'delay' => $thirdDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats($thirdL, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
+                'ip_request_stats' => $this->stats($thirdL, 'loginS'),
+                'user_request_stats' => $this->stats(0, 'loginS'),
             ],
 
             // ? Next are to test login requests made on one user
             [
                 'delay' => $firstDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats($firstL, 'loginS')),
+                'ip_request_stats' => $this->stats(0, 'loginS'),
+                'user_request_stats' => $this->stats($firstL, 'loginS'),
             ],
             [
                 'delay' => $secondDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats($secondL, 'loginS')),
+                'ip_request_stats' => $this->stats(0, 'loginS'),
+                'user_request_stats' => $this->stats($secondL, 'loginS'),
             ],
             [
                 'delay' => $thirdDelayL,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'loginS')),
-                'user_request_stats' => new RequestStatsData($this->stats($thirdL, 'loginS')),
+                'ip_request_stats' => $this->stats(0, 'loginS'),
+                'user_request_stats' => $this->stats($thirdL, 'loginS'),
             ],
         ];
     }
@@ -171,35 +169,35 @@ class RequestTrackProvider
             [
                 // request limit not needed as it's expected that error is thrown and that only happens if limit reached
                 'delay' => $firstDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats($firstE, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'email')),
+                'ip_request_stats' => $this->stats($firstE, 'email'),
+                'user_request_stats' => $this->stats(0, 'email'),
             ],
             [
                 'delay' => $secondDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats($secondE, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'email')),
+                'ip_request_stats' => $this->stats($secondE, 'email'),
+                'user_request_stats' => $this->stats(0, 'email'),
             ],
             [
                 'delay' => $thirdDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats($thirdE, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats(0, 'email')),
+                'ip_request_stats' => $this->stats($thirdE, 'email'),
+                'user_request_stats' => $this->stats(0, 'email'),
             ],
 
             // ? Next are to test email requests made on one user
             [
                 'delay' => $firstDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats($firstE, 'email')),
+                'ip_request_stats' => $this->stats(0, 'email'),
+                'user_request_stats' => $this->stats($firstE, 'email'),
             ],
             [
                 'delay' => $secondDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats($secondE, 'email')),
+                'ip_request_stats' => $this->stats(0, 'email'),
+                'user_request_stats' => $this->stats($secondE, 'email'),
             ],
             [
                 'delay' => $thirdDelayE,
-                'ip_request_stats' => new RequestStatsData($this->stats(0, 'email')),
-                'user_request_stats' => new RequestStatsData($this->stats($thirdE, 'email')),
+                'ip_request_stats' => $this->stats(0, 'email'),
+                'user_request_stats' => $this->stats($thirdE, 'email'),
             ],
         ];
     }
