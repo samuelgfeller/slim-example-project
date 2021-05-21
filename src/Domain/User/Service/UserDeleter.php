@@ -4,13 +4,13 @@
 namespace App\Domain\User\Service;
 
 
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostDeleterRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 
 class UserDeleter
 {
     public function __construct(
-        private PostRepository $postRepository,
+        private PostDeleterRepository $postDeleterRepository,
         private UserDeleterRepository $userDeleterRepository
     )
     {
@@ -18,7 +18,7 @@ class UserDeleter
 
     public function deleteUser($id): bool
     {
-        $this->postRepository->deletePostsFromUser($id);
+        $this->postDeleterRepository->deletePostsFromUser($id);
         return $this->userDeleterRepository->deleteUserById($id);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Test\Unit\Domain\User;
 
 use App\Domain\User\Service\UserDeleter;
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostDeleterRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class UserDeleterTest extends TestCase
     {
         $userId = 1;
         // Mock user repository and post repository
-        $this->mock(PostRepository::class)
+        $this->mock(PostDeleterRepository::class)
             ->expects(self::once())
             ->method('deletePostsFromUser')
             // With parameter user id

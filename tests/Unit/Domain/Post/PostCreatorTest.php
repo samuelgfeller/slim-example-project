@@ -5,7 +5,6 @@ namespace App\Test\Unit\Domain\Post;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostCreator;
-use App\Infrastructure\Post\PostRepository;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +14,7 @@ class PostCreatorTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test that service method createPost() calls PostRepository:insertPost()
+     * Test that service method createPost() calls PostCreatorRepository:insertPost()
      * and that (service) createPost() returns the id returned from (repo) insertPost()
      *
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
@@ -23,6 +22,7 @@ class PostCreatorTest extends TestCase
      */
     public function testCreatePost(Post $validPost): void
     {
+        $postId = $validPost->id;
         // Removing id from post array because before post is created id is not known
         unset($validPost['id']);
 
@@ -31,7 +31,7 @@ class PostCreatorTest extends TestCase
         // but should the expected parameter be tested as well? ->with($this->equalTo($validPost)) not included
         // because I dont want an annoying test function that fails for nothing if code changes. Didn't see the
         // real need for a test but maybe I'm wrong.
-        $this->mock(PostRepository::class)->expects(self::once())->method('insertPost')->willReturn($postId);
+        $this->mock(PostCreator::class)->expects(self::once())->method('insertPost')->willReturn($postId);
 
         // Mock because it is used in the validation logic.
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);

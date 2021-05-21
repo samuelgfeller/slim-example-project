@@ -4,12 +4,12 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostDeleterRepository;
 
 class PostDeleter
 {
     public function __construct(
-        private PostRepository $postRepository
+        private PostDeleterRepository $postDeleterRepository
     ) { }
 
     /**
@@ -20,6 +20,6 @@ class PostDeleter
      */
     public function deletePost(int $id): bool
     {
-        return $this->postRepository->deletePost($id);
+        return $this->postDeleterRepository->deletePost($id);
     }
 }

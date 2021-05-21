@@ -6,7 +6,7 @@ use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostFinderRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -24,8 +24,8 @@ class PostFinderTest extends TestCase
      */
     public function testFindAllPosts(array $posts, User $user): void
     {
-        // Add mock class PostRepository to container and define return value for method findAllPostsWithUsers
-        $this->mock(PostRepository::class)->method('findAllPostsWithUsers')->willReturn($posts);
+        // Add mock class PostFinderRepository to container and define return value for method findAllPostsWithUsers
+        $this->mock(PostFinderRepository::class)->method('findAllPostsWithUsers')->willReturn($posts);
         // Service class findAllPostsWithUsers calls addUserToPosts
         $this->mock(UserFinder::class)->method('findUserById')->willReturn($user);
 
@@ -49,10 +49,10 @@ class PostFinderTest extends TestCase
      */
     public function testFindPost(array $post): void
     {
-        // Add mock class PostRepository to container and define return value for method findPostById
+        // Add mock class PostFinderRepository to container and define return value for method findPostById
         // I dont see the necessity of expecting method to be called. If we get the result we want
         // we can let the code free how it returns it (don't want annoying test that fails after slight code change)
-        $this->mock(PostRepository::class)->method('findPostById')->willReturn(new Post($post));
+        $this->mock(PostFinderRepository::class)->method('findPostById')->willReturn(new Post($post));
 
         // Get an empty class instance from container
         /** @var PostFinder $service */
@@ -71,11 +71,11 @@ class PostFinderTest extends TestCase
      */
     public function testFindAllPostsFromUser(array $posts): void
     {
-        // Add mock class PostRepository to container and define return value for method findPostById
+        // Add mock class PostFinderRepository to container and define return value for method findPostById
         // Posts are with different user_ids from provider and logically findAllPostsFromUser has to return
         // posts with the same user_id since they belong to the same user. But this is not the point of the test.
         // The same posts array will be used in the assertions
-        $this->mock(PostRepository::class)->method('findAllPostsByUserId')->willReturn($posts);
+        $this->mock(PostFinderRepository::class)->method('findAllPostsByUserId')->willReturn($posts);
 
         // findAllPostsWithUsers returns posts with the name of the according user so they have to be added here as well
         $postsWithUsersToCompare= $this->addUserToPostsForTesting($posts);

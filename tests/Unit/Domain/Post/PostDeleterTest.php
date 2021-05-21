@@ -3,7 +3,7 @@
 namespace App\Test\Unit\Domain\Post;
 
 use App\Domain\Post\Service\PostDeleter;
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostDeleterRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -12,14 +12,14 @@ class PostDeleterTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test that postRepository:deletePost() is called in
+     * Test that PostDeleterRepository:deletePost() is called in
      * post service
      */
     public function testDeletePost(): void
     {
         $postId = 1;
 
-        $this->mock(PostRepository::class)
+        $this->mock(PostDeleterRepository::class)
             ->expects(self::once())
             ->method('deletePost')
             // With parameter user id

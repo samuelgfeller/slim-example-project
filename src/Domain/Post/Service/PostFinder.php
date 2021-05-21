@@ -6,12 +6,12 @@ namespace App\Domain\Post\Service;
 
 use App\Domain\Post\DTO\Post;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Post\PostRepository;
+use App\Infrastructure\Post\PostFinderRepository;
 
 class PostFinder
 {
     public function __construct(
-        private PostRepository $postRepository,
+        private PostFinderRepository $postFinderRepository,
         private UserFinder $userFinder
     ) { }
 
@@ -22,7 +22,7 @@ class PostFinder
      */
     public function findAllPostsWithUsers(): array
     {
-        $allPosts = $this->postRepository->findAllPostsWithUsers();
+        $allPosts = $this->postFinderRepository->findAllPostsWithUsers();
         return $this->addUserToPosts($allPosts);
     }
 
@@ -34,7 +34,7 @@ class PostFinder
      */
     public function findPost($id): Post
     {
-        $post = $this->postRepository->findPostById($id);
+        $post = $this->postFinderRepository->findPostById($id);
         $post->user = $this->userFinder->findUserById($post->userId);
         return $post;
     }
@@ -47,7 +47,7 @@ class PostFinder
      */
     public function findAllPostsFromUser($userId): array
     {
-        $posts = $this->postRepository->findAllPostsByUserId($userId);
+        $posts = $this->postFinderRepository->findAllPostsByUserId($userId);
         return $this->addUserToPosts($posts);
     }
 

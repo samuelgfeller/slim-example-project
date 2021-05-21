@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Actions\Auth;
 
-use App\Domain\Security\SecurityException;
+use App\Domain\Security\Exception\SecurityException;
 use App\Infrastructure\Security\RequestFinderRepository;
 use App\Infrastructure\Security\RequestPreponerRepository;
 use App\Test\AppTestTrait;

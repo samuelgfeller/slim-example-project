@@ -5,7 +5,7 @@ namespace App\Domain\Security\Service;
 
 
 use App\Domain\Security\DTO\RequestStatsData;
-use App\Domain\Security\SecurityException;
+use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
 use App\Infrastructure\Security\RequestFinderRepository;
 

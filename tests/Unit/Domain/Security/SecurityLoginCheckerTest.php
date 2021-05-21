@@ -2,7 +2,7 @@
 
 namespace App\Test\Unit\Domain\Security;
 
-use App\Domain\Security\SecurityException;
+use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Infrastructure\Security\RequestFinderRepository;
 use App\Test\AppTestTrait;
