@@ -3,7 +3,7 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\Service\UserRoleFinder;
+use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Infrastructure\User\UserRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;

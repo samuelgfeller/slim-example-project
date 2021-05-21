@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\User;
+namespace App\Infrastructure\Authentication;
 
 use App\Common\Hydrator;
-use App\Domain\Auth\DTO\UserVerification;
+use App\Domain\Authentication\DTO\UserVerification;
 use App\Infrastructure\DataManager;
 
 /**

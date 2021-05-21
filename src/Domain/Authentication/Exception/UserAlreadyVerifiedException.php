@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Auth\Exception;
+namespace App\Domain\Authentication\Exception;
 
 /**
  * Class InvalidTokenException.

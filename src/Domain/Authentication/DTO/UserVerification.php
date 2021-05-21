@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Auth\DTO;
+namespace App\Domain\Authentication\DTO;
 
 use App\Domain\Utility\ArrayReader;
 

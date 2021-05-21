@@ -2,13 +2,13 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\DTO\UserVerification;
-use App\Domain\Auth\Exception\InvalidTokenException;
-use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
-use App\Domain\Auth\Service\RegisterTokenVerifier;
+use App\Domain\Authentication\DTO\UserVerification;
+use App\Domain\Authentication\Exception\InvalidTokenException;
+use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
+use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
-use App\Infrastructure\User\UserVerificationRepository;
+use App\Infrastructure\Authentication\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Auth\Service;
+namespace App\Domain\Authentication\Service;
 
 
 use App\Domain\Security\Service\SecurityEmailChecker;
@@ -10,7 +10,7 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserRepository;
-use App\Infrastructure\User\UserVerificationRepository;
+use App\Infrastructure\Authentication\UserVerificationRepository;
 
 class UserRegisterer
 {
@@ -63,7 +63,7 @@ class UserRegisterer
                     // Subject asserted in testRegisterUser_alreadyExistingActiveUser
                     $this->emailService->setSubject('Someone tried to create an account with your address');
                     $this->emailService->setContentFromTemplate(
-                        'auth/register-on-existing.email.php',
+                        'Authentication/register-on-existing.email.php',
                         ['user' => $existingUser]
                     );
                     $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');

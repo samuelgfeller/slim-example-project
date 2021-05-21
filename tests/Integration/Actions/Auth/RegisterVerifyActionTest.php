@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Test\Integration\Actions\Auth;
+namespace App\Test\Integration\Actions\Authentication;
 
-use App\Domain\Auth\DTO\UserVerification;
+use App\Domain\Authentication\DTO\UserVerification;
 use App\Domain\User\DTO\User;
 use App\Test\AppTestTrait;
 use App\Test\Fixture\UserFixture;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Integration\Actions\Auth;
+namespace App\Test\Integration\Actions\Authentication;
 
 use App\Domain\Utility\EmailService;
 use App\Test\AppTestTrait;

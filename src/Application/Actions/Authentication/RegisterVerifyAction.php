@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\Actions\Auth;
+namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\Exception\InvalidTokenException;
-use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
-use App\Domain\Auth\Service\RegisterTokenVerifier;
+use App\Domain\Authentication\Exception\InvalidTokenException;
+use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
+use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;

@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider;
 
-use App\Domain\Auth\DTO\UserVerification;
+use App\Domain\Authentication\DTO\UserVerification;
 
 class UserVerificationProvider
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Auth;
+namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
 use Psr\Http\Message\ResponseInterface as Response;

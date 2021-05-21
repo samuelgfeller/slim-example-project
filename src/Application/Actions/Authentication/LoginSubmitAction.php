@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Application\Actions\Auth;
+namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\Service\LoginVerifier;
+use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;

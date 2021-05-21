@@ -9,17 +9,17 @@ use Slim\Routing\RouteCollectorProxy;
 return function (App $app) {
     $app->redirect('/', 'hello', 301)->setName('home');
 
-    $app->get('/login', \App\Application\Actions\Auth\LoginAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Actions\Auth\LoginSubmitAction::class)->setName('login-submit');
+    $app->get('/login', \App\Application\Actions\Authentication\LoginAction::class)->setName('login-page');
+    $app->post('/login', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName('login-submit');
 
-    $app->get('/logout', \App\Application\Actions\Auth\LogoutAction::class)->setName('logout');
+    $app->get('/logout', \App\Application\Actions\Authentication\LogoutAction::class)->setName('logout');
 
-    $app->get('/register', \App\Application\Actions\Auth\RegisterAction::class)->setName('register-page');
-    $app->post('/register', \App\Application\Actions\Auth\RegisterSubmitAction::class)->setName('register-submit');
-    $app->get('/register-verification', \App\Application\Actions\Auth\RegisterVerifyAction::class)->setName(
+    $app->get('/register', \App\Application\Actions\Authentication\RegisterAction::class)->setName('register-page');
+    $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName('register-submit');
+    $app->get('/register-verification', \App\Application\Actions\Authentication\RegisterVerifyAction::class)->setName(
         'register-verification'
     );
-    $app->get('/register-check-email', \App\Application\Actions\Auth\RegisterCheckEmailAction::class)->setName(
+    $app->get('/register-check-email', \App\Application\Actions\Authentication\RegisterCheckEmailAction::class)->setName(
         'register-check-email-page'
     );
 

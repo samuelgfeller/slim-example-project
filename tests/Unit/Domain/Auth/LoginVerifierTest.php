@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Test\Unit\Domain\Auth;
+namespace App\Test\Unit\Domain\Authentication;
 
-use App\Domain\Auth\Service\LoginVerifier;
+use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityLoginChecker;

@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Users;
 
 use App\Application\Responder\Responder;
-use App\Domain\Auth\Service\UserRoleFinder;
+use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserDeleter;
 use Psr\Http\Message\ResponseInterface;

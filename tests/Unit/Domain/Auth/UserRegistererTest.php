@@ -2,13 +2,13 @@
 
 namespace App\Test\Unit\Domain\Auth;
 
-use App\Domain\Auth\Service\UserRegisterer;
+use App\Domain\Authentication\Service\UserRegisterer;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\User\UserRepository;
-use App\Infrastructure\User\UserVerificationRepository;
+use App\Infrastructure\Authentication\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 

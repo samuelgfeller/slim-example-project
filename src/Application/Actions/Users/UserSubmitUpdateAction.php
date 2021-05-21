@@ -16,8 +16,6 @@ final class UserSubmitUpdateAction
 {
     private Responder $responder;
 
-    protected AuthService $authService;
-
     protected LoggerInterface $logger;
 
     /**
@@ -26,19 +24,16 @@ final class UserSubmitUpdateAction
      * @param Responder $responder The responder
      * @param LoggerFactory $logger
      * @param UserUpdater $userUpdater
-     * @param AuthService $authService
      * @param SessionInterface $session
      */
     public function __construct(
         Responder $responder,
         LoggerFactory $logger,
         private UserUpdater $userUpdater,
-        AuthService $authService,
         private SessionInterface $session
 
     ) {
         $this->responder = $responder;
-        $this->authService = $authService;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-update');
     }
 

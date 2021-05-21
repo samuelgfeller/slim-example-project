@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Domain\Auth\Service;
+namespace App\Domain\Authentication\Service;
 
 
-use App\Domain\Auth\Exception\InvalidTokenException;
-use App\Domain\Auth\Exception\UserAlreadyVerifiedException;
+use App\Domain\Authentication\Exception\InvalidTokenException;
+use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\User\UserRepository;
 use App\Infrastructure\User\UserVerificationRepository;
