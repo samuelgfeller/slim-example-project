@@ -7,15 +7,17 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\User\DTO\User;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Infrastructure\User\UserFinderRepository;
-use App\Infrastructure\Authentication\UserVerificationRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 
 final class RegisterTokenVerifier
 {
     public function __construct(
         private UserFinderRepository $userFinderRepository,
-        private UserVerificationRepository $userVerificationRepository,
+        private VerificationTokenFinderRepository $verificationTokenFinderRepository,
+        private VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
         private UserUpdaterRepository $userUpdaterRepository
     ) { }
 
@@ -28,7 +30,7 @@ final class RegisterTokenVerifier
      */
     public function getUserIdIfTokenIsValid(int $verificationId, string $token): int
     {
-        $verification = $this->userVerificationRepository->findUserVerification($verificationId);
+        $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
 
         if ($verification->token !== null) {
             $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
@@ -42,8 +44,8 @@ final class RegisterTokenVerifier
                 $hasUpdated = $this->userUpdaterRepository->changeUserStatus(User::STATUS_ACTIVE, $verification->userId);
                 if ($hasUpdated === true) {
                     // Mark token as being used only after making sure that user is active
-                    $this->userVerificationRepository->setVerificationEntryToUsed($verificationId);
-                    return $this->userVerificationRepository->getUserIdFromVerification($verificationId);
+                    $this->verificationTokenUpdaterRepository->setVerificationEntryToUsed($verificationId);
+                    return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
                 }
                 // If somehow the record could not be updated
                 throw new \DomainException('User status could not be set to "' . User::STATUS_ACTIVE . '"');

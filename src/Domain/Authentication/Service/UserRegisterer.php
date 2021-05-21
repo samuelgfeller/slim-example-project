@@ -9,10 +9,11 @@ use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\Authentication\UserRegistererRepository;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 use App\Infrastructure\User\UserFinderRepository;
-use App\Infrastructure\Authentication\UserVerificationRepository;
 
 class UserRegisterer
 {
@@ -22,7 +23,8 @@ class UserRegisterer
         private UserDeleterRepository $userDeleterRepository,
         private UserFinderRepository $userFinderRepository,
         private UserRegistererRepository $userRegistererRepository,
-        private UserVerificationRepository $userVerificationRepository,
+        private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
+        private VerificationTokenCreatorRepository $verificationTokenCreatorRepository,
         private EmailService $emailService,
         private RequestCreatorRepository $requestCreatorRepo
     ) { }
@@ -54,7 +56,7 @@ class UserRegisterer
             if ($existingUser->status === User::STATUS_UNVERIFIED) {
                 // Soft delete user so that new one can be inserted properly
                 $this->userDeleterRepository->deleteUserById($existingUser->id);
-                $this->userVerificationRepository->deleteVerificationToken($existingUser->id);
+                $this->verificationTokenDeleterRepository->deleteVerificationToken($existingUser->id);
             } elseif ($existingUser->status === User::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
                 return false;
@@ -120,10 +122,10 @@ class UserRegisterer
         $expires->add(new \DateInterval('PT02H')); // 2 hours
 
         // Soft delete any existing tokens for this user
-        $this->userVerificationRepository->deleteVerificationToken($user->id);
+        $this->verificationTokenDeleterRepository->deleteVerificationToken($user->id);
 
         // Insert verification token into database
-        $tokenId = $this->userVerificationRepository->insertUserVerification(
+        $tokenId = $this->verificationTokenCreatorRepository->insertUserVerification(
             [
                 'user_id' => $user->id,
                 'token' => password_hash($token, PASSWORD_DEFAULT),

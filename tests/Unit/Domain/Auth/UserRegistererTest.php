@@ -3,13 +3,14 @@
 namespace App\Test\Unit\Domain\Auth;
 
 use App\Domain\Authentication\Service\UserRegisterer;
+use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\EmailService;
 use App\Infrastructure\Authentication\UserRegistererRepository;
+use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\User\UserFinderRepository;
-use App\Infrastructure\Authentication\UserVerificationRepository;
 use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -36,9 +37,8 @@ class UserRegistererTest extends TestCase
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
-        $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
-        $userVerificationRepositoryMock->expects(self::once())->method('deleteVerificationToken');
-        $userVerificationRepositoryMock->expects(self::once())->method('insertUserVerification');
+        $this->mock(VerificationTokenDeleterRepository::class)->expects(self::once())->method('deleteVerificationToken');
+        $this->mock(VerificationTokenCreator::class)->expects(self::once())->method('insertUserVerification');
         $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
             'One more step to register'
         );
@@ -100,9 +100,10 @@ class UserRegistererTest extends TestCase
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
-        $userVerificationRepositoryMock = $this->mock(UserVerificationRepository::class);
-        $userVerificationRepositoryMock->expects(self::never())->method('deleteVerificationToken');
-        $userVerificationRepositoryMock->expects(self::never())->method('insertUserVerification');
+        $this->mock(VerificationTokenDeleterRepository::class)->expects(self::never())->method(
+            'deleteVerificationToken'
+        );
+        $this->mock(VerificationTokenCreator::class)->expects(self::never())->method('insertUserVerification');
         $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
             'Someone tried to create an account with your address'
         );

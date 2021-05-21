@@ -74,7 +74,6 @@ class RequestFinderRepository
                 'email' => $email
             ]
         )->bind(':sec', $seconds, 'integer');
-
         // Only fetch and not fetchAll as result will be one row with the counts
         return new RequestStatsData($query->execute()->fetch('assoc'));
     }

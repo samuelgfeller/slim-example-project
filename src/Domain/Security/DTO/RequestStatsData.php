@@ -10,14 +10,19 @@ use App\Common\ArrayReader;
  */
 class RequestStatsData
 {
-    public int $sentEmails;
-    public int $loginFailures;
-    public int $loginSuccesses;
+    // May be null when there are no requests
+    public ?int $sentEmails;
+    public ?int $loginFailures;
+    public ?int $loginSuccesses;
 
+    /**
+     * RequestStatsData constructor.
+     * @param array $data
+     */
     public function __construct(array $data = []) {
         $reader = new ArrayReader($data);
-        $this->sentEmails = $reader->getInt('sent_emails');
-        $this->loginFailures = $reader->getInt('login_failures');
-        $this->loginSuccesses = $reader->getInt('login_successes');
+        $this->sentEmails = $reader->findInt('sent_emails');
+        $this->loginFailures = $reader->findInt('login_failures');
+        $this->loginSuccesses = $reader->findInt('login_successes');
     }
 }
