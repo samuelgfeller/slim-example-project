@@ -4,7 +4,7 @@ namespace App\Domain\Post\DTO;
 
 
 use App\Domain\User\DTO\User;
-use App\Domain\Utility\ArrayReader;
+use App\Common\ArrayReader;
 
 class Post
 {

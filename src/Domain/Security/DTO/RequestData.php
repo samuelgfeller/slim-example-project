@@ -4,7 +4,7 @@
 namespace App\Domain\Security\DTO;
 
 
-use App\Domain\Utility\ArrayReader;
+use App\Common\ArrayReader;
 
 class RequestData
 {

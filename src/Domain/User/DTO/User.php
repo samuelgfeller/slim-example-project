@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\DTO;
 
-use App\Domain\Utility\ArrayReader;
+use App\Common\ArrayReader;
 
 /**
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
