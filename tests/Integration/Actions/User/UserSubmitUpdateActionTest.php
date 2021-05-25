@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Actions\User;
 
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

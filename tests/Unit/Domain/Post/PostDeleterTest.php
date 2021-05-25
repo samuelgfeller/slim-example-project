@@ -4,7 +4,7 @@ namespace App\Test\Unit\Domain\Post;
 
 use App\Domain\Post\Service\PostDeleter;
 use App\Infrastructure\Post\PostDeleterRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class PostDeleterTest extends TestCase

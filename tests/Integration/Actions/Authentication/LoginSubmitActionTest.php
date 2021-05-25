@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Actions\Authentication;
 
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;

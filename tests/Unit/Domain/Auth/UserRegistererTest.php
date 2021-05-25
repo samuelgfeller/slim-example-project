@@ -13,7 +13,7 @@ use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreator
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class UserRegistererTest extends TestCase

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Test\Integration\Actions\Auth;
+namespace App\Test\Integration\Actions\Authentication;
 
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\RouteTestTrait;

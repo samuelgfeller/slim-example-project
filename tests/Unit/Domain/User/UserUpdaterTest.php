@@ -6,7 +6,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Service\UserUpdater;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class UserUpdaterTest extends TestCase

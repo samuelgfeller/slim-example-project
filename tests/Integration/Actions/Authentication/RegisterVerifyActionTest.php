@@ -4,7 +4,7 @@ namespace App\Test\Integration\Actions\Authentication;
 
 use App\Domain\Authentication\DTO\UserVerification;
 use App\Domain\User\DTO\User;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;

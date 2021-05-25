@@ -8,7 +8,7 @@ use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Infrastructure\Security\RequestFinderRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

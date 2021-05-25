@@ -3,7 +3,7 @@
 namespace App\Test\Integration\Actions\Authentication;
 
 use App\Domain\Utility\EmailService;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixture;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;

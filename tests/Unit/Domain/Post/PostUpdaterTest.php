@@ -6,7 +6,7 @@ use App\Domain\Post\DTO\Post;
 use App\Domain\Post\Service\PostUpdater;
 use App\Infrastructure\Post\PostUpdaterRepository;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class PostUpdaterTest extends TestCase

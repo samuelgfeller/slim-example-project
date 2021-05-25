@@ -5,7 +5,7 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 
 class DebuggingTest extends \PHPUnit\Framework\TestCase
 {
-    use \App\Test\AppTestTrait;
+    use \App\Test\Traits\AppTestTrait;
     use RouteTestTrait;
     use \Selective\TestTrait\Traits\HttpTestTrait;
     use \Selective\TestTrait\Traits\DatabaseTestTrait;

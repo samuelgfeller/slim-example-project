@@ -5,7 +5,7 @@ namespace App\Test\Unit\Domain\Auth;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class UserRoleFinderTest extends TestCase

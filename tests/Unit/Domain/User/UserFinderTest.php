@@ -5,7 +5,7 @@ namespace App\Test\Unit\Domain\User;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\User\UserFinderRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class UserFinderTest extends TestCase

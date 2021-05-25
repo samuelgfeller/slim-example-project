@@ -5,7 +5,7 @@ namespace App\Test\Unit\Domain\User;
 use App\Domain\User\Service\UserDeleter;
 use App\Infrastructure\Post\PostDeleterRepository;
 use App\Infrastructure\User\UserDeleterRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class UserDeleterTest extends TestCase

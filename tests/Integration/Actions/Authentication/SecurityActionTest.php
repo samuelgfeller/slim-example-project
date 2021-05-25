@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Test\Integration\Actions\Auth;
+namespace App\Test\Integration\Actions\Authentication;
 
 use App\Domain\Security\Exception\SecurityException;
 use App\Infrastructure\Security\RequestFinderRepository;
 use App\Infrastructure\Security\RequestPreponerRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixtureLoginFailure;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
@@ -33,8 +33,8 @@ class SecurityActionTest extends TestCase
      */
     public function testTooManyLoginAttempts(array $loginFormValues): void
     {
-        // Not needed to insert successful login requests to make sure that request doesn't fail because global ratio
-        // too low as there is a minimal hard limit for the global check to fail
+        // Fixture not needed to insert successful login requests to make sure that request doesn't fail because global
+        // ratio too low as there is a minimal hard limit for the global check to fail
 
         // Insert user for the test of successful login abuse (provided via dataProvider)
         $this->insertFixtures([UserFixture::class]);

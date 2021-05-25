@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test;
+namespace App\Test\Traits;
 
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\MemorySession;
@@ -33,7 +33,7 @@ trait AppTestTrait
     protected function setUp(): void
     {
         // Start slim app
-        $this->app = require __DIR__ . '/../app/bootstrap.php';
+        $this->app = require __DIR__ . '/../../app/bootstrap.php';
 
         // Set $this->container to container instance
         $container = $this->app->getContainer();
@@ -58,7 +58,7 @@ trait AppTestTrait
             }
 
             // Create tables, truncate old ones
-            $this->setUpDatabase(__DIR__ . '/../resources/schema/schema.sql');
+            $this->setUpDatabase(__DIR__ . '/../../resources/schema/schema.sql');
         }
 
         // Per default not set when script executed with cli and used at least in all security checks
@@ -67,7 +67,7 @@ trait AppTestTrait
         // XDebug start_with_request produces errors when testing (SLE-102)
         // Disable xdebug.start_with_request (when already disabled, delay is approx 200ms for 80 tests)
         if (!isset($_ENV['AUTO_XDEBUG_DISABLED'])){
-            shell_exec( __DIR__ . '/../resources/scripts/1_disable_autostart_minimized_shortcut.lnk');
+            shell_exec(__DIR__ . '/../../resources/scripts/1_disable_autostart_minimized_shortcut.lnk');
             $_ENV['AUTO_XDEBUG_DISABLED'] = true;
 //            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
         }

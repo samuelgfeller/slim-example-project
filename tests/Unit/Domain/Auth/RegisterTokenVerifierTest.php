@@ -11,7 +11,7 @@ use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderR
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Infrastructure\User\UserFinderRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

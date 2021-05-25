@@ -7,7 +7,7 @@ use App\Domain\Post\Service\PostFinder;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostFinderRepository;
-use App\Test\AppTestTrait;
+use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 class PostFinderTest extends TestCase
@@ -34,7 +34,6 @@ class PostFinderTest extends TestCase
         // which is being tested. So we can take the autowired class instance from the container directly.
         /** @var PostFinder $service */
         $service = $this->container->get(PostFinder::class);
-
 
         self::assertEquals($posts, $service->findAllPostsWithUsers());
 
