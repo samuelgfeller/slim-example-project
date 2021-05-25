@@ -29,6 +29,13 @@ class PostFixture
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-
+        [
+            'id' => 3,
+            'user_id' => 1,
+            'message' => 'This is the second post referenced to user 1',
+            'updated_at' => null,
+            'created_at' => '2021-01-01 00:00:05',
+            'deleted_at' => null,
+        ],
     ];
 }

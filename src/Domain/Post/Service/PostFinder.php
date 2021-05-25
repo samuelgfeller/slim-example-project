@@ -53,12 +53,11 @@ class PostFinder
     /**
      * Return all posts which are linked to the given user
      *
-     * @param $userId
-     * @return array
+     * @param int $userId
+     * @return UserPost[]
      */
-    public function findAllPostsFromUser($userId): array
+    public function findAllPostsFromUser(int $userId): array
     {
-        $posts = $this->postFinderRepository->findAllPostsByUserId($userId);
-        return $this->addUserToPosts($posts);
+        return $this->postFinderRepository->findAllPostsByUserId($userId);
     }
 }

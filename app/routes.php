@@ -15,11 +15,16 @@ return function (App $app) {
     $app->get('/logout', \App\Application\Actions\Authentication\LogoutAction::class)->setName('logout');
 
     $app->get('/register', \App\Application\Actions\Authentication\RegisterAction::class)->setName('register-page');
-    $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName('register-submit');
+    $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName(
+        'register-submit'
+    );
     $app->get('/register-verification', \App\Application\Actions\Authentication\RegisterVerifyAction::class)->setName(
         'register-verification'
     );
-    $app->get('/register-check-email', \App\Application\Actions\Authentication\RegisterCheckEmailAction::class)->setName(
+    $app->get(
+        '/register-check-email',
+        \App\Application\Actions\Authentication\RegisterCheckEmailAction::class
+    )->setName(
         'register-check-email-page'
     );
 
@@ -40,20 +45,34 @@ return function (App $app) {
         }
     )->add(UserAuthMiddleware::class);
 
-    // Post requests where user needs to be authenticated
+
+
     $app->group(
         '/posts',
         function (RouteCollectorProxy $group) {
+            // Post requests where user DOESN'T need to be authenticated
             $group->get('', \App\Application\Actions\Posts\PostListAction::class)->setName('post-list-all');
-            $group->post('', \App\Application\Actions\Posts\PostCreateAction::class);
 
-            $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostReadAction::class)->setName('post-read');
-            $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class);
-            $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class);
+            $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostReadAction::class)->setName(
+                'post-read'
+            );
+
+            // Post requests where user DOES need to be authenticated
+            $group->post('', \App\Application\Actions\Posts\PostCreateAction::class)->add(UserAuthMiddleware::class);
+            $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class)->add(
+                UserAuthMiddleware::class
+            );
+            $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class)->add(
+                UserAuthMiddleware::class
+            );
         }
-    )->add(UserAuthMiddleware::class);
+    );
 
-    $app->get('/own-posts', \App\Application\Actions\Posts\PostViewOwnAction::class)->setName('post-list-own');
+    // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
+    // option 2 /own-posts and get user id from session
+    $app->get('/own-posts', \App\Application\Actions\Posts\PostListOwnAction::class)->setName(
+        'post-list-own'
+    )->add(UserAuthMiddleware::class);
 
     $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
 

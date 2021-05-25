@@ -3,8 +3,11 @@
 namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
+use App\Domain\Post\Exception\InvalidPostFilterException;
+use App\Domain\Post\Service\PostFilterFinder;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\Validation\OutputEscapeService;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,26 +17,15 @@ use Psr\Http\Message\ServerRequestInterface;
 final class PostListAction
 {
     /**
-     * @var Responder
-     */
-    private Responder $responder;
-    protected OutputEscapeService $outputEscapeService;
-
-
-    /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
-     * @param OutputEscapeService $outputEscapeService
+     * @param PostFilterFinder $postFilterFinder
      */
     public function __construct(
-        Responder $responder,
-        private PostFinder $postFinder,
-        OutputEscapeService $outputEscapeService
+        private Responder $responder,
+        private PostFilterFinder $postFilterFinder,
     ) {
-        $this->responder = $responder;
-        $this->outputEscapeService = $outputEscapeService;
     }
 
     /**
@@ -46,10 +38,26 @@ final class PostListAction
      * @return ResponseInterface The response
      * @throws \JsonException
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        $postsWithUsers = $this->postFinder->findAllPostsWithUsers();
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        try {
+            // Retrieve posts with given filter values (or none)
+            $userPosts = $this->postFilterFinder->findPostsWithFilter($request->getQueryParams());
+        } catch (InvalidPostFilterException $invalidPostFilterException) {
+            return $this->responder->respondWithJson(
+                $response,
+                // Response format tested in PostFilterProvider.php
+                [
+                    'status' => 'error',
+                    'message' => $invalidPostFilterException->getMessage()
+                ],
+                StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
+            );
+        }
 
-        return $this->responder->respondWithJson($response, $postsWithUsers);
+        return $this->responder->respondWithJson($response, $userPosts);
     }
 }

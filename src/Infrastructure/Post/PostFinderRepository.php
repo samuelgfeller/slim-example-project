@@ -17,7 +17,9 @@ class PostFinderRepository
     public function __construct(
         private DataManager $dataManager,
         private Hydrator $hydrator
-    ) { }
+    )
+    {
+    }
 
     /**
      * Return all posts with users attribute loaded
@@ -79,7 +81,7 @@ class PostFinderRepository
                 'user_role' => 'user.role',
             ]
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
-            ['post.id' => $id,'post.deleted_at IS' => null]
+            ['post.id' => $id, 'post.deleted_at IS' => null]
         );
         $resultRows = $query->execute()->fetch('assoc');
         // Instantiate UserPost DTO
@@ -104,12 +106,29 @@ class PostFinderRepository
      * Return all posts which are linked to the given user
      *
      * @param int $userId
-     * @return Post[]
+     * @return UserPost[]
      */
     public function findAllPostsByUserId(int $userId): array
     {
-        $postRows = $this->dataManager->findAllBy('post', 'user_id', $userId);
-        // Convert to list of objects
-        return $this->hydrator->hydrate($postRows, Post::class);
+        $query = $this->dataManager->newQuery()->from('post');
+        $query->select(
+            [
+                'post_id' => 'post.id',
+                'user_id' => 'user.id',
+                'post_message' => 'post.message',
+                'post_created_at' => 'post.created_at',
+                'post_updated_at' => 'post.updated_at',
+                'user_name' => 'user.name',
+                'user_role' => 'user.role',
+            ]
+        )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
+            [
+                'post.user_id' => $userId, // Not unsafe as its not an expression and thus escaped by querybuilder
+                'post.deleted_at IS' => null
+            ]
+        );
+        $resultRows = $query->execute()->fetchAll('assoc');
+        // Convert to list of Post objects with associated User info
+        return $this->hydrator->hydrate($resultRows, UserPost::class);
     }
 }
