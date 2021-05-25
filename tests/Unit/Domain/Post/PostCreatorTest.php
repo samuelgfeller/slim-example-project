@@ -22,16 +22,12 @@ class PostCreatorTest extends TestCase
      */
     public function testCreatePost(Post $validPost): void
     {
-        $postId = $validPost->id;
-        // Removing id from post array because before post is created id is not known
-        unset($validPost['id']);
-
         // Mock the required repository and configure relevant method return value
         // Here I find ->expects() relevant since the test is about if the method is called or not
         // but should the expected parameter be tested as well? ->with($this->equalTo($validPost)) not included
         // because I dont want an annoying test function that fails for nothing if code changes. Didn't see the
         // real need for a test but maybe I'm wrong.
-        $this->mock(PostCreator::class)->expects(self::once())->method('insertPost')->willReturn($postId);
+        $this->mock(PostCreator::class)->expects(self::once())->method('createPost')->willReturn(1);
 
         // Mock because it is used in the validation logic.
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
@@ -39,9 +35,7 @@ class PostCreatorTest extends TestCase
         /** @var PostCreator $postCreator */
         $postCreator = $this->container->get(PostCreator::class);
 
-        $postObj = new Post($validPost);
-
-        self::assertEquals($postId, $postCreator->createPost($postObj));
+        self::assertEquals(1, $postCreator->createPost($validPost));
     }
 
     /**
@@ -52,9 +46,9 @@ class PostCreatorTest extends TestCase
      * The method is called with each value of the provider
      *
      * @dataProvider \App\Test\Provider\PostProvider::invalidPostsProvider()
-     * @param array $invalidPost
+     * @param Post $invalidPost
      */
-    public function testCreatePost_invalid(array $invalidPost): void
+    public function testCreatePost_invalid(Post $invalidPost): void
     {
         // Mock because it is used by the validation logic.
         // Empty mock would do the trick as well as it would just return null on non defined functions.
@@ -68,7 +62,7 @@ class PostCreatorTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->createPost(new Post($invalidPost));
+        $service->createPost($invalidPost);
         // If we wanted to test more detailed, the error messages could be tested, that the right message(s) appear
     }
 
@@ -76,9 +70,9 @@ class PostCreatorTest extends TestCase
      * Test createPost when user doesn't exist
      *
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
-     * @param array $validPost
+     * @param Post $validPost
      */
-    public function testCreatePost_notExistingUser(array $validPost): void
+    public function testCreatePost_notExistingUser(Post $validPost): void
     {
         // Point of this test is not existing user
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(false);
@@ -88,6 +82,6 @@ class PostCreatorTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $service->createPost(new Post($validPost));
+        $service->createPost($validPost);
     }
 }

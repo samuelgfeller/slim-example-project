@@ -21,9 +21,9 @@ class PostUpdaterTest extends TestCase
      * validation as registerUser() and it's already done there
      *
      * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
-     * @param array $validPost
+     * @param Post $validPost
      */
-    public function testUpdatePost(array $validPost): void
+    public function testUpdatePost(Post $validPost): void
     {
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 
@@ -33,6 +33,6 @@ class PostUpdaterTest extends TestCase
         /** @var PostUpdater $service */
         $service = $this->container->get(PostUpdater::class);
 
-        self::assertTrue($service->updatePost(new Post($validPost)));
+        self::assertTrue($service->updatePost($validPost));
     }
 }

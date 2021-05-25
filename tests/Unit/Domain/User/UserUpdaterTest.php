@@ -4,6 +4,7 @@ namespace App\Test\Unit\Domain\User;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Service\UserUpdater;
+use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 use App\Test\Traits\AppTestTrait;
@@ -24,6 +25,7 @@ class UserUpdaterTest extends TestCase
         $this->mock(UserUpdaterRepository::class)->expects(self::once())->method('updateUser')->willReturn(true);
         // Used in Validation to check user existence
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
+        $this->mock(UserRoleFinderRepository::class)->method('getUserRoleById')->willReturn('user');
 
         $service = $this->container->get(UserUpdater::class);
 

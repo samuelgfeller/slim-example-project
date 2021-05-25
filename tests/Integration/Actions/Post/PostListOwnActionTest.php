@@ -58,7 +58,7 @@ class PostListOwnActionTest extends TestCase
         // Get rows of posts linked to user 1
         $postsFromUserRecords = $this->findRecordsFromFixtureWhere(['user_id' => 1], PostFixture::class);
         // Relevant user record
-        $userRow = $this->findRecordsFromFixtureWhere(['id' => 1], UserFixture::class);
+        $userRow = $this->findRecordsFromFixtureWhere(['id' => 1], UserFixture::class)[0];
         foreach ($postsFromUserRecords as $postRow) {
             $expected[] = [
                 // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718

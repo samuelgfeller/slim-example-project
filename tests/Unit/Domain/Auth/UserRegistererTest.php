@@ -110,7 +110,7 @@ class UserRegistererTest extends TestCase
         $this->mock(VerificationTokenDeleterRepository::class)->expects(self::never())->method(
             'deleteVerificationToken'
         );
-        $this->mock(VerificationTokenCreator::class)->expects(self::never())->method('insertUserVerification');
+        $this->mock(VerificationTokenCreatorRepository::class)->expects(self::never())->method('insertUserVerification');
         $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
             'Someone tried to create an account with your address'
         );
