@@ -4,12 +4,12 @@
 namespace App\Infrastructure\Security;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class RequestCreatorRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -21,7 +21,7 @@ class RequestCreatorRepository
      */
     public function insertEmailRequest(string $email, string $ip): string
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
 
         return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
             [
@@ -43,7 +43,7 @@ class RequestCreatorRepository
      */
     public function insertLoginRequest(string $email, string $ip, bool $success): string
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
             [
                 'email' => $email,

@@ -7,15 +7,14 @@ namespace App\Infrastructure\Post;
 use App\Common\Hydrator;
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\DTO\UserPost;
-use App\Domain\User\DTO\User;
-use App\Infrastructure\DataManager;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Factory\QueryFactory;
 
 class PostFinderRepository
 {
 
     public function __construct(
-        private DataManager $dataManager,
+        private QueryFactory $queryFactory,
         private Hydrator $hydrator
     )
     {
@@ -28,7 +27,7 @@ class PostFinderRepository
      */
     public function findAllPostsWithUsers(): array
     {
-        $query = $this->dataManager->newQuery()->from('post');
+        $query = $this->queryFactory->newQuery()->from('post');
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -43,7 +42,7 @@ class PostFinderRepository
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
             ['post.deleted_at IS' => null]
         );
-        $resultRows = $query->execute()->fetchAll('assoc');
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, UserPost::class);
     }
@@ -57,7 +56,9 @@ class PostFinderRepository
      */
     public function findPostById(string|int $id): Post
     {
-        $postRow = $this->dataManager->findById('post', $id);
+        $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
+            ['deleted_at IS' => null, 'id' => $id]);
+        $postRow = $query->execute()->fetch('assoc') ?: [];
         return new Post($postRow);
     }
 
@@ -69,7 +70,7 @@ class PostFinderRepository
      */
     public function findUserPostById(int $id): UserPost
     {
-        $query = $this->dataManager->newQuery()->from('post');
+        $query = $this->queryFactory->newQuery()->from('post');
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -83,7 +84,7 @@ class PostFinderRepository
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
             ['post.id' => $id, 'post.deleted_at IS' => null]
         );
-        $resultRows = $query->execute()->fetch('assoc');
+        $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
         return new UserPost($resultRows);
     }
@@ -99,7 +100,13 @@ class PostFinderRepository
      */
     public function getPostById(int $id): array
     {
-        return $this->dataManager->getById('post', $id);
+        $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
+            ['deleted_at IS' => null, 'id' => $id]);
+        $entry = $query->execute()->fetch('assoc');
+        if (!$entry){
+            throw new PersistenceRecordNotFoundException('post');
+        }
+        return $entry;
     }
 
     /**
@@ -110,7 +117,7 @@ class PostFinderRepository
      */
     public function findAllPostsByUserId(int $userId): array
     {
-        $query = $this->dataManager->newQuery()->from('post');
+        $query = $this->queryFactory->newQuery()->from('post');
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -127,7 +134,7 @@ class PostFinderRepository
                 'post.deleted_at IS' => null
             ]
         );
-        $resultRows = $query->execute()->fetchAll('assoc');
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, UserPost::class);
     }

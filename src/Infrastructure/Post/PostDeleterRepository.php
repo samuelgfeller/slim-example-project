@@ -4,13 +4,13 @@
 namespace App\Infrastructure\Post;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class PostDeleterRepository
 
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -21,7 +21,7 @@ class PostDeleterRepository
      */
     public function deletePost(int $id): bool
     {
-        $query = $this->dataManager->newDelete('post')->where(['id' => $id]);
+        $query = $this->queryFactory->newDelete('post')->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 
@@ -33,7 +33,7 @@ class PostDeleterRepository
      */
     public function deletePostsFromUser(int $userId): bool
     {
-        $query = $this->dataManager->newDelete('post')->where(['user_id' => $userId]);
+        $query = $this->queryFactory->newDelete('post')->where(['user_id' => $userId]);
         return $query->execute()->rowCount() > 0;
     }
 }

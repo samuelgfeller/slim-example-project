@@ -6,13 +6,14 @@ namespace App\Infrastructure\Security;
 
 use App\Domain\Security\DTO\RequestData;
 use App\Domain\Security\DTO\RequestStatsData;
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Factory\QueryFactory;
 use JetBrains\PhpStorm\ArrayShape;
 
 class RequestFinderRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) {
     }
 
@@ -21,12 +22,12 @@ class RequestFinderRepository
      *
      * @param string $ip
      * @param int $seconds
-     *
+     * Throws PersistenceRecordNotFoundException if entry not found
      * @return RequestStatsData
      */
     public function getIpRequestStats(string $ip, int $seconds): RequestStatsData
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select(
             [
                 'sent_emails' => $query->func()->sum('sent_email'),
@@ -45,7 +46,11 @@ class RequestFinderRepository
         )->bind(':sec', $seconds, 'integer')->bind(':ip', $ip, 'string');
 
         // Only fetch and not fetchAll as result will be one row with the counts
-        return new RequestStatsData($query->execute()->fetch('assoc'));
+        $requestStats = $query->execute()->fetch('assoc');
+        if (!$requestStats){
+            throw new PersistenceRecordNotFoundException('requestStats');
+        }
+        return new RequestStatsData($requestStats);
     }
 
     /**
@@ -57,7 +62,7 @@ class RequestFinderRepository
      */
     public function getUserRequestStats(string $email, int $seconds): RequestStatsData
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select(
             [
                 'sent_emails' => $query->func()->sum('sent_email'),
@@ -87,7 +92,7 @@ class RequestFinderRepository
      */
     public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): RequestData
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select('*')->from('request_track')->where(
             [
                 'is_login IS NOT' => null,
@@ -95,7 +100,7 @@ class RequestFinderRepository
                 // output: WHERE ((`is_login`) IS NOT NULL AND (`email` = :c0 OR `ip_address` = (INET_ATON(:ip))))
             ]
         )->bind(':ip', $ip, 'string')->orderDesc('created_at')->limit(1);
-        return new RequestData($query->execute()->fetch('assoc'));
+        return new RequestData($query->execute()->fetch('assoc') ?: []);
     }
 
     /**
@@ -107,14 +112,14 @@ class RequestFinderRepository
      */
     public function findLatestEmailRequestFromUserOrIp(string $email, string $ip): RequestData
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select('*')->from('request_track')->where(
             [
                 'sent_email' => 1,
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
             ]
         )->bind(':ip', $ip, 'string')->orderDesc('created_at')->limit(1);
-        return new RequestData($query->execute()->fetch('assoc'));
+        return new RequestData($query->execute()->fetch('assoc') ?: []);
     }
 
     /**
@@ -125,7 +130,7 @@ class RequestFinderRepository
     #[ArrayShape(['login_total' => "array", 'login_failures' => "array"])]
     public function getGlobalLoginAmountStats(): array
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select(
             [
                 'login_total' => $query->func()->count(1),
@@ -147,7 +152,7 @@ class RequestFinderRepository
      */
     public function getGlobalSentEmailAmount(int $days): int
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->select(
             [
                 'sent_email_amount' => $query->func()->sum('sent_email')

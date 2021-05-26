@@ -4,13 +4,13 @@
 namespace App\Infrastructure\User;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class UserExistenceCheckerRepository
 {
 
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -21,6 +21,9 @@ class UserExistenceCheckerRepository
      */
     public function userExists(int $id): bool
     {
-        return $this->dataManager->exists('user', 'id', $id);
+        $query = $this->queryFactory->newQuery()->from('user');
+        $query->select(1)->where(['id' => $id]);
+        $row = $query->execute()->fetch();
+        return !empty($row);
     }
 }

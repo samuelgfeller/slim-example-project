@@ -3,14 +3,13 @@
 
 namespace App\Infrastructure\Post;
 
-
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class PostCreatorRepository
 
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     )
     {
     }
@@ -23,6 +22,6 @@ class PostCreatorRepository
      */
     public function insertPost(array $data): int
     {
-        return (int)$this->dataManager->newInsert($data)->into('post')->execute()->lastInsertId();
+        return (int)$this->queryFactory->newInsert($data)->into('post')->execute()->lastInsertId();
     }
 }

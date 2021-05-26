@@ -4,12 +4,13 @@
 namespace App\Infrastructure\Authentication;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
+use App\Infrastructure\Factory\QueryFactory;
 
 class UserRoleFinderRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -22,6 +23,12 @@ class UserRoleFinderRepository
     public function getUserRoleById(int $id): string
     {
         // todo put role in separate tables
-        return $this->dataManager->getById('user', $id, ['role'])['role'];
+        $query = $this->queryFactory->newQuery()->select(['role'])->from('user')->where(
+            ['deleted_at IS' => null, 'id' => $id]);
+        $role = $query->execute()->fetch('assoc')['role'];
+        if (!$role){
+            throw new PersistenceRecordNotFoundException('post');
+        }
+        return $role;
     }
 }

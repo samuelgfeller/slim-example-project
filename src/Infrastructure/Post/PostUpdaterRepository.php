@@ -4,13 +4,13 @@
 namespace App\Infrastructure\Post;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class PostUpdaterRepository
 
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     )
     {
     }
@@ -24,7 +24,7 @@ class PostUpdaterRepository
      */
     public function updatePost(array $data, int $id): bool
     {
-        $query = $this->dataManager->newQuery()->update('post')->set($data)->where(['id' => $id]);
+        $query = $this->queryFactory->newQuery()->update('post')->set($data)->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 }

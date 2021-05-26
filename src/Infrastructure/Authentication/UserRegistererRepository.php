@@ -5,12 +5,12 @@ namespace App\Infrastructure\Authentication;
 
 
 use App\Domain\User\DTO\User;
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class UserRegistererRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -22,6 +22,6 @@ class UserRegistererRepository
     public function insertUser(User $user): int
     {
         $userRows = $user->toArrayForDatabase();
-        return (int)$this->dataManager->newInsert($userRows)->into('user')->execute()->lastInsertId();
+        return (int)$this->queryFactory->newInsert($userRows)->into('user')->execute()->lastInsertId();
     }
 }

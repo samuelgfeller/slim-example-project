@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Security;
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class RequestPreponerRepository
 {
 
-    public function __construct(private DataManager $dataManager)
+    public function __construct(private QueryFactory $queryFactory)
     {
     }
 
@@ -22,7 +22,7 @@ class RequestPreponerRepository
      */
     public function preponeLastRequest(int $seconds): bool
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->update('request_track')->set(
             [
                 'created_at' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')

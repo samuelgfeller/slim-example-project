@@ -4,12 +4,12 @@
 namespace App\Infrastructure\Authentication\VerificationToken;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class VerificationTokenCreatorRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -20,6 +20,6 @@ class VerificationTokenCreatorRepository
      */
     public function insertUserVerification(array $data): int
     {
-        return (int)$this->dataManager->newInsert($data)->into('user_verification')->execute()->lastInsertId();
+        return (int)$this->queryFactory->newInsert($data)->into('user_verification')->execute()->lastInsertId();
     }
 }

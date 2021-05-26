@@ -6,9 +6,9 @@ namespace App\Infrastructure\Exceptions;
 class PersistenceRecordNotFoundException extends PersistenceException
 {
     public $message = 'The requested entry does not exist.';
-    
-    public function setNotFoundElement($tableName)
+
+    public function __construct(string $tableName)
     {
-        $this->message = 'The requested '.$tableName.' does not exist.';
+        parent::__construct('The requested '.$tableName.' does not exist.');
     }
 }

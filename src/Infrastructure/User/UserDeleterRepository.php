@@ -4,12 +4,12 @@
 namespace App\Infrastructure\User;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class UserDeleterRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -20,7 +20,7 @@ class UserDeleterRepository
      */
     public function deleteUserById(int $userId): bool
     {
-        $query = $this->dataManager->newDelete('user')->where(['id' => $userId]);
+        $query = $this->queryFactory->newDelete('user')->where(['id' => $userId]);
         return $query->execute()->rowCount() > 0;
     }
 

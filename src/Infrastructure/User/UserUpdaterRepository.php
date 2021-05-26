@@ -4,12 +4,12 @@
 namespace App\Infrastructure\User;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class UserUpdaterRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -22,7 +22,7 @@ class UserUpdaterRepository
      */
     public function updateUser(int $userId, array $userValues): bool
     {
-        $query = $this->dataManager->newQuery()->update('user')->set($userValues)->where(['id' => $userId]);
+        $query = $this->queryFactory->newQuery()->update('user')->set($userValues)->where(['id' => $userId]);
         return $query->execute()->rowCount() > 0;
     }
 
@@ -35,7 +35,7 @@ class UserUpdaterRepository
      */
     public function changeUserStatus(string $status, string $userId): bool
     {
-        $query = $this->dataManager->newQuery()->update('user')->set(['status' => $status])->where(
+        $query = $this->queryFactory->newQuery()->update('user')->set(['status' => $status])->where(
             ['id' => $userId]
         );
         return $query->execute()->rowCount() > 0;

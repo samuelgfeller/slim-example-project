@@ -4,12 +4,12 @@
 namespace App\Infrastructure\Authentication\VerificationToken;
 
 
-use App\Infrastructure\DataManager;
+use App\Infrastructure\Factory\QueryFactory;
 
 class VerificationTokenUpdaterRepository
 {
     public function __construct(
-        private DataManager $dataManager
+        private QueryFactory $queryFactory
     ) { }
 
     /**
@@ -20,7 +20,7 @@ class VerificationTokenUpdaterRepository
      */
     public function setVerificationEntryToUsed(int $verificationId): bool
     {
-        $query = $this->dataManager->newQuery();
+        $query = $this->queryFactory->newQuery();
         $query->update('user_verification')->set(['used_at' => $query->newExpr('NOW()')])->where(
             ['id' => $verificationId]
         );
