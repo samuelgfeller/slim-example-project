@@ -49,7 +49,14 @@ class UserRegisterer
         $existingUser = $this->userFinderRepository->findUserByEmail($user->email);
         // Check if user already exists
         if ($existingUser->email !== null) {
-            return $this->userAlreadyExistingHandler->handleAlreadyExistingUser($existingUser);
+            // If unverified and registered again, old user should be deleted and replaced with new input and verification
+            // Reason: User could have lost the email or someone else tried to register under someone elses name
+            if ($existingUser->status === User::STATUS_UNVERIFIED) {
+                // Only delete the user and token but not return as function should continue normally and insert new user
+                $this->userAlreadyExistingHandler->handleUnverifiedExistingUser($existingUser);
+            }else {
+                return $this->userAlreadyExistingHandler->handleNotUnverifiedExistingUser($existingUser);
+            }
         }
 
         $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);

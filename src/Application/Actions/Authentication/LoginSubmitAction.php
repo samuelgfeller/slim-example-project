@@ -65,7 +65,7 @@ final class LoginSubmitAction
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
-                        'auth/login.html.php',
+                        'Authentication/login.html.php',
                         $ve->getValidationResult(),
                         $request->getQueryParams()
                     );
@@ -79,7 +79,7 @@ final class LoginSubmitAction
                     $this->responder->addAttribute('formError', true);
                     return $this->responder->render(
                         $response->withStatus(401),
-                        'auth/login.html.php',
+                        'Authentication/login.html.php',
                         // Provide same query params passed to login page to be added to the login submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
@@ -92,7 +92,7 @@ final class LoginSubmitAction
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'auth/login.html.php',
+                        'Authentication/login.html.php',
                         ['email' => $userData['email']],
                         $request->getQueryParams()
                     );

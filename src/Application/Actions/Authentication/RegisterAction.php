@@ -29,7 +29,7 @@ final class RegisterAction
     {
         return $this->responder->render(
             $response,
-            'auth/register.html.php',
+            'Authentication/register.html.php',
             // Provide same query params passed to register page to be added to the register submit request
             ['queryParams' => $request->getQueryParams()]
         );

@@ -11,7 +11,8 @@ Hello <?= $user->name ?> <br>
 <br>
 To verify that this email address belongs to you, please click on the following link: <br>
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>"
-    >Verify account</a></b>. Note: this link will expire in 2 hours. <br>
+    >Verify account</a></b>. <br>
+Note: this link will expire in 2 hours. <br>
 <br>
 Best regards <br>
 slim-example-project

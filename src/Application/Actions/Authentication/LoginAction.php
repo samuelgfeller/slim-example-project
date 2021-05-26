@@ -38,7 +38,7 @@ final class LoginAction
     {
         return $this->responder->render(
             $response,
-            'auth/login.html.php',
+            'Authentication/login.html.php',
             // Provide same query params passed to login page to be added to the login submit request
             ['queryParams' => $request->getQueryParams()]
         );

@@ -46,6 +46,7 @@ final class PostListOwnAction
         // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
         // option 2 /own-posts and get user id from token data body
         $postsWithUsers = $this->postFinder->findAllPostsFromUser((int)$this->session->get('user_id'));
+        $a = $this->session->get('user_id');
 
         return $this->responder->respondWithJson($response, $postsWithUsers);
     }

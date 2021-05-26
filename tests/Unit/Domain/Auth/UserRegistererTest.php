@@ -107,10 +107,13 @@ class UserRegistererTest extends TestCase
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
+        // Always called when inserting a new verification token which shouldn't be done in this function hence never()
         $this->mock(VerificationTokenDeleterRepository::class)->expects(self::never())->method(
             'deleteVerificationToken'
         );
-        $this->mock(VerificationTokenCreatorRepository::class)->expects(self::never())->method('insertUserVerification');
+        $this->mock(VerificationTokenCreatorRepository::class)->expects(self::never())->method(
+            'insertUserVerification'
+        );
         $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
             'Someone tried to create an account with your address'
         );
@@ -122,4 +125,43 @@ class UserRegistererTest extends TestCase
         // registerUser returns false when user creation failed
         self::assertFalse($service->registerUser($userData));
     }
+
+    /**
+     * Test registerUser() from UserService with already existing user with same email
+     *
+     * @param array $userData values from client
+     * @param User $existingUser values from repository
+     * @throws \PHPMailer\PHPMailer\Exception
+     *
+     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     */
+    public function testRegisterUser_existingUnverifiedUser(array $userData, User $existingUser): void
+    {
+        // Set user to active just to make sure
+        $existingUser->status = User::STATUS_UNVERIFIED;
+
+        // Set findUserByEmail to return user. That means that it already exists
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);
+        // New user should be inserted and new insert id returned
+        $this->mock(UserRegistererRepository::class)->expects(self::once())->method('insertUser')->willReturn(2);
+
+        $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
+        // Always called when inserting a new verification token
+        $this->mock(VerificationTokenDeleterRepository::class)->expects(self::atLeastOnce())->method(
+            'deleteVerificationToken'
+        );
+        $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
+        $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
+            'One more step to register'
+        );
+
+        // Instantiate autowired UserService which uses the function from the previously defined custom mock
+        /** @var UserRegisterer $service */
+        $service = $this->container->get(UserRegisterer::class);
+
+        // registerUser returns false when user creation failed
+        self::assertSame(2, $service->registerUser($userData));
+    }
+
+
 }

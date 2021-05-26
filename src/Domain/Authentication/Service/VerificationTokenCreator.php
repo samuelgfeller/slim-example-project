@@ -58,7 +58,7 @@ class VerificationTokenCreator
         // Send verification mail
         $this->emailService->setSubject('One more step to register'); // Subject asserted in testRegisterUser
         $this->emailService->setContentFromTemplate(
-            'auth/register.email.php',
+            'Authentication/register.email.php',
             ['user' => $user, 'queryParams' => $queryParams]
         );
         $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');

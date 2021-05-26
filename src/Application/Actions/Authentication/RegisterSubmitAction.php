@@ -47,7 +47,7 @@ final class RegisterSubmitAction
                     // Throws exception if there is error and returns false if user already exists
                     $insertId = $this->userRegisterer->registerUser($userData, $captcha, $request->getQueryParams());
                     // Say email has been sent even when user exists as it should be kept secret
-                    $flash->add('success', 'Email sent successfully.');
+                    $flash->add('success', 'Email has been sent.');
                     $flash->add(
                         'warning',
                         'Please click on the link in the email to finnish the registration.'
@@ -56,7 +56,7 @@ final class RegisterSubmitAction
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
-                        'auth/register.html.php',
+                        'Authentication/register.html.php',
                         $ve->getValidationResult(),
                         $request->getQueryParams()
                     );
@@ -67,7 +67,7 @@ final class RegisterSubmitAction
                     $this->responder->addAttribute('formError', true);
                     return $this->responder->render(
                         $response,
-                        'auth/register.html.php',
+                        'Authentication/register.html.php',
                         // Provide same query params passed to register page to be added again to the submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
@@ -80,7 +80,7 @@ final class RegisterSubmitAction
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'auth/register.html.php',
+                        'Authentication/register.html.php',
                         ['name' => $userData['name'], 'email' => $userData['email']],
                         $request->getQueryParams()
                     );

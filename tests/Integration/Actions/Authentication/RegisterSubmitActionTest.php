@@ -87,6 +87,8 @@ class RegisterSubmitActionTest extends TestCase
     /**
      * Test that user can't be registered twice but client should not notice any difference
      * For further tests, breakpoint can be set inside the register function
+     * Fixture dependency:
+     *      UserFixture: 1 user with email "admin@example.com"
      */
     public function testRegisterUser_alreadyExisting()
     {

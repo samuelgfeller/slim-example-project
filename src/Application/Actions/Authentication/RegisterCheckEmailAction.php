@@ -26,6 +26,6 @@ final class RegisterCheckEmailAction
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        return $this->responder->render($response, 'auth/register-check-email.html.php');
+        return $this->responder->render($response, 'Authentication/register-check-email.html.php');
     }
 }
