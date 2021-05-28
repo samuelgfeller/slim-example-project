@@ -52,7 +52,7 @@ dealing with data.
 * **Helper Traits** MUST end with the name Trait: `AppTestTrait.php`
 
 ## Database
-* Database and table names all lower case and words separated by underscores
-* Database name is the same name as project name but respecting the rule above `slim_example_project`
+* Database and table names MUST be all lower case and words separated by underscores
+* Database SHOULD have the same name as the project following the rule above: `slim_example_project`
 * Test database name is the same as default database but with the "test" keyword added at the end
   separated by an underscore `slim_example_project_test`
