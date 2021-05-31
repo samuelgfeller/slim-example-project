@@ -3,7 +3,7 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
- * @var \App\Domain\User\User $user object
+ * @var \App\Domain\User\DTO\User $user object
  */
 
 ?>
