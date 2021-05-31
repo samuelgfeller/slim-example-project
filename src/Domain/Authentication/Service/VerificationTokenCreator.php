@@ -4,8 +4,9 @@
 namespace App\Domain\Authentication\Service;
 
 
+use App\Application\Actions\Authentication\AuthenticationMailer;
 use App\Domain\User\DTO\User;
-use App\Domain\Utility\EmailService;
+use App\Domain\Utility\Mailer;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 
@@ -14,7 +15,7 @@ class VerificationTokenCreator
 
     public function __construct(
         private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
-        private EmailService $emailService,
+        private AuthenticationMailer $mailer,
         private VerificationTokenCreatorRepository $verificationTokenCreatorRepository
     )
     {
@@ -55,15 +56,8 @@ class VerificationTokenCreator
         $queryParams['token'] = $token;
         $queryParams['id'] = $tokenId;
 
-        // Send verification mail
-        $this->emailService->setSubject('One more step to register'); // Subject asserted in testRegisterUser
-        $this->emailService->setContentFromTemplate(
-            'Authentication/register.email.php',
-            ['user' => $user, 'queryParams' => $queryParams]
-        );
-        $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
-        $this->emailService->sendTo($user->email, $user->name);
         // PHPMailer errors caught in action
+        $this->mailer->sendRegisterVerificationToken($user, $queryParams);
 
         return $tokenId;
     }

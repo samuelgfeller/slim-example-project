@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Actions\Authentication;
 
-use App\Domain\Utility\EmailService;
+use App\Domain\Utility\Mailer;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixture;
 use App\Test\Fixture\UserFixture;
@@ -29,13 +29,13 @@ class RegisterSubmitActionTest extends TestCase
      *
      * @return void
      */
-    public function testRegisterUser(): void
+    public function testUserRegisterer(): void
     {
 
         $this->insertFixtures([RequestTrackFixture::class]);
 
         // Prevent email from being sent
-        $this->mock(EmailService::class);
+        $this->mock(Mailer::class);
 
         $request = $this->createFormRequest(
             'POST',
@@ -98,7 +98,7 @@ class RegisterSubmitActionTest extends TestCase
         $userAmountInFixture = count((new UserFixture())->records);
 
         // Prevent email from being sent
-        $this->mock(EmailService::class);
+        $this->mock(Mailer::class);
 
         $request = $this->createFormRequest(
             'POST',
