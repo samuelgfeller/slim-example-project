@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Unit\Domain\Auth;
+namespace App\Test\Unit\Domain\Authentication;
 
 use App\Domain\Authentication\DTO\UserVerification;
 use App\Domain\Authentication\Exception\InvalidTokenException;

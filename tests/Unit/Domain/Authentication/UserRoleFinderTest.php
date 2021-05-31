@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Test\Unit\Domain\Auth;
+namespace App\Test\Unit\Domain\Authentication;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;

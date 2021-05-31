@@ -7,7 +7,7 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
-use App\Domain\Utility\EmailService;
+use App\Domain\Utility\Mailer;
 use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
@@ -70,8 +70,6 @@ class UserRegisterer
 
         // Create, insert and send token to user
         $this->verificationTokenCreator->createAndSendUserVerification($user, $queryParams);
-
-        $this->requestCreatorRepo->insertEmailRequest($user->email, $_SERVER['REMOTE_ADDR']);
 
         return $user->id;
     }

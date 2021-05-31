@@ -1,7 +1,7 @@
 <?php
 
 use App\Application\Actions\PreflightAction;
-use App\Application\Middleware\UserAuthMiddleware;
+use App\Application\Middleware\UserAuthenticationMiddleware;
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
@@ -43,7 +43,7 @@ return function (App $app) {
             );
             $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\Users\UserDeleteAction::class);
         }
-    )->add(UserAuthMiddleware::class);
+    )->add(UserAuthenticationMiddleware::class);
 
 
 
@@ -58,12 +58,12 @@ return function (App $app) {
             );
 
             // Post requests where user DOES need to be authenticated
-            $group->post('', \App\Application\Actions\Posts\PostCreateAction::class)->add(UserAuthMiddleware::class);
+            $group->post('', \App\Application\Actions\Posts\PostCreateAction::class)->add(UserAuthenticationMiddleware::class);
             $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostUpdateAction::class)->add(
-                UserAuthMiddleware::class
+                UserAuthenticationMiddleware::class
             );
             $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Posts\PostDeleteAction::class)->add(
-                UserAuthMiddleware::class
+                UserAuthenticationMiddleware::class
             );
         }
     );
@@ -72,7 +72,7 @@ return function (App $app) {
     // option 2 /own-posts and get user id from session
     $app->get('/own-posts', \App\Application\Actions\Posts\PostListOwnAction::class)->setName(
         'post-list-own'
-    )->add(UserAuthMiddleware::class);
+    )->add(UserAuthenticationMiddleware::class);
 
     $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
 

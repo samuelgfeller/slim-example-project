@@ -16,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class UserAuthMiddleware
  * @package App\Application\Middleware
  */
-final class UserAuthMiddleware implements MiddlewareInterface
+final class UserAuthenticationMiddleware implements MiddlewareInterface
 {
     private SessionInterface $session;
 

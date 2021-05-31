@@ -190,7 +190,6 @@ final class Responder
      * @param mixed $data The data
      * @param int $status
      * @return ResponseInterface The response
-     * @throws JsonException
      */
     public function respondWithJson(
         ResponseInterface $response,

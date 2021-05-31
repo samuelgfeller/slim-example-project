@@ -108,4 +108,12 @@ $settings['google'] = [
     'recaptcha' => 'secretKey',
 ];
 
+$settings['public'] = [
+    'email' => [
+        'main_contact_address' => 'slim-example-project@samuel-gfeller.ch',
+        'main_sender_address' => 'no-reply@samuel-gfeller.ch',
+        'main_sender_name' => 'Slim example Project',
+    ],
+];
+
 return $settings;
