@@ -3,8 +3,8 @@
 namespace App\Domain\Post\DTO;
 
 
-use App\Domain\User\DTO\User;
 use App\Common\ArrayReader;
+use App\Domain\User\DTO\User;
 
 class Post
 {

@@ -3,7 +3,6 @@
 namespace App\Domain\Validation;
 
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Factory\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
 /**

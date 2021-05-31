@@ -7,12 +7,8 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
 use App\Domain\User\Service\UserValidator;
-use App\Domain\Utility\Mailer;
 use App\Infrastructure\Authentication\UserRegistererRepository;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
-use App\Infrastructure\User\UserDeleterRepository;
 use App\Infrastructure\User\UserFinderRepository;
 
 class UserRegisterer

@@ -5,8 +5,6 @@ namespace App\Application\Actions\Posts;
 use App\Application\Responder\Responder;
 use App\Domain\Post\Exception\InvalidPostFilterException;
 use App\Domain\Post\Service\PostFilterFinder;
-use App\Domain\Post\Service\PostFinder;
-use App\Domain\Validation\OutputEscapeService;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -4,9 +4,6 @@
 namespace App\Domain\Exceptions;
 
 
-use App\Domain\Exceptions\AuthenticationException;
-use App\Domain\User\DTO\User;
-
 class InvalidCredentialsException extends AuthenticationException
 {
 
