@@ -5,6 +5,8 @@ use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
+use App\Domain\Utility\Mailer;
+use App\Infrastructure\Security\RequestCreatorRepository;
 use Cake\Database\Connection;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
@@ -92,8 +94,7 @@ return [
 
         // As a second constructor value, global variables can be added
         return new PhpRenderer(
-            $rendererSettings['path'],
-            ['title' => 'Slim Example Project', 'dev' => $settings['dev']],
+            $rendererSettings['path'], ['title' => 'Slim Example Project', 'dev' => $settings['dev']],
         );
     },
 
@@ -113,15 +114,12 @@ return [
     BasePathMiddleware::class => function (ContainerInterface $container) {
         return new BasePathMiddleware($container->get(App::class));
     },
-    PhpViewExtensionMiddleware::class => function (ContainerInterface $container) {
-        return new PhpViewExtensionMiddleware(
-            $container->get(App::class), $container->get(PhpRenderer::class), $container->get(SessionInterface::class)
-        );
-    },
 
-    PHPMailer::class => function (ContainerInterface $container) {
+    Mailer::class => function (ContainerInterface $container) {
         $smtp = $container->get('settings')['smtp'];
-        $phpMailer = new PHPMailer(true);
+        $phpMailer = new Mailer(
+            true, $container->get(PhpRenderer::class), $container->get(RequestCreatorRepository::class)
+        );
         $phpMailer->isSMTP();
         $phpMailer->Host = $smtp['host'];
         $phpMailer->SMTPAuth = true; // Enable SMTP authentication

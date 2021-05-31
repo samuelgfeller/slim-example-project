@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Test\Unit\Domain\Auth;
+namespace App\Test\Unit\Domain\Authentication;
 
 use App\Domain\Authentication\Service\UserRegisterer;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\DTO\User;
-use App\Domain\Utility\EmailService;
+use App\Domain\Utility\Mailer;
 use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
@@ -43,7 +43,7 @@ class UserRegistererTest extends TestCase
             'deleteVerificationToken'
         );
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
-        $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
+        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
             'One more step to register'
         );
 
@@ -78,7 +78,7 @@ class UserRegistererTest extends TestCase
         $this->mock(VerificationTokenDeleterRepository::class);
         $this->mock(VerificationTokenCreatorRepository::class); // used in VerificationTokenCreator
         $this->mock(RequestCreatorRepository::class); // used UserAlreadyExistingHandler and UserRegisterer
-        $this->mock(EmailService::class); // used in VerificationTokenCreator
+        $this->mock(Mailer::class); // used in VerificationTokenCreator
 
         /** @var UserRegisterer $service */
         $service = $this->container->get(UserRegisterer::class);
@@ -114,7 +114,7 @@ class UserRegistererTest extends TestCase
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::never())->method(
             'insertUserVerification'
         );
-        $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
+        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
             'Someone tried to create an account with your address'
         );
 
@@ -151,7 +151,7 @@ class UserRegistererTest extends TestCase
             'deleteVerificationToken'
         );
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
-        $this->mock(EmailService::class)->expects(self::once())->method('setSubject')->with(
+        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
             'One more step to register'
         );
 

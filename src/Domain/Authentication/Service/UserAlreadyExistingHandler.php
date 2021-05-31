@@ -4,9 +4,9 @@
 namespace App\Domain\Authentication\Service;
 
 
+use App\Application\Actions\Authentication\AuthenticationMailer;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\DTO\User;
-use App\Domain\Utility\EmailService;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserDeleterRepository;
@@ -19,7 +19,7 @@ class UserAlreadyExistingHandler
     public function __construct(
         private UserDeleterRepository $userDeleterRepository,
         private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
-        private EmailService $emailService,
+        private AuthenticationMailer $mailer,
         private RequestCreatorRepository $requestCreatorRepository,
         LoggerFactory $logger
     )
@@ -47,26 +47,34 @@ class UserAlreadyExistingHandler
     {
         if ($existingUser->status === User::STATUS_SUSPENDED) {
             // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
+            try {
+                $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
+            } catch (\PHPMailer\PHPMailer\Exception $e) {
+                // We try to hide if an email already exists or not so if email fails, nothing is done
+                $this->logger->error($e->getMessage());
+            } catch (\Throwable $e) { // For phpRenderer ->fetch()
+                $this->logger->error($e->getMessage());
+            }
             return false;
         }
 
         if ($existingUser->status === User::STATUS_LOCKED) {
-            // Todo inform user (only via mail) that he is locked and can't create a new account
+            try {
+                $this->mailer->sendRegisterExistingLockedUser($existingUser);
+
+            } catch (\PHPMailer\PHPMailer\Exception $e) {
+                // We try to hide if an email already exists or not so if email fails, nothing is done
+                $this->logger->error($e->getMessage());
+            } catch (\Throwable $e) { // For phpRenderer ->fetch()
+                $this->logger->error($e->getMessage());
+            }
             return false;
         }
 
         if ($existingUser->status === User::STATUS_ACTIVE) {
             try {
-                // Send info mail to email address holder
-                // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-                $this->emailService->setSubject('Someone tried to create an account with your address');
-                $this->emailService->setContentFromTemplate(
-                    'Authentication/register-on-existing.email.php',
-                    ['user' => $existingUser]
-                );
-                $this->emailService->setFrom('slim-example-project@samuel-gfeller.ch', 'Slim Example Project');
-                $this->emailService->sendTo($existingUser->email, $existingUser->name);
-                $this->requestCreatorRepository->insertEmailRequest($existingUser->email, $_SERVER['REMOTE_ADDR']);
+                $this->mailer->sendRegisterExistingActiveUser($existingUser);
+
             } catch (\PHPMailer\PHPMailer\Exception $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
