@@ -3,8 +3,6 @@
 
 namespace App\Domain\Authentication\Service;
 
-
-use App\Application\Actions\Authentication\AuthenticationMailer;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;

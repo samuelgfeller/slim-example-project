@@ -105,6 +105,7 @@ $settings['smtp'] = [
 ];
 
 $settings['google'] = [
+    // reCAPTCHA secret key
     'recaptcha' => 'secretKey',
 ];
 

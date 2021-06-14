@@ -7,6 +7,9 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Views\PhpRenderer;
 
+/**
+ * Test sender score: https://www.mail-tester.com/
+ */
 class Mailer extends PHPMailer
 {
 
@@ -60,6 +63,7 @@ class Mailer extends PHPMailer
 
     /**
      * Shortcut function to add one address and send
+     * Test Score: https://www.mail-tester.com/
      *
      * @param string $toAddress
      * @param string $toName
@@ -71,7 +75,6 @@ class Mailer extends PHPMailer
     public function sendTo(string $toAddress, string $toName = ''): bool
     {
         $this->addAddress($toAddress, $toName);
-
         if (false !== $this->send()) {
             // Insert that there was an email request for security
             $this->requestCreatorRepository->insertEmailRequest($toAddress, $_SERVER['REMOTE_ADDR']);

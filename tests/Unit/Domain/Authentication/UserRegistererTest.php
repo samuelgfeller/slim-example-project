@@ -43,9 +43,7 @@ class UserRegistererTest extends TestCase
             'deleteVerificationToken'
         );
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
-        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
-            'One more step to register'
-        );
+        $this->mock(Mailer::class);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var UserRegisterer $service */
@@ -114,9 +112,7 @@ class UserRegistererTest extends TestCase
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::never())->method(
             'insertUserVerification'
         );
-        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
-            'Someone tried to create an account with your address'
-        );
+        $this->mock(Mailer::class);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var UserRegisterer $service */
@@ -151,9 +147,7 @@ class UserRegistererTest extends TestCase
             'deleteVerificationToken'
         );
         $this->mock(VerificationTokenCreatorRepository::class)->expects(self::once())->method('insertUserVerification');
-        $this->mock(Mailer::class)->expects(self::once())->method('setSubject')->with(
-            'One more step to register'
-        );
+        $this->mock(Mailer::class);
 
         // Instantiate autowired UserService which uses the function from the previously defined custom mock
         /** @var UserRegisterer $service */

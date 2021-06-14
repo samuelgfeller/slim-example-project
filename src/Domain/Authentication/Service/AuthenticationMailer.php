@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Application\Actions\Authentication;
+namespace App\Domain\Authentication\Service;
 
 use App\Domain\Settings;
 use App\Domain\User\DTO\User;

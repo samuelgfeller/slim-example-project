@@ -4,7 +4,6 @@
 namespace App\Domain\Authentication\Service;
 
 
-use App\Application\Actions\Authentication\AuthenticationMailer;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
