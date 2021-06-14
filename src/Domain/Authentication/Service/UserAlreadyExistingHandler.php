@@ -9,6 +9,7 @@ use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleter
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class UserAlreadyExistingHandler
 {
@@ -41,13 +42,13 @@ class UserAlreadyExistingHandler
      *
      * @return bool
      */
-    public function handleNotUnverifiedExistingUser(User $existingUser): bool
+    public function handleVerifiedExistingUser(User $existingUser): bool
     {
         if ($existingUser->status === User::STATUS_SUSPENDED) {
             // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             try {
                 $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
-            } catch (\PHPMailer\PHPMailer\Exception $e) {
+            } catch (TransportException $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
             } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -60,7 +61,7 @@ class UserAlreadyExistingHandler
             try {
                 $this->mailer->sendRegisterExistingLockedUser($existingUser);
 
-            } catch (\PHPMailer\PHPMailer\Exception $e) {
+            } catch (TransportException $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
             } catch (\Throwable $e) { // For phpRenderer ->fetch()
@@ -73,7 +74,7 @@ class UserAlreadyExistingHandler
             try {
                 $this->mailer->sendRegisterExistingActiveUser($existingUser);
 
-            } catch (\PHPMailer\PHPMailer\Exception $e) {
+            } catch (TransportException $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
             } catch (\Throwable $e) { // For phpRenderer ->fetch()

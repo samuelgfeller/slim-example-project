@@ -3,38 +3,31 @@
 namespace App\Domain\Utility;
 
 use App\Infrastructure\Security\RequestCreatorRepository;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Views\PhpRenderer;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 /**
+ * Mailer class with added method to get the html string from a template and added request audit in the send() function
+ * This class in not defined in the container and therefore is autowired. Configuration is defined in MailerInterface
  * Test sender score: https://www.mail-tester.com/
  */
-class Mailer extends PHPMailer
+class Mailer
 {
 
+    /**
+     * Mailer constructor.
+     *
+     * @param MailerInterface $mailer
+     * @param PhpRenderer $phpRenderer
+     * @param RequestCreatorRepository $requestCreatorRepository
+     */
     public function __construct(
-        bool $exceptions,
+        private MailerInterface $mailer,
         private PhpRenderer $phpRenderer,
         private RequestCreatorRepository $requestCreatorRepository
-    )
-    {
-        parent::__construct($exceptions);
-    }
-
-    /**
-     * Add subject and message body to mailer
-     *
-     * @param string $subject
-     * @param string $message
-     */
-    public function setSubjectAndMessage(string $subject, string $message): void
-    {
-        $this->isHTML(); // Default is plain text
-
-        $this->Subject = $subject;
-        $this->Body = $message;
-        $this->AltBody = strip_tags($message);
+    ) {
     }
 
     /**
@@ -45,41 +38,30 @@ class Mailer extends PHPMailer
      *
      * @param string $templatePath PHP-View path relative to template path defined in config
      * @param array $templateData ['varName' => 'data', 'otherVarName' => 'otherData',]
+     *
+     * @return string html email content
      */
-    public function setContentFromTemplate(string $templatePath, array $templateData): void
+    public function getContentFromTemplate(string $templatePath, array $templateData): string
     {
         // Prepare and fetch template
         $this->phpRenderer->setLayout(''); // Making sure there is no default layout
         foreach ($templateData as $key => $data) {
             $this->phpRenderer->addAttribute($key, $data);
         }
-        $parsedTemplate = $this->phpRenderer->fetch($templatePath);
-
-        // Add content to mailer
-        $this->isHTML(); // Default is plain text
-        $this->Body = $parsedTemplate;
-        $this->AltBody = strip_tags($parsedTemplate);
+        return $this->phpRenderer->fetch($templatePath);
     }
 
     /**
-     * Shortcut function to add one address and send
-     * Test Score: https://www.mail-tester.com/
+     * Function to send email and add insert to request tracking table
      *
-     * @param string $toAddress
-     * @param string $toName
-     *
-     * @return bool
-     *
-     * @throws Exception
+     * @param Email $email
+     * @return void
+     * @throws TransportExceptionInterface
      */
-    public function sendTo(string $toAddress, string $toName = ''): bool
+    public function send(Email $email): void
     {
-        $this->addAddress($toAddress, $toName);
-        if (false !== $this->send()) {
-            // Insert that there was an email request for security
-            $this->requestCreatorRepository->insertEmailRequest($toAddress, $_SERVER['REMOTE_ADDR']);
-            return true;
-        }
-        return false;
+        $this->mailer->send($email);
+        // Insert that there was an email request for security checks
+        $this->requestCreatorRepository->insertEmailRequest($email->getTo()[0]->getAddress(), $_SERVER['REMOTE_ADDR']);
     }
 }

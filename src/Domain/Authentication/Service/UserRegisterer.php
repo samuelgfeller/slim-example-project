@@ -10,6 +10,7 @@ use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserRegisterer
 {
@@ -31,7 +32,7 @@ class UserRegisterer
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
      * @return int|bool insert id, false if user already exists
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function registerUser(array $userData, string|null $captcha = null, array $queryParams = []): bool|int
     {
@@ -51,7 +52,7 @@ class UserRegisterer
                 // Only delete the user and token but not return as function should continue normally and insert new user
                 $this->userAlreadyExistingHandler->handleUnverifiedExistingUser($existingUser);
             }else {
-                return $this->userAlreadyExistingHandler->handleNotUnverifiedExistingUser($existingUser);
+                return $this->userAlreadyExistingHandler->handleVerifiedExistingUser($existingUser);
             }
         }
 

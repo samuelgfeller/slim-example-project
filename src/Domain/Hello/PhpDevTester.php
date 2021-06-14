@@ -16,6 +16,6 @@ class PhpDevTester
 
     public function testInheritanceInjection()
     {
-        return $this->mailer->Subject = '';
+
     }
 }

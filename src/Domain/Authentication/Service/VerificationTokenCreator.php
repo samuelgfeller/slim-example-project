@@ -7,6 +7,7 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\User\DTO\User;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class VerificationTokenCreator
 {
@@ -26,7 +27,7 @@ class VerificationTokenCreator
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
      * @return int
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function createAndSendUserVerification(User $user, array $queryParams = []): int
     {
@@ -54,7 +55,7 @@ class VerificationTokenCreator
         $queryParams['token'] = $token;
         $queryParams['id'] = $tokenId;
 
-        // PHPMailer errors caught in action
+        // Mailer errors caught in action
         $this->mailer->sendRegisterVerificationToken($user, $queryParams);
 
         return $tokenId;

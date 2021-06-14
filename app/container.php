@@ -2,16 +2,12 @@
 
 use App\Application\Handler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
-use App\Domain\Utility\Mailer;
-use App\Infrastructure\Security\RequestCreatorRepository;
 use Cake\Database\Connection;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
-use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
@@ -20,6 +16,9 @@ use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
 
 return [
     'settings' => function () {
@@ -115,19 +114,15 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
 
-    Mailer::class => function (ContainerInterface $container) {
-        $smtp = $container->get('settings')['smtp'];
-        $phpMailer = new Mailer(
-            true, $container->get(PhpRenderer::class), $container->get(RequestCreatorRepository::class)
-        );
-        $phpMailer->isSMTP();
-        $phpMailer->Host = $smtp['host'];
-        $phpMailer->SMTPAuth = true; // Enable SMTP authentication
-        $phpMailer->Username = $smtp['username'];
-        $phpMailer->Password = $smtp['password'];
-        $phpMailer->SMTPSecure = $smtp['encryption'];
-        $phpMailer->Port = $smtp['port'];
-        return $phpMailer;
+    // SMTP transport
+    MailerInterface::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings')['smtp'];
+
+        // smtp://user:pass@smtp.example.com:25
+        $dsn = $settings['type'] . '://' . $settings['username'] . ':' . $settings['password'] . '@' .
+            $settings['host'] . ':' . $settings['port'];
+
+        return new Mailer(Transport::fromDsn($dsn));
     },
 
 ];

@@ -6,6 +6,9 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Settings;
 use App\Domain\User\DTO\User;
 use App\Domain\Utility\Mailer;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 /**
  * This class manages the emails sent from the Authentication namespace.
@@ -18,21 +21,25 @@ use App\Domain\Utility\Mailer;
 class AuthenticationMailer
 {
 
+    private Email $email;
+
     /**
      * AuthenticationMailer constructor.
      *
-     * @param Mailer $mailer
+     * @param Mailer $mailer email sender and helper
      * @param Settings $settings
-     * @throws \PHPMailer\PHPMailer\Exception
      */
     public function __construct(
         private Mailer $mailer,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
+        // Create email object
+        $this->email = new Email();
         // Send auth emails from domain
-        $this->mailer->setFrom($settings['main_sender_address'], $settings['main_sender_name']);
-        $this->mailer->addReplyTo($settings['main_contact_address']);
+        $this->email->from(new Address($settings['main_sender_address'], $settings['main_sender_name']))->replyTo(
+            $settings['main_contact_address']
+        )->priority(Email::PRIORITY_HIGH);
     }
 
     /**
@@ -40,17 +47,20 @@ class AuthenticationMailer
      *
      * @param User $user
      * @param array $queryParams
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function sendRegisterVerificationToken(User $user, array $queryParams): void
     {
         // Send verification mail
-        $this->mailer->Subject = 'One more step to register'; // Subject asserted in testRegisterUser
-        $this->mailer->setContentFromTemplate(
-            'authentication/email/register.email.php',
-            ['user' => $user, 'queryParams' => $queryParams]
-        );
-        $this->mailer->sendTo($user->email, $user->name);
+        $this->email->subject('One more step to register') // Subject asserted in testRegisterUser
+        ->html(
+            $this->mailer->getContentFromTemplate(
+                'authentication/email/register.email.php',
+                ['user' => $user, 'queryParams' => $queryParams]
+            )
+        )->to(new Address($user->email, $user->name));
+        // Send email
+        $this->mailer->send($this->email);
     }
 
     /**
@@ -58,18 +68,20 @@ class AuthenticationMailer
      * same email address.
      *
      * @param User $existingUser
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function sendRegisterExistingActiveUser(User $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->mailer->Subject = 'Someone tried to create an account with your address';
-        $this->mailer->setContentFromTemplate(
-            'authentication/email/register-on-existing-active.php',
-            ['user' => $existingUser]
-        );
-        $this->mailer->sendTo($existingUser->email, $existingUser->name);
+        $this->email->subject('Someone tried to create an account with your address')->html(
+            $this->mailer->getContentFromTemplate(
+                'authentication/email/register-on-existing-active.php',
+                ['user' => $existingUser]
+            )
+        )->to(new Address($existingUser->email, $existingUser->name));
+        // Send email
+        $this->mailer->send($this->email);
     }
 
     /**
@@ -77,18 +89,20 @@ class AuthenticationMailer
      * same email address.
      *
      * @param User $existingUser
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function sendRegisterExistingSuspendedUser(User $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->mailer->Subject = 'Someone tried to create an account with your address';
-        $this->mailer->setContentFromTemplate(
-            'authentication/email/register-on-existing-suspended.php',
-            ['user' => $existingUser]
-        );
-        $this->mailer->sendTo($existingUser->email, $existingUser->name);
+        $this->email->subject('Someone tried to create an account with your address')->html(
+            $this->mailer->getContentFromTemplate(
+                'authentication/email/register-on-existing-suspended.php',
+                ['user' => $existingUser]
+            )
+        )->to(new Address($existingUser->email, $existingUser->name));
+        // Send email
+        $this->mailer->send($this->email);
     }
 
     /**
@@ -96,18 +110,19 @@ class AuthenticationMailer
      * same email address.
      *
      * @param User $existingUser
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws TransportExceptionInterface
      */
     public function sendRegisterExistingLockedUser(User $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->mailer->Subject = 'Someone tried to create an account with your address';
-        $this->mailer->setContentFromTemplate(
+        $this->email->subject('Someone tried to create an account with your address')
+        ->html($this->mailer->getContentFromTemplate(
             'authentication/email/register-on-existing-locked.php',
             ['user' => $existingUser]
-        );
-        $this->mailer->sendTo($existingUser->email, $existingUser->name);
+        ))->to(new Address($existingUser->email, $existingUser->name));
+        // Send email
+        $this->mailer->send($this->email);
     }
 
 

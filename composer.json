@@ -12,7 +12,7 @@
         "odan/session": "^5.0",
         "slim/php-view": "^3.0",
         "selective/basepath": "^2.0",
-        "phpmailer/phpmailer": "^6.3"
+        "symfony/mailer": "^5.3"
     },
     "autoload": {
         "psr-4": {

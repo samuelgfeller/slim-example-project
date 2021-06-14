@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class RegisterSubmitAction
 {
@@ -60,9 +61,9 @@ final class RegisterSubmitAction
                         $ve->getValidationResult(),
                         $request->getQueryParams()
                     );
-                } catch (\PHPMailer\PHPMailer\Exception $e) { // Not import for clarity
-                    $flash->add('error', 'Email error. Please try again. Message: ' . "\n" . $e->getMessage());
-                    $this->logger->error('PHPMailer exception: ' . $e->getMessage());
+                } catch (TransportExceptionInterface $e) {
+                    $flash->add('error', 'Email error. Please try again. ' . "<br> Message: " . $e->getMessage());
+                    $this->logger->error('Mailer exception: ' . $e->getMessage());
                     $response = $response->withStatus(500);
                     $this->responder->addAttribute('formError', true);
                     return $this->responder->render(

@@ -97,11 +97,12 @@ $settings['logger'] = [
 
 // Email settings
 $settings['smtp'] = [
-    'host' => 'smtp.example.com',
-    'username' => 'user@example.com',
-    'password' => 'secret',
-    'encryption' => \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS, // ENCRYPTION_SMTPS for ssl but not recommended
+    // use 'null' for the null adapter
+    'type' => 'smtp',
+    'host' => 'smtp.mailtrap.io',
     'port' => '587', // TLS: 587; SSL: 465
+    'username' => 'my-username',
+    'password' => 'my-secret-password',
 ];
 
 $settings['google'] = [
