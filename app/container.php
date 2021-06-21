@@ -16,9 +16,15 @@ use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Mailer\EventListener\EnvelopeListener;
+use Symfony\Component\Mailer\EventListener\MessageListener;
+use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 return [
     'settings' => function () {
@@ -116,13 +122,36 @@ return [
 
     // SMTP transport
     MailerInterface::class => function (ContainerInterface $container) {
+        return new Mailer($container->get(TransportInterface::class));
+    },
+    // Mailer transport
+    TransportInterface::class  => function (ContainerInterface $container) {
         $settings = $container->get('settings')['smtp'];
 
         // smtp://user:pass@smtp.example.com:25
-        $dsn = $settings['type'] . '://' . $settings['username'] . ':' . $settings['password'] . '@' .
-            $settings['host'] . ':' . $settings['port'];
+        $dsn =
+            sprintf(
+                '%s://%s:%s@%s:%s',
+                $settings['type'],
+                $settings['username'],
+                $settings['password'],
+                $settings['host'],
+                $settings['port']
+            );
 
-        return new Mailer(Transport::fromDsn($dsn));
+        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+
+        return Transport::fromDsn($dsn, $eventDispatcher);
     },
+    // Event dispatcher for mailer
+    EventDispatcherInterface::class => function () {
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addSubscriber(new MessageListener());
+        $eventDispatcher->addSubscriber(new EnvelopeListener());
+        $eventDispatcher->addSubscriber(new MessageLoggerListener());
+
+        return $eventDispatcher;
+    },
+
 
 ];

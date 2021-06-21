@@ -7,5 +7,5 @@ $settings['db']['database'] = 'slim_example_project_test';
 $settings['security']['global_daily_email_threshold'] = 300;
 $settings['security']['global_monthly_email_threshold'] = 1000;
 
-// Making sure emails don't get sent
-$settings['smtp']['host'] = 'invalid_host';
+// Using the null adapter to prevent emails from actually being sent
+$settings['smtp']['type'] = 'null';
