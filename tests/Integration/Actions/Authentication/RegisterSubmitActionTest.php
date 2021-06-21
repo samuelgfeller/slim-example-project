@@ -32,9 +32,8 @@ class RegisterSubmitActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserRegisterer(): void
+    public function testUserRegistration(): void
     {
-        $this->insertFixtures([RequestTrackFixture::class]);
         $name = 'Admin Example';
         $emailAddr = 'admin@example.com';
         $request = $this->createFormRequest(
@@ -54,7 +53,16 @@ class RegisterSubmitActionTest extends TestCase
         // Assert: 302 Found (redirect)
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
-        // Check database
+        // Email assertions
+        $email = $this->getMailerMessage();
+        self::assertEmailHtmlBodyContains(
+            $email,
+            'To verify that this email address belongs to you, please click on the following link'
+        );
+        // Assert that right email has been sent to the right person
+        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+
+        // Database assertions
         $this->assertTableRowCount(1, 'user');
 
         $expected = [
@@ -82,39 +90,37 @@ class RegisterSubmitActionTest extends TestCase
         );
         // Verify that hash matches the given password
         self::assertTrue(password_verify('12345678', $password));
-
-        // Assert that right email has been sent
-        $email = $this->getMailerMessage();
-        self::assertEmailHtmlBodyContains(
-            $email,
-            'To verify that this email address belongs to you, please click on the following link'
-        );
-        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
     }
 
     /**
      * Test that user can't be registered twice but client should not notice any difference
      * For further tests, breakpoint can be set inside the register function
      * Fixture dependency:
-     *      UserFixture: 1 user with email "admin@example.com"
+     *      UserFixture: first fixture (user) has to be "Admin Example" with email "admin@example.com"
+     * @dataProvider \App\Test\Integration\Actions\Authentication\Provider\RegisterCaseProvider::provideExistingUserStatusAndEmail()
+     * @param string $existingUserStatus
+     * @param string $partialEmailBody
      */
-    public function testRegisterUser_alreadyExisting()
+    public function testUserRegistration_alreadyExisting(string $existingUserStatus, string $partialEmailBody): void
     {
-        $this->insertFixtures([UserFixture::class]);
+        // Insert existing admin user with given status
+        // Get first record from UserFixture class
+        $existingUser = (new UserFixture())->records[0];
+        // Adapt status to provided status
+        $existingUser['status'] = $existingUserStatus;
+        $this->insertFixture('user', $existingUser);
         // User amount in fixture can be changed and it still can be asserted that after the action there's the same
         // amount of users in the db
         $userAmountInFixture = count((new UserFixture())->records);
-
-        // Prevent email from being sent
-        $this->mock(Mailer::class);
-
+        $name = 'Admin Example';
+        $emailAddr = 'admin@example.com';
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => 'Admin Example',
-                'email' => 'admin@example.com', // Has to be valid for mailgun test servers
+                'name' => $name,
+                'email' => $emailAddr,
                 'password' => '12345678',
                 'password2' => '12345678',
             ]
@@ -122,11 +128,20 @@ class RegisterSubmitActionTest extends TestCase
 
         $response = $this->app->handle($request);
 
-        // Assert: 302 Found (redirect)
+        // Assert: 302 Found (redirect to verification info page)
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
+        // Email assertions
+        $email = $this->getMailerMessage();
+        self::assertEmailHtmlBodyContains(
+            $email,
+            $partialEmailBody
+        );
+        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+
+        // Database assertions
         // Check that there are not more users in the database
-        $this->assertTableRowCount($userAmountInFixture, 'user');
+        $this->assertTableRowCount(1, 'user');
     }
 
     /**
@@ -166,10 +181,14 @@ class RegisterSubmitActionTest extends TestCase
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => 'Ad', /* Name too short */
-                'email' => 'admi$n@exampl$e.com', /* Invalid E-Mail */
-                'password' => '123', /* Password too short */
-                'password2' => '12', /* Password 2 not matching and too short */
+                'name' => 'Ad',
+                /* Name too short */
+                'email' => 'admi$n@exampl$e.com',
+                /* Invalid E-Mail */
+                'password' => '123',
+                /* Password too short */
+                'password2' => '12',
+                /* Password 2 not matching and too short */
             ]
         );
 

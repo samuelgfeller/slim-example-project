@@ -14,6 +14,7 @@ $this->setLayout('layout/layout.email.php');
     Hello <?= $user->name ?><br>
     <br>
     Someone tried to create an account with your email address. <br>
+    <!-- Sentence defined for assertion in RegisterCaseProvider.php    -->
     If this was you, then you can login with your credentials by navigating to the
     <a href="<?= $route->fullUrlFor($uri,'login-page') ?>">login section</a> or if you forgot your
     password, you can reset it here. <br>
