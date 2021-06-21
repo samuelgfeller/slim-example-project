@@ -6,12 +6,14 @@ use App\Domain\Utility\Mailer;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\RequestTrackFixture;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\MailerAssertionsTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 
 /**
  * Integration testing user registrations
@@ -23,6 +25,7 @@ class RegisterSubmitActionTest extends TestCase
     use HttpTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use MailerAssertionsTrait;
 
     /**
      * Test user creation
@@ -31,19 +34,16 @@ class RegisterSubmitActionTest extends TestCase
      */
     public function testUserRegisterer(): void
     {
-
         $this->insertFixtures([RequestTrackFixture::class]);
-
-        // Prevent email from being sent
-        $this->mock(Mailer::class);
-
+        $name = 'Admin Example';
+        $emailAddr = 'admin@example.com';
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => 'Admin Example',
-                'email' => 'contact@samuel-gfeller.ch', // Has to be valid for mailgun test servers
+                'name' => $name,
+                'email' => $emailAddr,
                 'password' => '12345678',
                 'password2' => '12345678',
             ]
@@ -61,7 +61,7 @@ class RegisterSubmitActionTest extends TestCase
             // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
             'id' => '1',
             'name' => 'Admin Example',
-            'email' => 'contact@samuel-gfeller.ch',
+            'email' => 'admin@example.com',
             // Not password since the hash value always changes, it's asserted later
         ];
 
@@ -82,6 +82,14 @@ class RegisterSubmitActionTest extends TestCase
         );
         // Verify that hash matches the given password
         self::assertTrue(password_verify('12345678', $password));
+
+        // Assert that right email has been sent
+        $email = $this->getMailerMessage();
+        self::assertEmailHtmlBodyContains(
+            $email,
+            'To verify that this email address belongs to you, please click on the following link'
+        );
+        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
     }
 
     /**

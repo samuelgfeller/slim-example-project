@@ -5,10 +5,10 @@
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
  * @var \App\Domain\User\DTO\User $user object
  */
-
 ?>
 Hello <?= $user->name ?> <br>
 <br>
+<!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 To verify that this email address belongs to you, please click on the following link: <br>
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>">Verify account</a></b>.
 <br>
