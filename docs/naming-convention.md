@@ -36,10 +36,13 @@ dealing with data.
   
 ## Templates
 * Follow [general files and folders](#General-files-and-folders) rules
-* View templates that are displayed to the user in a browser MUST end with `.html.php`:
-  `login-page.html.php`
-* Email templates MUST end with `.email.php` (and be in a sub folder "email"):
-  `register-confirmation.email.php`
+* View templates that are displayed to the user are in the module sub folder and just end
+  with `.php`: e.g.  `login-page.php`.   
+  *Note*: previous `.html` is useless as emails and other views are in their respective sub-folder.
+  It is very clear in the path name which type it is and there is no autocompletion anyway as it's 
+  written in a string.
+* Email templates, PDF and other views MUST be in a respective sub folder 
+  (`email/email-template.php` or `pdf/pdf-template.php`)   
   
 ## Tests 
 * **Folder and files** MUST be in PascalCase format meaning starting with an uppercase and then each word
@@ -50,6 +53,18 @@ dealing with data.
 * **Fixtures** MUST end with the word Fixture: `UserFixture.php`
 * **Provider** MUST end with the word Provider: `UserProvider.php`
 * **Helper Traits** MUST end with the name Trait: `AppTestTrait.php`
+
+### Test functions
+* **Unit test functions** MUST be named as follows: `testFunctionNameUnderTest_additionalInfo`.  
+  Starting with
+the word "test" followed by the name of the function which is being tested in camel case
+  and if a function is tested multiple times differently the test specificity should be in camel case
+  separated by an underscore (to differentiate easier and prevent unclear long test function names)
+  
+* **Integration test functions** MUST start with test as well but then describe the use case which
+is being tested and additional info can be added in camel case separated by an underscore 
+  e.g. `testUserRegistration_existingActiveUser`
+  
 
 ## Database
 * Database and table names MUST be all lower case and words separated by underscores
