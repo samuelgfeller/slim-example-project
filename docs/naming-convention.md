@@ -65,6 +65,25 @@ the word "test" followed by the name of the function which is being tested in ca
 is being tested and additional info can be added in camel case separated by an underscore 
   e.g. `testUserRegistration_existingActiveUser`
   
+### Providers
+I differentiate providers into two types. Both have to be in a sub folder "Provider" inside the 
+bundle folder where the test is located. This is to be able to find them easier and quicker while 
+developing.
+
+#### Data Providers
+Provide different only the data to run for a specific test.   
+E.g. For a test asserting that a validationException occurs with different invalid data 
+(name too long, password too short, not given email address etc.)  
+
+Data provider MUST end with `DataProvider.php`.
+
+#### Case Providers
+They contain both the input data but also the expected value for
+the assertion. They are here to make more generic test cases which are like a formula 
+and being able to feed them with many different data and expected values.  
+E.g. Asserting that validation exception occurs with a specific error message and behaviour.
+
+Case provider MUST end with `CaseProvider.php`.
 
 ## Database
 * Database and table names MUST be all lower case and words separated by underscores
