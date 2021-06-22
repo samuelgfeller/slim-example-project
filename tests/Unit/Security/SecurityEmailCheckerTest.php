@@ -30,7 +30,7 @@ class SecurityEmailCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\RequestTrackProvider::userEmailProvider()
+     * @dataProvider \App\Test\Provider\Security\RequestTrackCaseProvider::userEmailProvider()
      *
      * @param int|string $delay
      * @param RequestStatsData $ipRequestStats
@@ -90,7 +90,7 @@ class SecurityEmailCheckerTest extends TestCase
      *  - First iteration: email amount reaching DAILY threshold (and thus fail)
      *  - Second iteration: email amount reaching MONTHLY threshold (and thus fail)
      *
-     * @dataProvider \App\Test\Provider\RequestTrackProvider::globalEmailStatsProvider()
+     * @dataProvider \App\Test\Provider\Security\RequestTrackCaseProvider::globalEmailStatsProvider()
      *
      * Values same as threshold as exception is thrown if it equals or is greater than threshold
      * @param int $dailyEmailAmount too many daily emails

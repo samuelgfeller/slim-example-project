@@ -21,7 +21,7 @@ class RegisterVerifyActionTest extends TestCase
     use RouteTestTrait;
 
     /**
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
@@ -59,7 +59,7 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown
      *
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
@@ -94,11 +94,11 @@ class RegisterVerifyActionTest extends TestCase
 
 
     /**
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider()
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_invalidExpiredToken(UserVerification $verification, string $clearTextToken)
+    public function testRegisterVerification_invalidExpiredToken(UserVerification $verification, string $clearTextToken): void
     {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[0];
@@ -136,7 +136,7 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Test that exception is thrown when request body is malformed
      */
-    public function testRegisterVerification_badRequest()
+    public function testRegisterVerification_badRequest(): void
     {
         // No need to insert anything as exception should be thrown immediately
 

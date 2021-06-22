@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Test\Provider;
+namespace App\Test\Provider\Authentication;
 
 use App\Domain\Authentication\DTO\UserVerification;
 
-class UserVerificationProvider
+class UserVerificationDataProvider
 {
 
     /**

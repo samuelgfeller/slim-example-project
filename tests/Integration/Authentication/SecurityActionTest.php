@@ -3,12 +3,9 @@
 namespace App\Test\Integration\Authentication;
 
 use App\Domain\Security\Exception\SecurityException;
-use App\Infrastructure\Security\RequestFinderRepository;
 use App\Infrastructure\Security\RequestPreponerRepository;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Fixture\RequestTrackFixtureLoginFailure;
 use App\Test\Fixture\UserFixture;
-use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
@@ -27,7 +24,7 @@ class SecurityActionTest extends TestCase
      * If login request amount exceeds threshold, the user has to wait a certain delay
      * This is still far below a global test
      *
-     * @dataProvider \App\Test\Provider\UserProvider::loginUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::loginUserProvider()
      *
      * @param array $loginFormValues One dataset with wrong credentials and one with correct ones
      */

@@ -19,7 +19,7 @@ class LoginVerifierTest extends TestCase
     /**
      * Test getUserIdIfAllowedToLogin()
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      * @param array $validUserData
      * @param User $repoUser
      */
@@ -37,7 +37,7 @@ class LoginVerifierTest extends TestCase
     /**
      * Test getUserIdIfAllowedToLogin() with invalid user data
      *
-     * @dataProvider \App\Test\Provider\UserProvider::invalidEmailAndPasswordsUsersProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::invalidEmailAndPasswordsUsersProvider()
      * @param array $invalidUser
      */
     public function testGetUserIdIfAllowedToLogin_invalidData(array $invalidUser): void
@@ -57,7 +57,7 @@ class LoginVerifierTest extends TestCase
     /**
      * Test getUserIdIfAllowedToLogin() with not existing user
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testGetUserIdIfAllowedToLogin_userNotExisting(array $validUser): void
@@ -77,7 +77,7 @@ class LoginVerifierTest extends TestCase
      * Test getUserIdIfAllowedToLogin() with invalid password
      * important to test this method extensively for security
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      * @param array $userData values from client
      * @param User $userObj values from repository
      */

@@ -20,7 +20,7 @@ class PostUpdaterTest extends TestCase
      * Invalid or not existing user don't have to be tested since it's the same
      * validation as registerUser() and it's already done there
      *
-     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
      * @param Post $validPost
      */
     public function testUpdatePost(Post $validPost): void

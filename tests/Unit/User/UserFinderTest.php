@@ -15,7 +15,7 @@ class UserFinderTest extends TestCase
     /**
      * Test findAllUsers() from UserFinder
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneSetOfMultipleUserObjectsProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneSetOfMultipleUserObjectsProvider()
      * @param User[] $users
      */
     public function testFindAllUsers(array $users): void
@@ -33,7 +33,7 @@ class UserFinderTest extends TestCase
     /**
      * Test findUserById() from UserFinder
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectProvider()
      * @param User $user
      */
     public function testFindUserById(User $user): void
@@ -51,7 +51,7 @@ class UserFinderTest extends TestCase
     /**
      * Test findUserByEmail() from UserFinder
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectProvider()
      * @param User $user
      */
     public function testFindUserByEmail(User $user): void

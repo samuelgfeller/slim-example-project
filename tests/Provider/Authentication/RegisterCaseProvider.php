@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Integration\Authentication\Provider;
+namespace App\Test\Provider\Authentication;
 
 
 use App\Domain\User\DTO\User;

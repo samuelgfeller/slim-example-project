@@ -38,7 +38,7 @@ class SecurityLoginCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\RequestTrackProvider::userLoginProvider()
+     * @dataProvider \App\Test\Provider\Security\RequestTrackCaseProvider::userLoginProvider()
      *
      * @param int|string $delay
      * @param RequestStatsData $ipRequestStats

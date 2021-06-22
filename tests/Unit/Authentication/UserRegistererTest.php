@@ -23,7 +23,7 @@ class UserRegistererTest extends TestCase
     /**
      * Test registerUser() from UserService
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testRegisterUser(array $validUser): void
@@ -60,7 +60,7 @@ class UserRegistererTest extends TestCase
      * but without specific error analysis. Only that it didn't create it.
      * The method is called with each value of the provider
      *
-     * @dataProvider \App\Test\Provider\UserProvider::invalidUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::invalidUserProvider()
      * @param array $invalidUser
      */
     public function testRegisterUser_invalid(array $invalidUser): void
@@ -94,7 +94,7 @@ class UserRegistererTest extends TestCase
      * @throws \PHPMailer\PHPMailer\Exception
      * @todo test with different statuses of existing user
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      */
     public function testRegisterUser_existingActiveUser(array $userData, User $existingUser): void
     {
@@ -129,7 +129,7 @@ class UserRegistererTest extends TestCase
      * @param User $existingUser values from repository
      * @throws \PHPMailer\PHPMailer\Exception
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserObjectAndClientDataProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      */
     public function testRegisterUser_existingUnverifiedUser(array $userData, User $existingUser): void
     {

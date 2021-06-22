@@ -66,16 +66,18 @@ is being tested and additional info can be added in camel case separated by an u
   e.g. `testUserRegistration_existingActiveUser`
   
 ### Providers
-I differentiate providers into two types. Both have to be in a sub folder "Provider" inside the 
-bundle folder where the test is located. This is to be able to find them easier and quicker while 
-developing.
+I differentiate providers into two types. They have to be in a sub folder "Provider" at the root of 
+the `/tests` folder. As the same providers are used by both unit and integration tests, they can't 
+be inside the test case bundle.  
+Each are in folders with the bundle name after "Provider".
 
 #### Data Providers
 Provide different only the data to run for a specific test.   
 E.g. For a test asserting that a validationException occurs with different invalid data 
 (name too long, password too short, not given email address etc.)  
 
-Data provider MUST end with `DataProvider.php`.
+Data provider MUST end with `DataProvider.php` and be in the folder of their module name which is in
+the folder "Provider".
 
 #### Case Providers
 They contain both the input data but also the expected value for
@@ -83,7 +85,15 @@ the assertion. They are here to make more generic test cases which are like a fo
 and being able to feed them with many different data and expected values.  
 E.g. Asserting that validation exception occurs with a specific error message and behaviour.
 
-Case provider MUST end with `CaseProvider.php`.
+Case provider MUST end with `CaseProvider.php` and be in the folder of their module name which is in
+the folder "Provider".
+
+### Fixtures
+Unlike providers, fixtures are only used in integration tests. Therefore, they can be stored inside
+the integration test case bundle folder in a "Fixture" sub folder 
+(e.g. `tests\Integration\User\Fixture`).  
+Fixtures MUST end with `Fixture.php`.
+
 
 ## Database
 * Database and table names MUST be all lower case and words separated by underscores

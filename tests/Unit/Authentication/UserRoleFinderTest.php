@@ -16,7 +16,7 @@ class UserRoleFinderTest extends TestCase
      * Test getUserRoleById() with different roles
      *
      * Test with multiple users to have different roles
-     * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::validUserProvider()
      * @param array $user
      */
     public function testGetUserRoleById(array $user): void

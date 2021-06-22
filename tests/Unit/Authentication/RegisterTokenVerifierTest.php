@@ -24,7 +24,7 @@ class RegisterTokenVerifierTest extends TestCase
     /**
      * Test that with valid values all security checks pass until changeUserStatus is called
      *
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationProvider
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
@@ -56,7 +56,7 @@ class RegisterTokenVerifierTest extends TestCase
     /**
      * Case when user clicks on the link even though the user is not 'unverified' anymore
      *
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationProvider
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
      * @param UserVerification $verification
      * @param string $clearTextToken
      */
@@ -110,7 +110,7 @@ class RegisterTokenVerifierTest extends TestCase
      * Test when token is invalid or expired
      *
      * Provider gives once an invalid token and once an expired one
-     * @dataProvider \App\Test\Provider\UserVerificationProvider::userVerificationInvalidExpiredProvider
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider
      *
      * @param UserVerification $verification Once expired
      * @param string $clearTextToken Once valid, once invalid

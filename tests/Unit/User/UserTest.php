@@ -20,7 +20,7 @@ class UserTest extends TestCase
      * and there isn't any logic in these methods. This is an example
      * but I won't do it for other objects.
      *
-     * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::validUserProvider()
      * @param array $userValues
      */
     public function testGetters(array $userValues): void
@@ -41,7 +41,7 @@ class UserTest extends TestCase
     /**
      * Testing the function toArrayForDatabase()
      *
-     * @dataProvider \App\Test\Provider\UserProvider::validUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::validUserProvider()
      * @param array $userValues
      */
     public function testToArrayForDatabase(array $userValues): void

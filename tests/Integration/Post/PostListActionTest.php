@@ -78,7 +78,7 @@ class PostListActionTest extends TestCase
      *      UserFixture: one user with id 1 (for session)(better if at least two)
      *      PostFixture: one post (better if at least two)
      *
-     * @dataProvider \App\Test\Provider\TestProvider\PostFilterProvider::provideValidFilter()
+     * @dataProvider \App\Test\Provider\Post\PostFilterCaseProvider::provideValidFilter()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array<string, mixed> $recordFilter Filter as record filter like ['col' => 'value']
@@ -125,7 +125,7 @@ class PostListActionTest extends TestCase
     /**
      * Request list of posts but with invalid filter
      *
-     * @dataProvider \App\Test\Provider\TestProvider\PostFilterProvider::provideInvalidFilter()
+     * @dataProvider \App\Test\Provider\Post\PostFilterCaseProvider::provideInvalidFilter()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body

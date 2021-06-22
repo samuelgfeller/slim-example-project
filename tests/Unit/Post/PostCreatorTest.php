@@ -17,7 +17,7 @@ class PostCreatorTest extends TestCase
      * Test that service method createPost() calls PostCreatorRepository:insertPost()
      * and that (service) createPost() returns the id returned from (repo) insertPost()
      *
-     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
      * @param Post $validPost
      */
     public function testCreatePost(Post $validPost): void
@@ -45,7 +45,7 @@ class PostCreatorTest extends TestCase
      * but without specific error analysis. Important is that it didn't create it.
      * The method is called with each value of the provider
      *
-     * @dataProvider \App\Test\Provider\PostProvider::invalidPostsProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::invalidPostsProvider()
      * @param Post $invalidPost
      */
     public function testCreatePost_invalid(Post $invalidPost): void
@@ -69,7 +69,7 @@ class PostCreatorTest extends TestCase
     /**
      * Test createPost when user doesn't exist
      *
-     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
      * @param Post $validPost
      */
     public function testCreatePost_notExistingUser(Post $validPost): void

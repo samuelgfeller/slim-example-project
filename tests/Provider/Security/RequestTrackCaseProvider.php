@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Test\Provider;
+namespace App\Test\Provider\Security;
 
 use App\Domain\Security\DTO\RequestStatsData;
 
-class RequestTrackProvider
+class RequestTrackCaseProvider
 {
     // Placed on top to easily change.
     // ! This should be the same than the config values $settings['security']['login_throttle']

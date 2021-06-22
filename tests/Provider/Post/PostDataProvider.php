@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Test\Provider;
+namespace App\Test\Provider\Post;
 
 use App\Domain\Post\DTO\Post;
 use App\Domain\Post\DTO\UserPost;
 use App\Domain\User\DTO\User;
-use JetBrains\PhpStorm\ArrayShape;
 
-class PostProvider
+class PostDataProvider
 {
     public array $samplePosts = [
         ['id' => 1, 'user_id' => 1, 'message' => 'This is the first test message'],

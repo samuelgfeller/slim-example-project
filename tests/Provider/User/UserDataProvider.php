@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Test\Provider;
+namespace App\Test\Provider\User;
 
 use App\Domain\User\DTO\User;
+use App\Test\Provider\TestHydrator;
 
 /**
  * Provide users to fill entities
  */
-class UserProvider
+class UserDataProvider
 {
 
     use TestHydrator;

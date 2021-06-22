@@ -97,7 +97,7 @@ class RegisterSubmitActionTest extends TestCase
      * For further tests, breakpoint can be set inside the register function
      * Fixture dependency:
      *      UserFixture: first fixture (user) has to be "Admin Example" with email "admin@example.com"
-     * @dataProvider \App\Test\Integration\Authentication\Provider\RegisterCaseProvider::provideExistingUserStatusAndEmail()
+     * @dataProvider \App\Test\Provider\Authentication\RegisterCaseProvider::provideExistingUserStatusAndEmail()
      * @param string $existingUserStatus
      * @param string $partialEmailBody
      */
@@ -210,7 +210,7 @@ class RegisterSubmitActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      *
-     * @dataProvider \App\Test\Provider\UserProvider::malformedRequestBodyProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::malformedRequestBodyProvider()
      *
      * @param array|null $malformedBody null for the case that request body is null
      * @param string $message

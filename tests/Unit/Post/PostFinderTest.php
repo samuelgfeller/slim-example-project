@@ -19,7 +19,7 @@ class PostFinderTest extends TestCase
      * Test function findAllPostsWithUsers from PostFinder which returns
      * Post array including the the associated user
      *
-     * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultipleUserPostsProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
      * @param UserPost[] $userPosts
      */
     public function testFindAllPosts(array $userPosts): void
@@ -41,7 +41,7 @@ class PostFinderTest extends TestCase
      * Check if findPost() from PostFinder returns
      * the post coming from the repository
      *
-     * @dataProvider \App\Test\Provider\PostProvider::onePostProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
      * @param Post $post
      */
     public function testFindPost(Post $post): void
@@ -63,7 +63,7 @@ class PostFinderTest extends TestCase
      * the posts coming from the repository AND
      * if the user names are contained in the returned array
      *
-     * @dataProvider \App\Test\Provider\PostProvider::oneSetOfMultipleUserPostsProvider()
+     * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
      * @param UserPost[] $userPosts
      */
     public function testFindAllPostsFromUser(array $userPosts): void

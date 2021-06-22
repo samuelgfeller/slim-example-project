@@ -17,7 +17,7 @@ class UserUpdaterTest extends TestCase
     /**
      * Test updateUser() from UserUpdater
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testUpdateUser(array $validUser): void
@@ -36,7 +36,7 @@ class UserUpdaterTest extends TestCase
      * Test updateUser() with invalid users
      * Test that data from existing user is validated before being updated
      *
-     * @dataProvider \App\Test\Provider\UserProvider::invalidUserForUpdate()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::invalidUserForUpdate()
      * @param array $invalidUser
      */
     public function testUpdateUser_invalid(array $invalidUser): void
@@ -57,7 +57,7 @@ class UserUpdaterTest extends TestCase
     /**
      * Test updateUser() when user doesn't exist
      *
-     * @dataProvider \App\Test\Provider\UserProvider::oneUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserProvider()
      * @param array $validUser
      */
     public function testUpdateUser_notExisting(array $validUser): void
