@@ -2,7 +2,7 @@
 
 namespace App\Test\Unit\Post;
 
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Domain\Post\Service\PostUpdater;
 use App\Infrastructure\Post\PostUpdaterRepository;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
@@ -21,9 +21,9 @@ class PostUpdaterTest extends TestCase
      * validation as registerUser() and it's already done there
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
-     * @param Post $validPost
+     * @param PostData $validPost
      */
-    public function testUpdatePost(Post $validPost): void
+    public function testUpdatePost(PostData $validPost): void
     {
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 

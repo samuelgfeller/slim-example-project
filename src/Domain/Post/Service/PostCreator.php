@@ -4,7 +4,7 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Infrastructure\Post\PostCreatorRepository;
 
 class PostCreator
@@ -18,10 +18,10 @@ class PostCreator
     /**
      * Insert post in database
      *
-     * @param Post $post
+     * @param PostData $post
      * @return int insert id
      */
-    public function createPost(Post $post): int
+    public function createPost(PostData $post): int
     {
         $this->postValidator->validatePostCreationOrUpdate($post);
         return $this->postCreatorRepository->insertPost($post->toArray());

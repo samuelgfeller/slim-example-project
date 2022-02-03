@@ -4,7 +4,7 @@ namespace App\Domain\Post\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
@@ -34,10 +34,10 @@ class PostValidator extends AppValidation
     /**
      * Validate post creation or update since they are the same
      *
-     * @param Post $post
+     * @param PostData $post
      * @throws ValidationException
      */
-    public function validatePostCreationOrUpdate(Post $post): void
+    public function validatePostCreationOrUpdate(PostData $post): void
     {
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 

@@ -2,10 +2,10 @@
 
 namespace App\Test\Unit\Post;
 
-use App\Domain\Post\DTO\Post;
-use App\Domain\Post\DTO\UserPost;
+use App\Domain\Post\Data\PostData;
+use App\Domain\Post\Data\UserPostData;
 use App\Domain\Post\Service\PostFinder;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostFinderRepository;
 use App\Test\Traits\AppTestTrait;
@@ -20,7 +20,7 @@ class PostFinderTest extends TestCase
      * Post array including the the associated user
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
-     * @param UserPost[] $userPosts
+     * @param UserPostData[] $userPosts
      */
     public function testFindAllPosts(array $userPosts): void
     {
@@ -42,9 +42,9 @@ class PostFinderTest extends TestCase
      * the post coming from the repository
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
-     * @param Post $post
+     * @param PostData $post
      */
-    public function testFindPost(Post $post): void
+    public function testFindPost(PostData $post): void
     {
         // Add mock class PostFinderRepository to container and define return value for method findPostById
         // I dont see the necessity of expecting method to be called. If we get the result we want
@@ -64,7 +64,7 @@ class PostFinderTest extends TestCase
      * if the user names are contained in the returned array
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
-     * @param UserPost[] $userPosts
+     * @param UserPostData[] $userPosts
      */
     public function testFindAllPostsFromUser(array $userPosts): void
     {

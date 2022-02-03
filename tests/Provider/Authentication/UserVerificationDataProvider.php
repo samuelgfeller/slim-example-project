@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Authentication;
 
-use App\Domain\Authentication\DTO\UserVerification;
+use App\Domain\Authentication\Data\UserVerificationData;
 
 class UserVerificationDataProvider
 {
@@ -16,7 +16,7 @@ class UserVerificationDataProvider
         $token = random_bytes(50);
         return [
             [
-                'verification' => new UserVerification([
+                'verification' => new UserVerificationData([
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
@@ -42,7 +42,7 @@ class UserVerificationDataProvider
         return [
             // Invalid token
             [
-                'verification' => new UserVerification([
+                'verification' => new UserVerificationData([
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
@@ -54,7 +54,7 @@ class UserVerificationDataProvider
             ],
             // Expired token
             [
-                'verification' => new UserVerification([
+                'verification' => new UserVerificationData([
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),

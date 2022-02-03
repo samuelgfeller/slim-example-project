@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Security;
 
-use App\Domain\Security\DTO\RequestStatsData;
+use App\Domain\Security\Data\RequestStatsData;
 
 class RequestTrackCaseProvider
 {

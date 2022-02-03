@@ -4,7 +4,7 @@ namespace App\Application\Actions\Posts;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Domain\Post\Service\PostCreator;
 use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
@@ -51,7 +51,7 @@ final class PostCreateAction
 
         if (null !== $postData = $request->getParsedBody()) {
 
-            $post = new Post($postData);
+            $post = new PostData($postData);
             $post->userId = $userId;
 
             try {

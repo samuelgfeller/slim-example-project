@@ -6,7 +6,7 @@ use App\Domain\Authentication\Service\UserRegisterer;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Mailer;
 use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
@@ -36,7 +36,7 @@ class UserRegistererTest extends TestCase
 
         // Mock the required repository and configure relevant method return value
         $this->mock(UserRegistererRepository::class)->method('insertUser')->willReturn($userId);
-        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new UserData());
 
         $this->mock(SecurityEmailChecker::class)->expects(self::once())->method('performEmailAbuseCheck');
         $this->mock(VerificationTokenDeleterRepository::class)->expects(self::once())->method(
@@ -69,7 +69,7 @@ class UserRegistererTest extends TestCase
         // Empty mock would do the trick as well it would just return null on non defined functions.
         // If findUserByEmail returns null, validation thinks the user doesn't exist which has to be the case
         // when creating a new user.
-        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new User());
+        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn(new UserData());
         // todo in validation testing do a specific unit test to test the behaviour when email already exists
         $this->mock(SecurityEmailChecker::class); // used in UserRegisterer
         // used in VerificationTokenCreator and UserAlreadyExistingHandler
@@ -90,16 +90,16 @@ class UserRegistererTest extends TestCase
      * Test registerUser() from UserService with already existing user with same email
      *
      * @param array $userData values from client
-     * @param User $existingUser values from repository
+     * @param UserData $existingUser values from repository
      * @throws \PHPMailer\PHPMailer\Exception
      * @todo test with different statuses of existing user
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      */
-    public function testRegisterUser_existingActiveUser(array $userData, User $existingUser): void
+    public function testRegisterUser_existingActiveUser(array $userData, UserData $existingUser): void
     {
         // Set user to active just to make sure
-        $existingUser->status = User::STATUS_ACTIVE;
+        $existingUser->status = UserData::STATUS_ACTIVE;
 
         // Set findUserByEmail to return user. That means that it already exists
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);
@@ -126,15 +126,15 @@ class UserRegistererTest extends TestCase
      * Test registerUser() from UserService with already existing user with same email
      *
      * @param array $userData values from client
-     * @param User $existingUser values from repository
+     * @param UserData $existingUser values from repository
      * @throws \PHPMailer\PHPMailer\Exception
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      */
-    public function testRegisterUser_existingUnverifiedUser(array $userData, User $existingUser): void
+    public function testRegisterUser_existingUnverifiedUser(array $userData, UserData $existingUser): void
     {
         // Set user to active just to make sure
-        $existingUser->status = User::STATUS_UNVERIFIED;
+        $existingUser->status = UserData::STATUS_UNVERIFIED;
 
         // Set findUserByEmail to return user. That means that it already exists
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($existingUser);

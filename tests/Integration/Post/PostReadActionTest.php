@@ -1,10 +1,9 @@
 <?php
 
 
-namespace Actions\Post;
+namespace App\Test\Integration\Post;
 
 
-use App\Domain\Post\DTO\UserPost;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;

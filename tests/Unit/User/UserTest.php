@@ -4,13 +4,13 @@
 namespace App\Test\Unit\User;
 
 
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
 
-    protected User $user;
+    protected UserData $user;
 
     /**
      * Testing all getters of the class user
@@ -25,7 +25,7 @@ class UserTest extends TestCase
      */
     public function testGetters(array $userValues): void
     {
-        $user = new User($userValues);
+        $user = new UserData($userValues);
 
         // Set possible values via setters
         $user->password = $userValues['password'];
@@ -47,7 +47,7 @@ class UserTest extends TestCase
     public function testToArrayForDatabase(array $userValues): void
     {
         // Instantiating the User object
-        $user = new User($userValues);
+        $user = new UserData($userValues);
 
         // Call said function to get the values as array
         $userAsDbArray = $user->toArrayForDatabase();

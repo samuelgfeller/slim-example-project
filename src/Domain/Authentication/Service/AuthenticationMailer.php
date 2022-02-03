@@ -4,7 +4,7 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Settings;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Mailer;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -45,11 +45,11 @@ class AuthenticationMailer
     /**
      * Send verification token
      *
-     * @param User $user
+     * @param UserData $user
      * @param array $queryParams
      * @throws TransportExceptionInterface
      */
-    public function sendRegisterVerificationToken(User $user, array $queryParams): void
+    public function sendRegisterVerificationToken(UserData $user, array $queryParams): void
     {
         // Send verification mail
         $this->email->subject('One more step to register')
@@ -67,10 +67,10 @@ class AuthenticationMailer
      * Send email to the already existing user with status "suspended" when someone tries to register with the
      * same email address.
      *
-     * @param User $existingUser
+     * @param UserData $existingUser
      * @throws TransportExceptionInterface
      */
-    public function sendRegisterExistingActiveUser(User $existingUser): void
+    public function sendRegisterExistingActiveUser(UserData $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
@@ -88,10 +88,10 @@ class AuthenticationMailer
      * Send email to the already existing user with status "suspended" when someone tries to register with the
      * same email address.
      *
-     * @param User $existingUser
+     * @param UserData $existingUser
      * @throws TransportExceptionInterface
      */
-    public function sendRegisterExistingSuspendedUser(User $existingUser): void
+    public function sendRegisterExistingSuspendedUser(UserData $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
@@ -109,10 +109,10 @@ class AuthenticationMailer
      * Send email to the already existing user with status "locked" when someone tries to register with the
      * same email address.
      *
-     * @param User $existingUser
+     * @param UserData $existingUser
      * @throws TransportExceptionInterface
      */
-    public function sendRegisterExistingLockedUser(User $existingUser): void
+    public function sendRegisterExistingLockedUser(UserData $existingUser): void
     {
         // Send info mail to email address holder
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser

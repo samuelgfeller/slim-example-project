@@ -6,7 +6,7 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
@@ -33,7 +33,7 @@ class LoginVerifier
      */
     public function getUserIdIfAllowedToLogin(array $userData, string|null $captcha = null): int
     {
-        $user = new User($userData, true);
+        $user = new UserData($userData, true);
 
         // Validate entries coming from client
         $this->userValidator->validateUserLogin($user);
@@ -44,14 +44,14 @@ class LoginVerifier
         $dbUser = $this->userFinderRepository->findUserByEmail($user->email);
         // Check if user already exists
         if ($dbUser->email !== null) {
-            if ($dbUser->status === User::STATUS_UNVERIFIED) {
+            if ($dbUser->status === UserData::STATUS_UNVERIFIED) {
                 // todo inform user when he tries to login that account is unverified and he should click on the link in his inbox
                 // maybe send verification email again and newEmailRequest (not login as its same as register)
-            } elseif ($dbUser->status === User::STATUS_SUSPENDED) {
+            } elseif ($dbUser->status === UserData::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
-            } elseif ($dbUser->status === User::STATUS_LOCKED) {
+            } elseif ($dbUser->status === UserData::STATUS_LOCKED) {
                 // Todo login fail and inform user (only via mail) that he is locked
-            } elseif ($dbUser->status === User::STATUS_ACTIVE) {
+            } elseif ($dbUser->status === UserData::STATUS_ACTIVE) {
                 // Check failed login attempts
                 if (password_verify($user->password, $dbUser->passwordHash)) {
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\DTO;
+namespace App\Domain\User\Data;
 
 use App\Common\ArrayReader;
 
@@ -10,7 +10,7 @@ use App\Common\ArrayReader;
  * sense to keep them private otherwise not really.
  *
  */
-class User
+class UserData
 {
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     public ?string $name;

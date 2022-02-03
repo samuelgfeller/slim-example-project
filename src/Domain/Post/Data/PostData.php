@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Domain\Post\DTO;
+namespace App\Domain\Post\Data;
 
 
 use App\Common\ArrayReader;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 
-class Post
+class PostData
 {
     public ?int $id;
     public ?int $userId;
@@ -14,7 +14,7 @@ class Post
     public ?string $createdAt;
     public ?string $updatedAt;
     public ?string $deletedAt;
-    public ?User $user;
+    public ?UserData $user;
 
     /**
      * Post constructor.

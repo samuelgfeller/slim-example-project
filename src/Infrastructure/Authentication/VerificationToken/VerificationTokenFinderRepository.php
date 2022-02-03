@@ -4,7 +4,7 @@
 namespace App\Infrastructure\Authentication\VerificationToken;
 
 
-use App\Domain\Authentication\DTO\UserVerification;
+use App\Domain\Authentication\Data\UserVerificationData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -19,14 +19,14 @@ class VerificationTokenFinderRepository
      * Search and return user verification entry with token
      *
      * @param int $id
-     * @return UserVerification
+     * @return UserVerificationData
      */
-    public function findUserVerification(int $id): UserVerification
+    public function findUserVerification(int $id): UserVerificationData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('user_verification')->where(
             ['deleted_at IS' => null, 'id' => $id]);
         $userVerificationRow = $query->execute()->fetch('assoc') ?: [];
-        return new UserVerification($userVerificationRow);
+        return new UserVerificationData($userVerificationRow);
     }
 
     /**

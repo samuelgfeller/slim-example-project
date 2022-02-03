@@ -4,7 +4,7 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Domain\Post\DTO\UserPost;
+use App\Domain\Post\Data\UserPostData;
 use App\Domain\Post\Exception\InvalidPostFilterException;
 
 class PostFilterFinder
@@ -19,7 +19,7 @@ class PostFilterFinder
      *
      * @param array $params GET parameters containing filter values
      *
-     * @return UserPost[]
+     * @return UserPostData[]
      */
     public function findPostsWithFilter(array $params): array
     {

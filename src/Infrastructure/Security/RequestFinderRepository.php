@@ -4,8 +4,8 @@
 namespace App\Infrastructure\Security;
 
 
-use App\Domain\Security\DTO\RequestData;
-use App\Domain\Security\DTO\RequestStatsData;
+use App\Domain\Security\Data\RequestData;
+use App\Domain\Security\Data\RequestStatsData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 use JetBrains\PhpStorm\ArrayShape;

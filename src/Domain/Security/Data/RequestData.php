@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Security\DTO;
+namespace App\Domain\Security\Data;
 
 
 use App\Common\ArrayReader;

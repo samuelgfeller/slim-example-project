@@ -5,7 +5,7 @@ namespace App\Domain\Authentication\Service;
 
 
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
@@ -36,7 +36,7 @@ class UserRegisterer
      */
     public function registerUser(array $userData, string|null $captcha = null, array $queryParams = []): bool|int
     {
-        $user = new User($userData, true);
+        $user = new UserData($userData, true);
 
         // Validate entries coming from client
         $this->userValidator->validateUserRegistration($user);
@@ -48,7 +48,7 @@ class UserRegisterer
         if ($existingUser->email !== null) {
             // If unverified and registered again, old user should be deleted and replaced with new input and verification
             // Reason: User could have lost the email or someone else tried to register under someone elses name
-            if ($existingUser->status === User::STATUS_UNVERIFIED) {
+            if ($existingUser->status === UserData::STATUS_UNVERIFIED) {
                 // Only delete the user and token but not return as function should continue normally and insert new user
                 $this->userAlreadyExistingHandler->handleUnverifiedExistingUser($existingUser);
             }else {
@@ -59,7 +59,7 @@ class UserRegisterer
         $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
 
         // Set default status and role
-        $user->status = User::STATUS_UNVERIFIED;
+        $user->status = UserData::STATUS_UNVERIFIED;
         $user->role = 'user';
 
         // Insert new user into database

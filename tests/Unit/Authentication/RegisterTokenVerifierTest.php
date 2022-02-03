@@ -2,11 +2,11 @@
 
 namespace App\Test\Unit\Authentication;
 
-use App\Domain\Authentication\DTO\UserVerification;
+use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Infrastructure\User\UserFinderRepository;
@@ -25,10 +25,10 @@ class RegisterTokenVerifierTest extends TestCase
      * Test that with valid values all security checks pass until changeUserStatus is called
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
-     * @param UserVerification $verification
+     * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testGetUserIdIfTokenIsValid(UserVerification $verification, string $clearTextToken): void
+    public function testGetUserIdIfTokenIsValid(UserVerificationData $verification, string $clearTextToken): void
     {
         // Create mocks
         $userVerificationFinderRepository = $this->mock(VerificationTokenFinderRepository::class);
@@ -41,7 +41,7 @@ class RegisterTokenVerifierTest extends TestCase
         // Return unverified user (empty user, only status is populated)
         $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be unverified for the test to succeed
-            new User(['status' => User::STATUS_UNVERIFIED])
+            new UserData(['status' => UserData::STATUS_UNVERIFIED])
         );
         // Making sure that changeUserStatus is called
         $this->mock(UserUpdaterRepository::class)->expects(self::once())->method('changeUserStatus')->willReturn(true);
@@ -57,11 +57,11 @@ class RegisterTokenVerifierTest extends TestCase
      * Case when user clicks on the link even though the user is not 'unverified' anymore
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
-     * @param UserVerification $verification
+     * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
     public function testGetUserIdIfTokenIsValid_alreadyVerified(
-        UserVerification $verification,
+        UserVerificationData $verification,
         string $clearTextToken
     ): void {
         // Return valid verification object from repository
@@ -71,11 +71,11 @@ class RegisterTokenVerifierTest extends TestCase
         // Return active user (empty user, only status is populated)
         $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be already active for exception to be thrown
-            new User(['status' => User::STATUS_ACTIVE])
+            new UserData(['status' => UserData::STATUS_ACTIVE])
         );
 
         $this->expectException(UserAlreadyVerifiedException::class);
-        $this->expectExceptionMessage('User has not status "' . User::STATUS_UNVERIFIED . '"');
+        $this->expectExceptionMessage('User has not status "' . UserData::STATUS_UNVERIFIED . '"');
 
         // Call function under test
         $this->container->get(RegisterTokenVerifier::class)->getUserIdIfTokenIsValid(
@@ -93,7 +93,7 @@ class RegisterTokenVerifierTest extends TestCase
         // Return empty verification object from repository. That means that entry was not found
         $this->mock(VerificationTokenFinderRepository::class)->expects(self::once())->method(
             'findUserVerification'
-        )->willReturn(new UserVerification()); // Empty class means nothing was found
+        )->willReturn(new UserVerificationData()); // Empty class means nothing was found
 
         $verificationId = 1;
         $this->expectException(InvalidTokenException::class);
@@ -112,11 +112,11 @@ class RegisterTokenVerifierTest extends TestCase
      * Provider gives once an invalid token and once an expired one
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider
      *
-     * @param UserVerification $verification Once expired
+     * @param UserVerificationData $verification Once expired
      * @param string $clearTextToken Once valid, once invalid
      */
     public function testGetUserIdIfTokenIsValid_invalidExpiredToken(
-        UserVerification $verification,
+        UserVerificationData $verification,
         string $clearTextToken
     ): void {
         // Return valid verification object from repository
@@ -126,7 +126,7 @@ class RegisterTokenVerifierTest extends TestCase
         // Return active user (empty user, only status is populated)
         $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // User has to be unverified as this is the default value and its not purpose of this test
-            new User(['status' => User::STATUS_UNVERIFIED])
+            new UserData(['status' => UserData::STATUS_UNVERIFIED])
         );
 
         $this->expectException(InvalidTokenException::class);

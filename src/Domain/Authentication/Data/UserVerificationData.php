@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Authentication\DTO;
+namespace App\Domain\Authentication\Data;
 
 use App\Common\ArrayReader;
 
@@ -8,9 +8,8 @@ use App\Common\ArrayReader;
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
  * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
  * sense to keep them private otherwise not really.
- *
  */
-class UserVerification
+class UserVerificationData
 {
     public ?int $id;
     public ?int $userId;

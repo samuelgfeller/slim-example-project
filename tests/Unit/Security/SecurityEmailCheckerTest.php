@@ -4,8 +4,8 @@
 namespace App\Test\Unit\Security;
 
 
-use App\Domain\Security\DTO\RequestData;
-use App\Domain\Security\DTO\RequestStatsData;
+use App\Domain\Security\Data\RequestData;
+use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Infrastructure\Security\RequestFinderRepository;

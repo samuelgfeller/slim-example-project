@@ -2,7 +2,7 @@
 
 namespace App\Test\Unit\User;
 
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\User\UserFinderRepository;
 use App\Test\Traits\AppTestTrait;
@@ -16,7 +16,7 @@ class UserFinderTest extends TestCase
      * Test findAllUsers() from UserFinder
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneSetOfMultipleUserObjectsProvider()
-     * @param User[] $users
+     * @param UserData[] $users
      */
     public function testFindAllUsers(array $users): void
     {
@@ -34,9 +34,9 @@ class UserFinderTest extends TestCase
      * Test findUserById() from UserFinder
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectProvider()
-     * @param User $user
+     * @param UserData $user
      */
-    public function testFindUserById(User $user): void
+    public function testFindUserById(UserData $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserFinderRepository::class)->method('findUserById')->willReturn($user);
@@ -52,9 +52,9 @@ class UserFinderTest extends TestCase
      * Test findUserByEmail() from UserFinder
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectProvider()
-     * @param User $user
+     * @param UserData $user
      */
-    public function testFindUserByEmail(User $user): void
+    public function testFindUserByEmail(UserData $user): void
     {
         // Mock the required repository and configure relevant method return value
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($user);

@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Domain\Authentication\DTO\UserVerification;
-use App\Domain\User\DTO\User;
+use App\Domain\Authentication\Data\UserVerificationData;
+use App\Domain\User\Data\UserData;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
@@ -22,14 +22,14 @@ class RegisterVerifyActionTest extends TestCase
 
     /**
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
-     * @param UserVerification $verification
+     * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification(UserVerification $verification, string $clearTextToken): void
+    public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
         $userRow = (new UserFixture())->records[0];
-        $userRow['status'] = User::STATUS_UNVERIFIED;
+        $userRow['status'] = UserData::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -53,23 +53,23 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is active on user
-        $this->assertTableRowValue(User::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserData::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
     }
 
     /**
      * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
-     * @param UserVerification $verification
+     * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
     public function testRegisterVerification_alreadyVerified(
-        UserVerification $verification,
+        UserVerificationData $verification,
         string $clearTextToken
     ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[0];
-        $userRow['status'] = User::STATUS_ACTIVE;
+        $userRow['status'] = UserData::STATUS_ACTIVE;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -95,14 +95,14 @@ class RegisterVerifyActionTest extends TestCase
 
     /**
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider()
-     * @param UserVerification $verification
+     * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_invalidExpiredToken(UserVerification $verification, string $clearTextToken): void
+    public function testRegisterVerification_invalidExpiredToken(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[0];
-        $userRow['status'] = User::STATUS_UNVERIFIED;
+        $userRow['status'] = UserData::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -130,7 +130,7 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is still unverified on user
-        $this->assertTableRowValue(User::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserData::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
     }
 
     /**

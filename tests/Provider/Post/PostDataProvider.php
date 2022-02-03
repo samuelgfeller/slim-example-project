@@ -2,9 +2,9 @@
 
 namespace App\Test\Provider\Post;
 
-use App\Domain\Post\DTO\Post;
-use App\Domain\Post\DTO\UserPost;
-use App\Domain\User\DTO\User;
+use App\Domain\Post\Data\PostData;
+use App\Domain\Post\Data\UserPostData;
+use App\Domain\User\Data\UserData;
 
 class PostDataProvider
 {
@@ -19,17 +19,17 @@ class PostDataProvider
     /**
      * Most of the functions returning posts are expected to automatically
      * populate the Post object with its according user
-     * @return User
+     * @return UserData
      */
-    private function getGenericUser(): User
+    private function getGenericUser(): UserData
     {
-        return new User(
+        return new UserData(
             [
                 'id' => 1,
                 'name' => 'John Wick',
                 'email' => 'john@wick.com',
                 'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
-                'status' => User::STATUS_ACTIVE,
+                'status' => UserData::STATUS_ACTIVE,
                 'role' => 'admin',
             ]
         );
@@ -38,7 +38,7 @@ class PostDataProvider
     /**
      * Provide a set of posts in a DataProvider format
      *
-     * @return UserPost[][][]
+     * @return UserPostData[][][]
      */
     public function oneSetOfMultipleUserPostsProvider(): array
     {
@@ -46,7 +46,7 @@ class PostDataProvider
         return [
             [
                 'posts' => [
-                    new UserPost(
+                    new UserPostData(
                         [
                             'post_id' => 1,
                             'user_id' => 1,
@@ -57,7 +57,7 @@ class PostDataProvider
                             'user_role' => 'admin',
                         ]
                     ),
-                    new UserPost(
+                    new UserPostData(
                         [
                             'post_id' => 2,
                             'user_id' => 1,
@@ -77,13 +77,13 @@ class PostDataProvider
     /**
      * Provide one user in a DataProvider format
      *
-     * @return array<array<Post>>
+     * @return array<array<PostData>>
      */
     public function onePostProvider(): array
     {
         return [
             [
-                new Post(
+                new PostData(
                     ['id' => 1, 'user_id' => 1, 'message' => 'Test message', 'created_at' => date('Y-m-d H:i:s')]
                 ),
             ]
@@ -91,7 +91,7 @@ class PostDataProvider
     }
 
     /**
-     * @return Post[][]
+     * @return PostData[][]
      */
     public function invalidPostsProvider(): array
     {
@@ -102,13 +102,13 @@ class PostDataProvider
             iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
         return [
             // Msg too short (>4)
-            [new Post(['id' => 1, 'user_id' => 1, 'message' => 'aaa'])],
+            [new PostData(['id' => 1, 'user_id' => 1, 'message' => 'aaa'])],
             // Msg too long (<500)
-            [new Post(['id' => 1, 'user_id' => 1, 'message' => $tooLongMsg])],
+            [new PostData(['id' => 1, 'user_id' => 1, 'message' => $tooLongMsg])],
             // Required msg empty
-            [new Post(['id' => 1, 'user_id' => 1, 'message' => ''])],
+            [new PostData(['id' => 1, 'user_id' => 1, 'message' => ''])],
             // Required user_id missing
-            [new Post(['id' => 1, 'user_id' => '', 'message' => ''])],
+            [new PostData(['id' => 1, 'user_id' => '', 'message' => ''])],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.

@@ -4,7 +4,7 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Infrastructure\Post\PostUpdaterRepository;
 
 class PostUpdater
@@ -18,10 +18,10 @@ class PostUpdater
     /**
      * Change something or multiple things on post
      *
-     * @param Post $post
+     * @param PostData $post
      * @return bool if update was successful
      */
-    public function updatePost(Post $post): bool
+    public function updatePost(PostData $post): bool
     {
         $this->postValidator->validatePostCreationOrUpdate($post);
         return $this->postUpdaterRepository->updatePost($post->toArray(), $post->id);

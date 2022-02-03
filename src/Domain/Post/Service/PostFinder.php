@@ -4,8 +4,8 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Domain\Post\DTO\Post;
-use App\Domain\Post\DTO\UserPost;
+use App\Domain\Post\Data\PostData;
+use App\Domain\Post\Data\UserPostData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostFinderRepository;
 
@@ -19,7 +19,7 @@ class PostFinder
     /**
      * Gives all undeleted posts from db with name of user
      *
-     * @return Post[]
+     * @return PostData[]
      */
     public function findAllPostsWithUsers(): array
     {
@@ -30,9 +30,9 @@ class PostFinder
      * Find one post in the database
      *
      * @param $id
-     * @return Post
+     * @return PostData
      */
-    public function findPost($id): Post
+    public function findPost($id): PostData
     {
         $post = $this->postFinderRepository->findPostById($id);
         $post->user = $this->userFinder->findUserById($post->userId);
@@ -43,9 +43,9 @@ class PostFinder
      * Find specific post with user info
      *
      * @param int $id
-     * @return UserPost
+     * @return UserPostData
      */
-    public function findPostWithUserById(int $id): UserPost
+    public function findPostWithUserById(int $id): UserPostData
     {
         return $this->postFinderRepository->findUserPostById($id);
     }
@@ -54,7 +54,7 @@ class PostFinder
      * Return all posts which are linked to the given user
      *
      * @param int $userId
-     * @return UserPost[]
+     * @return UserPostData[]
      */
     public function findAllPostsFromUser(int $userId): array
     {

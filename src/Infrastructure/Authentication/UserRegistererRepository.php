@@ -4,7 +4,7 @@
 namespace App\Infrastructure\Authentication;
 
 
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserRegistererRepository
@@ -16,10 +16,10 @@ class UserRegistererRepository
     /**
      * Insert user in database
      *
-     * @param User $user
+     * @param UserData $user
      * @return int lastInsertId
      */
-    public function insertUser(User $user): int
+    public function insertUser(UserData $user): int
     {
         $userRows = $user->toArrayForDatabase();
         return (int)$this->queryFactory->newInsert($userRows)->into('user')->execute()->lastInsertId();

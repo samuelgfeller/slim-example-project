@@ -3,7 +3,7 @@
 namespace App\Test\Unit\Post;
 
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Domain\Post\Service\PostCreator;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Test\Traits\AppTestTrait;
@@ -18,9 +18,9 @@ class PostCreatorTest extends TestCase
      * and that (service) createPost() returns the id returned from (repo) insertPost()
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
-     * @param Post $validPost
+     * @param PostData $validPost
      */
-    public function testCreatePost(Post $validPost): void
+    public function testCreatePost(PostData $validPost): void
     {
         // Mock the required repository and configure relevant method return value
         // Here I find ->expects() relevant since the test is about if the method is called or not
@@ -46,9 +46,9 @@ class PostCreatorTest extends TestCase
      * The method is called with each value of the provider
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::invalidPostsProvider()
-     * @param Post $invalidPost
+     * @param PostData $invalidPost
      */
-    public function testCreatePost_invalid(Post $invalidPost): void
+    public function testCreatePost_invalid(PostData $invalidPost): void
     {
         // Mock because it is used by the validation logic.
         // Empty mock would do the trick as well as it would just return null on non defined functions.
@@ -70,9 +70,9 @@ class PostCreatorTest extends TestCase
      * Test createPost when user doesn't exist
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
-     * @param Post $validPost
+     * @param PostData $validPost
      */
-    public function testCreatePost_notExistingUser(Post $validPost): void
+    public function testCreatePost_notExistingUser(PostData $validPost): void
     {
         // Point of this test is not existing user
         $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(false);

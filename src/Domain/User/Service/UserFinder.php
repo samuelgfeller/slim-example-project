@@ -4,7 +4,7 @@
 namespace App\Domain\User\Service;
 
 
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\User\UserFinderRepository;
 
 class UserFinder
@@ -14,7 +14,7 @@ class UserFinder
     ) { }
 
     /**
-     * @return User[]
+     * @return UserData[]
      */
     public function findAllUsers(): array
     {
@@ -23,9 +23,9 @@ class UserFinder
 
     /**
      * @param string $id
-     * @return User
+     * @return UserData
      */
-    public function findUserById(string $id): User
+    public function findUserById(string $id): UserData
     {
         return $this->userFinderRepository->findUserById($id);
     }
@@ -34,9 +34,9 @@ class UserFinder
      * Find user via email
      *
      * @param string $email
-     * @return User
+     * @return UserData
      */
-    public function findUserByEmail(string $email): User
+    public function findUserByEmail(string $email): UserData
     {
         return $this->userFinderRepository->findUserByEmail($email);
     }

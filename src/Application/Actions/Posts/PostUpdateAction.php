@@ -6,7 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\DTO\Post;
+use App\Domain\Post\Data\PostData;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\Post\Service\PostUpdater;
 use App\Domain\Validation\OutputEscapeService;
@@ -80,7 +80,7 @@ final class PostUpdateAction
             if (null !== $postData = $request->getParsedBody()) {
                 // todo maybe add mapping a layer between client body and application logic
 
-                $post = new Post($postData);
+                $post = new PostData($postData);
                 // Needed to tell repo what data to update
                 $post->id = $postFromDb['id'];
 

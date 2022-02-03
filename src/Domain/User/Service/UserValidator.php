@@ -4,7 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
@@ -35,10 +35,10 @@ class UserValidator extends AppValidation
      * Validate updating the user.
      *
      * @param int $userId
-     * @param User $user
+     * @param UserData $user
      * @return ValidationResult
      */
-    public function validateUserUpdate(int $userId, User $user): ValidationResult
+    public function validateUserUpdate(int $userId, UserData $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         $this->validateUserExistence($userId, $validationResult);
@@ -55,11 +55,11 @@ class UserValidator extends AppValidation
     /**
      * Validate registration.
      *
-     * @param User $user
+     * @param UserData $user
      * @return ValidationResult
      * @throws ValidationException
      */
-    public function validateUserRegistration(User $user): ValidationResult
+    public function validateUserRegistration(UserData $user): ValidationResult
     {
         // Instantiate ValidationResult Object with default message
         $validationResult = new ValidationResult('There was a validation error when trying to register');
@@ -79,11 +79,11 @@ class UserValidator extends AppValidation
      * Validate if user inputs for the login
      * are valid
      *
-     * @param User $user
+     * @param UserData $user
      * @return ValidationResult
      * @throws ValidationException
      */
-    public function validateUserLogin(User $user): ValidationResult
+    public function validateUserLogin(UserData $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 

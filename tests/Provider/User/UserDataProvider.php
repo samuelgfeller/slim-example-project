@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\User;
 
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Test\Provider\TestHydrator;
 
 /**
@@ -84,13 +84,13 @@ class UserDataProvider
     /**
      * Provide a set of user objects
      *
-     * @return User[]
+     * @return UserData[]
      */
     public function oneSetOfMultipleUserObjectsProvider(): array
     {
         return [
             [
-                $this->hydrate($this->sampleUsers, User::class)
+                $this->hydrate($this->sampleUsers, UserData::class)
             ]
         ];
     }
@@ -99,15 +99,15 @@ class UserDataProvider
      * Hydrate User objects.
      * Placed in each provider as I'm unsure about
      * @param array $rows
-     * @return User[]
+     * @return UserData[]
      */
     public function hydrateUsers(array $rows): array
     {
-        /** @var User[] $result */
+        /** @var UserData[] $result */
         $result = [];
 
         foreach ($rows as $row) {
-            $result[] = new User($row);
+            $result[] = new UserData($row);
         }
 
         return $result;
@@ -130,7 +130,7 @@ class UserDataProvider
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                     'role' => 'admin',
-                    'status' => User::STATUS_ACTIVE,
+                    'status' => UserData::STATUS_ACTIVE,
                 ]
             ]
         ];
@@ -145,7 +145,7 @@ class UserDataProvider
     {
         return [
             [
-                new User(
+                new UserData(
                     [
                         'id' => 1,
                         'name' => 'Bill Gates',
@@ -154,7 +154,7 @@ class UserDataProvider
                         'password2' => '12345678',
                         'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                         'role' => 'admin',
-                        'status' => User::STATUS_ACTIVE,
+                        'status' => UserData::STATUS_ACTIVE,
                     ]
                 )
             ]
@@ -178,14 +178,14 @@ class UserDataProvider
                     'password2' => '12345678',
                 ],
                 // User object from repository
-                'userObj' => new User(
+                'userObj' => new UserData(
                     [
                         'id' => 1,
                         'name' => 'Bill Gates',
                         'email' => 'gates@email.com',
                         'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
                         'role' => 'admin',
-                        'status' => User::STATUS_ACTIVE,
+                        'status' => UserData::STATUS_ACTIVE,
                     ]
                 )
             ]

@@ -5,7 +5,7 @@ namespace App\Infrastructure\User;
 
 
 use App\Common\Hydrator;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserFinderRepository
@@ -22,7 +22,7 @@ class UserFinderRepository
     /**
      * Return all users
      *
-     * @return User[]
+     * @return UserData[]
      */
     public function findAllUsers(): array
     {
@@ -32,7 +32,7 @@ class UserFinderRepository
         $usersRows = $query->execute()->fetchAll('assoc') ?: [];
 
         // Convert to list of objects
-        return $this->hydrator->hydrate($usersRows, User::class);
+        return $this->hydrator->hydrate($usersRows, UserData::class);
     }
 
     /**
@@ -40,16 +40,16 @@ class UserFinderRepository
      * otherwise null
      *
      * @param string $id
-     * @return User
+     * @return UserData
      */
-    public function findUserById(string $id): User
+    public function findUserById(string $id): UserData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $userRows = $query->execute()->fetch('assoc') ?: [];
         // Empty user object if not found
-        return new User($userRows);
+        return new UserData($userRows);
     }
 
     /**
@@ -59,9 +59,9 @@ class UserFinderRepository
      * Source: https://stackoverflow.com/a/1970001/9013718
      *
      * @param string|null $email
-     * @return User
+     * @return UserData
      */
-    public function findUserByEmail(?string $email): User
+    public function findUserByEmail(?string $email): UserData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->andWhere(
             ['deleted_at IS' => null, 'email' => $email]
@@ -70,7 +70,7 @@ class UserFinderRepository
         $userRows = $query->execute()->fetch('assoc') ?: [];
 
         // Empty user object if not found
-        return new User($userRows);
+        return new UserData($userRows);
     }
 
     /**
@@ -78,10 +78,10 @@ class UserFinderRepository
      * If not found error is thrown
      *
      * @param int $id
-     * @return User
+     * @return UserData
      * Throws PersistenceRecordNotFoundException if not found
      */
-    public function getUserById(int $id): User
+    public function getUserById(int $id): UserData
     {
         $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->andWhere(
             ['deleted_at IS' => null, 'id' => $id]
@@ -89,6 +89,6 @@ class UserFinderRepository
 
         $userRows = $query->execute()->fetch('assoc');
 
-        return new User($userRows);
+        return new UserData($userRows);
     }
 }

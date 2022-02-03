@@ -6,7 +6,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
@@ -36,7 +36,7 @@ final class UserUpdater
      */
     public function updateUser(int $userIdToChange, array $userValues, int $loggedInUserId): bool
     {
-        $user = new User($userValues, true);
+        $user = new UserData($userValues, true);
         $this->userValidator->validateUserUpdate($userIdToChange, $user);
 
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);

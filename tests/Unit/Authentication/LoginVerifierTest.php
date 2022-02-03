@@ -6,7 +6,7 @@ use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\User\UserFinderRepository;
 use App\Test\Traits\AppTestTrait;
@@ -21,9 +21,9 @@ class LoginVerifierTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      * @param array $validUserData
-     * @param User $repoUser
+     * @param UserData $repoUser
      */
-    public function testGetUserIdIfAllowedToLogin(array $validUserData, User $repoUser): void
+    public function testGetUserIdIfAllowedToLogin(array $validUserData, UserData $repoUser): void
     {
         $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($repoUser);
         $this->mock(SecurityLoginChecker::class); // Return null on security checks
@@ -62,7 +62,7 @@ class LoginVerifierTest extends TestCase
      */
     public function testGetUserIdIfAllowedToLogin_userNotExisting(array $validUser): void
     {
-        $this->mock(UserFinder::class)->method('findUserByEmail')->willReturn(new User());
+        $this->mock(UserFinder::class)->method('findUserByEmail')->willReturn(new UserData());
         $this->mock(SecurityLoginChecker::class); // Return null on security checks
 
         /** @var LoginVerifier $loginVerifier */
@@ -79,9 +79,9 @@ class LoginVerifierTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
      * @param array $userData values from client
-     * @param User $userObj values from repository
+     * @param UserData $userObj values from repository
      */
-    public function testGetUserIdIfAllowedToLogin_invalidPass(array $userData, User $userObj): void
+    public function testGetUserIdIfAllowedToLogin_invalidPass(array $userData, UserData $userObj): void
     {
         // Add DIFFERENT password hash
         $userData['password_hash'] = password_hash('differentPass', PASSWORD_DEFAULT);

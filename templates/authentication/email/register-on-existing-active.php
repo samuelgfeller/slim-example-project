@@ -4,7 +4,7 @@
  * @var Slim\Views\PhpRenderer $this
  * @var Psr\Http\Message\UriInterface $uri
  * @var Slim\Interfaces\RouteParserInterface $route
- * @var App\Domain\User\DTO\User $user already existing registered user (result of findUserByEmail())
+ * @var App\Domain\User\Data\UserData $user already existing registered user (result of findUserByEmail())
  */
 
 $this->setLayout('layout/layout.email.php');

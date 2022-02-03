@@ -4,7 +4,7 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\DTO\User;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserDeleterRepository;
@@ -27,7 +27,7 @@ class UserAlreadyExistingHandler
             ->createInstance('auth-register-already-existing');
     }
 
-    public function handleUnverifiedExistingUser(User $existingUser): void
+    public function handleUnverifiedExistingUser(UserData $existingUser): void
     {
         // Soft delete user so that new one can be inserted properly
         $this->userDeleterRepository->deleteUserById($existingUser->id);
@@ -38,13 +38,13 @@ class UserAlreadyExistingHandler
      * Logic when user already exists and is not unverified meaning either
      *  active, locked or suspended during registration
      *
-     * @param User $existingUser
+     * @param UserData $existingUser
      *
      * @return bool
      */
-    public function handleVerifiedExistingUser(User $existingUser): bool
+    public function handleVerifiedExistingUser(UserData $existingUser): bool
     {
-        if ($existingUser->status === User::STATUS_SUSPENDED) {
+        if ($existingUser->status === UserData::STATUS_SUSPENDED) {
             // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             try {
                 $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
@@ -57,7 +57,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === User::STATUS_LOCKED) {
+        if ($existingUser->status === UserData::STATUS_LOCKED) {
             try {
                 $this->mailer->sendRegisterExistingLockedUser($existingUser);
 
@@ -70,7 +70,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === User::STATUS_ACTIVE) {
+        if ($existingUser->status === UserData::STATUS_ACTIVE) {
             try {
                 $this->mailer->sendRegisterExistingActiveUser($existingUser);
 

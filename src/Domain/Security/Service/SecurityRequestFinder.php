@@ -4,8 +4,8 @@
 namespace App\Domain\Security\Service;
 
 
-use App\Domain\Security\DTO\RequestData;
-use App\Domain\Security\DTO\RequestStatsData;
+use App\Domain\Security\Data\RequestData;
+use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Settings;
 use App\Infrastructure\Security\RequestFinderRepository;
 

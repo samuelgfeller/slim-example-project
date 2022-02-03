@@ -5,8 +5,8 @@ namespace App\Infrastructure\Post;
 
 
 use App\Common\Hydrator;
-use App\Domain\Post\DTO\Post;
-use App\Domain\Post\DTO\UserPost;
+use App\Domain\Post\Data\PostData;
+use App\Domain\Post\Data\UserPostData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -23,7 +23,7 @@ class PostFinderRepository
     /**
      * Return all posts with users attribute loaded
      *
-     * @return UserPost[]
+     * @return UserPostData[]
      */
     public function findAllPostsWithUsers(): array
     {
@@ -44,7 +44,7 @@ class PostFinderRepository
         );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
-        return $this->hydrator->hydrate($resultRows, UserPost::class);
+        return $this->hydrator->hydrate($resultRows, UserPostData::class);
     }
 
     /**
@@ -52,23 +52,23 @@ class PostFinderRepository
      * otherwise null
      *
      * @param string|int $id
-     * @return Post
+     * @return PostData
      */
-    public function findPostById(string|int $id): Post
+    public function findPostById(string|int $id): PostData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
             ['deleted_at IS' => null, 'id' => $id]);
         $postRow = $query->execute()->fetch('assoc') ?: [];
-        return new Post($postRow);
+        return new PostData($postRow);
     }
 
     /**
      * Return all posts with users attribute loaded
      *
      * @param int $id
-     * @return UserPost
+     * @return UserPostData
      */
-    public function findUserPostById(int $id): UserPost
+    public function findUserPostById(int $id): UserPostData
     {
         $query = $this->queryFactory->newQuery()->from('post');
         $query->select(
@@ -86,7 +86,7 @@ class PostFinderRepository
         );
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
-        return new UserPost($resultRows);
+        return new UserPostData($resultRows);
     }
 
 
@@ -113,7 +113,7 @@ class PostFinderRepository
      * Return all posts which are linked to the given user
      *
      * @param int $userId
-     * @return UserPost[]
+     * @return UserPostData[]
      */
     public function findAllPostsByUserId(int $userId): array
     {
@@ -136,6 +136,6 @@ class PostFinderRepository
         );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
-        return $this->hydrator->hydrate($resultRows, UserPost::class);
+        return $this->hydrator->hydrate($resultRows, UserPostData::class);
     }
 }
