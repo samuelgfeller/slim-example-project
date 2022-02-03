@@ -19,7 +19,7 @@
             "App\\": "src/"
         },
         "files": [
-            "app/functions.php"
+            "config/functions.php"
         ]
     },
     "autoload-dev": {

@@ -33,7 +33,7 @@ trait AppTestTrait
     protected function setUp(): void
     {
         // Start slim app
-        $this->app = require __DIR__ . '/../../app/bootstrap.php';
+        $this->app = require __DIR__ . '/../../config/bootstrap.php';
 
         // Set $this->container to container instance
         $container = $this->app->getContainer();

@@ -34,7 +34,7 @@ $middleware = require __DIR__ . '/middleware.php';
 $middleware($app);
 
 // Routing
-$routes = require __DIR__ . '/../app/routes.php';
+$routes = require __DIR__ . '/../config/routes.php';
 $routes($app);
 
 return $app;
