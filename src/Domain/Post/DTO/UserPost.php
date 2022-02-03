@@ -25,12 +25,12 @@ class UserPost
     public function __construct(array $postData = null)
     {
         $arrayReader = new ArrayReader($postData);
-        $this->postId = $arrayReader->findInt('post_id');
-        $this->userId = $arrayReader->findInt('user_id');
-        $this->postMessage = $arrayReader->findString('post_message');
-        $this->postCreatedAt = $arrayReader->findString('post_created_at');
-        $this->postUpdatedAt = $arrayReader->findString('post_updated_at');
-        $this->userName = $arrayReader->findString('user_name');
-        $this->userRole = $arrayReader->findString('user_role');
+        $this->postId = $arrayReader->findAsInt('post_id');
+        $this->userId = $arrayReader->findAsInt('user_id');
+        $this->postMessage = $arrayReader->findAsString('post_message');
+        $this->postCreatedAt = $arrayReader->findAsString('post_created_at');
+        $this->postUpdatedAt = $arrayReader->findAsString('post_updated_at');
+        $this->userName = $arrayReader->findAsString('user_name');
+        $this->userRole = $arrayReader->findAsString('user_role');
     }
 }

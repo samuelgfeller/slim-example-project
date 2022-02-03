@@ -21,8 +21,8 @@ class RequestStatsData
      */
     public function __construct(array $data = []) {
         $reader = new ArrayReader($data);
-        $this->sentEmails = $reader->findInt('sent_emails');
-        $this->loginFailures = $reader->findInt('login_failures');
-        $this->loginSuccesses = $reader->findInt('login_successes');
+        $this->sentEmails = $reader->findAsInt('sent_emails');
+        $this->loginFailures = $reader->findAsInt('login_failures');
+        $this->loginSuccesses = $reader->findAsInt('login_successes');
     }
 }

@@ -38,17 +38,17 @@ class User
         $arrayReader = new ArrayReader($userData);
         // Keys may be taken from client form or database so they have to correspond to both; otherwise use mapper
         // ArrayReader findDatatype casts the values in the wanted format too
-        $this->id = $arrayReader->findInt('id');
-        $this->name = $arrayReader->findString('name');
-        $this->email = $arrayReader->findString('email');
-        $this->password = $arrayReader->findString('password');
-        $this->password2 = $arrayReader->findString('password2');
-        $this->passwordHash = $arrayReader->findString('password_hash');
+        $this->id = $arrayReader->findAsInt('id');
+        $this->name = $arrayReader->findAsString('name');
+        $this->email = $arrayReader->findAsString('email');
+        $this->password = $arrayReader->findAsString('password');
+        $this->password2 = $arrayReader->findAsString('password2');
+        $this->passwordHash = $arrayReader->findAsString('password_hash');
 
         // Making sure that role and status aren't filled with malicious data
         if ($limited === false){
-            $this->status = $arrayReader->findString('status');
-            $this->role = $arrayReader->findString('role');
+            $this->status = $arrayReader->findAsString('status');
+            $this->role = $arrayReader->findAsString('role');
         }
     }
 

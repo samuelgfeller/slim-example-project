@@ -26,11 +26,11 @@ class UserVerification
     {
         $arrayReader = new ArrayReader($verificationData);
         // ArrayReader find*() casts the values in the given format
-        $this->id = $arrayReader->findInt('id');
-        $this->userId = $arrayReader->findInt('user_id');
-        $this->token = $arrayReader->findString('token');
-        $this->expires = $arrayReader->findInt('expires');
-        $this->createdAt = $arrayReader->findString('created_at');
+        $this->id = $arrayReader->findAsInt('id');
+        $this->userId = $arrayReader->findAsInt('user_id');
+        $this->token = $arrayReader->findAsString('token');
+        $this->expires = $arrayReader->findAsInt('expires');
+        $this->createdAt = $arrayReader->findAsString('created_at');
     }
 
     /**

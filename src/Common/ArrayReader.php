@@ -52,7 +52,7 @@ final class ArrayReader
      *
      * @return int|null The value
      */
-    public function findInt(string $key, int $default = null): ?int
+    public function findAsInt(string $key, int $default = null): ?int
     {
         $result = $this->find($key, $default);
 
@@ -92,7 +92,7 @@ final class ArrayReader
      *
      * @return string|null The value
      */
-    public function findString(string $key, string $default = null): ?string
+    public function findAsString(string $key, string $default = null): ?string
     {
         $value = $this->find($key, $default);
 
@@ -132,7 +132,7 @@ final class ArrayReader
      *
      * @return array|null The value
      */
-    public function findArray(string $key, array $default = null): ?array
+    public function findAsArray(string $key, array $default = null): ?array
     {
         $value = $this->find($key, $default);
 
@@ -172,7 +172,7 @@ final class ArrayReader
      *
      * @return float|null The value
      */
-    public function findFloat(string $key, float $default = null): ?float
+    public function findAsFloat(string $key, float $default = null): ?float
     {
         $value = $this->find($key, $default);
 
@@ -212,7 +212,7 @@ final class ArrayReader
      *
      * @return bool|null The value
      */
-    public function findBool(string $key, bool $default = null): ?bool
+    public function findAsBool(string $key, bool $default = null): ?bool
     {
         $value = $this->find($key, $default);
 

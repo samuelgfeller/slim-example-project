@@ -22,12 +22,12 @@ class Post
      */
     public function __construct(array $postData = null) {
         $arrayReader = new ArrayReader($postData);
-        $this->id = $arrayReader->findInt('id');
-        $this->userId = $arrayReader->findInt('user_id');
-        $this->message = $arrayReader->findString('message');
-        $this->createdAt = $arrayReader->findString('created_at');
-        $this->updatedAt = $arrayReader->findString('updated_at');
-        $this->deletedAt = $arrayReader->findString('deleted_at');
+        $this->id = $arrayReader->findAsInt('id');
+        $this->userId = $arrayReader->findAsInt('user_id');
+        $this->message = $arrayReader->findAsString('message');
+        $this->createdAt = $arrayReader->findAsString('created_at');
+        $this->updatedAt = $arrayReader->findAsString('updated_at');
+        $this->deletedAt = $arrayReader->findAsString('deleted_at');
     }
 
     /**
