@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Posts;
+namespace App\Application\Actions\Post;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;

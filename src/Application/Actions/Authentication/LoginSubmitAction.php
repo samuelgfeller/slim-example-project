@@ -46,7 +46,7 @@ final class LoginSubmitAction
 
                 try {
                     // Throws InvalidCredentialsException if not allowed
-                    $userId = $this->loginVerifier->GetUserIdIfAllowedToLogin($userData, $captcha);
+                    $userId = $this->loginVerifier->getUserIdIfAllowedToLogin($userData, $captcha);
 
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();

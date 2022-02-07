@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Users;
+namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
 use App\Domain\Factory\LoggerFactory;
