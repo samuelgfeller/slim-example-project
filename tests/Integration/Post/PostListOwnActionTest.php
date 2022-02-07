@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**

@@ -5,7 +5,7 @@ namespace App\Test\Integration\Authentication;
 use App\Test\Traits\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpNotFoundException;
 
 /**

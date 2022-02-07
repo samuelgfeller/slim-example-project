@@ -8,7 +8,7 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use App\Test\Traits\RouteTestTrait;
 
 /**
  * In this class actions that are processed by the `SecurityService` are tested

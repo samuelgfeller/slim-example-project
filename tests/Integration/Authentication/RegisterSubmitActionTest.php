@@ -2,18 +2,15 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Domain\Utility\Mailer;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Fixture\RequestTrackFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\MailerAssertionsTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use App\Test\Traits\RouteTestTrait;
+use Selective\TestTrait\Traits\MailerTestTrait;
 use Slim\Exception\HttpBadRequestException;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 
 /**
  * Integration testing user registrations
@@ -25,7 +22,7 @@ class RegisterSubmitActionTest extends TestCase
     use HttpTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use MailerAssertionsTrait;
+    use MailerTestTrait;
 
     /**
      * Test user creation
@@ -53,14 +50,16 @@ class RegisterSubmitActionTest extends TestCase
         // Assert: 302 Found (redirect)
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
+
         // Email assertions
         $email = $this->getMailerMessage();
-        self::assertEmailHtmlBodyContains(
+        $this->assertEmailHtmlBodyContains(
             $email,
             'To verify that this email address belongs to you, please click on the following link'
         );
         // Assert that right email has been sent to the right person
-        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+        $this->assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+
 
         // Database assertions
         $this->assertTableRowCount(1, 'user');

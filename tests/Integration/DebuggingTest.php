@@ -1,7 +1,7 @@
 <?php
 
 
-use Selective\TestTrait\Traits\RouteTestTrait;
+use App\Test\Traits\RouteTestTrait;
 
 class DebuggingTest extends \PHPUnit\Framework\TestCase
 {
