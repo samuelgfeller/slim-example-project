@@ -58,6 +58,7 @@ $settings['security'] = [
      * If changed, RequestTrackFixture has to be updated accordingly
      */
     // Seconds in the past relevant for global, user and ip request throttle
+    // If 3600, the requests in the past hour will be evaluated and compared to the set thresholds below
     'timespan' => 3600,
 
     // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest

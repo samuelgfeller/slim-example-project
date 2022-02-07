@@ -32,7 +32,7 @@ final class UserViewProfileAction
         private SessionInterface $session
     ) {
         $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('auth-view');
+            ->createInstance('user-view');
     }
 
     /**
@@ -50,14 +50,12 @@ final class UserViewProfileAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // getUserIdFromToken not transferred to action since it will be session based
-
-
         if (($userId = $this->session->get('user_id')) !== null){
             $user = $this->userFinder->findUserById($userId);
+            return $this->responder->respondWithJson($response, $user);
         }
 
-        $userRole = $this->authService->getUserRoleById($loggedUserId);
+        /*$userRole = $this->authService->getUserRoleById($loggedUserId);
 
         // Check if it's admin or if it's its own user
         if ($userRole === 'admin' || $id === $loggedUserId) {
@@ -71,6 +69,6 @@ final class UserViewProfileAction
             $response,
             ['status' => 'error', 'message' => 'You can only view your user info or be an admin to view others'],
             403
-        );
+        );*/
     }
 }

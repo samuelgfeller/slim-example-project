@@ -51,7 +51,7 @@ class SecurityLoginChecker
         }
         // If captcha is valid the other security checks don't have to be made
         if ($validCaptcha !== true) {
-            // Most strict. Very low limit on failed requests for specific emails or coming from a specific ip
+            // Most strict. Very low limit on failed requests for specific email or coming from an ip
             $this->performLoginCheck(
                 $this->requestFinder->retrieveIpStats(),
                 $this->requestFinder->retrieveUserStats($email),
