@@ -27,15 +27,4 @@ $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 $container = $containerBuilder->build();
 
 // Create App instance
-$app = $container->get(App::class);
-
-// Register middleware (outside container)
-$middleware = require __DIR__ . '/middleware.php';
-$middleware($app);
-
-// Routing
-$routes = require __DIR__ . '/../config/routes.php';
-$routes($app);
-
-return $app;
-
+return $container->get(App::class);

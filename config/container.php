@@ -10,9 +10,11 @@ use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
@@ -31,17 +33,27 @@ return [
         return require __DIR__ . '/settings.php';
     },
     App::class => function (ContainerInterface $container) {
-        AppFactory::setContainer($container);
-        return AppFactory::create();
+        $app = AppFactory::createFromContainer($container);
+        // Register routes
+        (require __DIR__ . '/routes.php')($app);
+
+        // Register middleware
+        (require __DIR__ . '/middleware.php')($app);
+        return $app;
     },
     LoggerFactory::class => function (ContainerInterface $container) {
         return new LoggerFactory($container->get('settings')['logger']);
     },
 
+    // HTTP factories
     // For Responder and error middleware
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
-        return $container->get(App::class)->getResponseFactory();
+        return $container->get(Psr17Factory::class);
     },
+    ServerRequestFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
+
     // For Responder
     RouteParserInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getRouteCollector()->getRouteParser();
