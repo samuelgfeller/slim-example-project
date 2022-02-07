@@ -17,6 +17,9 @@ Values displayed to the user in are first escaped to prevent XSS attacks.
 * Above thresholds are for login failures AND login successes within given timespan
   `$settings['security']['timespan']` (at the time, it's enough to wait [timespan] to be able to try to log in again
   without throttling)
+* When retrieving the user and ip stats, the failed login attempts in the last [timespan] are summed meaning if there were 5 fails, 1 success and then 2 fails again it counts as 
+7 fails. This does not make a lot of sense and can be annoying but its the least complex one and I thought that in the real world the case where someone loggs in and then, in 
+the same hour again with the wrong creds multiple times this case is extremly infrequent. Still it bothers me and I created [a ticket](https://samuel-gfeller.atlassian.net/browse/SLE-150).
 
 ### Global login rules (distributed brute force)
 
