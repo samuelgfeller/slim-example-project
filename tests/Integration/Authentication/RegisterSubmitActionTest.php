@@ -132,11 +132,11 @@ class RegisterSubmitActionTest extends TestCase
 
         // Email assertions
         $email = $this->getMailerMessage();
-        self::assertEmailHtmlBodyContains(
+        $this->assertEmailHtmlBodyContains(
             $email,
             $partialEmailBody
         );
-        self::assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+        $this->assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
 
         // Database assertions
         // Check that there are not more users in the database

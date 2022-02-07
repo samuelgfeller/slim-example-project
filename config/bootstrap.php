@@ -17,13 +17,13 @@ use DI\ContainerBuilder;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// Instantiate PHP-DI ContainerBuilder
+// Instantiate DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
 // Add container definitions
 $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 
-// Build PHP-DI Container instance
+// Build DI Container instance
 $container = $containerBuilder->build();
 
 // Create App instance

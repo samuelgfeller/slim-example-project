@@ -33,8 +33,8 @@ final class RegisterSubmitAction
         $userData = $request->getParsedBody();
 
         if (null !== $userData && [] !== $userData) {
-            // ? If a html form name changes, these changes have to be done in the entities constructor
-            // ? (and if isset condition below) too since these names will be the keys of the ArrayReader
+            // ? If a html form name changes, these changes have to be done in the data class constructor
+            // ? (and the array keys in the "if" condition below) too since these names will be the keys of the ArrayReader
             // Check that request body syntax is formatted right (one more when captcha)
             $requiredAreSet = isset($userData['name'], $userData['email'], $userData['password'], $userData['password2']);
             if (
@@ -51,7 +51,8 @@ final class RegisterSubmitAction
                     $flash->add('success', 'Email has been sent.');
                     $flash->add(
                         'warning',
-                        'Please click on the link in the email to finnish the registration.'
+                        'Your account is not active yet. <br>
+Please click on the link in the email to finnish the registration.'
                     );
                 } catch (ValidationException $ve) {
                     $flash->add('error', $ve->getMessage());

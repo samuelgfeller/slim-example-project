@@ -41,6 +41,7 @@ class UserRegisterer
         // Validate entries coming from client
         $this->userValidator->validateUserRegistration($user);
 
+        // Verify that user (concerned email) or ip address doesn't spam email sending
         $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
 
         $existingUser = $this->userFinderRepository->findUserByEmail($user->email);

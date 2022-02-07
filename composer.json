@@ -13,7 +13,8 @@
         "selective/basepath": "^2.0",
         "symfony/mailer": "^5.3",
         "nyholm/psr7": "^1.5",
-        "fig/http-message-util": "^1.1"
+        "fig/http-message-util": "^1.1",
+        "nyholm/psr7-server": "^1.0"
     },
     "autoload": {
         "psr-4": {
