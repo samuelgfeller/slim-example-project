@@ -16,8 +16,7 @@ class PostFinderRepository
     public function __construct(
         private QueryFactory $queryFactory,
         private Hydrator $hydrator
-    )
-    {
+    ) {
     }
 
     /**
@@ -28,6 +27,7 @@ class PostFinderRepository
     public function findAllPostsWithUsers(): array
     {
         $query = $this->queryFactory->newQuery()->from('post');
+        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -35,7 +35,7 @@ class PostFinderRepository
                 'post_message' => 'post.message',
                 'post_created_at' => 'post.created_at',
                 'post_updated_at' => 'post.updated_at',
-                'user_name' => 'user.name',
+                'user_name' => $concatName,
                 'user_email' => 'user.email',
                 'user_role' => 'user.role',
             ]
@@ -57,7 +57,8 @@ class PostFinderRepository
     public function findPostById(string|int $id): PostData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
-            ['deleted_at IS' => null, 'id' => $id]);
+            ['deleted_at IS' => null, 'id' => $id]
+        );
         $postRow = $query->execute()->fetch('assoc') ?: [];
         return new PostData($postRow);
     }
@@ -71,6 +72,9 @@ class PostFinderRepository
     public function findUserPostById(int $id): UserPostData
     {
         $query = $this->queryFactory->newQuery()->from('post');
+
+        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -78,7 +82,7 @@ class PostFinderRepository
                 'post_message' => 'post.message',
                 'post_created_at' => 'post.created_at',
                 'post_updated_at' => 'post.updated_at',
-                'user_name' => 'user.name',
+                'user_name' => $concatName,
                 'user_role' => 'user.role',
             ]
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
@@ -101,9 +105,10 @@ class PostFinderRepository
     public function getPostById(int $id): array
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
-            ['deleted_at IS' => null, 'id' => $id]);
+            ['deleted_at IS' => null, 'id' => $id]
+        );
         $entry = $query->execute()->fetch('assoc');
-        if (!$entry){
+        if (!$entry) {
             throw new PersistenceRecordNotFoundException('post');
         }
         return $entry;
@@ -118,6 +123,9 @@ class PostFinderRepository
     public function findAllPostsByUserId(int $userId): array
     {
         $query = $this->queryFactory->newQuery()->from('post');
+
+        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+
         $query->select(
             [
                 'post_id' => 'post.id',
@@ -125,7 +133,7 @@ class PostFinderRepository
                 'post_message' => 'post.message',
                 'post_created_at' => 'post.created_at',
                 'post_updated_at' => 'post.updated_at',
-                'user_name' => 'user.name',
+                'user_name' => $concatName,
                 'user_role' => 'user.role',
             ]
         )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(

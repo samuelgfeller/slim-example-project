@@ -11,7 +11,7 @@ use App\Infrastructure\Factory\QueryFactory;
 class UserFinderRepository
 {
     // Fields without password
-    private array $fields = ['id', 'name', 'email', 'updated_at', 'created_at'];
+    private array $fields = ['id', 'first_name', 'surname', 'email', 'updated_at', 'created_at'];
 
     public function __construct(
         private QueryFactory $queryFactory,

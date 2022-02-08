@@ -16,7 +16,8 @@ class UserDataProvider
     public array $sampleUsers = [
         [
             'id' => 1,
-            'name' => 'Admin Example',
+            'first_name' => 'Admin',
+            'surname' => 'Example',
             'email' => 'admin@example.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -25,7 +26,8 @@ class UserDataProvider
         ],
         [
             'id' => 2,
-            'name' => 'Steve Jobs',
+            'first_name' => 'Steve',
+            'surname' => 'Jobs',
             'email' => 'jobs@email.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -34,7 +36,8 @@ class UserDataProvider
         ],
         [
             'id' => 3,
-            'name' => 'Mark Zuckerberg',
+            'first_name' => 'Mark',
+            'surname' => 'Zuckerberg',
             'email' => 'zuckerberg@email.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -43,7 +46,8 @@ class UserDataProvider
         ],
         [
             'id' => 4,
-            'name' => 'Evan Spiegel',
+            'first_name' => 'Evan',
+            'surname' => 'Spiegel',
             'email' => 'spiegel@email.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -52,7 +56,8 @@ class UserDataProvider
         ],
         [
             'id' => 5,
-            'name' => 'Jack Dorsey',
+            'first_name' => 'Jack',
+            'surname' => 'Dorsey',
             'email' => 'dorsey@email.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -124,7 +129,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@email.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -148,7 +154,8 @@ class UserDataProvider
                 new UserData(
                     [
                         'id' => 1,
-                        'name' => 'Bill Gates',
+                        'first_name' => 'Bill',
+                        'surname' => 'Gates',
                         'email' => 'gates@email.com',
                         'password' => '12345678',
                         'password2' => '12345678',
@@ -172,7 +179,8 @@ class UserDataProvider
             [
                 // User values from client form submit
                 'userData' => [
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@email.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -181,7 +189,8 @@ class UserDataProvider
                 'userObj' => new UserData(
                     [
                         'id' => 1,
-                        'name' => 'Bill Gates',
+                        'first_name' => 'Bill',
+                        'surname' => 'Gates',
                         'email' => 'gates@email.com',
                         'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
                         'role' => 'admin',
@@ -203,7 +212,8 @@ class UserDataProvider
             [
                 [
                     'id' => 2,
-                    'name' => 'B',
+                    'first_name' => 'B',
+                    'surname' => 'G',
                     'email' => 'gates@email.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -215,7 +225,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@ema$il.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -227,7 +238,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@email.com',
                     'password' => '123456789',
                     'password2' => '12345678',
@@ -248,7 +260,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'B',
+                    'first_name' => 'B',
+                    'surname' => 'G',
                     'email' => 'gates@email.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -260,7 +273,8 @@ class UserDataProvider
             [
                 [
                     'id' => 2,
-                    'name' => 'B',
+                    'first_name' => 'B',
+                    'surname' => 'G',
                     'email' => 'gates@e$mail.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -281,7 +295,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@ema$il.com',
                     'password' => '12345678',
                     'password2' => '12345678',
@@ -291,7 +306,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => '',
                     'password' => '',
                     'password2' => '12345678',
@@ -301,7 +317,8 @@ class UserDataProvider
             [
                 [
                     'id' => 1,
-                    'name' => 'Bill Gates',
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
                     'email' => 'gates@email.com',
                     'password' => '',
                     'password2' => '12345678',
@@ -337,7 +354,8 @@ class UserDataProvider
                 // 5th parameter and client trying to set role
                 'body' => [
                     // Same keys than HTML form
-                    'name' => '',
+                    'first_name' => '',
+                    'surname' => '',
                     'email' => '',
                     'password' => '',
                     'password2' => '',
@@ -346,8 +364,19 @@ class UserDataProvider
                 'message' => 'Request body malformed.',
             ],
             [
-                // Leaving out 'name'
+                // Leaving out 'first_name'
                 'body' => [
+                    'surname' => '',
+                    'email' => '',
+                    'password' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'surname'
+                'body' => [
+                    'first_name' => '',
                     'email' => '',
                     'password' => '',
                     'password2' => '',
@@ -357,7 +386,8 @@ class UserDataProvider
             [
                 // Leaving out 'email'
                 'body' => [
-                    'name' => '',
+                    'first_name' => '',
+                    'surname' => '',
                     'password' => '',
                     'password2' => '',
                 ],
@@ -366,7 +396,8 @@ class UserDataProvider
             [
                 // Leaving out 'password'
                 'body' => [
-                    'name' => '',
+                    'first_name' => '',
+                    'surname' => '',
                     'email' => '',
                     'password2' => '',
                 ],
@@ -375,7 +406,8 @@ class UserDataProvider
             [
                 // Leaving out 'password2'
                 'body' => [
-                    'name' => '',
+                    'first_name' => '',
+                    'surname' => '',
                     'email' => '',
                     'password' => '',
                 ],

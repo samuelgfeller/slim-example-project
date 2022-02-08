@@ -6,7 +6,7 @@
  * @var \App\Domain\User\Data\UserData $user object
  */
 ?>
-Hello <?= $user->name ?> <br>
+Hello <?= $user->getFullName() ?> <br>
 <br>
 <!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 To verify that this email address belongs to you, please click on the following link: <br>

@@ -58,7 +58,7 @@ class AuthenticationMailer
                 'authentication/email/register.email.php',
                 ['user' => $user, 'queryParams' => $queryParams]
             )
-        )->to(new Address($user->email, $user->name));
+        )->to(new Address($user->email, $user->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }
@@ -79,7 +79,7 @@ class AuthenticationMailer
                 'authentication/email/register-on-existing-active.php',
                 ['user' => $existingUser]
             )
-        )->to(new Address($existingUser->email, $existingUser->name));
+        )->to(new Address($existingUser->email, $existingUser->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }
@@ -100,7 +100,7 @@ class AuthenticationMailer
                 'authentication/email/register-on-existing-suspended.php',
                 ['user' => $existingUser]
             )
-        )->to(new Address($existingUser->email, $existingUser->name));
+        )->to(new Address($existingUser->email, $existingUser->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }
@@ -120,7 +120,7 @@ class AuthenticationMailer
         ->html($this->mailer->getContentFromTemplate(
             'authentication/email/register-on-existing-locked.php',
             ['user' => $existingUser]
-        ))->to(new Address($existingUser->email, $existingUser->name));
+        ))->to(new Address($existingUser->email, $existingUser->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }

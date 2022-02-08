@@ -12,7 +12,7 @@ $this->setLayout('layout/layout.email.php');
 ?>
 
 <p>
-    Hello <?= $user->name ?><br>
+    Hello <?= $user->getFullName() ?><br>
     <br>
     Someone tried to create an account with your email address. <br>
     <!-- Sentence defined for assertion in RegisterCaseProvider.php    -->

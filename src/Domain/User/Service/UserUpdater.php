@@ -46,9 +46,13 @@ final class UserUpdater
             $validUpdateValues = [];
             // Data to be changed is set here. It can easily be controlled which data this function is allowed to change here
             // instead of removing the fields that are not allowed to be edited with this function (password, role etc.)
-            if ($user->name !== null) {
-                $validUpdateValues['name'] = $user->name;
+            if ($user->firstName !== null) {
+                $validUpdateValues['first_name'] = $user->firstName;
             }
+            if ($user->surname !== null) {
+                $validUpdateValues['surname'] = $user->surname;
+            }
+
             if ($user->email !== null) {
                 $validUpdateValues['email'] = $user->email;
             }

@@ -43,7 +43,8 @@ class UserValidator extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         $this->validateUserExistence($userId, $validationResult);
 
-        $this->validateName($user->name, false, $validationResult);
+        $this->validateName($user->firstName, 'first_name', false, $validationResult);
+        $this->validateName($user->surname, 'surname', false, $validationResult);
         $this->validateEmail($user->email, false, $validationResult);
 
         // If the validation failed, throw the exception that will be caught in the Controller
@@ -65,7 +66,8 @@ class UserValidator extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to register');
         // If user obj has null values that are validated, TypeError is thrown and that's correct as these are values
         // coming from the client and it needs to be checked earlier (in action) that they are set accordingly
-        $this->validateName($user->name, true, $validationResult);
+        $this->validateName($user->firstName, 'first_name', true, $validationResult);
+        $this->validateName($user->surname, 'surname', true, $validationResult);
         $this->validateEmail($user->email, true, $validationResult);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
@@ -174,17 +176,18 @@ class UserValidator extends AppValidation
      * Validate Name.
      *
      * @param string $name
+     * @param string $fieldName first_name or surname
      * @param bool $required on update the name doesn't have to be set but on creation it has
      * @param ValidationResult $validationResult
      */
-    private function validateName(string $name, bool $required, ValidationResult $validationResult): void
+    private function validateName(string $name, string $fieldName, bool $required, ValidationResult $validationResult): void
     {
         if (null !== $name && '' !== $name) {
-            $this->validateLengthMax($name, 'name', $validationResult, 200);
-            $this->validateLengthMin($name, 'name', $validationResult, 2);
+            $this->validateLengthMax($name, $fieldName, $validationResult, 100);
+            $this->validateLengthMin($name, $fieldName, $validationResult, 2);
         } // elseif only executed if previous "if" is falsy
         elseif (true === $required) {
-            $validationResult->setError('name', 'Name required but not given');
+            $validationResult->setError($fieldName, 'Name required but not given');
         }
     }
 

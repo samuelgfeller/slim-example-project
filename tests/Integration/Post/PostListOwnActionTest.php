@@ -67,7 +67,7 @@ class PostListOwnActionTest extends TestCase
                 'postMessage' => $postRow['message'],
                 'postCreatedAt' => $postRow['created_at'],
                 'postUpdatedAt' => $postRow['updated_at'],
-                'userName' => $userRow['name'],
+                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
             ];
         }

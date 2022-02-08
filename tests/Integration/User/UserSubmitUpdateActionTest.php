@@ -41,9 +41,9 @@ class UserSubmitUpdateActionTest extends TestCase
             'PUT',
             // Request to change user with id 1
             $this->urlFor('user-update-submit', ['user_id' => 1]),
-            // Same keys than HTML form
             [
-                'name' => 'Admin Example edited',
+                'first_name' => 'Admina',
+                'surname' => 'Example edited',
                 'email' => 'edited_admin@example.com'
             ]
         );
@@ -56,7 +56,8 @@ class UserSubmitUpdateActionTest extends TestCase
         $expected = [
             // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
             'id' => '1',
-            'name' => 'Admin Example edited',
+            'first_name' => 'Admina',
+            'surname' => 'Example edited',
             'email' => 'edited_admin@example.com',
             // Not password since the hash value always changes, it's asserted later
         ];
@@ -85,7 +86,8 @@ class UserSubmitUpdateActionTest extends TestCase
             $this->urlFor('user-update-submit', ['user_id' => 999]),
             // Invalid data
             [
-                'name' => 'A',
+                'first_name' => 'A',
+                'surname' => 'E',
                 'email' => '$edited_admin@exampl$e.com'
             ]
         );
@@ -110,10 +112,14 @@ class UserSubmitUpdateActionTest extends TestCase
                             'message' => 'User not existing',
                         ],
                         1 => [
-                            'field' => 'name',
+                            'field' => 'first_name',
                             'message' => 'Required minimum length is 2',
                         ],
                         2 => [
+                            'field' => 'surname',
+                            'message' => 'Required minimum length is 2',
+                        ],
+                        3 => [
                             'field' => 'email',
                             'message' => 'Invalid email address',
                         ],
@@ -138,9 +144,11 @@ class UserSubmitUpdateActionTest extends TestCase
             'PUT',
             // Request to change user with id 1 (which must not be allowed to)
             $this->urlFor('user-update-submit', ['user_id' => 1]),
-            // Same keys than HTML form
+            // Invalid data
             [
-                'name' => 'User edit Admin',
+                // Same keys than HTML form
+                'first_name' => 'Admina',
+                'surname' => 'Example edited',
                 'email' => 'edited_admin@example.com'
             ]
         );
@@ -153,7 +161,8 @@ class UserSubmitUpdateActionTest extends TestCase
         // Admin user should be unchanged (same as in fixture)
         $expected = [
             'id' => '1',
-            'name' => 'Admin Example',
+            'first_name' => 'Admin',
+            'surname' => 'Example',
             'email' => 'admin@example.com',
         ];
 
@@ -178,7 +187,8 @@ class UserSubmitUpdateActionTest extends TestCase
             $this->urlFor('user-update-submit', ['user_id' => 1]),
             // Same keys than HTML form
             [
-                'name' => 'User edit Admin',
+                'first_name' => 'Admina',
+                'surname' => 'Example edit',
                 'email' => 'edited_admin@example.com'
             ]
         );
@@ -195,7 +205,8 @@ class UserSubmitUpdateActionTest extends TestCase
         // Admin user should be unchanged (same as in fixture)
         $expected = [
             'id' => '1',
-            'name' => 'Admin Example',
+            'first_name' => 'Admin',
+            'surname' => 'Example',
             'email' => 'admin@example.com',
         ];
 
@@ -228,7 +239,7 @@ class UserSubmitUpdateActionTest extends TestCase
         $malformedRequest = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
-            $malformedBody,
+            $malformedBody
         );
 
         // Bad Request (400) means that the client sent the request wrongly; it's a client error

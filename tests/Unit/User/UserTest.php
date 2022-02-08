@@ -32,7 +32,8 @@ class UserTest extends TestCase
         $user->passwordHash = $userValues['password_hash'];
 
         self::assertEquals($userValues['id'], $user->id);
-        self::assertEquals($userValues['name'], $user->name);
+        self::assertEquals($userValues['first_name'], $user->firstName);
+        self::assertEquals($userValues['surname'], $user->surname);
         self::assertEquals($userValues['email'], $user->email);
         self::assertEquals($userValues['password'], $user->password);
         self::assertEquals($userValues['password2'], $user->password2);
@@ -54,7 +55,8 @@ class UserTest extends TestCase
 
         // Check if values match
         self::assertEquals($userValues['id'], $userAsDbArray['id']);
-        self::assertEquals($userValues['name'], $userAsDbArray['name']);
+        self::assertEquals($userValues['first_name'], $userAsDbArray['first_name']);
+        self::assertEquals($userValues['surname'], $userAsDbArray['surname']);
         self::assertEquals($userValues['email'], $userAsDbArray['email']);
         self::assertEquals($userValues['password_hash'], $userAsDbArray['password_hash']);
         // role defaults to user and cannot be set via constructor

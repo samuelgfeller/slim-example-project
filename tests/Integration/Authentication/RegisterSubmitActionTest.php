@@ -31,14 +31,16 @@ class RegisterSubmitActionTest extends TestCase
      */
     public function testUserRegistration(): void
     {
-        $name = 'Admin Example';
+        $firstName = 'Admin';
+        $surname = 'Example';
         $emailAddr = 'admin@example.com';
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => $name,
+                'first_name' => $firstName,
+                'surname' => $surname,
                 'email' => $emailAddr,
                 'password' => '12345678',
                 'password2' => '12345678',
@@ -58,7 +60,7 @@ class RegisterSubmitActionTest extends TestCase
             'To verify that this email address belongs to you, please click on the following link'
         );
         // Assert that right email has been sent to the right person
-        $this->assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+        $this->assertEmailHeaderSame($email, 'To', $firstName . ' ' . $surname . ' <' . $emailAddr . '>');
 
 
         // Database assertions
@@ -67,7 +69,8 @@ class RegisterSubmitActionTest extends TestCase
         $expected = [
             // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
             'id' => '1',
-            'name' => 'Admin Example',
+            'first_name' => 'Admin',
+            'surname' => 'Example',
             'email' => 'admin@example.com',
             // Not password since the hash value always changes, it's asserted later
         ];
@@ -111,14 +114,16 @@ class RegisterSubmitActionTest extends TestCase
         // User amount in fixture can be changed and it still can be asserted that after the action there's the same
         // amount of users in the db
         $userAmountInFixture = count((new UserFixture())->records);
-        $name = 'Admin Example';
+        $firstName = 'Admin';
+        $surname = 'Example';
         $emailAddr = 'admin@example.com';
         $request = $this->createFormRequest(
             'POST',
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => $name,
+                'first_name' => $firstName,
+                'surname' => $surname,
                 'email' => $emailAddr,
                 'password' => '12345678',
                 'password2' => '12345678',
@@ -136,7 +141,7 @@ class RegisterSubmitActionTest extends TestCase
             $email,
             $partialEmailBody
         );
-        $this->assertEmailHeaderSame($email, 'To', $name . ' <' . $emailAddr . '>');
+        $this->assertEmailHeaderSame($email, 'To', $firstName . ' ' . $surname . ' <' . $emailAddr . '>');
 
         // Database assertions
         // Check that there are not more users in the database
@@ -163,7 +168,8 @@ class RegisterSubmitActionTest extends TestCase
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => '',
+                'first_name' => '',
+                'surname' => '',
                 'email' => '',
                 'password' => '',
                 'password2' => '',
@@ -180,8 +186,10 @@ class RegisterSubmitActionTest extends TestCase
             $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
-                'name' => 'Ad',
                 /* Name too short */
+                'first_name' => 'A',
+                /* Name too short */
+                'surname' => 'D',
                 'email' => 'admi$n@exampl$e.com',
                 /* Invalid E-Mail */
                 'password' => '123',

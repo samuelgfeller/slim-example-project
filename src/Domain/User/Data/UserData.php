@@ -13,7 +13,8 @@ use App\Common\ArrayReader;
 class UserData
 {
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
-    public ?string $name;
+    public ?string $firstName;
+    public ?string $surname;
     // Email has to be default null as it is indicator that user obj is empty in AuthService register function
     public ?string $email;
     public ?string $password;
@@ -39,7 +40,8 @@ class UserData
         // Keys may be taken from client form or database so they have to correspond to both; otherwise use mapper
         // ArrayReader findDatatype casts the values in the wanted format too
         $this->id = $arrayReader->findAsInt('id');
-        $this->name = $arrayReader->findAsString('name');
+        $this->firstName = $arrayReader->findAsString('first_name');
+        $this->surname = $arrayReader->findAsString('surname');
         $this->email = $arrayReader->findAsString('email');
         $this->password = $arrayReader->findAsString('password');
         $this->password2 = $arrayReader->findAsString('password2');
@@ -50,6 +52,15 @@ class UserData
             $this->status = $arrayReader->findAsString('status');
             $this->role = $arrayReader->findAsString('role');
         }
+    }
+
+    /**
+     * Returns the first and surname in one string separated by a whitespace
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->surname;
     }
 
     /**
@@ -64,7 +75,8 @@ class UserData
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'first_name' => $this->firstName,
+            'surname' => $this->surname,
             'email' => $this->email,
             'password_hash' => $this->passwordHash,
             'role' => $this->role,

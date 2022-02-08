@@ -49,14 +49,14 @@ abstract class AppValidation
      * Check if a values string is less than a defined value.
      *
      * @param $value
-     * @param $fieldname
+     * @param $fieldName
      * @param ValidationResult $validationResult
      * @param int $length
      */
-    protected function validateLengthMin($value, $fieldname, ValidationResult $validationResult, $length = 3): void
+    protected function validateLengthMin($value, $fieldName, ValidationResult $validationResult, $length = 3): void
     {
         if (strlen(trim($value)) < $length) {
-            $validationResult->setError($fieldname, sprintf('Required minimum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf('Required minimum length is %s', $length));
         }
     }
 
@@ -64,14 +64,14 @@ abstract class AppValidation
      * Check if a values string length is more than a defined value.
      *
      * @param $value
-     * @param $fieldname
+     * @param $fieldName
      * @param ValidationResult $validationResult
      * @param int $length
      */
-    protected function validateLengthMax($value, $fieldname, ValidationResult $validationResult, $length = 255): void
+    protected function validateLengthMax($value, $fieldName, ValidationResult $validationResult, $length = 255): void
     {
         if (strlen(trim($value)) > $length) {
-            $validationResult->setError($fieldname, sprintf('Required maximum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf('Required maximum length is %s', $length));
         }
     }
 

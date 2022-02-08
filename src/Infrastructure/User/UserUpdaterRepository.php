@@ -14,7 +14,7 @@ class UserUpdaterRepository
 
     /**
      * Update values from user
-     * Example of $data: ['name' => 'New name']
+     * Example of $data: ['firstName' => 'NewFirstName']
      *
      * @param int $userId
      * @param array $userValues has to be only allowed changes for this function

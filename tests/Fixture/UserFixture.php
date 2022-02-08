@@ -16,7 +16,8 @@ class UserFixture
     public array $records = [
         [
             'id' => 1,
-            'name' => 'Admin Example',
+            'first_name' => 'Admin',
+            'surname' => 'Example',
             'email' => 'admin@example.com',
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1uLrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
@@ -28,7 +29,8 @@ class UserFixture
         ],
         [
             'id' => 2,
-            'name' => 'User Example',
+            'first_name' => 'User',
+            'surname' => 'Example',
             'email' => 'user@example.com',
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'role' => 'user',

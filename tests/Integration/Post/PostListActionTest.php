@@ -64,7 +64,7 @@ class PostListActionTest extends TestCase
                 'postMessage' => $postRow['message'],
                 'postCreatedAt' => $postRow['created_at'],
                 'postUpdatedAt' => $postRow['updated_at'],
-                'userName' => $userRow['name'],
+                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
             ];
         }
@@ -89,7 +89,7 @@ class PostListActionTest extends TestCase
         // All user fixtures required to insert all post fixtures
         $this->insertFixtures([UserFixture::class, PostFixture::class]);
 
-        $request = $this->createJsonRequest(
+        $request = $this->createRequest(
             'GET',
             $this->urlFor('post-list-all', [], $queryParams)
         ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
@@ -115,7 +115,7 @@ class PostListActionTest extends TestCase
                 'postMessage' => $postRow['message'],
                 'postCreatedAt' => $postRow['created_at'],
                 'postUpdatedAt' => $postRow['updated_at'],
-                'userName' => $userRow['name'],
+                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
             ];
         }
