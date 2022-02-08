@@ -8,7 +8,7 @@ use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 
 return function (App $app) {
-
+    $app->addBodyParsingMiddleware();
     $app->add(SessionMiddleware::class);
 
     $app->addRoutingMiddleware();

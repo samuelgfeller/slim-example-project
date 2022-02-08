@@ -26,7 +26,8 @@ class PostDataProvider
         return new UserData(
             [
                 'id' => 1,
-                'name' => 'John Wick',
+                'first_name' => 'John',
+                'surname' => 'Wick',
                 'email' => 'john@wick.com',
                 'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
                 'status' => UserData::STATUS_ACTIVE,

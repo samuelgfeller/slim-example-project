@@ -92,7 +92,8 @@ class PostListActionTest extends TestCase
         $request = $this->createJsonRequest(
             'GET',
             $this->urlFor('post-list-all', [], $queryParams)
-        );
+        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+        ->withQueryParams($queryParams);
 
         $response = $this->app->handle($request);
 
@@ -136,7 +137,8 @@ class PostListActionTest extends TestCase
         $request = $this->createJsonRequest(
             'GET',
             $this->urlFor('post-list-all', [], $queryParams)
-        );
+        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set
+        ->withQueryParams($queryParams);
 
         $response = $this->app->handle($request);
 

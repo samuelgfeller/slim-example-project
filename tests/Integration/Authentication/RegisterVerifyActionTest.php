@@ -42,7 +42,9 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
+            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+            ->withQueryParams($queryParams);
         $response = $this->app->handle($request);
 
         // Assert that redirect worked
@@ -82,13 +84,15 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
+        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
+            ->withQueryParams($queryParams);
+
         $response = $this->app->handle($request);
 
         // Assert that redirect worked
         self::assertSame($redirectLocation, $response->getHeaderLine('Location'));
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-
         // Here it's important that no exception is thrown when user is already verified. There is only a flash info.
     }
 
@@ -98,8 +102,10 @@ class RegisterVerifyActionTest extends TestCase
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_invalidExpiredToken(UserVerificationData $verification, string $clearTextToken): void
-    {
+    public function testRegisterVerification_invalidExpiredToken(
+        UserVerificationData $verification,
+        string $clearTextToken
+    ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[0];
         $userRow['status'] = UserData::STATUS_UNVERIFIED;
@@ -115,7 +121,9 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
+        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+            ->withQueryParams($queryParams);
         $response = $this->app->handle($request);
 
         // Assert that client is redirected to register page with the redirect GET param
@@ -145,7 +153,9 @@ class RegisterVerifyActionTest extends TestCase
             'id' => 1,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
+        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
+            ->withQueryParams($queryParams);
 
         $this->expectException(HttpBadRequestException::class);
 
