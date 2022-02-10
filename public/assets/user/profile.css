@@ -1,0 +1,37 @@
+/* Stylesheet of the profile view */
+
+#personal-info-wrapper{
+    display: grid;
+    row-gap: 20px;
+}
+.profile-value-title{
+    font-weight: bold;
+}
+.profile-value-title, .profile-value{
+    font-size: 1.3em;
+}
+.profile-value{
+    /*display: inline-block;*/
+    vertical-align: middle;
+
+}
+.edit-profile-value-btn{
+    max-width: 100px;
+    padding: 6px 30px;
+    margin: 0 0 0 20px;
+}
+.profile-value-div{
+    /*line-height: 0;*/
+
+}
+.edit-icon {
+    /*display: none;*/
+    width: 30px;
+    margin: 0 0 0 17px;
+    vertical-align: middle;
+}
+
+/* Overwrite form.css rule to match profile view */
+.form-input{
+    width: auto;
+}

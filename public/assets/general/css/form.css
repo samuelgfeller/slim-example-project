@@ -15,7 +15,9 @@
 
 }
 
-.form input, .form textarea, .form select, .form textarea{
+.form input, .form textarea, .form select, .form textarea,
+/* Sometimes I want form style but without it being in an actual form hence the direct css classes */
+.form-input, .form-textarea, .form-select, .form-textarea{
     width: 100%;
     padding: 8px;
     margin-top: 4px;
@@ -24,6 +26,12 @@
     border-radius: var(--input-boder-radius);
     box-sizing: border-box;
     font-size: 16px;
+}
+.form input:focus, .form textarea:focus, .form select:focus, .form textarea:focus,
+.form-input:focus, .form-textarea:focus, .form-select:focus, .form-textarea:focus
+{
+    border: 2px solid var(--formColor);
+    outline: none;
 }
 
 .form input[type=submit], .submit-btn {
@@ -50,10 +58,6 @@
     cursor: default;
 }
 
-.form input:focus, .form textarea:focus, .form select:focus, .form textarea:focus {
-    border: 2px solid var(--formColor);
-    outline: none;
-}
 .form label {
      margin-top: 15px;
      margin-left: 4px;

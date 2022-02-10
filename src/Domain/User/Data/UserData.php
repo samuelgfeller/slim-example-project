@@ -22,6 +22,8 @@ class UserData
     public ?string $passwordHash;
     public ?string $status = null;
     public ?string $role = null;
+    public ?string $createdAt;
+    public ?string $updatedAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added there
 
     public const STATUS_UNVERIFIED = 'unverified'; // Default after registration
@@ -32,9 +34,9 @@ class UserData
     /**
      * User constructor.
      * @param array $userData
-     * @param bool $limited With or without security related attributes (has to be default false e.g. for hydrate())
+     * @param bool $notRestricted With or without security related attributes (has to be default false e.g. for hydrate())
      */
-    public function __construct(array $userData = [], bool $limited = false)
+    public function __construct(array $userData = [], bool $notRestricted = false)
     {
         $arrayReader = new ArrayReader($userData);
         // Keys may be taken from client form or database so they have to correspond to both; otherwise use mapper
@@ -46,9 +48,11 @@ class UserData
         $this->password = $arrayReader->findAsString('password');
         $this->password2 = $arrayReader->findAsString('password2');
         $this->passwordHash = $arrayReader->findAsString('password_hash');
+        $this->createdAt = $arrayReader->findAsString('created_at');
+        $this->updatedAt = $arrayReader->findAsString('updated_at');
 
         // Making sure that role and status aren't filled with malicious data
-        if ($limited === false){
+        if ($notRestricted === true){
             $this->status = $arrayReader->findAsString('status');
             $this->role = $arrayReader->findAsString('role');
         }

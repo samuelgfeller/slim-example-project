@@ -23,6 +23,7 @@
     // Define layout assets
     $layoutCss = [
         'assets/general/css/default.css',
+        'assets/general/css/general.css',
         'assets/general/css/layout.css',
         'assets/general/css/navbar.css',
         'assets/general/css/flash.css'

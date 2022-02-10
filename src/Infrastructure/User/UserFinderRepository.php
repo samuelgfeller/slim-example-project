@@ -49,7 +49,8 @@ class UserFinderRepository
         );
         $userRows = $query->execute()->fetch('assoc') ?: [];
         // Empty user object if not found
-        return new UserData($userRows);
+        // $notRestricted true as values are safe as they come from the database. It's not a user input.
+        return new UserData($userRows, true);
     }
 
     /**
@@ -70,7 +71,8 @@ class UserFinderRepository
         $userRows = $query->execute()->fetch('assoc') ?: [];
 
         // Empty user object if not found
-        return new UserData($userRows);
+        // $notRestricted true as values are safe as they come from the database. It's not a user input.
+        return new UserData($userRows, true);
     }
 
     /**
@@ -89,6 +91,7 @@ class UserFinderRepository
 
         $userRows = $query->execute()->fetch('assoc');
 
-        return new UserData($userRows);
+        // $notRestricted true as values are safe as they come from the database. It's not a user input.
+        return new UserData($userRows, true);
     }
 }

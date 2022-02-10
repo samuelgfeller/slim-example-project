@@ -52,7 +52,12 @@ final class UserViewProfileAction
     ): ResponseInterface {
         if (($userId = $this->session->get('user_id')) !== null){
             $user = $this->userFinder->findUserById($userId);
-            return $this->responder->respondWithJson($response, $user);
+            return $this->responder->render(
+                $response,
+                'user/profile.html.php',
+                // Provide same query params passed to login page to be added to the login submit request
+                ['user' => $user]
+            );
         }
 
         /*$userRole = $this->authService->getUserRoleById($loggedUserId);

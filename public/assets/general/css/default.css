@@ -80,7 +80,7 @@ a:hover {
 }
 .btn:hover{
     background: #c1c1c1;
-    border: #c1c1c1;
+    border: 1px solid #c1c1c1;
     box-shadow: 0 0 10px #c1c1c1;
 }
 .btn:disabled{
