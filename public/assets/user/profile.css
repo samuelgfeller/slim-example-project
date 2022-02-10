@@ -5,15 +5,13 @@
     row-gap: 20px;
 }
 .profile-value-title{
+    font-size: 1.4em;
     font-weight: bold;
 }
-.profile-value-title, .profile-value{
+.profile-value {
     font-size: 1.3em;
-}
-.profile-value{
-    /*display: inline-block;*/
+    /* Along with vertical-align middle on the edit-icon to center it vertically*/
     vertical-align: middle;
-
 }
 .edit-profile-value-btn{
     max-width: 100px;
@@ -27,11 +25,14 @@
 .edit-icon {
     /*display: none;*/
     width: 30px;
-    margin: 0 0 0 17px;
+    margin: 0 0 0 14px;
+    /* Along with vertical-align middle on profile-value to center it vertically*/
     vertical-align: middle;
 }
 
 /* Overwrite form.css rule to match profile view */
 .form-input{
     width: auto;
+    font-size: 1.2em;
+
 }
