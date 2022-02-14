@@ -1,6 +1,9 @@
 let firstNameEditIco = document.getElementById('edit-first-name-ico');
 firstNameEditIco.addEventListener('click', function () {
-    let firstNameValSpan = document.getElementById('first-name-val');
+    // let firstNameValSpan = document.getElementById('first-name-val');
+    // Get (first name) value by getting the sibling before the edit icon. That way it doesn't need an id which
+    // facilitates the edit process
+    let firstNameValSpan = firstNameEditIco.previousElementSibling;
     let inputName = 'first_name';
     let valueParent = replaceValueWithInput(firstNameValSpan, firstNameEditIco, 'first-name-input', inputName);
     createSubmitBtn(valueParent, 'first-name-submit', inputName);
@@ -8,7 +11,7 @@ firstNameEditIco.addEventListener('click', function () {
 
 let surnameEditIco = document.getElementById('edit-surname-ico');
 surnameEditIco.addEventListener('click', function () {
-    let surnameValSpan = document.getElementById('surname-val');
+    let surnameValSpan = surnameEditIco.previousElementSibling;
     let inputName = 'surname';
     let valueParent = replaceValueWithInput(surnameValSpan, surnameEditIco, 'surname-input', inputName);
     createSubmitBtn(valueParent, 'surname-submit', inputName);
@@ -16,7 +19,7 @@ surnameEditIco.addEventListener('click', function () {
 
 let emailEditIco = document.getElementById('edit-email-ico');
 emailEditIco.addEventListener('click', function () {
-    let emailValSpan = document.getElementById('email-val');
+    let emailValSpan = emailEditIco.previousElementSibling;
     let inputName = 'email';
     let valueParent = replaceValueWithInput(emailValSpan, emailEditIco, 'email-input', inputName);
     createSubmitBtn(valueParent, 'email-submit', inputName);
@@ -68,12 +71,23 @@ function createSubmitBtn(valueParent, submitBtnId, inputName) {
     let valueSubmitImg = document.createElement('img');
     valueSubmitImg.src = 'assets/general/img/thin-checkmark.svg';
     valueSubmitImg.id = submitBtnId;
+    valueSubmitImg.tabIndex = 0;
     valueSubmitImg.className = 'profile-value-submit-icon cursor-pointer';
     valueParent.appendChild(valueSubmitImg);
 
-    // Add event listener
+    // Add event listeners for click and enter key press
     valueSubmitImg.addEventListener('click', function () {
         submitValueChange(submitBtnId, inputName);
+    });
+    valueSubmitImg.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            submitValueChange(submitBtnId, inputName);
+        }
+    });
+    valueParent.getElementsByTagName('input')[0].addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            submitValueChange(submitBtnId, inputName);
+        }
     });
 }
 
@@ -84,17 +98,21 @@ function submitValueChange(submitBtnId, inputName) {
     let inputElement = document.querySelector("[name='" + inputName + "']");
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
-
         if (xHttp.readyState === XMLHttpRequest.DONE) {
             // Hide submit icon
             document.getElementById(submitBtnId).remove();
+
+            // Replace input field with value span
+            replaceInputWithValue(inputElement);
+
             // if (xHttp.status === 200) {
             if (xHttp.getResponseHeader('Content-type') === 'application/json') {
                 // xHttp.responseText
                 if (xHttp.status !== 200) {
                     handleFail(xHttp);
                 } else {
-                    createFlashMessage('success', 'Successfully changed ' + inputName);
+                    let inputNameWithoutSpecialChar = inputName.replace(/[^a-zA-Z0-9 ]/g, ' ');
+                    createFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
                 }
             } else {
                 handleFail(xHttp);
@@ -114,4 +132,26 @@ function submitValueChange(submitBtnId, inputName) {
     // Data format: "fname=Henry&lname=Ford"
     // inputName in square brackets to be evaluated https://stackoverflow.com/a/11508490/9013718
     xHttp.send(JSON.stringify({[inputName]: inputElement.value}));
+}
+
+/**
+ * After changes were made the input field should become a value again
+ *
+ * @param inputElement
+ */
+function replaceInputWithValue(inputElement){
+    let inputParent = inputElement.parentElement;
+
+    // Make edit button visible again
+    let editIcon = inputParent.getElementsByTagName('img')[0];
+    editIcon.style.display = 'inline';
+
+    // Replace input element by text
+    let valueSpan = document.createElement('span');
+    valueSpan.className = 'profile-value';
+    valueSpan.textContent = inputElement.value;
+    // Insert value span before edit icon
+    inputParent.insertBefore(valueSpan, editIcon);
+    inputParent.removeChild(inputElement);
+
 }

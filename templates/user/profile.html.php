@@ -36,7 +36,8 @@ $this->addAttribute('js', ['assets/user/profile.js']);
         <label class="profile-value-title" for="first-name-input">Firstname:</label>
         <!--        <button class="btn edit-profile-value-btn">Edit</button>-->
         <div class="profile-value-div">
-            <span id="first-name-val" class="profile-value"><?= $user->firstName ?></span>
+            <!-- This span has to be before the edit icon as its used in js with previousElementSibling -->
+            <span class="profile-value"><?= $user->firstName ?></span>
             <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
                  id="edit-first-name-ico">
         </div>
