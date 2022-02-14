@@ -50,6 +50,7 @@ final class UserViewProfileAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
+        // Check if user is logged in
         if (($userId = $this->session->get('user_id')) !== null){
             $user = $this->userFinder->findUserById($userId);
             return $this->responder->render(
@@ -59,6 +60,15 @@ final class UserViewProfileAction
                 ['user' => $user]
             );
         }
+
+        // Not logged in
+
+        $flash = $this->session->getFlash();
+
+        $flash->add('info', 'Please log in to view and edit your profile');
+
+        $queryParams = ['redirect' => $this->responder->urlFor('profile')];
+        return $this->responder->redirectToRouteName($response, 'login-page', [], $queryParams);
 
         /*$userRole = $this->authService->getUserRoleById($loggedUserId);
 

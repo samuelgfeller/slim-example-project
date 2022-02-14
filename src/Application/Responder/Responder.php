@@ -128,6 +128,20 @@ final class Responder
     }
 
     /**
+     * Build the path for a named route including the base path
+     *
+     * @param string $routeName Route name
+     * @param string[] $data Named argument replacement data
+     * @param string[] $queryParams Optional query string parameters
+     *
+     * @return string
+     */
+    public function urlFor(string $routeName, array $data = [], array $queryParams = []): string
+    {
+        return $this->routeParser->urlFor($routeName, $data, $queryParams);
+    }
+
+    /**
      * Render template with validation errors
      *
      * @param ResponseInterface $response
