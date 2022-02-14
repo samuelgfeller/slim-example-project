@@ -42,10 +42,15 @@ class UserValidator extends AppValidation
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         $this->validateUserExistence($userId, $validationResult);
-
-        $this->validateName($user->firstName, 'first_name', false, $validationResult);
-        $this->validateName($user->surname, 'surname', false, $validationResult);
-        $this->validateEmail($user->email, false, $validationResult);
+        if ($user->firstName !== null) {
+            $this->validateName($user->firstName, 'first_name', false, $validationResult);
+        }
+        if ($user->surname !== null) {
+            $this->validateName($user->surname, 'surname', false, $validationResult);
+        }
+        if ($user->email !== null) {
+            $this->validateEmail($user->email, false, $validationResult);
+        }
 
         // If the validation failed, throw the exception that will be caught in the Controller
         $this->throwOnError($validationResult);

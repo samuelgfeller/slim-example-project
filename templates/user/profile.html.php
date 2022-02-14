@@ -30,7 +30,8 @@ $this->addAttribute('js', ['assets/user/profile.js']);
 <!--    <div>asdf</div>-->
 <!--</div>-->
 
-<div id="personal-info-wrapper">
+<!-- Put user id into wrapper as it's the same for all values to change in this page -->
+<div id="personal-info-wrapper" data-id="<?= $user->id ?>">
     <div>
         <label class="profile-value-title" for="first-name-input">Firstname:</label>
         <!--        <button class="btn edit-profile-value-btn">Edit</button>-->

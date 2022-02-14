@@ -1,6 +1,7 @@
 <?php
 /** @var \Odan\Session\FlashInterface $flash */
 ?>
+<!-- Client side flash message generation: general.js -->
 <aside id="flash-container">
     <!--    Display errors if there are some -->
     <?php

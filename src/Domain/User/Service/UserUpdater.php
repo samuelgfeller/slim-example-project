@@ -36,7 +36,7 @@ final class UserUpdater
      */
     public function updateUser(int $userIdToChange, array $userValues, int $loggedInUserId): bool
     {
-        $user = new UserData($userValues, true);
+        $user = new UserData($userValues, false); // Create restricted data object
         $this->userValidator->validateUserUpdate($userIdToChange, $user);
 
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);

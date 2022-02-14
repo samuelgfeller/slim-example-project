@@ -52,10 +52,11 @@ final class UserSubmitUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
+
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            // Id in url user_id defined in routes.php
             $userIdToChange = (int)$args['user_id'];
             $userValuesToChange = $request->getParsedBody();
-
             try {
                 $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange, $loggedInUserId);
             } catch (ValidationException $exception) {

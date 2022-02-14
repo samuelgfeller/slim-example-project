@@ -90,29 +90,28 @@ function submitValueChange(submitBtnId, inputName) {
             document.getElementById(submitBtnId).remove();
             // if (xHttp.status === 200) {
             if (xHttp.getResponseHeader('Content-type') === 'application/json') {
-                alert('JSON!'+xHttp.responseText);
-                JSON.stringify(JSON.parse(xHttp.responseText), undefined, 2);
+                // xHttp.responseText
+                if (xHttp.status !== 200) {
+                    handleFail(xHttp);
+                } else {
+                    createFlashMessage('success', 'Successfully changed ' + inputName);
+                }
             } else {
-                console.log(xHttp.responseText);
+                alert('Response is not application/json even though it should be.')
             }
-            /*} else if (xHttp.status === 400) {
-                output.innerHTML = 'There was an error 400';
-            } else if (xHttp.status === 404) {
-                output.innerHTML = 'Requested ressource not found 404';
-            } else if (xHttp.status === 500) {
-                output.innerHTML = 'Internal Server Error 500';
-            } else {
-                output.innerHTML = 'Error. Code: ' + xHttp.status;
-            }*/
+
         }
     };
+    // Find user id
+    let userId = document.getElementById('personal-info-wrapper').dataset.id;
     // Get basepath. Especially useful when developing on localhost/project-name
     let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
     // Not so sure about which url makes more sense. RestAPI would say PUT /user/{id} so I'll go with this
-    xHttp.open('PUT', basePath + 'users/1', true);
+    xHttp.open('PUT', basePath + 'users/' + userId, true);
     xHttp.setRequestHeader("Content-type", "application/json");
 
     // xHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // Data format: "fname=Henry&lname=Ford"
-    xHttp.send(JSON.stringify({inputName: inputElement.value}));
+    // inputName in square brackets to be evaluated https://stackoverflow.com/a/11508490/9013718
+    xHttp.send(JSON.stringify({[inputName]: inputElement.value}));
 }
