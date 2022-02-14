@@ -83,7 +83,7 @@ function createFlashMessage(typeName, message){
  * @param {XMLHttpRequest} xhr
  */
 function handleFail(xhr){
-    let errorMsg = 'Request failed. Please try again';
+    let errorMsg = 'Request failed. Please try again.';
 
     if (xhr.status === 401 || xhr.status === '401'){
         // Overwriting general error message to unauthorized
@@ -102,14 +102,14 @@ function handleFail(xhr){
     }
 
     // Add error messages if they are given by the backend
-    if(typeof xhr.responseJSON.message !== 'undefined' ){
+    if(typeof xhr.statusText !== 'undefined' ){
         // If we know the error message we can add it to the error popup
-        errorMsg += '\nMessage: '+xhr.responseJSON.message;
+        errorMsg += '<br>Message: '+xhr.statusText;
     }
 
-    errorMsg += '\nCode: '+ xhr.status;
+    errorMsg += '<br>Code: '+ xhr.status;
     // Output error to user
-    alert(errorMsg);
+    createFlashMessage('error', errorMsg);
 }
 
 /**

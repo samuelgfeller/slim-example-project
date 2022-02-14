@@ -97,7 +97,7 @@ function submitValueChange(submitBtnId, inputName) {
                     createFlashMessage('success', 'Successfully changed ' + inputName);
                 }
             } else {
-                alert('Response is not application/json even though it should be.')
+                handleFail(xHttp);
             }
 
         }
