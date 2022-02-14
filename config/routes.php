@@ -46,7 +46,6 @@ return function (App $app) {
     )->add(UserAuthenticationMiddleware::class);
 
 
-
     $app->group(
         '/posts',
         function (RouteCollectorProxy $group) {
@@ -58,7 +57,9 @@ return function (App $app) {
             );
 
             // Post requests where user DOES need to be authenticated
-            $group->post('', \App\Application\Actions\Post\PostCreateAction::class)->add(UserAuthenticationMiddleware::class);
+            $group->post('', \App\Application\Actions\Post\PostCreateAction::class)->add(
+                UserAuthenticationMiddleware::class
+            );
             $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\PostUpdateAction::class)->add(
                 UserAuthenticationMiddleware::class
             );
@@ -85,8 +86,15 @@ return function (App $app) {
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
      * NOTE: make sure this route is defined last
-     */ //    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
-//        throw new HttpNotFoundException($request, 'Route "'.
-//                                                $request->getUri()->getHost().$request->getUri()->getPath().'" not found.');
-//    });
+     * //     */
+//    $app->map(
+//        ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+//        '/{routes:.+}',
+//        function ($request, $response) {
+//            throw new HttpNotFoundException(
+//                $request, 'Route "' .
+//                        $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.'
+//            );
+//        }
+//    );
 };

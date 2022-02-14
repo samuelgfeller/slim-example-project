@@ -11,7 +11,7 @@ $this->setLayout('layout.html.php');
 <?php
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', ['assets/general/css/form.css', 'assets/user/profile.css']); // profile.css has to come last
-$this->addAttribute('js', ['assets/user/user.js']);
+$this->addAttribute('js', ['assets/user/profile.js']);
 ?>
 
 <!--https://samuel-gfeller.ch/favicon.ico-->
@@ -32,7 +32,7 @@ $this->addAttribute('js', ['assets/user/user.js']);
 
 <div id="personal-info-wrapper">
     <div>
-        <div class="profile-value-title">Firstname:</div>
+        <label class="profile-value-title" for="first-name-input">Firstname:</label>
         <!--        <button class="btn edit-profile-value-btn">Edit</button>-->
         <div class="profile-value-div">
             <span id="first-name-val" class="profile-value"><?= $user->firstName ?></span>
@@ -41,7 +41,7 @@ $this->addAttribute('js', ['assets/user/user.js']);
         </div>
     </div>
     <div>
-        <div class="profile-value-title">Surname:</div>
+        <label class="profile-value-title" for="surname-input">Surname:</label>
         <div class="profile-value-div">
             <span id="surname-val" class="profile-value"><?= $user->surname ?></span>
             <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
@@ -49,7 +49,7 @@ $this->addAttribute('js', ['assets/user/user.js']);
         </div>
     </div>
     <div>
-        <div class="profile-value-title">Email:</div>
+        <label class="profile-value-title" for="email-input">Email:</label>
         <div class="profile-value-div">
             <span id="email-val" class="profile-value"><?= $user->email ?></span>
             <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit" id="edit-email-ico">
