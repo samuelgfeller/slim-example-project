@@ -1,15 +1,16 @@
 <?php
 /** @var \Odan\Session\FlashInterface $flash */
+
+// Client side flash message generation in general.js
 ?>
-<!-- Client side flash message generation: general.js -->
 <aside id="flash-container">
-    <!--    Display errors if there are some -->
     <?php
+//    Display errors if there are some
     foreach ($flash->all() as $key => $flashCategory) {
         foreach ($flashCategory as $msg) { ?>
             <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
                 <figure class="flash-fig">
-                    <!-- Sadly I cannot use the `content:` tag because its impossible set basepath for css -->
+                    <?php // Sadly I cannot use the `content:` tag because its impossible set basepath for css ?>
                     <img class="<?= $key === "success" ? "open" : '' ?>" src="assets/general/img/checkmark.svg"
                          alt="success">
                     <img class="<?= $key === "error" ? "open" : '' ?>" src="assets/general/img/cross-icon.svg"

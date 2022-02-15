@@ -45,7 +45,6 @@ function replaceValueWithInput(valueSpan, editIcon, inputId, inputName) {
     valueInputElement.type = 'text';
     valueInputElement.className = 'form-input';
     valueInputElement.value = valueString;
-    valueInputElement.size = valueString.length + 7;
     valueInputElement.id = inputId;
     valueInputElement.name = inputName;
     // Replace with span

@@ -6,8 +6,8 @@
  */
 $this->setLayout('layout.html.php');
 ?>
-<!-- Define assets that should be included -->
 <?php
+// Define assets that should be included
 $this->addAttribute('css', ['assets/error/error.css']); ?>
 
 

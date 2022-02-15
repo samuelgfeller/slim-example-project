@@ -8,8 +8,8 @@
 $this->setLayout('layout.html.php');
 ?>
 
-<!-- Define assets that should be included -->
 <?php
+// Define assets that should be included
 $this->addAttribute('css', ['assets/general/css/form.css']);
 $this->addAttribute('js', ['assets/auth/auth.js']);
 ?>
