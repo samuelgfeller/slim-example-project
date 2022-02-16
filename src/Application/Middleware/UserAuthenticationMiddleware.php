@@ -37,16 +37,13 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $response = $handler->handle($request);
+        $response = $this->responder->createResponse();
 
         // Inform user that he/she has to login first
-        $this->session->getFlash()->add('warning', 'Please login to access this page.');
+        $this->session->getFlash()->add('info', 'Please login to access this page.');
 
         return $this->responder->redirectToRouteName(
-            $response,
-            'login-page',
-            [],
-            ['redirect' => $request->getUri()->getPath()]
+            $response, 'login-page', [], ['redirect' => $request->getUri()->getPath()]
         );
     }
 }

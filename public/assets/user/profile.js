@@ -95,28 +95,28 @@ function createSubmitBtn(valueParent, submitBtnId, inputName) {
  */
 function submitValueChange(submitBtnId, inputName) {
     let inputElement = document.querySelector("[name='" + inputName + "']");
+    // Ajax request
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // Hide submit icon
-            document.getElementById(submitBtnId).remove();
-
-            // Replace input field with value span
-            replaceInputWithValue(inputElement);
-
             // if (xHttp.status === 200) {
             if (xHttp.getResponseHeader('Content-type') === 'application/json') {
                 // xHttp.responseText
                 if (xHttp.status !== 200) {
                     handleFail(xHttp);
+                }
+                if (xHttp.status === 422) {
+                    // Validation error, mark input element with a red line
+                    inputElement.className += ' wrong-cred-input';
                 } else {
                     let inputNameWithoutSpecialChar = inputName.replace(/[^a-zA-Z0-9 ]/g, ' ');
                     createFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
+                    // Replace input field with value span
+                    replaceInputWithValue(inputElement);
+                    // Hide submit icon
+                    document.getElementById(submitBtnId).remove();
                 }
-            } else {
-                handleFail(xHttp);
             }
-
         }
     };
     // Find user id
