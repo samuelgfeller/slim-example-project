@@ -119,6 +119,13 @@ function createSubmitBtn(valueParent, submitBtnId, inputName) {
  */
 function submitValueChange(submitBtnId, inputName) {
     let inputElement = document.querySelector("[name='" + inputName + "']");
+
+    // Check form validity with native verification https://stackoverflow.com/a/71157966/9013718
+    if (inputElement.checkValidity() === false){
+        inputElement.reportValidity();
+        return;
+    }
+
     // Ajax request
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {

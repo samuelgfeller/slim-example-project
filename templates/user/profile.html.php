@@ -19,7 +19,7 @@ $this->addAttribute('js', ['assets/user/profile.js']);
 <h1>Your profile</h1>
 
 <div id="personal-info-wrapper"
-     data-id="<?= /* Put user id into wrapper as it's the same for all values to change in this page */ $user->id ?>">
+     data-id="<?= $user->id /* Put user id into wrapper as it's the same for all values to change in this page */ ?>">
     <div>
         <label class="profile-value-title" for="first-name-input">Firstname:</label>
         <!--        <button class="btn edit-profile-value-btn">Edit</button>-->
@@ -42,7 +42,8 @@ $this->addAttribute('js', ['assets/user/profile.js']);
         <label class="profile-value-title" for="email-input">Email:</label>
         <div class="profile-value-div">
             <span id="email-val" class="profile-value"><?= $user->email ?></span>
-            <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit" id="edit-email-ico">
+            <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+                 id="edit-email-ico">
         </div>
     </div>
 </div>
