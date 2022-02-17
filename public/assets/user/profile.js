@@ -117,6 +117,15 @@ function submitValueChange(submitBtnId, inputName) {
                     document.getElementById(submitBtnId).remove();
                 }
             }
+            // If user not logged in the server redirects to the login page but it is the same method than the request
+            // meaning if a PUT request is sent, the redirect will be on a PUT route which doesn't exist for the login
+            // page. The solution is to let the 405 Method not allowed request be made and intercept it here and
+            // redirect to the wanted location here with javascript.
+            if (xHttp.status === 405) {
+                // Redirect to response url
+                window.location.href = xHttp.responseURL;
+
+            }
         }
     };
     // Find user id
