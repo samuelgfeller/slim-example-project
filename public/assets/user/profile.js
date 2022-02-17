@@ -5,7 +5,9 @@ firstNameEditIco.addEventListener('click', function () {
     // facilitates the edit process
     let firstNameValSpan = firstNameEditIco.previousElementSibling;
     let inputName = 'first_name';
-    let valueParent = replaceValueWithInput(firstNameValSpan, firstNameEditIco, 'first-name-input', inputName);
+    let valueParent = replaceValueWithInput(
+        firstNameValSpan, firstNameEditIco, 'first-name-input', inputName, 2, 100
+    );
     createSubmitBtn(valueParent, 'first-name-submit', inputName);
 });
 
@@ -13,7 +15,9 @@ let surnameEditIco = document.getElementById('edit-surname-ico');
 surnameEditIco.addEventListener('click', function () {
     let surnameValSpan = surnameEditIco.previousElementSibling;
     let inputName = 'surname';
-    let valueParent = replaceValueWithInput(surnameValSpan, surnameEditIco, 'surname-input', inputName);
+    let valueParent = replaceValueWithInput(
+        surnameValSpan, surnameEditIco, 'surname-input', inputName, 2, 100
+    );
     createSubmitBtn(valueParent, 'surname-submit', inputName);
 });
 
@@ -21,10 +25,11 @@ let emailEditIco = document.getElementById('edit-email-ico');
 emailEditIco.addEventListener('click', function () {
     let emailValSpan = emailEditIco.previousElementSibling;
     let inputName = 'email';
-    let valueParent = replaceValueWithInput(emailValSpan, emailEditIco, 'email-input', inputName);
+    let valueParent = replaceValueWithInput(
+        emailValSpan, emailEditIco, 'email-input', inputName, null, 254, 'email'
+    );
     createSubmitBtn(valueParent, 'email-submit', inputName);
 });
-
 
 // Functions
 
@@ -34,19 +39,37 @@ emailEditIco.addEventListener('click', function () {
  *
  * @param valueSpan <span> DOM-element containing the value
  * @param editIcon <img> DOM-element being the edit icon
- * @param inputId id of input field for label and submit event
- * @param inputName name of input field for submit action
+ * @param {string} inputId id of input field for label and submit event
+ * @param {string} inputName name of input field for submit action
+ * @param {int|null} minLength
+ * @param {int|null} maxLength
+ * @param {string} inputType
  * @return valueParent Parent of profile value DOM-element
  */
-function replaceValueWithInput(valueSpan, editIcon, inputId, inputName) {
+function replaceValueWithInput(
+    valueSpan,
+    editIcon,
+    inputId,
+    inputName,
+    minLength = null,
+    maxLength = null,
+    inputType = 'text',
+) {
     let valueString = valueSpan.innerText;
     // Create input type text
     let valueInputElement = document.createElement('input');
-    valueInputElement.type = 'text';
+    valueInputElement.type = inputType;
     valueInputElement.className = 'form-input';
     valueInputElement.value = valueString;
     valueInputElement.id = inputId;
     valueInputElement.name = inputName;
+    // Set min and max length if set
+    if (minLength !== null) {
+        valueInputElement.minLength = minLength;
+    }
+    if (maxLength !== null) {
+        valueInputElement.maxLength = maxLength;
+    }
     // Replace with span
     let valueParent = valueSpan.parentNode;
     valueParent.appendChild(valueInputElement);
@@ -70,6 +93,7 @@ function createSubmitBtn(valueParent, submitBtnId, inputName) {
     let valueSubmitImg = document.createElement('img');
     valueSubmitImg.src = 'assets/general/img/thin-checkmark.svg';
     valueSubmitImg.id = submitBtnId;
+    // Make it behave more like a submit button (highlight when pressing tab after input)
     valueSubmitImg.tabIndex = 0;
     valueSubmitImg.className = 'profile-value-submit-icon cursor-pointer';
     valueParent.appendChild(valueSubmitImg);
@@ -147,7 +171,7 @@ function submitValueChange(submitBtnId, inputName) {
  *
  * @param inputElement
  */
-function replaceInputWithValue(inputElement){
+function replaceInputWithValue(inputElement) {
     let inputParent = inputElement.parentElement;
 
     // Make edit button visible again

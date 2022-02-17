@@ -32,7 +32,11 @@ window.addEventListener("load", function (event) {
 });
 
 
-// In own function to be run client side after loading
+/**
+ * Display flash messages to user
+ *
+ * In own function to be run client side after loading
+ */
 function showFlashMessages() {
     let flashes = document.getElementsByClassName("flash");
     Array.from(flashes).forEach(function (flash, index) {
@@ -53,10 +57,16 @@ function showFlashMessages() {
     });
 }
 
+/**
+ * Remove flash message after a few seconds of display
+ *
+ * @param flash
+ */
 function slideFlashOut(flash) {
     flash.className = flash.className.replace('slide-in', "slide-out");
     // Hide a bit later so that page content can go to its place again
     setTimeout(function () {
         flash.style.display = 'none';
+        flash.remove();
     }, 800); // .slide-out animation is 0.9s
 }

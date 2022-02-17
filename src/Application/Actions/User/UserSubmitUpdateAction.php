@@ -52,7 +52,6 @@ final class UserSubmitUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             // Id in url user_id defined in routes.php
             $userIdToChange = (int)$args['user_id'];
@@ -81,11 +80,7 @@ final class UserSubmitUpdateAction
                 ['status' => 'warning', 'message' => 'User wasn\'t updated']
             );
         }
-        // Status 401 when not authenticated and 403 when not allowed (logged in but missing right)
-        return $this->responder->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'Please login to make the changes.'],
-            401
-        );
+
+        return $response;
     }
 }

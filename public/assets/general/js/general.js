@@ -53,26 +53,28 @@ function createFlashMessage(typeName, message){
     }
     figure.appendChild(icon);
 
-    // flash message content
+    // First dialog child: flash message content
     let flashMessageDiv = document.createElement('div');
     flashMessageDiv.className = 'flash-message';
     dialog.appendChild(flashMessageDiv);
 
-    // Header
+    // First flash message content child: header
     let flashMessageHeader = document.createElement('h3');
     flashMessageHeader.textContent = 'Hey'; // Replaced by css
     flashMessageDiv.appendChild(flashMessageHeader);
 
+    // Second flash message content child: message content
     let flashMessageContent = document.createElement('p');
     flashMessageContent.innerHTML = message;
     flashMessageDiv.appendChild(flashMessageContent);
 
-    // Close flash button
+    // Second dialog child: close flash button
     let closeBtn = document.createElement('span');
     closeBtn.className = 'flash-close-btn';
     closeBtn.innerHTML = "&times";
     dialog.appendChild(closeBtn);
 
+    // Make it visible to the user
     showFlashMessages();
 }
 
@@ -102,12 +104,24 @@ function handleFail(xhr){
     }
 
     // Add error messages if they are given by the backend
-    if(typeof xhr.statusText !== 'undefined' ){
+    // if(typeof xhr.statusText !== 'undefined' ){
         // If we know the error message we can add it to the error popup
-        errorMsg += '<br>Message: '+xhr.statusText;
+        // errorMsg += '<br>Message: '+xhr.statusText;
+    // }
+
+    errorMsg += '<br>Code: '+ xhr.status + ' ' + xhr.statusText;
+
+    // If validation error ignore the default message and create specific one
+    if (xhr.status === 422){
+        errorMsg = '';
+        let json = xhr.response;
+        let validationErrors = JSON.parse(json);
+        // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
+        for (const error of validationErrors.data.errors){
+            errorMsg += error.message + ' for <b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b><br>';
+        }
     }
 
-    errorMsg += '<br>Code: '+ xhr.status;
     // Output error to user
     createFlashMessage('error', errorMsg);
 }
