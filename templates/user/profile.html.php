@@ -10,21 +10,23 @@ $this->setLayout('layout.html.php');
 <?php
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
-$this->addAttribute('css', ['assets/general/css/form.css', 'assets/user/profile.css']); // profile.css has to come last
+$this->addAttribute('css', [
+    'assets/general/css/form.css',
+    'assets/general/css/loader/three-dots-loader.css',
+    // profile.css has to come last to overwrite other styles
+    'assets/user/profile.css'
+]);
 $this->addAttribute('js', ['assets/user/profile.js']);
 ?>
 
-<pre></pre>
-
 <h1>Your profile</h1>
-
 <div id="personal-info-wrapper"
      data-id="<?= $user->id /* Put user id into wrapper as it's the same for all values to change in this page */ ?>">
     <div>
         <label class="profile-value-title" for="first-name-input">Firstname:</label>
         <!--        <button class="btn edit-profile-value-btn">Edit</button>-->
         <div class="profile-value-div">
-            <!-- This span has to be before the edit icon as its used in js with previousElementSibling -->
+            <!-- This span has to be before the edit icon as it's used in js with previousElementSibling -->
             <span class="profile-value"><?= $user->firstName ?></span>
             <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
                  id="edit-first-name-ico">

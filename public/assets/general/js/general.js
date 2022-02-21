@@ -112,33 +112,21 @@ function handleFail(xhr){
     errorMsg += '<br>Code: '+ xhr.status + ' ' + xhr.statusText;
 
     // If validation error ignore the default message and create specific one
-    if (xhr.status === 422){
-        errorMsg = '';
-        let json = xhr.response;
-        let validationErrors = JSON.parse(json);
-        // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
-        for (const error of validationErrors.data.errors){
-            errorMsg += error.message + ' for <b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b><br>';
+    if (xhr.status === 422) {
+        if (xhr.getResponseHeader('Content-type') === 'application/json') {
+            errorMsg = '';
+            let json = xhr.response;
+            let validationErrors = JSON.parse(json);
+            // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
+            for (const error of validationErrors.data.errors) {
+                errorMsg += error.message + ' for <b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b><br>';
+            }
+        } else{
+            // Default error message when server returns 422 but not json
+            errorMsg = 'Validation error. Something could not have been validate on the server.';
         }
     }
 
     // Output error to user
     createFlashMessage('error', errorMsg);
 }
-
-/**
- * Check html validity of form and display browser default error
- *
- * Source: https://stackoverflow.com/a/11867013/9013718
- *
- * @param formId
- */
-// function formIsValid(formId){
-//     if(!document.getElementById(formId).checkValidity()) {
-//         // If the form is invalid, submit it. The form won't actually submit;
-//         // this will just cause the browser to display the native HTML5 error messages.
-//         $('<input type="submit">').hide().appendTo($('#'+formId)).click().remove();
-//         return false;
-//     }
-//     return true;
-// }

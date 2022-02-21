@@ -24,8 +24,7 @@
     }
 
     .profile-value-div {
-        /*line-height: 0;*/
-
+        margin-top: 5px;
     }
 
     .edit-icon {
@@ -38,18 +37,25 @@
 
     /* Overwrite form.css rule to match profile view */
     .form-input {
-        width: calc(100% - 51px) ;
+        /* Full width minus edit save icon and loader plus space */
+        width: calc(100% - 70px) ;
         max-width: 300px;
         font-size: 1.2em;
         padding: 5px;
         vertical-align: middle;
+        /* Remove default margin for the loader to be aligned */
+        margin-top: 0;
     }
 
     .profile-value-submit-icon {
         width: 35px;
         vertical-align: middle;
-        margin: 0 0 0 14px;
         filter: brightness(130%);
+    }
+    .profile-value-submit-icon,
+    /* Make addition to three-dots-loader.css */
+    .lds-ellipsis {
+        margin: 0 0 0 14px;
     }
 
     .profile-value-submit-icon:hover {

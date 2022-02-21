@@ -121,33 +121,19 @@ function submitValueChange(submitBtnId, inputName) {
     let inputElement = document.querySelector("[name='" + inputName + "']");
 
     // Check form validity with native verification https://stackoverflow.com/a/71157966/9013718
-    if (inputElement.checkValidity() === false){
+    if (inputElement.checkValidity() === false) {
         inputElement.reportValidity();
         return;
     }
 
-    // Ajax request
+    // Hide submit icon right after click, before Ajax call as to show the user that his input is taken into account
+    document.getElementById(submitBtnId).style.display = 'none';
+    showProfileValueChangeLoader(submitBtnId);
+
+    // Ajax request to change the profile value
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // if (xHttp.status === 200) {
-            if (xHttp.getResponseHeader('Content-type') === 'application/json') {
-                // xHttp.responseText
-                if (xHttp.status !== 200) {
-                    handleFail(xHttp);
-                }
-                if (xHttp.status === 422) {
-                    // Validation error, mark input element with a red line
-                    inputElement.className += ' wrong-cred-input';
-                } else {
-                    let inputNameWithoutSpecialChar = inputName.replace(/[^a-zA-Z0-9 ]/g, ' ');
-                    createFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
-                    // Replace input field with value span
-                    replaceInputWithValue(inputElement);
-                    // Hide submit icon
-                    document.getElementById(submitBtnId).remove();
-                }
-            }
             // If user not logged in the server redirects to the login page but it is the same method than the request
             // meaning if a PUT request is sent, the redirect will be on a PUT route which doesn't exist for the login
             // page. The solution is to let the 405 Method not allowed request be made and intercept it here and
@@ -155,7 +141,31 @@ function submitValueChange(submitBtnId, inputName) {
             if (xHttp.status === 405) {
                 // Redirect to response url
                 window.location.href = xHttp.responseURL;
+            }
 
+            // Fail
+            if (xHttp.status !== 200) {
+                // Show submit button again on fail
+                document.getElementById(submitBtnId).style.display = 'inline-block';
+                // Default fail handler
+                handleFail(xHttp);
+                // Validation error, mark input element with a red line
+                if (xHttp.status === 422) {
+                    inputElement.className += ' wrong-cred-input';
+                }
+            }
+
+            // Success
+            else {
+                // Remove special chars for flash message (first_name -> first name)
+                let inputNameWithoutSpecialChar = inputName.replace(/[^a-zA-Z0-9 ]/g, ' ');
+                createFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
+                // Replace input field with value span
+                replaceInputWithValue(inputElement);
+                // Remove submit icon from DOM
+                document.getElementById(submitBtnId).remove();
+                // Hide loader
+                document.getElementsByClassName('lds-ellipsis')[0].remove();
             }
         }
     };
@@ -192,5 +202,12 @@ function replaceInputWithValue(inputElement) {
     // Insert value span before edit icon
     inputParent.insertBefore(valueSpan, editIcon);
     inputParent.removeChild(inputElement);
+}
 
+/**
+ * @param {string} prependId insert loader before given id
+ */
+function showProfileValueChangeLoader(prependId) {
+    document.getElementById(prependId).insertAdjacentHTML('afterend',
+        '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
 }
