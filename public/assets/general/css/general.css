@@ -4,6 +4,14 @@
     cursor: pointer;
 }
 
+/* Vertically align middle */
+.vertical-middle {
+    vertical-align: middle;
+}
+.vertical-middle h1, .vertical-middle h2 {
+    display:inline-block;
+    vertical-align: middle;
+}
 
 /* Boxes */
 /*
