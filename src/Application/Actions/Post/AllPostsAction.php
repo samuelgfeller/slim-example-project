@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class PostListAction
+final class AllPostsAction
 {
     /**
      * The constructor.
@@ -55,7 +55,6 @@ final class PostListAction
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
         }
-        return $this->responder->render($response, 'post/all-posts.html.php', ['userPosts' => $userPosts]);
         return $this->responder->respondWithJson($response, $userPosts);
     }
 }

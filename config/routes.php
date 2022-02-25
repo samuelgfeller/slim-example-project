@@ -46,12 +46,12 @@ return function (App $app) {
         }
     )->add(UserAuthenticationMiddleware::class);
 
-
+    // Post CRUD routes; I try to keep this as REST as possible so the page actions have urls other than /posts
     $app->group(
         '/posts',
         function (RouteCollectorProxy $group) {
             // Post requests where user DOESN'T need to be authenticated
-            $group->get('', \App\Application\Actions\Post\PostListAction::class)->setName('post-list-all');
+            $group->get('', \App\Application\Actions\Post\AllPostsAction::class)->setName('post-list-all');
 
             $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\PostReadAction::class)->setName(
                 'post-read'
@@ -69,12 +69,12 @@ return function (App $app) {
             );
         }
     );
-
-    // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
-    // option 2 /own-posts and get user id from session
+    // Page actions routes outside /posts as they are needed by Ajax after page load
+    $app->get('/all-posts', \App\Application\Actions\Post\AllPostsListPageAction::class)->setName('post-list-all-page');
     $app->get('/own-posts', \App\Application\Actions\Post\PostListOwnAction::class)->setName(
         'post-list-own'
     )->add(UserAuthenticationMiddleware::class);
+
 
     $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
 

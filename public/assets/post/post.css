@@ -1,20 +1,9 @@
-
 /* Boxes */
 #post-wrapper {
     width: 100%;
     display: flex;
-    gap: 2% 40px;
-}
-
-.single-box {
-    /*overflow: hidden;*/
-    min-width: 300px;
-    display: inline-block;
-    float: left;
-    min-height: 100px;
-    /*margin-left: 2%;*/
-    /*margin-bottom: 40px;*/
-    /*box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1)!*, 3px 3px 3px 0 rgba(0, 0, 0, 0.05)*!;*/
+    gap: 30px 40px;
+    flex-wrap: wrap;
 }
 
 .box-header {
@@ -23,6 +12,7 @@
     padding: 0 70px 0 0;
     margin: 0;
 }
+
 .box-content {
     padding: 20px;
     position: relative;
@@ -30,11 +20,18 @@
     background: #f2f2f2;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
     border-radius: 20px;
+    max-width: 650px;
+    overflow-wrap: anywhere;
 }
-.box-content:hover{
+
+.box-content p{
+}
+
+.box-content:hover {
     box-shadow: inset 0 0 0 0px black;
 }
-.box-content:hover > .del-icon,.box-content:hover > .post-edit-icon {
+
+.box-content:hover > .del-icon, .box-content:hover > .post-edit-icon {
     display: inline;
 }
 
@@ -56,6 +53,7 @@
     top: 0px;
     margin: 20px;
 }
+
 .post-edit-icon {
     display: none;
     width: 30px;;
@@ -63,4 +61,54 @@
     right: 40px;
     top: 0px;
     margin: 15px;
+}
+
+/* Preloading */
+
+.load-wrapper{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(231, 231, 231);
+    z-index: 44;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.activity{
+    position: absolute;
+    left: -45%;
+    height: 100%;
+    width: 45%;
+    background-image: linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+    background-image: -moz-linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+    background-image: -webkit-linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+    animation: loading 1s infinite;
+    z-index: 45;
+}
+
+@keyframes loading {
+    0%{
+        left: -45%;
+    }
+    100%{
+        left: 100%;
+    }
+}
+
+.preloading-box-content{
+    height: 190px;
+    width: 280px;
+    padding: 20px;
+    border-radius: 20px;
+/* Change box to look good for preloading */
+    background: #f8f8f8;
+}
+
+.preloading-box-header {
+    height: 28px;
+}
+.preloading-box-inner-content {
+    height: 94px;
+    margin-top: 21px;
+    margin-bottom: 16px;
 }

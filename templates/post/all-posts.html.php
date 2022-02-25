@@ -27,27 +27,42 @@ $this->addAttribute('js', ['assets/post/post.js', 'assets/general/js/modal.js'])
 <!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
 All posts and own posts pages are quite similar and share the same create form and modal box. After the creation of
 a post they are re-loaded in the background (async) to be up-to-date with the server -->
+
+
+
 <div id="post-wrapper" data-post-visibility-scope="all">
-    <?php
-    foreach ($userPosts as $userPost) { ?>
-        <div class="post-squares" id="post<?= $userPost->postId ?>">
+    <!-- Flexbox -->
+    <!-- todo addajacenthtml to post-wrapper -->
+
+
+
+    <!--    <?php
+    /*    foreach ($userPosts as $userPost) { */ ?>
+        <div class="post-squares" id="post<?
+    /*= $userPost->postId */ ?>">
             <div class="box-content">
-                <div class="loader" id="loaderForPost<?= $userPost->postId ?>"></div>
-                <h3 class="box-header"><?= $userPost->userName ?></h3>
-                <div id="box-inner-content<?= $userPost->postId ?>">
-                    <p><span class="info-in-box-span"></span><b><?= $userPost->postMessage ?></b></p>
-                    <p><span class="info-in-box-span">Updated at: </span><b><?= $userPost->postUpdatedAt ?></b></p>
-                    <p><span class="info-in-box-span">Created at: </span><?= $userPost->postCreatedAt ?></p>
+                <div class="loader" id="loaderForPost<?
+    /*= $userPost->postId */ ?>"></div>
+                <h3 class="box-header"><?
+    /*= $userPost->userName */ ?></h3>
+                <div id="box-inner-content<?
+    /*= $userPost->postId */ ?>">
+                    <p><span class="info-in-box-span"></span><b><?
+    /*= $userPost->postMessage */ ?></b></p>
+                    <p><span class="info-in-box-span">Updated at: </span><b><?
+    /*= $userPost->postUpdatedAt */ ?></b></p>
+                    <p><span class="info-in-box-span">Created at: </span><?
+    /*= $userPost->postCreatedAt */ ?></p>
                 </div>
             </div>
         </div>
-        <?php
-    } ?>
+        --><?php
+    /*    } */ ?>
 </div>
 
-    <div id="create-post-div">
-    </div>
-    <!--<div id="postsDiv">-->
-    <!--    <p>Loading...</p>-->
-    <!--</div>-->
-    <div class="clearfix"></div>
+<div id="create-post-div">
+</div>
+<!--<div id="postsDiv">-->
+<!--    <p>Loading...</p>-->
+<!--</div>-->
+<div class="clearfix"></div>
