@@ -4,12 +4,14 @@ namespace App\Application\Actions\Post\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\UserRoleFinder;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\Data\PostData;
 use App\Domain\Post\Service\PostFinder;
 use App\Domain\Post\Service\PostUpdater;
 use App\Domain\Validation\OutputEscapeService;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -31,23 +33,20 @@ final class PostUpdateAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
+     * @param SessionInterface $session
      * @param PostUpdater $postUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
-     * @param UserRoleFinder $userRoleFinder
      */
     public function __construct(
         Responder $responder,
-        private PostFinder $postFinder,
+        private SessionInterface $session,
         private PostUpdater $postUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
-        private UserRoleFinder $userRoleFinder
     ) {
         $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('post-update');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('post-update');
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -66,54 +65,36 @@ final class PostUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $userId = (int)$this->getUserIdFromToken($request);
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $postIdToChange = (int)$args['post_id'];
+            $postValues = $request->getParsedBody();
 
-        $id = (int)$args['id'];
-
-        $postFromDb = $this->postFinder->findPost($id);
-
-        // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
-        $userRole = $this->userRoleFinder->getUserRoleById($userId);
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $postFromDb->userId === $userId) {
-            // todo check if parsedbody is empty everywhere
-            if (null !== $postData = $request->getParsedBody()) {
-                // todo maybe add mapping a layer between client body and application logic
-
-                $post = new PostData($postData);
-                // Needed to tell repo what data to update
-                $post->id = $postFromDb['id'];
-
-                try {
-                    $updated = $this->postUpdater->updatePost($post);
-                } catch (ValidationException $exception) {
-                    return $this->responder->respondWithJsonOnValidationError(
-                        $exception->getValidationResult(),
-                        $response
-                    );
-                }
-
-                if ($updated) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success']);
-                }
-                $response = $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'warning', 'message' => 'The post was not updated']
+            try {
+                $updated = $this->postUpdater->updatePost($postIdToChange, $postValues, $loggedInUserId);
+            } catch (ValidationException $exception) {
+                return $this->responder->respondWithJsonOnValidationError(
+                    $exception->getValidationResult(),
+                    $response
                 );
-                return $response->withAddedHeader('Warning', 'The post was not updated');
+            } catch (ForbiddenException $fe) {
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'error', 'message' => 'You can only edit your own post or be an admin to edit others'],
+                    403
+                );
             }
-            $response = $this->responder->respondWithJson(
-                $response,
-                ['status' => 'error', 'message' => 'Request body empty'],
-                400
-            );
-            return $response->withAddedHeader('Warning', '');
+
+            if ($updated) {
+                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            }
+            $response = $this->responder->respondWithJson($response, [
+                'status' => 'warning',
+                'message' => 'The post was not updated'
+            ]);
+            return $response->withAddedHeader('Warning', 'The post was not updated');
         }
-        $this->logger->notice('User ' . $userId . ' tried to update other post with id: ' . $id);
-        return $this->responder->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'],
-            403
-        );
+
+        // Not logged in, let AuthenticationMiddleware handle redirect
+        return $response;
     }
 }

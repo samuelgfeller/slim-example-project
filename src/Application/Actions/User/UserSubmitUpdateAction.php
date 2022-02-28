@@ -74,7 +74,7 @@ final class UserSubmitUpdateAction
             if ($updated) {
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
             }
-            // If for example values didnt change
+            // If for example values didn't change
             return $this->responder->respondWithJson(
                 $response,
                 ['status' => 'warning', 'message' => 'User wasn\'t updated']

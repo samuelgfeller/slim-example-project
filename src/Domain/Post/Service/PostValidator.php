@@ -24,20 +24,19 @@ class PostValidator extends AppValidation
     public function __construct(
         LoggerFactory $logger,
         private UserExistenceCheckerRepository $userExistenceCheckerRepository
-    )
-    {
-        parent::__construct($logger->addFileHandler('error.log')
-            ->createInstance('post-validation'));
-
+    ) {
+        parent::__construct(
+            $logger->addFileHandler('error.log')->createInstance('post-validation')
+        );
     }
 
     /**
-     * Validate post creation or update since they are the same
+     * Validate post creation
      *
      * @param PostData $post
      * @throws ValidationException
      */
-    public function validatePostCreationOrUpdate(PostData $post): void
+    public function validatePostCreation(PostData $post): void
     {
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
@@ -46,6 +45,24 @@ class PostValidator extends AppValidation
 
         $this->throwOnError($validationResult);
     }
+
+    /**
+     * Validate post update
+     *
+     * @param PostData $post
+     * @throws ValidationException
+     */
+    public function validatePostUpdate(PostData $post): void
+    {
+        $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
+
+        if (null !== $post->message) {
+            $this->validateMessage($post->message, $validationResult, false);
+        }
+
+        $this->throwOnError($validationResult);
+    }
+
 
     protected function validateMessage($postMsg, ValidationResult $validationResult, bool $required): void
     {

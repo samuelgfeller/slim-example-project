@@ -23,7 +23,7 @@ class PostCreator
      */
     public function createPost(PostData $post): int
     {
-        $this->postValidator->validatePostCreationOrUpdate($post);
+        $this->postValidator->validatePostCreation($post);
         return $this->postCreatorRepository->insertPost($post->toArray());
     }
 }
