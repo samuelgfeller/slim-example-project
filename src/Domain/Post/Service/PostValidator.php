@@ -41,6 +41,7 @@ class PostValidator extends AppValidation
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
         $this->validateMessage($post->message, $validationResult, true);
+        // It's a bit pointless to check user existence as user should always exist if he's logged in
         $this->validateUser($post->userId, $validationResult, true);
 
         $this->throwOnError($validationResult);

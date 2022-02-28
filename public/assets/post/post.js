@@ -1,6 +1,3 @@
-document.getElementById('test').addEventListener('click', function () {
-    loadPosts();
-})
 // Load posts on
 loadPosts();
 
@@ -153,13 +150,7 @@ function createPostModal() {
  * @param formId
  */
 function submitCreatePost(formId) {
-
-
-    /**
-     * TODO check validity of textarea, and make POST Ajax call
-     * TODO write load posts with json function and re load according to visibility scope
-     */
-        // Check if textarea content is valid (frontend validation)
+    // Check if textarea content is valid (frontend validation)
     let textArea = document.getElementById('create-message-textarea')
     if (textArea.checkValidity() === false) {
         // If not valid, report to user and return void
@@ -167,24 +158,21 @@ function submitCreatePost(formId) {
         return;
     }
 
+    // Show loader to indicate user that the request is on its way
+    showPostModalLoader();
+
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
             // Fail
-            if (xHttp.status !== 200) {
+            if (xHttp.status !== 201 && xHttp.status !== 200) {
                 // Default fail handler
                 handleFail(xHttp);
             }
             // Success
             else {
                 closeModal();
-
-                /*                if (scope === 'own') {
-                                    loadAllOwnPosts();
-                                }
-                                if (scope === 'all') {
-                                    loadAllPosts();
-                                }*/
+                loadPosts();
 
                 // Hide loader
                 document.getElementsByClassName('lds-ellipsis')[0].remove();
@@ -198,5 +186,14 @@ function submitCreatePost(formId) {
     xHttp.setRequestHeader("Content-type", "application/json");
 
     // Data format: "fname=Henry&lname=Ford"
-    xHttp.send();
+    // In [square brackets] to be evaluated
+    xHttp.send(JSON.stringify({[textArea.name]: textArea.value}));
+}
+
+/**
+ * Show post modal loader
+ */
+function showPostModalLoader() {
+    document.getElementById('modal-footer').insertAdjacentHTML('afterbegin',
+        '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
 }

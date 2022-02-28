@@ -18,12 +18,15 @@ class PostCreator
     /**
      * Insert post in database
      *
-     * @param PostData $post
+     * @param array $postData
      * @return int insert id
      */
-    public function createPost(PostData $post): int
+    public function createPost(array $postData, int $loggedInUserId): int
     {
+        $post = new PostData($postData);
+        $post->userId = $loggedInUserId;
         $this->postValidator->validatePostCreation($post);
+
         return $this->postCreatorRepository->insertPost($post->toArray());
     }
 }

@@ -14,6 +14,7 @@ $this->addAttribute('css', [
 //    'assets/general/css/loader/three-dots-loader.css',
     // post.css has to come last to overwrite other styles
     'assets/general/css/form.css',
+    'assets/general/css/loader/three-dots-loader.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/modal.css',
     'assets/post/post.css',
@@ -29,7 +30,6 @@ All posts and own posts pages are quite similar and share the same create form a
 a post they are re-loaded in the background (async) to be up-to-date with the server -->
 
 
-<button id="test">Reload</button>
 <div id="post-wrapper" data-post-visibility-scope="own">
     <!-- Flexbox -->
 </div>

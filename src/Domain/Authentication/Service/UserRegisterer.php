@@ -19,7 +19,6 @@ class UserRegisterer
         private SecurityEmailChecker $emailSecurityChecker,
         private UserFinderRepository $userFinderRepository,
         private UserRegistererRepository $userRegistererRepository,
-        private RequestCreatorRepository $requestCreatorRepo,
         private UserAlreadyExistingHandler $userAlreadyExistingHandler,
         private VerificationTokenCreator $verificationTokenCreator
     ) { }

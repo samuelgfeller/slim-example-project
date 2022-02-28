@@ -205,9 +205,9 @@ function replaceInputWithValue(inputElement) {
 }
 
 /**
- * @param {string} prependId insert loader before given id
+ * @param {string} insertAfterId insert loader before given id
  */
-function showProfileValueChangeLoader(prependId) {
-    document.getElementById(prependId).insertAdjacentHTML('afterend',
+function showProfileValueChangeLoader(insertAfterId) {
+    document.getElementById(insertAfterId).insertAdjacentHTML('afterend',
         '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
 }
