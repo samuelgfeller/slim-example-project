@@ -56,10 +56,9 @@ function loadPosts() {
  */
 function displayPostContentPlaceholder() {
     let postWrapper = document.getElementById('post-wrapper');
-    postWrapper.insertAdjacentHTML('beforeend', '<div id="preloading-box-container"></div>');
 
     let contentPlaceholderHtml =
-        '<div id="preloading-box-content">' +
+        '<div class="preloading-box-content">' +
         '    <div class="preloading-box-header">' +
         '        <div class="load-wrapper">' +
         '            <div class="activity"></div>' +
@@ -72,7 +71,7 @@ function displayPostContentPlaceholder() {
         '    </div>' +
         '</div>';
 
-    let preloadingContainer = document.getElementById('preloading-box-container')
+    // Add content placeholder 3 times
     postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
     postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
     postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
@@ -81,19 +80,14 @@ function displayPostContentPlaceholder() {
 /**
  * Remove placeholders
  */
-function removeContentPlaceholder(){
-    document.getElementById('post-wrapper').remove();
-    // let contentPlaceholders = document.getElementsByClassName('preloading-box-content');
-    //
-    // // for (var i = 0; i < 3; i++) {
-    //     // console.log(contentPlaceholders[i]); //second console output
-    //     // console.log(i);
-    //     // contentPlaceholders[i].remove();
-    // // }
-    // for (let contentPlaceholder of contentPlaceholders) {
-    //     contentPlaceholder.style.display = 'none';
-    //     contentPlaceholder.parentNode.removeChild(contentPlaceholder);
-    // }
+function removeContentPlaceholder() {
+    // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
+    let contentPlaceholders = document.querySelectorAll('.preloading-box-content');
+    // Foreach loop over content placeholders
+    for (let contentPlaceholder of contentPlaceholders) {
+        // remove from DOM
+        contentPlaceholder.remove();
+    }
 }
 
 /**
