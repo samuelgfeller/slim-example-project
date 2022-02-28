@@ -126,6 +126,7 @@ function createPostModal() {
         'maxlength="500" required></textarea>' + '</div>';
     let footer = '<button type="button" id="submit-btn-create-post" class="submit-btn modal-submit-btn">' +
         'Create post</button>' + '<div class="clearfix"></div>' + '</div>';
+    document.getElementById('post-wrapper').insertAdjacentHTML('afterend', '<div id="create-post-div"></div>');
     let container = document.getElementById('create-post-div');
     createModal(header, body, footer, container);
 }

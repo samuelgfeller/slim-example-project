@@ -32,37 +32,4 @@ a post they are re-loaded in the background (async) to be up-to-date with the se
 
 <div id="post-wrapper" data-post-visibility-scope="all">
     <!-- Flexbox -->
-    <!-- todo addajacenthtml to post-wrapper -->
-
-
-
-    <!--    <?php
-    /*    foreach ($userPosts as $userPost) { */ ?>
-        <div class="post-squares" id="post<?
-    /*= $userPost->postId */ ?>">
-            <div class="box-content">
-                <div class="loader" id="loaderForPost<?
-    /*= $userPost->postId */ ?>"></div>
-                <h3 class="box-header"><?
-    /*= $userPost->userName */ ?></h3>
-                <div id="box-inner-content<?
-    /*= $userPost->postId */ ?>">
-                    <p><span class="info-in-box-span"></span><b><?
-    /*= $userPost->postMessage */ ?></b></p>
-                    <p><span class="info-in-box-span">Updated at: </span><b><?
-    /*= $userPost->postUpdatedAt */ ?></b></p>
-                    <p><span class="info-in-box-span">Created at: </span><?
-    /*= $userPost->postCreatedAt */ ?></p>
-                </div>
-            </div>
-        </div>
-        --><?php
-    /*    } */ ?>
 </div>
-
-<div id="create-post-div">
-</div>
-<!--<div id="postsDiv">-->
-<!--    <p>Loading...</p>-->
-<!--</div>-->
-<div class="clearfix"></div>
