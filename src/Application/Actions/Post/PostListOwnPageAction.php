@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class AllPostsListPageAction
+final class PostListOwnPageAction
 {
     /**
      * The constructor.
@@ -40,7 +40,7 @@ final class AllPostsListPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Loading the page. All posts are loaded dynamically with js after page load for a fast loading time
-        return $this->responder->render($response, 'post/all-posts.html.php');
+        // Loading the page. Own posts are loaded dynamically with js after page load for a fast loading time
+        return $this->responder->render($response, 'post/own-posts.html.php');
     }
 }

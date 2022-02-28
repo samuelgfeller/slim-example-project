@@ -45,7 +45,7 @@ class PostListOwnActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('post-list-own')
+            $this->urlFor('post-list-own-page')
         );
 
         $response = $this->app->handle($request);
@@ -77,14 +77,14 @@ class PostListOwnActionTest extends TestCase
 
     public function testPostListAction_notLoggedIn(): void
     {
-        $request = $this->createJsonRequest('GET',$this->urlFor('post-list-own'));
+        $request = $this->createJsonRequest('GET',$this->urlFor('post-list-own-page'));
 
         $response = $this->app->handle($request);
         // Before it even accesses the action class, the UserAuthMiddleware catches the request and redirects to login
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         // Assert that it redirected to the login page with correct redirect get param back to own-posts
         self::assertSame(
-            $this->urlFor('login-page', [], ['redirect' => $this->urlFor('post-list-own')]),
+            $this->urlFor('login-page', [], ['redirect' => $this->urlFor('post-list-own-page')]),
             $response->getHeaderLine('Location')
         );
     }

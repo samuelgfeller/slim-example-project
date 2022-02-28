@@ -89,7 +89,7 @@ function handleFail(xhr){
 
     if (xhr.status === 401 || xhr.status === '401'){
         // Overwriting general error message to unauthorized
-        errorMsg = 'Access denied please authenticate and try again';
+        errorMsg = 'Access denied please log in and try again.';
     }
     if (xhr.status === 403 || xhr.status === '403'){
         errorMsg = 'Forbidden. You do not have access to this area or function';

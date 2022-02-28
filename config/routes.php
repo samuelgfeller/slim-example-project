@@ -3,7 +3,6 @@
 use App\Application\Actions\PreflightAction;
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Slim\App;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
@@ -51,28 +50,28 @@ return function (App $app) {
         '/posts',
         function (RouteCollectorProxy $group) {
             // Post requests where user DOESN'T need to be authenticated
-            $group->get('', \App\Application\Actions\Post\AllPostsAction::class)->setName('post-list-all');
+            $group->get('', \App\Application\Actions\Post\Ajax\PostListAction::class)->setName('post-list-all');
 
-            $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\PostReadAction::class)->setName(
+            $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostReadAction::class)->setName(
                 'post-read'
             );
 
             // Post requests where user DOES need to be authenticated
-            $group->post('', \App\Application\Actions\Post\PostCreateAction::class)->add(
+            $group->post('', \App\Application\Actions\Post\Ajax\PostCreateAction::class)->add(
                 UserAuthenticationMiddleware::class
             );
-            $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\PostUpdateAction::class)->add(
+            $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostUpdateAction::class)->add(
                 UserAuthenticationMiddleware::class
             );
-            $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\PostDeleteAction::class)->add(
+            $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostDeleteAction::class)->add(
                 UserAuthenticationMiddleware::class
             );
         }
     );
     // Page actions routes outside /posts as they are needed by Ajax after page load
-    $app->get('/all-posts', \App\Application\Actions\Post\AllPostsListPageAction::class)->setName('post-list-all-page');
-    $app->get('/own-posts', \App\Application\Actions\Post\PostListOwnAction::class)->setName(
-        'post-list-own'
+    $app->get('/all-posts', \App\Application\Actions\Post\PostListAllPageAction::class)->setName('post-list-all-page');
+    $app->get('/own-posts', \App\Application\Actions\Post\PostListOwnPageAction::class)->setName(
+        'post-list-own-page'
     )->add(UserAuthenticationMiddleware::class);
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Post;
+namespace App\Application\Actions\Post\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;

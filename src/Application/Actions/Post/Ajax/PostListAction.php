@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Application\Actions\Post;
+namespace App\Application\Actions\Post\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Exceptions\UnauthorizedException;
 use App\Domain\Post\Exception\InvalidPostFilterException;
 use App\Domain\Post\Service\PostFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
@@ -10,9 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Action.
+ * Post list all and own action.
  */
-final class AllPostsAction
+final class PostListAction
 {
     /**
      * The constructor.
@@ -27,7 +28,7 @@ final class AllPostsAction
     }
 
     /**
-     * Action.
+     * Post list all and own Action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
@@ -53,6 +54,13 @@ final class AllPostsAction
                     'message' => $invalidPostFilterException->getMessage()
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
+            );
+        } catch (UnauthorizedException $unauthorizedException) {
+            // Respond with status code 401 Unauthorized which is caught in the Ajax call
+            return $this->responder->respondWithJson(
+                $response,
+                ['loginUrl' => $this->responder->urlFor('login-page')],
+                401
             );
         }
         return $this->responder->respondWithJson($response, $userPosts);

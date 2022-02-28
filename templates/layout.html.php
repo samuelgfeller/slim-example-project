@@ -61,8 +61,8 @@
             <a href="<?= $route->urlFor('profile') ?>" <?= $uri->getPath() === $route->urlFor(
                 'profile'
             ) ? 'class="is-active"' : '' ?>>Profile</a>
-            <a href="<?= $route->urlFor('post-list-own') ?>" <?= $uri->getPath() === $route->urlFor(
-                'post-list-own'
+            <a href="<?= $route->urlFor('post-list-own-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'post-list-own-page'
             ) ? 'class="is-active"' : '' ?>>Own posts</a>
             <a href="<?= $route->urlFor('post-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'post-list-all-page'

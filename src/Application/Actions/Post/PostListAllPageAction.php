@@ -1,28 +1,26 @@
 <?php
 
-
 namespace App\Application\Actions\Post;
 
-
 use App\Application\Responder\Responder;
-use App\Domain\Post\Service\PostFinder;
-use Odan\Session\SessionInterface;
+use App\Domain\Post\Exception\InvalidPostFilterException;
+use App\Domain\Post\Service\PostFilterFinder;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class PostListOwnAction
+/**
+ * Action.
+ */
+final class PostListAllPageAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
-     * @param SessionInterface $session
      */
     public function __construct(
         private Responder $responder,
-        private PostFinder $postFinder,
-        private SessionInterface $session
     ) {
     }
 
@@ -35,18 +33,14 @@ final class PostListOwnAction
      * @param array $args
      * @return ResponseInterface The response
      * @throws \JsonException
+     * @throws \Throwable
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // URL format
-        // option 1 /posts?user=xxx and then $request->getQueryParams('user'); but that would mean that the user has to know its id
-        // option 2 /own-posts and get user id from token data body
-        $postsWithUsers = $this->postFinder->findAllPostsFromUser((int)$this->session->get('user_id'));
-        $a = $this->session->get('user_id');
-
-        return $this->responder->respondWithJson($response, $postsWithUsers);
+        // Loading the page. All posts are loaded dynamically with js after page load for a fast loading time
+        return $this->responder->render($response, 'post/all-posts.html.php');
     }
 }

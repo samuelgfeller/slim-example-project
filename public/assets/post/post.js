@@ -1,3 +1,6 @@
+document.getElementById('test').addEventListener('click', function () {
+    loadPosts();
+})
 // Load posts on
 loadPosts();
 
@@ -21,6 +24,7 @@ function loadPosts() {
     displayPostContentPlaceholder();
     // 'own' if own posts should be loaded after creation or 'all' if all should
     let postVisibilityScope = document.getElementById('post-wrapper').dataset.postVisibilityScope;
+    let queryParams = postVisibilityScope === 'own' ? '?scope=own' : '';
 
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
@@ -30,24 +34,28 @@ function loadPosts() {
                 // Default fail handler
                 handleFail(xHttp);
             }
+            // If status code 401 user is not logged in
+            if (xHttp.status === 401) {
+                removeContentPlaceholder();
+                document.getElementById('post-wrapper').insertAdjacentHTML('afterend',
+                    '<p>Please <a href="' + JSON.parse(xHttp.responseText).loginUrl +
+                    '">login</a> to access your posts.</p>');
+            }
             // Success
             else {
                 let posts = JSON.parse(xHttp.responseText);
                 removeContentPlaceholder();
                 addPostsToDom(posts);
-
-                // Hide loader
-                // document.getElementsByClassName('lds-ellipsis')[0].remove();
             }
         }
     };
     // Get basepath. Especially useful when developing on localhost/project-name
     let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
-    xHttp.open('GET', basePath + 'posts', true);
+    // For GET requests, query params have to be passed in the url directly. They are ignored in send()
+    xHttp.open('GET', basePath + 'posts' + queryParams, true);
     xHttp.setRequestHeader("Content-type", "application/json");
 
-    // Data format: "fname=Henry&lname=Ford"
     xHttp.send();
 }
 
@@ -56,6 +64,8 @@ function loadPosts() {
  */
 function displayPostContentPlaceholder() {
     let postWrapper = document.getElementById('post-wrapper');
+    // Empty posts
+    postWrapper.innerHTML = '';
 
     let contentPlaceholderHtml =
         '<div class="preloading-box-content">' +
@@ -97,6 +107,12 @@ function removeContentPlaceholder() {
  */
 function addPostsToDom(posts) {
     let postContainer = document.getElementById('post-wrapper');
+
+    // If no results, tell user so
+    if (posts.length === 0) {
+        postContainer.insertAdjacentHTML('afterend', '<p>No posts could be found.</p>')
+    }
+
     // Loop over posts and add to DOM
     for (const post of posts) {
         let postHtml = '<div class="post-squares" id="post' + post.postId + '">' +

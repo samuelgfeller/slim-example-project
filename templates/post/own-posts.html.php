@@ -13,38 +13,23 @@ $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
 //    'assets/general/css/loader/three-dots-loader.css',
     // post.css has to come last to overwrite other styles
-    'assets/post/post.css'
+    'assets/general/css/form.css',
+    'assets/general/css/plus-button.css',
+    'assets/general/css/modal.css',
+    'assets/post/post.css',
 ]);
-$this->addAttribute('js', ['assets/user/profile.js']);
+$this->addAttribute('js', ['assets/post/post.js', 'assets/general/js/modal.js']);
 ?>
-<div class="verticalCenter">
-    <h2 style="display:inline-block;">All posts</h2>
-    <div class="plusBtn" id="createPostBtn"></div>
+<div class="vertical-middle">
+    <h2>Own posts</h2>
+    <div class="plusBtn" id="create-post-btn"></div>
 </div>
-<div id="post-wrapper">
-    <?php
-    foreach ($userPosts as $userPost) { ?>
-        <div class="single-box" id="post<?= $userPost->postId ?>">
-            <div class="box-content">
-                <img src="/img/edit_icon.svg" class="post-edit-icon cursorPointer" data-id="<?= $userPost->postId ?>" alt="edit">
-                <img src="/img/del_icon.svg" class="del-icon cursorPointer" data-id="<?= $userPost->postId ?>" alt="del">
-                <div class="loader" id="loaderForPost<?= $userPost->postId ?>"></div>
-                <h3 class="box-header"><?= $userPost->userName ?></h3>
-                <div id="box-inner-content<?= $userPost->postId ?>">
-                    <p><span class="info-in-box-span"></span><b><?= $userPost->postMessage ?></b></p>
-                    <p><span class="info-in-box-span">Updated at: </span><b><?= $userPost->postUpdatedAt ?></b></p>
-                    <p><span class="info-in-box-span">Created at: </span><?= $userPost->postCreatedAt ?></p>
-                </div>
-            </div>
-        </div>
-        <?php
-    } ?>
-</div>
+<!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
+All posts and own posts pages are quite similar and share the same create form and modal box. After the creation of
+a post they are re-loaded in the background (async) to be up-to-date with the server -->
 
 
-<div id="create-post-div">
+<button id="test">Reload</button>
+<div id="post-wrapper" data-post-visibility-scope="own">
+    <!-- Flexbox -->
 </div>
-<!--<div id="postsDiv">-->
-<!--    <p>Loading...</p>-->
-<!--</div>-->
-<div class="clearfix"></div>
