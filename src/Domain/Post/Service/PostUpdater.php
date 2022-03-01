@@ -51,14 +51,14 @@ class PostUpdater
             if (null !== $post->message) {
                 // To be sure that only the message will be updated
                 $updateData['message'] = $post->message;
-                return $this->postUpdaterRepository->updatePost($updateData, $post->id);
+                return $this->postUpdaterRepository->updatePost($updateData, $postId);
             }
             // Nothing was updated as message was empty
             return false;
         }
         // User does not have needed rights to access area or function
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
+            'User ' . $loggedInUserId . ' tried to update other user with id: ' . $loggedInUserId
         );
         throw new ForbiddenException('Not allowed to change that user');
     }

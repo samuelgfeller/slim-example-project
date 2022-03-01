@@ -1,3 +1,7 @@
+// Global variables
+// Get basepath. Especially useful when developing on localhost/project-name
+const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
+
 // Load posts on
 loadPosts();
 
@@ -12,6 +16,17 @@ document.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'submit-btn-create-post') {
         submitCreatePost();
     }
+    // Open edit post modal after edit button click in post box
+    if (e.target && e.target.className.includes('box-edit-icon')) {
+        let postId = e.target.dataset.id;
+        updatePostModal(postId);
+    }
+    // Submit edit post
+    if (e.target && e.target.id === 'submit-btn-update-post') {
+        let postId = e.target.dataset.id;
+        submitUpdatePost(postId);
+    }
+
 });
 
 /**
@@ -42,12 +57,10 @@ function loadPosts() {
             else {
                 let posts = JSON.parse(xHttp.responseText);
                 removeContentPlaceholder();
-                addPostsToDom(posts);
+                addPostsToDom(posts, postVisibilityScope);
             }
         }
     };
-    // Get basepath. Especially useful when developing on localhost/project-name
-    let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
     // For GET requests, query params have to be passed in the url directly. They are ignored in send()
     xHttp.open('GET', basePath + 'posts' + queryParams, true);
@@ -101,8 +114,9 @@ function removeContentPlaceholder() {
  * Add post to page
  *
  * @param {object[]} posts
+ * @param {string} scope 'own' or 'all' needed to determine if edit and delete buttons should be visible
  */
-function addPostsToDom(posts) {
+function addPostsToDom(posts, scope) {
     let postContainer = document.getElementById('post-wrapper');
 
     // If no results, tell user so
@@ -112,9 +126,18 @@ function addPostsToDom(posts) {
 
     // Loop over posts and add to DOM
     for (const post of posts) {
+        // Set delete and edit buttons but only if user is viewing its own posts
+        let ownPostsButtons = '';
+        if (scope === 'own') {
+            ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="box-edit-icon cursor-pointer" ' +
+                'data-id="' + post.postId + '" alt="edit">' +
+                '<img src="assets/general/img/del_icon.svg" class="box-del-icon cursor-pointer" ' +
+                'data-id="' + post.postId + '" alt="del">';
+        }
+        // Post box HTML
         let postHtml = '<div class="post-squares" id="post' + post.postId + '">' +
             '    <div class="box-content">' +
-            '        <div class="loader" id="loaderForPost' + post.postId + '"></div>' +
+            ownPostsButtons +
             '        <h3 class="box-header">' + post.userName + '</h3>' +
             '        <div id="box-inner-content' + post.postId + '">' +
             '            <p><span class="info-in-box-span"></span><b>' + post.postMessage + '</b></p>' +
@@ -134,7 +157,7 @@ function addPostsToDom(posts) {
  */
 function createPostModal() {
     let header = '<h2>Post</h2>';
-    let body = '<div id="create-post-form" class="form modal-form">' + '<textarea rows="4" cols="50" name="message" ' +
+    let body = '<div class="form modal-form">' + '<textarea rows="4" cols="50" name="message" ' +
         'id="create-message-textarea" class="form-textarea" ' + 'placeholder="Your message here." minlength="4" ' +
         'maxlength="500" required></textarea>' + '</div>';
     let footer = '<button type="button" id="submit-btn-create-post" class="submit-btn modal-submit-btn">' +
@@ -175,12 +198,10 @@ function submitCreatePost(formId) {
                 loadPosts();
 
                 // Hide loader
-                document.getElementsByClassName('lds-ellipsis')[0].remove();
+                hidePostModalLoader();
             }
         }
     };
-    // Get basepath. Especially useful when developing on localhost/project-name
-    let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
     xHttp.open('POST', basePath + 'posts', true);
     xHttp.setRequestHeader("Content-type", "application/json");
@@ -196,4 +217,95 @@ function submitCreatePost(formId) {
 function showPostModalLoader() {
     document.getElementById('modal-footer').insertAdjacentHTML('afterbegin',
         '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
+}
+
+/**
+ * Hide post modal loader
+ */
+function hidePostModalLoader() {
+    document.getElementsByClassName('lds-ellipsis')[0].remove();
+}
+
+/**
+ * After the click on the edit icon of a post, a modal box is opened
+ * with an editable textarea containing the most recent content (request to server)
+ *
+ * @param {string} postId
+ */
+function updatePostModal(postId) {
+
+    let header = '<h2>Edit post</h2>';
+    let body = '<div class="form modal-form"><textarea rows="4" cols="50" name="message" ' +
+        'id="update-message-textarea" class="form-textarea" minlength="4" ' +
+        'maxlength="500" required disabled>Loading...</textarea></div>';
+    let footer = '<button type="button" id="submit-btn-update-post" class="submit-btn modal-submit-btn">' +
+        'Update post</button><div class="clearfix"></div>';
+
+    document.getElementById('post-wrapper').insertAdjacentHTML(
+        'afterend', '<div id="update-post-modal"></div>');
+    let container = document.getElementById('update-post-modal');
+
+    createModal(header, body, footer, container);
+
+    // Retrieve actual post infos via Ajax and populate textarea
+    let xHttp = new XMLHttpRequest();
+    xHttp.onreadystatechange = function () {
+        if (xHttp.readyState === XMLHttpRequest.DONE) {
+            // Fail
+            if (xHttp.status !== 200) {
+                // Default fail handler
+                handleFail(xHttp);
+            }
+            // Success
+            else {
+                let output = JSON.parse(xHttp.responseText);
+                let updateMessageTextarea = document.getElementById('update-message-textarea');
+                updateMessageTextarea.value = output.postMessage;
+                updateMessageTextarea.disabled = false;
+                // Set post id on submit button as its easiest to retrieve on delegated event listener
+                document.getElementById('submit-btn-update-post').setAttribute('data-id', output.postId);
+            }
+        }
+    };
+
+    // Read post infos
+    xHttp.open('GET', basePath + 'posts/' + postId, true);
+    xHttp.setRequestHeader("Content-type", "application/json");
+    xHttp.send();
+}
+
+/**
+ * Submit post change
+ *
+ * @param {string} postId
+ */
+function submitUpdatePost(postId) {
+    let updateMessageTextarea = document.getElementById('update-message-textarea');
+
+    // Show loader to indicate user that the request is on its way
+    showPostModalLoader();
+
+    // Ajax request
+    let xHttp = new XMLHttpRequest();
+    xHttp.onreadystatechange = function () {
+        if (xHttp.readyState === XMLHttpRequest.DONE) {
+            // Fail
+            if (xHttp.status !== 200) {
+                // Default fail handler
+                handleFail(xHttp);
+            }
+            // Success
+            else {
+                hidePostModalLoader();
+                closeModal();
+                loadPosts();
+            }
+        }
+    };
+
+    // Read post infos
+    xHttp.open('PUT', basePath + 'posts/' + postId, true);
+    xHttp.setRequestHeader("Content-type", "application/json");
+    // In square brackets to be evaluated
+    xHttp.send(JSON.stringify({[updateMessageTextarea.name]: updateMessageTextarea.value}));
 }
