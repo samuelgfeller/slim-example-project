@@ -16,9 +16,12 @@ class PostCreator
     ) { }
 
     /**
-     * Insert post in database
+     * Post creation logic
+     * Called by Action
      *
      * @param array $postData
+     * @param int $loggedInUserId
+     *
      * @return int insert id
      */
     public function createPost(array $postData, int $loggedInUserId): int

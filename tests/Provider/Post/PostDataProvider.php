@@ -23,17 +23,15 @@ class PostDataProvider
      */
     private function getGenericUser(): UserData
     {
-        return new UserData(
-            [
-                'id' => 1,
-                'first_name' => 'John',
-                'surname' => 'Wick',
-                'email' => 'john@wick.com',
-                'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
-                'status' => UserData::STATUS_ACTIVE,
-                'role' => 'admin',
-            ]
-        );
+        return new UserData([
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'surname' => 'Wick',
+                                'email' => 'john@wick.com',
+                                'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
+                                'status' => UserData::STATUS_ACTIVE,
+                                'role' => 'admin',
+                            ]);
     }
 
     /**
@@ -47,28 +45,24 @@ class PostDataProvider
         return [
             [
                 'posts' => [
-                    new UserPostData(
-                        [
-                            'post_id' => 1,
-                            'user_id' => 1,
-                            'post_message' => 'This is the first test message',
-                            'post_created_at' => date('Y-m-d H:i:s'),
-                            'post_updated_at' => date('Y-m-d H:i:s'),
-                            'user_name' => 'Admin Example',
-                            'user_role' => 'admin',
-                        ]
-                    ),
-                    new UserPostData(
-                        [
-                            'post_id' => 2,
-                            'user_id' => 1,
-                            'post_message' => 'This is the second test message',
-                            'post_created_at' => date('Y-m-d H:i:s'),
-                            'post_updated_at' => date('Y-m-d H:i:s'),
-                            'user_name' => 'Admin Example',
-                            'user_role' => 'admin',
-                        ]
-                    ),
+                    new UserPostData([
+                                         'post_id' => 1,
+                                         'user_id' => 1,
+                                         'post_message' => 'This is the first test message',
+                                         'post_created_at' => date('Y-m-d H:i:s'),
+                                         'post_updated_at' => date('Y-m-d H:i:s'),
+                                         'user_name' => 'Admin Example',
+                                         'user_role' => 'admin',
+                                     ]),
+                    new UserPostData([
+                                         'post_id' => 2,
+                                         'user_id' => 1,
+                                         'post_message' => 'This is the second test message',
+                                         'post_created_at' => date('Y-m-d H:i:s'),
+                                         'post_updated_at' => date('Y-m-d H:i:s'),
+                                         'user_name' => 'Admin Example',
+                                         'user_role' => 'admin',
+                                     ]),
 
                 ],
             ],
@@ -78,21 +72,19 @@ class PostDataProvider
     /**
      * Provide one user in a DataProvider format
      *
-     * @return array<array<PostData>>
+     * @return array<array<array>>
      */
     public function onePostProvider(): array
     {
         return [
             [
-                new PostData(
-                    ['id' => 1, 'user_id' => 1, 'message' => 'Test message', 'created_at' => date('Y-m-d H:i:s')]
-                ),
+                ['id' => 1, 'user_id' => 1, 'message' => 'Test message', 'created_at' => date('Y-m-d H:i:s')],
             ]
         ];
     }
 
     /**
-     * @return PostData[][]
+     * @return array<array<array>> invalid post data
      */
     public function invalidPostsProvider(): array
     {
@@ -103,13 +95,13 @@ class PostDataProvider
             iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
         return [
             // Msg too short (>4)
-            [new PostData(['id' => 1, 'user_id' => 1, 'message' => 'aaa'])],
+            [['id' => 1, 'user_id' => 1, 'message' => 'aaa']],
             // Msg too long (<500)
-            [new PostData(['id' => 1, 'user_id' => 1, 'message' => $tooLongMsg])],
+            [['id' => 1, 'user_id' => 1, 'message' => $tooLongMsg]],
             // Required msg empty
-            [new PostData(['id' => 1, 'user_id' => 1, 'message' => ''])],
+            [['id' => 1, 'user_id' => 1, 'message' => '']],
             // Required user_id missing
-            [new PostData(['id' => 1, 'user_id' => '', 'message' => ''])],
+            [['id' => 1, 'user_id' => '', 'message' => '']],
         ];
         // Could add more rows with always 1 required missing because now error could be thrown
         // by another missing field.
