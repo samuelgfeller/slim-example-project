@@ -57,7 +57,7 @@ final class PostCreateAction
             $postData = $request->getParsedBody();
 
             // If a html form name changes, these changes have to be done in the data class constructor
-            // Check that request body syntax is formatted right (one more when captcha)
+            // Check that request body syntax is formatted right (if changed, )
             if (null !== $postData && [] !== $postData && isset($postData['message']) && count($postData) === 1) {
                 try {
                     $insertId = $this->postCreator->createPost($postData, $loggedInUserId);

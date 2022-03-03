@@ -57,7 +57,8 @@ return function (App $app) {
             );
 
             // Post requests where user DOES need to be authenticated
-            $group->post('', \App\Application\Actions\Post\Ajax\PostCreateAction::class)->add(
+            $group->post('', \App\Application\Actions\Post\Ajax\PostCreateAction::class)->setName(
+                'post-submit-create')->add(
                 UserAuthenticationMiddleware::class
             );
             $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostUpdateAction::class)->add(

@@ -39,7 +39,7 @@ class UserSubmitUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            // Request to change user with id 1
+            // Request to change user with id 1 (url: PUT /users/1)
             $this->urlFor('user-update-submit', ['user_id' => 1]),
             [
                 'first_name' => 'Admina',

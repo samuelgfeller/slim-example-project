@@ -38,6 +38,7 @@ class PostValidator extends AppValidation
      */
     public function validatePostCreation(PostData $post): void
     {
+        // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
         $this->validateMessage($post->message, $validationResult, true);
@@ -55,6 +56,7 @@ class PostValidator extends AppValidation
      */
     public function validatePostUpdate(PostData $post): void
     {
+        // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
         if (null !== $post->message) {
