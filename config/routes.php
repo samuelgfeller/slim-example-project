@@ -63,10 +63,10 @@ return function (App $app) {
             );
             $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostUpdateAction::class)->add(
                 UserAuthenticationMiddleware::class
-            );
+            )->setName('post-submit-update');
             $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostDeleteAction::class)->add(
                 UserAuthenticationMiddleware::class
-            );
+            )->setName('post-submit-delete');
         }
     );
     // Page actions routes outside /posts as they are needed by Ajax after page load

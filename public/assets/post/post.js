@@ -328,6 +328,11 @@ function submitDeletePost(postId) {
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
+            // Not logged in, redirect to login url
+            if (xHttp.status === 401) {
+                let loginUrl = JSON.parse(xHttp.responseText).loginUrl;
+                window.location.href = loginUrl;
+            }
             // Fail
             if (xHttp.status !== 200) {
                 // Default fail handler
@@ -348,8 +353,11 @@ function submitDeletePost(postId) {
 
     // Read post infos
     xHttp.open('DELETE', basePath + 'posts/' + postId, true);
+    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // to know to send the login url in the json response body and where to redirect back after a successful login
+    xHttp.setRequestHeader("Content-type", "application/json");
+    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "post-list-own-page");
 
-    // In square brackets to be evaluated
     xHttp.send();
 }
 

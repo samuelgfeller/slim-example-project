@@ -3,11 +3,10 @@
 namespace App\Application\Actions\Post\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRoleFinder;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Post\Service\PostDeleter;
-use App\Domain\Post\Service\PostFinder;
-use App\Domain\Validation\OutputEscapeService;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -21,7 +20,6 @@ final class PostDeleteAction
      * @var Responder
      */
     private Responder $responder;
-    protected OutputEscapeService $outputEscapeService;
     protected LoggerInterface $logger;
 
 
@@ -29,25 +27,19 @@ final class PostDeleteAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
      * @param PostDeleter $postDeleter
-     * @param OutputEscapeService $outputEscapeService
-     * @param UserRoleFinder $userRoleFinder
+     * @param SessionInterface $session
      * @param LoggerFactory $logger
      */
     public function __construct(
         Responder $responder,
-        private PostFinder $postFinder,
         private PostDeleter $postDeleter,
-        OutputEscapeService $outputEscapeService,
-        private UserRoleFinder $userRoleFinder,
+        private SessionInterface $session,
         LoggerFactory $logger
 
     ) {
         $this->responder = $responder;
-        $this->outputEscapeService = $outputEscapeService;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('post-delete');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('post-delete');
     }
 
     /**
@@ -65,31 +57,38 @@ final class PostDeleteAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $userId = (int)$this->getUserIdFromToken($request);
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $postId = (int)$args['post_id'];
 
-        $id = (int)$args['id'];
+            try {
+                // Delete post logic
+                $deleted = $this->postDeleter->deletePost($postId, $loggedInUserId);
 
-        $post = $this->postFinder->findPost($id);
+                if ($deleted) {
+                    return $this->responder->respondWithJson($response, ['status' => 'success']);
+                }
 
-        $userRole = $this->userRoleFinder->getUserRoleById($userId);
-
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $post->userId === $userId) {
-            $deleted = $this->postDeleter->deletePost($id);
-            if ($deleted) {
-                return $this->responder->respondWithJson($response, ['status' => 'success']);
+                $response = $this->responder->respondWithJson($response,
+                                                              ['status' => 'warning', 'message' => 'Post not deleted']);
+                $flash = $this->session->getFlash();
+                // If not deleted, inform user
+                $flash->add('warning', 'The post was not deleted');
+                return $response->withAddedHeader('Warning', 'The post was not deleted');
+            } catch (ForbiddenException $fe) {
+                // Log event as this should not be able to happen with normal use. User has to manually make exact request
+                $this->logger->notice(
+                    '403 Forbidden, user ' . $loggedInUserId . ' tried to delete other post with id: ' . $postId
+                );
+                // Not throwing HttpForbiddenException as it's a json request and response should be json too
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'],
+                    403
+                );
             }
-            $response = $this->responder->respondWithJson(
-                $response,
-                ['status' => 'warning', 'message' => 'Post not deleted']
-            );
-            return $response->withAddedHeader('Warning', 'The post got not deleted');
         }
-        $this->logger->notice('User ' . $userId . ' tried to delete other post with id: ' . $id);
-        return $this->responder->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You have to be admin or post creator to update this post'],
-            403
-        );
+
+        // UserAuthenticationMiddleware handles redirect to login
+        return $response;
     }
 }

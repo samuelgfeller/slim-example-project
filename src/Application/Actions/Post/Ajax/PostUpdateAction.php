@@ -71,6 +71,15 @@ final class PostUpdateAction
 
             try {
                 $updated = $this->postUpdater->updatePost($postIdToChange, $postValues, $loggedInUserId);
+
+                if ($updated) {
+                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+                }
+                $response = $this->responder->respondWithJson($response, [
+                    'status' => 'warning',
+                    'message' => 'The post was not updated'
+                ]);
+                return $response->withAddedHeader('Warning', 'The post was not updated');
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),
@@ -83,15 +92,6 @@ final class PostUpdateAction
                     403
                 );
             }
-
-            if ($updated) {
-                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
-            }
-            $response = $this->responder->respondWithJson($response, [
-                'status' => 'warning',
-                'message' => 'The post was not updated'
-            ]);
-            return $response->withAddedHeader('Warning', 'The post was not updated');
         }
 
         // Not logged in, let AuthenticationMiddleware handle redirect
