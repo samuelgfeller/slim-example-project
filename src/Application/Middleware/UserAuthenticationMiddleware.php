@@ -42,8 +42,23 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
         // Inform user that he/she has to login first
         $this->session->getFlash()->add('info', 'Please login to access this page.');
 
-        return $this->responder->redirectToRouteName(
-            $response, 'login-page', [], ['redirect' => $request->getUri()->getPath()]
-        );
+        $queryParams = [];
+        // If header Redirect-to-if-unauthorized is set, add it to the query params of the login route
+        if (($routeName = $request->getHeaderLine('Redirect-to-if-unauthorized')) !== '') {
+            // Redirect to after login
+            $queryParams['redirect'] = $this->responder->urlFor($routeName);
+        }
+
+        // If it's a JSON request return 401 with the login url and its possible query params
+        if ($request->getHeaderLine('Content-Type') === 'application/json') {
+            return $this->responder->respondWithJson(
+                $response,
+                ['loginUrl' => $this->responder->urlFor('login-page', [], $queryParams)],
+                401
+            );
+        }
+
+        // If no redirect header is set, and it's not a JSON request, redirect to same url as the request after login
+        return $this->responder->redirectToRouteName($response, 'login-page', [], $queryParams);
     }
 }
