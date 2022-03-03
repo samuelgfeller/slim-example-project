@@ -62,6 +62,14 @@
     top: 0px;
     margin: 15px;
 }
+/* Loader that replaces the delete icon after clicking on it */
+.post-box-del-loader{
+/*  Loader size changed in javascript  */
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 10px 12px;
+}
 
 /* Preloading content placeholder*/
 .load-wrapper{

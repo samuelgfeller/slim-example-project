@@ -26,7 +26,11 @@ document.addEventListener('click', function (e) {
         let postId = e.target.dataset.id;
         submitUpdatePost(postId);
     }
-
+    // Submit delete post
+    if (e.target && e.target.className.includes('box-del-icon')) {
+        let postId = e.target.dataset.id;
+        submitDeletePost(postId);
+    }
 });
 
 /**
@@ -308,4 +312,58 @@ function submitUpdatePost(postId) {
     xHttp.setRequestHeader("Content-type", "application/json");
     // In square brackets to be evaluated
     xHttp.send(JSON.stringify({[updateMessageTextarea.name]: updateMessageTextarea.value}));
+}
+
+/**
+ * Submit post deletion
+ *
+ * @param {string} postId
+ */
+function submitDeletePost(postId) {
+
+    // Replace delete icon with loader to indicate user that the request is on its way
+    showPostDeleteLoader(postId);
+
+    // Ajax request
+    let xHttp = new XMLHttpRequest();
+    xHttp.onreadystatechange = function () {
+        if (xHttp.readyState === XMLHttpRequest.DONE) {
+            // Fail
+            if (xHttp.status !== 200) {
+                // Default fail handler
+                handleFail(xHttp);
+                // Reload posts on fail as issue may be resolved with refresh
+                loadPosts();
+            }
+            // Success
+            else {
+                // Remove post box after successful deletion
+                document.getElementById('post' + postId).remove();
+            }
+
+            // After request is done, reset loader size no matter if success or failure
+            document.documentElement.style.setProperty('--three-dots-loader-factor', '0.65');
+        }
+    };
+
+    // Read post infos
+    xHttp.open('DELETE', basePath + 'posts/' + postId, true);
+
+    // In square brackets to be evaluated
+    xHttp.send();
+}
+
+/**
+ * Replace delete icon with loader to indicate user that the request is on its way
+ */
+function showPostDeleteLoader(postId) {
+    // Insert loader
+    document.querySelector('.box-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
+        '<div class="lds-ellipsis post-box-del-loader"><div></div><div></div><div></div><div></div></div>');
+    // Change loader size in changing the css variable
+    document.documentElement.style.setProperty('--three-dots-loader-factor', '0.5');
+    // Hide delete icon
+    document.querySelector('.box-del-icon[data-id="' + postId + '"]').style.display = 'none';
+    // Lower post box opacity to reinforce feeling that something is happening
+    document.getElementById('post'+postId).style.opacity = '0.6';
 }
