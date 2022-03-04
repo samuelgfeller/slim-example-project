@@ -77,9 +77,9 @@ final class PostUpdateAction
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'The post was not updated'
+                    'message' => 'The post was not updated.'
                 ]);
-                return $response->withAddedHeader('Warning', 'The post was not updated');
+                return $response->withAddedHeader('Warning', 'The post was not updated.');
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),

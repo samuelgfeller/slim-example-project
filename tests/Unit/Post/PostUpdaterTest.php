@@ -12,12 +12,12 @@ use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Post update test covered here:
+ * Post update unit test covered here:
  * - normal update
  * - edit other post as user (403 Forbidden)
  * - edit other post as admin
- * NOT in this test:
- * - edit non-existing post as admin (expected return value false) -> Integration test
+ * NOT in this test (not useful enough to me):
+ * - edit non-existing post as admin (expected return value false)
  * - edit non-existing post as user (expected forbidden exception)
  * - make edit request but with the same content as before (expected not updated response)
  */

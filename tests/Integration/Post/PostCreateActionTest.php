@@ -4,9 +4,7 @@
 namespace App\Test\Integration\Post;
 
 
-use _PHPStan_76800bfb5\Nette\Schema\ValidationException;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -41,7 +39,9 @@ class PostCreateActionTest extends TestCase
         // Simulate logged-in user with id 1
         $this->container->get(SessionInterface::class)->set('user_id', 1);
 
+        $postId = 1;
         $postMessage = 'This is a normal test post.';
+
         $request = $this->createJsonRequest(
             'POST',
             $this->urlFor('post-submit-create'),
@@ -56,12 +56,12 @@ class PostCreateActionTest extends TestCase
 
         $expected = [
             // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
-            'id' => '1',
+            'id' => (string)$postId,
             'message' => $postMessage,
         ];
 
         // Assert that content of selected fields (which are the keys of the $expected array) are same as expected
-        $this->assertTableRow($expected, 'post', 1, array_keys($expected));
+        $this->assertTableRow($expected, 'post', $postId, array_keys($expected));
     }
 
     /**
