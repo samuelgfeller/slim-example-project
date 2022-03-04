@@ -13,7 +13,6 @@ class PostFinder
 {
     public function __construct(
         private PostFinderRepository $postFinderRepository,
-        private UserFinder $userFinder
     ) { }
 
     /**
@@ -35,17 +34,6 @@ class PostFinder
     public function findPost($id): PostData
     {
         return $this->postFinderRepository->findPostById($id);
-    }
-
-    /**
-     * Find specific post with user info
-     *
-     * @param int $id
-     * @return UserPostData
-     */
-    public function findPostWithUserById(int $id): UserPostData
-    {
-        return $this->postFinderRepository->findUserPostById($id);
     }
 
     /**

@@ -36,7 +36,7 @@ final class PostReadAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $postWithUser = $this->postFinder->findPostWithUserById((int)$args['post_id']);
+        $postWithUser = $this->postFinder->findPost((int)$args['post_id']);
 
         // json_encode transforms object with public attributes to camelCase which matches Google recommendation
         // https://stackoverflow.com/a/19287394/9013718

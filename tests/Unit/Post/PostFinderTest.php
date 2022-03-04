@@ -22,7 +22,7 @@ class PostFinderTest extends TestCase
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
      * @param UserPostData[] $userPosts
      */
-    public function testFindAllPosts(array $userPosts): void
+    public function testFindAllPostsWithUsers(array $userPosts): void
     {
         // Add mock class PostFinderRepository to container and define return value for method findAllPostsWithUsers
         $this->mock(PostFinderRepository::class)->method('findAllPostsWithUsers')->willReturn($userPosts);
@@ -42,10 +42,11 @@ class PostFinderTest extends TestCase
      * the post coming from the repository
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::onePostProvider()
-     * @param PostData $post
+     * @param array $postData
      */
-    public function testFindPost(PostData $post): void
+    public function testFindPost(array $postData): void
     {
+        $post = new PostData($postData);
         // Add mock class PostFinderRepository to container and define return value for method findPostById
         // I dont see the necessity of expecting method to be called. If we get the result we want
         // we can let the code free how it returns it (don't want annoying test that fails after slight code change)

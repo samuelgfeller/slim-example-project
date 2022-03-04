@@ -264,10 +264,10 @@ function updatePostModal(postId) {
             else {
                 let output = JSON.parse(xHttp.responseText);
                 let updateMessageTextarea = document.getElementById('update-message-textarea');
-                updateMessageTextarea.value = output.postMessage;
+                updateMessageTextarea.value = output.message;
                 updateMessageTextarea.disabled = false;
                 // Set post id on submit button as its easiest to retrieve on delegated event listener
-                document.getElementById('submit-btn-update-post').setAttribute('data-id', output.postId);
+                document.getElementById('submit-btn-update-post').setAttribute('data-id', output.id);
             }
         }
     };
