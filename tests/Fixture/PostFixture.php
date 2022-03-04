@@ -13,6 +13,7 @@ class PostFixture
 
     // Database records in 2d array
     public array $records = [
+        // Post id 1 owner: user id 1
         [
             'id' => 1,
             'user_id' => 1,
@@ -21,6 +22,7 @@ class PostFixture
             'created_at' => '2021-01-01 00:00:05',
             'deleted_at' => null,
         ],
+        // Post id 2 owner: user id 2
         [
             'id' => 2,
             'user_id' => 2,

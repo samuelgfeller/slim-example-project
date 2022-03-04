@@ -14,6 +14,7 @@ class UserFixture
 
     // Database records in 2d array
     public array $records = [
+        // User id 1: role admin
         [
             'id' => 1,
             'first_name' => 'Admin',
@@ -27,6 +28,7 @@ class UserFixture
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
+        // User id 2: role user
         [
             'id' => 2,
             'first_name' => 'User',

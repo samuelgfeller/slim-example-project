@@ -34,9 +34,7 @@ class PostFinder
      */
     public function findPost($id): PostData
     {
-        $post = $this->postFinderRepository->findPostById($id);
-        $post->user = $this->userFinder->findUserById($post->userId);
-        return $post;
+        return $this->postFinderRepository->findPostById($id);
     }
 
     /**

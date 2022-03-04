@@ -51,7 +51,7 @@ class PostDeleterTest extends TestCase
      * Test that ForbiddenException is thrown when user tries to delete post
      * that he doesn't own.
      */
-    public function testDeletePost_userNotOwner(): void
+    public function testDeletePost_otherPostAsUser(): void
     {
         $postId = 1;
         $postUserId = 1;

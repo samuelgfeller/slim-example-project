@@ -68,8 +68,10 @@ final class PostDeleteAction
                     return $this->responder->respondWithJson($response, ['status' => 'success']);
                 }
 
-                $response = $this->responder->respondWithJson($response,
-                                                              ['status' => 'warning', 'message' => 'Post not deleted']);
+                $response = $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'warning', 'message' => 'Post not deleted.']
+                );
                 $flash = $this->session->getFlash();
                 // If not deleted, inform user
                 $flash->add('warning', 'The post was not deleted');
