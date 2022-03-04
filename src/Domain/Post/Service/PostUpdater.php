@@ -58,8 +58,8 @@ class PostUpdater
         }
         // User does not have needed rights to access area or function
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update other user with id: ' . $loggedInUserId
+            'User ' . $loggedInUserId . ' tried to update other post with id: ' . $loggedInUserId
         );
-        throw new ForbiddenException('Not allowed to change that user');
+        throw new ForbiddenException('Not allowed to change that post as it\'s linked to another user.');
     }
 }

@@ -74,7 +74,7 @@ class PostDeleterTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
 
-        self::assertTrue($service->deletePost($postId, $loggedInUserId));
+        $service->deletePost($postId, $loggedInUserId);
     }
 
 
