@@ -330,8 +330,7 @@ function submitDeletePost(postId) {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
             // Not logged in, redirect to login url
             if (xHttp.status === 401) {
-                let loginUrl = JSON.parse(xHttp.responseText).loginUrl;
-                window.location.href = loginUrl;
+                window.location.href = JSON.parse(xHttp.responseText).loginUrl;
             }
             // Fail
             if (xHttp.status !== 200) {
