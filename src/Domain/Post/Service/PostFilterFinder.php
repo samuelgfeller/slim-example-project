@@ -29,17 +29,17 @@ class PostFilterFinder
      */
     public function findPostsWithFilter(array $params): array
     {
-        // Filter own posts
-        if (isset($params['scope']) && $params['scope'] === 'own'){
-            // User should be logged in (user has to be logged in to access own-posts)
-            if(($userId = $this->session->get('user_id')) !== null){
-                return $this->postFinder->findAllPostsFromUser((int)$userId);
-            }
-            throw new UnauthorizedException('You have to be logged in to access own-posts');
-        }
         // Filter 'user'
         if (isset($params['user'])) {
-            if (!is_numeric($params['user'])) {
+            if ($params['user'] === 'session'){
+                // User has to be logged-in to access own-posts
+                if(($userId = $this->session->get('user_id')) !== null){
+                    $params['user'] = $userId;
+                } else {
+                    throw new UnauthorizedException('You have to be logged in to access own-posts');
+                }
+            } // If not user 'session' and also not numeric
+            elseif (!is_numeric($params['user'])) {
                 // Exception message tested in PostFilterProvider.php
                 throw new InvalidPostFilterException('Filter "user" is not numeric.');
             }

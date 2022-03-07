@@ -40,7 +40,7 @@ function loadPosts() {
     displayPostContentPlaceholder();
     // 'own' if own posts should be loaded after creation or 'all' if all should
     let postVisibilityScope = document.getElementById('post-wrapper').dataset.postVisibilityScope;
-    let queryParams = postVisibilityScope === 'own' ? '?scope=own' : '';
+    let queryParams = postVisibilityScope === 'own' ? '?user=session' : '';
 
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {

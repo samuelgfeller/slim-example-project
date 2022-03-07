@@ -57,8 +57,8 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
                 401
             );
         }
-
         // If no redirect header is set, and it's not a JSON request, redirect to same url as the request after login
+        $queryParams = ['redirect' => $request->getUri()->getPath()];
         return $this->responder->redirectToRouteName($response, 'login-page', [], $queryParams);
     }
 }

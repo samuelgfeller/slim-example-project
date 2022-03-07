@@ -55,11 +55,17 @@ final class PostListAction
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
-        } catch (UnauthorizedException $unauthorizedException) {
+        } // If user requests its own posts he has to be logged in
+        catch (UnauthorizedException $unauthorizedException) {
             // Respond with status code 401 Unauthorized which is caught in the Ajax call
             return $this->responder->respondWithJson(
                 $response,
-                ['loginUrl' => $this->responder->urlFor('login-page')],
+                [
+                    'loginUrl' => $this->responder->urlFor(
+                        'login-page',
+                        [],
+                        ['redirect' => $this->responder->urlFor('post-list-own-page')])
+                ],
                 401
             );
         }
