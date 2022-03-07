@@ -50,7 +50,7 @@ return function (App $app) {
         '/posts',
         function (RouteCollectorProxy $group) {
             // Post requests where user DOESN'T need to be authenticated
-            $group->get('', \App\Application\Actions\Post\Ajax\PostListAction::class)->setName('post-list-all');
+            $group->get('', \App\Application\Actions\Post\Ajax\PostListAction::class)->setName('post-list');
 
             $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostReadAction::class)->setName(
                 'post-read'

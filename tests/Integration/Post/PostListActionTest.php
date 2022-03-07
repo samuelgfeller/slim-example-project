@@ -7,6 +7,7 @@ use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\FixtureTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -14,7 +15,10 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
 
 /**
- * Integration testing user update Process
+ * - post list all page access
+ * - post list all normal json request
+ * - post list filtered
+ * - post list with invalid filters
  */
 class PostListActionTest extends TestCase
 {
@@ -27,6 +31,35 @@ class PostListActionTest extends TestCase
     use FixtureTrait;
 
     /**
+     * Test that list all page is 200 OK both logged in or not
+     * Fixtures dependency:
+     *      UserFixture: one user with id 1 (for session)(better if at least two)
+     *
+     * @return void
+     */
+    public function testPostListAllPageAction(): void
+    {
+        // Test not logged in
+        $requestNotLoggedIn = $this->createRequest('GET', $this->urlFor('post-list-all-page'));
+        $responseNotLoggedIn = $this->app->handle($requestNotLoggedIn);
+        self::assertSame(StatusCodeInterface::STATUS_OK, $responseNotLoggedIn->getStatusCode());
+
+        // Test with active session
+        // Insert logged-in user
+        $userRow = (new UserFixture())->records[0];
+        $this->insertFixture('user', $userRow);
+
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $requestLoggedIn = $this->createRequest('GET', $this->urlFor('post-list-all-page'));
+        $responseLoggedIn = $this->app->handle($requestLoggedIn);
+
+        // Assert: 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $responseLoggedIn->getStatusCode());
+    }
+
+    /**
      * Request list of all posts
      * Fixtures dependency:
      *      UserFixture: one user with id 1 (for session)(better if at least two)
@@ -34,14 +67,14 @@ class PostListActionTest extends TestCase
      *
      * @return void
      */
-    public function testPostListAction(): void
+    public function testPostListAllAction(): void
     {
         // All user fixtures required to insert all post fixtures
         $this->insertFixtures([UserFixture::class, PostFixture::class]);
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('post-list-all')
+            $this->urlFor('post-list')
         );
 
         $response = $this->app->handle($request);
@@ -91,7 +124,7 @@ class PostListActionTest extends TestCase
 
         $request = $this->createRequest(
             'GET',
-            $this->urlFor('post-list-all', [], $queryParams)
+            $this->urlFor('post-list', [], $queryParams)
         ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
         ->withQueryParams($queryParams);
 
@@ -136,7 +169,7 @@ class PostListActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('post-list-all', [], $queryParams)
+            $this->urlFor('post-list', [], $queryParams)
         ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set
         ->withQueryParams($queryParams);
 
