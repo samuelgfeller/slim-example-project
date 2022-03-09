@@ -17,7 +17,7 @@ class PostFinderTest extends TestCase
 
     /**
      * Test function findAllPostsWithUsers from PostFinder which returns
-     * Post array including the the associated user
+     * Post array including the associated user
      *
      * @dataProvider \App\Test\Provider\Post\PostDataProvider::oneSetOfMultipleUserPostsProvider()
      * @param UserPostData[] $userPosts

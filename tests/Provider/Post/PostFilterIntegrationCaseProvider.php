@@ -4,7 +4,7 @@
 namespace App\Test\Provider\Post;
 
 
-class PostFilterCaseProvider
+class PostFilterIntegrationCaseProvider
 {
     /**
      * Return every filter combination for integration testing

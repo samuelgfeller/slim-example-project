@@ -35,7 +35,7 @@ class PostDataProvider
     }
 
     /**
-     * Provide a set of posts in a DataProvider format
+     * Provide a set of posts attached to same user in a DataProvider format
      *
      * @return UserPostData[][][]
      */
@@ -44,6 +44,7 @@ class PostDataProvider
         // Array that is expected for repository functions like findAllPostsWithUsers()
         return [
             [
+                // Called with [0]['posts'] in PostFilterFinderTest.php
                 'posts' => [
                     new UserPostData([
                                          'post_id' => 1,
