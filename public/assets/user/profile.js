@@ -1,3 +1,4 @@
+// First name
 let firstNameEditIco = document.getElementById('edit-first-name-ico');
 firstNameEditIco.addEventListener('click', function () {
     // let firstNameValSpan = document.getElementById('first-name-val');
@@ -10,7 +11,7 @@ firstNameEditIco.addEventListener('click', function () {
     );
     createSubmitBtn(valueParent, 'first-name-submit', inputName);
 });
-
+// Surname
 let surnameEditIco = document.getElementById('edit-surname-ico');
 surnameEditIco.addEventListener('click', function () {
     let surnameValSpan = surnameEditIco.previousElementSibling;
@@ -20,7 +21,7 @@ surnameEditIco.addEventListener('click', function () {
     );
     createSubmitBtn(valueParent, 'surname-submit', inputName);
 });
-
+// Email
 let emailEditIco = document.getElementById('edit-email-ico');
 emailEditIco.addEventListener('click', function () {
     let emailValSpan = emailEditIco.previousElementSibling;
@@ -134,15 +135,10 @@ function submitValueChange(submitBtnId, inputName) {
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // If user not logged in the server redirects to the login page but it is the same method than the request
-            // meaning if a PUT request is sent, the redirect will be on a PUT route which doesn't exist for the login
-            // page. The solution is to let the 405 Method not allowed request be made and intercept it here and
-            // redirect to the wanted location here with javascript.
-            if (xHttp.status === 405) {
-                // Redirect to response url
-                window.location.href = xHttp.responseURL;
+            // Not logged in, redirect to login url
+            if (xHttp.status === 401) {
+                window.location.href = JSON.parse(xHttp.responseText).loginUrl;
             }
-
             // Fail
             if (xHttp.status !== 200) {
                 // Show submit button again on fail
@@ -175,10 +171,12 @@ function submitValueChange(submitBtnId, inputName) {
     let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
     // Not so sure about which url makes more sense. RestAPI would say PUT /user/{id} so I'll go with this
     xHttp.open('PUT', basePath + 'users/' + userId, true);
-    xHttp.setRequestHeader("Content-type", "application/json");
 
-    // xHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // Data format: "fname=Henry&lname=Ford"
+    xHttp.setRequestHeader("Content-type", "application/json");
+    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // to know to send the login url in the json response body and where to redirect back after a successful login
+    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "profile-page");
+
     // inputName in square brackets to be evaluated https://stackoverflow.com/a/11508490/9013718
     xHttp.send(JSON.stringify({[inputName]: inputElement.value}));
 }

@@ -27,7 +27,7 @@ return function (App $app) {
         'register-check-email-page'
     );
 
-    $app->get('/profile', \App\Application\Actions\User\UserViewProfileAction::class)->setName('profile')
+    $app->get('/profile', \App\Application\Actions\User\UserViewProfileAction::class)->setName('profile-page')
         ->add(UserAuthenticationMiddleware::class);
 
     $app->group(

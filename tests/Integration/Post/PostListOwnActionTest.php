@@ -94,7 +94,7 @@ class PostListOwnActionTest extends TestCase
         $request = $this->createJsonRequest(
             'GET',
             $this->urlFor('post-list')
-        )->withQueryParams(['scope' => 'own']);
+        )->withQueryParams(['user' => 'session']);
 
         $response = $this->app->handle($request);
 

@@ -37,16 +37,12 @@ class UserSubmitUpdateActionTest extends TestCase
         // Simulate logged in user with id 1
         $this->container->get(SessionInterface::class)->set('user_id', 1);
 
-        $request = $this->createJsonRequest(
-            'PUT',
-            // Request to change user with id 1 (url: PUT /users/1)
-            $this->urlFor('user-update-submit', ['user_id' => 1]),
-            [
+        $request = $this->createJsonRequest('PUT', // Request to change user with id 1 (url: PUT /users/1)
+            $this->urlFor('user-update-submit', ['user_id' => 1]), [
                 'first_name' => 'Admina',
                 'surname' => 'Example edited',
                 'email' => 'edited_admin@example.com'
-            ]
-        );
+            ]);
 
         $response = $this->app->handle($request);
 
@@ -80,17 +76,13 @@ class UserSubmitUpdateActionTest extends TestCase
         // Simulate logged in user with id 1
         $this->container->get(SessionInterface::class)->set('user_id', 1);
 
-        $request = $this->createJsonRequest(
-            'PUT',
-            // Request to change non-existent user with id 999
-            $this->urlFor('user-update-submit', ['user_id' => 999]),
-            // Invalid data
+        $request = $this->createJsonRequest('PUT', // Request to change non-existent user with id 999
+            $this->urlFor('user-update-submit', ['user_id' => 999]), // Invalid data
             [
                 'first_name' => 'A',
                 'surname' => 'E',
                 'email' => '$edited_admin@exampl$e.com'
-            ]
-        );
+            ]);
 
         $response = $this->app->handle($request);
 
@@ -140,18 +132,14 @@ class UserSubmitUpdateActionTest extends TestCase
         // Simulate logged in user with id 2 which has NOT admin rights
         $this->container->get(SessionInterface::class)->set('user_id', 2);
 
-        $request = $this->createJsonRequest(
-            'PUT',
-            // Request to change user with id 1 (which must not be allowed to)
-            $this->urlFor('user-update-submit', ['user_id' => 1]),
-            // Invalid data
+        $request = $this->createJsonRequest('PUT', // Request to change user with id 1 (which must not be allowed to)
+            $this->urlFor('user-update-submit', ['user_id' => 1]), // Invalid data
             [
                 // Same keys than HTML form
                 'first_name' => 'Admina',
                 'surname' => 'Example edited',
                 'email' => 'edited_admin@example.com'
-            ]
-        );
+            ]);
 
         $response = $this->app->handle($request);
 
@@ -181,26 +169,27 @@ class UserSubmitUpdateActionTest extends TestCase
         // Make user not logged in
         $this->container->get(SessionInterface::class)->clear();
 
-        $request = $this->createJsonRequest(
-            'PUT',
-            // Request to change user with id 1 (which must not be allowed to)
-            $this->urlFor('user-update-submit', ['user_id' => 1]),
-            // Same keys than HTML form
+        $request = $this->createJsonRequest('PUT', // Request to change user with id 1 (which must not be allowed to)
+            $this->urlFor('user-update-submit', ['user_id' => 1]), // Same keys than HTML form
             [
                 'first_name' => 'Admina',
                 'surname' => 'Example edit',
                 'email' => 'edited_admin@example.com'
-            ]
-        );
+            ]);
+        // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
+        $redirectAfterLoginRouteName = 'profile-page';
+        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', $redirectAfterLoginRouteName);
 
         $response = $this->app->handle($request);
-        // Before it even accesses the action class, the UserAuthMiddleware catches the request and redirects to login
-        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-        // Assert that it redirected to the login page with correct redirect get param back to users/1
-        self::assertSame(
-            $this->urlFor('login-page', [], ['redirect' => '/users/1']),
-            $response->getHeaderLine('Location')
-        );
+        // Server returns 401 on json requests when not logged in
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+
+        // Expected body content
+        // Assert that body contains the url to the login page with correct redirect get param back to own-posts
+        $expectedBody = [
+            'loginUrl' => $this->urlFor('login-page', [], ['redirect' => $this->urlFor($redirectAfterLoginRouteName)])
+        ];
+        $this->assertJsonData($expectedBody, $response);
 
         // Admin user should be unchanged (same as in fixture)
         $expected = [

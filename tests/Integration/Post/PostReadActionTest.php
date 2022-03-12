@@ -55,13 +55,12 @@ class PostReadActionTest extends TestCase
         $this->assertJsonData(
             [
                 // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
-                'postId' => $postRow['id'],
-                'userId' => $userRow['id'],
-                'postMessage' => $postRow['message'],
-                'postCreatedAt' => $postRow['created_at'],
-                'postUpdatedAt' => $postRow['updated_at'],
-                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
-                'userRole' => $userRow['role'],
+                'id' => $postRow['id'],
+                'userId' => $postRow['user_id'],
+                'message' => $postRow['message'],
+                'createdAt' => $postRow['created_at'],
+                'updatedAt' => $postRow['updated_at'],
+                'deletedAt' => $postRow['deleted_at'],
             ],
             $response
         );

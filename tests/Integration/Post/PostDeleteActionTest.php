@@ -179,7 +179,7 @@ class PostDeleteActionTest extends TestCase
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
         $redirectAfterLoginRouteName = 'post-list-own-page';
-        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', 'post-list-own-page');
+        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', $redirectAfterLoginRouteName);
 
 
         $response = $this->app->handle($request);

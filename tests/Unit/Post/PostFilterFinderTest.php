@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * In this test class I intended to test the things below, but I intentionally won't do it.
- * Reason: 1. these cases are already integration tested, 2 it's a pain to write them beautifully and
- * 3, it will be annoying to maintain those in addition to the integration tests.
+ * Reason: 1. these cases are already integration tested, 2 it's a pain to write them beautifully
+ * (because of the filter logic) and 3, it will be annoying to maintain those in addition to the integration tests.
  * - find all posts without filter
  * - find posts with valid filter
  * - find posts with invalid filter
