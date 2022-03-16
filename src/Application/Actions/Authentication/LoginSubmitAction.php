@@ -45,8 +45,10 @@ final class LoginSubmitAction
                 $captcha = $userData['g-recaptcha-response'] ?? null;
 
                 try {
+                    $queryParams = $request->getQueryParams();
+
                     // Throws InvalidCredentialsException if not allowed
-                    $userId = $this->loginVerifier->getUserIdIfAllowedToLogin($userData, $captcha);
+                    $userId = $this->loginVerifier->getUserIdIfAllowedToLogin($userData, $captcha, $queryParams);
 
                     // Clear all session data and regenerate session ID
                     $this->session->regenerateId();
@@ -57,7 +59,7 @@ final class LoginSubmitAction
                     $flash->add('success', 'Login successful');
 
                     // After register and login success, check if user should be redirected
-                    if (isset($request->getQueryParams()['redirect'])) {
+                    if (isset($queryParams['redirect'])) {
                         return $this->responder->redirectToUrl($response, $request->getQueryParams()['redirect']);
                     }
                     return $this->responder->redirectToRouteName($response, 'hello');

@@ -11,20 +11,20 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
- * This class manages the emails sent from the Authentication namespace.
+ * This class manages the emails sent in relation to registration.
  *
  * This is a centralised Service class containing email content and sending action.
  * Advantages:
  *  - Prevents other service classes of having the email responsibility (Single-responsibility principle)
- *  - Contents are centralized and can be changed easier without having to search them all over the code
+ *  - Contents are centralised and can be changed easier without having to search them all over the code
  */
-class AuthenticationMailer
+class RegistrationMailer
 {
 
     private Email $email;
 
     /**
-     * AuthenticationMailer constructor.
+     * RegistrationMailer constructor.
      *
      * @param Mailer $mailer email sender and helper
      * @param Settings $settings

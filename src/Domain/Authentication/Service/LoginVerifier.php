@@ -19,6 +19,7 @@ class LoginVerifier
         private SecurityLoginChecker $loginSecurityChecker,
         private UserFinderRepository $userFinderRepository,
         private RequestCreatorRepository $requestCreatorRepo,
+        private LoginNonActiveUserHandler $loginNonActiveUserHandler,
     ) { }
 
     /**
@@ -31,7 +32,7 @@ class LoginVerifier
      * @return int id
      *
      */
-    public function getUserIdIfAllowedToLogin(array $userData, string|null $captcha = null): int
+    public function getUserIdIfAllowedToLogin(array $userData, string|null $captcha = null, array $queryParams = []): int
     {
         $user = new UserData($userData, true);
 
@@ -47,6 +48,8 @@ class LoginVerifier
             if ($dbUser->status === UserData::STATUS_UNVERIFIED) {
                 // todo inform user when he tries to login that account is unverified and he should click on the link in his inbox
                 // maybe send verification email again and newEmailRequest (not login as its same as register)
+                $this->loginNonActiveUserHandler->handleUnverifiedUser($user, $queryParams);
+                // Todo display error message to user in form and test email
             } elseif ($dbUser->status === UserData::STATUS_SUSPENDED) {
                 // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             } elseif ($dbUser->status === UserData::STATUS_LOCKED) {

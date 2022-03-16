@@ -18,8 +18,7 @@ class UserAlreadyExistingHandler
     public function __construct(
         private UserDeleterRepository $userDeleterRepository,
         private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
-        private AuthenticationMailer $mailer,
-        private RequestCreatorRepository $requestCreatorRepository,
+        private RegistrationMailer $mailer,
         LoggerFactory $logger
     )
     {

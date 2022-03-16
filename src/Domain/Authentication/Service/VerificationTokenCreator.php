@@ -14,7 +14,6 @@ class VerificationTokenCreator
 
     public function __construct(
         private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
-        private AuthenticationMailer $mailer,
         private VerificationTokenCreatorRepository $verificationTokenCreatorRepository
     )
     {
@@ -26,10 +25,10 @@ class VerificationTokenCreator
      * @param UserData $user WITH id
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
-     * @return int
+     * @return array $queryParams with token and id
      * @throws TransportExceptionInterface
      */
-    public function createAndSendUserVerification(UserData $user, array $queryParams = []): int
+    public function createUserVerification(UserData $user, array $queryParams = []): array
     {
         // Create token
         $token = random_bytes(50);
@@ -55,9 +54,6 @@ class VerificationTokenCreator
         $queryParams['token'] = $token;
         $queryParams['id'] = $tokenId;
 
-        // Mailer errors caught in action
-        $this->mailer->sendRegisterVerificationToken($user, $queryParams);
-
-        return $tokenId;
+        return $queryParams;
     }
 }

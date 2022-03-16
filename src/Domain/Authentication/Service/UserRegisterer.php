@@ -20,7 +20,8 @@ class UserRegisterer
         private UserFinderRepository $userFinderRepository,
         private UserRegistererRepository $userRegistererRepository,
         private UserAlreadyExistingHandler $userAlreadyExistingHandler,
-        private VerificationTokenCreator $verificationTokenCreator
+        private VerificationTokenCreator $verificationTokenCreator,
+        private RegistrationMailer $registrationMailer,
     ) { }
 
     /**
@@ -65,8 +66,10 @@ class UserRegisterer
         // Insert new user into database
         $user->id = $this->userRegistererRepository->insertUser($user);
 
-        // Create, insert and send token to user
-        $this->verificationTokenCreator->createAndSendUserVerification($user, $queryParams);
+        // Create and insert token
+        $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
+        // Send token to user. Mailer errors caught in action
+        $this->registrationMailer->sendRegisterVerificationToken($user, $queryParams);
 
         return $user->id;
     }
