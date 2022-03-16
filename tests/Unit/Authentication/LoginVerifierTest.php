@@ -17,24 +17,6 @@ class LoginVerifierTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test getUserIdIfAllowedToLogin()
-     *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::oneUserObjectAndClientDataProvider()
-     * @param array $validUserData
-     * @param UserData $repoUser
-     */
-    public function testGetUserIdIfAllowedToLogin(array $validUserData, UserData $repoUser): void
-    {
-        $this->mock(UserFinderRepository::class)->method('findUserByEmail')->willReturn($repoUser);
-        $this->mock(SecurityLoginChecker::class); // Return null on security checks
-
-        /** @var LoginVerifier $loginVerifier */
-        $loginVerifier = $this->container->get(LoginVerifier::class);
-
-        self::assertEquals($repoUser->id, $loginVerifier->GetUserIdIfAllowedToLogin($validUserData));
-    }
-
-    /**
      * Test getUserIdIfAllowedToLogin() with invalid user data
      *
      * @dataProvider \App\Test\Provider\User\UserDataProvider::invalidEmailAndPasswordsUsersProvider()

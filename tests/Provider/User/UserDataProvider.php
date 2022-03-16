@@ -151,19 +151,17 @@ class UserDataProvider
     {
         return [
             [
-                new UserData(
-                    [
-                        'id' => 1,
-                        'first_name' => 'Bill',
-                        'surname' => 'Gates',
-                        'email' => 'gates@email.com',
-                        'password' => '12345678',
-                        'password2' => '12345678',
-                        'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
-                        'role' => 'admin',
-                        'status' => UserData::STATUS_ACTIVE,
-                    ]
-                )
+                new UserData([
+                    'id' => 1,
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '12345678',
+                    'password2' => '12345678',
+                    'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
+                    'role' => 'admin',
+                    'status' => UserData::STATUS_ACTIVE,
+                ])
             ]
         ];
     }
@@ -186,17 +184,15 @@ class UserDataProvider
                     'password2' => '12345678',
                 ],
                 // User object from repository
-                'userObj' => new UserData(
-                    [
-                        'id' => 1,
-                        'first_name' => 'Bill',
-                        'surname' => 'Gates',
-                        'email' => 'gates@email.com',
-                        'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
-                        'role' => 'admin',
-                        'status' => UserData::STATUS_ACTIVE,
-                    ]
-                )
+                'userObj' => new UserData([
+                    'id' => 1,
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
+                    'email' => 'gates@email.com',
+                    'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
+                    'role' => 'admin',
+                    'status' => UserData::STATUS_ACTIVE,
+                ])
             ]
         ];
     }
@@ -417,12 +413,12 @@ class UserDataProvider
     }
 
     /**
-     * Provides one time valid user login values matching the password
+     * Provides one time valid login credentials matching the password
      * of tests/Fixture/UserFixture.php and one time not
      *
      * @return array[]
      */
-    public function loginUserProvider(): array
+    public function correctAndWrongCredentialsProvider(): array
     {
         return [
             // Invalid password
@@ -444,4 +440,63 @@ class UserDataProvider
         ];
     }
 
+    /**
+     * Correct login credentials provider
+     *
+     * @return string[][][]
+     */
+    public function correctLoginCredentialsProvider(): array
+    {
+        return [
+            // Correct credentials (inserted with tests/Fixture/UserFixture.php)
+            [
+                [
+                    // Same keys than HTML form
+                    'email' => 'admin@example.com',
+                    'password' => '12345678',
+                ],
+            ]
+        ];
+    }
+
+    // Wrong not needed as anything can be taken
+
+    /**
+     * Invalid login credentials provider that should fail validation
+     *
+     * @return string[][][]
+     */
+    public function invalidLoginCredentialsProvider(): array
+    {
+        return [
+            [
+                [
+                    // Invalid email
+                    'email' => 'admin@exam$ple.com',
+                    'password' => '12345678',
+                ],
+            ],
+            [
+                [
+                    // Missing email
+                    'email' => '',
+                    'password' => '12345678',
+                ],
+            ],
+            [
+                [
+                    // Invalid password
+                    'email' => 'admin@example.com',
+                    'password' => '12',
+                ],
+            ],
+            [
+                [
+                    // Missing password
+                    'email' => 'admin@example.com',
+                    'password' => '',
+                ],
+            ]
+        ];
+    }
 }

@@ -33,7 +33,7 @@ final class LoginSubmitAction
         $userData = $request->getParsedBody();
 
         if (null !== $userData && [] !== $userData) {
-            // ? If a html form name changes, these changes have to be done in the entities constructor
+            // ? If a html form name changes, these changes have to be done in the entities' constructor
             // ? (and if isset condition below) too since these names will be the keys of the ArrayReader
             // Check that request body syntax is formatted right (3 when with captcha)
             $requiredAreSet = isset($userData['email'], $userData['password']);
