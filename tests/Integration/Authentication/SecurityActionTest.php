@@ -24,7 +24,7 @@ class SecurityActionTest extends TestCase
      * If login request amount exceeds threshold, the user has to wait a certain delay
      * This is still far below a global test
      *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::loginUserProvider()
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::correctAndWrongCredentialsProvider()
      *
      * @param array $loginFormValues One dataset with wrong credentials and one with correct ones
      */
