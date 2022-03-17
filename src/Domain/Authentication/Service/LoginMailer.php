@@ -39,20 +39,64 @@ class LoginMailer
      * When user tries to log in but his status is unverified
      *
      * @param UserData $user
-     * @param array $queryParams
+     * @param array $queryParamsWithToken
      * @throws TransportExceptionInterface
      */
-    public function sendInfoToUnverifiedUser(UserData $user, array $tokenQueryParams): void
+    public function sendInfoToUnverifiedUser(UserData $user, array $queryParamsWithToken): void
     {
         // Send verification mail
         $this->email->subject('You tried to login but are unverified')
             ->html(
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/login-but-unverified.email.php',
-                    ['user' => $user, 'queryParams' => $tokenQueryParams]
+                    ['user' => $user, 'queryParams' => $queryParamsWithToken]
                 )
             )->to(new Address($user->email, $user->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }
+
+    /**
+     * When user tries to log in but his status is suspended
+     *
+     * @param UserData $user
+     * @throws TransportExceptionInterface
+     */
+    public function sendInfoToSuspendedUser(UserData $user): void
+    {
+        // Send verification mail
+        $this->email->subject('You tried to login but are suspended')
+            ->html(
+                $this->mailer->getContentFromTemplate(
+                    'authentication/email/login-but-suspended.email.php',
+                    ['user' => $user]
+                )
+            )->to(new Address($user->email, $user->getFullName()));
+        // Send email
+        $this->mailer->send($this->email);
+    }
+
+    /**
+     * When user tries to log in but his status is suspended
+     *
+     * @param UserData $user
+     * @param array $queryParamsWithToken
+     * @throws TransportExceptionInterface
+     */
+    public function sendInfoToLockedUser(UserData $user, array $queryParamsWithToken): void
+    {
+        // Send verification mail
+        $this->email->subject('You tried to login but are locked')
+            ->html(
+                $this->mailer->getContentFromTemplate(
+                    'authentication/email/login-but-locked.email.php',
+                    ['user' => $user, 'queryParams' => $queryParamsWithToken]
+                )
+            )->to(new Address($user->email, $user->getFullName()));
+        // Send email
+        $this->mailer->send($this->email);
+    }
+
+
+
 }
