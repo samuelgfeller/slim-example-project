@@ -5,7 +5,7 @@ namespace App\Application\Actions\Authentication;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
-use App\Domain\Authentication\Service\RegisterTokenVerifier;
+use App\Domain\Authentication\Service\AccountUnlockTokenVerifier;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpForbiddenException;
 
-final class RegisterVerifyAction
+final class AccountUnlockAction
 {
     protected LoggerInterface $logger;
 
@@ -22,9 +22,9 @@ final class RegisterVerifyAction
         LoggerFactory $logger,
         protected Responder $responder,
         private SessionInterface $session,
-        private RegisterTokenVerifier $registerTokenVerifier
+        private AccountUnlockTokenVerifier $accountUnlockTokenVerifier
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-verify-register');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-unlock-account');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response
@@ -34,15 +34,11 @@ final class RegisterVerifyAction
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
             try {
-                $userId = $this->registerTokenVerifier->getUserIdIfRegisterTokenIsValid(
+                $userId = $this->accountUnlockTokenVerifier->getUserIdIfUnlockTokenIsValid(
                     (int)$queryParams['id'],
                     $queryParams['token']
                 );
 
-                $flash->add(
-                    'success',
-                    'Congratulations! <br> Your account has been  verified! <br>' . '<b>You are now logged in.</b>'
-                );
                 // Log user in
                 // Clear all session data and regenerate session ID
                 $this->session->regenerateId();
@@ -50,10 +46,14 @@ final class RegisterVerifyAction
                 $this->session->set('user_id', $userId);
 
                 if (isset($queryParams['redirect'])) {
+                    $flash->add(
+                        'success',
+                        'Congratulations! <br> Your account has been unlocked! <br>' . '<b>You are now logged in.</b>'
+                    );
                     $flash->add('info', 'You have been redirected to the site you previously tried to access.');
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                return $this->responder->render($response, 'authentication/login-account-unlocked.html.php');
             } catch (InvalidTokenException $ite) {
                 $flash->add('error', '<b>Invalid or expired link. <br>Please register again.</b>');
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);

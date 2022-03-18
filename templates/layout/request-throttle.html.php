@@ -6,7 +6,7 @@
 ?>
 <?php
 if (isset($throttleDelay)) { ?>
-    <div id="throttle-div">
+    <div class="error-div-below-form">
         <?php
         if (is_numeric($throttleDelay)) { ?>
             <strong class="err-msg" id="throttle-delay-msg">Please wait <span

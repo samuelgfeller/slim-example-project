@@ -76,7 +76,7 @@ final class Responder
      *
      * @return void
      */
-    public function addAttribute(string $key, $value): void
+    public function addPhpViewAttribute(string $key, $value): void
     {
         $this->phpRenderer->addAttribute($key, $value);
     }

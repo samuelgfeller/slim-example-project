@@ -5,7 +5,6 @@
  * @var Psr\Http\Message\UriInterface $uri
  * @var Slim\Interfaces\RouteParserInterface $route
  * @var App\Domain\User\Data\UserData $user already existing registered user (result of findUserByEmail())
- * @var array $config public configuration values
  */
 
 $this->setLayout('layout/layout.email.php');
@@ -16,11 +15,11 @@ $this->setLayout('layout/layout.email.php');
     <br>
     Someone tried to create an account with your email address. <br>
     <!-- Sentence defined for assertion in RegisterCaseProvider.php    -->
-    If this was you, then we have the regret to inform you that your account is suspended. <br>
-    Please <a href="mailto:<?= $config['email']['main_contact_address'] ?>">contact us</a> if you wish to activate
-    your account.
+    If this was you, then you can login with your credentials by navigating to the
+    <a href="<?= $route->fullUrlFor($uri,'login-page') ?>">login section</a> or if you forgot your
+    password, you can reset it here. <br>
     <br><br>
-    Best regards <br>
+    Best regards <br><br>
     Slim Example Project
 </p>
 

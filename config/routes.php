@@ -6,7 +6,7 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->redirect('/', 'hello', 301)->setName('home');
+    $app->redirect('/', 'hello', 301)->setName('home-page');
 
     $app->get('/login', \App\Application\Actions\Authentication\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName('login-submit');
@@ -26,6 +26,10 @@ return function (App $app) {
     )->setName(
         'register-check-email-page'
     );
+
+    $app->get('/unlock-account', \App\Application\Actions\Authentication\AccountUnlockAction::class)
+        ->setName('account-unlock-verification');
+
 
     $app->get('/profile', \App\Application\Actions\User\UserViewProfileAction::class)->setName('profile-page')
         ->add(UserAuthenticationMiddleware::class);
@@ -55,7 +59,6 @@ return function (App $app) {
             $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostReadAction::class)->setName(
                 'post-read'
             );
-
             // Post requests where user DOES need to be authenticated
             $group->post('', \App\Application\Actions\Post\Ajax\PostCreateAction::class)->setName(
                 'post-submit-create')->add(

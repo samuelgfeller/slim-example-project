@@ -33,19 +33,16 @@ class RegisterSubmitActionTest extends TestCase
     {
         $firstName = 'Admin';
         $surname = 'Example';
-        $emailAddr = 'admin@example.com';
-        $request = $this->createFormRequest(
-            'POST',
-            $this->urlFor('register-submit'),
-            // Same keys than HTML form
+        $inputEmail = 'admin@example.com';
+
+        $request = $this->createFormRequest('POST', $this->urlFor('register-submit'), // Same keys than HTML form
             [
                 'first_name' => $firstName,
                 'surname' => $surname,
-                'email' => $emailAddr,
+                'email' => $inputEmail,
                 'password' => '12345678',
                 'password2' => '12345678',
-            ]
-        );
+            ]);
 
         $response = $this->app->handle($request);
 
@@ -60,15 +57,16 @@ class RegisterSubmitActionTest extends TestCase
             'To verify that this email address belongs to you, please click on the following link'
         );
         // Assert that right email has been sent to the right person
-        $this->assertEmailHeaderSame($email, 'To', $firstName . ' ' . $surname . ' <' . $emailAddr . '>');
+        $this->assertEmailHeaderSame($email, 'To', $firstName . ' ' . $surname . ' <' . $inputEmail . '>');
 
 
         // Database assertions
-        $this->assertTableRowCount(1, 'user');
+        $userId = 1;
+        $this->assertTableRowCount($userId, 'user');
 
         $expected = [
             // id is string as CakePHP Database returns always strings: https://stackoverflow.com/a/11913488/9013718
-            'id' => '1',
+            'id' => "$userId",
             'first_name' => 'Admin',
             'surname' => 'Example',
             'email' => 'admin@example.com',
@@ -76,15 +74,15 @@ class RegisterSubmitActionTest extends TestCase
         ];
 
         // Assert that content of selected fields (which are the keys of the $expected array) are same as expected
-        $this->assertTableRow($expected, 'user', 1, array_keys($expected));
+        $this->assertTableRow($expected, 'user', $userId, array_keys($expected));
 
         // Assert that field "id" of row with id 1 equals to "1" (CakePHP returns always strings)
-        $this->assertTableRowValue('1', 'user', 1, 'id');
+        $this->assertTableRowValue("$userId", 'user', $userId, 'id');
 
         // Password
-        $password = $this->getTableRowById('user', 1)['password_hash'];
+        $password = $this->getTableRowById('user', $userId)['password_hash'];
         // Assert that password_hash starts with the beginning of a BCRYPT hash
-        // Hash algo may change in the future but it's not a big deal to update if tests fail
+        // Hash algo may change in the future, but it's not a big deal to update if tests fail
         self::assertStringStartsWith(
             '$2y$10$',
             $password,
@@ -92,6 +90,33 @@ class RegisterSubmitActionTest extends TestCase
         );
         // Verify that hash matches the given password
         self::assertTrue(password_verify('12345678', $password));
+
+        // Assert that there is a verification token in the database
+        $expectedVerificationToken = [
+            // CakePHP Database returns always strings
+            'user_id' => "$userId",
+            'used_at' => null,
+            'deleted_at' => null,
+        ];
+        $this->assertTableRow(
+            $expectedVerificationToken,
+            'user_verification',
+            $userId,
+            array_keys($expectedVerificationToken)
+        );
+
+        // Get user_verification row to make sure its valid
+        $userVerificationRow = $this->getTableRowById('user_verification', $userId);
+
+        // Assert that token expiration date is at least 59min the future
+        self::assertTrue($userVerificationRow['expires_at'] > (time() + 60 * 59));
+
+        // Assert that token starts with the beginning of a BCRYPT hash
+        self::assertStringStartsWith(
+            '$2y$10$',
+            $userVerificationRow['token'],
+            'token not starting with beginning of bcrypt hash'
+        );
     }
 
     /**
@@ -117,18 +142,14 @@ class RegisterSubmitActionTest extends TestCase
         $firstName = 'Admin';
         $surname = 'Example';
         $emailAddr = 'admin@example.com';
-        $request = $this->createFormRequest(
-            'POST',
-            $this->urlFor('register-submit'),
-            // Same keys than HTML form
+        $request = $this->createFormRequest('POST', $this->urlFor('register-submit'), // Same keys than HTML form
             [
                 'first_name' => $firstName,
                 'surname' => $surname,
                 'email' => $emailAddr,
                 'password' => '12345678',
                 'password2' => '12345678',
-            ]
-        );
+            ]);
 
         $response = $this->app->handle($request);
 
@@ -163,9 +184,7 @@ class RegisterSubmitActionTest extends TestCase
     public function testRegisterUser_invalidData(): void
     {
         // Test with required values not set
-        $requestRequiredNotSet = $this->createFormRequest(
-            'POST',
-            $this->urlFor('register-submit'),
+        $requestRequiredNotSet = $this->createFormRequest('POST', $this->urlFor('register-submit'),
             // Same keys than HTML form
             [
                 'first_name' => '',
@@ -173,31 +192,22 @@ class RegisterSubmitActionTest extends TestCase
                 'email' => '',
                 'password' => '',
                 'password2' => '',
-            ]
-        );
+            ]);
 
         $responseRequiredNotSet = $this->app->handle($requestRequiredNotSet);
         // Request body syntax is right and server understands the content but it's not able (doesn't want) to process it
         // https://stackoverflow.com/a/3291292/9013718 422 Unprocessable Entity is the right status code
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $responseRequiredNotSet->getStatusCode());
 
-        $requestInvalid = $this->createFormRequest(
-            'POST',
-            $this->urlFor('register-submit'),
-            // Same keys than HTML form
+        $requestInvalid = $this->createFormRequest('POST', $this->urlFor('register-submit'), // Same keys than HTML form
             [
-                /* Name too short */
-                'first_name' => 'A',
-                /* Name too short */
-                'surname' => 'D',
+                /* Name too short */ 'first_name' => 'A',
+                /* Name too short */ 'surname' => 'D',
                 'email' => 'admi$n@exampl$e.com',
-                /* Invalid E-Mail */
-                'password' => '123',
-                /* Password too short */
-                'password2' => '12',
+                /* Invalid E-Mail */ 'password' => '123',
+                /* Password too short */ 'password2' => '12',
                 /* Password 2 not matching and too short */
-            ]
-        );
+            ]);
 
         $responseInvalid = $this->app->handle($requestInvalid);
         // Assert that response has error status 422

@@ -12,6 +12,8 @@ use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
 
+use function PHPUnit\Framework\throwException;
+
 class LoginVerifier
 {
 
@@ -67,14 +69,18 @@ class LoginVerifier
                 if ($dbUser->status === UserData::STATUS_UNVERIFIED) {
                     // Inform user via email that account is unverified, and he should click on the link in his inbox
                     $this->loginNonActiveUserHandler->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
-                    // Todo display error message to user in form and test email
+                    // Throw exception to display error message in form
                     throw $unableToLoginException;
                 } elseif ($dbUser->status === UserData::STATUS_SUSPENDED) {
                     // Inform user (only via mail) that he is suspended
                     $this->loginNonActiveUserHandler->handleSuspendedUserLoginAttempt($dbUser);
+                    // Throw exception to display error message in form
+                    throw $unableToLoginException;
                 } elseif ($dbUser->status === UserData::STATUS_LOCKED) {
                     // Todo login fail and inform user (only via mail) that he is locked
-                    $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser);
+                    $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
+                    // Throw exception to display error message in form
+                    throw $unableToLoginException;
                 } else {
                     // todo invalid role in db. Send email to admin to inform that there is something wrong with the user
                     throw new \RuntimeException('Invalid status');

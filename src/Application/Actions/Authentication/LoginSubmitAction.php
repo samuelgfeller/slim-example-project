@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
+use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Exceptions\ValidationException;
@@ -78,7 +79,7 @@ final class LoginSubmitAction
                         'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
                         $e->getUserEmail() . '"'
                     );
-                    $this->responder->addAttribute('formError', true);
+                    $this->responder->addPhpViewAttribute('formError', true);
                     return $this->responder->render(
                         $response->withStatus(401),
                         'Authentication/login.html.php',
@@ -97,6 +98,17 @@ final class LoginSubmitAction
                         'Authentication/login.html.php',
                         ['email' => $userData['email']],
                         $request->getQueryParams()
+                    );
+                } catch (UnableToLoginStatusNotActiveException $unableToLoginException){
+                    // When user doesn't have status active
+                    $this->responder->addPhpViewAttribute('formError', true);
+                    // Add form error message
+                    $this->responder->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());
+                    return $this->responder->render(
+                        $response->withStatus(401),
+                        'Authentication/login.html.php',
+                        // Provide same query params passed to login page to be added to the login submit request
+                        ['queryParams' => $request->getQueryParams()]
                     );
                 }
             }

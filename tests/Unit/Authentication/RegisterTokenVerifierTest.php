@@ -40,7 +40,7 @@ class RegisterTokenVerifierTest extends TestCase
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testGetUserIdIfTokenIsValid_alreadyVerified(
+    public function testGetUserIdIfRegisterTokenIsValid_alreadyVerified(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -58,7 +58,7 @@ class RegisterTokenVerifierTest extends TestCase
         $this->expectExceptionMessage('User has not status "' . UserData::STATUS_UNVERIFIED . '"');
 
         // Call function under test
-        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfTokenIsValid(
+        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfRegisterTokenIsValid(
             $verification->id,
             $clearTextToken
         );

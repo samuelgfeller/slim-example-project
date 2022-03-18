@@ -14,7 +14,7 @@ class UserVerificationData
     public ?int $id;
     public ?int $userId;
     public ?string $token;
-    public ?int $expires;
+    public ?int $expiresAt;
     public ?string $usedAt;
     public ?string $createdAt;
 
@@ -28,7 +28,8 @@ class UserVerificationData
         $this->id = $arrayReader->findAsInt('id');
         $this->userId = $arrayReader->findAsInt('user_id');
         $this->token = $arrayReader->findAsString('token');
-        $this->expires = $arrayReader->findAsInt('expires');
+        $this->expiresAt = $arrayReader->findAsInt('expiresAt');
+        $this->usedAt = $arrayReader->findAsInt('used_at');
         $this->createdAt = $arrayReader->findAsString('created_at');
     }
 
@@ -46,7 +47,7 @@ class UserVerificationData
             'id' => $this->id,
             'user_id' => $this->userId,
             'token' => $this->token,
-            'expires' => $this->expires,
+            'expiresAt' => $this->expiresAt,
             'created_at' => $this->createdAt,
         ];
     }

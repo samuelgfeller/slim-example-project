@@ -54,6 +54,7 @@ class LoginNonActiveUserHandler
         // Write event in logger
         $this->logger->info('Login attempt on suspended user id ' . $user->id . '.');
     }
+
     /**
      * When user tries to log in but his status is locked
      * which can happen on too many failed login requests
@@ -68,7 +69,7 @@ class LoginNonActiveUserHandler
         $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
 
         // Send email to locked user
-        $this->loginMailer->sendInfoToLockedUser($user);
+        $this->loginMailer->sendInfoToLockedUser($user, $queryParams);
 
         // Write event in logger
         $this->logger->info('Login attempt on locked user id ' . $user->id . '.');

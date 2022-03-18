@@ -21,6 +21,8 @@ class RegisterVerifyActionTest extends TestCase
     use RouteTestTrait;
 
     /**
+     * Test that with given correct token the account status is set to active
+     *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
      * @param UserVerificationData $verification
      * @param string $clearTextToken
@@ -43,7 +45,7 @@ class RegisterVerifyActionTest extends TestCase
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
             ->withQueryParams($queryParams);
         $response = $this->app->handle($request);
 

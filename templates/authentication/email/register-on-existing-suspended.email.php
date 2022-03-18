@@ -16,11 +16,11 @@ $this->setLayout('layout/layout.email.php');
     <br>
     Someone tried to create an account with your email address. <br>
     <!-- Sentence defined for assertion in RegisterCaseProvider.php    -->
-    If this was you, then we have the regret to inform you that your account is locked for security reasons. <br>
+    If this was you, then we have the regret to inform you that your account is suspended. <br>
     Please <a href="mailto:<?= $config['email']['main_contact_address'] ?>">contact us</a> if you wish to activate
     your account.
     <br><br>
-    Best regards <br>
+    Best regards <br><br>
     Slim Example Project
 </p>
 

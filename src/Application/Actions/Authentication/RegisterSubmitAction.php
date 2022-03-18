@@ -67,7 +67,7 @@ Please click on the link in the email to finnish the registration.'
                     $flash->add('error', 'Email error. Please try again. ' . "<br> Message: " . $e->getMessage());
                     $this->logger->error('Mailer exception: ' . $e->getMessage());
                     $response = $response->withStatus(500);
-                    $this->responder->addAttribute('formError', true);
+                    $this->responder->addPhpViewAttribute('formError', true);
                     return $this->responder->render(
                         $response,
                         'Authentication/register.html.php',

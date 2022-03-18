@@ -76,7 +76,7 @@ class RegistrationMailer
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
         $this->email->subject('Did you try to create an account?')->html(
             $this->mailer->getContentFromTemplate(
-                'authentication/email/register-on-existing-active.php',
+                'authentication/email/register-on-existing-active.email.php',
                 ['user' => $existingUser]
             )
         )->to(new Address($existingUser->email, $existingUser->getFullName()));
@@ -97,7 +97,7 @@ class RegistrationMailer
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
         $this->email->subject('Did you try to create an account?')->html(
             $this->mailer->getContentFromTemplate(
-                'authentication/email/register-on-existing-suspended.php',
+                'authentication/email/register-on-existing-suspended.email.php',
                 ['user' => $existingUser]
             )
         )->to(new Address($existingUser->email, $existingUser->getFullName()));
@@ -118,7 +118,7 @@ class RegistrationMailer
         // Subject asserted in testRegisterUser_alreadyExistingActiveUser
         $this->email->subject('Did you try to create an account?')
         ->html($this->mailer->getContentFromTemplate(
-            'authentication/email/register-on-existing-locked.php',
+            'authentication/email/register-on-existing-locked.email.php',
             ['user' => $existingUser]
         ))->to(new Address($existingUser->email, $existingUser->getFullName()));
         // Send email

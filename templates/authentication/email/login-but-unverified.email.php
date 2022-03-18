@@ -14,12 +14,12 @@ This means clicking on the link provided in the email that you should have recei
 <!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 You have the opportunity here as well to verify that this email address belongs by clicking on the following link:
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>">Verify account</a></b>.
-<br>
+<br><br>
 This link will expire in 2 hours. To receive a new one you can
 <a href="<?= $route->fullUrlFor($uri, 'register-page') ?>">register</a> once again.<br>
 <br>
 If however you did NOT log in, your credentials may not be safe, and I urge you to change password after verification
 in the <a href="<?= $route->fullUrlFor($uri, 'profile-page') ?>">profile</a> section.
-<br>
-Best regards <br>
+<br><br>
+Best regards <br><br>
 slim-example-project

@@ -22,6 +22,12 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <div class="form-box <?= isset($formError) ? ' wrong-cred-input' : '' ?>" id="login-form-box">
     <form action="<?= $route->urlFor('login-submit', [], $queryParams ?? []) ?>"
           id="login-form" class="form" method="post" autocomplete="on">
+        <?php
+        // Display form error message if there is one
+        if (isset($formErrorMessage)) { ?>
+            <strong class="err-msg" id="throttle-delay-msg"><?= $formErrorMessage ?></strong>
+            <?php
+        } ?>
         <label for="loginEmailInp">Email</label>
         <input type="email" name="email" id="loginEmailInp"
                placeholder="your@email.com"
@@ -46,5 +52,8 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
     </form>
     <br>Not registered?
     <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">Register</a>
-
 </div>
+
+<?php
+// Throttle error message in request-throttle.html.php ?>
+

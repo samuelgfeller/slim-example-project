@@ -34,8 +34,8 @@ class VerificationTokenCreator
         $token = random_bytes(50);
 
         // Set token expiration because link automatically logs in
-        $expires = new \DateTime('now');
-        $expires->add(new \DateInterval('PT02H')); // 2 hours
+        $expiresAt = new \DateTime('now');
+        $expiresAt->add(new \DateInterval('PT02H')); // 2 hours
 
         // Soft delete any existing tokens for this user
         $this->verificationTokenDeleterRepository->deleteVerificationToken($user->id);
@@ -45,8 +45,8 @@ class VerificationTokenCreator
             [
                 'user_id' => $user->id,
                 'token' => password_hash($token, PASSWORD_DEFAULT),
-                // expires format 'U' is the same as time() so it can be used later to compare easily
-                'expires' => $expires->format('U')
+                // expiresAt format 'U' is the same as time() so it can be used later to compare easily
+                'expires_at' => $expiresAt->format('U')
             ]
         );
 

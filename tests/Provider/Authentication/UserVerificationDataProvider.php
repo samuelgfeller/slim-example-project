@@ -20,7 +20,7 @@ class UserVerificationDataProvider
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
-                    'expires' => time() + (60 * 60 * 2), // Time as seconds plus 2h
+                    'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s')
                 ]),
@@ -46,7 +46,7 @@ class UserVerificationDataProvider
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
-                    'expires' => time() + (60 * 60 * 2), // Time as seconds plus 2h
+                    'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s')
                 ]),
@@ -58,7 +58,7 @@ class UserVerificationDataProvider
                     'id' => 1,
                     'user_id' => 1,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
-                    'expires' => time() - 1, // Expired one second ago (test relevant)
+                    'expires_at' => time() - 1, // Expired one second ago (test relevant)
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s', time() - 2), // Created 2 seconds ago
                 ]),

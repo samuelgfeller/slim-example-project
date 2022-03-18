@@ -13,13 +13,10 @@ This may mean that someone tried to log into your account repeatedly with an inc
 
 <!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 You can unlock your account by clicking on the following link:
-<b><a href="<?= $route->fullUrlFor($uri, 'login-locked-verification', [], $queryParams) ?>">verify account</a></b>.
+<b><a href="<?= $route->fullUrlFor($uri, 'account-unlock-verification', [], $queryParams) ?>">verify account</a></b>.
 <br><br>
 
-<br><br>
 The link will expire in 2 hours. <br>
 <br>
-
-<br>
-Best regards <br>
+Best regards <br><br>
 slim-example-project

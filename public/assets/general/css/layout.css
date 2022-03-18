@@ -44,7 +44,7 @@
     address{
         font-style: normal;
     }
-    #throttle-div{
+    .error-div-below-form{
         margin-top: 20px;
     }
 }

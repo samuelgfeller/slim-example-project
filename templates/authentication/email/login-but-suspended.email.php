@@ -13,5 +13,5 @@ If you just tried to log in, please take note that your account is suspended. <b
 Please <b><a href="mailto:<?= $config['email']['main_contact_address'] ?>">contact us</a></b> if you wish to activate
 your account.
 <br>
-Best regards <br>
+Best regards <br><br>
 slim-example-project
