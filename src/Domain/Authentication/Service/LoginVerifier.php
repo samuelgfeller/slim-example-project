@@ -77,7 +77,7 @@ class LoginVerifier
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
                 } elseif ($dbUser->status === UserData::STATUS_LOCKED) {
-                    // Todo login fail and inform user (only via mail) that he is locked
+                    // login fail and inform user (only via mail) that he is locked and provide unlock token
                     $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;

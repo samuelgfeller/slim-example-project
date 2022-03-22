@@ -61,15 +61,21 @@ final class RegisterVerifyAction
                 // Redirect to register page with redirect query param if set
                 return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
-                $flash->add('info', 'You are already verified and should be able to log in.');
-                $this->logger->info(
-                    'Already verified user tried to verify again. user_verification id: ' . $queryParams['id']
-                );
-                if (isset($queryParams['redirect'])) {
-                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
-                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                // Check if already logged in
+                if ($this->session->get('user_id') !== null) {
+                    // If not logged in, redirect to login page with correct further redirect query param
+                    $flash->add('info', 'You are already verified. Please log in.');
+                    $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+                    return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
+                } else {
+                    $flash->add('info', 'You are now logged in.');
+
+                    if (isset($queryParams['redirect'])) {
+                        $flash->add('info', 'You have been redirected to the site you previously tried to access.');
+                        return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                    }
+                    return $this->responder->redirectToRouteName($response, 'home-page');
                 }
-                return $this->responder->redirectToRouteName($response, 'home-page');
             }
         }
 

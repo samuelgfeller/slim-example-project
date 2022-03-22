@@ -91,7 +91,7 @@ class RegisterVerifyActionTest extends TestCase
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
-        $redirectLocation = $this->urlFor('user-list');
+        $redirectLocation = $this->urlFor('profile-page');
         $queryParams = [
             // Test redirect at the same time
             'redirect' => $redirectLocation,
@@ -109,6 +109,11 @@ class RegisterVerifyActionTest extends TestCase
         self::assertSame($redirectLocation, $response->getHeaderLine('Location'));
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         // Here it's important that no exception is thrown when user is already verified. There is only a flash info.
+
+        // Assert that user is NOT authenticated
+        $session = $this->container->get(SessionInterface::class);
+        self::assertNull($session->get('user_id'));
+
     }
 
 

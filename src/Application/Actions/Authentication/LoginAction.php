@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -11,19 +12,16 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class LoginAction
 {
-    /**
-     * @var Responder
-     */
-    private Responder $responder;
 
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
      */
-    public function __construct(Responder $responder)
-    {
-        $this->responder = $responder;
+    public function __construct(
+        private Responder $responder,
+        private SessionInterface $session,
+    ) {
     }
 
     /**
@@ -36,11 +34,26 @@ final class LoginAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->responder->render(
-            $response,
+        $queryParams = $request->getQueryParams();
+
+        // Check if user already logged in
+        if ($this->session->get('user_id') !== null) {
+            $flash = $this->session->getFlash();
+            $flash->add(
+                'success',
+                'You are already logged-in.<br>' . 'Would you like to <a href="' . $this->responder->urlFor('logout') .
+                '">logout</a>?'
+            );
+            // If redirect param set, redirect to this url
+            if (isset($queryParams['redirect'])){
+                return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+            }
+            // Otherwise, go to home page
+            return $this->responder->redirectToRouteName($response, 'home-page');
+        }
+        return $this->responder->render($response,
             'Authentication/login.html.php',
             // Provide same query params passed to login page to be added to the login submit request
-            ['queryParams' => $request->getQueryParams()]
-        );
+            ['queryParams' => $request->getQueryParams()]);
     }
 }

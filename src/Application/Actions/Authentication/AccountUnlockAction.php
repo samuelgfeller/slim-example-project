@@ -55,21 +55,26 @@ final class AccountUnlockAction
                 }
                 return $this->responder->render($response, 'authentication/login-account-unlocked.html.php');
             } catch (InvalidTokenException $ite) {
-                $flash->add('error', '<b>Invalid or expired link. <br>Please register again.</b>');
+                $flash->add(
+                    'error',
+                    '<b>Invalid or expired link. <br>Please log in once again to receive a new email.</b>'
+                );
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
-                // Redirect to register page with redirect query param if set
-                return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
+                // Redirect to login page with redirect query param if set
+                return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
-                $flash->add('info', 'You are already verified and should be able to log in.');
+                $flash->add('info', $uave->getMessage());
                 $this->logger->info(
-                    'Already verified user tried to verify again. user_verification id: ' . $queryParams['id']
+                    'Not locked user tried to unlock account. user_verification id: ' . $queryParams['id']
                 );
-                if (isset($queryParams['redirect'])) {
-                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
-                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
-                }
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+                return $this->responder->redirectToRouteName(
+                    $response,
+                    'login-page',
+                    [],
+                    $newQueryParam
+                );
             }
         }
 
