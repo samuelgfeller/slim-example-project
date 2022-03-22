@@ -7,12 +7,21 @@ use App\Domain\User\Data\UserData;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
+use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
+/**
+ * Test that the link sent to user when creating an account
+ * works correctly and safely. Test covered in this class:
+ *  - Set user account status from unverified to active with valid token
+ *  - Attempt to verify user account that is already active
+ *  - Attempt to verify user with used, invalid and expired token
+ *  - Test action with invalid parameters (400 Bad request)
+ */
 class RegisterVerifyActionTest extends TestCase
 {
     use AppTestTrait;
@@ -58,6 +67,10 @@ class RegisterVerifyActionTest extends TestCase
 
         // Assert that status is active on user
         $this->assertTableRowValue(UserData::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
+
+        $session = $this->container->get(SessionInterface::class);
+        // Assert that session user_id is set meaning user is logged-in
+        self::assertNotNull($session->get('user_id'));
     }
 
     /**
@@ -87,7 +100,7 @@ class RegisterVerifyActionTest extends TestCase
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
+            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
             ->withQueryParams($queryParams);
 
         $response = $this->app->handle($request);
@@ -107,7 +120,7 @@ class RegisterVerifyActionTest extends TestCase
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_invalidExpiredToken(
+    public function testRegisterVerification_invalidUsedExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -127,7 +140,7 @@ class RegisterVerifyActionTest extends TestCase
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
             ->withQueryParams($queryParams);
         $response = $this->app->handle($request);
 
@@ -139,11 +152,18 @@ class RegisterVerifyActionTest extends TestCase
         );
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
-        // Assert that token had NOT been used
-        self::assertNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
+        // Assert that token had NOT been used (except if already used)
+        self::assertSame(
+            $verification->usedAt,
+            $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
+        );
 
         // Assert that status is still unverified on user
         $this->assertTableRowValue(UserData::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
+
+        $session = $this->container->get(SessionInterface::class);
+        // Assert that session user_id is not set
+        self::assertNull($session->get('user_id'));
     }
 
     /**
@@ -159,7 +179,7 @@ class RegisterVerifyActionTest extends TestCase
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-        // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
+            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
             ->withQueryParams($queryParams);
 
         $this->expectException(HttpBadRequestException::class);

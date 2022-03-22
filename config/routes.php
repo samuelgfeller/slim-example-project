@@ -73,7 +73,8 @@ return function (App $app) {
         }
     );
     // Page actions routes outside /posts as they are needed by Ajax after page load
-    $app->get('/all-posts', \App\Application\Actions\Post\PostListAllPageAction::class)->setName('post-list-all-page');
+    $app->get('/all-posts', \App\Application\Actions\Post\PostListAllPageAction::class)
+        ->setName('post-list-all-page');
     $app->get('/own-posts', \App\Application\Actions\Post\PostListOwnPageAction::class)->setName(
         'post-list-own-page'
     )->add(UserAuthenticationMiddleware::class);

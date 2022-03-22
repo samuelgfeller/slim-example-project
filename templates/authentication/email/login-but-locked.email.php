@@ -8,10 +8,10 @@
 ?>
 Hello <?= $user->getFullName() ?> <br>
 <br>
+<?php /** Following sentence asserted at @see LoginSubmitActionTest */?>
 If you just tried to log in, please take note that your account is locked. <br>
 This may mean that someone tried to log into your account repeatedly with an incorrect password.
 
-<!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 You can unlock your account by clicking on the following link:
 <b><a href="<?= $route->fullUrlFor($uri, 'account-unlock-verification', [], $queryParams) ?>">verify account</a></b>.
 <br><br>

@@ -8,10 +8,10 @@
 ?>
 Hello <?= $user->getFullName() ?> <br>
 <br>
+<?php /** Following sentence asserted at @see LoginSubmitActionTest */?>
 If you just tried to log in, please take note that you have to validate your email address first. <br>
 This means clicking on the link provided in the email that you should have received after registration.
 
-<!-- Following sentence asserted in UserRegistererTest.php and RegisterSubmitActionTest.php -->
 You have the opportunity here as well to verify that this email address belongs by clicking on the following link:
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>">Verify account</a></b>.
 <br><br>

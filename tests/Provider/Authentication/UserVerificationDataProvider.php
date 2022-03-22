@@ -64,6 +64,18 @@ class UserVerificationDataProvider
                 ]),
                 'token' => $token, // Valid token
             ],
+            // Used token
+            [
+                'verification' => new UserVerificationData([
+                    'id' => 1,
+                    'user_id' => 1,
+                    'token' => password_hash($token, PASSWORD_DEFAULT),
+                    'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
+                    'used_at' => date('Y-m-d H:i:s'), // Used
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]),
+                'token' => $token, // Valid token
+            ],
         ];
     }
 

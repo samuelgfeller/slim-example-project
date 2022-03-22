@@ -32,7 +32,8 @@ final class RegisterTokenVerifier
     {
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
 
-        if ($verification->token !== null) {
+        // Check that verification has token in the database and token is not used
+        if ($verification->token !== null && $verification->usedAt === null) {
             $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
             // Check if user is already verified
             if (UserData::STATUS_UNVERIFIED !== $userStatus) {
@@ -54,6 +55,6 @@ final class RegisterTokenVerifier
             throw new InvalidTokenException('Invalid or expired token.');
         }
         // If no token was found and user is still unverified, that means that the token is invalid
-        throw new InvalidTokenException('No token was found for id "' . $verificationId . '".');
+        throw new InvalidTokenException('No valid token was found for user id "' . $verification->userId . '".');
     }
 }

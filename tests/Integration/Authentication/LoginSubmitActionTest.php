@@ -17,9 +17,9 @@ use Selective\TestTrait\Traits\MailerTestTrait;
  *  - normal login submit with correct credentials (302 Found redirect)
  *  - login request with incorrect password (401 Unverified)
  *  - login request with invalid values (400 Bad request)
- *  - login request on unverified account
- *  - login request on suspended account
- *  - login request on locked account
+ *  - login request on unverified account (401 Unverified + email with token)
+ *  - login request on suspended account (401 Unverified + email)
+ *  - login request on locked account (401 Unverified + email with token)
  *
  * Login tests involving request throttle are done in @see SecurityActionTest
  */
@@ -131,7 +131,7 @@ class LoginSubmitActionTest extends TestCase
         // Assert that session user_id is not set
         self::assertNull($session->get('user_id'));
 
-        // When account is suspended, a verification link is sent to the user via the email
+        // When account is unverified, a verification link is sent to the user via the email
 
         // Assert that correct email was sent (email body contains string)
         $email = $this->getMailerMessage();
@@ -197,8 +197,6 @@ class LoginSubmitActionTest extends TestCase
         // Assert that session user_id is not set
         self::assertNull($session->get('user_id'));
 
-        // When account is suspended, a verification link is sent to the user via the email
-
         // Assert that correct email was sent (email body contains string)
         $email = $this->getMailerMessage();
         $this->assertEmailHtmlBodyContains(
@@ -210,4 +208,42 @@ class LoginSubmitActionTest extends TestCase
             $userRow['surname'] . ' <' . $correctCredentials['email'] . '>');
     }
 
+    /**
+     * Test login with user status suspended.
+     *
+     * @dataProvider \App\Test\Provider\User\UserDataProvider::correctLoginCredentialsProvider()
+     *
+     * @param array $correctCredentials valid credentials
+     */
+    public function testLoginSubmitAction_accountLocked(array $correctCredentials): void
+    {
+        $userRow = (new UserFixture())->records[0];
+        $userRow['status'] = UserData::STATUS_LOCKED;
+        $this->insertFixture('user', $userRow);
+        $userId = $userRow['id'];
+
+        // Create request
+        $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $correctCredentials);
+        $response = $this->app->handle($request);
+
+        // Assert: 401 Unauthorized
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+
+        // Assert that user is NOT authenticated
+        $session = $this->container->get(SessionInterface::class);
+        // Assert that session user_id is not set
+        self::assertNull($session->get('user_id'));
+
+        // When account is locked, a verification link is sent to the user via the email to unlock account
+
+        // Assert that correct email was sent (email body contains string)
+        $email = $this->getMailerMessage();
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'If you just tried to log in, please take note that your account is locked.'
+        );
+        // Assert that email was sent to the right person in the right format
+        $this->assertEmailHeaderSame($email, 'To', $userRow['first_name'] . ' ' .
+            $userRow['surname'] . ' <' . $correctCredentials['email'] . '>');
+    }
 }
