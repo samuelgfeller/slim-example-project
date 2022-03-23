@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  * Email verification test (after user clicked on link)
  *
  * Important note: with SLE-152 I removed useless unit tests that break when doing changes on the
- * function under test. On this test class I kept only a select cases where I see it being useful for now.
+ * function under test. On this test class I kept only a select case where I see it being useful for now.
  */
 class RegisterTokenVerifierTest extends TestCase
 {

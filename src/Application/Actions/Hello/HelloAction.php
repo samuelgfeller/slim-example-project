@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Hello;
 
 use App\Application\Responder\Responder;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -21,7 +22,7 @@ final class HelloAction
      *
      * @param Responder $responder The responder
      */
-    public function __construct(Responder $responder)
+    public function __construct(Responder $responder, private SessionInterface $session)
     {
         $this->responder = $responder;
     }

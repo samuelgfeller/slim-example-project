@@ -141,6 +141,4 @@ class SecurityLoginCheckerTest extends TestCase
             throw $se;
         }
     }
-
-    // todo test normal flow (success) as well because if security always fails its not fun to the enduser
 }

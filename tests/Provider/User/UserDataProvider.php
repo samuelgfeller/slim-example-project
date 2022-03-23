@@ -320,6 +320,17 @@ class UserDataProvider
                     'password2' => '12345678',
                 ]
             ],
+            // Password too short
+            [
+                [
+                    'id' => 1,
+                    'first_name' => 'Bill',
+                    'surname' => 'Gates',
+                    'email' => 'gates@email.com',
+                    'password' => '12',
+                    'password2' => '12345678',
+                ]
+            ],
         ];
     }
 

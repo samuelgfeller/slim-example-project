@@ -62,7 +62,7 @@ final class RegisterVerifyAction
                 return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
                 // Check if already logged in
-                if ($this->session->get('user_id') !== null) {
+                if ($this->session->get('user_id') === null) {
                     // If not logged in, redirect to login page with correct further redirect query param
                     $flash->add('info', 'You are already verified. Please log in.');
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
