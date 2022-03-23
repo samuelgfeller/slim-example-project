@@ -176,7 +176,7 @@ class RegisterSubmitActionTest extends TestCase
      *
      * This is not possible to test however because I can’t just access the body of a
      * response object. The content is in a so called “stream”. Well I could with __toString()
-     * a plain string doesn't help for testing.
+     * but a plain string doesn't help a lot for testing.
      *
      * That’s why I will only assert that the Response status is the right one on a validation
      * exception (422) or 400 Bad request
@@ -201,12 +201,17 @@ class RegisterSubmitActionTest extends TestCase
 
         $requestInvalid = $this->createFormRequest('POST', $this->urlFor('register-submit'), // Same keys than HTML form
             [
-                /* Name too short */ 'first_name' => 'A',
-                /* Name too short */ 'surname' => 'D',
+                /* Name too short */
+                'first_name' => 'A',
+                /* Name too short */
+                'surname' => 'D',
+                /* Invalid E-Mail */
                 'email' => 'admi$n@exampl$e.com',
-                /* Invalid E-Mail */ 'password' => '123',
-                /* Password too short */ 'password2' => '12',
+                /* Password too short */
+                'password' => '123',
                 /* Password 2 not matching and too short */
+                'password2' => '12',
+
             ]);
 
         $responseInvalid = $this->app->handle($requestInvalid);

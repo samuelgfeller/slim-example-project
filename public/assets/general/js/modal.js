@@ -22,7 +22,7 @@ document.addEventListener('click', function (e) {
 function createModal(header, body, footer, container) {
     // Insert parts into entire modal structure
     let htmlString = '<div id="modal">' +
-        '<div id="modal-content">' +
+        '<div id="modal-box">' +
         '<div id="modal-header">' +
         '<span id="close-modal">&times;</span>' +
         header +

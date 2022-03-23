@@ -68,26 +68,36 @@ a:hover {
 
 /* Button */
 .btn{
-    width: 100%;
     background-color: white;
     border: 1px solid black;
     color: black;
-    padding: 8px 15px;
+    padding: 8px 20px;
     margin: 15px 0 0;
     border-radius: 4444px;
     cursor: pointer;
     font-size: 100%;
 }
 .btn:hover{
-    background: #c1c1c1;
-    border: 1px solid #c1c1c1;
-    box-shadow: 0 0 10px #c1c1c1;
+    /* Example: alert modal box cancel button */
+    background: #4b4b4b;
+    border: 1px solid #4b4b4b;
+    color: white;
+    box-shadow: 0 0 14px #c1c1c1;
 }
 .btn:disabled{
     border: 1px solid grey;
     background: whitesmoke;
     color: grey;
     cursor: default;
+}
+
+.btn-red{
+    border: 1px solid #b2180e;
+}
+.btn-red:hover {
+    background-color: #b2180e;
+    border: 1px solid #b2180e;
+    color: white;
 }
 
 .discrete-link{

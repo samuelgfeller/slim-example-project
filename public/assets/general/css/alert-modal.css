@@ -1,0 +1,94 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    /* The Modal (background) */
+    #alert-modal {
+        position: fixed; /* Stay in place */
+        z-index: 10; /* Sit on top of content placeholder but below flash */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100vh; /* Full height also on mobile */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
+        opacity: 1;
+    }
+
+    /* Modal Content */
+    #alert-modal-box {
+        display: flex;
+        flex-direction: column;
+        column-gap: 20px;
+        align-items: center;
+
+        width: 100%;
+        max-width: 450px;
+        border-radius: 25px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border: 5px solid #b2180e;
+        font-size: 1.1em;
+        text-align: center;
+        background-color: #f2f2f2;
+        padding: 27px;
+
+        transform: translate(-50%, -50%) scale(1);
+        position: absolute;
+        top: 40%;
+        left: 50%;
+
+        animation-name: fade-in-alert-modal;
+        animation-duration: 0.3s;
+    }
+
+    /* Modal Header */
+    #alert-modal-header {
+        padding: 2px 0;
+    }
+
+    /* Modal Body */
+    #alert-modal-body {
+        padding: 2px 0;
+    }
+
+    /* Modal Footer */
+    #alert-modal-footer {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    /* Enhance borders */
+    #alert-modal-footer .btn {
+        font-size: 1.1em;
+        border-width: 2px;
+    }
+}
+
+@media (min-width: 400px) {
+}
+
+@media (min-width: 641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    #alert-modal-box {
+        padding: 40px;
+    }
+    #alert-modal-footer .btn{
+        font-size: 1.2em;
+    }
+}
+
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+}
+
+
+/* Add Animation */
+@keyframes fade-in-alert-modal {
+    from {
+        transform: translate(-50%, -50%) scale(0.97);
+        opacity: 0
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1
+    }
+}

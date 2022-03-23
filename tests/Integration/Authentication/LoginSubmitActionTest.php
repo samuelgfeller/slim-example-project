@@ -17,9 +17,9 @@ use Selective\TestTrait\Traits\MailerTestTrait;
  *  - normal login submit with correct credentials (302 Found redirect)
  *  - login request with incorrect password (401 Unverified)
  *  - login request with invalid values (400 Bad request)
- *  - login request on unverified account (401 Unverified + email with token)
- *  - login request on suspended account (401 Unverified + email)
- *  - login request on locked account (401 Unverified + email with token)
+ *  - login request on unverified account (401 Unverified + email with verification token)
+ *  - login request on suspended account (401 Unverified + email with info)
+ *  - login request on locked account (401 Unverified + email with unlock token)
  *
  * Login tests involving request throttle are done in @see SecurityActionTest
  */
