@@ -12,14 +12,16 @@ $this->setLayout('layout.html.php');
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
     'assets/general/css/form.css',
+    'assets/general/css/alert-modal.css',
     'assets/general/css/loader/three-dots-loader.css',
     // profile.css has to come last to overwrite other styles
     'assets/user/profile.css'
 ]);
-$this->addAttribute('js', ['assets/user/profile.js']);
+$this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-modal.js']);
 ?>
 
 <h1>Your profile</h1>
+<!-- CSS Grid -->
 <div id="personal-info-wrapper"
      data-id="<?= $user->id /* Put user id into wrapper as it's the same for all values to change in this page */ ?>">
     <div>
@@ -48,10 +50,15 @@ $this->addAttribute('js', ['assets/user/profile.js']);
                  id="edit-email-ico">
         </div>
     </div>
+    <div>
+        <button class="btn btn-red" id="delete-account-btn">Delete account</button>
+    </div>
 </div>
 
+<br>
+<br>
+<br>
 
-<br><br><br>
 <p><i><b>Id:</b> <?= $user->id ?></i></p>
 <p><i><b>Status:</b> <?= $user->status ?></i></p>
 <p><i><b>Role:</b> <?= $user->role ?></i></p>

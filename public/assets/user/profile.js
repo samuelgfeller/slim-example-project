@@ -32,6 +32,15 @@ emailEditIco.addEventListener('click', function () {
     createSubmitBtn(valueParent, 'email-submit', inputName);
 });
 
+// Delete account
+document.getElementById('delete-account-btn').addEventListener('click', function () {
+    let title = 'Are you sure that you want to delete your account?';
+    let info = 'Deleting your account means that you won\'t be able to log in again and all activity and posts may ' +
+        'get deleted. <br> If you want to undo this action, you will have to contact us and there is no guarantee that ' +
+        'data can be recovered.';
+    createAlertModal(title, info, submitDeleteAccount);
+});
+
 // Functions
 
 /**
@@ -208,4 +217,44 @@ function replaceInputWithValue(inputElement) {
 function showProfileValueChangeLoader(insertAfterId) {
     document.getElementById(insertAfterId).insertAdjacentHTML('afterend',
         '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
+}
+
+/**
+ * Make server request to delete account
+ */
+function submitDeleteAccount(){
+    // Ajax request to change the profile value
+    let xHttp = new XMLHttpRequest();
+    xHttp.onreadystatechange = function () {
+        if (xHttp.readyState === XMLHttpRequest.DONE) {
+            // Not logged in, redirect to login url
+            if (xHttp.status === 401) {
+                window.location.href = JSON.parse(xHttp.responseText).loginUrl;
+            }
+            // Fail
+            if (xHttp.status !== 200) {
+                // Default fail handler
+                handleFail(xHttp);
+            }
+
+            // Success
+            else {
+                createFlashMessage('success', 'Successfully deleted account. You are now logged out.');
+            }
+        }
+    };
+
+    // Find user id
+    let userId = document.getElementById('personal-info-wrapper').dataset.id;
+    // Get basepath. Especially useful when developing on localhost/project-name
+    let basePath = document.getElementsByTagName('base')[0].getAttribute('href');
+    // Not so sure about which url makes more sense. RestAPI would say PUT /user/{id} so I'll go with this
+    xHttp.open('DELETE', basePath + 'users/' + userId, true);
+
+    xHttp.setRequestHeader("Content-type", "application/json");
+    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // to know to send the login url in the json response body and where to redirect back after a successful login
+    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "profile-page");
+
+    xHttp.send();
 }

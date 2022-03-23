@@ -85,31 +85,19 @@ function createFlashMessage(typeName, message){
  * @param {XMLHttpRequest} xhr
  */
 function handleFail(xhr){
-    let errorMsg = 'Request failed. Please try again.';
+    let errorMsg = 'Code: '+ xhr.status + ' ' + xhr.statusText;
 
-    if (xhr.status === 401 || xhr.status === '401'){
+    if (xhr.status === 401){
         // Overwriting general error message to unauthorized
-        errorMsg = 'Access denied please log in and try again.';
+        errorMsg += '<br>Access denied please log in and try again.';
     }
-    if (xhr.status === 403 || xhr.status === '403'){
-        errorMsg = 'Forbidden. You do not have access to this area or function';
-    }
-
-    if (xhr.status === 404 || xhr.status === '404'){
-        errorMsg = 'Page not found!';
+    if (xhr.status === 403){
+        errorMsg += '<br>Forbidden. You do not have access to this area or function';
     }
 
-    if (xhr.status === 500 || xhr.status === '500'){
-        errorMsg = 'Internal server error';
+    if (xhr.status === 500){
+        errorMsg += '<br>Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
     }
-
-    // Add error messages if they are given by the backend
-    // if(typeof xhr.statusText !== 'undefined' ){
-        // If we know the error message we can add it to the error popup
-        // errorMsg += '<br>Message: '+xhr.statusText;
-    // }
-
-    errorMsg += '<br>Code: '+ xhr.status + ' ' + xhr.statusText;
 
     // If validation error ignore the default message and create specific one
     if (xhr.status === 422) {

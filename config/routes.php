@@ -45,7 +45,8 @@ return function (App $app) {
             $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\UserSubmitUpdateAction::class)->setName(
                 'user-update-submit'
             );
-            $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class);
+            $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)
+            ->setName('user-delete-submit');
         }
     )->add(UserAuthenticationMiddleware::class);
 
