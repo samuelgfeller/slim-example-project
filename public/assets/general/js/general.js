@@ -85,7 +85,8 @@ function createFlashMessage(typeName, message){
  * @param {XMLHttpRequest} xhr
  */
 function handleFail(xhr){
-    let errorMsg = 'Code: '+ xhr.status + ' ' + xhr.statusText;
+    // Example: 404 Not Found
+    let errorMsg = xhr.status + ' ' + xhr.statusText;
 
     if (xhr.status === 401){
         // Overwriting general error message to unauthorized

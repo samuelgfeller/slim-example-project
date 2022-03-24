@@ -3,40 +3,36 @@
 namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRoleFinder;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Service\UserDeleter;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 final class UserDeleteAction
 {
     private Responder $responder;
 
-    protected LoggerInterface $logger;
 
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param LoggerFactory $logger
      * @param UserDeleter $userDeleter
-     * @param UserRoleFinder $userRoleFinder
+     * @param SessionInterface $session
      */
     public function __construct(
         Responder $responder,
-        LoggerFactory $logger,
         private UserDeleter $userDeleter,
-        private UserRoleFinder $userRoleFinder
+        private SessionInterface $session
     ) {
         $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('user-delete');
     }
 
     /**
-     * Action.
+     * Action used by two different use cases.
+     *  - User deletes its own account
+     *  - Admin deletes user account
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
@@ -50,33 +46,41 @@ final class UserDeleteAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // getUserIdFromToken not transferred to action since it will be session based
-        $loggedUserId = (int)$this->getUserIdFromToken($request);
-        $id = (int)$args['id'];
 
-        $userRole = $this->userRoleFinder->getUserRoleById($loggedUserId);
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $userIdToDelete = (int)$args['user_id'];
 
+            try {
+                // Delete user
+                $deleted = $this->userDeleter->deleteUser($userIdToDelete, $loggedInUserId);
 
-        // Check if it's admin or if it's its own user
-        if ($userRole === 'admin' || $id === $loggedUserId) {
-            // todo [SLE-30] Validate User deletion in Domain instead of Action
-            $validationResult = $this->userValidator->validateDeletion($id, $loggedUserId);
-            if ($validationResult->fails()) {
-                return $this->responder->respondWithJsonOnValidationError($validationResult, $response);
+                if ($deleted) {
+                    $responseBody = ['status' => 'success'];
+                    // If user deleted his own account, log him out and send redirect location
+                    if ($loggedInUserId === $userIdToDelete) {
+                        $this->session->destroy();
+                        $this->session->start();
+                        $this->session->getFlash()->add('success', 'Successfully deleted account. You are now logged out.');
+                        $this->session->save();
+                        $responseBody['redirectUrl'] = $this->responder->urlFor('home-page');
+                    }
+                    return $this->responder->respondWithJson($response, $responseBody);
+                }
+
+                $response = $this->responder->respondWithJson($response,
+                    ['status' => 'warning', 'message' => 'User not deleted.']);
+                // If not deleted, inform user
+//                $flash->add('warning',   'The account was not deleted');
+                return $response->withAddedHeader('Warning', 'The account was not deleted');
+            } catch (ForbiddenException $fe) {
+                // Not throwing HttpForbiddenException as it's a json request and response should be json too
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'],
+                    403
+                );
             }
-
-            $deleted = $this->userDeleter->deleteUser($id);
-            if ($deleted) {
-                return $this->responder->respondWithJson($response, ['status' => 'success', 'message' => 'User deleted']);
-            }
-            return $this->responder->respondWithJson($response, ['status' => 'error', 'message' => 'User not deleted']);
         }
-        $this->logger->notice('User ' . $loggedUserId . ' tried to delete other user with id: ' . $id);
-
-        return $this->responder->respondWithJson(
-            $response,
-            ['status' => 'error', 'message' => 'You can only delete your user or be an admin to delete others'],
-            403
-        );
+        return $response;
     }
 }

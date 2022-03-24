@@ -239,7 +239,13 @@ function submitDeleteAccount(){
 
             // Success
             else {
-                createFlashMessage('success', 'Successfully deleted account. You are now logged out.');
+                // Not ideal but we don't have much choice as if flash message is created server side it is not shown
+                // on the js "redirect". For the flash message to display.
+                // createFlashMessage('success', 'Successfully deleted account. You are now logged out.');
+                let responseBody = JSON.parse(xHttp.responseText);
+                if (typeof responseBody.redirectUrl !== 'undefined'){
+                    window.location.href = responseBody.redirectUrl;
+                }
             }
         }
     };
