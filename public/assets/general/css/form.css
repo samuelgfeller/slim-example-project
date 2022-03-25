@@ -4,88 +4,105 @@
     --formColor: #6592a2;
     /* dark pink #660066*/
 }
-.form-box {
-    /*min-width: 400px;*/
-    width: 50%;
-    min-width: 400px;
-    border-radius: var(--outer-box-border-radius);
-    background-color: #f2f2f2;
-    padding: 20px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width:100px) {
+    .form-box {
+        width: 100%;
+        border-radius: var(--outer-box-border-radius);
+        background-color: #f2f2f2;
+        padding: 20px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+    }
+
+    .form input, .form textarea, .form select, .form textarea,
+        /* Sometimes I want form style but without it being in an actual form hence the direct css classes */
+    .form-input, .form-textarea, .form-select, .form-textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        display: inline-block;
+        border: 1px solid var(--formColor);
+        border-radius: var(--input-boder-radius);
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .form input:focus, .form textarea:focus, .form select:focus, .form textarea:focus,
+    .form-input:focus, .form-textarea:focus, .form-select:focus, .form-textarea:focus {
+        border: 2px solid var(--formColor);
+        outline: none;
+    }
+
+    .form input[type=submit], .submit-btn {
+        width: 100%;
+        background-color: white;
+        border: 1px solid var(--formColor);
+        color: var(--formColor);
+        padding: 8px 15px;
+        margin: 15px 0 0;
+        border-radius: 4444px;
+        cursor: pointer;
+        font-size: 100%;
+    }
+
+    .form input[type=submit]:hover, .submit-btn:hover {
+        background: var(--formColor);
+        color: white;
+    }
+
+    .form input[type=submit]:disabled, .submit-btn:disabled {
+        border: 1px solid grey;
+        background: whitesmoke;
+        color: grey;
+        cursor: default;
+    }
+
+    .form label {
+        margin-top: 15px;
+        margin-left: 4px;
+        margin-bottom: 4px;
+        vertical-align: top;
+        display: block;
+    }
+
+    .form label:first-child {
+        margin-top: 5px;
+    }
+
+    .form-box.wrong-cred-input, input.wrong-cred-input {
+        border: 2px solid #c0000a;
+    }
+
+    .err-msg {
+        padding-top: 5px;
+        display: block;
+        color: #9f0009;
+    }
+
+    .success-msg {
+        font-weight: bold;
+    }
+
+    .input-warning {
+        font-weight: 400;
+        margin-top: 10px;
+        display: inline-block;
+        color: #d66500;
+    }
+}
+
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    .form-box {
+        width: 50%;
+        min-width: 400px;
+    }
+}
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
 
 }
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
 
-.form input, .form textarea, .form select, .form textarea,
-/* Sometimes I want form style but without it being in an actual form hence the direct css classes */
-.form-input, .form-textarea, .form-select, .form-textarea{
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    display: inline-block;
-    border: 1px solid var(--formColor);
-    border-radius: var(--input-boder-radius);
-    box-sizing: border-box;
-    font-size: 16px;
 }
-.form input:focus, .form textarea:focus, .form select:focus, .form textarea:focus,
-.form-input:focus, .form-textarea:focus, .form-select:focus, .form-textarea:focus
-{
-    border: 2px solid var(--formColor);
-    outline: none;
-}
-
-.form input[type=submit], .submit-btn {
-    width: 100%;
-    background-color: white;
-    border: 1px solid var(--formColor);
-    color: var(--formColor);
-    padding: 8px 15px;
-    margin: 15px 0 0;
-    border-radius: 4444px;
-    cursor: pointer;
-    font-size: 100%;
-}
-
-.form input[type=submit]:hover, .submit-btn:hover {
-    background: var(--formColor);
-    color: white;
-}
-
-.form input[type=submit]:disabled, .submit-btn:disabled {
-    border: 1px solid grey;
-    background: whitesmoke;
-    color: grey;
-    cursor: default;
-}
-
-.form label {
-     margin-top: 15px;
-     margin-left: 4px;
-     margin-bottom: 4px;
-     vertical-align: top;
-     display: block;
- }
-
-.form label:first-child {
-    margin-top: 5px;
-}
-
-.form-box.wrong-cred-input, input.wrong-cred-input{
-    border: 2px solid #c0000a;
-}
-
-.err-msg{
-    padding-top: 5px;
-    display: block;
-    color: #9f0009;
-}
-.success-msg{
-    font-weight: bold;
-}
-
-.input-warning{
-    font-weight: 400;
-    margin-top: 10px;
-    display: inline-block;
-    color: #d66500;
-}
+@media (min-width:1281px) { /* hi-res laptops and desktops */ }

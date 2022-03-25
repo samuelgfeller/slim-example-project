@@ -11,7 +11,7 @@
     }
     main {
         width: 100%;
-        padding: 1em 0.5em 0.5em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+        padding: 1em 0.5em 1em 0.5em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
         /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
         flex: 1 0 auto;
         border-radius: 20px;
