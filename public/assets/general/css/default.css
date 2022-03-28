@@ -34,7 +34,8 @@ a {
 }
 
 a:hover {
-    text-shadow: 1px 0 0 black;
+    /*text-shadow: 0 0 1px black;*/
+    font-weight: bold;
     text-decoration: none;
 }
 
@@ -105,6 +106,9 @@ a:hover {
     font-style: italic;
     color: #575757;
     font-size: 0.9em;
+}
+.discrete-link:hover{
+    /*color: #777777;*/
 }
 
 #recaptcha{

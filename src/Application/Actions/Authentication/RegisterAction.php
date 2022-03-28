@@ -8,15 +8,14 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
 final class RegisterAction
 {
-    protected Responder $responder;
 
     /**
      * RegisterAction constructor.
      * @param Responder $responder
      */
-    public function __construct(Responder $responder)
+    public function __construct(
+        private Responder $responder)
     {
-        $this->responder = $responder;
     }
 
     /**
@@ -29,7 +28,7 @@ final class RegisterAction
     {
         return $this->responder->render(
             $response,
-            'Authentication/register.html.php',
+            'authentication/register.html.php',
             // Provide same query params passed to register page to be added to the register submit request
             ['queryParams' => $request->getQueryParams()]
         );

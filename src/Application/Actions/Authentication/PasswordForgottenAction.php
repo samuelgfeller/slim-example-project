@@ -6,16 +6,16 @@ use App\Application\Responder\Responder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
-final class RegisterCheckEmailAction
+class PasswordForgottenAction
 {
-    protected Responder $responder;
-
     /**
-     * RegisterAction constructor.
+     * The constructor.
+     *
      * @param Responder $responder
      */
-    public function __construct(Responder $responder) {
-        $this->responder = $responder;
+    public function __construct(
+        private Responder $responder
+    ) {
     }
 
     /**
@@ -26,6 +26,9 @@ final class RegisterCheckEmailAction
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        return $this->responder->render($response, 'authentication/register-check-email.html.php');
+        return $this->responder->render(
+            $response,
+            'authentication/password-forgotten.html.php'
+        );
     }
 }

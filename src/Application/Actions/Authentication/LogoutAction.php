@@ -3,39 +3,33 @@
 namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
-use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
-use Psr\Log\LoggerInterface;
 
 final class LogoutAction
 {
-    protected LoggerInterface $logger;
-    protected Responder $responder;
-    protected SessionInterface $session;
-
-
+    /**
+     * LogoutAction constructor
+     *
+     * @param SessionInterface $session
+     * @param Responder $responder
+     */
     public function __construct(
-        Responder $responder,
-        LoggerFactory $logger,
-        SessionInterface $session
+        private SessionInterface $session,
+        private Responder $responder,
     ) {
-        $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('auth-logout');
-        $this->session = $session;
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         // Logout user
         $this->session->destroy();
+        $this->session->start();
+        $this->session->regenerateId();
+        // Add flash message to inform user of the success
+        $this->session->getFlash()->add('success', 'Logged out successfully.');
 
-        return $this->responder->redirectToRouteName(
-            $response,
-            'login-page',
-            ['status' => 'success', 'message' => 'Logged out successfully']
-        );
+        return $this->responder->redirectToRouteName($response, 'login-page');
     }
 }

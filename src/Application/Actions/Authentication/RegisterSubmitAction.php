@@ -59,7 +59,7 @@ Please click on the link in the email to finnish the registration.'
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
-                        'Authentication/register.html.php',
+                        'authentication/register.html.php',
                         $ve->getValidationResult(),
                         $request->getQueryParams()
                     );
@@ -70,7 +70,7 @@ Please click on the link in the email to finnish the registration.'
                     $this->responder->addPhpViewAttribute('formError', true);
                     return $this->responder->render(
                         $response,
-                        'Authentication/register.html.php',
+                        'authentication/register.html.php',
                         // Provide same query params passed to register page to be added again to the submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
@@ -83,7 +83,7 @@ Please click on the link in the email to finnish the registration.'
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'Authentication/register.html.php',
+                        'authentication/register.html.php',
                         ['firstName' => $userData['first_name'], 'surname' => $userData['surname'], 'email' => $userData['email']],
                         $request->getQueryParams()
                     );

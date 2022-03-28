@@ -52,7 +52,7 @@ final class LoginAction
             return $this->responder->redirectToRouteName($response, 'home-page');
         }
         return $this->responder->render($response,
-            'Authentication/login.html.php',
+            'authentication/login.html.php',
             // Provide same query params passed to login page to be added to the login submit request
             ['queryParams' => $request->getQueryParams()]);
     }

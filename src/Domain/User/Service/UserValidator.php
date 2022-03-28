@@ -105,6 +105,27 @@ class UserValidator extends AppValidation
     }
 
     /**
+     * Validate email for password recovery
+     *
+     * @param UserData $user
+     * @return ValidationResult
+     * @throws ValidationException
+     */
+    public function validatePasswordResetEmail(UserData $user): ValidationResult
+    {
+        $validationResult = new ValidationResult('There was a validation error when trying to login');
+
+        // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
+        $this->validateEmail($user->email, true, $validationResult);
+
+        // If the validation failed, throw the exception which will be caught in the Controller
+        $this->throwOnError($validationResult);
+
+        return $validationResult;
+    }
+
+
+    /**
      * Validate password and password2
      *
      * @param array $passwords [$password, $password2]
@@ -130,7 +151,7 @@ class UserValidator extends AppValidation
      * @param ValidationResult $validationResult
      * @param string $fieldName Optional e.g. password2
      */
-    public function validatePassword(
+    private function validatePassword(
         ?string $password,
         bool $required,
         ValidationResult $validationResult,

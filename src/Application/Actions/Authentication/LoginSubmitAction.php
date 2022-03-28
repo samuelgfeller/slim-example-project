@@ -68,7 +68,7 @@ final class LoginSubmitAction
                     $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
-                        'Authentication/login.html.php',
+                        'authentication/login.html.php',
                         $ve->getValidationResult(),
                         $request->getQueryParams()
                     );
@@ -82,7 +82,7 @@ final class LoginSubmitAction
                     $this->responder->addPhpViewAttribute('formError', true);
                     return $this->responder->render(
                         $response->withStatus(401),
-                        'Authentication/login.html.php',
+                        'authentication/login.html.php',
                         // Provide same query params passed to login page to be added to the login submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
@@ -95,7 +95,7 @@ final class LoginSubmitAction
                     return $this->responder->respondWithThrottle(
                         $response,
                         $se->getRemainingDelay(),
-                        'Authentication/login.html.php',
+                        'authentication/login.html.php',
                         ['email' => $userData['email']],
                         $request->getQueryParams()
                     );
@@ -106,7 +106,7 @@ final class LoginSubmitAction
                     $this->responder->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());
                     return $this->responder->render(
                         $response->withStatus(401),
-                        'Authentication/login.html.php',
+                        'authentication/login.html.php',
                         // Provide same query params passed to login page to be added to the login submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
