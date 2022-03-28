@@ -60,8 +60,8 @@ final class UserDeleteAction
                     if ($loggedInUserId === $userIdToDelete) {
                         $this->session->destroy();
                         $this->session->start();
+                        $this->session->regenerateId();
                         $this->session->getFlash()->add('success', 'Successfully deleted account. You are now logged out.');
-                        $this->session->save();
                         $responseBody['redirectUrl'] = $this->responder->urlFor('home-page');
                     }
                     return $this->responder->respondWithJson($response, $responseBody);
