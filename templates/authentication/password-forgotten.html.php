@@ -35,7 +35,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         >
         <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
 
-        <input type="submit" class="submit-btn" id="submitBtnLogin" value="Login">
+        <input type="submit" class="submit-btn" value="Request link to reset password">
     </form>
     <br>Or do you want to navigate to the
     <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">login page</a>?

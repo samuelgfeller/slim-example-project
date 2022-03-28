@@ -40,4 +40,21 @@ class UserUpdaterRepository
         );
         return $query->execute()->rowCount() > 0;
     }
+
+    /**
+     * Change user password
+     *
+     * @param string $passwordHash
+     * @param string $userId
+     * @return bool
+     */
+    public function changeUserPassword(string $passwordHash, string $userId): bool
+    {
+        $query = $this->queryFactory->newQuery()->update('user')->set(['password_hash' => $passwordHash])->where(
+            ['id' => $userId]
+        );
+        return $query->execute()->rowCount() > 0;
+    }
+
+
 }

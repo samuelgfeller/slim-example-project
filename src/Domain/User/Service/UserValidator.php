@@ -128,18 +128,31 @@ class UserValidator extends AppValidation
     /**
      * Validate password and password2
      *
+     * (used for password change from profile, forgotten password and registration)
+     *
      * @param array $passwords [$password, $password2]
      * @param bool $required
-     * @param ValidationResult $validationResult
+     * @param ValidationResult|null $validationResult
      */
-    private function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult): void
+    public function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult = null): void
     {
+        // Keep value to throw exception if validationResult not given
+        $validationResultIsGiven = (bool)$validationResult;
+        // Instantiate ValidationResult Object with default message if not already given
+        $validationResult = $validationResult ??
+            new ValidationResult('There was a validation error when trying to register');
+
         if ($passwords[0] !== $passwords[1]) {
             $validationResult->setError('passwords', 'Passwords do not match');
         }
 
         $this->validatePassword($passwords[0], $required, $validationResult);
         $this->validatePassword($passwords[1], $required, $validationResult, 'password2');
+
+        if ($validationResultIsGiven === true) {
+            // If the validation failed, throw the exception which will be caught in the Controller
+            $this->throwOnError($validationResult); // Thrown at the end so all errors are included
+        }
     }
 
     /**

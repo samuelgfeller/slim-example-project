@@ -5,6 +5,7 @@ namespace App\Application\Actions\Authentication;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exceptions\DomainRecordNotFoundException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -51,10 +52,18 @@ final class PasswordForgottenEmailSubmitAction
                 $this->passwordRecoveryEmailSender->sendPasswordRecoveryEmail($userData);
             } catch (DomainRecordNotFoundException $domainRecordNotFoundException) {
                 // User was not found. Do nothing special as it would be a security flaw to tell the client if user exists
+            } catch (ValidationException $validationException){
+                $flash->add('error', $validationException->getMessage());
+                return $this->responder->renderOnValidationError(
+                    $response,
+                    'authentication/password-forgotten.html.php',
+                    $validationException->getValidationResult(),
+                    $request->getQueryParams()
+                );
             }
-            $flash->add('success', 'Password recovery Email is sent. Please check your inbox and the 
-            spam folder if needed.');
-            $this->responder->redirectToRouteName($response, 'login-page');
+            $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>. 
+            Please check your inbox and the spam folder if needed.');
+            return $this->responder->redirectToRouteName($response, 'login-page');
         }
 
         $flash->add('error', 'Malformed request body syntax');

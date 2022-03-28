@@ -13,18 +13,18 @@ return function (App $app) {
     $app->get('/', \App\Application\Actions\Hello\HelloAction::class)->setName('home-page');
 
     // Authentication - pages and Ajax submit
-    $app->get('/register', \App\Application\Actions\Authentication\RegisterAction::class)->setName('register-page');
+    $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName('register-page');
     $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName(
         'register-submit'
     );
 
-    $app->get('/login', \App\Application\Actions\Authentication\LoginAction::class)->setName('login-page');
+    $app->get('/login', \App\Application\Actions\Authentication\Page\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName('login-submit');
     $app->get('/logout', \App\Application\Actions\Authentication\LogoutAction::class)->setName('logout')->add(
         SessionMiddleware::class
     );
 
-    $app->get('/profile', \App\Application\Actions\User\UserViewProfileAction::class)->setName('profile-page')->add(
+    $app->get('/profile', \App\Application\Actions\User\Page\UserViewProfileAction::class)->setName('profile-page')->add(
         UserAuthenticationMiddleware::class
     );
 
@@ -34,21 +34,26 @@ return function (App $app) {
     );
     $app->get(
         '/register-check-email',
-        \App\Application\Actions\Authentication\RegisterCheckEmailAction::class
+        \App\Application\Actions\Authentication\Page\RegisterCheckEmailAction::class
     )->setName('register-check-email-page');
 
     $app->get('/unlock-account', \App\Application\Actions\Authentication\AccountUnlockAction::class)->setName(
         'account-unlock-verification'
     );
 
-    $app->get('/password-forgotten', \App\Application\Actions\Authentication\PasswordForgottenAction::class)->setName(
-        'password-forgotten'
+    $app->get('/password-forgotten', \App\Application\Actions\Authentication\Page\PasswordForgottenAction::class)->setName(
+        'password-forgotten-page'
     );
     $app->post('/password-forgotten', \App\Application\Actions\Authentication\PasswordForgottenEmailSubmitAction::class)->setName(
         'password-forgotten-email-submit'
     );
-    $app->post('/reset-password', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName(
-        'login-submit'
+    // Set new password page
+    $app->get('/reset-password', \App\Application\Actions\Authentication\Page\ResetPasswordAction::class)->setName(
+        'password-reset-page'
+    );
+    // Submit new password
+    $app->post('/reset-password', \App\Application\Actions\Authentication\ResetPasswordSubmitAction::class)->setName(
+        'password-reset-submit'
     );
 
 
@@ -57,7 +62,7 @@ return function (App $app) {
         $group->get('', \App\Application\Actions\User\UserListAction::class)->setName('user-list');
 
         $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-        $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserViewProfileAction::class);
+        $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\Page\UserViewProfileAction::class);
         $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\UserSubmitUpdateAction::class)->setName(
             'user-update-submit'
         );

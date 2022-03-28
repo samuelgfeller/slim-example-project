@@ -3,13 +3,12 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Exceptions\DomainRecordNotFoundException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Mailer;
 use App\Infrastructure\User\UserFinderRepository;
-use Couchbase\User;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -46,7 +45,7 @@ class PasswordRecoveryEmailSender
      * When user requests a new password for email
      *
      * @param array $userData
-     * @throws TransportExceptionInterface
+     * @throws ValidationException
      */
     public function sendPasswordRecoveryEmail(array $userData): void
     {
@@ -58,7 +57,7 @@ class PasswordRecoveryEmailSender
 
         if ($dbUser->email !== null) {
             // Create verification token, so he doesn't have to register again
-            $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($user);
+            $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($dbUser);
 
             // Send verification mail
             $this->email->subject('Reset password')->html(

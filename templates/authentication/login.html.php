@@ -41,7 +41,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
                ($passwordErr = get_field_error(($validation ?? []), 'password')) ? 'wrong-cred-input' : '' ?>"
         >
         <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
-        <br><a class="discrete-link" href="<?= $route->urlFor('password-forgotten') ?>">Forgot password?</a>
+        <br><a class="discrete-link" href="<?= $route->urlFor('password-forgotten-page') ?>">Forgot password?</a>
         <!-- reCaptcha -->
         <div class="g-recaptcha" id="recaptcha" data-sitekey="6LcctKoaAAAAAAcqzzgz-19OULxNxtwNPPS35DOU"></div>
 

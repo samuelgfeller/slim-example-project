@@ -9,8 +9,8 @@
 Hello <?= $user->getFullName() ?> <br>
 <br>
 <?php ///** Following sentence asserted at @see LoginSubmitActionTest */?>
-If you recently requested to reset your password, click the link below to do so.
-
+If you recently requested to reset your password, click the link below to do so. <br>
+<br>
 <b><a href="<?= $route->fullUrlFor($uri, 'password-reset-submit', [], $queryParams) ?>">Create new password</a></b>.
 <br><br>
 

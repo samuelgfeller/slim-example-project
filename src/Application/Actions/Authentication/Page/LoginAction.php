@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Authentication;
+namespace App\Application\Actions\Authentication\Page;
 
 use App\Application\Responder\Responder;
 use Odan\Session\SessionInterface;
