@@ -7,7 +7,7 @@ password1Inp.addEventListener('keyup', checkIfPasswordsMatch);
 password2Inp.addEventListener('keyup', checkIfPasswordsMatch);
 
 // Check if password is known to be breached
-password1Inp.addEventListener('change', checkIfPasswordIsBreached);
+password1Inp.addEventListener('keyup', checkIfPasswordIsBreached);
 
 /**
  * Check if password 1 and password 2 are identical
@@ -24,11 +24,10 @@ function checkIfPasswordsMatch() {
 function checkIfPasswordIsBreached() {
     // Create hash and make Ajax request to HIBP api and display warning if needed
     getHash(password1Inp.value)
-        // passwordHash is the return value of the promise above
-        .then(passwordHash => {
-            // console.log(passwordHash);
-            makeHIBPRequest(passwordHash)
-        });
+        // makeHIBPRequest is called with as parameter the return value of getHash() promise which is the password hash
+        .then(makeHIBPRequest)
+        // showWarning and removeWarning are the functions executed by makeHIBPRequest promise resolve() and reject()
+        .then(showWarning, removeWarning);
 }
 
 /**
@@ -37,36 +36,38 @@ function checkIfPasswordIsBreached() {
  * @param {string} passwordHash
  */
 function makeHIBPRequest(passwordHash) {
-    let hashPrefix = passwordHash.substring(0, 5);
-    let hashSuffix = passwordHash.substring(5);
+    return new Promise((resolve, reject) => {
+        let hashPrefix = passwordHash.substring(0, 5);
 
-    // todo implement async function to return after result https://stackoverflow.com/a/5316805/9013718
-    let xHttp = new XMLHttpRequest();
-    xHttp.onreadystatechange = function () {
-        if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // Fail
-            if (xHttp.status !== 200) {
-                // Default fail handler
-                handleFail(xHttp);
-                removeWarning();
-            }
+        let hashSuffix = passwordHash.substring(5);
 
-            // Success
-            else {
-                let hashFound = xHttp.responseText.toLowerCase().includes(hashSuffix);
-                if (hashFound === true) {
-                    // Callback function
-                    showWarning();
-                } else {
+        let xHttp = new XMLHttpRequest();
+        xHttp.onreadystatechange = function () {
+            if (xHttp.readyState === XMLHttpRequest.DONE) {
+                // Fail
+                if (xHttp.status !== 200) {
+                    // Default fail handler
+                    handleFail(xHttp);
                     removeWarning();
                 }
+                // Success
+                else {
+                    let hashFound = xHttp.responseText.toLowerCase().includes(hashSuffix);
+                    if (hashFound === true) {
+                        // Resolve that calls showWarning() inside .then
+                        resolve();
+                    } else {
+                        // Reject that calls showWarning() inside .then
+                        reject();
+                    }
+                }
             }
-        }
-    };
-    // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-    xHttp.open('GET', `https://api.pwnedpasswords.com/range/${hashPrefix}`, false);
+        };
+        // For GET requests, query params have to be passed in the url directly. They are ignored in send()
+        xHttp.open('GET', `https://api.pwnedpasswords.com/range/${hashPrefix}`, false);
 
-    xHttp.send();
+        xHttp.send();
+    });
 }
 
 /**
