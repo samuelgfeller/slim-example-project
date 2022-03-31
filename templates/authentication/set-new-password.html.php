@@ -6,6 +6,8 @@ $this->setLayout('layout.html.php');
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams query params that should be added to form submit (e.g. redirect)
  * @var null|array $validation validation errors and messages (may be undefined, MUST USE NULL COALESCING)
+ * @var string $token verification token
+ * @var string $id verification id
  */
 ?>
 
@@ -17,7 +19,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Password reset</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-box <?= isset($formError) ? ' wrong-cred-input' : '' ?>" id="password-reset-form-box">
+<div class="form-box <?= isset($formError) ? ' wrong-cred-input' : '' ?>">
     <form action="<?= $route->urlFor('password-reset-submit') ?>"
           class="form" method="post" autocomplete="on">
         <?php
@@ -46,10 +48,13 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
         <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
 
-        <input type="submit" class="submit-btn" value="Set new password">
+        <input type="hidden" name="token" value="<?= $token ?>">
+        <input type="hidden" name="id" value="<?= $id ?>">
+
+        <input type="submit" id="password-reset-submit-btn" class="submit-btn" value="Set new password">
     </form>
     <br>Or do you want to navigate to the
-    <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">login page</a>?
+    <a href="<?= $route->urlFor('login-page', [], $queryParams ?? []) ?>">login page</a>?
 </div>
 
 <?php

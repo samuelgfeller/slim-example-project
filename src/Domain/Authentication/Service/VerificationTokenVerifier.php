@@ -8,7 +8,7 @@ use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 
-final class VerificationTokenChecker
+final class VerificationTokenVerifier
 {
     public function __construct(
         private VerificationTokenFinderRepository $verificationTokenFinderRepository,
@@ -18,6 +18,8 @@ final class VerificationTokenChecker
 
     /**
      * Most simple form of verifying token and return user id
+     *
+     * Token also verified @see AccountUnlockTokenVerifier, RegisterTokenVerifier
      *
      * @param int $verificationId
      * @param string $token
@@ -42,6 +44,6 @@ final class VerificationTokenChecker
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
         }
 
-        throw new InvalidTokenException('Not existing, invalid, used or expired token.');
+         throw new InvalidTokenException('Not existing, invalid, used or expired token.');
     }
 }

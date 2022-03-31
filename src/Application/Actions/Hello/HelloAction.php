@@ -36,8 +36,11 @@ final class HelloAction
      * @param array $args
      * @return ResponseInterface The response
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
         $name = $args['name'] ?? 'noname';
         $array = [];
 //        $a = $test;

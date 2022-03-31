@@ -13,7 +13,7 @@ $this->setLayout('layout.html.php');
 <?php
 // Define assets that should be included
 $this->addAttribute('css', ['assets/general/css/form.css']);
-$this->addAttribute('js', ['assets/auth/auth.js']);
+$this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
 ?>
 <div class="verticalCenter">
     <h2 style="display:inline-block;">Register</h2>
@@ -54,16 +54,16 @@ $this->addAttribute('js', ['assets/auth/auth.js']);
         <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
 
         <!--   Password 1    -->
-        <label for="register-password1-inp">Password</label>
-        <input type="password" name="password" id="register-password1-inp" minlength="3" required
+        <label for="password1-inp">Password</label>
+        <input type="password" name="password" id="password1-inp" minlength="3" required
                class="<?= //If there is an error on a specific field, echo error class
                ($passwordErr = get_field_error(($validation ?? []), 'password')) ? 'wrong-cred-input' : '' ?>"
         >
         <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
 
         <!--   Password 2     -->
-        <label for="register-password2-inp">Repeat password</label>
-        <input type="password" name="password2" id="register-password2-inp" minlength="3" required
+        <label for="password2-inp">Repeat password</label>
+        <input type="password" name="password2" id="password2-inp" minlength="3" required
                class="<?= //If there is an error on a specific field, echo error class
                ($password2Err = get_field_error(($validation ?? []), 'password2')) ? 'wrong-cred-input' : '' ?>
                <?= // If there is error with both passwords

@@ -3,8 +3,7 @@
 namespace App\Application\Actions\Authentication\Page;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Exception\InvalidTokenException;
-use App\Domain\Authentication\Service\VerificationTokenChecker;
+use App\Domain\Authentication\Service\VerificationTokenVerifier;
 use App\Domain\Factory\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -24,7 +23,7 @@ class ResetPasswordAction
     public function __construct(
         private Responder $responder,
         private SessionInterface $session,
-        private VerificationTokenChecker $resetPasswordTokenVerifier,
+        private VerificationTokenVerifier $verificationTokenChecker,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-service');
@@ -45,7 +44,10 @@ class ResetPasswordAction
 
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
-            return $this->responder->render($response, 'authentication/set-new-password.html.php');
+            return $this->responder->render($response, 'authentication/set-new-password.html.php', [
+                    'token' => $queryParams['token'],
+                    'id' => $queryParams['id']
+                ]);
         }
 
         $flash->add('error', 'Please click on the link you received via email.');

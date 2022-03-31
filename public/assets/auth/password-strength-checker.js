@@ -23,6 +23,7 @@ function checkIfPasswordsMatch() {
  */
 function checkIfPasswordIsBreached() {
     // Create hash and make Ajax request to HIBP api and display warning if needed
+    // getHash makes SHA-1 hash and returns promise
     getHash(password1Inp.value)
         // makeHIBPRequest is called with as parameter the return value of getHash() promise which is the password hash
         .then(makeHIBPRequest)
@@ -92,7 +93,7 @@ function removeWarning() {
 }
 
 /**
- * Create SHA-1 hash
+ * Create SHA-1 hash asynchronously
  *
  * Source: https://stackoverflow.com/a/43383990/9013718
  * @param str
@@ -107,9 +108,9 @@ function getHash(str, algo = "SHA-1") {
         // first is the success callback function and second the error callback function
         // hash is the variable name of the return result of the promise before (resolved value)
         // which is passed to an anonymous function that can use this value (hashAsParam) => {/* function */}
-        .then(hash => {
+        .then((hash) => {
             window.hash = hash;
-            // here hash is an arrayBuffer,
+            // Here hash is an arrayBuffer,
             // So we'll convert it to its hex version
             let result = '';
             const view = new DataView(hash);
