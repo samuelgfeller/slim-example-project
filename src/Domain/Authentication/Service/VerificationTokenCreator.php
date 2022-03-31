@@ -31,7 +31,7 @@ class VerificationTokenCreator
     public function createUserVerification(UserData $user, array $queryParams = []): array
     {
         // Create token
-        $token = random_bytes(50);
+        $token = bin2hex(random_bytes(50));
 
         // Set token expiration because link automatically logs in
         $expiresAt = new \DateTime('now');
