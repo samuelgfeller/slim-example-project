@@ -46,7 +46,6 @@ final class UserDeleteAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userIdToDelete = (int)$args['user_id'];
 
@@ -61,16 +60,20 @@ final class UserDeleteAction
                         $this->session->destroy();
                         $this->session->start();
                         $this->session->regenerateId();
-                        $this->session->getFlash()->add('success', 'Successfully deleted account. You are now logged out.');
+                        $this->session->getFlash()->add(
+                            'success',
+                            'Successfully deleted account. You are now logged out.'
+                        );
                         $responseBody['redirectUrl'] = $this->responder->urlFor('home-page');
                     }
                     return $this->responder->respondWithJson($response, $responseBody);
                 }
 
-                $response = $this->responder->respondWithJson($response,
-                    ['status' => 'warning', 'message' => 'User not deleted.']);
-                // If not deleted, inform user
-//                $flash->add('warning',   'The account was not deleted');
+                $response = $this->responder->respondWithJson(
+                    $response,
+                    // response json body asserted in UserDeleteActionTest
+                    ['status' => 'warning', 'message' => 'User not deleted.']
+                );
                 return $response->withAddedHeader('Warning', 'The account was not deleted');
             } catch (ForbiddenException $fe) {
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
