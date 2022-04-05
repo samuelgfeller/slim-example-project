@@ -149,7 +149,7 @@ class UserValidator extends AppValidation
         $this->validatePassword($passwords[0], $required, $validationResult);
         $this->validatePassword($passwords[1], $required, $validationResult, 'password2');
 
-        if ($validationResultIsGiven === true) {
+        if ($validationResultIsGiven === false) {
             // If the validation failed, throw the exception which will be caught in the Controller
             $this->throwOnError($validationResult); // Thrown at the end so all errors are included
         }

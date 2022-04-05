@@ -47,7 +47,7 @@ return function (App $app) {
     $app->post('/password-forgotten', \App\Application\Actions\Authentication\PasswordForgottenEmailSubmitAction::class)->setName(
         'password-forgotten-email-submit'
     );
-    // Set new password page
+    // Set new password page when forgotten
     $app->get('/reset-password', \App\Application\Actions\Authentication\Page\ResetPasswordAction::class)->setName(
         'password-reset-page'
     );
@@ -55,6 +55,16 @@ return function (App $app) {
     $app->post('/reset-password', \App\Application\Actions\Authentication\ResetPasswordSubmitAction::class)->setName(
         'password-reset-submit'
     );
+
+    // Change password page when authenticated
+    $app->get('/change-password', \App\Application\Actions\Authentication\Page\ChangePasswordAction::class)->setName(
+        'change-password-page'
+    )->add(UserAuthenticationMiddleware::class);
+    // Submit new password when authenticated
+    $app->post('/change-password', \App\Application\Actions\Authentication\ChangePasswordSubmitAction::class)->setName(
+        'change-password-submit'
+    )->add(UserAuthenticationMiddleware::class);
+
 
 
     $app->group('/users', function (RouteCollectorProxy $group) {

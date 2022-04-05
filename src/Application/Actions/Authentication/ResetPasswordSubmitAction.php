@@ -82,7 +82,7 @@ class ResetPasswordSubmitAction
                 $flash->add('error', $validationException->getMessage());
                 return $this->responder->renderOnValidationError(
                     $response,
-                    'authentication/set-new-password.html.php',
+                    'authentication/reset-password.html.php',
                     $validationException->getValidationResult(),
                     $request->getQueryParams()
                 );

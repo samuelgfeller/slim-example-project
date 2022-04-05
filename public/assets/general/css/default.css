@@ -77,6 +77,8 @@ a:hover {
     border-radius: 4444px;
     cursor: pointer;
     font-size: 100%;
+    text-decoration: none; /* For when <a> is used as button */
+    display: inline-block; /* For when <a> to behave as button */
 }
 .btn:hover{
     /* Example: alert modal box cancel button */

@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var \Slim\Interfaces\RouteParserInterface $route
  * @var $this \Slim\Views\PhpRenderer Rendering engine
  * @var $user \App\Domain\User\Data\UserData logged in user
  */
@@ -51,16 +52,17 @@ $this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-mod
         </div>
     </div>
     <div>
-        <button class="btn btn-red" id="delete-account-btn">Delete account</button>
+        <a class="btn" id="change-password-btn" href="<?= $route->urlFor('change-password-page')?>">Change password</a>
+    </div>
+    <div>
+        <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>
     </div>
 </div>
 
 <br>
-<br>
-<br>
 
-<p><i><b>Id:</b> <?= $user->id ?></i></p>
-<p><i><b>Status:</b> <?= $user->status ?></i></p>
-<p><i><b>Role:</b> <?= $user->role ?></i></p>
-<p><i><b>Created:</b> <?= date('d.m.Y H:i:s ', strtotime($user->createdAt)) ?></i></p>
-<p><i><b>Updated:</b> <?= date('d.m.Y H:i:s', strtotime($user->updatedAt)) ?></i></p>
+<p><i><b>Id:</b> <?= $user->id ?></i><br>
+<i><b>Status:</b> <?= $user->status ?></i><br>
+<i><b>Role:</b> <?= $user->role ?></i><br>
+<i><b>Created:</b> <?= date('d.m.Y H:i:s ', strtotime($user->createdAt)) ?></i><br>
+<i><b>Updated:</b> <?= date('d.m.Y H:i:s', strtotime($user->updatedAt)) ?></i></p>

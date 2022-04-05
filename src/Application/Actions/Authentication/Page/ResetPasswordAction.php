@@ -23,7 +23,6 @@ class ResetPasswordAction
     public function __construct(
         private Responder $responder,
         private SessionInterface $session,
-        private VerificationTokenVerifier $verificationTokenChecker,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-service');
@@ -44,7 +43,7 @@ class ResetPasswordAction
 
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
-            return $this->responder->render($response, 'authentication/set-new-password.html.php', [
+            return $this->responder->render($response, 'authentication/reset-password.html.php', [
                     'token' => $queryParams['token'],
                     'id' => $queryParams['id']
                 ]);
