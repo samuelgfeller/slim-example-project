@@ -34,6 +34,7 @@ class UserFixture
             'first_name' => 'User',
             'surname' => 'Example',
             'email' => 'user@example.com',
+            // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'role' => 'user',
             'status' => UserData::STATUS_ACTIVE,

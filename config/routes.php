@@ -60,7 +60,7 @@ return function (App $app) {
     $app->get('/change-password', \App\Application\Actions\Authentication\Page\ChangePasswordAction::class)->setName(
         'change-password-page'
     )->add(UserAuthenticationMiddleware::class);
-    // Submit new password when authenticated
+    // Submit new password when authenticated (post and not put as form submit)
     $app->post('/change-password', \App\Application\Actions\Authentication\ChangePasswordSubmitAction::class)->setName(
         'change-password-submit'
     )->add(UserAuthenticationMiddleware::class);

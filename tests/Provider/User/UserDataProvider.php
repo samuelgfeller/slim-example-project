@@ -340,7 +340,8 @@ class UserDataProvider
     /**
      * Providing arrays of how malformed request body can look like
      * Error messages have to be identical to RegisterSubmitAction.php
-     * asserting error message to differentiate empty body and malformed body
+     * asserting error message to differentiate empty body and malformed body.
+     * Used to test register and update.
      *
      * @return array[][]
      */
@@ -420,6 +421,52 @@ class UserDataProvider
                 ],
                 'message' => 'Request body malformed.',
             ],
+        ];
+    }
+
+    /**
+     * Provide malformed bodies for password change submit request as well as
+     * according error messages
+     * @return array[]
+     */
+    public function malformedPasswordChangeRequestBodyProvider(): array
+    {
+        return [
+            [
+                // Empty body
+                'body' => [],
+                'message' => 'Password change request malformed.',
+            ],
+            [
+                // Body "null" (because both can happen )
+                'body' => null,
+                'message' => 'Password change request malformed.',
+            ],
+            [
+                // Leaving out 'old_password'
+                'body' => [
+                    'password' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Password change request malformed.',
+            ],
+            [
+                // Leaving out 'password'
+                'body' => [
+                    'old_password' => '',
+                    'password2' => '',
+                ],
+                'message' => 'Password change request malformed.',
+            ],
+            [
+                // Leaving out 'password2'
+                'body' => [
+                    'old_password' => '',
+                    'password' => '',
+                ],
+                'message' => 'Password change request malformed.',
+            ],
+
         ];
     }
 

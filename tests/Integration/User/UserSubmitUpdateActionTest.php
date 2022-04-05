@@ -66,7 +66,7 @@ class UserSubmitUpdateActionTest extends TestCase
     }
 
     /**
-     * Test behaviour when trying to exist a user that doesn't exist
+     * Test behaviour when trying to update a user that doesn't exist
      * and data fails makes validation fail.
      */
     public function testUpdateUser_invalidData(): void
