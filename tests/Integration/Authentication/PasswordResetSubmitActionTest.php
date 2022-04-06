@@ -22,7 +22,7 @@ use Slim\Exception\HttpBadRequestException;
  *  - request to set new password with valid token but invalid data -> 400 Bad request
  *  - request to set new password with malformed request body -> HttpBadRequestException
  */
-class ResetPasswordSubmitActionTest extends TestCase
+class PasswordResetSubmitActionTest extends TestCase
 {
 
     use AppTestTrait;
