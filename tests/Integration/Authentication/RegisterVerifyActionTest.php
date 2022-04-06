@@ -39,7 +39,7 @@ class RegisterVerifyActionTest extends TestCase
     public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
-        $userRow = (new UserFixture())->records[0];
+        $userRow = (new UserFixture())->records[1];
         $userRow['status'] = UserData::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
@@ -85,7 +85,7 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = (new UserFixture())->records[0];
+        $userRow = (new UserFixture())->records[1];
         $userRow['status'] = UserData::STATUS_ACTIVE;
         $this->insertFixture('user', $userRow);
 
@@ -132,7 +132,7 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = (new UserFixture())->records[0];
+        $userRow = (new UserFixture())->records[1];
         $userRow['status'] = UserData::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 

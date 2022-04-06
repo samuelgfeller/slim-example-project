@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Test\Integration\User;
+namespace App\Test\Integration\Authentication;
 
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
 use Slim\Exception\HttpBadRequestException;
 

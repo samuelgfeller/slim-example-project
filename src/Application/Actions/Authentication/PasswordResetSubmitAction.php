@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
-class ResetPasswordSubmitAction
+class PasswordResetSubmitAction
 {
     private LoggerInterface $logger;
 
@@ -65,7 +65,7 @@ class ResetPasswordSubmitAction
 
                 $flash->add('success', 'Successfully changed password. <b>You are now logged in.</b>');
 
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                return $this->responder->redirectToRouteName($response, 'profile-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add(
                     'error',
@@ -80,11 +80,13 @@ class ResetPasswordSubmitAction
                 return $this->responder->redirectToRouteName($response, 'login-page');
             } catch (ValidationException $validationException) {
                 $flash->add('error', $validationException->getMessage());
+                // Add token and id to php view attribute like PasswordResetAction does
+                $this->responder->addPhpViewAttribute('token', $parsedBody['token']);
+                $this->responder->addPhpViewAttribute('id', $parsedBody['id']);
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/reset-password.html.php',
-                    $validationException->getValidationResult(),
-                    $request->getQueryParams()
+                    $validationException->getValidationResult()
                 );
             }
         }
@@ -95,7 +97,7 @@ class ResetPasswordSubmitAction
             'Password change request malformed: ' . json_encode($parsedBody, JSON_THROW_ON_ERROR)
         );
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
-        // Exception message same as in tests/Provider/UserProvider->malformedRequestBodyProvider()
-        throw new HttpBadRequestException($request, 'Query params or body malformed.');
+        // Exception message same as in tests/Provider/UserProvider->malformedPasswordResetRequestBodyProvider()
+        throw new HttpBadRequestException($request, 'Request body malformed.');
     }
 }

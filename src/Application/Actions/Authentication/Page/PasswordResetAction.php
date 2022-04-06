@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
-class ResetPasswordAction
+class PasswordResetAction
 {
     private LoggerInterface $logger;
 

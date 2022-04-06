@@ -48,11 +48,11 @@ return function (App $app) {
         'password-forgotten-email-submit'
     );
     // Set new password page when forgotten
-    $app->get('/reset-password', \App\Application\Actions\Authentication\Page\ResetPasswordAction::class)->setName(
+    $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetAction::class)->setName(
         'password-reset-page'
     );
     // Submit new password
-    $app->post('/reset-password', \App\Application\Actions\Authentication\ResetPasswordSubmitAction::class)->setName(
+    $app->post('/reset-password', \App\Application\Actions\Authentication\PasswordResetSubmitAction::class)->setName(
         'password-reset-submit'
     );
 

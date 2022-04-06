@@ -13,12 +13,12 @@ class UserVerificationDataProvider
     public function userVerificationProvider(): array
     {
         // Same as in AuthService:createAndSendUserVerification()
-        $token = random_bytes(50);
+        $token = bin2hex(random_bytes(50));
         return [
             [
                 'verification' => new UserVerificationData([
                     'id' => 1,
-                    'user_id' => 1,
+                    'user_id' => 2,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
@@ -38,13 +38,13 @@ class UserVerificationDataProvider
     public function userVerificationInvalidExpiredProvider(): array
     {
         // Same as in AuthService:createAndSendUserVerification()
-        $token = random_bytes(50);
+        $token = bin2hex(random_bytes(50));
         return [
             // Invalid token
             [
                 'verification' => new UserVerificationData([
                     'id' => 1,
-                    'user_id' => 1,
+                    'user_id' => 2,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
@@ -56,7 +56,7 @@ class UserVerificationDataProvider
             [
                 'verification' => new UserVerificationData([
                     'id' => 1,
-                    'user_id' => 1,
+                    'user_id' => 2,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() - 1, // Expired one second ago (test relevant)
                     'used_at' => null,
@@ -68,7 +68,7 @@ class UserVerificationDataProvider
             [
                 'verification' => new UserVerificationData([
                     'id' => 1,
-                    'user_id' => 1,
+                    'user_id' => 2,
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => date('Y-m-d H:i:s'), // Used

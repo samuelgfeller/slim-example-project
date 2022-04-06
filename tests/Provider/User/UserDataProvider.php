@@ -466,7 +466,63 @@ class UserDataProvider
                 ],
                 'message' => 'Password change request malformed.',
             ],
+        ];
+    }
 
+    /**
+     * Provide malformed request bodies for password reset submit request as well as
+     * according error messages
+     * @return array[]
+     */
+    public function malformedPasswordResetRequestBodyProvider(): array
+    {
+        return [
+            [
+                // Empty body
+                'body' => [],
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Body "null" (because both can happen )
+                'body' => null,
+                'message' => 'Request body malformed.',
+            ],
+            [
+                // Leaving out 'password'
+                'body' => [
+                    'password2' => '',
+                    'token' => '',
+                    'id' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+                        [
+                // Leaving out 'password2'
+                'body' => [
+                    'password' => '',
+                    'token' => '',
+                    'id' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+                        [
+                // Leaving out 'token'
+                'body' => [
+                    'password' => '',
+                    'password2' => '',
+                    'id' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
+                        [
+                // Leaving out 'id'
+                'body' => [
+                    'password' => '',
+                    'password2' => '',
+                    'token' => '',
+                ],
+                'message' => 'Request body malformed.',
+            ],
         ];
     }
 
