@@ -499,20 +499,21 @@ class UserDataProvider
     }
 
     /**
-     * Correct login credentials provider
+     * Correct login credentials provider of user with role user
      *
      * @return string[][][]
      */
-    public function correctLoginCredentialsProvider(): array
+    public function userLoginCredentialsProvider(): array
     {
         return [
             // Correct credentials (inserted with tests/Fixture/UserFixture.php)
             [
                 [
                     // Same keys than HTML form
-                    'email' => 'admin@example.com',
+                    'email' => 'user@example.com',
                     'password' => '12345678',
                 ],
+
             ]
         ];
     }

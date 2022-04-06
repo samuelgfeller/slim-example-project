@@ -8,6 +8,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
@@ -19,11 +20,12 @@ use Slim\Exception\HttpBadRequestException;
  *  - change password not authenticated -> 302 to login page with correct redirect param
  *  - change password authenticated malformed request body -> HttpBadRequestException
  */
-class ChangePasswordSubmitActionTest extends TestCase
+class ResetPasswordSubmitActionTest extends TestCase
 {
 
     use AppTestTrait;
     use HttpTestTrait;
+    use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
 

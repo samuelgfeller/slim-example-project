@@ -104,8 +104,8 @@ class AccountUnlockActionTest extends TestCase
         $response = $this->app->handle($request);
 
         // Assert that redirect to register worked with correct further redirect query params
-        $registerPage = $this->urlFor('register-page', [], ['redirect' => $redirectLocation]);
-        self::assertSame($registerPage, $response->getHeaderLine('Location'));
+        $loginPage = $this->urlFor('login-page', [], ['redirect' => $redirectLocation]);
+        self::assertSame($loginPage, $response->getHeaderLine('Location'));
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Assert that token had NOT been used (except if already used)

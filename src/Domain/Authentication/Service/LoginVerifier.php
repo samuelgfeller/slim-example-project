@@ -71,20 +71,24 @@ class LoginVerifier
                     $this->loginNonActiveUserHandler->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
-                } elseif ($dbUser->status === UserData::STATUS_SUSPENDED) {
+                }
+
+                if ($dbUser->status === UserData::STATUS_SUSPENDED) {
                     // Inform user (only via mail) that he is suspended
                     $this->loginNonActiveUserHandler->handleSuspendedUserLoginAttempt($dbUser);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
-                } elseif ($dbUser->status === UserData::STATUS_LOCKED) {
+                }
+
+                if ($dbUser->status === UserData::STATUS_LOCKED) {
                     // login fail and inform user (only via mail) that he is locked and provide unlock token
                     $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
-                } else {
-                    // todo invalid role in db. Send email to admin to inform that there is something wrong with the user
-                    throw new \RuntimeException('Invalid status');
                 }
+
+                // todo invalid role in db. Send email to admin to inform that there is something wrong with the user
+                throw new \RuntimeException('Invalid status');
             }
         }
         // Password not correct or user not existing - insert login request for ip

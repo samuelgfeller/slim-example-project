@@ -63,7 +63,7 @@ class PasswordRecoveryEmailSender
             $this->email->subject('Reset password')->html(
                     $this->mailer->getContentFromTemplate('authentication/email/password-reset.email.php',
                         ['user' => $dbUser, 'queryParams' => $queryParamsWithToken])
-                )->to(new Address($user->email, $user->getFullName()));
+                )->to(new Address($dbUser->email, $dbUser->getFullName()));
             // Send email
             $this->mailer->send($this->email);
             return;

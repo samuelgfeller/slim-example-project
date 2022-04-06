@@ -67,15 +67,15 @@ final class RegisterVerifyAction
                     $flash->add('info', 'You are already verified. Please log in.');
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
                     return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
-                } else {
-                    $flash->add('info', 'You are now logged in.');
-
-                    if (isset($queryParams['redirect'])) {
-                        $flash->add('info', 'You have been redirected to the site you previously tried to access.');
-                        return $this->responder->redirectToUrl($response, $queryParams['redirect']);
-                    }
-                    return $this->responder->redirectToRouteName($response, 'home-page');
                 }
+                // Already logged in
+                $flash->add('info', 'You are now logged in.');
+
+                if (isset($queryParams['redirect'])) {
+                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
+                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                }
+                return $this->responder->redirectToRouteName($response, 'home-page');
             }
         }
 

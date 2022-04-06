@@ -4,6 +4,7 @@ namespace App\Test\Integration\Authentication;
 
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -23,6 +24,7 @@ class RegisterSubmitActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use MailerTestTrait;
+    use DatabaseExtensionTestTrait;
 
     /**
      * Test user creation
@@ -98,15 +100,16 @@ class RegisterSubmitActionTest extends TestCase
             'used_at' => null,
             'deleted_at' => null,
         ];
-        $this->assertTableRow(
+        $this->assertTableRowsByColumn(
             $expectedVerificationToken,
             'user_verification',
+            'user_id',
             $userId,
             array_keys($expectedVerificationToken)
         );
 
         // Get user_verification row to make sure its valid
-        $userVerificationRow = $this->getTableRowById('user_verification', $userId);
+        $userVerificationRow = $this->findTableRowsByColumn('user_verification', 'user_id', $userId)[0];
 
         // Assert that token expiration date is at least 59min the future
         self::assertTrue($userVerificationRow['expires_at'] > (time() + 60 * 59));

@@ -90,7 +90,7 @@ class RegisterVerifyActionTest extends TestCase
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
-
+        // Any location to test that page that user visited before is in the redirect param
         $redirectLocation = $this->urlFor('profile-page');
         $queryParams = [
             // Test redirect at the same time
@@ -105,15 +105,17 @@ class RegisterVerifyActionTest extends TestCase
 
         $response = $this->app->handle($request);
 
-        // Assert that redirect worked
-        self::assertSame($redirectLocation, $response->getHeaderLine('Location'));
+        // Assert that redirect worked when not logged in. When authenticated, redirect should go to location directly
+        self::assertSame(
+            $this->urlFor('login-page', [], ['redirect' => $redirectLocation]),
+            $response->getHeaderLine('Location')
+        );
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         // Here it's important that no exception is thrown when user is already verified. There is only a flash info.
 
         // Assert that user is NOT authenticated
         $session = $this->container->get(SessionInterface::class);
         self::assertNull($session->get('user_id'));
-
     }
 
 
