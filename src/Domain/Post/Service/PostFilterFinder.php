@@ -31,6 +31,7 @@ class PostFilterFinder
     {
         // Filter 'user'
         if (isset($params['user'])) {
+            // To display own posts, the client sends the filter user=session
             if ($params['user'] === 'session'){
                 // User has to be logged-in to access own-posts
                 if(($userId = $this->session->get('user_id')) !== null){
@@ -45,6 +46,7 @@ class PostFilterFinder
             }
             return $this->postFinder->findAllPostsFromUser((int)$params['user']);
         }
+        // Other filters here
 
         // If there is no filter, all posts should be returned
         return $this->postFinder->findAllPostsWithUsers();

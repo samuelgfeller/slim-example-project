@@ -13,6 +13,7 @@ class PostFinder
 {
     public function __construct(
         private PostFinderRepository $postFinderRepository,
+        private PostUserRightSetter $postUserRightSetter,
     ) { }
 
     /**
@@ -22,7 +23,12 @@ class PostFinder
      */
     public function findAllPostsWithUsers(): array
     {
-        return $this->postFinderRepository->findAllPostsWithUsers();
+        $allPosts = $this->postFinderRepository->findAllPostsWithUsers();
+        // In PHP, an object variable doesn't contain the object itself as value. It only contains an object identifier
+        // meaning the reference is passed and changes are made on the original reference that can be used further
+        // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
+        $this->postUserRightSetter->setUserRightsOnPosts($allPosts);
+        return $allPosts;
     }
 
     /**
@@ -44,6 +50,8 @@ class PostFinder
      */
     public function findAllPostsFromUser(int $userId): array
     {
-        return $this->postFinderRepository->findAllPostsByUserId($userId);
+        $allPosts = $this->postFinderRepository->findAllPostsByUserId($userId);
+        $this->postUserRightSetter->setUserRightsOnPosts($allPosts);
+        return $allPosts;
     }
 }

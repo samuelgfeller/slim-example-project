@@ -70,7 +70,6 @@ class PasswordRecoveryEmailSender
         }
 
         throw new DomainRecordNotFoundException('User not existing');
-
     }
 
 }

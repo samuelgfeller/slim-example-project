@@ -18,6 +18,12 @@ class UserPostData
     public ?string $userName;
     public ?string $userRole;
 
+    // Not post value from db, populated in PostUserRightSetter
+    public ?string $userMutationRight;
+
+    public const USER_UPDATE_RIGHT_ALL = 'all';
+    public const USER_UPDATE_RIGHT_NONE = 'none';
+
     /**
      * Post constructor.
      * @param array|null $postData

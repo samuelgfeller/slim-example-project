@@ -61,7 +61,7 @@ function loadPosts() {
             else {
                 let posts = JSON.parse(xHttp.responseText);
                 removeContentPlaceholder();
-                addPostsToDom(posts, postVisibilityScope);
+                addPostsToDom(posts);
             }
         }
     };
@@ -118,9 +118,8 @@ function removeContentPlaceholder() {
  * Add post to page
  *
  * @param {object[]} posts
- * @param {string} scope 'own' or 'all' needed to determine if edit and delete buttons should be visible
  */
-function addPostsToDom(posts, scope) {
+function addPostsToDom(posts) {
     let postContainer = document.getElementById('post-wrapper');
 
     // If no results, tell user so
@@ -132,7 +131,7 @@ function addPostsToDom(posts, scope) {
     for (const post of posts) {
         // Set delete and edit buttons but only if user is viewing its own posts
         let ownPostsButtons = '';
-        if (scope === 'own') {
+        if (post.userMutationRight === 'all'){
             ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="box-edit-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="edit">' +
                 '<img src="assets/general/img/del_icon.svg" class="box-del-icon cursor-pointer" ' +
