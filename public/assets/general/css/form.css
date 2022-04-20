@@ -1,44 +1,109 @@
 :root{
-    --outer-box-border-radius: 20px;
-    --input-boder-radius: 10px;
+    --outer-box-border-radius: 40px;
+    --input-boder-radius: 100px;
     --formColor: #6592a2;
     /* dark pink #660066*/
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px) {
+    .form-background {
+        width: 100%;
+        /*background-color: var(--layout-main-color);*/
+    }
+    /* Form design source: https://codepen.io/abergin/pen/vYmaPE */
     .form-box {
         width: 100%;
-        border-radius: var(--outer-box-border-radius);
-        background-color: #f2f2f2;
-        padding: 20px;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    .form input, .form textarea, .form select, .form textarea,
-        /* Sometimes I want form style but without it being in an actual form hence the direct css classes */
-    .form-input, .form-textarea, .form-select, .form-textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 4px;
-        display: inline-block;
-        border: 1px solid var(--formColor);
-        border-radius: var(--input-boder-radius);
+        margin: 30px 0;
+        border-radius: 33px;
+        background: white;
+        /*padding: 20px;*/
+        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+        position: relative;
+        font-size: 17px;
+        max-width: 625px;
         box-sizing: border-box;
-        font-size: 16px;
+        padding: 25px 15px;
     }
 
-    .form input:focus, .form textarea:focus, .form select:focus, .form textarea:focus,
-    .form-input:focus, .form-textarea:focus, .form-select:focus, .form-textarea:focus {
-        border: 2px solid var(--formColor);
+    .transition, .form-input-group label, .form-input-group input, .form input[type=submit], .submit-btn {
+        transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+    }
+    .form-input-group {
+        position: relative;
+        padding: 10px 0;
+    }
+    .form-input-group:first-of-type {
+        padding-top: 0;
+    }
+    .form-input-group:last-of-type {
+        padding-bottom: 0;
+    }
+    .form-input-group label {
+        transform-origin: left center;
+        color: var(--layout-darker-main-color);
+        /*color: black;*/
+        font-weight: 100;
+        letter-spacing: 0.01em;
+        box-sizing: border-box;
+        padding: 10px 15px;
+        display: block;
+        position: absolute;
+        transform: translate(0, -100%);
+        z-index: 2;
+        pointer-events: none;
+    }
+    .form-input-group input{
+        appearance: none;
+        border: none;
+        /*box-shadow: 0 2px 10px rgba(63, 135, 166, 0.2);*/
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-size: 17px;
+        width: 100%;
+        display: block;
+        box-sizing: border-box;
+        padding: 10px 15px;
+        border-radius: 60px;
+        color: black;
+        font-weight: 100;
+        letter-spacing: 0.01em;
+        position: relative;
+        z-index: 1;
+    }
+    .form-input-group input:hover {
+        /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-input-group input:focus {
         outline: none;
+        background: var(--layout-darker-main-color);
+        color: white;
+        margin-top: 30px;
+        border-bottom: none;
+    }
+    .form-input-group input:-webkit-autofill:focus{
+        /*top: 30px;*/
+    }
+    .form-input-group input:valid, .form-input-group input:-webkit-autofill {
+        margin-top: 30px;
+    }
+    .form-input-group input:focus ~ label {
+        transform: translate(0, -200%);
+        color: black;
+    }
+    .form-input-group input:valid ~ label,
+    .form-input-group input:-webkit-autofill ~ label {
+        transform: translate(0, -200%);
     }
 
     .form input[type=submit], .submit-btn {
-        width: 100%;
-        background-color: white;
-        border: 1px solid var(--formColor);
-        color: var(--formColor);
+        width: 50%;
+        border:none;
+        /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: var(--layout-darker-main-color);
+        /*color: black;*/
+        background: white;
         padding: 8px 15px;
         margin: 15px 0 0;
         border-radius: 4444px;
@@ -47,37 +112,42 @@
     }
 
     .form input[type=submit]:hover, .submit-btn:hover {
-        background: var(--formColor);
+        background: var(--layout-darker-main-color);
         color: white;
     }
 
     .form input[type=submit]:disabled, .submit-btn:disabled {
-        border: 1px solid grey;
+        /*border: 1px solid grey;*/
         background: whitesmoke;
         color: grey;
         cursor: default;
     }
 
-    .form label {
-        margin-top: 15px;
-        margin-left: 4px;
-        margin-bottom: 4px;
-        vertical-align: top;
-        display: block;
+    .form-box.invalid-input:focus, input.invalid-input:focus{
     }
 
-    .form label:first-child {
-        margin-top: 5px;
+    .invalid-form-box{
+        /* No effects yet, can be added */
     }
 
-    .form-box.wrong-cred-input, input.wrong-cred-input {
-        border: 2px solid #c0000a;
+    /* When form input group is faulty after submit (server response) */
+    .input-group-error label{
+        color: #9f0009;
+        font-weight: bold;
+    }
+    .input-group-error input, input.invalid-input{
+        border-bottom: 2px solid #c0000a;
     }
 
     .err-msg {
-        padding-top: 5px;
+        padding: 10px 0 0 15px;
         display: block;
-        color: #9f0009;
+        /*color: #9f0009;*/
+        font-size: 0.9em;
+    }
+
+    #form-general-error-msg{
+        margin-bottom: 55px;
     }
 
     .success-msg {
@@ -90,16 +160,24 @@
         display: inline-block;
         color: #d66500;
     }
+
+    .content-below-input{
+        margin-left: 15px;
+    }
 }
 
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     .form-box {
-        width: 50%;
-        min-width: 400px;
+        width: 90%;
+        padding: 35px 25px;
+        border-radius: 40px;
     }
 }
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
-
+    .form-box {
+        width: 60%;
+        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+    }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
 

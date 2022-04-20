@@ -39,7 +39,8 @@ public function __construct(
     {
         if(($loggedInUserId = $this->session->get('user_id')) !== null) {
 
-            // Validate passwords
+            // If password forgot, password validation is done before token verification as usedAt should stay blank
+            // But its needed here for a normal password change request so there is a double validation on password reset
             $this->userValidator->validatePasswords([$password1, $password2], true);
 
             // If no user id is provided, change logged-in user password

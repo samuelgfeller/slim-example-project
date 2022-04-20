@@ -8,6 +8,7 @@ use App\Domain\Authentication\Service\PasswordChanger;
 use App\Domain\Authentication\Service\VerificationTokenVerifier;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Service\UserValidator;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -28,6 +29,7 @@ class PasswordResetSubmitAction
         private SessionInterface $session,
         private VerificationTokenVerifier $verificationTokenChecker,
         private PasswordChanger $passwordChanger,
+        private UserValidator $userValidator,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-service');
@@ -49,6 +51,9 @@ class PasswordResetSubmitAction
         // There may be other query params e.g. redirect
         if (isset($parsedBody['id'], $parsedBody['token'], $parsedBody['password'], $parsedBody['password2'])) {
             try {
+                // Validate passwords BEFORE token as it would be set to usedAt even if passwords are not valid
+                $this->userValidator->validatePasswords([$parsedBody['password'], $parsedBody['password2']], true);
+
                 $userId = $this->verificationTokenChecker->getUserIdIfTokenIsValid(
                     (int)$parsedBody['id'],
                     $parsedBody['token'],
@@ -67,17 +72,22 @@ class PasswordResetSubmitAction
 
                 return $this->responder->redirectToRouteName($response, 'profile-page');
             } catch (InvalidTokenException $ite) {
-                $flash->add(
-                    'error',
-                    '<b>Invalid, used or expired link. <br> Please <a href="' . $this->responder->urlFor(
-                        'password-forgotten-page'
-                    ) . '">ask for a new link</a>.</b>'
+                $this->responder->addPhpViewAttribute(
+                    'formErrorMessage',
+                    '<b>Invalid, used or expired link. <br> Please request a new link below and make sure to click on ' .
+                    'the most recent email we sent to you</a>.</b>'
                 );
+                // Pre-fill email input field for more user comfort. The usefulness of this specific situation may be
+                // questionable but this is here to serve as inspiration. My goal is a program user LOVE to use.
+                if ($ite->userData->email !== null) {
+                    $this->responder->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
+                }
+
                 $this->logger->error(
                     'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
                 );
-                // Redirect to login page
-                return $this->responder->redirectToRouteName($response, 'login-page');
+                // Render password
+                return $this->responder->render($response, 'authentication/password-forgotten.html.php');
             } catch (ValidationException $validationException) {
                 $flash->add('error', $validationException->getMessage());
                 // Add token and id to php view attribute like PasswordResetAction does
@@ -86,7 +96,8 @@ class PasswordResetSubmitAction
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/reset-password.html.php',
-                    $validationException->getValidationResult()
+                    $validationException,
+                    $request->getQueryParams(),
                 );
             }
         }

@@ -1,3 +1,14 @@
+:root {
+    --layout-main-color: #7fbbd0;
+    --layout-light-color: #b6e9ff;
+    --layout-lighter-text-color: #65818d; /* When text should not be full black but a little lighter, perfect for hovers as well */
+    --layout-darker-main-color:  #3f87a6; /* When text should not be full black but a little lighter, perfect for hovers as well */
+    /*    button hover color, text color */
+    --layout-main-button-color: #a4dfff;
+    --layout-main-button-hover-color: #7bd0ff;
+    --layout-tile-color: #f2f2f2;
+}
+
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
     #wrapper{

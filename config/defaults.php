@@ -68,6 +68,7 @@ $settings['security'] = [
     // login request, the next check will be at the beginning of the the 5th
     'login_throttle' => [4 => 10, 9 => 120, 12 => 'captcha'],
     'user_email_throttle' => [5 => 2, 10 => 4, 20 => 'captcha'],
+
     // Percentage of login requests that may be failures (threshold)
     'login_failure_percentage' => 20,
 

@@ -36,8 +36,9 @@ final class RegisterSubmitAction
             // ? If a html form name changes, these changes have to be done in the data class constructor
             // ? (and the array keys in the "if" condition below) too since these names will be the keys of the ArrayReader
             // Check that request body syntax is formatted right (one more when captcha)
-            $requiredAreSet = isset($userData['first_name'], $userData['surname'], $userData['email'],
-                $userData['password'], $userData['password2']);
+            $requiredAreSet = isset(
+                $userData['first_name'], $userData['surname'], $userData['email'], $userData['password'], $userData['password2']
+            );
             if (
                 ($requiredAreSet && count($userData) === 5) ||
                 ($requiredAreSet && (count($userData) === 6 && isset($userData['g-recaptcha-response'])))
@@ -55,13 +56,14 @@ final class RegisterSubmitAction
                         'Your account is not active yet. <br>
 Please click on the link in the email to finnish the registration.'
                     );
-                } catch (ValidationException $ve) {
-                    $flash->add('error', $ve->getMessage());
+                } catch (ValidationException $validationException) {
                     return $this->responder->renderOnValidationError(
-                        $response,
-                        'authentication/register.html.php',
-                        $ve->getValidationResult(),
-                        $request->getQueryParams()
+                        $response, 'authentication/register.html.php', $validationException, $request->getQueryParams(),
+                        [
+                            'firstName' => $userData['first_name'],
+                            'surname' => $userData['surname'],
+                            'email' => $userData['email']
+                        ]
                     );
                 } catch (TransportExceptionInterface $e) {
                     $flash->add('error', 'Email error. Please try again. ' . "<br> Message: " . $e->getMessage());
@@ -79,13 +81,17 @@ Please click on the link in the email to finnish the registration.'
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
                         throw $se;
                     }
-                    $flash->add('error', $se->getPublicMessage());
-                    return $this->responder->respondWithThrottle(
+
+                    return $this->responder->respondWithFormThrottle(
                         $response,
-                        $se->getRemainingDelay(),
                         'authentication/register.html.php',
-                        ['firstName' => $userData['first_name'], 'surname' => $userData['surname'], 'email' => $userData['email']],
-                        $request->getQueryParams()
+                        $se,
+                        $request->getQueryParams(),
+                        [
+                            'firstName' => $userData['first_name'],
+                            'surname' => $userData['surname'],
+                            'email' => $userData['email']
+                        ],
                     );
                 }
 

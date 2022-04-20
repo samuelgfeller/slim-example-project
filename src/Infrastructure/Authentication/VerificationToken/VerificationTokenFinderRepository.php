@@ -5,6 +5,7 @@ namespace App\Infrastructure\Authentication\VerificationToken;
 
 
 use App\Domain\Authentication\Data\UserVerificationData;
+use App\Domain\User\Data\UserData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -45,7 +46,29 @@ class VerificationTokenFinderRepository
             throw new PersistenceRecordNotFoundException('post');
         }
         return (int)$userId;
+    }
 
+    /**
+     * Search and return user details of given verification entry even if it was deleted
+     *
+     * @param int $verificationId
+     * @return UserData
+     */
+    public function findUserDetailsFromAlsoDeletedVerification(int $verificationId): UserData
+    {
+        $query = $this->queryFactory->newQuery()->from('user_verification');
 
+        $query->select(
+            [
+                'id' => 'user_verification.user_id',
+                'email' => 'user.email'
+            ]
+        )->join(['table' => 'user', 'conditions' => 'user_verification.user_id = user.id']
+        )->andWhere(
+            ['user_verification.id' => $verificationId]
+        );
+        $resultRows = $query->execute()->fetch('assoc') ?: [];
+
+        return new UserData($resultRows);
     }
 }

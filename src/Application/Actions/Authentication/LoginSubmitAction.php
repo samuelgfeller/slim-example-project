@@ -73,31 +73,32 @@ final class LoginSubmitAction
                         $request->getQueryParams()
                     );
                 } catch (InvalidCredentialsException $e) {
-                    $flash->add('error', 'Invalid credentials.');
                     // Log error
                     $this->logger->notice(
                         'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
                         $e->getUserEmail() . '"'
                     );
                     $this->responder->addPhpViewAttribute('formError', true);
+                    $this->responder->addPhpViewAttribute('formErrorMessage', 'Invalid credentials. Please try again.');
+
                     return $this->responder->render(
                         $response->withStatus(401),
                         'authentication/login.html.php',
                         // Provide same query params passed to login page to be added to the login submit request
                         ['queryParams' => $request->getQueryParams()]
                     );
-                } catch (SecurityException $se) {
+                } catch (SecurityException $securityException) {
                     if (PHP_SAPI === 'cli') {
                         // If script is called from commandline (e.g. testing) throw error instead of rendering page
-                        throw $se;
+                        throw $securityException;
                     }
-                    $flash->add('error', $se->getPublicMessage());
-                    return $this->responder->respondWithThrottle(
+
+                    return $this->responder->respondWithFormThrottle(
                         $response,
-                        $se->getRemainingDelay(),
                         'authentication/login.html.php',
+                        $securityException,
+                        $request->getQueryParams(),
                         ['email' => $userData['email']],
-                        $request->getQueryParams()
                     );
                 } catch (UnableToLoginStatusNotActiveException $unableToLoginException){
                     // When user doesn't have status active

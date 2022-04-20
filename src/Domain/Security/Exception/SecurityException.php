@@ -43,7 +43,8 @@ class SecurityException extends \RuntimeException
     {
         return match ($this->getType()) {
             self::USER_LOGIN, self::USER_EMAIL  => 'It looks like you are doing this too much. <br> Please '.
-                (is_numeric($this->remainingDelay) ? 'wait ' . $this->remainingDelay . 's' : 'fill out the captcha') .
+                (is_numeric($this->remainingDelay) ? 'wait <span class="throttle-time-span">' . $this->remainingDelay . '</span>s'
+                    : 'fill out the captcha') .
                 ' and try again.',
             self::GLOBAL_LOGIN, self::GLOBAL_EMAIL => 'It\'s not your fault! The site is under a too high request load'.
                 'therefore a general throttling is in place. Please fill out the captcha and try again.',

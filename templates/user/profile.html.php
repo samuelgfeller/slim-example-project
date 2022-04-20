@@ -61,7 +61,7 @@ $this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-mod
 
 <br>
 
-<p><i><b>Id:</b> <?= $user->id ?></i><br>
+<p class="secondary-text"><i><b>Id:</b> <?= $user->id ?></i><br>
 <i><b>Status:</b> <?= $user->status ?></i><br>
 <i><b>Role:</b> <?= $user->role ?></i><br>
 <i><b>Created:</b> <?= date('d.m.Y H:i:s ', strtotime($user->createdAt)) ?></i><br>

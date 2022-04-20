@@ -8,7 +8,6 @@ use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
-use JetBrains\PhpStorm\ArrayShape;
 
 class RequestFinderRepository
 {
@@ -125,9 +124,11 @@ class RequestFinderRepository
     /**
      * Returns global login amount stats of all time
      *
-     * @return array<array>
+     * @return array{
+     *     login_total: array,
+     *     login_failures: array
+     * }
      */
-    #[ArrayShape(['login_total' => "array", 'login_failures' => "array"])]
     public function getGlobalLoginAmountStats(): array
     {
         $query = $this->queryFactory->newQuery();

@@ -2,5 +2,3 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
-RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-

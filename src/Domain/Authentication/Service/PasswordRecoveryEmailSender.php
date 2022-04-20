@@ -4,6 +4,7 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Exceptions\DomainRecordNotFoundException;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
@@ -30,7 +31,8 @@ class PasswordRecoveryEmailSender
         private UserValidator $userValidator,
         private UserFinderRepository $userFinderRepository,
         private VerificationTokenCreator $verificationTokenCreator,
-        Settings $settings
+        Settings $settings,
+        private SecurityEmailChecker $securityEmailChecker,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object
@@ -47,11 +49,14 @@ class PasswordRecoveryEmailSender
      * @param array $userData
      * @throws ValidationException
      */
-    public function sendPasswordRecoveryEmail(array $userData): void
+    public function sendPasswordRecoveryEmail(array $userData, string|null $captcha = null): void
     {
         $user = new UserData($userData);
 
         $this->userValidator->validatePasswordResetEmail($user);
+
+        // Verify that user (concerned email) or ip address doesn't spam email sending
+        $this->securityEmailChecker->performEmailAbuseCheck($user->email, $captcha);
 
         $dbUser = $this->userFinderRepository->findUserByEmail($user->email);
 

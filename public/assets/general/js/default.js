@@ -17,17 +17,22 @@ window.addEventListener("load", function (event) {
     showFlashMessages();
 
     /** Throttle time countdown */
-    let timeSpan = document.getElementById('delay-time');
-    if (timeSpan !== null) {
-        let timeInSec = parseInt(timeSpan.innerHTML);
-        let timer = setInterval(function () {
-            timeSpan.textContent = timeInSec;
-            if (--timeInSec < 0) {
-                timeInSec = 0;
-                document.getElementById('throttle-delay-msg').style.display = 'none';
-                clearInterval(timer)
-            }
-        }, 1000);
+    let timeSpans = document.getElementsByClassName('throttle-time-span');
+    for (const timeSpan of timeSpans) {
+        if (timeSpan !== null) {
+            let timeInSec = parseInt(timeSpan.innerHTML);
+            let timer = setInterval(function () {
+                timeSpan.textContent = timeInSec;
+                if (--timeInSec < 0) {
+                    timeInSec = 0;
+                    // document.getElementById('throttle-delay-msg').style.display = 'none';
+                    // document.getElementById('form-general-error-msg').style.display = 'none';
+                    timeSpan.parentElement.style.display = 'none';
+
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
     }
 });
 

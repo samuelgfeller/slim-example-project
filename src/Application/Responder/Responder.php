@@ -2,8 +2,9 @@
 
 namespace App\Application\Responder;
 
+use App\Domain\Exceptions\ValidationException;
+use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationResult;
-use JsonException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface;
@@ -146,18 +147,24 @@ final class Responder
      *
      * @param ResponseInterface $response
      * @param string $template
-     * @param ValidationResult $validationResult
+     * @param ValidationException $validationException
      * @param array $queryParams same query params passed to page to be added again to form after validation error
+     * @param array|null $preloadValues
      * @return ResponseInterface|null
      * @throws \Throwable
      */
     public function renderOnValidationError(
         ResponseInterface $response,
         string $template,
-        ValidationResult $validationResult,
-        array $queryParams = []
+        ValidationException $validationException,
+        array $queryParams = [],
+        array $preloadValues = null,
     ): ?ResponseInterface {
+        $this->phpRenderer->addAttribute('formErrorMessage', $validationException->getMessage());
+        $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
+
         // Add the validation errors to phpRender attributes
+        $validationResult = $validationException->getValidationResult();
         $this->phpRenderer->addAttribute('validation', $validationResult->toArray());
         $this->phpRenderer->addAttribute('formError', true);
         // Provide same query params passed to page to be added again after validation error (e.g. redirect)
@@ -188,6 +195,35 @@ final class Responder
         $this->phpRenderer->addAttribute('throttleDelay', $remainingDelay);
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
         $this->phpRenderer->addAttribute('formError', true);
+        // Provide same query params passed to page to be added again after validation error (e.g. redirect)
+        $this->phpRenderer->addAttribute('queryParams', $queryParams);
+
+        return $this->render($response->withStatus(422), $template);
+    }
+
+    /**
+     * Respond with delay user has to wait or action that needs to be made before repeating the action.
+     * Specifically for form errors.
+     *
+     * @param ResponseInterface $response
+     * @param string $template
+     * @param SecurityException $securityException
+     * @param array|null $preloadValues
+     * @param array $queryParams same query params passed to page to be added again to form after validation error
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function respondWithFormThrottle(
+        ResponseInterface $response,
+        string $template,
+        SecurityException $securityException,
+        array $queryParams = [],
+        array $preloadValues = null,
+    ): ResponseInterface {
+        $this->phpRenderer->addAttribute('formErrorMessage', $securityException->getPublicMessage());
+        $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
+        $this->phpRenderer->addAttribute('formError', true);
+
         // Provide same query params passed to page to be added again after validation error (e.g. redirect)
         $this->phpRenderer->addAttribute('queryParams', $queryParams);
 

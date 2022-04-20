@@ -156,7 +156,7 @@ function submitValueChange(submitBtnId, inputName) {
                 handleFail(xHttp);
                 // Validation error, mark input element with a red line
                 if (xHttp.status === 422) {
-                    inputElement.className += ' wrong-cred-input';
+                    inputElement.className += ' invalid-input';
                 }
             }
 

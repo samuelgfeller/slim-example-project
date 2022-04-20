@@ -4,6 +4,7 @@ use App\Application\Actions\PreflightAction;
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
 use Slim\App;
+use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
@@ -13,7 +14,9 @@ return function (App $app) {
     $app->get('/', \App\Application\Actions\Hello\HelloAction::class)->setName('home-page');
 
     // Authentication - pages and Ajax submit
-    $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName('register-page');
+    $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(
+        'register-page'
+    );
     $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName(
         'register-submit'
     );
@@ -24,7 +27,9 @@ return function (App $app) {
         SessionMiddleware::class
     );
 
-    $app->get('/profile', \App\Application\Actions\User\Page\UserViewProfileAction::class)->setName('profile-page')->add(
+    $app->get('/profile', \App\Application\Actions\User\Page\UserViewProfileAction::class)->setName(
+        'profile-page'
+    )->add(
         UserAuthenticationMiddleware::class
     );
 
@@ -41,10 +46,16 @@ return function (App $app) {
         'account-unlock-verification'
     );
 
-    $app->get('/password-forgotten', \App\Application\Actions\Authentication\Page\PasswordForgottenAction::class)->setName(
+    $app->get(
+        '/password-forgotten',
+        \App\Application\Actions\Authentication\Page\PasswordForgottenAction::class
+    )->setName(
         'password-forgotten-page'
     );
-    $app->post('/password-forgotten', \App\Application\Actions\Authentication\PasswordForgottenEmailSubmitAction::class)->setName(
+    $app->post(
+        '/password-forgotten',
+        \App\Application\Actions\Authentication\PasswordForgottenEmailSubmitAction::class
+    )->setName(
         'password-forgotten-email-submit'
     );
     // Set new password page when forgotten
@@ -64,7 +75,6 @@ return function (App $app) {
     $app->post('/change-password', \App\Application\Actions\Authentication\ChangePasswordSubmitAction::class)->setName(
         'change-password-submit'
     )->add(UserAuthenticationMiddleware::class);
-
 
 
     $app->group('/users', function (RouteCollectorProxy $group) {
@@ -118,14 +128,14 @@ return function (App $app) {
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
      * NOTE: make sure this route is defined last
-     * //     */ //    $app->map(
-//        ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-//        '/{routes:.+}',
-//        function ($request, $response) {
-//            throw new HttpNotFoundException(
-//                $request, 'Route "' .
-//                        $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.'
-//            );
-//        }
-//    );
+     * //     */
+    $app->map(
+        ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) use ($app) {
+
+        throw new HttpNotFoundException(
+            $request, 'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
+            <br>Basepath: "'. $app->getBasePath() .'"'
+        );
+    }
+    );
 };

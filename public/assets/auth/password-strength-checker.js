@@ -76,8 +76,9 @@ function makeHIBPRequest(passwordHash) {
  */
 function showWarning() {
     if (null === document.getElementById('pwned-password-warning')) {
-        password1Inp.insertAdjacentHTML('afterend', '<span class="input-warning" id="pwned-password-warning">' +
-            'This password is known to have been leaked and is unsafe to use</span>');
+        const password1InputGroup = document.getElementById('password1-inp-group');
+        password1InputGroup.insertAdjacentHTML('beforeend', '<span class="input-warning content-below-input" ' +
+            'id="pwned-password-warning">This password is known to have been leaked and is unsafe to use</span>');
     }
 }
 

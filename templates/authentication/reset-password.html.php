@@ -21,33 +21,37 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Password reset</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-box <?= isset($formError) ? ' wrong-cred-input' : '' ?>">
+<div class="form-box <?= isset($formError) ? ' invalid-input' : '' ?>">
     <form action="<?= $route->urlFor('password-reset-submit') ?>"
           class="form" method="post" autocomplete="on">
+
+        <?= // General form error message if there is one
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+            '</strong>' : '' ?>
+
         <?php
-        // Display form error message if there is one
-        if (isset($formErrorMessage)) { ?>
-            <strong class="err-msg"><?= $formErrorMessage ?></strong>
-            <?php
-        } ?>
+        // If error for both passwords
+        $passwordsErr = get_field_error(($validation ?? []), 'passwords');
+        ?>
 
         <!--   Password 1    -->
-        <label for="password1-inp">Password</label>
-        <input type="password" name="password" id="password1-inp" minlength="3" required
-               class="<?= //If there is an error on a specific field, echo error class
-               ($passwordErr = get_field_error(($validation ?? []), 'password')) ? 'wrong-cred-input' : '' ?>"
-        >
-        <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+        <div id="password1-inp-group" class="form-input-group <?= //If there is an error on a specific field, echo error class
+        ($passwordErr = get_field_error(($validation ?? []), 'password')) ||
+        $passwordsErr ? ' input-group-error' : '' ?>">
+            <input type="password" name="password" id="password1-inp" minlength="3" required>
+            <label for="password1-inp">Password</label>
+            <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+        </div>
 
         <!--   Password 2     -->
-        <label for="password2-inp">Repeat password</label>
-        <input type="password" name="password2" id="password2-inp" minlength="3" required
-               class="<?= //If there is an error on a specific field, echo error class
-               ($password2Err = get_field_error(($validation ?? []), 'password2')) ? 'wrong-cred-input' : '' ?>
-               <?= // If there is error with both passwords
-               ($passwordsErr = get_field_error(($validation ?? []), 'passwords')) ? 'wrong-cred-input' : '' ?>"
-        >
-        <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
+        <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+        ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
+        $passwordsErr ? ' input-group-error' : '' ?>">
+            <input type="password" name="password2" id="password2-inp" minlength="3" required>
+            <label for="password2-inp">Repeat password</label>
+            <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
+        </div>
+
         <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
 
         <input type="hidden" name="token" value="<?= $token ?>">

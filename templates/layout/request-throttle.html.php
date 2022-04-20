@@ -10,7 +10,7 @@ if (isset($throttleDelay)) { ?>
         <?php
         if (is_numeric($throttleDelay)) { ?>
             <strong class="err-msg" id="throttle-delay-msg">Please wait <span
-                        id="delay-time"><?= $throttleDelay ?></span>
+                        class="throttle-time-span"><?= $throttleDelay ?></span>
                 seconds before trying again</strong>
         <?php
         } elseif ($throttleDelay === 'captcha') { ?>
