@@ -48,6 +48,6 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
     <?= $errorMessage['exceptionMessage'] !== null ? '<p>Error message: <b>' . $errorMessage['exceptionMessage'] . '</b></p>' : '' ?>
 </section>
 <section id="home-btn-section">
-    <a href="<?= $route->urlFor('hello') ?>" class="btn">Go back home</a>
+    <a href="<?= $route->urlFor('home-page') ?>" class="btn">Go back home</a>
 </section>
 

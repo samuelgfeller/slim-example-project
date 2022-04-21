@@ -24,7 +24,7 @@ $this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
 
 <h2>Register</h2>
 <div class="form-background">
-    <div class="form-box<?= isset($formError) ? ' invalid-input' : '' ?>" id="register-form-box">
+    <div class="form-container<?= isset($formError) ? ' invalid-input' : '' ?>" id="register-form-container">
         <form class="form" autocomplete="off"
               id="<?= $route->urlFor('register-submit', [], $queryParams ?? []) ?>" method="post">
 

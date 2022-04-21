@@ -6,7 +6,6 @@
     /*    button hover color, text color */
     --layout-main-button-color: #a4dfff;
     --layout-main-button-hover-color: #7bd0ff;
-    --layout-tile-color: #f2f2f2;
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */

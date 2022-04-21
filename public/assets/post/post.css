@@ -1,4 +1,4 @@
-/* Boxes */
+/* Cards */
 #post-wrapper {
     width: 100%;
     display: flex;
@@ -6,36 +6,37 @@
     flex-wrap: wrap;
 }
 
-.box-header {
+.card-header {
     /*font-size: 1.5em;*/
     /*Remove default margin*/
     padding: 0 70px 0 0;
     margin: 0;
 }
 
-.box-content {
+.card-content {
     padding: 20px;
     position: relative;
     display: inline-block;
-    background: var(--layout-tile-color);
+    background: #f2f2f2;
+    border: 1px solid rgba(242, 242, 242, 0.55);
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     max-width: 650px;
     overflow-wrap: anywhere;
 }
 
-.box-content p{
+.card-content p{
 }
 
-.box-content:hover {
+.card-content:hover {
     box-shadow: inset 0 0 0 0px black;
 }
 
-.box-content:hover > .box-del-icon, .box-content:hover > .box-edit-icon {
+.card-content:hover > .card-del-icon, .card-content:hover > .card-edit-icon {
     display: inline;
 }
 
-.info-in-box-span {
+.info-in-card-span {
     font-style: italic;
     color: #575757;
 }
@@ -45,7 +46,7 @@
     margin: auto;
 }
 
-.box-del-icon {
+.card-del-icon {
     display: none;
     width: 20px;;
     position: absolute;
@@ -54,7 +55,7 @@
     margin: 20px;
 }
 
-.box-edit-icon {
+.card-edit-icon {
     display: none;
     width: 30px;;
     position: absolute;
@@ -63,7 +64,7 @@
     margin: 15px;
 }
 /* Loader that replaces the delete icon after clicking on it */
-.post-box-del-loader{
+.post-card-del-loader{
 /*  Loader size changed in javascript  */
     position: absolute;
     right: 0;
@@ -102,19 +103,19 @@
     }
 }
 
-.preloading-box-content{
+.preloading-card-content{
     height: 190px;
     width: 280px;
     padding: 20px;
     border-radius: 20px;
-/* Change box to look good for preloading */
+/* Change card to look good for preloading */
     background: #f8f8f8;
 }
 
-.preloading-box-header {
+.preloading-card-header {
     height: 28px;
 }
-.preloading-box-inner-content {
+.preloading-card-inner-content {
     height: 94px;
     margin-top: 21px;
     margin-bottom: 16px;

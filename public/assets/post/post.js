@@ -17,7 +17,7 @@ document.addEventListener('click', function (e) {
         submitCreatePost();
     }
     // Open edit post modal after edit button click in post box
-    if (e.target && e.target.className.includes('box-edit-icon')) {
+    if (e.target && e.target.className.includes('card-edit-icon')) {
         let postId = e.target.dataset.id;
         updatePostModal(postId);
     }
@@ -27,7 +27,7 @@ document.addEventListener('click', function (e) {
         submitUpdatePost(postId);
     }
     // Submit delete post
-    if (e.target && e.target.className.includes('box-del-icon')) {
+    if (e.target && e.target.className.includes('card-del-icon')) {
         let postId = e.target.dataset.id;
         submitDeletePost(postId);
     }
@@ -82,13 +82,13 @@ function displayPostContentPlaceholder() {
     postWrapper.innerHTML = '';
 
     let contentPlaceholderHtml =
-        '<div class="preloading-box-content">' +
-        '    <div class="preloading-box-header">' +
+        '<div class="preloading-card-content">' +
+        '    <div class="preloading-card-header">' +
         '        <div class="load-wrapper">' +
         '            <div class="activity"></div>' +
         '        </div>' +
         '    </div>' +
-        '    <div class="preloading-box-inner-content">' +
+        '    <div class="preloading-card-inner-content">' +
         '        <div class="load-wrapper">' +
         '            <div class="activity"></div>' +
         '        </div>' +
@@ -106,7 +106,7 @@ function displayPostContentPlaceholder() {
  */
 function removeContentPlaceholder() {
     // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
-    let contentPlaceholders = document.querySelectorAll('.preloading-box-content');
+    let contentPlaceholders = document.querySelectorAll('.preloading-card-content');
     // Foreach loop over content placeholders
     for (let contentPlaceholder of contentPlaceholders) {
         // remove from DOM
@@ -132,20 +132,20 @@ function addPostsToDom(posts) {
         // Set delete and edit buttons but only if user is viewing its own posts
         let ownPostsButtons = '';
         if (post.userMutationRight === 'all'){
-            ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="box-edit-icon cursor-pointer" ' +
+            ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="card-edit-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="edit">' +
-                '<img src="assets/general/img/del_icon.svg" class="box-del-icon cursor-pointer" ' +
+                '<img src="assets/general/img/del_icon.svg" class="card-del-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="del">';
         }
-        // Post box HTML
+        // Post card HTML
         let postHtml = '<div class="post-squares" id="post' + post.postId + '">' +
-            '    <div class="box-content">' +
+            '    <div class="card-content">' +
             ownPostsButtons +
-            '        <h3 class="box-header">' + post.userName + '</h3>' +
-            '        <div id="box-inner-content' + post.postId + '">' +
-            '            <p><span class="info-in-box-span"></span><b>' + post.postMessage + '</b></p>' +
-            '            <p><span class="info-in-box-span">Updated at: </span><b>' + post.postUpdatedAt + '</b></p>' +
-            '            <p><span class="info-in-box-span">Created at: </span>' + post.postCreatedAt + '</p>' +
+            '        <h3 class="card-header">' + post.userName + '</h3>' +
+            '        <div id="card-inner-content' + post.postId + '">' +
+            '            <p><span class="info-in-card-span"></span><b>' + post.postMessage + '</b></p>' +
+            '            <p><span class="info-in-card-span">Updated at: </span><b>' + post.postUpdatedAt + '</b></p>' +
+            '            <p><span class="info-in-card-span">Created at: </span>' + post.postCreatedAt + '</p>' +
             '        </div>' +
             '    </div>' +
             '</div>';
@@ -161,7 +161,7 @@ function addPostsToDom(posts) {
 function createPostModal() {
     let header = '<h2>Post</h2>';
     let body = '<div class="form modal-form">' + '<textarea rows="4" cols="50" name="message" ' +
-        'id="create-message-textarea" class="form-textarea" ' + 'placeholder="Your message here." minlength="4" ' +
+        'id="create-message-textarea" class="form-input" ' + 'placeholder="Your message here." minlength="4" ' +
         'maxlength="500" required></textarea>' + '</div>';
     let footer = '<button type="button" id="submit-btn-create-post" class="submit-btn modal-submit-btn">' +
         'Create post</button>' + '<div class="clearfix"></div>' + '</div>';
@@ -239,7 +239,7 @@ function updatePostModal(postId) {
 
     let header = '<h2>Edit post</h2>';
     let body = '<div class="form modal-form"><textarea rows="4" cols="50" name="message" ' +
-        'id="update-message-textarea" class="form-textarea" minlength="4" ' +
+        'id="update-message-textarea" class="form-input" minlength="4" ' +
         'maxlength="500" required disabled>Loading...</textarea></div>';
     let footer = '<button type="button" id="submit-btn-update-post" class="submit-btn modal-submit-btn">' +
         'Update post</button><div class="clearfix"></div>';
@@ -340,7 +340,7 @@ function submitDeletePost(postId) {
             }
             // Success
             else {
-                // Remove post box after successful deletion
+                // Remove post card after successful deletion
                 document.getElementById('post' + postId).remove();
             }
 
@@ -364,7 +364,7 @@ function submitDeletePost(postId) {
  */
 function showPostDeleteLoader(postId) {
     // Insert loader
-    document.querySelector('.box-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
+    document.querySelector('.card-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
         '<div class="lds-ellipsis post-box-del-loader"><div></div><div></div><div></div><div></div></div>');
     // Change loader size in changing the css variable
     document.documentElement.style.setProperty('--three-dots-loader-factor', '0.5');

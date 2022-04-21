@@ -8,23 +8,26 @@
     width: 100%;
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgb(100, 100, 100); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    backdrop-filter: blur(5px);
 }
 
 /* Modal Content */
 #modal-box {
     position: relative;
-    background-color: var(--layout-tile-color);
+    background-color: rgba(255, 255, 255, 0.8);
     margin: auto;
     padding: 0;
-    border-radius: 25px;
+    border-radius: 33px;
     /*border: 2px solid black;*/
     min-width: 300px;
     width: 40%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    backdrop-filter: blur(20px);
 }
 
 /* The Close Button */
@@ -62,13 +65,19 @@
     /*color: white;*/
 }
 
-/* Modal */
+/* Overwrite form.css style to match better modal */
 .modalForm input[type=submit], .modal-submit-btn {
     /*padding: 6px 6px;*/
     width: 30%;
     min-width: 160px;
     float: right;
     /*font-size: 90%;*/
+}
+.form-input{
+    background-color: rgba(255, 255, 255, 0.75);
+}
+.form-input:disabled{
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 /* Add Animation */

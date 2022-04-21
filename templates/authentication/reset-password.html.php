@@ -21,7 +21,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Password reset</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-box <?= isset($formError) ? ' invalid-input' : '' ?>">
+<div class="form-container <?= isset($formError) ? ' invalid-input' : '' ?>">
     <form action="<?= $route->urlFor('password-reset-submit') ?>"
           class="form" method="post" autocomplete="on">
 

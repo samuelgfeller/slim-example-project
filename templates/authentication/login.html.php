@@ -16,7 +16,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Login</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-box <?= isset($formError) ? ' invalid-form-box' : '' ?>" id="login-form-box">
+<div class="form-container <?= isset($formError) ? ' invalid-form-container' : '' ?>" id="login-form-container">
     <form action="<?= $route->urlFor('login-submit', [], $queryParams ?? []) ?>"
           id="login-form" class="form" method="post" autocomplete="on">
 

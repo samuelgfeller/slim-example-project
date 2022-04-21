@@ -52,7 +52,7 @@
     <header>
         <nav class="clearfix">
             <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
-            <a href="<?= $route->urlFor('hello') ?>" <?= $uri->getPath() === $route->urlFor(
+            <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'home-page'
             ) ? 'class="is-active"' : '' ?>>Home</a>
             <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
