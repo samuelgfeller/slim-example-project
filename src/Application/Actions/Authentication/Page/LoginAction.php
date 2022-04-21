@@ -40,7 +40,7 @@ final class LoginAction
         if ($this->session->get('user_id') !== null) {
             $flash = $this->session->getFlash();
             $flash->add(
-                'success',
+                'info',
                 'You are already logged-in.<br>' . 'Would you like to <a href="' . $this->responder->urlFor('logout') .
                 '">logout</a>?'
             );

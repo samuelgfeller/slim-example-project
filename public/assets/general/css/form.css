@@ -53,7 +53,7 @@
         z-index: 2;
         pointer-events: none;
     }
-    .form-input-group input{
+    .form-input-group input, .form-input{
         appearance: none;
         border: none;
         /*box-shadow: 0 2px 10px rgba(63, 135, 166, 0.2);*/
@@ -70,17 +70,23 @@
         position: relative;
         z-index: 1;
     }
+
+
     .form-input-group input:hover {
         /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .form-input-group input:focus {
+    .form-input-group input:focus, .form-input:focus {
         outline: none;
-        background: var(--layout-darker-main-color);
-        color: white;
-        margin-top: 30px;
         border-bottom: none;
     }
+    /* Form input focus when input is inside .form-input-group and thus with floating label */
+    .form-input-group input:focus {
+        margin-top: 30px;
+        background: var(--layout-darker-main-color);
+        color: white;
+    }
+
     .form-input-group input:-webkit-autofill:focus{
         /*top: 30px;*/
     }

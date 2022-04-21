@@ -28,7 +28,6 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
             <input type="email" name="email" id="loginEmailInp"
-                   placeholder="your@email.com"
                    maxlength="254"
                    required value="<?= $preloadValues['email'] ?? '' ?>"
                    class="<?= isset($emailErr) ? 'invalid-input' : '' ?>">

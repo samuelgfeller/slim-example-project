@@ -38,10 +38,10 @@
     /* Overwrite form.css rule to match profile view */
     .form-input {
         /* Full width minus edit save icon and loader plus space */
-        width: calc(100% - 70px) ;
+        width: calc(100% - 60px) ;
         max-width: 300px;
         font-size: 1.2em;
-        padding: 5px;
+        display: inline-block;
         vertical-align: middle;
         /* Remove default margin for the loader to be aligned */
         margin-top: 0;
