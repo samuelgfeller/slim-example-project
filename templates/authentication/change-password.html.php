@@ -14,52 +14,49 @@ $this->setLayout('layout.html.php');
 
 <?php
 // Define assets that should be included
-//$this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
+$this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
 $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
 <h2>Change password</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-box <?= isset($formError) ? ' invalid-input' : '' ?>">
+<div class="form-box <?= isset($formError) ? ' form-error' : '' ?>">
     <form action="<?= $route->urlFor('change-password-submit') ?>"
           class="form" method="post" autocomplete="on">
-        <?php
-        // Display form error message if there is one
-        if (isset($formErrorMessage)) { ?>
-            <strong class="err-msg"><?= $formErrorMessage ?></strong>
-            <?php
-        } ?>
+
+        <?= // General form error message if there is one
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+            '</strong>' : '' ?>
 
         <!--   Old password    -->
-        <label for="old-password-inp">Old password</label>
-        <input type="password" name="old_password" id="old-password-inp" minlength="3" required
-               class="<?= //If old password is wrong, the variable is set by the server, otherwise undefined
-               $oldPasswordErr ?? false ? 'invalid-input' : '' ?>"
-        >
-
+        <div class="form-input-group <?= //If old password is wrong, the variable is set by the server, otherwise undefined
+        $oldPasswordErr ?? false ? ' input-group-error' : '' ?>">
+            <input type="password" name="old_password" id="old-password-inp" minlength="3" required>
+            <label for="old-password-inp">Old password</label>
+        </div>
         <!--   Password 1    -->
-        <label for="password1-inp">New password</label>
-        <input type="password" name="password" id="password1-inp" minlength="3" required
-               class="<?= //If there is an error on a specific field, echo error class
-               ($passwordErr = get_field_error(($validation ?? []), 'password')) ? 'invalid-input' : '' ?>"
-        >
-        <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+        <div id="password1-inp-group" class="form-input-group <?= //If there is an error on a specific field, echo error class
+        ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
+            <input type="password" name="password" id="password1-inp" minlength="3" required>
+            <label for="password1-inp">New password</label>
+            <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+        </div>
 
         <!--   Password 2     -->
-        <label for="password2-inp">Repeat new password</label>
-        <input type="password" name="password2" id="password2-inp" minlength="3" required
-               class="<?= //If there is an error on a specific field, echo error class
-               ($password2Err = get_field_error(($validation ?? []), 'password2')) ? 'invalid-input' : '' ?>
-               <?= // If there is error with both passwords
-               ($passwordsErr = get_field_error(($validation ?? []), 'passwords')) ? 'invalid-input' : '' ?>"
-        >
-        <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
-        <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
+        <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+        ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
+        ($passwordsErr = get_field_error(($validation ?? []), 'passwords')) ? ' input-group-error' : '' ?>">
+            <input type="password" name="password2" id="password2-inp" minlength="3" required>
+            <label for="password2-inp">Repeat new password</label>
+            <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
+            <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
+        </div>
 
         <input type="submit" class="submit-btn" value="Set new password">
     </form>
+    <span class="secondary-text">
     <br>Go back to the
-    <a href="<?= $route->urlFor('profile-page', [], $queryParams ?? []) ?>">profile page</a>
+    <a href="<?= $route->urlFor('profile-page', [], $queryParams ?? []) ?>">profile page</a></span>
 </div>
 
 <?php

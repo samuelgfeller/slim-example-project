@@ -140,7 +140,7 @@ class UserValidator extends AppValidation
         $validationResultIsGiven = (bool)$validationResult;
         // Instantiate ValidationResult Object with default message if not already given
         $validationResult = $validationResult ??
-            new ValidationResult('There was a validation error when trying to register');
+            new ValidationResult('There was a validation with the passwords.');
 
         if ($passwords[0] !== $passwords[1]) {
             $validationResult->setError('passwords', 'Passwords do not match');

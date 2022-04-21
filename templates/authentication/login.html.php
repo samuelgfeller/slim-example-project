@@ -29,8 +29,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
             <input type="email" name="email" id="loginEmailInp"
                    maxlength="254"
-                   required value="<?= $preloadValues['email'] ?? '' ?>"
-                   class="<?= isset($emailErr) ? 'invalid-input' : '' ?>">
+                   required value="<?= $preloadValues['email'] ?? '' ?>">
             <label for="loginEmailInp">Email</label>
             <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
         </div>
@@ -38,8 +37,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <!-- ===== PASSWORD ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
-            <input type="password" name="password" id="loginPasswordInp" minlength="3" required
-                   class="<?= isset($passwordErr) ? 'invalid-input' : '' ?>">
+            <input type="password" name="password" id="loginPasswordInp" minlength="3" required>
             <label for="loginPasswordInp">Password</label>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
             <a class="discrete-link content-below-input"

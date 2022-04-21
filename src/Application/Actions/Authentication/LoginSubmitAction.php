@@ -65,11 +65,10 @@ final class LoginSubmitAction
                     }
                     return $this->responder->redirectToRouteName($response, 'hello');
                 } catch (ValidationException $ve) {
-                    $flash->add('error', $ve->getMessage());
                     return $this->responder->renderOnValidationError(
                         $response,
                         'authentication/login.html.php',
-                        $ve->getValidationResult(),
+                        $ve,
                         $request->getQueryParams()
                     );
                 } catch (InvalidCredentialsException $e) {

@@ -61,7 +61,7 @@ class ChangePasswordSubmitAction
 
                 return $this->responder->redirectToRouteName($response, 'profile-page');
             } catch (InvalidCredentialsException $invalidCredentialsException) {
-                $flash->add('error', '<b>Wrong old password. <br> Please try again.');
+                $this->responder->addPhpViewAttribute('formErrorMessage', 'Wrong old password. Please try again.');
 
                 // Redirect to password change page
                 return $this->responder->render(
@@ -71,11 +71,10 @@ class ChangePasswordSubmitAction
                     ['formError' => true, 'oldPasswordErr'=> true]
                 );
             } catch (ValidationException $validationException) {
-                $flash->add('error', $validationException->getMessage());
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/change-password.html.php',
-                    $validationException->getValidationResult(),
+                    $validationException,
                     $request->getQueryParams()
                 );
             }
