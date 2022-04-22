@@ -33,6 +33,11 @@ a {
     color: black;
 }
 
+h2, h1{
+    color: black;
+    text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);
+}
+
 a:hover {
     /*text-shadow: 0 0 1px black;*/
     font-weight: bold;
@@ -114,6 +119,12 @@ a:hover {
 }
 .secondary-text{
     color: var(--layout-lighter-text-color);
+}
+.layout-color-text {
+    color: var(--layout-lighter-text-color);
+}
+.display-newlines{
+    white-space: pre-line;
 }
 
 #recaptcha{

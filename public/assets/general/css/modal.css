@@ -1,112 +1,159 @@
-/* The Modal (background) */
-#modal {
-    position: fixed; /* Stay in place */
-    z-index: 10; /* Sit on top of content placeholder but below flash */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(100, 100, 100); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-    backdrop-filter: blur(5px);
-}
-
-/* Modal Content */
-#modal-box {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin: auto;
-    padding: 0;
-    border-radius: 33px;
-    /*border: 2px solid black;*/
-    min-width: 300px;
-    width: 40%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    animation-name: animatetop;
-    animation-duration: 0.4s;
-    backdrop-filter: blur(20px);
-}
-
-/* The Close Button */
-#close-modal {
-    color: #aaaaaa;
-    float: right;
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-#close-modal:hover,
-#close-modal:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Modal Header */
-#modal-header {
-    padding: 2px 30px;
-    /*background-color: #5cb85c;*/
-    /*color: white;*/
-}
-
-/* Modal Body */
-#modal-body {
-    padding: 2px 30px;
-}
-
-/* Modal Footer */
-#modal-footer {
-    padding: 10px 30px 20px 30px;
-    /*background-color: #5cb85c;*/
-    /*color: white;*/
-}
-
-/* Overwrite form.css style to match better modal */
-.modalForm input[type=submit], .modal-submit-btn {
-    /*padding: 6px 6px;*/
-    width: 30%;
-    min-width: 160px;
-    float: right;
-    /*font-size: 90%;*/
-}
-.form-input{
-    background-color: rgba(255, 255, 255, 0.75);
-}
-.form-input:disabled{
-    background-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Add Animation */
-@keyframes animatetop {
-    from {
-        top: -300px;
-        opacity: 0
-    }
-    to {
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    /* The Modal (background) */
+    #modal {
+        position: fixed; /* Stay in place */
+        z-index: 10; /* Sit on top of content placeholder but below flash */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
         top: 0;
-        opacity: 1
+        width: 100%;
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(100, 100, 100); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        backdrop-filter: blur(5px);
+    }
+
+    /* Modal Content */
+    #modal-box {
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.8);
+        margin: auto;
+        padding: 2px 18px 30px 18px;
+        border-radius: 33px;
+        /*border: 2px solid black;*/
+        min-width: 300px;
+        width: 95%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation-name: fade-in-modal;
+        animation-duration: 0.4s;
+        backdrop-filter: blur(20px);
+    }
+
+    /* The Close Button */
+    #close-modal {
+        color: #aaaaaa;
+        float: right;
+        font-size: 32px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-right: 5px;
+    }
+
+    #close-modal:hover,
+    #close-modal:focus {
+        color: #868686;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Modal Header */
+    #modal-header {
+        padding: 2px 0;
+        /*background-color: #5cb85c;*/
+        /*color: white;*/
+    }
+
+    /* Modal Body */
+    #modal-body {
+        padding: 2px 0;
+    }
+
+    /* Modal Footer */
+    #modal-footer {
+        padding-top: 10px;
+        /*background-color: #5cb85c;*/
+        /*color: white;*/
+    }
+
+    /* Overwrite form.css style to match better modal */
+    .form-input {
+        background-color: rgba(255, 255, 255, 0.75);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
+    }
+
+    .form-input:disabled {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-form input[type=submit], .modal-submit-btn {
+        /*padding: 6px 6px;*/
+        width: 30%;
+        min-width: 160px;
+        float: right;
+        margin-top: 15px;
+        color: black;
+        border-radius: 15px;
+        padding: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        background: rgba(255, 255, 255, 0.75);
+    }
+    .modalForm input[type=submit]:hover, .modal-submit-btn:hover{
+        background-color: #ececec;
+        color: black;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
     }
 }
 
-@media only screen and (max-width: 1100px) {
-    #modal-box  {
+@media (min-width: 641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    #alert-modal-box {
+        padding: 40px;
+    }
+
+    #alert-modal-footer .btn {
+        font-size: 1.2em;
+    }
+
+    #modal-box {
+        width: 80%;
+        padding: 2px 30px 30px 30px;
+    }
+}
+
+@media (min-width: 700px) {
+    #modal-box {
         width: 60%;
     }
 }
 
-@media only screen and (max-width: 700px) {
-    #modal-box  {
-        width: 80%;
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box {
+        width: 40%;
     }
 }
 
-@media only screen and (max-width: 500px) {
-    #modal-box  {
-        width: 95%;
+/* Add Animation */
+@keyframes fade-in-modal {
+    from {
+        transform: scale(0.97);
+        opacity: 0
+    }
+    to {
+        transform: scale(1);
+        opacity: 1
     }
 }
+
+/*@media only screen and (max-width: 1100px) {*/
+/*    #modal-box {*/
+/*        width: 60%;*/
+/*    }*/
+/*}*/
+
+/*@media only screen and (max-width: 700px) {*/
+/*    #modal-box {*/
+/*        width: 80%;*/
+/*    }*/
+/*}*/
+
+/*@media only screen and (max-width: 500px) {*/
+/*    #modal-box {*/
+/*        width: 95%;*/
+/*    }*/
+/*}*/
 

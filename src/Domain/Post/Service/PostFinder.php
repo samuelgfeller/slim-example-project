@@ -24,6 +24,7 @@ class PostFinder
     public function findAllPostsWithUsers(): array
     {
         $allPosts = $this->postFinderRepository->findAllPostsWithUsers();
+        $this->changeDateFormat($allPosts);
         // In PHP, an object variable doesn't contain the object itself as value. It only contains an object identifier
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
@@ -51,7 +52,25 @@ class PostFinder
     public function findAllPostsFromUser(int $userId): array
     {
         $allPosts = $this->postFinderRepository->findAllPostsByUserId($userId);
+        $this->changeDateFormat($allPosts);
         $this->postUserRightSetter->setUserRightsOnPosts($allPosts);
         return $allPosts;
+    }
+
+    /**
+     * Change created and updated date format from SQL datetime to
+     * something we are used to see in Switzerland
+     *
+     * @param UserPostData[] $userPosts
+     * @param string $format
+     *
+     * @return void
+     */
+    private function changeDateFormat(array $userPosts, string $format = 'd.m.Y H:i:s'): void
+    {
+        foreach ($userPosts as $userPost){
+            $userPost->postUpdatedAt = date($format, strtotime($userPost->postUpdatedAt));
+            $userPost->postCreatedAt = date($format, strtotime($userPost->postCreatedAt));
+        }
     }
 }

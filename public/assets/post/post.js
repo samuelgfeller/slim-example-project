@@ -82,13 +82,13 @@ function displayPostContentPlaceholder() {
     postWrapper.innerHTML = '';
 
     let contentPlaceholderHtml =
-        '<div class="preloading-card-content">' +
+        '<div class="preloading-card">' +
         '    <div class="preloading-card-header">' +
         '        <div class="load-wrapper">' +
         '            <div class="activity"></div>' +
         '        </div>' +
         '    </div>' +
-        '    <div class="preloading-card-inner-content">' +
+        '    <div class="preloading-card-body">' +
         '        <div class="load-wrapper">' +
         '            <div class="activity"></div>' +
         '        </div>' +
@@ -106,7 +106,7 @@ function displayPostContentPlaceholder() {
  */
 function removeContentPlaceholder() {
     // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
-    let contentPlaceholders = document.querySelectorAll('.preloading-card-content');
+    let contentPlaceholders = document.querySelectorAll('.preloading-card');
     // Foreach loop over content placeholders
     for (let contentPlaceholder of contentPlaceholders) {
         // remove from DOM
@@ -131,21 +131,22 @@ function addPostsToDom(posts) {
     for (const post of posts) {
         // Set delete and edit buttons but only if user is viewing its own posts
         let ownPostsButtons = '';
-        if (post.userMutationRight === 'all'){
+        if (post.userMutationRight === 'all') {
             ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="card-edit-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="edit">' +
                 '<img src="assets/general/img/del_icon.svg" class="card-del-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="del">';
         }
         // Post card HTML
-        let postHtml = '<div class="post-squares" id="post' + post.postId + '">' +
+        let postHtml = '<div class="post-card" id="post' + post.postId + '">' +
             '    <div class="card-content">' +
             ownPostsButtons +
             '        <h3 class="card-header">' + post.userName + '</h3>' +
             '        <div id="card-inner-content' + post.postId + '">' +
-            '            <p><span class="info-in-card-span"></span><b>' + post.postMessage + '</b></p>' +
-            '            <p><span class="info-in-card-span">Updated at: </span><b>' + post.postUpdatedAt + '</b></p>' +
-            '            <p><span class="info-in-card-span">Created at: </span>' + post.postCreatedAt + '</p>' +
+            '            <p class="display-newlines"><b>' + post.postMessage + '</b></p>' +
+            '            <p class="post-card-additional-info">Updated: ' +
+            '               <span class="layout-color-text">' + post.postUpdatedAt + '</span><br>' +
+            '            Created: <span class="layout-color-text">' + post.postCreatedAt + '</span></p>' +
             '        </div>' +
             '    </div>' +
             '</div>';
@@ -371,5 +372,5 @@ function showPostDeleteLoader(postId) {
     // Hide delete icon
     document.querySelector('.box-del-icon[data-id="' + postId + '"]').style.display = 'none';
     // Lower post box opacity to reinforce feeling that something is happening
-    document.getElementById('post'+postId).style.opacity = '0.6';
+    document.getElementById('post' + postId).style.opacity = '0.6';
 }

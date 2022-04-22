@@ -72,6 +72,7 @@
     }
     .form-input-group textarea, textarea.form-input {
         border-radius: 20px;
+        padding: 15px;
     }
     .form-input-group input:hover, .form-input:hover {
         /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
@@ -107,7 +108,7 @@
         width: 50%;
         border:none;
         /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         color: var(--layout-darker-main-color);
         /*color: black;*/
         background: white;
