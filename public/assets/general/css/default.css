@@ -1,6 +1,6 @@
 @font-face {
-    font-family: CenturyGothic;
-    src: url(../fonts/CenturyGothic.ttf);
+    font-family: Comfortaa;
+    src: url(../fonts/Comfortaa.ttf);
 }
 @font-face {
     font-family: DM-Sans;
@@ -26,7 +26,7 @@ body, html {
     and height and not overflowing to the parent.
     https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
     box-sizing: border-box;
-    font-family: DM-Sans, CenturyGothic, Geneva, AppleGothic, sans-serif;
+    font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;
 }
 
 a {
