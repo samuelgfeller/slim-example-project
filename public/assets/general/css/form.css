@@ -119,13 +119,12 @@
         font-size: 100%;
     }
 
-    .form input[type=submit]:hover, .submit-btn:hover {
+    .form input[type=submit]:hover:enabled, .submit-btn:hover:enabled {
         background: var(--layout-darker-main-color);
         color: white;
     }
 
     .form input[type=submit]:disabled, .submit-btn:disabled {
-        /*border: 1px solid grey;*/
         background: whitesmoke;
         color: grey;
         cursor: default;

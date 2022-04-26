@@ -74,6 +74,11 @@
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
     }
 
+    .form-input:hover {
+        /* Keep box shadow on hover */
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
+    }
+
     .form-input:disabled {
         background-color: rgba(255, 255, 255, 0.5);
     }
@@ -87,15 +92,43 @@
         color: black;
         border-radius: 15px;
         padding: 10px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         background: rgba(255, 255, 255, 0.75);
     }
-    .modalForm input[type=submit]:hover, .modal-submit-btn:hover{
-        background-color: #ececec;
-        color: black;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
+    .modal-form input[type=submit]:hover:enabled, .modal-submit-btn:hover:enabled {
+        background-color: #ececec;
+        color: inherit;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
+
+    .modal-submit-btn-loading {
+        animation: buttonShadowLoading linear 0.7s;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes buttonShadowLoading {
+        0% {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        50% {
+            box-shadow: 0 0px 20px rgba(0, 0, 0, 0.3);
+        }
+        100% {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+    }
+    @keyframes color {
+        0% {
+            color: black;
+
+        }
+        100% {
+            color: red;
+
+        }
+    }
+
 }
 
 @media (min-width: 641px) {

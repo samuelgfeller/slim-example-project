@@ -11,7 +11,9 @@ $this->setLayout('layout.html.php');
 
 <?php
 // Define assets that should be included
-$this->addAttribute('css', ['assets/general/css/form.css']); ?>
+$this->addAttribute('css', ['assets/general/css/form.css']);
+$this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
+?>
 
 <h2>Login</h2>
 
@@ -27,18 +29,18 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <!-- ===== Email ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
-            <input type="email" name="email" id="loginEmailInp"
+            <input type="email" name="email"
                    maxlength="254"
                    required value="<?= $preloadValues['email'] ?? '' ?>">
-            <label for="loginEmailInp">Email</label>
+            <label>Email</label>
             <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
         </div>
 
         <!-- ===== PASSWORD ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
-            <input type="password" name="password" id="loginPasswordInp" minlength="3" required>
-            <label for="loginPasswordInp">Password</label>
+            <input type="password" id="loginPasswordInp" name="password" minlength="3" required>
+            <label>Password</label>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
             <a class="discrete-link content-below-input"
                href="<?= $route->urlFor('password-forgotten-page') ?>">Forgot password?</a>

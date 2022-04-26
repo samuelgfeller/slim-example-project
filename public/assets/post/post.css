@@ -18,9 +18,6 @@
 
     .post-card {
         width: 100%;
-    }
-
-    .card-content {
         padding: 20px;
         position: relative;
         display: block;
@@ -31,15 +28,14 @@
         max-width: 650px;
         overflow-wrap: anywhere;
     }
-
-    .card-content p {
+    .post-card p {
     }
 
-    .card-content:hover {
+    .post-card:hover {
         box-shadow: inset 0 0 0 0px black;
     }
 
-    .card-content:hover > .card-del-icon, .card-content:hover > .card-edit-icon {
+    .post-card:hover > .card-del-icon, .post-card:hover > .card-edit-icon {
         display: inline;
     }
 

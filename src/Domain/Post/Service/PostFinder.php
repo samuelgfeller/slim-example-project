@@ -14,7 +14,8 @@ class PostFinder
     public function __construct(
         private PostFinderRepository $postFinderRepository,
         private PostUserRightSetter $postUserRightSetter,
-    ) { }
+    ) {
+    }
 
     /**
      * Gives all undeleted posts from db with name of user
@@ -62,15 +63,24 @@ class PostFinder
      * something we are used to see in Switzerland
      *
      * @param UserPostData[] $userPosts
-     * @param string $format
+     * @param string $format If default format changes, it has to be adapted in PostListActionTest
      *
      * @return void
      */
     private function changeDateFormat(array $userPosts, string $format = 'd.m.Y H:i:s'): void
     {
-        foreach ($userPosts as $userPost){
-            $userPost->postUpdatedAt = date($format, strtotime($userPost->postUpdatedAt));
-            $userPost->postCreatedAt = date($format, strtotime($userPost->postCreatedAt));
+        // Tested in PostListActionTest
+        foreach ($userPosts as $userPost) {
+            // Change updated at format
+            $userPost->postUpdatedAt = $userPost->postUpdatedAt ? date(
+                $format,
+                strtotime($userPost->postUpdatedAt)
+            ) : null;
+            // Change created at format
+            $userPost->postCreatedAt = $userPost->postCreatedAt ? date(
+                $format,
+                strtotime($userPost->postCreatedAt)
+            ) : null;
         }
     }
 }

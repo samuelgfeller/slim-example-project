@@ -21,8 +21,8 @@ class UserPostData
     // Not post value from db, populated in PostUserRightSetter
     public ?string $userMutationRight;
 
-    public const USER_UPDATE_RIGHT_ALL = 'all';
-    public const USER_UPDATE_RIGHT_NONE = 'none';
+    public const MUTATION_PERMISSION_ALL = 'all';
+    public const MUTATION_PERMISSION_NONE = 'none';
 
     /**
      * Post constructor.

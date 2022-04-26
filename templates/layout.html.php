@@ -38,8 +38,7 @@
     // fetch() includes another template into the current template
     // Include template which contains HTML to include assets
     echo $this->fetch(
-        'layout/assets.html.php',
-        // Merge layout assets and from sub templates
+        'layout/assets.html.php', // Merge layout assets and from sub templates
         ['stylesheets' => array_merge($layoutCss, $css ?? []), 'scripts' => array_merge($layoutJs, $js ?? [])]
     );
     ?>
@@ -60,7 +59,8 @@
             ) ? 'class="is-active"' : '' ?>>Users</a>
             <a href="<?= $route->urlFor('profile-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'profile-page'
-            ) ? 'class="is-active"' : '' ?>>Profile</a>
+            ) || $uri->getPath() === $route->urlFor('change-password-page') ? 'class="is-active"' : '' ?>>
+                Profile</a>
             <a href="<?= $route->urlFor('post-list-own-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'post-list-own-page'
             ) ? 'class="is-active"' : '' ?>>Own posts</a>

@@ -50,13 +50,13 @@ class PostUserRightSetter
     private function setUserRightsOnPost(UserPostData $userPost): void
     {
         // Default is no rights
-        $userPost->userMutationRight = UserPostData::USER_UPDATE_RIGHT_NONE;
+        $userPost->userMutationRight = UserPostData::MUTATION_PERMISSION_NONE;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
 
             if ($userPost->userId === $loggedInUserId || $userRole === 'admin') {
-                $userPost->userMutationRight = UserPostData::USER_UPDATE_RIGHT_ALL;
+                $userPost->userMutationRight = UserPostData::MUTATION_PERMISSION_ALL;
             }
         }
     }

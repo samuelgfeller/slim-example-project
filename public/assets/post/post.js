@@ -139,16 +139,14 @@ function addPostsToDom(posts) {
         }
         // Post card HTML
         let postHtml = '<div class="post-card" id="post' + post.postId + '">' +
-            '    <div class="card-content">' +
             ownPostsButtons +
             '        <h3 class="card-header">' + post.userName + '</h3>' +
-            '        <div id="card-inner-content' + post.postId + '">' +
+            '        <div id="card-content' + post.postId + '">' +
             '            <p class="display-newlines"><b>' + post.postMessage + '</b></p>' +
             '            <p class="post-card-additional-info">Updated: ' +
             '               <span class="layout-color-text">' + post.postUpdatedAt + '</span><br>' +
             '            Created: <span class="layout-color-text">' + post.postCreatedAt + '</span></p>' +
             '        </div>' +
-            '    </div>' +
             '</div>';
 
         // Add to DOM
@@ -221,6 +219,9 @@ function submitCreatePost(formId) {
 function showPostModalLoader() {
     document.getElementById('modal-footer').insertAdjacentHTML('afterbegin',
         '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
+    let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
+    submitBtn.classList.add('modal-submit-btn-loading');
+    submitBtn.disabled = true;
 }
 
 /**
@@ -228,6 +229,9 @@ function showPostModalLoader() {
  */
 function hidePostModalLoader() {
     document.getElementsByClassName('lds-ellipsis')[0].remove();
+    let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
+    submitBtn.classList.remove('modal-submit-btn-loading');
+    submitBtn.disabled = false;
 }
 
 /**
@@ -242,7 +246,7 @@ function updatePostModal(postId) {
     let body = '<div class="form modal-form"><textarea rows="4" cols="50" name="message" ' +
         'id="update-message-textarea" class="form-input" minlength="4" ' +
         'maxlength="500" required disabled>Loading...</textarea></div>';
-    let footer = '<button type="button" id="submit-btn-update-post" class="submit-btn modal-submit-btn">' +
+    let footer = '<button type="button" disabled id="submit-btn-update-post" class="submit-btn modal-submit-btn">' +
         'Update post</button><div class="clearfix"></div>';
 
     document.getElementById('post-wrapper').insertAdjacentHTML(
@@ -266,8 +270,10 @@ function updatePostModal(postId) {
                 let updateMessageTextarea = document.getElementById('update-message-textarea');
                 updateMessageTextarea.value = output.message;
                 updateMessageTextarea.disabled = false;
+                let submitPostUpdateBtn = document.getElementById('submit-btn-update-post');
+                submitPostUpdateBtn.disabled = false;
                 // Set post id on submit button as its easiest to retrieve on delegated event listener
-                document.getElementById('submit-btn-update-post').setAttribute('data-id', output.id);
+                submitPostUpdateBtn.setAttribute('data-id', output.id);
             }
         }
     };
@@ -323,7 +329,7 @@ function submitDeletePost(postId) {
 
     // Replace delete icon with loader to indicate user that the request is on its way
     showPostDeleteLoader(postId);
-
+    return;
     // Ajax request
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
@@ -365,12 +371,15 @@ function submitDeletePost(postId) {
  */
 function showPostDeleteLoader(postId) {
     // Insert loader
-    document.querySelector('.card-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
-        '<div class="lds-ellipsis post-box-del-loader"><div></div><div></div><div></div><div></div></div>');
+    // document.querySelector('.card-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
+    //     '<div class="lds-ellipsis post-box-del-loader"><div></div><div></div><div></div><div></div></div>');
+    document.querySelector('#post' + postId).insertAdjacentHTML('afterend',
+        '<span></span><span></span><span></span><span></span>');
+
     // Change loader size in changing the css variable
     document.documentElement.style.setProperty('--three-dots-loader-factor', '0.5');
     // Hide delete icon
-    document.querySelector('.box-del-icon[data-id="' + postId + '"]').style.display = 'none';
+    document.querySelector('.card-del-icon[data-id="' + postId + '"]').style.display = 'none';
     // Lower post box opacity to reinforce feeling that something is happening
     document.getElementById('post' + postId).style.opacity = '0.6';
 }

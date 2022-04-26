@@ -54,10 +54,9 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
         <input type="submit" class="submit-btn" value="Set new password">
     </form>
-    <span class="secondary-text">
-    <br>Go back to the
-    <a href="<?= $route->urlFor('profile-page', [], $queryParams ?? []) ?>">profile page</a></span>
 </div>
+    <span class="secondary-text"><br>Go back to the
+    <a href="<?= $route->urlFor('profile-page', [], $queryParams ?? []) ?>">profile page</a></span>
 
 <?php
 // Throttle error message in request-throttle.html.php ?>

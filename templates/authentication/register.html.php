@@ -13,7 +13,7 @@ $this->setLayout('layout.html.php');
 <?php
 // Define assets that should be included
 $this->addAttribute('css', ['assets/general/css/form.css']);
-$this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
+$this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'assets/auth/password-strength-checker.js']);
 ?>
 
 
@@ -37,9 +37,9 @@ $this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
             <!--   First name     -->
             <div class="form-input-group <?= //If there is an error on a specific field, echo error class
             ($firstNameErr = get_field_error(($validation ?? []), 'first_name')) ? ' input-group-error' : '' ?>">
-                <input type="text" name="first_name" id="register-first-name-inp"
+                <input type="text" name="first_name"
                        maxlength="100" minlength="3" required value="<?= $preloadValues['firstName'] ?? '' ?>">
-                <label for="register-first-name-inp">First name</label>
+                <label>First name</label>
                 <?= // Error message below input field
                 $firstNameErr !== null ? '<strong class="err-msg">' . $firstNameErr . '</strong>' : '' ?>
             </div>
@@ -47,19 +47,19 @@ $this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
             <!--   Surname     -->
             <div class="form-input-group <?= //If there is an error on a specific field, echo error class
             ($surnameErr = get_field_error(($validation ?? []), 'surname')) ? ' input-group-error' : '' ?>">
-                <input type="text" name="surname" id="register-surname-inp"
+                <input type="text" name="surname"
                        maxlength="100" minlength="3" required value="<?= $preloadValues['surname'] ?? '' ?>">
-                <label for="register-surname-inp">Surname</label>
+                <label>Surname</label>
                 <?= $surnameErr !== null ? '<strong class="err-msg">' . $surnameErr . '</strong>' : '' ?>
             </div>
 
             <!--    Email    -->
             <div class="form-input-group <?= //If there is an error on a specific field, echo error class
             ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
-                <input type="email" name="email" id="register-email-inp"
+                <input type="email" name="email"
                        maxlength="254"
                        required value="<?= $preloadValues['email'] ?? '' ?>">
-                <label for="register-email-inp">Email</label>
+                <label>Email</label>
                 <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
             </div>
 
@@ -68,8 +68,8 @@ $this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
                 ($validation ?? []),
                 'password'
             )) ? ' input-group-error' : '' ?>">
-                <input type="password" name="password" id="password1-inp" minlength="3" required>
-                <label for="password1-inp">Password</label>
+                <input type="password" name="password" minlength="3" id="password1-inp" required>
+                <label>Password</label>
                 <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
             </div>
 
@@ -77,7 +77,7 @@ $this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
             <div class="form-input-group <?= //If there is an error on a specific field, echo error class
             ($password2Err = get_field_error(($validation ?? []), 'password2')) ? ' input-group-error' : '' ?>">
                 <input type="password" name="password2" id="password2-inp" minlength="3" required>
-                <label for="password2-inp">Repeat password</label>
+                <label>Repeat password</label>
                 <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
             </div>
             <?= // If there is error with both passwords

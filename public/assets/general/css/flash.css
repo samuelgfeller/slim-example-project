@@ -23,7 +23,7 @@
 
 .flash-close-btn {
     position: absolute;
-    top: -10px; /* Large font size and time symbol pretty small it has to be pushed upwards*/
+    /*top: -10px; !* Large font size and time symbol pretty small it has to be pushed upwards*!*/
     right: 10px;
     height: 30px;
     font-size: 40px;
