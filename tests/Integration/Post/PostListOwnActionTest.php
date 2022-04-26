@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Post;
 
+use App\Domain\Post\Data\UserPostData;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
@@ -82,8 +83,8 @@ class PostListOwnActionTest extends TestCase
      */
     public function testPostListOwnAction(): void
     {
-        // Logged-in user that requests to see his own posts
-        $userId = 1;
+        // Logged-in user role user that requests to see his own posts
+        $userId = 2;
 
         // All user fixtures required to insert all post fixtures
         $this->insertFixtures([UserFixture::class, PostFixture::class]);
@@ -113,10 +114,11 @@ class PostListOwnActionTest extends TestCase
                 'postId' => $postRow['id'],
                 'userId' => $userRow['id'],
                 'postMessage' => $postRow['message'],
-                'postCreatedAt' => $postRow['created_at'],
-                'postUpdatedAt' => $postRow['updated_at'],
+                'postCreatedAt' => $this->changeDateFormat($postRow['created_at']),
+                'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
+                'userMutationRight' => UserPostData::MUTATION_PERMISSION_ALL, // All as its own posts
             ];
         }
 
@@ -146,6 +148,17 @@ class PostListOwnActionTest extends TestCase
             'loginUrl' => $this->urlFor('login-page', [], ['redirect' => $this->urlFor('post-list-own-page')])
         ];
         $this->assertJsonData($expectedBody, $response);
+    }
+
+    /**
+     * PostFinder changes the date into the default format in Europe
+     *
+     * @param string|null $date
+     * @return string|null
+     */
+    private function changeDateFormat(?string $date): ?string
+    {
+        return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
     }
 
 }

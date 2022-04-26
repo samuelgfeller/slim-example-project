@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Post;
 
+use App\Domain\Post\Data\UserPostData;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
@@ -77,6 +78,10 @@ class PostListActionTest extends TestCase
             $this->urlFor('post-list')
         );
 
+        // Simulate logged-in user with id 2 role user
+        $loggedInUserId = 2;
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+
         $response = $this->app->handle($request);
 
         // Assert: 200 OK
@@ -95,10 +100,13 @@ class PostListActionTest extends TestCase
                 'postId' => $postRow['id'],
                 'userId' => $userRow['id'],
                 'postMessage' => $postRow['message'],
-                'postCreatedAt' => $postRow['created_at'],
-                'postUpdatedAt' => $postRow['updated_at'],
+                'postCreatedAt' => $this->changeDateFormat($postRow['created_at']),
+                'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
+                // If it's the user's own post, all rights but otherwise none
+                'userMutationRight' => $loggedInUserId ===
+                $postRow['user_id'] ? UserPostData::MUTATION_PERMISSION_ALL : UserPostData::MUTATION_PERMISSION_NONE,
             ];
         }
 
@@ -146,10 +154,11 @@ class PostListActionTest extends TestCase
                 'postId' => $postRow['id'],
                 'userId' => $userRow['id'],
                 'postMessage' => $postRow['message'],
-                'postCreatedAt' => $postRow['created_at'],
-                'postUpdatedAt' => $postRow['updated_at'],
+                'postCreatedAt' => $this->changeDateFormat($postRow['created_at']),
+                'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
+                'userMutationRight' => UserPostData::MUTATION_PERMISSION_NONE, // None as not logged in
             ];
         }
 
@@ -178,5 +187,50 @@ class PostListActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
         $this->assertJsonData($expectedBody, $response);
+    }
+
+    /**
+     * Request list of all posts when admin is logged in
+     * Expected is that all posts have all permissions
+     *
+     * Fixtures dependency:
+     *      UserFixture: one user with id 1 (for session)(better if at least two)
+     *      PostFixture: one post (better if at least two)
+     *
+     * @return void
+     */
+    public function testPostListAllAction_asAdmin(): void
+    {
+        // All user fixtures required to insert all post fixtures
+        $this->insertFixtures([UserFixture::class, PostFixture::class]);
+
+        // Logged in user 1 role 'admin'
+        $this->container->get(SessionInterface::class)->set('user_id', 1);
+
+        $request = $this->createJsonRequest(
+            'GET',
+            $this->urlFor('post-list')
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert: 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Assert that mutation permission is all on all posts
+        foreach ($this->getJsonData($response) as $post) {
+            self::assertSame(UserPostData::MUTATION_PERMISSION_ALL, $post['userMutationRight']);
+        }
+    }
+
+    /**
+     * PostFinder changes the date into the default format in Europe
+     *
+     * @param string|null $date
+     * @return string|null
+     */
+    private function changeDateFormat(?string $date): ?string
+    {
+        return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
     }
 }
