@@ -53,26 +53,26 @@
             <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
             <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'home-page'
-            ) ? 'class="is-active"' : '' ?>>Home</a>
+            ) ? 'class="is-active"' : '' ?>>Dashboard</a>
             <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
                 'user-list'
-            ) ? 'class="is-active"' : '' ?>>Users</a>
+            ) ? 'class="is-active"' : '' ?>>Non-assigned requests</a>
+            <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'client-list-assigned-to-me-page'
+            ) ? 'class="is-active"' : '' ?>>Assigned to me</a>
+            <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'client-list-all-page'
+            ) ? 'class="is-active"' : '' ?>>Client list</a>
+            <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
+                'client-list-all-page'
+            ) ? 'class="is-active"' : '' ?>>Admin area</a>
+            <!--           <a href="<?/*= $route->urlFor('register-page') */?>" <?/*= $uri->getPath() === $route->urlFor(
+                'register-page'
+            ) ? 'class="is-active"' : '' */?>>Register</a>-->
             <a href="<?= $route->urlFor('profile-page') ?>" <?= $uri->getPath() === $route->urlFor(
                 'profile-page'
             ) || $uri->getPath() === $route->urlFor('change-password-page') ? 'class="is-active"' : '' ?>>
                 Profile</a>
-            <a href="<?= $route->urlFor('post-list-own-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'post-list-own-page'
-            ) ? 'class="is-active"' : '' ?>>Own posts</a>
-            <a href="<?= $route->urlFor('post-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'post-list-all-page'
-            ) ? 'class="is-active"' : '' ?>>All posts</a>
-            <a href="<?= $route->urlFor('login-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'login-page'
-            ) ? 'class="is-active"' : '' ?>>Login</a>
-            <a href="<?= $route->urlFor('register-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'register-page'
-            ) ? 'class="is-active"' : '' ?>>Register</a>
 
             <div id="nav-icon">
                 <span></span>

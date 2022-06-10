@@ -1,26 +1,26 @@
 <?php
 
 
-namespace App\Domain\Post\Service;
+namespace App\Domain\Client\Service;
 
 
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Data\ClientData;
+use App\Domain\Client\Data\ClientData;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\Post\PostUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
-class PostUpdater
+class ClientUpdater
 {
     private LoggerInterface $logger;
 
     public function __construct(
-        private PostValidator $postValidator,
-        private PostUpdaterRepository $postUpdaterRepository,
+        private ClientValidator          $postValidator,
+        private PostUpdaterRepository    $postUpdaterRepository,
         private UserRoleFinderRepository $userRoleFinderRepository,
-        private PostFinder $postFinder,
-        LoggerFactory $logger
+        private ClientFinder             $postFinder,
+        LoggerFactory                    $logger
 
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('post-service');

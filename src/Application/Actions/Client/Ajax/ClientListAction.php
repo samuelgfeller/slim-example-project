@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Exceptions\UnauthorizedException;
 use App\Domain\Post\Exception\InvalidPostFilterException;
 use App\Domain\Post\Service\PostFilterFinder;
@@ -13,22 +14,22 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Post list all and own action.
  */
-final class PostListAction
+final class ClientListAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFilterFinder $postFilterFinder
+     * @param ClientFilterFinder $clientFilterFinder
      */
     public function __construct(
         private Responder $responder,
-        private PostFilterFinder $postFilterFinder,
+        private readonly ClientFilterFinder $clientFilterFinder,
     ) {
     }
 
     /**
-     * Post list all and own Action.
+     * Client list all and own Action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
@@ -44,7 +45,7 @@ final class PostListAction
     ): ResponseInterface {
         try {
             // Retrieve posts with given filter values (or none)
-            $userPosts = $this->postFilterFinder->findPostsWithFilter($request->getQueryParams());
+            $userPosts = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
         } catch (InvalidPostFilterException $invalidPostFilterException) {
             return $this->responder->respondWithJson(
                 $response,

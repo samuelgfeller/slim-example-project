@@ -224,6 +224,25 @@ final class ArrayReader
     }
 
     /**
+     * Get value as DateTimeImmutable or null.
+     *
+     * @param string $key The key
+     * @param string|null $default The default value
+     *
+     * @return \DateTimeImmutable|null The value
+     */
+    public function findAsDateTimeImmutable(string $key, string $default = null): ?\DateTimeImmutable
+    {
+        $value = $this->find($key, $default);
+
+        if ($value === null) {
+            return null;
+        }
+
+        return new \DateTimeImmutable($value);
+    }
+
+    /**
      * Find mixed value.
      *
      * @param string $path The path

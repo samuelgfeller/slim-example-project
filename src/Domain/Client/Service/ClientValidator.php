@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Post\Service;
+namespace App\Domain\Client\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Data\ClientData;
+use App\Domain\Client\Data\ClientData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
@@ -12,7 +12,7 @@ use App\Infrastructure\User\UserExistenceCheckerRepository;
 /**
  * Class PostValidator
  */
-class PostValidator extends AppValidation
+class ClientValidator extends AppValidation
 {
 
     /**

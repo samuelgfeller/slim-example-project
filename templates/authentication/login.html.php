@@ -23,8 +23,8 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
           id="login-form" class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">'.
-            $formErrorMessage .'</strong>' : '' ?>
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+            '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
@@ -55,6 +55,8 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
     <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">Register</a>
     </span>
 </div>
+
+
 
 <?php
 // Throttle error message in request-throttle.html.php ?>

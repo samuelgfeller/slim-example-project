@@ -1,17 +1,17 @@
 <?php
 
 
-namespace App\Domain\Post\Service;
+namespace App\Domain\Client\Service;
 
 
-use App\Domain\Post\Data\ClientData;
+use App\Domain\Client\Data\ClientData;
 use App\Infrastructure\Post\PostCreatorRepository;
 
-class PostCreator
+class ClientCreator
 {
 
     public function __construct(
-        private PostValidator $postValidator,
+        private ClientValidator       $postValidator,
         private PostCreatorRepository $postCreatorRepository
     ) { }
 
@@ -30,6 +30,6 @@ class PostCreator
         $post->userId = $loggedInUserId;
         $this->postValidator->validatePostCreation($post);
 
-        return $this->postCreatorRepository->insertPost($post->toArray());
+        return $this->postCreatorRepository->insertPost($post->toArrayForDatabase());
     }
 }

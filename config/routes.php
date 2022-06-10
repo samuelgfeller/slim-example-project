@@ -92,32 +92,55 @@ return function (App $app) {
     })->add(UserAuthenticationMiddleware::class);
 
     // Post CRUD routes; I try to keep this as REST as possible so the page actions have urls other than /posts
+    $app->group('/clients', function (RouteCollectorProxy $group) {
+        // Post requests where user DOESN'T need to be authenticated
+        $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
+
+        $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientReadAction::class)->setName(
+            'client-read'
+        );
+        // Post requests where user DOES need to be authenticated
+        $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)->setName(
+            'client-submit-create'
+        )->add(
+            UserAuthenticationMiddleware::class
+        );
+        $group->put('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientUpdateAction::class)->add(
+            UserAuthenticationMiddleware::class
+        )->setName('client-submit-update');
+        $group->delete('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientDeleteAction::class)->add(
+            UserAuthenticationMiddleware::class
+        )->setName('client-submit-delete');
+    });
+
+    // Page actions routes outside /posts as they are needed by Ajax after page load
+    // All clients with status whose status is not closed
+    $app->get('/all-clients', \App\Application\Actions\Client\ClientListAllPageAction::class)->setName('client-list-all-page');
+    $app->get('/clients-assigned-to-me', \App\Application\Actions\Client\ClientListAssignedToMePageAction::class)->setName(
+        'client-list-assigned-to-me-page'
+    )->add(UserAuthenticationMiddleware::class);
+
+    // Post CRUD routes; I try to keep this as REST as possible so the page actions have urls other than /posts
     $app->group('/posts', function (RouteCollectorProxy $group) {
         // Post requests where user DOESN'T need to be authenticated
-        $group->get('', \App\Application\Actions\Post\Ajax\PostListAction::class)->setName('post-list');
+        $group->get('', \App\Application\Actions\Post\Ajax\ClientListAction::class)->setName('post-list');
 
-        $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostReadAction::class)->setName(
+        $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientReadAction::class)->setName(
             'post-read'
         );
         // Post requests where user DOES need to be authenticated
-        $group->post('', \App\Application\Actions\Post\Ajax\PostCreateAction::class)->setName(
+        $group->post('', \App\Application\Actions\Post\Ajax\ClientCreateAction::class)->setName(
             'post-submit-create'
         )->add(
             UserAuthenticationMiddleware::class
         );
-        $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostUpdateAction::class)->add(
+        $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientUpdateAction::class)->add(
             UserAuthenticationMiddleware::class
         )->setName('post-submit-update');
-        $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\PostDeleteAction::class)->add(
+        $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientDeleteAction::class)->add(
             UserAuthenticationMiddleware::class
         )->setName('post-submit-delete');
     });
-    // Page actions routes outside /posts as they are needed by Ajax after page load
-    $app->get('/all-posts', \App\Application\Actions\Post\PostListAllPageAction::class)->setName('post-list-all-page');
-    $app->get('/own-posts', \App\Application\Actions\Post\PostListOwnPageAction::class)->setName(
-        'post-list-own-page'
-    )->add(UserAuthenticationMiddleware::class);
-
 
 //    $app->get( '/favicon.ico', function ($request, $response) {
 //        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');
@@ -134,7 +157,7 @@ return function (App $app) {
 
         throw new HttpNotFoundException(
             $request, 'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
-            <br>Basepath: "'. $app->getBasePath() .'"'
+            <br>Basepath: "' . $app->getBasePath() . '"'
         );
     }
     );

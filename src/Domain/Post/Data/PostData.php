@@ -20,7 +20,8 @@ class PostData
      * Post constructor.
      * @param array|null $postData
      */
-    public function __construct(array $postData = null) {
+    public function __construct(array $postData = null)
+    {
         $arrayReader = new ArrayReader($postData);
         $this->id = $arrayReader->findAsInt('id');
         $this->userId = $arrayReader->findAsInt('user_id');
@@ -40,9 +41,13 @@ class PostData
      */
     public function toArray(): array
     {
-        // Not include required, from db non nullable values if they are null -> for update
-        if($this->id !== null){ $post['id'] = $this->id;}
-        if($this->userId !== null){ $post['user_id'] = $this->userId;}
+        // Not include required, from db non-nullable values if they are null -> for update
+        if ($this->id !== null) {
+            $post['id'] = $this->id;
+        }
+        if ($this->userId !== null) {
+            $post['user_id'] = $this->userId;
+        }
 
         // Message is nullable and null is a valid value so it has to be included todo detect null values and add IS for cakequery builder IS NULL
         $post['message'] = $this->message;

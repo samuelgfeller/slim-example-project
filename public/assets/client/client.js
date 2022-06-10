@@ -3,7 +3,7 @@
 const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
 // Load posts on
-loadPosts();
+loadClients();
 
 // Open modal box to create new post after click on plus button
 document.getElementById('create-post-btn').addEventListener('click', function () {
@@ -36,10 +36,10 @@ document.addEventListener('click', function (e) {
 /**
  * Load posts into dom
  */
-function loadPosts() {
+function loadClients() {
     displayPostContentPlaceholder();
     // 'own' if own posts should be loaded after creation or 'all' if all should
-    let postVisibilityScope = document.getElementById('post-wrapper').dataset.postVisibilityScope;
+    let postVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
     let queryParams = postVisibilityScope === 'own' ? '?user=session' : '';
 
     let xHttp = new XMLHttpRequest();
@@ -53,9 +53,9 @@ function loadPosts() {
             // If status code 401 user is not logged in
             if (xHttp.status === 401) {
                 removeContentPlaceholder();
-                document.getElementById('post-wrapper').insertAdjacentHTML('afterend',
+                document.getElementById('client-wrapper').insertAdjacentHTML('afterend',
                     '<p>Please <a href="' + JSON.parse(xHttp.responseText).loginUrl +
-                    '">login</a> to access your posts.</p>');
+                    '">login</a> to access clients assigned to you.</p>');
             }
             // Success
             else {
@@ -67,7 +67,7 @@ function loadPosts() {
     };
 
     // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-    xHttp.open('GET', basePath + 'posts' + queryParams, true);
+    xHttp.open('GET', basePath + 'clients' + queryParams, true);
     xHttp.setRequestHeader("Content-type", "application/json");
 
     xHttp.send();

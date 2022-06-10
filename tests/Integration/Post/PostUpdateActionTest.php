@@ -206,8 +206,8 @@ class PostUpdateActionTest extends TestCase
         );
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginRouteName = 'post-list-own-page';
-        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', 'post-list-own-page');
+        $redirectAfterLoginRouteName = 'client-list-assigned-to-me-page';
+        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', 'client-list-assigned-to-me-page');
 
         // Make request
         $response = $this->app->handle($request);

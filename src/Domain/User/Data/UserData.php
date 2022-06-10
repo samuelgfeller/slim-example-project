@@ -12,6 +12,7 @@ use App\Common\ArrayReader;
  */
 class UserData
 {
+    // Variable names matching database columns (camelCase instead of snake_case)
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     public ?string $firstName;
     public ?string $surname;
@@ -26,6 +27,7 @@ class UserData
     public ?string $updatedAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added there
 
+    // User authentication status
     public const STATUS_UNVERIFIED = 'unverified'; // Default after registration
     public const STATUS_ACTIVE = 'active'; // Verified via token received in email
     public const STATUS_LOCKED = 'locked'; // Locked for security reasons, may be reactivated by account holder via email

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ForbiddenException;
@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Action.
  */
-final class PostDeleteAction
+final class ClientDeleteAction
 {
     /**
      * @var Responder

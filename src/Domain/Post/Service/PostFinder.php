@@ -4,7 +4,7 @@
 namespace App\Domain\Post\Service;
 
 
-use App\Domain\Post\Data\PostData;
+use App\Domain\Post\Data\ClientData;
 use App\Domain\Post\Data\UserPostData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Post\PostFinderRepository;
@@ -20,7 +20,7 @@ class PostFinder
     /**
      * Gives all undeleted posts from db with name of user
      *
-     * @return PostData[]
+     * @return ClientData[]
      */
     public function findAllPostsWithUsers(): array
     {
@@ -37,9 +37,9 @@ class PostFinder
      * Find one post in the database
      *
      * @param $id
-     * @return PostData
+     * @return ClientData
      */
-    public function findPost($id): PostData
+    public function findPost($id): ClientData
     {
         return $this->postFinderRepository->findPostById($id);
     }

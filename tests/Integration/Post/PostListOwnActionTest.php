@@ -46,7 +46,7 @@ class PostListOwnActionTest extends TestCase
         // Simulate logged-in user with id 1
         $this->container->get(SessionInterface::class)->set('user_id', 1);
 
-        $request = $this->createRequest('GET', $this->urlFor('post-list-own-page'));
+        $request = $this->createRequest('GET', $this->urlFor('client-list-assigned-to-me-page'));
         $response = $this->app->handle($request);
 
         // Assert: 200 OK 
@@ -61,14 +61,14 @@ class PostListOwnActionTest extends TestCase
      */
     public function testPostListOwnPageAction_notLoggedIn(): void
     {
-        $request = $this->createRequest('GET', $this->urlFor('post-list-own-page'));
+        $request = $this->createRequest('GET', $this->urlFor('client-list-assigned-to-me-page'));
         $response = $this->app->handle($request);
 
         // Assert: 302 Found meaning redirect
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Test that redirect link after login is correct
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor('post-list-own-page')]);
+        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor('client-list-assigned-to-me-page')]);
         $actualUrl = $response->getHeaderLine('Location');
         self::assertSame($expectedLoginUrl, $actualUrl);
     }
@@ -145,7 +145,7 @@ class PostListOwnActionTest extends TestCase
         // Expected body content
         // Assert that it redirected to the login page with correct redirect get param back to own-posts
         $expectedBody = [
-            'loginUrl' => $this->urlFor('login-page', [], ['redirect' => $this->urlFor('post-list-own-page')])
+            'loginUrl' => $this->urlFor('login-page', [], ['redirect' => $this->urlFor('client-list-assigned-to-me-page')])
         ];
         $this->assertJsonData($expectedBody, $response);
     }

@@ -44,7 +44,7 @@ class AccountUnlockActionTest extends TestCase
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
         // Test redirect at the same time
-        $redirectLocation = $this->urlFor('post-list-all-page');
+        $redirectLocation = $this->urlFor('client-list-all-page');
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
@@ -91,7 +91,7 @@ class AccountUnlockActionTest extends TestCase
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
         // Test redirect at the same time
-        $redirectLocation = $this->urlFor('post-list-all-page');
+        $redirectLocation = $this->urlFor('client-list-all-page');
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,

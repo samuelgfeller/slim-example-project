@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
@@ -15,7 +15,7 @@ use Slim\Exception\HttpBadRequestException;
 /**
  * Action.
  */
-final class PostCreateAction
+final class ClientCreateAction
 {
     /**
      * @var Responder
