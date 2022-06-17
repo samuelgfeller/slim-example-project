@@ -3,7 +3,10 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Service\ClientFilterFinder;
+use App\Domain\Client\Service\ClientFinder;
 use App\Domain\Post\Service\PostFinder;
+use App\Infrastructure\Client\ClientDeleterRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -16,11 +19,11 @@ final class ClientReadAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
+     * @param ClientFinder $clientFinder
      */
     public function __construct(
-        private Responder $responder,
-        private PostFinder $postFinder,
+        private readonly Responder $responder,
+        private readonly ClientFinder $clientFinder,
     ) {
     }
 
@@ -36,7 +39,7 @@ final class ClientReadAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $postWithUser = $this->postFinder->findPost((int)$args['post_id']);
+        $postWithUser = $this->clientFinder->findClientAggregate((int)$args['client_id']);
 
         // json_encode transforms object with public attributes to camelCase which matches Google recommendation
         // https://stackoverflow.com/a/19287394/9013718

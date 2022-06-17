@@ -6,14 +6,15 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Exceptions\ForbiddenException;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Infrastructure\Client\ClientDeleterRepository;
 use App\Infrastructure\Post\PostDeleterRepository;
 
 class ClientDeleter
 {
     public function __construct(
-        private PostDeleterRepository    $postDeleterRepository,
-        private ClientFinder             $postFinder,
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly ClientDeleterRepository  $clientDeleterRepository,
+        private readonly ClientFinder             $clientFinder,
+        private readonly UserRoleFinderRepository $userRoleFinderRepository,
     ) { }
 
     /**
@@ -24,16 +25,16 @@ class ClientDeleter
      * @return bool
      * @throws ForbiddenException
      */
-    public function deletePost(int $postId, int $loggedInUserId): bool
+    public function deleteClient(int $postId, int $loggedInUserId): bool
     {
         // Find post in db to get its ownership
-        $postFromDb = $this->postFinder->findPost($postId);
+        $clientFromDb = $this->clientFinder->findClient($postId);
 
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
 
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $postFromDb->userId === $loggedInUserId) {
-            return $this->postDeleterRepository->deletePost($postId);
+        if ($userRole === 'admin' || $clientFromDb->user_id === $loggedInUserId) {
+            return $this->clientDeleterRepository->deleteClient($postId);
         }
         throw new ForbiddenException('You have to be admin or the post creator to update this post');
     }

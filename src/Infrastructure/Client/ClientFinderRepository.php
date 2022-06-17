@@ -9,15 +9,37 @@ use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
+use http\Client;
 
 class ClientFinderRepository
 {
 
+    // To prevent duplicate code the client aggregate select fields for ClientResultAggregateData are in this array below
+    private array $clientAggregateSelectFields = [
+        // Client data retrieved with original name to populate ClientData
+        'id' => 'client.id',
+        'first_name' => 'client.first_name',
+        'last_name' => 'client.last_name',
+        'birthdate' => 'client.birthdate',
+        'location' => 'client.location',
+        'phone' => 'client.phone',
+        'email' => 'client.email',
+        'note' => 'client.note',
+        'user_id' => 'client.user_id',
+        'client_status_id' => 'client.client_status_id',
+        'updated_at' => 'client.updated_at',
+        'created_at' => 'client.created_at',
+        // User data prefixed with user_
+        'user_first_name' => 'user.first_name',
+        'user_surname' => 'user.surname',
+        // Client status data prefixed with client_status_
+        'client_status_name' => 'client_status.name',
+    ];
+
     public function __construct(
         private QueryFactory $queryFactory,
-        private Hydrator     $hydrator
-    )
-    {
+        private Hydrator $hydrator
+    ) {
     }
 
     /**
@@ -34,31 +56,12 @@ class ClientFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('post');
         $query->select(
-            [
-                // Client data retrieved with original name to populate ClientData
-                'id' => 'client.id',
-                'first_name' => 'client.first_name',
-                'last_name' => 'client.last_name',
-                'birthdate' => 'client.birthdate',
-                'location' => 'client.location',
-                'phone' => 'client.phone',
-                'email' => 'client.email',
-                'note' => 'client.note',
-                'user_id' => 'client.user_id',
-                'client_status_id' => 'client.client_status_id',
-                'updated_at' => 'client.updated_at',
-                'created_at' => 'client.created_at',
-                // User data prefixed with user_
-                'user_first_name' => 'user.first_name',
-                'user_surname' => 'user.surname',
-                // Client status data prefixed with client_status_
-                'client_status_name' => 'client_status.name',
-            ]
+            $this->clientAggregateSelectFields
         )->join(['table' => 'user', 'conditions' => 'client.user_id = user.id'])
             ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
             ->andWhere(
-            ['client.deleted_at IS' => null]
-        );
+                ['client.deleted_at IS' => null]
+            );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);
@@ -71,9 +74,9 @@ class ClientFinderRepository
      * @param string|int $id
      * @return ClientData
      */
-    public function findPostById(string|int $id): ClientData
+    public function findClientById(string|int $id): ClientData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
+        $query = $this->queryFactory->newQuery()->select(['*'])->from('client')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $postRow = $query->execute()->fetch('assoc') ?: [];
@@ -81,33 +84,25 @@ class ClientFinderRepository
     }
 
     /**
-     * Return all posts with users attribute loaded
+     * Return client with relevant aggregate data
      *
      * @param int $id
-     * @return UserPostData
+     * @return ClientResultAggregateData
      */
-    public function findUserPostById(int $id): UserPostData
+    public function findClientAggregateById(int $id): ClientResultAggregateData
     {
         $query = $this->queryFactory->newQuery()->from('post');
 
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
-
-        $query->select(
-            [
-                'post_id' => 'post.id',
-                'user_id' => 'user.id',
-                'post_message' => 'post.message',
-                'post_created_at' => 'post.created_at',
-                'post_updated_at' => 'post.updated_at',
-                'user_name' => $concatName,
-                'user_role' => 'user.role',
-            ]
-        )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
-            ['post.id' => $id, 'post.deleted_at IS' => null]
-        );
+        $query->select($this->clientAggregateSelectFields)->join(
+            ['table' => 'user', 'conditions' => 'client.user_id = user.id']
+        )
+            ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
+            ->andWhere(
+                ['client.id' => $id, 'client.deleted_at IS' => null]
+            );
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
-        return new UserPostData($resultRows);
+        return new ClientResultAggregateData($resultRows);
     }
 
 
@@ -135,32 +130,21 @@ class ClientFinderRepository
      * Return all posts which are linked to the given user
      *
      * @param int $userId
-     * @return UserPostData[]
+     * @return ClientResultAggregateData[]
      */
-    public function findAllPostsByUserId(int $userId): array
+    public function findAllClientsByUserId(int $userId): array
     {
-        $query = $this->queryFactory->newQuery()->from('post');
-
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+        $query = $this->queryFactory->newQuery()->from('client');
 
         $query->select(
-            [
-                'post_id' => 'post.id',
-                'user_id' => 'user.id',
-                'post_message' => 'post.message',
-                'post_created_at' => 'post.created_at',
-                'post_updated_at' => 'post.updated_at',
-                'user_name' => $concatName,
-                'user_role' => 'user.role',
-            ]
-        )->join(['table' => 'user', 'conditions' => 'post.user_id = user.id'])->andWhere(
-            [
-                'post.user_id' => $userId, // Not unsafe as its not an expression and thus escaped by querybuilder
-                'post.deleted_at IS' => null
-            ]
-        );
+            $this->clientAggregateSelectFields
+        )->join(['table' => 'user', 'conditions' => 'client.user_id = user.id'])
+            ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
+            ->andWhere(
+                ['client.user_id' => $userId, 'client.deleted_at IS' => null]
+            );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
-        // Convert to list of Post objects with associated User info
-        return $this->hydrator->hydrate($resultRows, UserPostData::class);
+        // Convert to list of Post objects with aggregate
+        return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);
     }
 }

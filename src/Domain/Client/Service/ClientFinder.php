@@ -10,35 +10,47 @@ use App\Infrastructure\Client\ClientFinderRepository;
 class ClientFinder
 {
     public function __construct(
-        private ClientFinderRepository  $clientFinderRepository,
-        private ClientUserRightSetter $postUserRightSetter,
+        private readonly ClientFinderRepository  $clientFinderRepository,
+        private readonly ClientUserRightSetter $clientUserRightSetter,
     ) {
     }
 
     /**
-     * Gives all undeleted posts from db with name of user
+     * Gives all undeleted clients from db with aggregate data
      *
      * @return ClientData[]
      */
-    public function findAllClientsWithUsers(): array
+    public function findAllClientsWithAggregate(): array
     {
         $allClientResults = $this->clientFinderRepository->findAllClientsWithResultAggregate();
 
         // Add permissions on what logged-in user is allowed to do with object
-        $this->postUserRightSetter->defineUserRightsOnClients($allClientResults);
+        $this->clientUserRightSetter->defineUserRightsOnClients($allClientResults);
         return $allClientResults;
     }
 
     /**
-     * Find one post in the database
+     * Find one client in the database
      *
      * @param $id
      * @return ClientData
      */
-    public function findPost($id): ClientData
+    public function findClient($id): ClientData
     {
-        return $this->postFinderRepository->findPostById($id);
+        return $this->clientFinderRepository->findClientById($id);
     }
+
+    /**
+     * Find one client in the database with aggregate
+     *
+     * @param $id
+     * @return ClientData
+     */
+    public function findClientAggregate($id): ClientData
+    {
+        return $this->clientFinderRepository->findClientAggregateById($id);
+    }
+
 
     /**
      * Return all posts which are linked to the given user
@@ -48,35 +60,9 @@ class ClientFinder
      */
     public function findAllClientsFromUser(int $userId): array
     {
-        $allClients = $this->postFinderRepository->findAllPostsByUserId($userId);
-        $this->changeDateFormat($allClients);
-        $this->postUserRightSetter->defineUserRightsOnClients($allClients);
+        $allClients = $this->clientFinderRepository->findAllClientsByUserId($userId);
+        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
         return $allClients;
     }
 
-    /**
-     * Change created and updated date format from SQL datetime to
-     * something we are used to see in Switzerland
-     *
-     * @param ClientData[] $clients
-     * @param string $format If default format changes, it has to be adapted in PostListActionTest
-     *
-     * @return void
-     */
-    private function changeDateFormat(array $clients, string $format = 'd.m.Y H:i:s'): void
-    {
-        // Tested in PostListActionTest
-        foreach ($clients as $client) {
-            // Change updated at format
-            $client->updatedAt = $client->updatedAt ? date(
-                $format,
-                strtotime($client->updatedAt)
-            ) : null;
-            // Change created at format
-            $client->createdAt = $client->createdAt ? date(
-                $format,
-                strtotime($client->createdAt)
-            ) : null;
-        }
-    }
 }

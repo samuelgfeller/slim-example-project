@@ -3,9 +3,8 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Service\ClientCreator;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\Data\ClientData;
-use App\Domain\Post\Service\ClientCreator;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -28,12 +27,12 @@ final class ClientCreateAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientCreator $postCreator
+     * @param ClientCreator $clientCreator
      */
     public function __construct(
         Responder                $responder,
-        private ClientCreator    $postCreator,
-        private SessionInterface $session,
+        private readonly ClientCreator    $clientCreator,
+        private readonly SessionInterface $session,
     ) {
         $this->responder = $responder;
     }
@@ -60,7 +59,7 @@ final class ClientCreateAction
             // Check that request body syntax is formatted right (if changed, )
             if (null !== $postData && [] !== $postData && isset($postData['message']) && count($postData) === 1) {
                 try {
-                    $insertId = $this->postCreator->createPost($postData, $loggedInUserId);
+                    $insertId = $this->clientCreator->createPost($postData, $loggedInUserId);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),

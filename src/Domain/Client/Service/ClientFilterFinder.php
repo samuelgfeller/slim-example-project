@@ -4,6 +4,7 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Exceptions\UnauthorizedException;
 use App\Domain\Post\Data\UserPostData;
 use App\Domain\Post\Exception\InvalidPostFilterException;
@@ -25,7 +26,7 @@ class ClientFilterFinder
      *
      * @param array $params GET parameters containing filter values
      *
-     * @return UserPostData[]
+     * @return ClientResultAggregateData[]
      */
     public function findClientsWithFilter(array $params): array
     {
@@ -49,6 +50,6 @@ class ClientFilterFinder
         // Other filters here
 
         // If there is no filter, all posts should be returned
-        return $this->clientFinder->findAllClientsWithUsers();
+        return $this->clientFinder->findAllClientsWithAggregate();
     }
 }
