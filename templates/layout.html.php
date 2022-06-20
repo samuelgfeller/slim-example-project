@@ -25,14 +25,13 @@
         'assets/general/css/default.css',
         'assets/general/css/general.css',
         'assets/general/css/layout.css',
-        'assets/general/css/navbar.css',
+        'assets/general/css/side-navbar.css',
         'assets/general/css/flash.css'
     ];
     $layoutJs = [
         'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
         'assets/general/js/default.js',
         'assets/general/js/general.js',
-        'assets/general/js/navbar.js'
     ];
 
     // fetch() includes another template into the current template
@@ -46,44 +45,75 @@
     <title><?= $title ?></title>
 </head>
 <body>
+
+<!--    <header>-->
+<!--    </header>-->
+<aside id="nav-container">
+    <nav>
+        <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
+        <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'home-page'
+        ) ? 'class="is-active"' : '' ?>>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Dashboard">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Dashboard</span>
+        </a>
+        <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
+            'user-list'
+        ) ? 'class="is-active"' : '' ?>>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Non-assigned">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Incoming</span>
+        </a>
+        <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'client-list-assigned-to-me-page'
+        ) ? 'class="is-active"' : '' ?>>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Assigned me">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Assigned to me</span>
+        </a>
+        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'client-list-all-page'
+        ) ? 'class="is-active"' : '' ?>>
+            <div>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Client list">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Client list</span>
+            </div>
+        </a>
+        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'client-list-all-page'
+        ) ? 'class="is-active"' : '' ?>>
+            <div>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Admin area">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Admin</span>
+            </div>
+        </a>
+        <!--           <a href="<?
+        /*= $route->urlFor('register-page') */ ?>" <?
+        /*= $uri->getPath() === $route->urlFor(
+                        'register-page'
+                    ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
+        <a href="<?= $route->urlFor('profile-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'profile-page'
+        ) || $uri->getPath() === $route->urlFor('change-password-page') ? 'class="is-active"' : '' ?>>
+            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Profile">
+            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <span class="nav-span">Profile</span>
+        </a>
+
+        <div id="nav-burger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <span class="nav-indicator no-animation-on-page-load" id="nav-indicator"></span>
+    </nav>
+</aside>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
 <div id="wrapper">
-    <header>
-        <nav class="clearfix">
-            <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
-            <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'home-page'
-            ) ? 'class="is-active"' : '' ?>>Dashboard</a>
-            <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
-                'user-list'
-            ) ? 'class="is-active"' : '' ?>>Non-assigned requests</a>
-            <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'client-list-assigned-to-me-page'
-            ) ? 'class="is-active"' : '' ?>>Assigned to me</a>
-            <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'client-list-all-page'
-            ) ? 'class="is-active"' : '' ?>>Client list</a>
-            <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'client-list-all-page'
-            ) ? 'class="is-active"' : '' ?>>Admin area</a>
-            <!--           <a href="<?/*= $route->urlFor('register-page') */?>" <?/*= $uri->getPath() === $route->urlFor(
-                'register-page'
-            ) ? 'class="is-active"' : '' */?>>Register</a>-->
-            <a href="<?= $route->urlFor('profile-page') ?>" <?= $uri->getPath() === $route->urlFor(
-                'profile-page'
-            ) || $uri->getPath() === $route->urlFor('change-password-page') ? 'class="is-active"' : '' ?>>
-                Profile</a>
-
-            <div id="nav-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <span class="nav-indicator no-animation-on-page-load" id="nav-indicator"></span>
-        </nav>
-    </header>
-
     <main>
         <?= $this->fetch('layout/flash-messages.html.php') ?>
         <?= $content ?>

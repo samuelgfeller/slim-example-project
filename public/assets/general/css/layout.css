@@ -61,20 +61,21 @@
 @media (min-width:400px)  {
     main {
         padding: 1em 1em 1em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+        margin-left: 100px;
     }
 }
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     header{
         margin-top: 2em;
     }
-    #wrapper{
-        margin: 0 2em;
-    }
+    /*#wrapper{*/
+    /*    margin: 0 2em;*/
+    /*}*/
 }
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
-        width: 80%;
-        margin: auto;
+        width: 100%;
+        border-right: 8px solid #cc0033;
     }
     header{
         margin: 2em 0 1em 0;

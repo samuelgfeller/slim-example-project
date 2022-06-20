@@ -1,0 +1,128 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    #brand-name-span {
+        color: #757575;
+        width: 80%;
+        display: block;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    #nav-container {
+        height: 100%;
+        left: 0;
+        /*width: 230px;*/
+        position: fixed;
+    }
+
+    nav {
+        display: inline-block;
+        /*border-radius: 0 35px 35px 0;*/
+        border-radius: 32px;
+        /*padding: 10px 0 10px 0;*/
+        /*background: ;*/
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        margin-left: 15px;
+        position: relative;
+        max-width: 80px;
+        transition: max-width .5s ease-in-out;
+        white-space: nowrap;
+        overflow: hidden;
+        z-index: 100;
+        background: white;
+    }
+
+    nav a {
+        float: none;
+        display: block;
+        border-radius: 99px;
+        /*text-align: left;*/
+        padding: 14px 14px;
+        text-decoration: none;
+        font-weight: normal;
+        /*font-size: 17px;*/
+        /*transition: 0.3s;*/
+        width: auto;
+        position: relative;
+        /*margin: 0 6px;*/
+    }
+
+    nav a:hover {
+        background: rgba(0, 0, 0, .05);
+    }
+
+    /* Navigation icons */
+    nav a img {
+        width: 35px;
+        /* To prevent little extra space below image */
+        /*display: block;*/
+        vertical-align: middle;
+    }
+    /* Toggle hover image */
+    nav a img:last-of-type {
+        display: none;
+    }
+    nav a:hover img:first-of-type {
+        display: none;
+    }
+    nav a:hover img:last-of-type {
+        display: inline-block;
+    }
+
+    nav a span {
+        margin-left: 10px;
+        opacity: 0;
+        height: 0;
+        position: absolute;
+        overflow: hidden;
+    }
+    nav:hover{
+        max-width: 230px;
+    }
+    /* https://stackoverflow.com/a/47851820/9013718 */
+    nav:hover > a span {
+        /*display: inline-block;*/
+        opacity: 1;
+        height: auto;
+        position: initial;
+    }
+
+
+
+}
+
+@media (min-width: 340px) {
+    /* 340px enough wide to add letter-spacing*/
+    #brand-name-span {
+        letter-spacing: 1vw;
+    }
+}
+
+@media (min-width: 641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    /* Desktop Nav breakpoint */
+    #brand-name-span {
+        display: none;
+    }
+}
+
+
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+
+}
+
+/* Desktop / mobile nav breakpoint. If min-width changes, navbar.js should be updated as well */
+@media (min-width: 1025px) {
+    /* big landscape tablets, laptops, and desktops */
+    #nav-burger-icon {
+        display: none;
+    }
+
+    /*nav a:before, #nav-indicator {*/
+    /*    width: auto;*/
+    /*    left: 0;*/
+    /*}*/
+}
+
