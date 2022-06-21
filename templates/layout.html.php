@@ -75,20 +75,16 @@
         <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
             'client-list-all-page'
         ) ? 'class="is-active"' : '' ?>>
-            <div>
             <img src="assets/general/img/nav/gallery-tiles.svg" alt="Client list">
             <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
             <span class="nav-span">Client list</span>
-            </div>
         </a>
         <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
             'client-list-all-page'
         ) ? 'class="is-active"' : '' ?>>
-            <div>
             <img src="assets/general/img/nav/gallery-tiles.svg" alt="Admin area">
             <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
             <span class="nav-span">Admin</span>
-            </div>
         </a>
         <!--           <a href="<?
         /*= $route->urlFor('register-page') */ ?>" <?
