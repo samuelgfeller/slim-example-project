@@ -29,7 +29,7 @@
         transition: max-width .5s ease-out;
         white-space: nowrap;
         overflow: hidden;
-        z-index: 100;
+        z-index: 999;
         background: white;
     }
 

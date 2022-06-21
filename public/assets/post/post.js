@@ -124,7 +124,7 @@ function addPostsToDom(posts) {
 
     // If no results, tell user so
     if (posts.length === 0) {
-        postContainer.insertAdjacentHTML('afterend', '<p>No posts could be found.</p>')
+        postContainer.insertAdjacentHTML('afterend', '<p>No posts were found.</p>')
     }
 
     // Loop over posts and add to DOM

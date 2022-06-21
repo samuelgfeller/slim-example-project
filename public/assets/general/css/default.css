@@ -55,9 +55,12 @@ h2, h1{
     color: black;
     text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);
     font-family: SF-Pro Display, Helvetica, sans-serif;
-    font-size: 3em;
     font-weight: bold;
 }
+h1{
+    font-size: 3em;
+}
+
 
 a:hover {
     /*text-shadow: 0 0 1px black;*/

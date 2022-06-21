@@ -2,45 +2,45 @@
 // Get basepath. Especially useful when developing on localhost/project-name
 const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
-// Load posts on
-loadClients();
+// Load clients on
+// loadClients();
 
-// Open modal box to create new post after click on plus button
-document.getElementById('create-post-btn').addEventListener('click', function () {
-    createPostModal();
+// Open modal box to create new client after click on plus button
+document.getElementById('create-client-btn').addEventListener('click', function () {
+    createClientModal();
 });
 
 // Event delegation (event listeners on dynamically loaded elements)
 document.addEventListener('click', function (e) {
     // Submit form on create button click
-    if (e.target && e.target.id === 'submit-btn-create-post') {
-        submitCreatePost();
+    if (e.target && e.target.id === 'submit-btn-create-client') {
+        submitCreateClient();
     }
-    // Open edit post modal after edit button click in post box
+    // Open edit client modal after edit button click in client box
     if (e.target && e.target.className.includes('card-edit-icon')) {
-        let postId = e.target.dataset.id;
-        updatePostModal(postId);
+        let clientId = e.target.dataset.id;
+        updateClientModal(clientId);
     }
-    // Submit edit post
-    if (e.target && e.target.id === 'submit-btn-update-post') {
-        let postId = e.target.dataset.id;
-        submitUpdatePost(postId);
+    // Submit edit client
+    if (e.target && e.target.id === 'submit-btn-update-client') {
+        let clientId = e.target.dataset.id;
+        submitUpdateClient(clientId);
     }
-    // Submit delete post
+    // Submit delete client
     if (e.target && e.target.className.includes('card-del-icon')) {
-        let postId = e.target.dataset.id;
-        submitDeletePost(postId);
+        let clientId = e.target.dataset.id;
+        submitDeleteClient(clientId);
     }
 });
 
 /**
- * Load posts into dom
+ * Load clients into dom
  */
 function loadClients() {
-    displayPostContentPlaceholder();
-    // 'own' if own posts should be loaded after creation or 'all' if all should
-    let postVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
-    let queryParams = postVisibilityScope === 'own' ? '?user=session' : '';
+    displayClientContentPlaceholder();
+    // 'own' if own clients should be loaded after creation or 'all' if all should
+    let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
+    let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';
 
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
@@ -59,9 +59,9 @@ function loadClients() {
             }
             // Success
             else {
-                let posts = JSON.parse(xHttp.responseText);
+                let clients = JSON.parse(xHttp.responseText);
                 removeContentPlaceholder();
-                addPostsToDom(posts);
+                addClientsToDom(clients);
             }
         }
     };
@@ -74,12 +74,12 @@ function loadClients() {
 }
 
 /**
- * Display post content placeholders
+ * Display client content placeholders
  */
-function displayPostContentPlaceholder() {
-    let postWrapper = document.getElementById('post-wrapper');
-    // Empty posts
-    postWrapper.innerHTML = '';
+function displayClientContentPlaceholder() {
+    let clientWrapper = document.getElementById('client-wrapper');
+    // Empty clients
+    clientWrapper.innerHTML = '';
 
     let contentPlaceholderHtml =
         '<div class="preloading-card">' +
@@ -96,9 +96,9 @@ function displayPostContentPlaceholder() {
         '</div>';
 
     // Add content placeholder 3 times
-    postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
-    postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
-    postWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
+    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
+    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
+    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
 }
 
 /**
@@ -115,66 +115,57 @@ function removeContentPlaceholder() {
 }
 
 /**
- * Add post to page
+ * Add client to page
  *
- * @param {object[]} posts
+ * @param {object[]} clients
  */
-function addPostsToDom(posts) {
-    let postContainer = document.getElementById('post-wrapper');
+function addClientsToDom(clients) {
+    let clientContainer = document.getElementById('client-wrapper');
 
     // If no results, tell user so
-    if (posts.length === 0) {
-        postContainer.insertAdjacentHTML('afterend', '<p>No posts could be found.</p>')
+    if (clients.length === 0) {
+        clientContainer.insertAdjacentHTML('afterend', '<p>No clients were found.</p>')
     }
 
-    // Loop over posts and add to DOM
-    for (const post of posts) {
-        // Set delete and edit buttons but only if user is viewing its own posts
-        let ownPostsButtons = '';
-        if (post.userMutationRight === 'all') {
-            ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="card-edit-icon cursor-pointer" ' +
-                'data-id="' + post.postId + '" alt="edit">' +
-                '<img src="assets/general/img/del_icon.svg" class="card-del-icon cursor-pointer" ' +
-                'data-id="' + post.postId + '" alt="del">';
-        }
-        // Post card HTML
-        let postHtml = '<div class="post-card" id="post' + post.postId + '">' +
-            ownPostsButtons +
-            '        <h3 class="card-header">' + post.userName + '</h3>' +
-            '        <div id="card-content' + post.postId + '">' +
-            '            <p class="display-newlines"><b>' + post.postMessage + '</b></p>' +
-            '            <p class="post-card-additional-info">Updated: ' +
-            '               <span class="layout-color-text">' + post.postUpdatedAt + '</span><br>' +
-            '            Created: <span class="layout-color-text">' + post.postCreatedAt + '</span></p>' +
+    // Loop over clients and add to DOM
+    for (const client of clients) {
+        // Client card HTML
+        let clientHtml = '<div class="client-card" id="client' + client.clientId + '">' +
+            '        <h3 class="card-header">' + client.first_name + ' ' + client.last_name + '</h3>' +
+            '        <div id="card-content' + client.id + '">' +
+            '            <p class="display-newlines"><b>' + client.age + '</b></p>' +
+            '            <p class="client-card-additional-info">Updated: ' +
+            '               <span class="layout-color-text">' + client.updated_at.date + '</span><br>' +
+            '            User: <span class="layout-color-text">' + client.userData.firstName + ' ' + client.userData.surname + '</span></p>' +
             '        </div>' +
             '</div>';
 
         // Add to DOM
-        postContainer.insertAdjacentHTML('beforeend', postHtml);
+        clientContainer.insertAdjacentHTML('beforeend', clientHtml);
     }
 }
 
 /**
- * Create and display modal box to create a new post
+ * Create and display modal box to create a new client
  */
-function createPostModal() {
-    let header = '<h2>Post</h2>';
+function createClientModal() {
+    let header = '<h2>Client</h2>';
     let body = '<div class="form modal-form">' + '<textarea rows="4" cols="50" name="message" ' +
         'id="create-message-textarea" class="form-input" ' + 'placeholder="Your message here." minlength="4" ' +
         'maxlength="500" required></textarea>' + '</div>';
-    let footer = '<button type="button" id="submit-btn-create-post" class="submit-btn modal-submit-btn">' +
-        'Create post</button>' + '<div class="clearfix"></div>' + '</div>';
-    document.getElementById('post-wrapper').insertAdjacentHTML('afterend', '<div id="create-post-div"></div>');
-    let container = document.getElementById('create-post-div');
+    let footer = '<button type="button" id="submit-btn-create-client" class="submit-btn modal-submit-btn">' +
+        'Create client</button>' + '<div class="clearfix"></div>' + '</div>';
+    document.getElementById('client-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
+    let container = document.getElementById('create-client-div');
     createModal(header, body, footer, container);
 }
 
 /**
- * Send post creation to server
+ * Send client creation to server
  *
  * @param formId
  */
-function submitCreatePost(formId) {
+function submitCreateClient(formId) {
     // Check if textarea content is valid (frontend validation)
     let textArea = document.getElementById('create-message-textarea')
     if (textArea.checkValidity() === false) {
@@ -184,7 +175,7 @@ function submitCreatePost(formId) {
     }
 
     // Show loader to indicate user that the request is on its way
-    showPostModalLoader();
+    showClientModalLoader();
 
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
@@ -197,15 +188,15 @@ function submitCreatePost(formId) {
             // Success
             else {
                 closeModal();
-                loadPosts();
+                loadClients();
 
                 // Hide loader
-                hidePostModalLoader();
+                hideClientModalLoader();
             }
         }
     };
 
-    xHttp.open('POST', basePath + 'posts', true);
+    xHttp.open('POST', basePath + 'clients', true);
     xHttp.setRequestHeader("Content-type", "application/json");
 
     // Data format: "fname=Henry&lname=Ford"
@@ -214,9 +205,9 @@ function submitCreatePost(formId) {
 }
 
 /**
- * Show post modal loader
+ * Show client modal loader
  */
-function showPostModalLoader() {
+function showClientModalLoader() {
     document.getElementById('modal-footer').insertAdjacentHTML('afterbegin',
         '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
     let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
@@ -225,9 +216,9 @@ function showPostModalLoader() {
 }
 
 /**
- * Hide post modal loader
+ * Hide client modal loader
  */
-function hidePostModalLoader() {
+function hideClientModalLoader() {
     document.getElementsByClassName('lds-ellipsis')[0].remove();
     let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
     submitBtn.classList.remove('modal-submit-btn-loading');
@@ -235,27 +226,27 @@ function hidePostModalLoader() {
 }
 
 /**
- * After the click on the edit icon of a post, a modal box is opened
+ * After the click on the edit icon of a client, a modal box is opened
  * with an editable textarea containing the most recent content (request to server)
  *
- * @param {string} postId
+ * @param {string} clientId
  */
-function updatePostModal(postId) {
+function updateClientModal(clientId) {
 
-    let header = '<h2>Edit post</h2>';
+    let header = '<h2>Edit client</h2>';
     let body = '<div class="form modal-form"><textarea rows="4" cols="50" name="message" ' +
         'id="update-message-textarea" class="form-input" minlength="4" ' +
         'maxlength="500" required disabled>Loading...</textarea></div>';
-    let footer = '<button type="button" disabled id="submit-btn-update-post" class="submit-btn modal-submit-btn">' +
-        'Update post</button><div class="clearfix"></div>';
+    let footer = '<button type="button" disabled id="submit-btn-update-client" class="submit-btn modal-submit-btn">' +
+        'Update client</button><div class="clearfix"></div>';
 
-    document.getElementById('post-wrapper').insertAdjacentHTML(
-        'afterend', '<div id="update-post-modal"></div>');
-    let container = document.getElementById('update-post-modal');
+    document.getElementById('client-wrapper').insertAdjacentHTML(
+        'afterend', '<div id="update-client-modal"></div>');
+    let container = document.getElementById('update-client-modal');
 
     createModal(header, body, footer, container);
 
-    // Retrieve actual post infos via Ajax and populate textarea
+    // Retrieve actual client infos via Ajax and populate textarea
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
@@ -270,30 +261,30 @@ function updatePostModal(postId) {
                 let updateMessageTextarea = document.getElementById('update-message-textarea');
                 updateMessageTextarea.value = output.message;
                 updateMessageTextarea.disabled = false;
-                let submitPostUpdateBtn = document.getElementById('submit-btn-update-post');
-                submitPostUpdateBtn.disabled = false;
-                // Set post id on submit button as its easiest to retrieve on delegated event listener
-                submitPostUpdateBtn.setAttribute('data-id', output.id);
+                let submitClientUpdateBtn = document.getElementById('submit-btn-update-client');
+                submitClientUpdateBtn.disabled = false;
+                // Set client id on submit button as its easiest to retrieve on delegated event listener
+                submitClientUpdateBtn.setAttribute('data-id', output.id);
             }
         }
     };
 
-    // Read post infos
-    xHttp.open('GET', basePath + 'posts/' + postId, true);
+    // Read client infos
+    xHttp.open('GET', basePath + 'clients/' + clientId, true);
     xHttp.setRequestHeader("Content-type", "application/json");
     xHttp.send();
 }
 
 /**
- * Submit post change
+ * Submit client change
  *
- * @param {string} postId
+ * @param {string} clientId
  */
-function submitUpdatePost(postId) {
+function submitUpdateClient(clientId) {
     let updateMessageTextarea = document.getElementById('update-message-textarea');
 
     // Show loader to indicate user that the request is on its way
-    showPostModalLoader();
+    showClientModalLoader();
 
     // Ajax request
     let xHttp = new XMLHttpRequest();
@@ -306,29 +297,29 @@ function submitUpdatePost(postId) {
             }
             // Success
             else {
-                hidePostModalLoader();
+                hideClientModalLoader();
                 closeModal();
-                loadPosts();
+                loadClients();
             }
         }
     };
 
-    // Read post infos
-    xHttp.open('PUT', basePath + 'posts/' + postId, true);
+    // Read client infos
+    xHttp.open('PUT', basePath + 'clients/' + clientId, true);
     xHttp.setRequestHeader("Content-type", "application/json");
     // In square brackets to be evaluated
     xHttp.send(JSON.stringify({[updateMessageTextarea.name]: updateMessageTextarea.value}));
 }
 
 /**
- * Submit post deletion
+ * Submit client deletion
  *
- * @param {string} postId
+ * @param {string} clientId
  */
-function submitDeletePost(postId) {
+function submitDeleteClient(clientId) {
 
     // Replace delete icon with loader to indicate user that the request is on its way
-    showPostDeleteLoader(postId);
+    showClientDeleteLoader(clientId);
     return;
     // Ajax request
     let xHttp = new XMLHttpRequest();
@@ -342,13 +333,13 @@ function submitDeletePost(postId) {
             if (xHttp.status !== 200) {
                 // Default fail handler
                 handleFail(xHttp);
-                // Reload posts on fail as issue may be resolved with refresh
-                loadPosts();
+                // Reload clients on fail as issue may be resolved with refresh
+                loadClients();
             }
             // Success
             else {
-                // Remove post card after successful deletion
-                document.getElementById('post' + postId).remove();
+                // Remove client card after successful deletion
+                document.getElementById('client' + clientId).remove();
             }
 
             // After request is done, reset loader size no matter if success or failure
@@ -356,8 +347,8 @@ function submitDeletePost(postId) {
         }
     };
 
-    // Read post infos
-    xHttp.open('DELETE', basePath + 'posts/' + postId, true);
+    // Read client infos
+    xHttp.open('DELETE', basePath + 'clients/' + clientId, true);
     // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
     xHttp.setRequestHeader("Content-type", "application/json");
@@ -369,17 +360,17 @@ function submitDeletePost(postId) {
 /**
  * Replace delete icon with loader to indicate user that the request is on its way
  */
-function showPostDeleteLoader(postId) {
+function showClientDeleteLoader(clientId) {
     // Insert loader
-    // document.querySelector('.card-edit-icon[data-id="' + postId + '"]').insertAdjacentHTML('afterend',
-    //     '<div class="lds-ellipsis post-box-del-loader"><div></div><div></div><div></div><div></div></div>');
-    document.querySelector('#post' + postId).insertAdjacentHTML('afterend',
+    // document.querySelector('.card-edit-icon[data-id="' + clientId + '"]').insertAdjacentHTML('afterend',
+    //     '<div class="lds-ellipsis client-box-del-loader"><div></div><div></div><div></div><div></div></div>');
+    document.querySelector('#client' + clientId).insertAdjacentHTML('afterend',
         '<span></span><span></span><span></span><span></span>');
 
     // Change loader size in changing the css variable
     document.documentElement.style.setProperty('--three-dots-loader-factor', '0.5');
     // Hide delete icon
-    document.querySelector('.card-del-icon[data-id="' + postId + '"]').style.display = 'none';
-    // Lower post box opacity to reinforce feeling that something is happening
-    document.getElementById('post' + postId).style.opacity = '0.6';
+    document.querySelector('.card-del-icon[data-id="' + clientId + '"]').style.display = 'none';
+    // Lower client box opacity to reinforce feeling that something is happening
+    document.getElementById('client' + clientId).style.opacity = '0.6';
 }

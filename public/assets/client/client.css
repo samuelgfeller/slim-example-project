@@ -1,46 +1,119 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     /* Cards */
-    #post-wrapper {
+    #client-wrapper {
         width: 100%;
         display: flex;
         gap: 30px 40px;
         flex-wrap: wrap;
         padding: 0 10px;
+        margin-top: 80px;
     }
 
-    .card-header {
-        /*font-size: 1.5em;*/
-        /*Remove default margin*/
-        padding: 0 70px 0 0;
-        margin: 0;
-    }
-
-    .post-card {
+    .client-profile-card {
         width: 100%;
-        padding: 20px;
+        min-width: 250px;
         position: relative;
-        display: block;
-        background: #f2f2f2;
-        border: 1px solid rgba(242, 242, 242, 0.55);
-        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
-        border-radius: 20px;
+        display: flex;
+        /*background: #f6f6f6;*/
+        /*border: 1px solid rgba(243, 243, 243, 0.55);*/
+        /*box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);*/
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+
+        border-radius: 30px;
         max-width: 650px;
-        overflow-wrap: anywhere;
+        /*overflow-wrap: anywhere;*/
+        /*white-space: nowrap;*/
+        overflow: hidden; /* To prevent header and content overflowing border radius */
     }
-    .post-card p {
+    .profile-card-header {
+        padding: 20px 20px 5px 20px;
+        /*background: #d7b9b9;*/
+        background: WHITE;
+        /*width: 100%;*/
+    }
+    .profile-card-avatar{
+        width: 100px;
+        display: block; /* To center avatar image */
+        margin: auto;
+        position: relative;
+        /*background: rgba(0,0,0,.1);*/
+        background: #ececec;
+        border-radius: 99px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    }
+    .profile-card-avatar img {
+        padding: 5px;
+        border-radius: 99px;
+    }
+    /* Age */
+    .profile-card-avatar span{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        right: -20px;
+        top: 5px;
+        border-radius: 99px;
+        z-index: 2;
+        background: white;
+        border: 3px solid #2e3e50;
+        box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.1);
+        font-weight: bold;
+    }
+    .profile-card-content{
+        padding: 0 20px 20px 20px;
+        background: #ececec;
+        /*width: 100%;*/
+    }
+    .client-profile-card h3{
+        text-align: center;
+        padding-top: 18px;
+        margin-top: 0; /* To prevent gap between divs */
+        margin-bottom: 15px;
+    }
+    /* Two different flex boxes make the second one containing the dropdowns below the phone and location info */
+    .profile-card-infos-flexbox, .profile-card-assignee-and-status{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between; /* align the flex box items to the left and right*/
+        column-gap: 15px;
+    }
+    /* Make divs inside flexbox also flexbox to align text with icon*/
+    .profile-card-infos-flexbox div{
+        display: flex;
+        align-content: center;
+    }
+    /* Name of the location */
+    .profile-card-infos-flexbox div .profile-card-content-icon {
+        margin-right: 10px;
+        height: 20px;
     }
 
-    .post-card:hover {
+    .profile-card-assignee-and-status{
+        margin-top: 15px;
+    }
+
+
+    .profile-card-content select{
+        border-radius: 99px;
+        padding: 5px;
+        border: 1.5px solid #2e3e50;
+    }
+
+
+    .profile-client-card:hover {
         box-shadow: inset 0 0 0 0px black;
     }
 
-    .post-card:hover > .card-del-icon, .post-card:hover > .card-edit-icon {
+    .profile-client-card:hover > .card-del-icon, .profile-client-card:hover > .profile-card-edit-icon {
         display: inline;
     }
 
 
-    .post-card-additional-info{
+    .client-card-additional-info{
         font-style: italic;
         color: #575757;
         line-height: 1.5em;
@@ -72,7 +145,7 @@
     }
 
     /* Loader that replaces the delete icon after clicking on it */
-    .post-card-del-loader {
+    .client-card-del-loader {
         /*  Loader size changed in javascript  */
         position: absolute;
         right: 0;
@@ -126,9 +199,12 @@
 
 @media (min-width: 641px) {
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-    .post-card {
+    .client-profile-card {
         width: auto;
         display: inline-block;
+    }
+    .profile-card-avatar{
+        /*width: 130px;*/
     }
     .preloading-card{
         width: 280px;
