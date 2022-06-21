@@ -80,6 +80,9 @@
     header{
         margin: 2em 0 1em 0;
     }
+    main {
+        margin-top: 10px;
+    }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
 

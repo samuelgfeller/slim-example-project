@@ -54,12 +54,11 @@
 
     /* Navigation icons */
     nav a img {
-        width: 25px;
-        /* To prevent little extra space below image */
-        /*display: block;*/
+        width: 30px;
         vertical-align: middle;
     }
     /* Toggle hover image */
+    /* Last of type is hover / focus image and first of type is normal icon*/
     nav a img:last-of-type {
         display: none;
     }
@@ -69,6 +68,18 @@
     nav a:hover img:last-of-type {
         display: inline-block;
     }
+    /* If link is active, display hover / focus image and hide normal one */
+    nav a.is-active img:last-of-type {
+        display: inline-block;
+    }
+    nav a.is-active img:first-of-type {
+        display: none;
+    }
+    /* Show little background to emphasize active nav point except when hover */
+    nav:not(:hover) a.is-active {
+        background: rgba(0,0,0, .05);
+    }
+
 
     nav a span {
         margin-left: 10px;

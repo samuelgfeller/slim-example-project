@@ -3,9 +3,25 @@
     src: url(../fonts/Comfortaa.ttf);
 }
 @font-face {
+    font-family: SF-Pro-Text;
+    src: url(../fonts/SF-Pro/SF-Pro-Text-Regular.otf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: SF-Pro-Text;
+    src: url(../fonts/SF-Pro/SF-Pro-Text-Bold.otf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: SF-Pro Display;
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Bold.otf);
+}
+
+@font-face {
     font-family: DM-Sans;
     src: url(../fonts/DMSans-Regular.ttf);
 }
+
 
 body, html {
     min-height: 100vh;
@@ -26,7 +42,9 @@ body, html {
     and height and not overflowing to the parent.
     https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
     box-sizing: border-box;
-    font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;
+    /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
+    font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
+    /*letter-spacing: 2px;*/
 }
 
 a {
@@ -36,6 +54,9 @@ a {
 h2, h1{
     color: black;
     text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);
+    font-family: SF-Pro Display, Helvetica, sans-serif;
+    font-size: 3em;
+    font-weight: bold;
 }
 
 a:hover {

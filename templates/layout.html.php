@@ -58,11 +58,11 @@
             <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
             <span class="nav-span">Dashboard</span>
         </a>
-        <a href="<?= $route->urlFor('user-list') ?>" <?= $uri->getPath() === $route->urlFor(
-            'user-list'
+        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
+            'client-list-all-page'
         ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Non-assigned">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+            <img src="assets/general/img/nav/people.svg" alt="Non-assigned">
+            <img src="assets/general/img/nav/people_hover.svg" alt="People">
             <span class="nav-span">Incoming</span>
         </a>
         <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>" <?= $uri->getPath() === $route->urlFor(
@@ -71,20 +71,6 @@
             <img src="assets/general/img/nav/gallery-tiles.svg" alt="Assigned me">
             <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
             <span class="nav-span">Assigned to me</span>
-        </a>
-        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'client-list-all-page'
-        ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Client list">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-            <span class="nav-span">Client list</span>
-        </a>
-        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'client-list-all-page'
-        ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Admin area">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-            <span class="nav-span">Admin</span>
         </a>
         <!--           <a href="<?
         /*= $route->urlFor('register-page') */ ?>" <?
