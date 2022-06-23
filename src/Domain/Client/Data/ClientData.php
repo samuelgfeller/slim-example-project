@@ -17,10 +17,15 @@ class ClientData
     public ?string $phone;
     public ?string $email;
     public ?string $note;
+    // https://en.wikipedia.org/wiki/ISO/IEC_5218
+    public ?int $sex; // 0 -> Not known; 1 -> Male; 2 -> Female; 9 -> Not applicable.
     public ?int $user_id;
     public ?int $client_status_id;
     public ?\DateTimeImmutable $updated_at;
     public ?\DateTimeImmutable $created_at;
+
+    // Not database field but here so that age doesn't have to be calculated in view
+    public ?int $age;
 
     /**
      * Client Data constructor.
@@ -29,18 +34,23 @@ class ClientData
     public function __construct(array $clientData = null)
     {
         $reader = new ArrayReader($clientData);
-        $this->id = $reader->findAsInt($clientData['id']);
-        $this->first_name = $reader->findAsString($clientData['first_name']);
-        $this->last_name = $reader->findAsString($clientData['last_name']);
-        $this->birthdate = $reader->findAsDateTimeImmutable($clientData['birthdate']);
-        $this->location = $reader->findAsString($clientData['location']);
-        $this->phone = $reader->findAsString($clientData['phone']);
-        $this->email = $reader->findAsString($clientData['email']);
-        $this->note = $reader->findAsString($clientData['note']);
-        $this->user_id = $reader->findAsInt($clientData['user_id']);
-        $this->client_status_id = $reader->findAsInt($clientData['client_status_id']);
-        $this->updated_at = $reader->findAsDateTimeImmutable($clientData['updated_at']);
-        $this->created_at = $reader->findAsDateTimeImmutable($clientData['created_at']);
+        $this->id = $reader->findAsInt('id');
+        $this->first_name = $reader->findAsString('first_name');
+        $this->last_name = $reader->findAsString('last_name');
+        $this->birthdate = $reader->findAsDateTimeImmutable('birthdate');
+        $this->location = $reader->findAsString('location');
+        $this->phone = $reader->findAsString('phone');
+        $this->email = $reader->findAsString('email');
+        $this->note = $reader->findAsString('note');
+        $this->sex = $reader->findAsInt('sex');
+        $this->user_id = $reader->findAsInt('user_id');
+        $this->client_status_id = $reader->findAsInt('client_status_id');
+        $this->updated_at = $reader->findAsDateTimeImmutable('updated_at');
+        $this->created_at = $reader->findAsDateTimeImmutable('created_at');
+
+        if ($this->birthdate){
+            $this->age = (new \DateTime())->diff($this->birthdate)->y;
+        }
     }
 
     /**
@@ -61,6 +71,7 @@ class ClientData
             'phone' => $this->phone,
             'email' => $this->email,
             'note' => $this->note,
+            'sex' => $this->sex,
             'user_id' => $this->user_id,
             'client_status_id' => $this->client_status_id,
         ];

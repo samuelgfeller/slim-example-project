@@ -4,12 +4,10 @@
 namespace App\Domain\Client\Service;
 
 
-use App\Domain\Client\Data\ClientResultAggregateData;
+use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Post\Data\UserPostData;
 use App\Domain\Post\Exception\InvalidPostFilterException;
 use Odan\Session\SessionInterface;
-use Slim\Exception\HttpUnauthorizedException;
 
 class ClientFilterFinder
 {
@@ -26,9 +24,9 @@ class ClientFilterFinder
      *
      * @param array $params GET parameters containing filter values
      *
-     * @return ClientResultAggregateData[]
+     * @return ClientResultDataCollection
      */
-    public function findClientsWithFilter(array $params): array
+    public function findClientsWithFilter(array $params): ClientResultDataCollection
     {
         // Filter 'user'
         if (isset($params['user'])) {

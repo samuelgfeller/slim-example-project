@@ -11,7 +11,8 @@ class UserFinder
 {
     public function __construct(
         private UserFinderRepository $userFinderRepository
-    ) { }
+    ) {
+    }
 
     /**
      * @return UserData[]
@@ -32,11 +33,13 @@ class UserFinder
         $user = $this->userFinderRepository->findUserById($id);
 
         // If the password hash is not explicitly needed remove it from object for view and other use cases
-        if ($withPasswordHash === false){
+        if ($withPasswordHash === false) {
             $user->passwordHash = null;
         }
         return $user;
     }
+
+
 
     /**
      * Find user via email

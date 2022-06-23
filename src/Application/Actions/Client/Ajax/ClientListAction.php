@@ -45,7 +45,7 @@ final class ClientListAction
     ): ResponseInterface {
         try {
             // Retrieve posts with given filter values (or none)
-            $userPosts = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
+            $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
         } catch (InvalidPostFilterException $invalidPostFilterException) {
             return $this->responder->respondWithJson(
                 $response,
@@ -70,6 +70,6 @@ final class ClientListAction
                 401
             );
         }
-        return $this->responder->respondWithJson($response, $userPosts);
+        return $this->responder->respondWithJson($response, $clientResultCollection);
     }
 }

@@ -16,7 +16,7 @@ class ClientFinderRepository
 
     // To prevent duplicate code the client aggregate select fields for ClientResultAggregateData are in this array below
     private array $clientAggregateSelectFields = [
-        // Client data retrieved with original name to populate ClientData
+        // Client data retrieved with original name to populate parent class ClientData
         'id' => 'client.id',
         'first_name' => 'client.first_name',
         'last_name' => 'client.last_name',
@@ -54,11 +54,19 @@ class ClientFinderRepository
      */
     public function findAllClientsWithResultAggregate(): array
     {
-        $query = $this->queryFactory->newQuery()->from('post');
+        $query = $this->queryFactory->newQuery()->from('client');
         $query->select(
             $this->clientAggregateSelectFields
-        )->join(['table' => 'user', 'conditions' => 'client.user_id = user.id'])
-            ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
+        )// Multiple joins doc: https://book.cakephp.org/4/en/orm/query-builder.html#adding-joins
+        ->join([
+            // `user` is alias and has to be same as $clientAggregateSelectFields (could be `u` as well as long as its consistent)
+            'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'client.user_id = user.id'],
+            'client_status' => [
+                'table' => 'client_status',
+                'type' => 'LEFT',
+                'conditions' => 'client.client_status_id = client_status.id'
+            ]
+        ])
             ->andWhere(
                 ['client.deleted_at IS' => null]
             );
