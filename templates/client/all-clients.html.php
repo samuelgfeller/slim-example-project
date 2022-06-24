@@ -5,9 +5,7 @@
  */
 
 $this->setLayout('layout.html.php');
-?>
 
-<?php
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
@@ -18,7 +16,20 @@ $this->addAttribute('css', [
     'assets/general/css/modal.css',
     'assets/client/client.css',
 ]);
-$this->addAttribute('js', ['assets/client/client.js', 'assets/general/js/modal.js']);
+$this->addAttribute('js',
+    [
+        'assets/client/client-fetcher.js',
+        'assets/client/client-page-manager.js',
+        'assets/general/js/modal.js'
+    ]
+);
+// Js files that import things from other js files
+$this->addAttribute('jsModules',
+    [
+        'assets/client/client.js',
+    ]
+);
+
 ?>
 <h1>Clients</h1>
 <!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
@@ -50,16 +61,16 @@ a post they are re-loaded in the background (async) to be up-to-date with the se
             </div>
             <div class="profile-card-assignee-and-status">
                 <div>
-                <select name="assigned-user">
-                    <option value="1">Samuel</option>
-                    <option value="2">Peter</option>
-                </select>
+                    <select name="assigned-user">
+                        <option value="1">Samuel</option>
+                        <option value="2">Peter</option>
+                    </select>
                 </div>
                 <div>
-                <select name="status">
-                    <option value="1">Needs attention</option>
-                    <option value="2">Done</option>
-                </select>
+                    <select name="status">
+                        <option value="1">Needs attention</option>
+                        <option value="2">Done</option>
+                    </select>
                 </div>
             </div>
 

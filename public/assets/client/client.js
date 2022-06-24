@@ -1,14 +1,16 @@
+import {getClientProfileCardHtml} from "./client-profile-card.js";
+
 // Global variables
 // Get basepath. Especially useful when developing on localhost/project-name
 const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
 // Load clients on
-// loadClients();
+loadClients();
 
 // Open modal box to create new client after click on plus button
-document.getElementById('create-client-btn').addEventListener('click', function () {
-    createClientModal();
-});
+// document.getElementById('create-client-btn').addEventListener('click', function () {
+//     createClientModal();
+// });
 
 // Event delegation (event listeners on dynamically loaded elements)
 document.addEventListener('click', function (e) {
@@ -59,9 +61,10 @@ function loadClients() {
             }
             // Success
             else {
-                let clients = JSON.parse(xHttp.responseText);
+                let response = JSON.parse(xHttp.responseText);
                 removeContentPlaceholder();
-                addClientsToDom(clients);
+                console.log(response.clients);
+                addClientsToDom(response.clients, response.users, response.statuses);
             }
         }
     };
@@ -74,52 +77,13 @@ function loadClients() {
 }
 
 /**
- * Display client content placeholders
- */
-function displayClientContentPlaceholder() {
-    let clientWrapper = document.getElementById('client-wrapper');
-    // Empty clients
-    clientWrapper.innerHTML = '';
-
-    let contentPlaceholderHtml =
-        '<div class="preloading-card">' +
-        '    <div class="preloading-card-header">' +
-        '        <div class="load-wrapper">' +
-        '            <div class="activity"></div>' +
-        '        </div>' +
-        '    </div>' +
-        '    <div class="preloading-card-body">' +
-        '        <div class="load-wrapper">' +
-        '            <div class="activity"></div>' +
-        '        </div>' +
-        '    </div>' +
-        '</div>';
-
-    // Add content placeholder 3 times
-    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
-    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
-    clientWrapper.insertAdjacentHTML('beforeend', contentPlaceholderHtml);
-}
-
-/**
- * Remove placeholders
- */
-function removeContentPlaceholder() {
-    // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
-    let contentPlaceholders = document.querySelectorAll('.preloading-card');
-    // Foreach loop over content placeholders
-    for (let contentPlaceholder of contentPlaceholders) {
-        // remove from DOM
-        contentPlaceholder.remove();
-    }
-}
-
-/**
  * Add client to page
  *
  * @param {object[]} clients
+ * @param allUsers
+ * @param allStatuses
  */
-function addClientsToDom(clients) {
+function addClientsToDom(clients, allUsers, allStatuses) {
     let clientContainer = document.getElementById('client-wrapper');
 
     // If no results, tell user so
@@ -127,21 +91,16 @@ function addClientsToDom(clients) {
         clientContainer.insertAdjacentHTML('afterend', '<p>No clients were found.</p>')
     }
 
+
     // Loop over clients and add to DOM
     for (const client of clients) {
         // Client card HTML
-        let clientHtml = '<div class="client-card" id="client' + client.clientId + '">' +
-            '        <h3 class="card-header">' + client.first_name + ' ' + client.last_name + '</h3>' +
-            '        <div id="card-content' + client.id + '">' +
-            '            <p class="display-newlines"><b>' + client.age + '</b></p>' +
-            '            <p class="client-card-additional-info">Updated: ' +
-            '               <span class="layout-color-text">' + client.updated_at.date + '</span><br>' +
-            '            User: <span class="layout-color-text">' + client.userData.firstName + ' ' + client.userData.surname + '</span></p>' +
-            '        </div>' +
-            '</div>';
+        let clientProfileCardHtml = getClientProfileCardHtml(clientContainer, client.first_name, client.last_name,
+            client.age, client.sex, client.location, client.phone, client.user_id, client.client_status_id, allUsers,
+            allStatuses);
 
         // Add to DOM
-        clientContainer.insertAdjacentHTML('beforeend', clientHtml);
+        clientContainer.insertAdjacentHTML('beforeend', clientProfileCardHtml);
     }
 }
 

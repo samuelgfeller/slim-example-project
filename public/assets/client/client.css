@@ -34,6 +34,7 @@
     }
     .profile-card-avatar{
         width: 100px;
+        height: 100px;
         display: block; /* To center avatar image */
         margin: auto;
         position: relative;

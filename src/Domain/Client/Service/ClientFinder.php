@@ -7,6 +7,7 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
+use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 
 class ClientFinder
 {
@@ -14,6 +15,7 @@ class ClientFinder
         private readonly ClientFinderRepository  $clientFinderRepository,
         private readonly ClientUserRightSetter $clientUserRightSetter,
         private readonly UserNameAbbreviator $userNameAbbreviator,
+        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
     ) {
     }
 
@@ -26,6 +28,7 @@ class ClientFinder
     {
         $clientResultCollection = new ClientResultDataCollection();
         $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsWithResultAggregate();
+        $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllStatusesForDropdown();
         $clientResultCollection->users = $this->userNameAbbreviator->findUserNamesForDropdown();
 
         // Add permissions on what logged-in user is allowed to do with object

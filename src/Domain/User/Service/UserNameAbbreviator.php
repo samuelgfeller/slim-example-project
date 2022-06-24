@@ -69,7 +69,7 @@ class UserNameAbbreviator
             $groupedUsers[$user->firstName][$user->id] = $user;
         }
 
-        // Loop over the ordered duplicate user array
+        // Loop over the ordered user array
         /** @var  UserData[] $usersWithIdenticalFirstName */
         foreach ($groupedUsers as $firstName => $usersWithIdenticalFirstName) {
             // If there is only one entry it means that it's a unique first name

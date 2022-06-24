@@ -4,7 +4,6 @@ namespace App\Domain\Client\Data;
 
 
 use App\Common\ArrayReader;
-use App\Domain\User\Data\UserData;
 
 class ClientData
 {
@@ -17,8 +16,8 @@ class ClientData
     public ?string $phone;
     public ?string $email;
     public ?string $note;
-    // https://en.wikipedia.org/wiki/ISO/IEC_5218
-    public ?int $sex; // 0 -> Not known; 1 -> Male; 2 -> Female; 9 -> Not applicable.
+    // https://ocelot.ca/blog/blog/2013/09/16/representing-sex-in-databases/
+    public ?string $sex; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
     public ?int $user_id;
     public ?int $client_status_id;
     public ?\DateTimeImmutable $updated_at;
@@ -42,7 +41,7 @@ class ClientData
         $this->phone = $reader->findAsString('phone');
         $this->email = $reader->findAsString('email');
         $this->note = $reader->findAsString('note');
-        $this->sex = $reader->findAsInt('sex');
+        $this->sex = $reader->findAsString('sex');
         $this->user_id = $reader->findAsInt('user_id');
         $this->client_status_id = $reader->findAsInt('client_status_id');
         $this->updated_at = $reader->findAsDateTimeImmutable('updated_at');
