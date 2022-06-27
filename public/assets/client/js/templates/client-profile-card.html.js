@@ -29,11 +29,11 @@ export function getClientProfileCardHtml(clientContainer, firstName, lastName, a
         <h3>${firstName} ${lastName}</h3>
         <div class="profile-card-infos-flexbox">
             <div>
-                <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
+                <img src="../../img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
                 <span>${location}</span>
             </div>
             <div>
-                <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+                <img src="../../img/phone.svg" class="profile-card-content-icon" alt="phone">
                 <span>${phoneNumber}</span>
             </div>
         </div>
