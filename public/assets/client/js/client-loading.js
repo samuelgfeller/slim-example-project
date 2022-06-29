@@ -1,10 +1,12 @@
-import {getClientProfileCardHtml} from "./templates/client-profile-card.html";
+import {getClientProfileCardHtml} from "./templates/client-profile-card.html.js";
+import {displayClientProfileCardLoadingPlaceholder, removeContentPlaceholder} from "./client-loading-placeholder.js";
+import {basePath} from "../../general/js/config.js";
 
 /**
  *  Load clients into DOM
  */
 export function loadClients() {
-    displayClientContentPlaceholder();
+    displayClientProfileCardLoadingPlaceholder();
     // 'own' if own clients should be loaded after creation or 'all' if all should
     let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
     let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';

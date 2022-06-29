@@ -15,18 +15,19 @@ $this->addAttribute('css', [
     'assets/general/css/plus-button.css',
     'assets/general/css/modal.css',
     'assets/client/client.css',
+    'assets/client/client-loading-placeholder.css',
 ]);
-$this->addAttribute('js',
+$this->addAttribute(
+    'js',
     [
-        'assets/client/client-fetcher.js',
-        'assets/client/client-page-manager.js',
         'assets/general/js/modal.js'
     ]
 );
 // Js files that import things from other js files
-$this->addAttribute('jsModules',
+$this->addAttribute(
+    'jsModules',
     [
-        'assets/client/client.js',
+        'assets/client/js/client-main.js',
     ]
 );
 
@@ -38,82 +39,135 @@ a post they are re-loaded in the background (async) to be up-to-date with the se
 
 <div id="client-wrapper" data-client-filter="all">
     <!-- Flexbox -->
-    <div class="client-profile-card">
-        <div class="profile-card-header">
-            <!-- other div needed to attach bubble to img -->
-            <div class="profile-card-avatar">
-                <img src="assets/client/img/avatar_female.svg" alt="avatar">
-                <span class="profile-card-age">41</span>
-            </div>
-        </div>
-        <div class="profile-card-content">
-            <h3>Rachel Harmon</h3>
+<!---->
+<!--    <div class="client-profile-card-loading-placeholder">-->
+<!--        <div class="client-profile-card-loading-placeholder-header">-->
+<!--            <div class="client-profile-card-avatar-age-loading-placeholder">-->
+<!--                <div class="client-profile-card-avatar-loading-placeholder">-->
+<!--                 Avatar-->
+<!--                <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                    <div class="moving-loading-placeholder-part"></div>-->
+<!--                </div>-->
+<!--                </div>-->
+<!--                 Age -->
+<!--                <div class="client-profile-card-age-loading-placeholder">-->
+<!--                    <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                        <div class="moving-loading-placeholder-part"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--        <div class="client-profile-card-loading-placeholder-body">-->
+<!--            CSS Grid -->
+<!--            <div class="client-profile-card-name-loading-placeholder">-->
+<!--                <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                    <div class="moving-loading-placeholder-part"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="client-profile-card-loading-placeholder-infos-container">-->
+<!--                <div class="client-profile-card-location-loading-placeholder">-->
+<!--                    <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                        <div class="moving-loading-placeholder-part"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="client-profile-card-phone-nr-loading-placeholder">-->
+<!--                    <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                        <div class="moving-loading-placeholder-part"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="client-profile-card-assignee-loading-placeholder">-->
+<!--                    <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                        <div class="moving-loading-placeholder-part"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="client-profile-card-status-loading-placeholder">-->
+<!--                    <div class="moving-loading-placeholder-part-wrapper">-->
+<!--                        <div class="moving-loading-placeholder-part"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!---->
+<!---->
+<!--    <div class="client-profile-card">-->
+<!--        <div class="profile-card-header">-->
+<!--             other div needed to attach bubble to img -->
+<!--            <div class="profile-card-avatar">-->
+<!--                <img src="assets/client/img/avatar_female.svg" alt="avatar">-->
+<!--                <span class="profile-card-age">41</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="profile-card-content">-->
+<!--            <h3>Rachel Harmon</h3>-->
+<!---->
+<!--            <div class="profile-card-infos-flexbox">-->
+<!--                <div>-->
+<!--                    <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">-->
+<!--                    <span>Basel</span>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">-->
+<!--                    <span>079 572 99 32</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="profile-card-assignee-and-status">-->
+<!--                <div>-->
+<!--                    <select name="assigned-user">-->
+<!--                        <option value="1">Samuel</option>-->
+<!--                        <option value="2">Peter</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <select name="status">-->
+<!--                        <option value="1">Needs attention</option>-->
+<!--                        <option value="2">Done</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--    </div>-->
+<!---->
+<!--    <div class="client-profile-card">-->
+<!--        <div class="profile-card-header">-->
+<!--             other div needed to attach bubble to img -->
+<!--            <div class="profile-card-avatar">-->
+<!--                <img src="assets/client/img/avatar_male.svg" alt="avatar">-->
+<!--                <span class="profile-card-age">28</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="profile-card-content">-->
+<!--            <h3>Timon Koch</h3>-->
+<!---->
+<!--            <div class="profile-card-infos-flexbox">-->
+<!--                <div>-->
+<!--                    <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">-->
+<!--                    <span>Bern</span>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">-->
+<!--                    <span>076 823 82 33</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="profile-card-assignee-and-status">-->
+<!--                <div>-->
+<!--                    <select name="assigned-user">-->
+<!--                        <option value="1">Samuel</option>-->
+<!--                        <option value="2">Peter</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <select name="status">-->
+<!--                        <option value="1">Needs attention</option>-->
+<!--                        <option value="2">Done</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--    </div>-->
 
-            <div class="profile-card-infos-flexbox">
-                <div>
-                    <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                    <span>Basel</span>
-                </div>
-                <div>
-                    <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                    <span>079 572 99 32</span>
-                </div>
-            </div>
-            <div class="profile-card-assignee-and-status">
-                <div>
-                    <select name="assigned-user">
-                        <option value="1">Samuel</option>
-                        <option value="2">Peter</option>
-                    </select>
-                </div>
-                <div>
-                    <select name="status">
-                        <option value="1">Needs attention</option>
-                        <option value="2">Done</option>
-                    </select>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="client-profile-card">
-        <div class="profile-card-header">
-            <!-- other div needed to attach bubble to img -->
-            <div class="profile-card-avatar">
-                <img src="assets/client/img/avatar_male.svg" alt="avatar">
-                <span class="profile-card-age">28</span>
-            </div>
-        </div>
-        <div class="profile-card-content">
-            <h3>Timon Koch</h3>
-
-            <div class="profile-card-infos-flexbox">
-                <div>
-                    <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                    <span>Bern</span>
-                </div>
-                <div>
-                    <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                    <span>076 823 82 33</span>
-                </div>
-            </div>
-            <div class="profile-card-assignee-and-status">
-                <div>
-                    <select name="assigned-user">
-                        <option value="1">Samuel</option>
-                        <option value="2">Peter</option>
-                    </select>
-                </div>
-                <div>
-                    <select name="status">
-                        <option value="1">Needs attention</option>
-                        <option value="2">Done</option>
-                    </select>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
 </div>

@@ -1,8 +1,4 @@
-import {loadClients} from "./client-loading";
-
-// Global variables
-// Get basepath. Especially useful when developing on localhost/project-name
-const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
+import {loadClients} from "./client-loading.js";
 
 // Load clients at page startup
 loadClients();

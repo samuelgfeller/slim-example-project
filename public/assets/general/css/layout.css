@@ -20,7 +20,7 @@
         flex: none;
     }
     main {
-        width: 100%;
+        /*width: 100%;*/
         padding: 1em 0.5em 1em 0.5em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
         /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
         flex: 1 0 auto;
@@ -76,7 +76,7 @@
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
         width: 100%;
-        border-right: 8px solid #cc0033;
+        /*border-right: 8px solid #cc0033;*/
     }
     header{
         margin: 2em 0 1em 0;

@@ -1,3 +1,5 @@
+import {getAvatarPath, getDropdownOptions} from "./client-template-util.js";
+
 /**
  * HTML code for client profile card
  *
@@ -29,11 +31,11 @@ export function getClientProfileCardHtml(clientContainer, firstName, lastName, a
         <h3>${firstName} ${lastName}</h3>
         <div class="profile-card-infos-flexbox">
             <div>
-                <img src="../../img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
+                <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
                 <span>${location}</span>
             </div>
             <div>
-                <img src="../../img/phone.svg" class="profile-card-content-icon" alt="phone">
+                <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
                 <span>${phoneNumber}</span>
             </div>
         </div>
@@ -53,35 +55,54 @@ export function getClientProfileCardHtml(clientContainer, firstName, lastName, a
 </div>`;
 }
 
-/**
- * Creates option list for html select
- *
- * @param {object} allEntries database key has to be object key and value is name
- * @param {number} selectedKey
- * @return {string}
- */
-function getDropdownOptions(allEntries, selectedKey){
-    let optionsHtml = '';
-    for (const [entryId, name] of Object.entries(allEntries)) {
-        let selected = entryId === selectedKey.toString() ? `selected="selected"` : '';
-        optionsHtml += `<option value="${entryId}" ${selected}>${name}</option>\n`;
-    }
-    return optionsHtml;
-}
+export function getClientProfileCardLoadingPlaceholderHtml(){
+    return `<div class="client-profile-card-loading-placeholder">
+        <div class="client-profile-card-loading-placeholder-header">
+            <div class="client-profile-card-avatar-age-loading-placeholder">
+                <div class="client-profile-card-avatar-loading-placeholder">
+                <!-- Avatar-->
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
+                </div>
+                </div>
+                <!-- Age -->
+                <div class="client-profile-card-age-loading-placeholder">
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
+                </div>
+            </div>
 
-/**
- * Determine avatar path with sex
- *
- * @param {string} sex
- */
-function getAvatarPath(sex){
-    switch(sex){
-        case 'M':
-            return "assets/client/img/avatar_male.svg";
-        case 'F':
-            return "assets/client/img/avatar_female.svg";
-        case 'O':
-        case null:
-            return "assets/client/img/avatar_neutral.svg";
-    }
+        </div>
+        <div class="client-profile-card-loading-placeholder-body">
+            <!-- CSS Grid -->
+            <div class="client-profile-card-name-loading-placeholder">
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
+                </div>
+            </div>
+            <div class="client-profile-card-loading-placeholder-infos-container">
+                <div class="client-profile-card-location-loading-placeholder">
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
+                </div>
+                <div class="client-profile-card-phone-nr-loading-placeholder">
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
+                </div>
+                <div class="client-profile-card-assignee-loading-placeholder">
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
+                </div>
+                <div class="client-profile-card-status-loading-placeholder">
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
 }

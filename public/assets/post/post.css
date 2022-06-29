@@ -91,7 +91,7 @@
         border-radius: 5px;
     }
 
-    .activity {
+    .moving-loading-placeholder-part {
         position: absolute;
         left: -45%;
         height: 100%;
@@ -104,7 +104,7 @@
     }
 
 
-    .preloading-card {
+    .client-profile-card-loading-placeholder {
         height: 190px;
         width: 100%;
         padding: 20px;
@@ -113,11 +113,11 @@
         background: #f8f8f8;
     }
 
-    .preloading-card-header {
+    .client-profile-card-loading-placeholder-header {
         height: 28px;
     }
 
-    .preloading-card-body {
+    .client-profile-card-loading-placeholder-body {
         height: 94px;
         margin-top: 21px;
         margin-bottom: 16px;
@@ -130,7 +130,7 @@
         width: auto;
         display: inline-block;
     }
-    .preloading-card{
+    .client-profile-card-loading-placeholder{
         width: 280px;
     }
 }

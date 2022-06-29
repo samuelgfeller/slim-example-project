@@ -153,49 +153,6 @@
         top: 0;
         margin: 10px 12px;
     }
-
-    /* Preloading content placeholder*/
-    .load-wrapper {
-        position: relative;
-        height: 100%;
-        width: 100%;
-        background-color: rgb(231, 231, 231);
-        z-index: 8;
-        overflow: hidden;
-        border-radius: 5px;
-    }
-
-    .activity {
-        position: absolute;
-        left: -45%;
-        height: 100%;
-        width: 45%;
-        background-image: linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        background-image: -moz-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        background-image: -webkit-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        animation: loading 1s infinite;
-        z-index: 9;
-    }
-
-
-    .preloading-card {
-        height: 190px;
-        width: 100%;
-        padding: 20px;
-        border-radius: 20px;
-        /* Change card to look good for preloading */
-        background: #f8f8f8;
-    }
-
-    .preloading-card-header {
-        height: 28px;
-    }
-
-    .preloading-card-body {
-        height: 94px;
-        margin-top: 21px;
-        margin-bottom: 16px;
-    }
 }
 
 @media (min-width: 641px) {
@@ -207,7 +164,7 @@
     .profile-card-avatar{
         /*width: 130px;*/
     }
-    .preloading-card{
+    .client-profile-card-loading-placeholder{
         width: 280px;
     }
 }

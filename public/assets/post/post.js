@@ -82,15 +82,15 @@ function displayPostContentPlaceholder() {
     postWrapper.innerHTML = '';
 
     let contentPlaceholderHtml =
-        '<div class="preloading-card">' +
-        '    <div class="preloading-card-header">' +
+        '<div class="client-profile-card-loading-placeholder">' +
+        '    <div class="client-profile-card-loading-placeholder-header">' +
         '        <div class="load-wrapper">' +
-        '            <div class="activity"></div>' +
+        '            <div class="moving-loading-placeholder-part"></div>' +
         '        </div>' +
         '    </div>' +
-        '    <div class="preloading-card-body">' +
+        '    <div class="client-profile-card-loading-placeholder-body">' +
         '        <div class="load-wrapper">' +
-        '            <div class="activity"></div>' +
+        '            <div class="moving-loading-placeholder-part"></div>' +
         '        </div>' +
         '    </div>' +
         '</div>';
@@ -106,7 +106,7 @@ function displayPostContentPlaceholder() {
  */
 function removeContentPlaceholder() {
     // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
-    let contentPlaceholders = document.querySelectorAll('.preloading-card');
+    let contentPlaceholders = document.querySelectorAll('.client-profile-card-loading-placeholder');
     // Foreach loop over content placeholders
     for (let contentPlaceholder of contentPlaceholders) {
         // remove from DOM
