@@ -13,7 +13,7 @@
     .client-profile-card {
         width: 100%;
         min-width: 250px;
-        position: relative;
+        /*position: relative; causes nav z-index to not work*/
         display: flex;
         /*background: #f6f6f6;*/
         /*border: 1px solid rgba(243, 243, 243, 0.55);*/

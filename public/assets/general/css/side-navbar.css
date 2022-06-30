@@ -50,6 +50,7 @@
 
     nav a:hover {
         background: rgba(0, 0, 0, .05);
+        font-weight: normal;
     }
 
     /* Navigation icons */
