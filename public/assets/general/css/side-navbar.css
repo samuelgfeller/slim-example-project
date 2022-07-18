@@ -1,36 +1,36 @@
+:root {
+    --nav-icon-scale: 85%; /*Percentage*/
+}
+
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    #brand-name-span {
-        color: #757575;
-        width: 80%;
-        display: block;
-        text-align: center;
-        line-height: 50px;
-    }
-
     #nav-container {
         height: 100%;
         left: 0;
-        /*width: 230px;*/
-        position: fixed;
+        position: relative; /* For z-index and ui to work, relative on mobile and fixed for desktop */
     }
 
     nav {
+        /*height: 50px; !* fixed height to center nav-icon and bypass transition movement when opened*!*/
         display: inline-block;
-        /*border-radius: 0 35px 35px 0;*/
+        max-width: 0; /* 0 on mobile, 80px on desktop for icons */
         border-radius: 32px;
-        /*padding: 10px 0 10px 0;*/
-        /*background: ;*/
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         margin-top: 50px;
         margin-left: 15px;
-        position: relative;
-        max-width: 80px;
         transition: max-width .5s ease-out;
         white-space: nowrap;
         overflow: hidden;
         z-index: 999;
         background: white;
+        position: fixed;
+        bottom: 100px;
+    }
+
+    /* Show menu when mobile nav is open */
+    #nav-container.open nav{
+        max-width: 230px;
+        outline: 3px solid #2e3e50;
     }
 
     nav a {
@@ -58,30 +58,140 @@
         width: 30px;
         vertical-align: middle;
     }
+
     /* Toggle hover image */
     /* Last of type is hover / focus image and first of type is normal icon*/
     nav a img:last-of-type {
         display: none;
     }
+
     nav a:hover img:first-of-type {
         display: none;
     }
+
     nav a:hover img:last-of-type {
         display: inline-block;
     }
+
     /* If link is active, display hover / focus image and hide normal one */
     nav a.is-active img:last-of-type {
         display: inline-block;
     }
+
     nav a.is-active img:first-of-type {
         display: none;
     }
+
     /* Show little background to emphasize active nav point except when hover */
     nav:not(:hover) a.is-active {
-        background: rgba(0,0,0, .05);
+        background: rgba(0, 0, 0, .05);
+    }
+    nav a span {
+        margin-left: 10px;
     }
 
 
+    /* Container */
+    #nav-mobile-toggle-icon {
+        background: #2e3e50;
+        border-radius: 99px;
+        position: fixed;
+        z-index: 999;
+        bottom: 20px;
+        left: 15px;
+        width: 70px;
+        height: 70px;
+        transform: scale(var(--nav-icon-scale));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+
+    }
+
+    #nav-burger-icon {
+        width: 40px;
+        height: 28px;
+        position: absolute;
+        display: block;
+        transform: rotate(0deg);
+        transition: .5s ease-in-out;
+        cursor: pointer;
+
+    }
+
+    #nav-burger-icon span {
+        display: block;
+        position: absolute;
+        height: 4px;
+        width: 100%;
+        background: #d3e0ff;
+        border-radius: 6px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: .25s ease-in-out;
+    }
+
+    #nav-burger-icon span:nth-child(1) {
+        top: 0;
+    }
+
+    #nav-burger-icon span:nth-child(2), #nav-burger-icon span:nth-child(3) {
+        top: 12px;
+    }
+
+    #nav-burger-icon span:nth-child(4) {
+        top: 24px;
+    }
+
+    #nav-container.open #nav-burger-icon span:nth-child(1) {
+        top: 12px;
+        width: 0;
+        left: 50%;
+    }
+
+    #nav-container.open #nav-burger-icon span:nth-child(2) {
+        transform: rotate(45deg);
+    }
+
+    #nav-container.open #nav-burger-icon span:nth-child(3) {
+        transform: rotate(-45deg);
+    }
+
+    #nav-container.open #nav-burger-icon span:nth-child(4) {
+        top: 12px;
+        width: 0;
+        left: 50%;
+    }
+
+}
+
+@media (min-width: 340px) {
+
+}
+
+@media (min-width: 641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+
+}
+
+/* Desktop / mobile nav breakpoint. If min-width changes, navbar.js should be updated as well */
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #nav-burger-icon {
+        display: none;
+    }
+
+    nav {
+        display: inline-block;
+        position: relative;
+        bottom: initial;
+        max-width: 80px;
+        width: auto;
+    }
+
+    /* Hide nav label until hover */
     nav a span {
         margin-left: 10px;
         opacity: 0;
@@ -89,7 +199,7 @@
         position: absolute;
         overflow: hidden;
     }
-    nav:hover{
+    nav:hover {
         max-width: 230px;
     }
     /* https://stackoverflow.com/a/47851820/9013718 */
@@ -99,39 +209,13 @@
         height: auto;
         position: initial;
     }
-
-
-
-}
-
-@media (min-width: 340px) {
-    /* 340px enough wide to add letter-spacing*/
-    #brand-name-span {
-        letter-spacing: 1vw;
+    #nav-container {
+        position: fixed;
     }
 }
 
-@media (min-width: 641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-    /* Desktop Nav breakpoint */
-    #brand-name-span {
-        display: none;
-    }
-}
-
-
-@media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
-
-}
-
-/* Desktop / mobile nav breakpoint. If min-width changes, navbar.js should be updated as well */
 @media (min-width: 1025px) {
     /* big landscape tablets, laptops, and desktops */
-    #nav-burger-icon {
-        display: none;
-    }
-
     /*nav a:before, #nav-indicator {*/
     /*    width: auto;*/
     /*    left: 0;*/

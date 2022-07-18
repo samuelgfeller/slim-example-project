@@ -32,6 +32,7 @@
         'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
         'assets/general/js/default.js',
         'assets/general/js/general.js',
+        'assets/general/js/navbar.js',
     ];
 
     // fetch() includes another template into the current template
@@ -51,11 +52,12 @@
 </head>
 <body>
 
-<!--    <header>-->
-<!--    </header>-->
+<header>
+    <!-- Application name -->
+    <span>Slim Example Project</span>
+</header>
 <aside id="nav-container">
     <nav>
-        <span id="brand-name-span" class="cursor-pointer">Slim Example Project</span>
         <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
             'home-page'
         ) ? 'class="is-active"' : '' ?>>
@@ -90,14 +92,16 @@
             <span class="nav-span">Profile</span>
         </a>
 
+
+    </nav>
+    <div id="nav-mobile-toggle-icon">
         <div id="nav-burger-icon">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
         </div>
-        <span class="nav-indicator no-animation-on-page-load" id="nav-indicator"></span>
-    </nav>
+    </div>
 </aside>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
 <div id="wrapper">

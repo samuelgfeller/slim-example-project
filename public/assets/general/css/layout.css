@@ -16,8 +16,18 @@
         /* No top/bottom margin on wrapper it makes body not touch the top */
     }
     header{
-        margin: 1em 0 1em 0;
         flex: none;
+    }
+    header span {
+        color: #757575;
+        width: 80%;
+        display: block;
+        font-size: 0.7em;
+        text-align: center;
+        line-height: 40px;
+        margin: auto;
+        padding-top: 1em;
+        letter-spacing: 1vw;
     }
     main {
         /*width: 100%;*/
@@ -26,6 +36,10 @@
         flex: 1 0 auto;
         border-radius: 20px;
         color: #2e3e50;
+    }
+    /* Headers have have a margin too big on mobile */
+    main h1{
+        margin-top: 0;
     }
     footer{
         flex: none;
@@ -59,16 +73,17 @@
         margin-top: 20px;
     }
 }
+@media (min-width: 340px) {
+    /* 340px enough wide to add letter-spacing*/
+    header span {
+    }
+}
 @media (min-width:400px)  {
     main {
         padding: 1em 1em 1em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
-        margin-left: 100px;
     }
 }
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-    header{
-        margin-top: 2em;
-    }
     /*#wrapper{*/
     /*    margin: 0 2em;*/
     /*}*/
@@ -76,13 +91,19 @@
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
         width: 100%;
+        background: darkgrey;
         /*border-right: 8px solid #cc0033;*/
     }
     header{
-        margin: 2em 0 1em 0;
+        display: none;
     }
     main {
         margin-top: 10px;
+        margin-left: 100px;
+    }
+    main h1{
+        /*Add normal margin for desktop*/
+        margin-top: auto;
     }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
