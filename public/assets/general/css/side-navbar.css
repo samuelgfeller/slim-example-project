@@ -190,7 +190,6 @@
         max-width: 80px;
         width: auto;
     }
-
     /* Hide nav label until hover */
     nav a span {
         margin-left: 10px;
@@ -208,6 +207,9 @@
         opacity: 1;
         height: auto;
         position: initial;
+    }
+    #nav-mobile-toggle-icon{
+        display: none;
     }
     #nav-container {
         position: fixed;

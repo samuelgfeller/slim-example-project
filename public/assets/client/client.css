@@ -19,12 +19,22 @@
         /*border: 1px solid rgba(243, 243, 243, 0.55);*/
         /*box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);*/
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
-
+        /*border-radius: 100px 100px 30px 30px;*/
         border-radius: 30px;
         max-width: 650px;
         /*overflow-wrap: anywhere;*/
         /*white-space: nowrap;*/
         overflow: hidden; /* To prevent header and content overflowing border radius */
+        /*perspective-origin: 50% 50%;*/
+        /*transform-style: preserve-3d;*/
+    }
+
+    .client-profile-card:hover, .client-profile-card:focus{
+        /*transform: perspective(1500px) rotateX(7deg);*/
+        transform: translateY(-5px);
+        transition: all 0.2s;
+        box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+        cursor: pointer;
     }
     .profile-card-header {
         padding: 20px 20px 5px 20px;
@@ -102,8 +112,18 @@
         border-radius: 99px;
         padding: 5px;
         border: 1.5px solid #2e3e50;
+        position: static;
     }
 
+    .profile-card-content select::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
     .profile-client-card:hover {
         box-shadow: inset 0 0 0 0px black;

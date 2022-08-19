@@ -4,6 +4,7 @@ import {getAvatarPath, getDropdownOptions} from "./client-template-util.js";
  * HTML code for client profile card
  *
  * @param clientContainer
+ * @param clientId
  * @param firstName
  * @param lastName
  * @param age
@@ -16,10 +17,10 @@ import {getAvatarPath, getDropdownOptions} from "./client-template-util.js";
  * @param allStatuses
  * @return {string}
  */
-export function getClientProfileCardHtml(clientContainer, firstName, lastName, age, sex, location, phoneNumber, assignedUserId,
+export function getClientProfileCardHtml(clientContainer, clientId, firstName, lastName, age, sex, location, phoneNumber, assignedUserId,
                                          statusId, allUsers, allStatuses) {
 
-    return `<div class="client-profile-card">
+    return `<div class="client-profile-card" tabindex="0" data-client-id="${clientId}">
     <div class="profile-card-header">
         <!-- other div needed to attach bubble to img -->
         <div class="profile-card-avatar">
