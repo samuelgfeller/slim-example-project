@@ -56,7 +56,7 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
 </div>`;
 }
 
-export function getClientProfileCardLoadingPlaceholderHtml(){
+export function getClientProfileCardLoadingPlaceholderHtml() {
     return `<div class="client-profile-card-loading-placeholder">
         <div class="client-profile-card-loading-placeholder-header">
             <div class="client-profile-card-avatar-age-loading-placeholder">

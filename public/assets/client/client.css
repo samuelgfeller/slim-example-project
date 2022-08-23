@@ -6,15 +6,16 @@
         display: flex;
         gap: 30px 40px;
         flex-wrap: wrap;
-        padding: 0 10px;
+        padding: 0 1em;
         margin-top: 30px;
     }
 
     .client-profile-card {
         width: 100%;
-        min-width: 250px;
+        min-width: 232px;
         /*position: relative; causes nav z-index to not work*/
-        display: flex;
+        /*display: flex;*/
+        display: inline-block;
         /*background: #f6f6f6;*/
         /*border: 1px solid rgba(243, 243, 243, 0.55);*/
         /*box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);*/
@@ -29,20 +30,23 @@
         /*transform-style: preserve-3d;*/
     }
 
-    .client-profile-card:hover, .client-profile-card:focus{
+    .client-profile-card:hover, .client-profile-card:focus {
         /*transform: perspective(1500px) rotateX(7deg);*/
         transform: translateY(-5px);
         transition: all 0.2s;
         box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 20px 0 rgba(0, 0, 0, 0.1);
         cursor: pointer;
     }
+
     .profile-card-header {
+        /*More padding on the right side for mobile because of the age circle top right of the avatar*/
         padding: 20px 20px 5px 20px;
         /*background: #d7b9b9;*/
         background: WHITE;
         /*width: 100%;*/
     }
-    .profile-card-avatar{
+
+    .profile-card-avatar {
         width: 100px;
         height: 100px;
         display: block; /* To center avatar image */
@@ -53,76 +57,87 @@
         border-radius: 99px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     }
+
     .profile-card-avatar img {
         padding: 5px;
         border-radius: 99px;
     }
+
     /* Age */
-    .profile-card-avatar span{
+    .profile-card-age {
         display: flex;
         justify-content: center;
         align-items: center;
         position: absolute;
         width: 35px;
         height: 35px;
-        right: -20px;
-        top: 5px;
         border-radius: 99px;
         z-index: 2;
         background: white;
         border: 3px solid #2e3e50;
         box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.1);
         font-weight: bold;
+        right: -20px;
+        top: 5px;
     }
-    .profile-card-content{
+
+    .profile-card-content {
         padding: 0 20px 20px 20px;
         background: #ececec;
-        /*width: 100%;*/
+        width: 100%;
+        /*position: relative; makes outline hidden behind content */
+        font-size: 16px;
     }
-    .client-profile-card h3{
-        text-align: center;
+
+    .client-profile-card h3 {
         padding-top: 18px;
+        text-align: center;
         margin-top: 0; /* To prevent gap between divs */
         margin-bottom: 15px;
     }
+
     /* Two different flex boxes make the second one containing the dropdowns below the phone and location info */
-    .profile-card-infos-flexbox, .profile-card-assignee-and-status{
+    .profile-card-infos-flexbox, .profile-card-assignee-and-status {
         display: flex;
         flex-flow: row wrap;
-        justify-content: space-between; /* align the flex box items to the left and right*/
+        justify-content: space-around; /* align flex box items so that there is equal space left right and center for mobile*/
         column-gap: 15px;
     }
+
     /* Make divs inside flexbox also flexbox to align text with icon*/
-    .profile-card-infos-flexbox div{
+    .profile-card-infos-flexbox div {
         display: flex;
         align-content: center;
     }
+
+    /* Gap on smallest version when flex items are wrapped and not side by side*/
+    .profile-card-infos-flexbox div:not(:first-of-type),
+    .profile-card-assignee-and-status div:not(:first-of-type) {
+        margin-top: 10px;
+    }
+
     /* Name of the location */
     .profile-card-infos-flexbox div .profile-card-content-icon {
         margin-right: 10px;
         height: 20px;
     }
 
-    .profile-card-assignee-and-status{
-        margin-top: 15px;
+    .profile-card-assignee-and-status {
+        margin-top: 10px;
     }
 
+    /*For smallest version, min-width 80% that will be removed later*/
+    .profile-card-assignee-and-status div {
+        min-width: 90%;
+    }
 
-    .profile-card-content select{
+    .profile-card-content select {
         border-radius: 99px;
         padding: 5px;
         border: 1.5px solid #2e3e50;
-        position: static;
-    }
-
-    .profile-card-content select::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
+        font-size: 12px;
+        background: white;
         width: 100%;
-        height: 100%;
     }
 
     .profile-client-card:hover {
@@ -134,7 +149,7 @@
     }
 
 
-    .client-card-additional-info{
+    .client-card-additional-info {
         font-style: italic;
         color: #575757;
         line-height: 1.5em;
@@ -175,29 +190,75 @@
     }
 }
 
+/* After very small phones (fold) until iPhone 4 */
+/* Breakpoint: location and phone number and the 2 selects one below other
+for galaxy fold and very slim phones*/
+@media (min-width: 311px) {
+    /*Remove top margin when flex divs are wrapped*/
+    .profile-card-infos-flexbox div:not(:first-of-type),
+    .profile-card-assignee-and-status div:not(:first-of-type) {
+        margin-top: 0;
+    }
+
+    .profile-card-assignee-and-status div {
+        min-width: initial;
+    }
+}
+
+/* After very small phones (iPhone 4) until medium phones to big phones */
+/* Breakpoint for the 2 select dropdowns to stay side by side
+ and not one below the other */
+@media (min-width: 337px) {
+    .profile-card-content {
+        font-size: 18px;
+    }
+
+    .profile-card-content select {
+        font-size: 13px; /*From 12 to 13px */
+    }
+
+}
+/*Very big phones or small tablets*/
+@media (min-width: 420px) {
+    /* Increase font and gap size for small tablet or big phone*/
+    .profile-card-content {
+        font-size: 21px;
+    }
+    .profile-card-content select {
+        font-size: 16px;
+    }
+        .profile-card-assignee-and-status {
+        margin-top: 18px;
+    }
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    #client-wrapper {
+        padding: 0 10px;
+    }
+
     .client-profile-card {
         width: auto;
-        display: inline-block;
     }
-    .profile-card-avatar{
+
+    .profile-card-infos-flexbox, .profile-card-assignee-and-status {
+        justify-content: space-between; /* align the flex box items to the left and right*/
+    }
+
+    .profile-card-avatar {
         /*width: 130px;*/
     }
-    .client-profile-card-loading-placeholder{
-        width: 280px;
+
+    .profile-card-content {
+        font-size: initial;
+
+    }
+    .profile-card-assignee-and-status {
+        margin-top: 10px; /*Set to 10px again after small tablet*/
     }
 }
 
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
-}
-
-@keyframes loading {
-    0% {
-        left: -45%;
-    }
-    100% {
-        left: 100%;
-    }
 }
