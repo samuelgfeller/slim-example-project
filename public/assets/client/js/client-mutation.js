@@ -1,4 +1,4 @@
-import {loadClients} from "./client-loading";
+import {loadClients} from "./list/client-loading.js";
 
 /**
  * After the click on the edit icon of a client, a modal box is opened

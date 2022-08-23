@@ -42,12 +42,12 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
         </div>
         <div class="profile-card-assignee-and-status">
             <div>
-                <select name="assigned-user">
+                <select name="assigned-user" class="default-select">
                 ${getDropdownOptions(allUsers, assignedUserId)}
                 </select>
             </div>
             <div>
-                <select name="status">
+                <select name="status" class="default-select">
                 ${getDropdownOptions(allStatuses, statusId)}
                 </select>
             </div>

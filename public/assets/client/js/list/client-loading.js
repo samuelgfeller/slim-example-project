@@ -1,6 +1,6 @@
-import {getClientProfileCardHtml} from "./templates/client-profile-card.html.js";
+import {getClientProfileCardHtml} from "../templates/client-profile-card.html.js";
 import {displayClientProfileCardLoadingPlaceholder, removeContentPlaceholder} from "./client-loading-placeholder.js";
-import {basePath} from "../../general/js/config.js";
+import {basePath} from "../../../general/js/config.js";
 
 /**
  *  Load clients into DOM

@@ -1,0 +1,24 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    .status-and-assigned-user-div select {
+        /*border: 3px solid #2e3e50;*/
+        background: #d7e9ff;
+        color: #2e3e50;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .dropdown-label {
+        display: block;
+    }
+
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+
+}
+
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+}

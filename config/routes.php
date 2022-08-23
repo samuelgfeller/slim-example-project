@@ -96,9 +96,13 @@ return function (App $app) {
         // Post requests where user DOESN'T need to be authenticated
         $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
 
-        $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientReadAction::class)->setName(
-            'client-read'
+        $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)->setName(
+            'client-read-page'
         );
+        /* For api response action:
+         json_encode transforms object with public attributes to camelCase which matches Google recommendation
+         https://stackoverflow.com/a/19287394/9013718
+         return $this->responder->respondWithJson($response, $postWithUser); */
         // Post requests where user DOES need to be authenticated
         $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)->setName(
             'client-submit-create'

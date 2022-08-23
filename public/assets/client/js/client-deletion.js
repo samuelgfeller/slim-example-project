@@ -1,4 +1,4 @@
-import {loadClients} from "./client-loading";
+import {loadClients} from "./list/client-loading.js";
 
 /**
  * Submit client deletion

@@ -1,4 +1,4 @@
-import {loadClients} from "./client-loading";
+import {loadClients} from "./list/client-loading.js";
 
 /**
  * Create and display modal box to create a new client

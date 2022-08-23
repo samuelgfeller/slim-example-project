@@ -76,7 +76,7 @@ class UserNameAbbreviator
             if (count($usersWithIdenticalFirstName) === 1) {
                 // reset() gives the first value of the array
                 $userWithUniqueFirstName = reset($usersWithIdenticalFirstName);
-                $outputNames[$userWithUniqueFirstName->id] = $userWithUniqueFirstName->firstName;
+                $outputNames[(int)$userWithUniqueFirstName->id] = $userWithUniqueFirstName->firstName;
                 continue;
             }
 
@@ -89,7 +89,7 @@ class UserNameAbbreviator
                 // Call recursive function which compares last name of currently iterated user with other users with same
                 // first name and returns the shortest version of non-duplicate lastname
                 $lastNameAbbr = $this->buildLastNameAbbreviation($user->surname, $usersToCheckAgainst);
-                $outputNames[$userId] = $user->firstName . ' ' . $lastNameAbbr;
+                $outputNames[(int)$userId] = $user->firstName . ' ' . $lastNameAbbr;
             }
         }
         return $outputNames;

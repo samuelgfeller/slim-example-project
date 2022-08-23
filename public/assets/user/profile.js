@@ -11,7 +11,7 @@ firstNameEditIco.addEventListener('click', function () {
     );
     createSubmitBtn(valueParent, 'first-name-submit', inputName);
 });
-// Surname
+// Last name
 let surnameEditIco = document.getElementById('edit-surname-ico');
 surnameEditIco.addEventListener('click', function () {
     let surnameValSpan = surnameEditIco.previousElementSibling;

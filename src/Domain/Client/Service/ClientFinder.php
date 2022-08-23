@@ -4,6 +4,9 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Client\Data\ClientData;
+use App\Domain\Client\Data\ClientDropdownValuesData;
+use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
@@ -40,9 +43,9 @@ class ClientFinder
      * Find one client in the database
      *
      * @param $id
-     * @return ClientDataAlias
+     * @return ClientData
      */
-    public function findClient($id): ClientDataAlias
+    public function findClient($id): ClientData
     {
         return $this->clientFinderRepository->findClientById($id);
     }
@@ -51,13 +54,12 @@ class ClientFinder
      * Find one client in the database with aggregate
      *
      * @param $id
-     * @return ClientDataAlias
+     * @return ClientResultAggregateData
      */
-    public function findClientAggregate($id): ClientDataAlias
+    public function findClientAggregate($id): ClientResultAggregateData
     {
         return $this->clientFinderRepository->findClientAggregateById($id);
     }
-
 
     /**
      * Return all posts which are linked to the given user
@@ -71,6 +73,19 @@ class ClientFinder
         $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsByUserId($userId);
 //        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
         return $clientResultCollection;
+    }
+
+    /**
+     * Find all dropdown values for a client
+     *
+     * @return ClientDropdownValuesData
+     */
+    public function findClientDropdownValues(): ClientDropdownValuesData
+    {
+        return new ClientDropdownValuesData(
+            $this->clientStatusFinderRepository->findAllStatusesForDropdown(),
+            $this->userNameAbbreviator->findUserNamesForDropdown(),
+        );
     }
 
 }

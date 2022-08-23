@@ -1,5 +1,5 @@
 import {loadClients} from "./client-loading.js";
-import {basePath} from "../../general/js/config.js";
+import {basePath} from "../../../general/js/config.js";
 
 // Load clients at page startup
 loadClients();
@@ -29,7 +29,14 @@ document.addEventListener('click', function (e) {
     // https://stackoverflow.com/questions/73406779/how-to-add-event-listener-on-dynamically-created-div-with-interactive-content
     const card = e.target.closest('.client-profile-card');
     if (card && e.target.tagName !== 'SELECT') {
-        window.location = basePath + 'clients/' + card.dataset.clientId;
+        const linkToOpenClient = basePath + 'clients/' + card.dataset.clientId;
+        // Detect if user wants to open in new tab with mouse middle button or ctrl key
+        if (e.key === 2 || e.button === 1 || e.ctrlKey){
+            // Open link in new tab
+            window.open(linkToOpenClient);
+        }else{
+            window.location = linkToOpenClient;
+        }
         // console.log('redirect to ' + card.dataset.clientId);
     }
 });

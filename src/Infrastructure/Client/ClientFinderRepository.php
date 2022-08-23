@@ -100,19 +100,27 @@ class ClientFinderRepository
      */
     public function findClientAggregateById(int $id): ClientResultAggregateData
     {
-        $query = $this->queryFactory->newQuery()->from('post');
+        $query = $this->queryFactory->newQuery()->from('client');
 
-        $query->select($this->clientAggregateSelectFields)->join(
-            ['table' => 'user', 'conditions' => 'client.user_id = user.id']
-        )
-            ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
+        $query->select($this->clientAggregateSelectFields)
+            ->join([
+                // `user` is alias and has to be same as $clientAggregateSelectFields (could be `u` as well as long as its consistent)
+                'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'client.user_id = user.id'],
+                'client_status' => [
+                    'table' => 'client_status',
+                    'type' => 'LEFT',
+                    'conditions' => 'client.client_status_id = client_status.id'
+                ]
+            ])
             ->andWhere(
                 ['client.id' => $id, 'client.deleted_at IS' => null]
             );
+
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
         return new ClientResultAggregateData($resultRows);
     }
+
 
 
     /**

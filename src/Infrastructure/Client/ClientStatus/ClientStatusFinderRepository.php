@@ -26,11 +26,10 @@ class ClientStatusFinderRepository
             ->andWhere(
                 ['deleted_at IS' => null]
             );
-        // Convert to list of Post objects with aggregate
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $statuses = [];
         foreach ($resultRows as $resultRow) {
-            $statuses[$resultRow['id']] = $resultRow['name'];
+            $statuses[(int)$resultRow['id']] = $resultRow['name'];
         }
         return $statuses;
     }

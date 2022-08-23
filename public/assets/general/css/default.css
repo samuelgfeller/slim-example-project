@@ -166,6 +166,14 @@ a:hover {
     border-bottom: 4px solid #b25353;
 }
 
+.default-select {
+    border-radius: 99px;
+    padding: 5px;
+    border: 1.5px solid #2e3e50;
+    font-size: 12px;
+    background: white;
+}
+
 @media (min-width: 961px) {
     #wrapper{
         height: 100vh;

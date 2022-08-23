@@ -17,7 +17,7 @@ $this->addAttribute('css', [
     'assets/general/css/loader/three-dots-loader.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/modal.css',
-    'assets/client/client.css',
+    'assets/client/client-list.css',
 ]);
 $this->addAttribute('js', ['assets/client/client.js', 'assets/general/js/modal.js']);
 ?>

@@ -117,7 +117,7 @@
         height: 20px;
     }
 
-    .profile-card-assignee-and-status {
+    .profile-card-assignee-and-status div {
         margin-top: 10px;
     }
 
@@ -127,11 +127,6 @@
     }
 
     .profile-card-content select {
-        border-radius: 99px;
-        padding: 5px;
-        border: 1.5px solid #2e3e50;
-        font-size: 12px;
-        background: white;
         width: 100%;
     }
 
@@ -216,7 +211,7 @@ for galaxy fold and very slim phones*/
     .profile-card-content select {
         font-size: 16px;
     }
-        .profile-card-assignee-and-status {
+        .profile-card-assignee-and-status div {
         margin-top: 18px;
     }
 }
@@ -245,7 +240,7 @@ for galaxy fold and very slim phones*/
     .profile-card-content select {
         font-size: 13px; /*Reset to 13px*/
     }
-    .profile-card-assignee-and-status {
+    .profile-card-assignee-and-status div {
         margin-top: 10px; /*Set to 10px again after small tablet*/
     }
 }

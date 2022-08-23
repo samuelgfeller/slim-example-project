@@ -3,21 +3,27 @@
 namespace App\Application\Actions\Client;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Service\ClientFilterFinder;
+use App\Domain\Client\Service\ClientFinder;
+use App\Domain\Post\Service\PostFinder;
+use App\Infrastructure\Client\ClientDeleterRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Action.
  */
-final class ClientListAllPageAction
+final class ClientReadPageAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param ClientFinder $clientFinder
      */
     public function __construct(
-        private Responder $responder,
+        private readonly Responder $responder,
+        private readonly ClientFinder $clientFinder,
     ) {
     }
 
@@ -30,14 +36,19 @@ final class ClientListAllPageAction
      * @param array $args
      * @return ResponseInterface The response
      * @throws \JsonException
-     * @throws \Throwable
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Loading the page. All posts are loaded dynamically with js after page load for a fast loading time
-        return $this->responder->render($response, 'client/clients-list.html.php');
+        $clientAggregate = $this->clientFinder->findClientAggregate((int)$args['client_id']);
+        $dropdownValues = $this->clientFinder->findClientDropdownValues();
+
+        return $this->responder->render(
+            $response,
+            'client/client-read.html.php',
+            ['clientAggregate' => $clientAggregate, 'dropdownValues' => $dropdownValues]
+        );
     }
 }
