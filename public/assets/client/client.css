@@ -93,7 +93,7 @@
         padding-top: 18px;
         text-align: center;
         margin-top: 0; /* To prevent gap between divs */
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
 
     /* Two different flex boxes make the second one containing the dropdowns below the phone and location info */
@@ -108,12 +108,7 @@
     .profile-card-infos-flexbox div {
         display: flex;
         align-content: center;
-    }
-
-    /* Gap on smallest version when flex items are wrapped and not side by side*/
-    .profile-card-infos-flexbox div:not(:first-of-type),
-    .profile-card-assignee-and-status div:not(:first-of-type) {
-        margin-top: 10px;
+        margin-top: 5px; /* space here for when wrapping */
     }
 
     /* Name of the location */
@@ -194,12 +189,6 @@
 /* Breakpoint: location and phone number and the 2 selects one below other
 for galaxy fold and very slim phones*/
 @media (min-width: 311px) {
-    /*Remove top margin when flex divs are wrapped*/
-    .profile-card-infos-flexbox div:not(:first-of-type),
-    .profile-card-assignee-and-status div:not(:first-of-type) {
-        margin-top: 0;
-    }
-
     .profile-card-assignee-and-status div {
         min-width: initial;
     }
@@ -249,10 +238,12 @@ for galaxy fold and very slim phones*/
     .profile-card-avatar {
         /*width: 130px;*/
     }
-
+    /* Reset values after mobile */
     .profile-card-content {
         font-size: initial;
-
+    }
+    .profile-card-content select {
+        font-size: 13px; /*Reset to 13px*/
     }
     .profile-card-assignee-and-status {
         margin-top: 10px; /*Set to 10px again after small tablet*/
