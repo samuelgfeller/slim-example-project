@@ -61,15 +61,27 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
     </div>
 </div>
 
-<div id="client-info-div">
-    Telefon-Nummer: <?= $clientAggregate->phone ?><br>
-    E-Mail: <?= $clientAggregate->email ?>
-    Ort: <?= $clientAggregate->location ?>
-
+<div id="client-personal-info-flex-container">
+    <div tabindex="0">
+        <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
+        <span><?= $clientAggregate->location ?></span>
+    </div>
+    <div tabindex="0">
+        <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+        <span><?= $clientAggregate->phone ?></span>
+    </div>
+    <div tabindex="0">
+        <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+        <span><?= $clientAggregate->email ?></span>
+    </div>
 </div>
 
 <h2>Aktivität</h2>
-<textarea class="client-activity-textarea" style="height: auto" id="second-tx">
+<textarea class="client-activity-textarea auto-resize-textarea" id="second-tx">
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
 labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
 et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</textarea>
+
+<textarea class="client-activity-textarea auto-resize-textarea" >
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+labore et dolore magna aliquyam erat, sed diam voluptua.</textarea>

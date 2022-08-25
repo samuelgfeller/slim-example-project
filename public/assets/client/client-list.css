@@ -107,7 +107,7 @@
     /* Make divs inside flexbox also flexbox to align text with icon*/
     .profile-card-infos-flexbox div {
         display: flex;
-        align-content: center;
+        align-items: center;
         margin-top: 5px; /* space here for when wrapping */
     }
 
