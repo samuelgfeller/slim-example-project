@@ -29,7 +29,7 @@ body, html {
     padding: 0;
     overflow-x: hidden; /* Needed for flash messages sliding in */
 }
-#wrapper{
+#wrapper {
     /* --vh set in default.js
     https://css-tricks.com/the-trick-to-viewport-units-on-mobile
     if not found 1vh is fallback value, phpStorm warning can be ignored */
@@ -60,7 +60,9 @@ h2, h1{
 h1{
     font-size: 3em;
 }
-
+h2{
+    font-size: 2em;
+}
 
 a:hover {
     /*text-shadow: 0 0 1px black;*/
@@ -175,7 +177,7 @@ a:hover {
 }
 
 @media (min-width: 961px) {
-    #wrapper{
+    #wrapper {
         height: 100vh;
     }
 }

@@ -2,21 +2,69 @@
 @media (min-width: 100px) {
     .status-and-assigned-user-div select {
         /*border: 3px solid #2e3e50;*/
-        background: #d7e9ff;
+        background: #f3f3f3;
         color: #2e3e50;
         font-weight: bold;
         font-size: 16px;
     }
-
     .dropdown-label {
         display: block;
+        font-weight: bold;
+        color: rgba(46, 62, 80, 0.84);
+        font-size: 13px;
+        margin: 0 0 3px 7px;
+    }
+    .status-and-assigned-user-div div{
+        display: inline-block;
+    }
+    .status-and-assigned-user-div{
+        display: flex;
+        justify-content: space-between;
+        column-gap: 6%;
+    }
+
+    #main-info-textarea-div textarea{
+        border-radius: 30px;
+        border: 4px solid #2e3e50;
+        /*border: none;*/
+        padding: 15px 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /*background: #ffdfa3;*/
+        /*box-shadow: 0 0px 20px 10px #ffdfa3;*/
+        background: white;
+
+        font-size: 18px;
+        line-height: 23px;
+        width: 100%;
+    }
+    #main-info-textarea-div{
+        flex-grow: 1;
+    }
+
+    #client-info-div{
+        display: inline-block;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 20px;
+        /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+    }
+
+    .client-activity-textarea{
+        border-radius: 30px;
+        width: 70%;
+        padding: 15px 20px;
+
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
     }
 
 }
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
-
+    .status-and-assigned-user-div {
+        margin-right: 10%;
+    }
 }
 
 @media (min-width: 961px) {

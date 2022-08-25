@@ -5,7 +5,7 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     #nav-container {
-        height: 100%;
+        /*height: 100%; takes entire remaining space putting content at the bottom */
         left: 0;
         position: relative; /* For z-index and ui to work, relative on mobile and fixed for desktop */
     }

@@ -51,7 +51,9 @@
     <title><?= $title ?></title>
 </head>
 <body>
-
+<!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
+<!-- Wrapper should englobe entire body content as its height is 100vh -->
+<div id="wrapper">
 <header>
     <!-- Application name -->
     <span>Slim Example Project</span>
@@ -103,8 +105,6 @@
         </div>
     </div>
 </aside>
-<!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
-<div id="wrapper">
     <main>
         <?= $this->fetch('layout/flash-messages.html.php') ?>
         <?= $content ?>

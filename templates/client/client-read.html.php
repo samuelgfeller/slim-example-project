@@ -20,39 +20,56 @@ $this->addAttribute('css', [
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
-$this->addAttribute('js', ['assets/client/client-read.js', 'assets/general/js/alert-modal.js']);
+$this->addAttribute('js', ['assets/client/js/read/client-read-main.js', 'assets/general/js/alert-modal.js']);
 ?>
 
 <h1><?= $clientAggregate->first_name . ' ' . $clientAggregate->last_name ?></h1>
 
 <div class="status-and-assigned-user-div">
+    <div id="main-info-textarea-div">
+        <textarea name="" id="first-tx" class="auto-resize-textarea">
+Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
+und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
+muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
+    </div>
     <!-- Status select options-->
-    <label for="client-status" class="dropdown-label">Status</label>
-    <select name="client_status" class="default-select">
-        <?php
-        // Client status select options
-        foreach ($dropdownValues->statuses as $statusId => $statusName) {
-            $selected = $statusId === $clientAggregate->client_status_id ? 'selected' : '';
-            echo "<option value='$statusId' $selected>$statusName</option>";
-        }
-        ?>
-    </select>
+    <div>
+        <label for="client-status" class="dropdown-label">Status</label>
+        <select name="client_status" class="default-select">
+            <?php
+            // Client status select options
+            foreach ($dropdownValues->statuses as $statusId => $statusName) {
+                $selected = $statusId === $clientAggregate->client_status_id ? 'selected' : '';
+                echo "<option value='$statusId' $selected>$statusName</option>";
+            }
+            ?>
+        </select>
+    </div>
 
     <!-- Assigned user select options-->
-    <label for="assigned-user" class="dropdown-label">Assigned to</label>
-    <select name="assigned_user" class="default-select" id="assigned-user">
-        <?php
-        // Client status select options
-        foreach ($dropdownValues->users as $id => $name) {
-            $selected = $id === $clientAggregate->user_id ? 'selected' : '';
-            echo "<option value='$id' $selected>$name</option>";
-        }
-        ?>
-    </select>
+    <div>
+        <label for="assigned-user" class="dropdown-label">Helper</label>
+        <select name="assigned_user" class="default-select" id="assigned-user">
+            <?php
+            // Client status select options
+            foreach ($dropdownValues->users as $id => $name) {
+                $selected = $id === $clientAggregate->user_id ? 'selected' : '';
+                echo "<option value='$id' $selected>$name</option>";
+            }
+            ?>
+        </select>
+    </div>
+</div>
+
+<div id="client-info-div">
+    Telefon-Nummer: <?= $clientAggregate->phone ?><br>
+    E-Mail: <?= $clientAggregate->email ?>
+    Ort: <?= $clientAggregate->location ?>
 
 </div>
 
-
-Telefon-Nummer: <?= $clientAggregate->phone ?><br>
-E-Mail: <?= $clientAggregate->email ?>
-Ort: <?= $clientAggregate->location ?>
+<h2>Aktivität</h2>
+<textarea class="client-activity-textarea" style="height: auto" id="second-tx">
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</textarea>
