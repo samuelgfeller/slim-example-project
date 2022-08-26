@@ -4,11 +4,12 @@ namespace App\Domain\Client\Data;
 
 
 use App\Domain\ClientStatus\Data\ClientStatusData;
+use App\Domain\Note\Data\NoteData;
 use App\Domain\User\Data\UserData;
 
 /**
  * Aggregate DTO to store ClientData combined with
- * linked (aggregate) classes.
+ * some linked (aggregate) classes.
  * Used as result DTO when access to aggregate
  * details is relevant.
  */
@@ -17,6 +18,8 @@ class ClientResultAggregateData extends ClientData
 
     public ?ClientStatusData $clientStatusData;
     public ?UserData $userData;
+    /** @var NoteData[]|null $notes */
+    public ?array $notes = null;
 
     /**
      * Client Data constructor.

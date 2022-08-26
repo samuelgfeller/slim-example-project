@@ -8,6 +8,7 @@ use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
+use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
@@ -19,6 +20,7 @@ class ClientFinder
         private readonly ClientUserRightSetter $clientUserRightSetter,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
+        private readonly NoteFinder $noteFinder,
     ) {
     }
 
@@ -53,12 +55,14 @@ class ClientFinder
     /**
      * Find one client in the database with aggregate
      *
-     * @param $id
+     * @param int $clientId
      * @return ClientResultAggregateData
      */
-    public function findClientAggregate($id): ClientResultAggregateData
+    public function findClientAggregate(int $clientId): ClientResultAggregateData
     {
-        return $this->clientFinderRepository->findClientAggregateById($id);
+        $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
+        $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId);
+        return $clientResultAggregate;
     }
 
     /**

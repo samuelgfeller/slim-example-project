@@ -92,20 +92,12 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
 
 <h2>Aktivität</h2>
 <div class="client-activity-textarea-div">
-<textarea class="auto-resize-textarea" id="second-tx" readonly="readonly" data-note-id="1">
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</textarea>
+    <?php
+    foreach ($clientAggregate->notes as $note) { // Below has to be on the same line to prevent unnecessary line break?>
+    <textarea class="auto-resize-textarea" data-note-id="<?= $note->id ?>" readonly="readonly"><?= $note->message ?></textarea>
     <div class="circle-loader client-read">
         <div class="checkmark draw"></div>
     </div>
-</div>
-
-<div class="client-activity-textarea-div">
-<textarea class="auto-resize-textarea" data-note-id="2">
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-labore et dolore magna aliquyam erat, sed diam voluptua.</textarea>
-    <div class="circle-loader client-read">
-        <div class="checkmark draw"></div>
-    </div>
+    <?php
+    } ?>
 </div>

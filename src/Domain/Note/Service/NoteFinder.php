@@ -59,6 +59,20 @@ class NoteFinder
     }
 
     /**
+     * Return all notes which are linked to the given client
+     *
+     * @param int $clientId
+     * @return UserNoteData[]
+     */
+    public function findAllNotesFromClient(int $clientId): array
+    {
+        $allNotes = $this->noteFinderRepository->findAllNotesByClientId($clientId);
+//        $this->changeDateFormat($allNotes);
+//        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
+        return $allNotes;
+    }
+
+    /**
      * Change created and updated date format from SQL datetime to
      * something we are used to see in Switzerland
      *

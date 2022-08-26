@@ -146,4 +146,34 @@ class NoteFinderRepository
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, UserNoteData::class);
     }
+
+    /**
+     * Return all notes which are linked to the given client
+     *
+     * @param int $clientId
+     * @return UserNoteData[]
+     */
+    public function findAllNotesByClientId(int $clientId): array
+    {
+        $query = $this->queryFactory->newQuery()->from('note');
+
+        $query->select(
+            [
+                'note.id',
+                'note.message',
+                'note.created_at',
+                'note.updated_at',
+            ]
+        )->andWhere(
+            [
+                'note.client_id' => $clientId, // Not unsafe as it's not an expression and thus escaped by querybuilder
+                'note.deleted_at IS' => null
+            ]
+        );
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+        // Convert to list of Note objects with associated User info
+        return $this->hydrator->hydrate($resultRows, NoteData::class);
+    }
+
+
 }

@@ -21,7 +21,7 @@ CREATE TABLE `user_verification`
     `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`    INT(11) UNSIGNED NOT NULL,
     `token`      VARCHAR(300)     NOT NULL COLLATE utf8mb4_unicode_ci,
-    `expires_at`    BIGINT(20)       NOT NULL,
+    `expires_at` BIGINT(20)       NOT NULL,
     `used_at`    DATETIME         NULL DEFAULT NULL,
     `created_at` DATETIME         NULL DEFAULT current_timestamp(),
     `deleted_at` DATETIME         NULL DEFAULT NULL,
@@ -47,16 +47,22 @@ CREATE TABLE `request_track`
   ENGINE = InnoDB
 ;
 
-CREATE TABLE `post`
+CREATE TABLE `note`
 (
-    `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`    INT(11) UNSIGNED NOT NULL,
-    `message`    VARCHAR(500)     NULL     DEFAULT NULL,
-    `updated_at` DATETIME         NULL     DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
-    `created_at` DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    `deleted_at` DATETIME         NULL     DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) COLLATE = utf8mb4_unicode_ci
-  ENGINE = InnoDB
+    `id`         INT(11)      NOT NULL AUTO_INCREMENT,
+    `user_id`    INT(11)      NOT NULL,
+    `client_id`  INT(11)      NOT NULL,
+    `message`    VARCHAR(500) NULL     DEFAULT NULL COLLATE 'utf8_general_ci',
+    `updated_at` DATETIME     NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    `created_at` DATETIME     NOT NULL DEFAULT current_timestamp(),
+    `deleted_at` DATETIME     NULL     DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `FK__user` (`user_id`) USING BTREE,
+    INDEX `FK_note_client` (`client_id`) USING BTREE,
+    CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+    CONSTRAINT `FK_note_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+    COLLATE = 'utf8_general_ci'
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 9
 ;
