@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Post\Exception;
+namespace App\Domain\Note\Exception;
 
 /**
  * Class ValidationException.
  */
-class InvalidPostFilterException extends \RuntimeException
+class InvalidNoteFilterException extends \RuntimeException
 {
 
     public function __construct($message)

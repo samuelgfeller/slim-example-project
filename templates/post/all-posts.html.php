@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $userPosts \App\Domain\Post\Data\UserPostData[]
+ * @var $userPosts \App\Domain\Post\Data\UserNoteData[]
  */
 
 $this->setLayout('layout.html.php');

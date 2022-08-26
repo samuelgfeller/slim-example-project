@@ -31,7 +31,7 @@ $this->addAttribute('js', ['assets/client/js/read/client-read-main.js', 'assets/
 Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
 und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
 muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
-        <div class="circle-loader client-read color-inverted">
+        <div class="circle-loader client-read">
             <div class="checkmark draw"></div>
         </div>
     </div>

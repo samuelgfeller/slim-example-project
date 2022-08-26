@@ -5,8 +5,8 @@ namespace App\Application\Actions\Client\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Post\Exception\InvalidPostFilterException;
-use App\Domain\Post\Service\PostFilterFinder;
+use App\Domain\Note\Exception\InvalidNoteFilterException;
+use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,7 +46,7 @@ final class ClientListAction
         try {
             // Retrieve posts with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
-        } catch (InvalidPostFilterException $invalidPostFilterException) {
+        } catch (InvalidNoteFilterException $invalidPostFilterException) {
             return $this->responder->respondWithJson(
                 $response,
                 // Response format tested in PostFilterProvider.php

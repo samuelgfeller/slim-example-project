@@ -1,34 +1,34 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Post\Exception\InvalidPostFilterException;
-use App\Domain\Post\Service\PostFilterFinder;
+use App\Domain\Note\Exception\InvalidNoteFilterException;
+use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Post list all and own action.
+ * Note list all and own action.
  */
-final class PostListAction
+final class NoteListAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFilterFinder $postFilterFinder
+     * @param NoteFilterFinder $noteFilterFinder
      */
     public function __construct(
         private Responder $responder,
-        private PostFilterFinder $postFilterFinder,
+        private NoteFilterFinder $noteFilterFinder,
     ) {
     }
 
     /**
-     * Post list all and own Action.
+     * Note list all and own Action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
@@ -43,19 +43,19 @@ final class PostListAction
         array $args
     ): ResponseInterface {
         try {
-            // Retrieve posts with given filter values (or none)
-            $userPosts = $this->postFilterFinder->findPostsWithFilter($request->getQueryParams());
-        } catch (InvalidPostFilterException $invalidPostFilterException) {
+            // Retrieve notes with given filter values (or none)
+            $userNotes = $this->noteFilterFinder->findNotesWithFilter($request->getQueryParams());
+        } catch (InvalidNoteFilterException $invalidNoteFilterException) {
             return $this->responder->respondWithJson(
                 $response,
-                // Response format tested in PostFilterProvider.php
+                // Response format tested in NoteFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidPostFilterException->getMessage()
+                    'message' => $invalidNoteFilterException->getMessage()
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
-        } // If user requests its own posts he has to be logged in
+        } // If user requests its own notes he has to be logged in
         catch (UnauthorizedException $unauthorizedException) {
             // Respond with status code 401 Unauthorized which is caught in the Ajax call
             return $this->responder->respondWithJson(
@@ -69,6 +69,6 @@ final class PostListAction
                 401
             );
         }
-        return $this->responder->respondWithJson($response, $userPosts);
+        return $this->responder->respondWithJson($response, $userNotes);
     }
 }

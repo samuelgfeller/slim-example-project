@@ -5,14 +5,14 @@ namespace App\Domain\Client\Service;
 
 
 use App\Domain\Client\Data\ClientData;
-use App\Infrastructure\Post\PostCreatorRepository;
+use App\Infrastructure\Note\NoteCreatorRepository;
 
 class ClientCreator
 {
 
     public function __construct(
         private ClientValidator       $postValidator,
-        private PostCreatorRepository $postCreatorRepository
+        private NoteCreatorRepository $postCreatorRepository
     ) { }
 
     /**

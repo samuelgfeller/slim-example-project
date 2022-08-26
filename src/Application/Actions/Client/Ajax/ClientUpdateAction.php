@@ -7,9 +7,9 @@ use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Data\ClientData;
-use App\Domain\Post\Service\PostFinder;
-use App\Domain\Post\Service\PostUpdater;
+use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Service\NoteFinder;
+use App\Domain\Note\Service\NoteUpdater;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -34,14 +34,14 @@ final class ClientUpdateAction
      *
      * @param Responder $responder The responder
      * @param SessionInterface $session
-     * @param PostUpdater $postUpdater
+     * @param NoteUpdater $postUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
         private SessionInterface $session,
-        private PostUpdater $postUpdater,
+        private NoteUpdater $postUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
     ) {

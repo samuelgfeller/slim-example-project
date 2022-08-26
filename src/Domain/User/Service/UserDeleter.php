@@ -7,7 +7,7 @@ namespace App\Domain\User\Service;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\Post\PostDeleterRepository;
+use App\Infrastructure\Note\NoteDeleterRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -17,7 +17,7 @@ class UserDeleter
     protected LoggerInterface $logger;
 
     /**
-     * @param PostDeleterRepository $postDeleterRepository
+     * @param NoteDeleterRepository $postDeleterRepository
      * @param UserDeleterRepository $userDeleterRepository
      * @param UserRoleFinderRepository $userRoleFinderRepository
      * @param LoggerFactory $logger
@@ -26,7 +26,7 @@ class UserDeleter
         LoggerFactory $logger,
         private UserDeleterRepository $userDeleterRepository,
         private UserRoleFinderRepository $userRoleFinderRepository,
-        private PostDeleterRepository $postDeleterRepository,
+        private NoteDeleterRepository $postDeleterRepository,
         private SessionInterface $session,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-delete');

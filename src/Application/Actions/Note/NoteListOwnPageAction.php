@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\Actions\Post;
+namespace App\Application\Actions\Note;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\Exception\InvalidPostFilterException;
-use App\Domain\Post\Service\PostFilterFinder;
+use App\Domain\Note\Exception\InvalidNoteFilterException;
+use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class PostListOwnPageAction
+final class NoteListOwnPageAction
 {
     /**
      * The constructor.

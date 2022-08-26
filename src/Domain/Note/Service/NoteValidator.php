@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Domain\Post\Service;
+namespace App\Domain\Note\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Data\ClientData;
+use App\Domain\Note\Data\NoteData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\User\UserExistenceCheckerRepository;
 
 /**
- * Class PostValidator
+ * Class NoteValidator
  */
-class PostValidator extends AppValidation
+class NoteValidator extends AppValidation
 {
 
     /**
-     * PostValidator constructor.
+     * NoteValidator constructor.
      *
      * @param LoggerFactory $logger
      * @param UserExistenceCheckerRepository $userExistenceCheckerRepository
@@ -26,52 +26,52 @@ class PostValidator extends AppValidation
         private UserExistenceCheckerRepository $userExistenceCheckerRepository
     ) {
         parent::__construct(
-            $logger->addFileHandler('error.log')->createInstance('post-validation')
+            $logger->addFileHandler('error.log')->createInstance('note-validation')
         );
     }
 
     /**
-     * Validate post creation
+     * Validate note creation
      *
-     * @param ClientData $post
+     * @param NoteData $note
      * @throws ValidationException
      */
-    public function validatePostCreation(ClientData $post): void
+    public function validateNoteCreation(NoteData $note): void
     {
-        // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
-        $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
+        // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
+        $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
-        $this->validateMessage($post->message, $validationResult, true);
+        $this->validateMessage($note->message, $validationResult, true);
         // It's a bit pointless to check user existence as user should always exist if he's logged in
-        $this->validateUser($post->userId, $validationResult, true);
+        $this->validateUser($note->userId, $validationResult, true);
 
         $this->throwOnError($validationResult);
     }
 
     /**
-     * Validate post update
+     * Validate note update
      *
-     * @param ClientData $post
+     * @param NoteData $note
      * @throws ValidationException
      */
-    public function validatePostUpdate(ClientData $post): void
+    public function validateNoteUpdate(NoteData $note): void
     {
-        // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
-        $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
+        // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
+        $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
-        if (null !== $post->message) {
-            $this->validateMessage($post->message, $validationResult, false);
+        if (null !== $note->message) {
+            $this->validateMessage($note->message, $validationResult, false);
         }
 
         $this->throwOnError($validationResult);
     }
 
 
-    protected function validateMessage($postMsg, ValidationResult $validationResult, bool $required): void
+    protected function validateMessage($noteMsg, ValidationResult $validationResult, bool $required): void
     {
-        if (null !== $postMsg && '' !== $postMsg) {
-            $this->validateLengthMax($postMsg, 'message', $validationResult, 500);
-            $this->validateLengthMin($postMsg, 'message', $validationResult, 4);
+        if (null !== $noteMsg && '' !== $noteMsg) {
+            $this->validateLengthMax($noteMsg, 'message', $validationResult, 500);
+            $this->validateLengthMin($noteMsg, 'message', $validationResult, 4);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('message', 'Message is required but not given');

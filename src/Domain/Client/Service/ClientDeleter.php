@@ -7,7 +7,7 @@ namespace App\Domain\Client\Service;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\Client\ClientDeleterRepository;
-use App\Infrastructure\Post\PostDeleterRepository;
+use App\Infrastructure\Note\NoteDeleterRepository;
 
 class ClientDeleter
 {

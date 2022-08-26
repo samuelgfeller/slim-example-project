@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Post\Service\PostFinder;
+use App\Domain\Note\Service\NoteFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Action.
  */
-final class PostReadAction
+final class NoteReadAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param PostFinder $postFinder
+     * @param NoteFinder $noteFinder
      */
     public function __construct(
         private Responder $responder,
-        private PostFinder $postFinder,
+        private NoteFinder $noteFinder,
     ) {
     }
 
@@ -36,10 +36,10 @@ final class PostReadAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $postWithUser = $this->postFinder->findPost((int)$args['post_id']);
+        $noteWithUser = $this->noteFinder->findNote((int)$args['note_id']);
 
         // json_encode transforms object with public attributes to camelCase which matches Google recommendation
         // https://stackoverflow.com/a/19287394/9013718
-        return $this->responder->respondWithJson($response, $postWithUser);
+        return $this->responder->respondWithJson($response, $noteWithUser);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Post\Data\ClientData;
-use App\Domain\Post\Service\ClientCreator;
+use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Service\NoteCreator;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -15,7 +15,7 @@ use Slim\Exception\HttpBadRequestException;
 /**
  * Action.
  */
-final class PostCreateAction
+final class NoteCreateAction
 {
     /**
      * @var Responder
@@ -28,11 +28,11 @@ final class PostCreateAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientCreator $postCreator
+     * @param NoteCreator $noteCreator
      */
     public function __construct(
-        Responder                $responder,
-        private ClientCreator    $postCreator,
+        Responder $responder,
+        private NoteCreator $noteCreator,
         private SessionInterface $session,
     ) {
         $this->responder = $responder;
@@ -54,13 +54,13 @@ final class PostCreateAction
         array $args
     ): ResponseInterface {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $postData = $request->getParsedBody();
+            $noteData = $request->getParsedBody();
 
             // If a html form name changes, these changes have to be done in the data class constructor
             // Check that request body syntax is formatted right (if changed, )
-            if (null !== $postData && [] !== $postData && isset($postData['message']) && count($postData) === 1) {
+            if (null !== $noteData && [] !== $noteData && isset($noteData['message']) && count($noteData) === 1) {
                 try {
-                    $insertId = $this->postCreator->createPost($postData, $loggedInUserId);
+                    $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),
@@ -73,9 +73,9 @@ final class PostCreateAction
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'Post not created'
+                    'message' => 'Note not created'
                 ]);
-                return $response->withAddedHeader('Warning', 'The post could not be created');
+                return $response->withAddedHeader('Warning', 'The note could not be created');
             }
             throw new HttpBadRequestException($request, 'Request body malformed.');
         }

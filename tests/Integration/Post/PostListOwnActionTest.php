@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Post;
 
-use App\Domain\Post\Data\UserPostData;
+use App\Domain\Post\Data\UserNoteData;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
@@ -118,7 +118,7 @@ class PostListOwnActionTest extends TestCase
                 'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
-                'userMutationRight' => UserPostData::MUTATION_PERMISSION_ALL, // All as its own posts
+                'userMutationRight' => UserNoteData::MUTATION_PERMISSION_ALL, // All as its own posts
             ];
         }
 

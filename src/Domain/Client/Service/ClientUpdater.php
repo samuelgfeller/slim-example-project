@@ -8,7 +8,7 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Client\Data\ClientData;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\Post\PostUpdaterRepository;
+use App\Infrastructure\Note\NoteUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
 class ClientUpdater
@@ -17,7 +17,7 @@ class ClientUpdater
 
     public function __construct(
         private ClientValidator          $postValidator,
-        private PostUpdaterRepository    $postUpdaterRepository,
+        private NoteUpdaterRepository    $postUpdaterRepository,
         private UserRoleFinderRepository $userRoleFinderRepository,
         private ClientFinder             $postFinder,
         LoggerFactory                    $logger

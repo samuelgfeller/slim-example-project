@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Infrastructure\Post;
+namespace App\Infrastructure\Note;
 
 
 use App\Infrastructure\Factory\QueryFactory;
 
-class PostUpdaterRepository
+class NoteUpdaterRepository
 
 {
     public function __construct(
@@ -16,15 +16,15 @@ class PostUpdaterRepository
     }
 
     /**
-     * Update values from post
+     * Update values from note
      *
      * @param int $id
      * @param array $data ['col_name' => 'New name']
      * @return bool
      */
-    public function updatePost(array $data, int $id): bool
+    public function updateNote(array $data, int $id): bool
     {
-        $query = $this->queryFactory->newQuery()->update('post')->set($data)->where(['id' => $id]);
+        $query = $this->queryFactory->newQuery()->update('note')->set($data)->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 }

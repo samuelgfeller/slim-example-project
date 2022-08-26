@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Domain\Post\Data;
+namespace App\Domain\Note\Data;
 
 
 use App\Common\ArrayReader;
 use App\Domain\User\Data\UserData;
 
-class PostData
+class NoteData
 {
     public ?int $id;
     public ?int $userId;

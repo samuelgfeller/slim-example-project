@@ -91,9 +91,9 @@ return function (App $app) {
         );
     })->add(UserAuthenticationMiddleware::class);
 
-    // Post CRUD routes; I try to keep this as REST as possible so the page actions have urls other than /posts
+    // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
     $app->group('/clients', function (RouteCollectorProxy $group) {
-        // Post requests where user DOESN'T need to be authenticated
+        // Client requests where user DOESN'T need to be authenticated
         $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
 
         $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)->setName(
@@ -103,7 +103,7 @@ return function (App $app) {
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
          https://stackoverflow.com/a/19287394/9013718
          return $this->responder->respondWithJson($response, $postWithUser); */
-        // Post requests where user DOES need to be authenticated
+        // Client requests where user DOES need to be authenticated
         $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)->setName(
             'client-submit-create'
         )->add(
@@ -124,26 +124,26 @@ return function (App $app) {
         'client-list-assigned-to-me-page'
     )->add(UserAuthenticationMiddleware::class);
 
-    // Post CRUD routes; I try to keep this as REST as possible so the page actions have urls other than /posts
-    $app->group('/posts', function (RouteCollectorProxy $group) {
-        // Post requests where user DOESN'T need to be authenticated
-        $group->get('', \App\Application\Actions\Post\Ajax\ClientListAction::class)->setName('post-list');
+    // Note routes
+    $app->group('/notes', function (RouteCollectorProxy $group) {
+        // Note requests where user DOESN'T need to be authenticated
+        $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
 
-        $group->get('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientReadAction::class)->setName(
-            'post-read'
+        $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteReadAction::class)->setName(
+            'note-read'
         );
-        // Post requests where user DOES need to be authenticated
-        $group->post('', \App\Application\Actions\Post\Ajax\ClientCreateAction::class)->setName(
-            'post-submit-create'
+        // Note requests where user DOES need to be authenticated
+        $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
+            'note-submit-create'
         )->add(
             UserAuthenticationMiddleware::class
         );
-        $group->put('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientUpdateAction::class)->add(
+        $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateAction::class)->add(
             UserAuthenticationMiddleware::class
-        )->setName('post-submit-update');
-        $group->delete('/{post_id:[0-9]+}', \App\Application\Actions\Post\Ajax\ClientDeleteAction::class)->add(
+        )->setName('note-submit-update');
+        $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteAction::class)->add(
             UserAuthenticationMiddleware::class
-        )->setName('post-submit-delete');
+        )->setName('note-submit-delete');
     });
 
 //    $app->get( '/favicon.ico', function ($request, $response) {

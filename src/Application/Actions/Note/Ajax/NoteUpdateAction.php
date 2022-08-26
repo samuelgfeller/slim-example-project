@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Application\Actions\Post\Ajax;
+namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Post\Data\ClientData;
-use App\Domain\Post\Service\PostFinder;
-use App\Domain\Post\Service\PostUpdater;
+use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Service\NoteFinder;
+use App\Domain\Note\Service\NoteUpdater;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Action.
  */
-final class PostUpdateAction
+final class NoteUpdateAction
 {
     /**
      * @var Responder
@@ -34,19 +34,19 @@ final class PostUpdateAction
      *
      * @param Responder $responder The responder
      * @param SessionInterface $session
-     * @param PostUpdater $postUpdater
+     * @param NoteUpdater $noteUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
         private SessionInterface $session,
-        private PostUpdater $postUpdater,
+        private NoteUpdater $noteUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
     ) {
         $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('post-update');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('note-update');
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -66,20 +66,20 @@ final class PostUpdateAction
         array $args
     ): ResponseInterface {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $postIdToChange = (int)$args['post_id'];
-            $postValues = $request->getParsedBody();
+            $noteIdToChange = (int)$args['note_id'];
+            $noteValues = $request->getParsedBody();
 
             try {
-                $updated = $this->postUpdater->updatePost($postIdToChange, $postValues, $loggedInUserId);
+                $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues, $loggedInUserId);
 
                 if ($updated) {
                     return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'The post was not updated.'
+                    'message' => 'The note was not updated.'
                 ]);
-                return $response->withAddedHeader('Warning', 'The post was not updated.');
+                return $response->withAddedHeader('Warning', 'The note was not updated.');
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),
@@ -88,7 +88,7 @@ final class PostUpdateAction
             } catch (ForbiddenException $fe) {
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'You can only edit your own post or be an admin to edit others'],
+                    ['status' => 'error', 'message' => 'You can only edit your own note or be an admin to edit others'],
                     403
                 );
             }

@@ -6,7 +6,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Post\Exception\InvalidPostFilterException;
+use App\Domain\Post\Exception\InvalidNoteFilterException;
 use Odan\Session\SessionInterface;
 
 class ClientFilterFinder
@@ -41,7 +41,7 @@ class ClientFilterFinder
             } // If not user 'session' and also not numeric
             elseif (!is_numeric($params['user'])) {
                 // Exception message tested in PostFilterProvider.php
-                throw new InvalidPostFilterException('Filter "user" is not numeric.');
+                throw new InvalidNoteFilterException('Filter "user" is not numeric.');
             }
             return $this->clientFinder->findAllClientsFromUser((int)$params['user']);
         }
