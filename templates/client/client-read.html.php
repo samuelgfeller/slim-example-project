@@ -16,7 +16,7 @@ $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
     'assets/general/css/form.css',
     'assets/general/css/alert-modal.css',
-    'assets/general/css/loader/three-dots-loader.css',
+    'assets/general/css/loader/animated-checkmark.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
@@ -62,26 +62,47 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
 </div>
 
 <div id="client-personal-info-flex-container">
-    <div tabindex="0">
-        <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-        <span><?= $clientAggregate->location ?></span>
-    </div>
-    <div tabindex="0">
-        <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-        <span><?= $clientAggregate->phone ?></span>
-    </div>
-    <div tabindex="0">
-        <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
-        <span><?= $clientAggregate->email ?></span>
-    </div>
+
+    <?php
+    if ($clientAggregate->phone) { ?>
+        <div tabindex="0">
+            <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
+            <span><?= $clientAggregate->location ?></span>
+        </div>
+        <?php
+    }
+    if ($clientAggregate->phone) { ?>
+        <div tabindex="0">
+            <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+            <span><?= $clientAggregate->phone ?></span>
+        </div>
+        <?php
+    }
+    if ($clientAggregate->email) { ?>
+        <div tabindex="0">
+            <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+            <span><?= $clientAggregate->email ?></span>
+        </div>
+        <?php
+    } ?>
 </div>
 
 <h2>Aktivität</h2>
-<textarea class="client-activity-textarea auto-resize-textarea" id="second-tx">
+<div class="client-activity-textarea-div">
+<textarea class="auto-resize-textarea" id="second-tx" readonly="readonly" data-note-id="1">
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
 labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
 et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</textarea>
+    <div class="circle-loader client-read">
+        <div class="checkmark draw"></div>
+    </div>
+</div>
 
-<textarea class="client-activity-textarea auto-resize-textarea" >
+<div class="client-activity-textarea-div">
+<textarea class="auto-resize-textarea" data-note-id="2">
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
 labore et dolore magna aliquyam erat, sed diam voluptua.</textarea>
+    <div class="circle-loader client-read">
+        <div class="checkmark draw"></div>
+    </div>
+</div>

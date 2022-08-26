@@ -1,0 +1,83 @@
+/* Source: https://stackoverflow.com/a/53123267/9013718 */
+:root{
+    --animated-checkmark-factor: 0.25;
+    --animated-checkmark-color: #2e3e50;
+}
+.circle-loader {
+    margin-bottom: calc(3.5em * var(--animated-checkmark-factor));
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-left-color: var(--animated-checkmark-color);
+    animation: loader-spin 1.2s infinite linear;
+    /*position: relative;*/
+    display: none;
+    vertical-align: top;
+    border-radius: 50%;
+    width: calc(7em * var(--animated-checkmark-factor));
+    height: calc(7em * var(--animated-checkmark-factor));
+}
+
+.load-complete {
+    animation: none;
+    border-color: var(--animated-checkmark-color);
+    transition: border 500ms ease-out;
+}
+
+.checkmark {
+    display: none;
+}
+
+.checkmark.draw:after {
+    animation-duration: 800ms;
+    animation-timing-function: ease;
+    animation-name: checkmark;
+    transform: scaleX(-1) rotate(135deg);
+}
+
+.checkmark:after {
+    opacity: 1;
+    height: calc(3.5em * var(--animated-checkmark-factor));
+    width: calc(1.75em * var(--animated-checkmark-factor));
+    transform-origin: left top;
+    /*transform-origin: 50% 50%;*/
+    border-right: 2px solid var(--animated-checkmark-color);
+    border-top: 2px solid var(--animated-checkmark-color);
+    content: "";
+    /*left: calc(1.75em * var(--animated-checkmark-factor));*/
+    /*top: calc(3.5em * var(--animated-checkmark-factor));*/
+    position: absolute;
+    top: 50%; right: 50%;
+    /*transform: ;*/
+}
+
+
+@keyframes loader-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+    20% {
+        height: 0;
+        width: calc(1.75em * var(--animated-checkmark-factor));
+        opacity: 1;
+    }
+    40% {
+        height: calc(3.5em * var(--animated-checkmark-factor));
+        width: calc(1.75em * var(--animated-checkmark-factor));
+        opacity: 1;
+    }
+    100% {
+        height: calc(3.5em * var(--animated-checkmark-factor));
+        width: calc(1.75em * var(--animated-checkmark-factor));
+        opacity: 1;
+    }
+}
