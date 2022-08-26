@@ -16,7 +16,10 @@ window.addEventListener("DOMContentLoaded", function (event) {
  * Activity textareas should be editable on click and auto save on input pause
  */
 function initActivityTextareasEventListeners() {
-    let activityTextareas = document.querySelectorAll('.client-activity-textarea-div textarea');
+    let activityTextareas = document.querySelectorAll(
+        '.client-activity-textarea-div textarea, #main-note-textarea-div textarea'
+    );
+    console.log(activityTextareas);
     let textareaChangeTimeoutId;
     for (let textarea of activityTextareas) {
         textarea.addEventListener('click', function (e) {
@@ -36,6 +39,7 @@ function initActivityTextareasEventListeners() {
     }
 
     let circleLoaderTimeoutId;
+
     function saveToDb() {
         console.log('save to db');
         // show circle loader

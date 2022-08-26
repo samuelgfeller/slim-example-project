@@ -25,12 +25,15 @@ $this->addAttribute('js', ['assets/client/js/read/client-read-main.js', 'assets/
 
 <h1><?= $clientAggregate->first_name . ' ' . $clientAggregate->last_name ?></h1>
 
-<div class="status-and-assigned-user-div">
-    <div id="main-info-textarea-div">
+<div class="main-note-status-assigned-user-div">
+    <div id="main-note-textarea-div">
         <textarea name="" id="first-tx" class="auto-resize-textarea">
 Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
 und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
 muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
+        <div class="circle-loader client-read color-inverted">
+            <div class="checkmark draw"></div>
+        </div>
     </div>
     <!-- Status select options-->
     <div>

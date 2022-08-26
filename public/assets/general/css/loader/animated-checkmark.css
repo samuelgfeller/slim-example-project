@@ -1,7 +1,8 @@
-/* Source: https://stackoverflow.com/a/53123267/9013718 */
+/* Source: https://stackoverflow.com/a/53123267/9013718 https://codepen.io/scottloway/pen/zqoLyQ */
 :root{
     --animated-checkmark-factor: 0.25;
     --animated-checkmark-color: #2e3e50;
+    --animated-checkmark-bright-color: #eef0f1;
 }
 .circle-loader {
     margin-bottom: calc(3.5em * var(--animated-checkmark-factor));
@@ -14,6 +15,7 @@
     border-radius: 50%;
     width: calc(7em * var(--animated-checkmark-factor));
     height: calc(7em * var(--animated-checkmark-factor));
+    background: var(--animated-checkmark-bright-color);
 }
 
 .load-complete {
@@ -47,6 +49,20 @@
     position: absolute;
     top: 50%; right: 50%;
     /*transform: ;*/
+}
+
+/*If it contains the class "color-inverted"*/
+.circle-loader.color-inverted{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-left-color: var(--animated-checkmark-bright-color);
+    background: var(--animated-checkmark-color);
+}
+.circle-loader.color-inverted.load-complete{
+    border-color: var(--animated-checkmark-bright-color) !important;
+}
+.color-inverted .checkmark:after{
+    border-right: 2px solid var(--animated-checkmark-bright-color);
+    border-top: 2px solid var(--animated-checkmark-bright-color);
 }
 
 
