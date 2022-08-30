@@ -39,9 +39,7 @@ window.addEventListener("load", function (event) {
 // DOMContentLoaded faster than load as it doesn't wait on all resources
 window.addEventListener("DOMContentLoaded", function (event) {
     /** Auto resize textareas */
-        // Target all textarea fields that have class name auto-resize-textarea
-    let textareasToResize = document.getElementsByClassName("auto-resize-textarea");
-    initAutoResizingTextareas(textareasToResize);
+    initAutoResizingTextareas();
 });
 
 
@@ -88,10 +86,10 @@ function slideFlashOut(flash) {
  * Auto resize all given textareas
  * Source: https://stackoverflow.com/a/25621277/9013718
  * Known issue: https://stackoverflow.com/q/73475416/9013718
- *
- * @param {object}textareas object array of textareas
  */
-function initAutoResizingTextareas(textareas) {
+function initAutoResizingTextareas() {
+    // Target all textarea fields that have class name auto-resize-textarea
+    let textareas = document.getElementsByClassName("auto-resize-textarea");
     // Init observer to call resizeTextarea when the dimensions of the textareas change
     let observer = new ResizeObserver(entries => {
         for (let entry of entries) {
@@ -115,7 +113,47 @@ function initAutoResizingTextareas(textareas) {
         observer.observe(textarea);
     }
 
+    var working = false;
+    function resizeTextareaNew() {
+        if (working) {
+            console.log('working');
+            return;
+        }
+        working = true;
 
+        // Textareas have default 2px padding and if not set it returns 0px
+        const style = getComputedStyle(this);
+        const paddingBottom = Number.parseFloat(style.getPropertyValue('padding-bottom'));
+        const paddingTop = Number.parseFloat(style.getPropertyValue('padding-top'));
+        const borderBottom = Number.parseFloat(style.getPropertyValue('border-bottom'));
+        const borderTop = Number.parseFloat(style.getPropertyValue('border-top'));
+        const adjust = borderBottom + borderTop;
+
+        // Reset textarea height to (supposedly) have correct scrollHeight afterwards
+        const scrollHeightBefore = this.scrollHeight;
+        const offsetHeightBefore = this.offsetHeight;
+        const styleHeightBefore = this.style.height;
+        console.log('before', scrollHeightBefore, offsetHeightBefore, styleHeightBefore);
+        this.style.height = "0px";
+
+        const scrollHeightAfter = this.scrollHeight;
+        const offsetHeightAfter = this.offsetHeight;
+        const styleHeightAfter = this.style.height;
+        console.log('after', scrollHeightAfter, offsetHeightAfter, styleHeightAfter);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                working = false;
+            });
+            // Adapt height of textarea to new scrollHeight and padding
+            if (scrollHeightBefore > offsetHeightBefore) {
+                this.style.height = (scrollHeightBefore + adjust) + "px";
+            } else {
+                this.style.height = (scrollHeightAfter + adjust) + "px";
+            }
+            console.log(scrollHeightBefore > offsetHeightBefore, this.style.height);
+        });
+    }
     function resizeTextarea() {
         // Textareas have default 2px padding and if not set it returns 0px
         let padding = window.getComputedStyle(this).getPropertyValue('padding-bottom');
@@ -123,7 +161,7 @@ function initAutoResizingTextareas(textareas) {
         padding = parseInt(padding.replace('px', ''));
         // console.log('scrollHeight before height reset: '+this.scrollHeight);
         // Reset textarea height to (supposedly) have correct scrollHeight afterwards
-        this.style.height = "auto";
+        this.style.height = "1px";
         // console.log('scrollHeight after height reset: ' + this.scrollHeight);
         // Adapt height of textarea to new scrollHeight and padding
         this.style.height = (this.scrollHeight + padding) + "px";
