@@ -1,6 +1,6 @@
 // Global variables
 // Get basepath. Especially useful when developing on localhost/project-name
-const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
+// const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
 // Load posts on
 loadPosts();

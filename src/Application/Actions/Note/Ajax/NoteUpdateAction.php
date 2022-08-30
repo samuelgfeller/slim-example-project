@@ -88,7 +88,7 @@ final class NoteUpdateAction
             } catch (ForbiddenException $fe) {
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'You can only edit your own note or be an admin to edit others'],
+                    ['status' => 'error', 'message' => 'You can only edit your own note or need to be an admin to edit others'],
                     403
                 );
             }

@@ -16,18 +16,18 @@ class UserRoleFinderRepository
     /**
      * Retrieve user role
      *
-     * @param int $id
+     * @param int $userId
      * @return string
-     * Throws PersistenceRecordNotFoundException if entry not found
+     * @throws PersistenceRecordNotFoundException if entry not found
      */
-    public function getUserRoleById(int $id): string
+    public function getUserRoleById(int $userId): string
     {
         // todo put role in separate tables
         $query = $this->queryFactory->newQuery()->select(['role'])->from('user')->where(
-            ['deleted_at IS' => null, 'id' => $id]);
+            ['deleted_at IS' => null, 'id' => $userId]);
         $role = $query->execute()->fetch('assoc')['role'];
         if (!$role){
-            throw new PersistenceRecordNotFoundException('post');
+            throw new PersistenceRecordNotFoundException('user');
         }
         return $role;
     }

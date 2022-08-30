@@ -67,6 +67,14 @@ class NoteValidator extends AppValidation
     }
 
 
+    /**
+     * Validate note message
+     *
+     * @param $noteMsg
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
     protected function validateMessage($noteMsg, ValidationResult $validationResult, bool $required): void
     {
         if (null !== $noteMsg && '' !== $noteMsg) {

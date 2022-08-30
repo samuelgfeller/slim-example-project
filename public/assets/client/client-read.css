@@ -53,7 +53,15 @@
         /* Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718 */
         position: relative;
         display: inline-block;
+
         width: 70%;
+    }
+    /*Extra relative positioned div for the checkmark loader to know to which element it has to position itself*/
+    /*Using the > changes the description to: "Find any divs that are the direct descendents of section divs" which is what you want.*/
+    .client-activity-textarea-div > div{
+        display: inline-block;
+        width: 100%;
+        position: relative;
     }
 
     .client-activity-textarea-div textarea{

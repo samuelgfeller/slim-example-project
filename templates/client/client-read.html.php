@@ -20,13 +20,15 @@ $this->addAttribute('css', [
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
-$this->addAttribute('js', ['assets/client/js/read/client-read-main.js', 'assets/general/js/alert-modal.js']);
+$this->addAttribute('js', ['assets/general/js/alert-modal.js']);
+// Js files that import things from other js files
+$this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 ?>
 
 <h1><?= $clientAggregate->first_name . ' ' . $clientAggregate->last_name ?></h1>
 
 <div class="main-note-status-assigned-user-div">
-    <div id="main-note-textarea-div">
+    <div id="main-note-textarea-div" data-note-id="1">
         <textarea name="" id="first-tx" class="auto-resize-textarea">
 Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
 und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
@@ -93,11 +95,17 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
 <h2>Aktivität</h2>
 <div class="client-activity-textarea-div">
     <?php
-    foreach ($clientAggregate->notes as $note) { // Below has to be on the same line to prevent unnecessary line break?>
-    <textarea class="auto-resize-textarea" data-note-id="<?= $note->id ?>" readonly="readonly"><?= $note->message ?></textarea>
-    <div class="circle-loader client-read">
-        <div class="checkmark draw"></div>
-    </div>
-    <?php
+    foreach ($clientAggregate->notes as $note) { ?>
+        <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
+        <div data-note-id="<?= $note->id ?>">
+            <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
+            <textarea class="auto-resize-textarea" readonly="readonly"
+                      name="message"><?= $note->message ?></textarea>
+            <div class="circle-loader client-read" data-note-id="<?= $note->id ?>">
+                <div class="checkmark draw"></div>
+            </div>
+        </div>
+
+        <?php
     } ?>
 </div>
