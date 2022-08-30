@@ -213,6 +213,8 @@
     }
     #nav-container {
         position: fixed;
+        /*The z-index matters most here as its the most parent context of the menu*/
+        z-index: 999;
     }
 }
 
