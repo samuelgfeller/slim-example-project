@@ -37,75 +37,82 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
             <div class="checkmark draw"></div>
         </div>
     </div>
-    <!-- Status select options-->
-    <div>
-        <label for="client-status" class="dropdown-label">Status</label>
-        <select name="client_status" class="default-select">
-            <?php
-            // Client status select options
-            foreach ($dropdownValues->statuses as $statusId => $statusName) {
-                $selected = $statusId === $clientAggregate->client_status_id ? 'selected' : '';
-                echo "<option value='$statusId' $selected>$statusName</option>";
-            }
-            ?>
-        </select>
-    </div>
+    <!-- Status and assigned user select options containers -->
+    <div id="status-and-assigned-user-select-containers">
+        <!-- Status select options-->
+        <div>
+            <label for="client-status" class="dropdown-label">Status</label>
+            <select name="client_status" class="default-select">
+                <?php
+                // Client status select options
+                foreach ($dropdownValues->statuses as $statusId => $statusName) {
+                    $selected = $statusId === $clientAggregate->client_status_id ? 'selected' : '';
+                    echo "<option value='$statusId' $selected>$statusName</option>";
+                }
+                ?>
+            </select>
+        </div>
 
-    <!-- Assigned user select options-->
-    <div>
-        <label for="assigned-user" class="dropdown-label">Helper</label>
-        <select name="assigned_user" class="default-select" id="assigned-user">
-            <?php
-            // Client status select options
-            foreach ($dropdownValues->users as $id => $name) {
-                $selected = $id === $clientAggregate->user_id ? 'selected' : '';
-                echo "<option value='$id' $selected>$name</option>";
-            }
-            ?>
-        </select>
+        <!-- Assigned user select options-->
+        <div>
+            <label for="assigned-user" class="dropdown-label">Helper</label>
+            <select name="assigned_user" class="default-select" id="assigned-user">
+                <?php
+                // Client status select options
+                foreach ($dropdownValues->users as $id => $name) {
+                    $selected = $id === $clientAggregate->user_id ? 'selected' : '';
+                    echo "<option value='$id' $selected>$name</option>";
+                }
+                ?>
+            </select>
+        </div>
     </div>
 </div>
 
-<div id="client-personal-info-flex-container">
+<div id="client-activity-personal-info-container">
 
-    <?php
-    if ($clientAggregate->phone) { ?>
-        <div tabindex="0">
-            <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-            <span><?= $clientAggregate->location ?></span>
-        </div>
+    <div class="client-activity-textarea-div">
+        <h2>Aktivität</h2>
         <?php
-    }
-    if ($clientAggregate->phone) { ?>
-        <div tabindex="0">
-            <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-            <span><?= $clientAggregate->phone ?></span>
-        </div>
-        <?php
-    }
-    if ($clientAggregate->email) { ?>
-        <div tabindex="0">
-            <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
-            <span><?= $clientAggregate->email ?></span>
-        </div>
-        <?php
-    } ?>
-</div>
-
-<h2>Aktivität</h2>
-<div class="client-activity-textarea-div">
-    <?php
-    foreach ($clientAggregate->notes as $note) { ?>
-        <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
-        <div data-note-id="<?= $note->id ?>">
-            <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
-            <textarea class="auto-resize-textarea" readonly="readonly"
-                      name="message"><?= $note->message ?></textarea>
-            <div class="circle-loader client-read" data-note-id="<?= $note->id ?>">
-                <div class="checkmark draw"></div>
+        foreach ($clientAggregate->notes as $note) { ?>
+            <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
+            <div data-note-id="<?= $note->id ?>">
+                <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
+                <textarea class="auto-resize-textarea" id="note<?= $note->id ?>" readonly="readonly"
+                          name="message"><?= $note->message ?></textarea>
+                <div class="circle-loader client-read" data-note-id="<?= $note->id ?>">
+                    <div class="checkmark draw"></div>
+                </div>
             </div>
-        </div>
+
+            <?php
+        } ?>
+    </div>
+
+    <div id="client-personal-info-flex-container">
 
         <?php
-    } ?>
+        if ($clientAggregate->phone) { ?>
+            <div tabindex="0">
+                <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
+                <span><?= $clientAggregate->location ?></span>
+            </div>
+            <?php
+        }
+        if ($clientAggregate->phone) { ?>
+            <div tabindex="0">
+                <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+                <span><?= $clientAggregate->phone ?></span>
+            </div>
+            <?php
+        }
+        if ($clientAggregate->email) { ?>
+            <div tabindex="0">
+                <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+                <span><?= $clientAggregate->email ?></span>
+            </div>
+            <?php
+        } ?>
+    </div>
+
 </div>
