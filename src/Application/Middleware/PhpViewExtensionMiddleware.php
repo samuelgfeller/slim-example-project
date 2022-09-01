@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\App;
+use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
 final class PhpViewExtensionMiddleware implements MiddlewareInterface
@@ -32,6 +33,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         $this->phpRenderer->addAttribute('uri', $request->getUri());
         $this->phpRenderer->addAttribute('basePath', $this->app->getBasePath());
         $this->phpRenderer->addAttribute('route', $this->app->getRouteCollector()->getRouteParser());
+        $this->phpRenderer->addAttribute('currRouteName', (RouteContext::fromRequest($request)->getRoute())->getName());
 
         $this->phpRenderer->addAttribute('flash', $this->session->getFlash());
         // Used for public values used by view like company email address

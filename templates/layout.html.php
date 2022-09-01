@@ -4,6 +4,7 @@
  * @var string $basePath
  * @var string $content PHP-View var page content
  * @var \Slim\Interfaces\RouteParserInterface $route
+ * @var string $currRouteName current route name
  * @var \Psr\Http\Message\UriInterface $uri
  * @var string $title
  */
@@ -13,7 +14,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--  Trailing slash has to be avoided on asset paths. Otherwise <base> does not work  -->
+    <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
     <base href="<?= $basePath ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,57 +55,54 @@
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
 <!-- Wrapper should englobe entire body content as its height is 100vh -->
 <div id="wrapper">
-<header>
-    <!-- Application name -->
-    <span>Slim Example Project</span>
-</header>
-<aside id="nav-container">
-    <nav>
-        <a href="<?= $route->urlFor('home-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'home-page'
-        ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Dashboard">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-            <span class="nav-span">Dashboard</span>
-        </a>
-        <a href="<?= $route->urlFor('client-list-all-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'client-list-all-page'
-        ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/people.svg" alt="Non-assigned">
-            <img src="assets/general/img/nav/people_hover.svg" alt="People">
-            <span class="nav-span">Incoming</span>
-        </a>
-        <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'client-list-assigned-to-me-page'
-        ) ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Assigned me">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-            <span class="nav-span">Assigned to me</span>
-        </a>
-        <!--           <a href="<?
-        /*= $route->urlFor('register-page') */ ?>" <?
-        /*= $uri->getPath() === $route->urlFor(
-                        'register-page'
-                    ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
-        <a href="<?= $route->urlFor('profile-page') ?>" <?= $uri->getPath() === $route->urlFor(
-            'profile-page'
-        ) || $uri->getPath() === $route->urlFor('change-password-page') ? 'class="is-active"' : '' ?>>
-            <img src="assets/general/img/nav/gallery-tiles.svg" alt="Profile">
-            <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-            <span class="nav-span">Profile</span>
-        </a>
+    <header>
+        <!-- Application name -->
+        <span>Slim Example Project</span>
+    </header>
+    <aside id="nav-container">
+        <nav>
+            <a href="<?= $route->urlFor('home-page') ?>"
+                <?= $currRouteName === 'home-page' ? 'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Dashboard">
+                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+                <span class="nav-span">Dashboard</span>
+            </a>
+            <a href="<?= $route->urlFor('client-list-all-page') ?>"
+                <?= in_array($currRouteName, ['client-list-all-page', 'client-read-page'], true) ?
+                    'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/people.svg" alt="Non-assigned">
+                <img src="assets/general/img/nav/people_hover.svg" alt="People">
+                <span class="nav-span">Incoming</span>
+            </a>
+            <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>"
+                <?= $currRouteName === 'client-list-assigned-to-me-page' ? 'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Assigned me">
+                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+                <span class="nav-span">Assigned to me</span>
+            </a>
+            <!--           <a href="<?
+            /*= $route->urlFor('register-page') */ ?>" <?
+            /*= $uri->getPath() === $route->urlFor(
+                            'register-page'
+                        ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
+            <a href="<?= $route->urlFor('profile-page') ?>"
+                <?= in_array($currRouteName, ['profile-page', 'change-password-page']) ? 'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Profile">
+                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+                <span class="nav-span">Profile</span>
+            </a>
 
 
-    </nav>
-    <div id="nav-mobile-toggle-icon">
-        <div id="nav-burger-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+        </nav>
+        <div id="nav-mobile-toggle-icon">
+            <div id="nav-burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-    </div>
-</aside>
+    </aside>
     <main>
         <?= $this->fetch('layout/flash-messages.html.php') ?>
         <?= $content ?>
