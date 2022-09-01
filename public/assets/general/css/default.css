@@ -194,6 +194,10 @@ a:hover {
     resize: none;
 }
 
+.relative {
+    position: relative;
+}
+
 @media (min-width: 961px) {
     #wrapper {
         height: 100vh;

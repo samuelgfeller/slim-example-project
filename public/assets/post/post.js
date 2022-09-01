@@ -140,7 +140,7 @@ function addPostsToDom(posts) {
         // Post card HTML
         let postHtml = '<div class="post-card" id="post' + post.postId + '">' +
             ownPostsButtons +
-            '        <h3 class="card-header">' + post.userName + '</h3>' +
+            '        <h3 class="card-header">' + post.userFullName + '</h3>' +
             '        <div id="card-content' + post.postId + '">' +
             '            <p class="display-newlines"><b>' + post.postMessage + '</b></p>' +
             '            <p class="post-card-additional-info">Updated: ' +

@@ -41,7 +41,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
     <div id="status-and-assigned-user-select-containers">
         <!-- Status select options-->
         <div>
-            <label for="client-status" class="dropdown-label">Status</label>
+            <label for="client-status" class="discrete-label">Status</label>
             <select name="client_status" class="default-select">
                 <?php
                 // Client status select options
@@ -55,7 +55,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
 
         <!-- Assigned user select options-->
         <div>
-            <label for="assigned-user" class="dropdown-label">Helper</label>
+            <label for="assigned-user" class="discrete-label">Helper</label>
             <select name="assigned_user" class="default-select" id="assigned-user">
                 <?php
                 // Client status select options
@@ -76,12 +76,18 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
         <?php
         foreach ($clientAggregate->notes as $note) { ?>
             <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
-            <div data-note-id="<?= $note->id ?>">
-                <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
-                <textarea class="auto-resize-textarea" id="note<?= $note->id ?>" readonly="readonly"
-                          name="message"><?= $note->message ?></textarea>
-                <div class="circle-loader client-read" data-note-id="<?= $note->id ?>">
-                    <div class="checkmark draw"></div>
+            <div>
+                <label for="note<?= $note->noteId ?>"
+                       class="discrete-label textarea-label"><?= $note->userFullName ?></label>
+                <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
+                <div class="relative">
+                    <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
+                    <textarea class="auto-resize-textarea" id="note<?= $note->noteId ?>"
+                              data-note-id="<?= $note->noteId ?>"
+                              readonly="readonly" name="message"><?= $note->noteMessage ?></textarea>
+                    <div class="circle-loader client-read" data-note-id="<?= $note->noteId ?>">
+                        <div class="checkmark draw"></div>
+                    </div>
                 </div>
             </div>
 

@@ -49,7 +49,7 @@ function initActivityTextareasEventListeners() {
         // Setting the var to false, to compare it on success. If it is not false anymore, it means that the user typed
         userStillTyping = false;
         // show circle loader
-        let noteId = this.parentNode.dataset.noteId;
+        let noteId = this.dataset.noteId;
         // By using querySelector on the targeted textarea parent it's certain that the right circleLoader is targeted
         let circleLoader = this.parentNode.querySelector('.circle-loader');
         circleLoader.style.display = 'inline-block';

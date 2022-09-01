@@ -5,7 +5,6 @@
         justify-content: space-between;
         flex-wrap: wrap;
         row-gap: 30px;
-        align-content: flex-start;
         column-gap: 6%;
     }
 
@@ -16,12 +15,14 @@
     #status-and-assigned-user-select-containers {
         margin: 0 auto auto auto; /* Make it be on the top of right flex container and centered for mobile */
         flex-grow: 1; /*Needed to display max-width fit-content*/
-        max-width: fit-content;
-        display: grid;
-        column-gap: 10vw;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        column-gap: 0;
         row-gap: 20px;
         height: min-content;
-        grid-template-columns: 1fr 1fr; /*To be displayed as columns on mobile*/
+        /* I wanted to do a nested flexbox (with both dropdowns) or grid that wraps before the container wraps
+        but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718 */
     }
 
     #status-and-assigned-user-select-containers > div {
@@ -29,7 +30,7 @@
 
 
     #main-note-textarea-div {
-        flex-grow: 1;
+        flex-grow: 100; /*Make it grow a lot more than the dropdown selects*/
         min-width: 100%;
         position: relative;
     }
@@ -64,27 +65,36 @@
         min-width: 100%;
     }
 
-    .dropdown-label {
+    .discrete-label {
         display: block;
         font-weight: bold;
         color: rgba(46, 62, 80, 0.84);
         font-size: 13px;
-        margin: 0 0 3px 7px;
+        margin: 0 0 5px 7px;
+    }
+    .textarea-label {
+        margin: 0 0 7px 20px;
+        color: black;
+        font-weight: normal;
     }
 
     /*Flex container containing notes under activity and personal infos */
     #client-activity-personal-info-container {
         display: flex;
-        gap: 10%;
+        flex-wrap: wrap-reverse;
         flex-direction: row;
         justify-content: space-between;
+        column-gap: 5vw;
+    }
+    #client-activity-personal-info-container > div{
+        flex-basis: 100%;
     }
 
     .client-activity-textarea-div {
         /* Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718 */
         position: relative;
         display: inline-block;
-        width: 70%;
+        /*width: 70%;*/
     }
 
     /*Extra relative positioned div for the checkmark loader to know to which element it has to position itself*/
@@ -121,18 +131,20 @@
 
     /*This grid places all the icons and their span value with the same space between icon and text*/
     #client-personal-info-flex-container {
-        display: inline-block;
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
         padding: 10px;
         border-radius: 30px;
         /*float: right;*/
         height: auto;
-        margin: 40px 4vw 0 0;
+        margin: 40px 0 0 0;
         box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
         align-self: start; /*Make it not expand to the same height as activity notes*/
     }
 
     #client-personal-info-flex-container div {
-        display: grid;
+        display: inline-grid;
         grid-template-columns: 20px auto;
         grid-row: auto;
         grid-column-gap: 15px;
@@ -142,6 +154,7 @@
         cursor: pointer;
         margin-top: 0px;
         font-size: 20px;
+        white-space: nowrap;
     }
 
     /*Increase icon size*/
@@ -171,20 +184,46 @@
 
 /* last iPad portrait breakpoint is at 768 */
 @media (min-width: 769px) {
-    #status-and-assigned-user-select-containers {
-        grid-template-columns: initial;
+    .main-note-status-assigned-user-div{
         margin-right: 4vw;
     }
-}
+    #status-and-assigned-user-select-containers {
+        /*grid-template-columns: none;*/
+        column-gap: 10vw;
+        justify-content: end;
+        flex-basis: auto;
+    }
+    #client-activity-personal-info-container{
+        flex-wrap: nowrap;
+        column-gap: 5vw;
+        margin-right: 4vw;
+    }
+    #client-activity-personal-info-container > div{
+        flex-basis: auto;
+    }
+    .client-activity-textarea-div{
+        flex-grow: 1;
+    }
+    #client-personal-info-flex-container{
+        flex-grow: 0;
+        display: inline-block; /*From display flex to inline-block to wrap elements the easiest way*/
+    }
+    #client-personal-info-flex-container div {
+        display: grid; /*From inline-grid to grid to prevent being on only one line for desktop*/
+    }
+    }
 
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #client-activity-personal-info-container{
+        /*column-gap: 10vw;*/
+    }
 }
 
 /*Very large screens*/
 @media (min-width: 1250px) {
     #status-and-assigned-user-select-containers {
-        grid-template-columns: 1fr 1fr;
+        /*grid-template-columns: 1fr 1fr;*/
         column-gap: 5vw;
     }
 }

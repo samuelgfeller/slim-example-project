@@ -3,7 +3,7 @@
 namespace App\Domain\Note\Service;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
-use App\Domain\Note\Data\UserNoteData;
+use App\Domain\Note\Data\NoteWithUserData;
 use Odan\Session\SessionInterface;
 
 /**
@@ -23,13 +23,13 @@ class NoteUserRightSetter
      *
      * I'm not sure if that is a good practice to accept collections and single objects both in the same function,
      * but I have seen this in a PHP function and thought it was practical.
-     * @param UserNoteData[]|UserNoteData $userNoteData
+     * @param NoteWithUserData[]|NoteWithUserData $userNoteData
      *
      * @return void In PHP, an object variable doesn't contain the object itself as value. It only contains an object
      * identifier meaning the reference is passed and changes are made on the original reference that can be used further
      * https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
      */
-    public function setUserRightsOnNotes(array|UserNoteData $userNoteData): void
+    public function setUserRightsOnNotes(array|NoteWithUserData $userNoteData): void
     {
         if (is_array($userNoteData)) {
             foreach ($userNoteData as $userNote) {
@@ -44,18 +44,18 @@ class NoteUserRightSetter
      * Add userUpdateRight attribute to given UserNoteData with
      * logged-in user mutation right.
      *
-     * @param UserNoteData $userNote
+     * @param NoteWithUserData $userNote
  */
-    private function setUserRightsOnNote(UserNoteData $userNote): void
+    private function setUserRightsOnNote(NoteWithUserData $userNote): void
     {
         // Default is no rights
-        $userNote->userMutationRight = UserNoteData::MUTATION_PERMISSION_NONE;
+        $userNote->userMutationRight = NoteWithUserData::MUTATION_PERMISSION_NONE;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
 
             if ($userNote->userId === $loggedInUserId || $userRole === 'admin') {
-                $userNote->userMutationRight = UserNoteData::MUTATION_PERMISSION_ALL;
+                $userNote->userMutationRight = NoteWithUserData::MUTATION_PERMISSION_ALL;
             }
         }
     }

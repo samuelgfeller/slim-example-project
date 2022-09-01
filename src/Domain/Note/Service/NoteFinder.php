@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 
 
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Data\UserNoteData;
+use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Note\NoteFinderRepository;
 
@@ -48,7 +48,7 @@ class NoteFinder
      * Return all notes which are linked to the given user
      *
      * @param int $userId
-     * @return UserNoteData[]
+     * @return NoteWithUserData[]
      */
     public function findAllNotesFromUser(int $userId): array
     {
@@ -62,11 +62,11 @@ class NoteFinder
      * Return all notes which are linked to the given client
      *
      * @param int $clientId
-     * @return UserNoteData[]
+     * @return NoteWithUserData[]
      */
     public function findAllNotesFromClient(int $clientId): array
     {
-        $allNotes = $this->noteFinderRepository->findAllNotesByClientId($clientId);
+        $allNotes = $this->noteFinderRepository->findAllNotesWithUserByClientId($clientId);
 //        $this->changeDateFormat($allNotes);
 //        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;
@@ -76,7 +76,7 @@ class NoteFinder
      * Change created and updated date format from SQL datetime to
      * something we are used to see in Switzerland
      *
-     * @param UserNoteData[] $userNotes
+     * @param NoteWithUserData[] $userNotes
      * @param string $format If default format changes, it has to be adapted in NoteListActionTest
      *
      * @return void

@@ -4,7 +4,7 @@ namespace App\Domain\Client\Data;
 
 
 use App\Domain\ClientStatus\Data\ClientStatusData;
-use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\User\Data\UserData;
 
 /**
@@ -18,7 +18,7 @@ class ClientResultAggregateData extends ClientData
 
     public ?ClientStatusData $clientStatusData;
     public ?UserData $userData;
-    /** @var NoteData[]|null $notes */
+    /** @var NoteWithUserData[]|null $notes */
     public ?array $notes = null;
 
     /**

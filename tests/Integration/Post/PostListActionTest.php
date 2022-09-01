@@ -102,7 +102,7 @@ class PostListActionTest extends TestCase
                 'postMessage' => $postRow['message'],
                 'postCreatedAt' => $this->changeDateFormat($postRow['created_at']),
                 'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
-                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
+                'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
                 // If it's the user's own post, all rights but otherwise none
                 'userMutationRight' => $loggedInUserId ===
@@ -156,7 +156,7 @@ class PostListActionTest extends TestCase
                 'postMessage' => $postRow['message'],
                 'postCreatedAt' => $this->changeDateFormat($postRow['created_at']),
                 'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
-                'userName' => $userRow['first_name'] . ' ' . $userRow['surname'],
+                'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
                 'userMutationRight' => UserNoteData::MUTATION_PERMISSION_NONE, // None as not logged in
             ];

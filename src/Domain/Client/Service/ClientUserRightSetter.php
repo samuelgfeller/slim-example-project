@@ -4,7 +4,6 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Client\Data\ClientResultAggregateData;
-use App\Domain\Note\Data\UserNoteData;
 use Odan\Session\SessionInterface;
 
 /**
