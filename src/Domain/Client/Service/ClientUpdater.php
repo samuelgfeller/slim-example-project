@@ -53,6 +53,11 @@ class ClientUpdater
                 // To be sure that only the message will be updated
                 $updateData['client_status_id'] = $client->client_status_id;
             }
+            if (null !== $client->user_id) {
+                // To be sure that only the message will be updated
+                $updateData['user_id'] = $client->user_id;
+            }
+
             return $this->clientUpdaterRepository->updateClient($updateData, $clientId);
         }
         // User does not have needed rights to access area or function

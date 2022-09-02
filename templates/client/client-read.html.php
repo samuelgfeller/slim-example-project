@@ -59,7 +59,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
         <!-- Assigned user select options-->
         <div>
             <label for="assigned-user" class="discrete-label">Helper</label>
-            <select name="assigned_user" class="default-select" id="assigned-user">
+            <select name="user_id" class="default-select" id="assigned-user">
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->users as $id => $name) {
