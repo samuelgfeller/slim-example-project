@@ -23,7 +23,7 @@ $this->addAttribute('js', ['assets/client/client.js', 'assets/general/js/modal.j
 ?>
 <div class="vertical-middle">
     <h2>Clients assigned to me</h2>
-    <div class="plusBtn" id="create-post-btn"></div>
+    <div class="plus-btn" id="create-post-btn"></div>
 </div>
 <!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
 All posts and own posts pages are quite similar and share the same create form and modal box. After the creation of

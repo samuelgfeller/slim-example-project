@@ -50,6 +50,10 @@ class NoteData
         if ($this->userId !== null) {
             $note['user_id'] = $this->userId;
         }
+        if ($this->clientId !== null) {
+            $note['client_id'] = $this->clientId;
+        }
+
 
         // Message is nullable and null is a valid value so it has to be included todo detect null values and add IS for cakequery builder IS NULL
         $note['message'] = $this->message;

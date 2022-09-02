@@ -113,7 +113,6 @@ function initAutoResizingTextareas() {
         observer.observe(textarea);
     }
 
-    var working = false;
     function resizeTextareaNew() {
         if (working) {
             console.log('working');
@@ -154,6 +153,7 @@ function initAutoResizingTextareas() {
             console.log(scrollHeightBefore > offsetHeightBefore, this.style.height);
         });
     }
+
     function resizeTextarea() {
         // Textareas have default 2px padding and if not set it returns 0px
         let padding = window.getComputedStyle(this).getPropertyValue('padding-bottom');
@@ -165,5 +165,49 @@ function initAutoResizingTextareas() {
         // console.log('scrollHeight after height reset: ' + this.scrollHeight);
         // Adapt height of textarea to new scrollHeight and padding
         this.style.height = (this.scrollHeight + padding) + "px";
+    }
+
+    var working = false;
+    function resizeTextareaNew2() {
+        if (working) {
+            console.log('working');
+            return;
+        }
+        working = true;
+
+        // Textareas have default 2px padding and if not set it returns 0px
+        const style = getComputedStyle(this);
+        const paddingBottom = Number.parseFloat(style.getPropertyValue('padding-bottom'));
+        const paddingTop = Number.parseFloat(style.getPropertyValue('padding-top'));
+        const borderBottom = Number.parseFloat(style.getPropertyValue('border-bottom'));
+        const borderTop = Number.parseFloat(style.getPropertyValue('border-top'));
+        const adjust = borderBottom + borderTop;
+        // console.log('Border bottom: '+borderBottom +'  Border top: '+borderTop+ '  padding bottom: '+paddingBottom);
+
+        // Reset textarea height to (supposedly) have correct scrollHeight afterwards
+        const scrollHeightBefore = this.scrollHeight;
+        const offsetHeightBefore = this.offsetHeight;
+        const styleHeightBefore = this.style.height;
+        console.log('before', scrollHeightBefore, offsetHeightBefore, styleHeightBefore);
+        this.style.height = "0px";
+
+        const scrollHeightAfter = this.scrollHeight;
+        const offsetHeightAfter = this.offsetHeight;
+        const styleHeightAfter = this.style.height;
+        console.log('after', scrollHeightAfter, offsetHeightAfter, styleHeightAfter);
+
+        // Adapt height of textarea to new scrollHeight and padding
+        if (scrollHeightBefore > offsetHeightBefore) {
+            this.style.height = (scrollHeightBefore + adjust) + "px";
+        } else {
+            this.style.height = (scrollHeightAfter + adjust) + "px";
+        }
+        console.log(scrollHeightBefore > offsetHeightBefore, this.style.height);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                working = false;
+            });
+        });
     }
 }

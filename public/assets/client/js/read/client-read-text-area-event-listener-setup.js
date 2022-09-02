@@ -1,4 +1,5 @@
-import {saveNoteChangeToDb} from "./client-read-save-note.js";
+import {saveNoteChangeToDb} from "./client-read-save-existing-note.js";
+import {insertNewNoteToDb} from "./client-read-create-note.js";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is
@@ -15,7 +16,7 @@ export function changeUserIsTyping(value) {
 
 export function initActivityTextareasEventListeners() {
     let activityTextareas = document.querySelectorAll(
-        '.client-activity-textarea-div textarea, #main-note-textarea-div textarea'
+        '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
 
     let textareaInputPauseTimeoutId;
@@ -31,7 +32,12 @@ export function initActivityTextareasEventListeners() {
             clearTimeout(textareaInputPauseTimeoutId);
             textareaInputPauseTimeoutId = setTimeout(function () {
                 // Runs 1 second after the last change
-                saveNoteChangeToDb.call(textarea);
+                let noteId = textarea.dataset.noteId;
+                if (noteId !== 'new-note') {
+                    saveNoteChangeToDb.call(textarea, noteId);
+                }else{
+                    insertNewNoteToDb(textarea);
+                }
             }, 1000);
         });
         // textarea.addEventListener('change', saveNoteChangeToDb, false)

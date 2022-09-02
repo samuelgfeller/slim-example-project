@@ -6,7 +6,9 @@ use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Service\NoteCreator;
+use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\OutputEscapeService;
+use App\Infrastructure\User\UserFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,8 +34,10 @@ final class NoteCreateAction
      */
     public function __construct(
         Responder $responder,
-        private NoteCreator $noteCreator,
-        private SessionInterface $session,
+        private readonly NoteCreator $noteCreator,
+        private readonly SessionInterface $session,
+        private readonly UserFinder $userFinder,
+
     ) {
         $this->responder = $responder;
     }
@@ -58,7 +62,8 @@ final class NoteCreateAction
 
             // If a html form name changes, these changes have to be done in the data class constructor
             // Check that request body syntax is formatted right (if changed, )
-            if (null !== $noteData && [] !== $noteData && isset($noteData['message']) && count($noteData) === 1) {
+            if (null !== $noteData && [] !== $noteData && isset($noteData['message'], $noteData['client_id'])
+                && count($noteData) === 2) {
                 try {
                     $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
                 } catch (ValidationException $exception) {
@@ -69,7 +74,12 @@ final class NoteCreateAction
                 }
 
                 if (0 !== $insertId) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success'], 201);
+                    $user = $this->userFinder->findUserById($loggedInUserId);
+                    // camelCase according to Google recommendation
+                    return $this->responder->respondWithJson($response, [
+                        'status' => 'success',
+                        'data' => ['userFullName' => $user->firstName . ' ' . $user->surname, 'noteId' => $insertId],
+                    ], 201);
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',

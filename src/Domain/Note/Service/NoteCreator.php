@@ -6,13 +6,14 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Note\Data\NoteData;
 use App\Infrastructure\Note\NoteCreatorRepository;
+use App\Infrastructure\User\UserFinderRepository;
 
 class NoteCreator
 {
 
     public function __construct(
-        private NoteValidator $noteValidator,
-        private NoteCreatorRepository $noteCreatorRepository
+        private readonly NoteValidator $noteValidator,
+        private readonly NoteCreatorRepository $noteCreatorRepository,
     ) { }
 
     /**

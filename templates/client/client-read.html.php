@@ -17,6 +17,7 @@ $this->addAttribute('css', [
     'assets/general/css/form.css',
     'assets/general/css/alert-modal.css',
     'assets/general/css/loader/animated-checkmark.css',
+    'assets/general/css/plus-button.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
@@ -24,6 +25,8 @@ $this->addAttribute('js', ['assets/general/js/alert-modal.js']);
 // Js files that import things from other js files
 $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 ?>
+<!-- Store client id on the page for js to read it -->
+<data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
 <h1><?= $clientAggregate->first_name . ' ' . $clientAggregate->last_name ?></h1>
 
@@ -71,14 +74,19 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
 
 <div id="client-activity-personal-info-container">
 
-    <div class="client-activity-textarea-div">
-        <h2>Aktivität</h2>
+    <div id="client-activity-textarea-container">
+        <div class="vertical-center" id="activity-header">
+            <h2>Aktivität</h2>
+            <div class="plus-btn" id="create-note-btn"></div>
+        </div>
         <?php
         foreach ($clientAggregate->notes as $note) { ?>
             <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
             <div>
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><?= $note->userFullName ?></label>
+                       class="discrete-label textarea-label"><?= $note->userFullName ?><span
+                            class="main-color-discrete-text note-created-date"><?=
+                    (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->

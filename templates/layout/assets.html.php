@@ -6,7 +6,7 @@
  * @var $dev bool true for development false for production
  */
 
-
+$dev = false;
 // CSS stylesheets
 foreach ($stylesheets ?? [] as $stylesheet) {
     // "assets/" not default since some paths could be external urls

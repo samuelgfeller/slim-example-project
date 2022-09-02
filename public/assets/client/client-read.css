@@ -77,6 +77,12 @@
         color: black;
         font-weight: normal;
     }
+    .note-created-date {
+        float: right;
+        margin-right: 20px;
+        font-size: 12px;
+        margin-top: 4px;
+    }
 
     /*Flex container containing notes under activity and personal infos */
     #client-activity-personal-info-container {
@@ -90,7 +96,7 @@
         flex-basis: 100%;
     }
 
-    .client-activity-textarea-div {
+    #client-activity-textarea-container {
         /* Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718 */
         position: relative;
         display: inline-block;
@@ -99,13 +105,12 @@
 
     /*Extra relative positioned div for the checkmark loader to know to which element it has to position itself*/
     /*Using the > changes the description to: "Find any divs that are the direct descendents of section divs" which is what you want.*/
-    .client-activity-textarea-div > div {
-        display: inline-block;
+    #client-activity-textarea-container > div {
         width: 100%;
         position: relative;
     }
 
-    .client-activity-textarea-div textarea {
+    #client-activity-textarea-container textarea {
         border-radius: 30px;
         border: none;
         width: 100%;
@@ -117,7 +122,7 @@
         margin-bottom: 20px;
     }
 
-    .client-activity-textarea-div textarea:focus {
+    #client-activity-textarea-container textarea:focus {
         outline: #eef0f1;
         box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
     }
@@ -171,6 +176,7 @@
         background: rgba(0, 0, 0, 0.1);
     }
 
+
 }
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
@@ -189,7 +195,7 @@
     }
     #status-and-assigned-user-select-containers {
         /*grid-template-columns: none;*/
-        column-gap: 10vw;
+        column-gap: 5vw;
         justify-content: end;
         flex-basis: auto;
     }
@@ -201,7 +207,7 @@
     #client-activity-personal-info-container > div{
         flex-basis: auto;
     }
-    .client-activity-textarea-div{
+    #client-activity-textarea-container{
         flex-grow: 1;
     }
     #client-personal-info-flex-container{

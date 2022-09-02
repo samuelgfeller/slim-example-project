@@ -98,6 +98,12 @@ a:hover {
     transition: none !important;
 }
 
+/*Center title and plus button next to it*/
+.vertical-center{
+    display: flex;
+    align-items: center;
+}
+
 /* Button */
 .btn{
     background-color: var(--layout-main-button-color);
@@ -196,6 +202,12 @@ a:hover {
 
 .relative {
     position: relative;
+}
+.main-color-text{
+    color: #2e3e50;
+}
+.main-color-discrete-text{
+    color: #576381;
 }
 
 @media (min-width: 961px) {

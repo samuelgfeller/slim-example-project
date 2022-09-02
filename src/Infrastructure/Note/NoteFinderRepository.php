@@ -153,7 +153,7 @@ class NoteFinderRepository
      * @param int $clientId
      * @return NoteWithUserData[]
      */
-    public function findAllNotesWithUserByClientId(int $clientId): array
+    public function findAllNotesWithUserByClientId(int $clientId, bool $orderDesc = false): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
@@ -174,7 +174,7 @@ class NoteFinderRepository
                 'note.client_id' => $clientId, // Not unsafe as it's not an expression and thus escaped by querybuilder
                 'note.deleted_at IS' => null
             ]
-        );
+        )->orderDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);

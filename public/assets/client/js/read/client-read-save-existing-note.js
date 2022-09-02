@@ -1,11 +1,10 @@
 import {basePath} from "../../../general/js/config.js";
-import {changeUserIsTyping, hideCheckmarkLoader, userIsTyping} from "./text-area-event-listener-setup.js";
+import {changeUserIsTyping, hideCheckmarkLoader, userIsTyping} from "./client-read-text-area-event-listener-setup.js";
 
-export function saveNoteChangeToDb() {
+export function saveNoteChangeToDb(noteId) {
     // Setting the var to false, to compare it on success. If it is not false anymore, it means that the user typed
     changeUserIsTyping(false);
     // show circle loader
-    let noteId = this.dataset.noteId;
     // By using querySelector on the targeted textarea parent it's certain that the right circleLoader is targeted
     let circleLoader = this.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
