@@ -8,7 +8,7 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Client\Data\ClientData;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\Note\NoteUpdaterRepository;
+use App\Infrastructure\Client\ClientUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
 class ClientUpdater
@@ -16,11 +16,12 @@ class ClientUpdater
     private LoggerInterface $logger;
 
     public function __construct(
-        private ClientValidator          $postValidator,
-        private NoteUpdaterRepository    $postUpdaterRepository,
+        private ClientValidator $postValidator,
+        private ClientUpdaterRepository $clientUpdaterRepository,
         private UserRoleFinderRepository $userRoleFinderRepository,
-        private ClientFinder             $postFinder,
-        LoggerFactory                    $logger
+        private readonly ClientValidator $clientValidator,
+        private readonly ClientFinder $clientFinder,
+        LoggerFactory $logger
 
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('post-service');
@@ -29,37 +30,38 @@ class ClientUpdater
     /**
      * Change something or multiple things on post
      *
-     * @param int $postId id of post being changed
-     * @param array|null $postValues values that have to be changed
+     * @param int $clientId id of post being changed
+     * @param array|null $clientValues values that have to be changed
      * @param int $loggedInUserId
      * @return bool if update was successful
      */
-    public function updatePost(int $postId, null|array $postValues, int $loggedInUserId): bool
+    public function updateClient(int $clientId, null|array $clientValues, int $loggedInUserId): bool
     {
         // Init object for validation
-        $post = new ClientData($postValues);
-        $this->postValidator->validatePostUpdate($post);
+        $client = new ClientData($clientValues);
+        $this->clientValidator->validateClientUpdate($client);
 
-        // Find post in db to compare its ownership
-        $postFromDb = $this->postFinder->findPost($postId);
-
+        // Find note in db to compare its ownership
+        $clientFromDb = $this->clientFinder->findClient($clientId);
+//sleep(1);
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $postFromDb->userId === $loggedInUserId) {
-            // The only thing that a user can change on a post is its message
-            if (null !== $post->message) {
+        // Check if it's admin or if it's its own client or user as all users should be able to update all clients
+        if ($userRole === 'admin' || $clientFromDb->user_id === $loggedInUserId || $userRole === 'user') {
+            $updateData = [];
+            if (null !== $client->client_status_id) {
                 // To be sure that only the message will be updated
-                $updateData['message'] = $post->message;
-                return $this->postUpdaterRepository->updatePost($updateData, $postId);
+                $updateData['client_status_id'] = $client->client_status_id;
             }
-            // Nothing was updated as message was empty
-            return false;
+            return $this->clientUpdaterRepository->updateClient($updateData, $clientId);
         }
         // User does not have needed rights to access area or function
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update other post with id: ' . $loggedInUserId
+            'User ' . $loggedInUserId . ' tried to update client with id: ' . $loggedInUserId .
+            ' but isn\'t allowed.'
         );
-        throw new ForbiddenException('Not allowed to change that post as it\'s linked to another user.');
+        throw new ForbiddenException('Not allowed to change that client as it\'s linked to another user.');
     }
+
+
 }

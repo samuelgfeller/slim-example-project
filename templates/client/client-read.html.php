@@ -28,7 +28,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <!-- Store client id on the page for js to read it -->
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
-<h1><?= $clientAggregate->first_name . ' ' . $clientAggregate->last_name ?></h1>
+<h1><?= html($clientAggregate->first_name . ' ' . $clientAggregate->last_name) ?></h1>
 
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div" data-note-id="1">
@@ -45,7 +45,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
         <!-- Status select options-->
         <div>
             <label for="client-status" class="discrete-label">Status</label>
-            <select name="client_status" class="default-select">
+            <select name="client_status_id" class="default-select">
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
@@ -84,7 +84,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
             <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
             <div>
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><?= $note->userFullName ?><span
+                       class="discrete-label textarea-label"><?= html($note->userFullName) ?><span
                             class="main-color-discrete-text note-created-date"><?=
                     (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
@@ -92,7 +92,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea" id="note<?= $note->noteId ?>"
                               data-note-id="<?= $note->noteId ?>"
-                              readonly="readonly" name="message"><?= $note->noteMessage ?></textarea>
+                              readonly="readonly" name="message"><?= html($note->noteMessage) ?></textarea>
                     <div class="circle-loader client-read" data-note-id="<?= $note->noteId ?>">
                         <div class="checkmark draw"></div>
                     </div>

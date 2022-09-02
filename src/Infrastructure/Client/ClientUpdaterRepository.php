@@ -11,20 +11,19 @@ class ClientUpdaterRepository
 {
     public function __construct(
         private QueryFactory $queryFactory
-    )
-    {
+    ) {
     }
 
     /**
-     * Update values from post
+     * Update values from client
      *
-     * @param int $id
+     * @param int $clientId
      * @param array $data ['col_name' => 'New name']
      * @return bool
      */
-    public function updatePost(array $data, int $id): bool
+    public function updateClient(array $data, int $clientId): bool
     {
-        $query = $this->queryFactory->newQuery()->update('post')->set($data)->where(['id' => $id]);
+        $query = $this->queryFactory->newQuery()->update('client')->set($data)->where(['id' => $clientId]);
         return $query->execute()->rowCount() > 0;
     }
 }

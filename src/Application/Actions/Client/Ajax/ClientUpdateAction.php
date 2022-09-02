@@ -3,13 +3,10 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRoleFinder;
+use App\Domain\Client\Service\ClientUpdater;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Service\NoteFinder;
-use App\Domain\Note\Service\NoteUpdater;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -26,7 +23,6 @@ final class ClientUpdateAction
      */
     private Responder $responder;
     protected LoggerInterface $logger;
-    protected OutputEscapeService $outputEscapeService;
 
 
     /**
@@ -34,19 +30,19 @@ final class ClientUpdateAction
      *
      * @param Responder $responder The responder
      * @param SessionInterface $session
-     * @param NoteUpdater $postUpdater
+     * @param ClientUpdater $clientUpdater
      * @param LoggerFactory $logger
      * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
         Responder $responder,
-        private SessionInterface $session,
-        private NoteUpdater $postUpdater,
+        private readonly SessionInterface $session,
+        private readonly ClientUpdater $clientUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
     ) {
         $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('post-update');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('client-update');
         $this->outputEscapeService = $outputEscapeService;
     }
 
@@ -66,20 +62,20 @@ final class ClientUpdateAction
         array $args
     ): ResponseInterface {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $postIdToChange = (int)$args['post_id'];
-            $postValues = $request->getParsedBody();
+            $clientId = (int)$args['client_id'];
+            $clientValues = $request->getParsedBody();
 
             try {
-                $updated = $this->postUpdater->updatePost($postIdToChange, $postValues, $loggedInUserId);
+                $updated = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
 
                 if ($updated) {
                     return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'The post was not updated.'
+                    'message' => 'The client was not updated.'
                 ]);
-                return $response->withAddedHeader('Warning', 'The post was not updated.');
+                return $response->withAddedHeader('Warning', 'The client was not updated.');
             } catch (ValidationException $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),
@@ -88,7 +84,7 @@ final class ClientUpdateAction
             } catch (ForbiddenException $fe) {
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'You can only edit your own post or be an admin to edit others'],
+                    ['status' => 'error', 'message' => 'You can only edit your own client or be an admin to edit others'],
                     403
                 );
             }

@@ -179,27 +179,6 @@ class UserValidator extends AppValidation
         }
     }
 
-    /**
-     * Validate email
-     *
-     * @param string|null $email
-     * @param bool $required
-     * @param ValidationResult $validationResult
-     */
-    private function validateEmail(string|null $email, bool $required, ValidationResult $validationResult): void
-    {
-        // Email filter will fail if email is empty and if it's optional it shouldn't throw an error
-        if (null !== $email && '' !== $email) {
-            // reversed, if true -> error
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $validationResult->setError('email', 'Invalid email address');
-            }
-        } elseif (true === $required && (null === $email || '' === $email)) {
-            // If it is null or empty string and required
-            $validationResult->setError('email', 'Email required but not given');
-        }
-    }
-
     protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
         $exists = $this->userExistenceCheckerRepository->userExists($userId);
@@ -208,25 +187,6 @@ class UserValidator extends AppValidation
             $validationResult->setError('user', 'User not existing');
 
             $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
-        }
-    }
-
-    /**
-     * Validate Name.
-     *
-     * @param string $name
-     * @param string $fieldName first_name or surname
-     * @param bool $required on update the name doesn't have to be set but on creation it has
-     * @param ValidationResult $validationResult
-     */
-    private function validateName(string $name, string $fieldName, bool $required, ValidationResult $validationResult): void
-    {
-        if (null !== $name && '' !== $name) {
-            $this->validateLengthMax($name, $fieldName, $validationResult, 100);
-            $this->validateLengthMin($name, $fieldName, $validationResult, 2);
-        } // elseif only executed if previous "if" is falsy
-        elseif (true === $required) {
-            $validationResult->setError($fieldName, 'Name required but not given');
         }
     }
 
