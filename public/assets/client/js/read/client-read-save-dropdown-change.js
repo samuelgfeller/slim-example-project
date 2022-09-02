@@ -15,7 +15,7 @@ export function saveClientReadDropdownChange() {
                 let textStatus = JSON.parse(xHttp.responseText).status;
                 // Show checkmark only on status success and if user is not typing
                 if (textStatus === 'success') {
-                    this.style.boxShadow = '0 0px 8px #46ef46';
+                    this.style.boxShadow = '0 0px 8px #2e3e5075';
                     setTimeout(function () {
                         this.style.boxShadow = 'none';
                     }.bind(this), 700);

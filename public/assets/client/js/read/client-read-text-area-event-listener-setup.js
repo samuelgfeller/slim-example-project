@@ -21,7 +21,7 @@ export function initActivityTextareasEventListeners() {
 
     let textareaInputPauseTimeoutId;
     for (let textarea of activityTextareas) {
-        textarea.addEventListener('click', function (e) {
+        textarea.addEventListener('focus', function (e) {
             this.removeAttribute('readonly');
         });
         textarea.addEventListener('input', function () {

@@ -5,8 +5,7 @@ import {
 } from "./client-read-text-area-event-listener-setup.js";
 
 export function addNewNoteTextarea() {
-    let container = document.querySelector('#client-activity-textarea-container');
-    // Insert after end of activity header
+    // Insert after end of activity header and not container as header comes as first element
     document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div>
                 <label for=""
                        class="discrete-label textarea-label"></label>
@@ -26,6 +25,10 @@ export function addNewNoteTextarea() {
     initActivityTextareasEventListeners();
     // Make that newly created textarea resize automatically as well
     initAutoResizingTextareas();
+
+    // Has to be after textarea event listener init
+    let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
+    textarea.focus();
 }
 
 

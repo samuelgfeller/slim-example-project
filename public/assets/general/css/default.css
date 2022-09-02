@@ -209,6 +209,9 @@ a:hover {
 .main-color-discrete-text{
     color: #576381;
 }
+.discrete-text {
+    color: #5e5e5e;
+}
 
 @media (min-width: 961px) {
     #wrapper {

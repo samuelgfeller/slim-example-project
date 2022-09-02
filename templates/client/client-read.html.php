@@ -85,7 +85,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
             <div>
                 <label for="note<?= $note->noteId ?>"
                        class="discrete-label textarea-label"><?= html($note->userFullName) ?><span
-                            class="main-color-discrete-text note-created-date"><?=
+                            class="discrete-text note-created-date"><?=
                     (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
