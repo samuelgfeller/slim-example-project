@@ -32,7 +32,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div" data-note-id="1">
-        <textarea name="" id="first-tx" class="auto-resize-textarea">
+        <textarea name="" id="first-tx" class="auto-resize-textarea main-textarea">
 Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
 und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
 muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>

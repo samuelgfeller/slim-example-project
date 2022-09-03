@@ -21,23 +21,30 @@ export function initActivityTextareasEventListeners() {
     // Add delete event listeners
     initDeleteBtnEventListeners();
     // Target all textareas
-    let activityTextareas = document.querySelectorAll(
+    let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
 
     let textareaInputPauseTimeoutId;
-    for (let textarea of activityTextareas) {
+    for (let textarea of clientReadTextareas) {
         // Get delete btn with note label to show it on textarea focus
-        let delBtn = document.querySelector('label[for="note'+this.dataset.noteId+'"]')
-            .querySelector('.delete-note-btn');
+        let delBtn = null;
+        if (!textarea.classList.contains('main-textarea')){
+            let delBtn = document.querySelector('label[for="note'+textarea.dataset.noteId+'"]')
+                .closest('.delete-note-btn');
+        }
 
         textarea.addEventListener('focus', function (e) {
             this.removeAttribute('readonly');
-            delBtn.style.display = 'inline-block';
+            if (delBtn !== null) {
+                delBtn.style.display = 'inline-block';
+            }
         });
         textarea.addEventListener('focusout', function (e) {
             this.setAttribute('readonly', 'readonly');
-            delBtn.style.display = 'none';
+            if (delBtn !== null) {
+                delBtn.style.display = 'none';
+            }
         });
 
         textarea.addEventListener('input', function () {
