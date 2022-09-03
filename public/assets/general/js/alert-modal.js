@@ -1,17 +1,20 @@
-// Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically
+function initAlertModalEventListeners() {
+    // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically
 // more on https://stackoverflow.com/a/34896387/9013718
-document.addEventListener('click', function (e) {
-    if (e.target && (
-        // When anywhere in the window is clicked except the modal area itself
-        e.target === document.getElementById('alert-modal') ||
-        // Hide modal when anywhere in the window is clicked except the modal area itself
-        e.target === document.getElementById('alert-modal-cancel-btn') ||
-        // When clicking the confirmation button modal box has to disappear too
-        e.target === document.getElementById('alert-modal-confirm-btn')
-    )) {
-        closeAlertModal();
-    }
-})
+    document.addEventListener('click', function (e) {
+        if (e.target && (
+            // When anywhere in the window is clicked except the modal area itself
+            e.target === document.getElementById('alert-modal') ||
+            // Hide modal when anywhere in the window is clicked except the modal area itself
+            e.target === document.getElementById('alert-modal-cancel-btn') ||
+            // When clicking the confirmation button modal box has to disappear too
+            e.target === document.getElementById('alert-modal-confirm-btn')
+        )) {
+            closeAlertModal();
+        }
+    });
+
+}
 
 /**
  * Create and show alert modal with given content
@@ -21,7 +24,8 @@ document.addEventListener('click', function (e) {
  * @param {function} confirmationEventFunction function that is executed on confirmation
  * @param {string} btnString
  */
-function createAlertModal(title, info, confirmationEventFunction, btnString = 'Yes delete') {
+export function createAlertModal(title, info, confirmationEventFunction, btnString = 'Yes delete') {
+    initAlertModalEventListeners();
     // Insert parts into entire modal structure
     let htmlString = '<div id="alert-modal">' +
         '<div id="alert-modal-box">' +

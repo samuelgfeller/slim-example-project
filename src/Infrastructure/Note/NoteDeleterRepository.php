@@ -14,14 +14,14 @@ class NoteDeleterRepository
     ) { }
 
     /**
-     * Delete post from database
+     * Delete note from database
      *
      * @param int $id
      * @return bool
      */
     public function deleteNote(int $id): bool
     {
-        $query = $this->queryFactory->newDelete('post')->where(['id' => $id]);
+        $query = $this->queryFactory->newDelete('note')->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 

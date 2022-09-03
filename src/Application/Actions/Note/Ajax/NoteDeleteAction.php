@@ -3,9 +3,10 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Service\ClientDeleter;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Note\Service\ClientDeleter;
+use App\Domain\Note\Service\NoteDeleter;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,15 +28,15 @@ final class NoteDeleteAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientDeleter $noteDeleter
+     * @param NoteDeleter $noteDeleter
      * @param SessionInterface $session
      * @param LoggerFactory $logger
      */
     public function __construct(
-        Responder                $responder,
-        private ClientDeleter    $noteDeleter,
+        Responder $responder,
+        private NoteDeleter $noteDeleter,
         private SessionInterface $session,
-        LoggerFactory            $logger
+        LoggerFactory $logger
 
     ) {
         $this->responder = $responder;
@@ -62,7 +63,7 @@ final class NoteDeleteAction
 
             try {
                 // Delete note logic
-                $deleted = $this->noteDeleter->deletePost($noteId, $loggedInUserId);
+                $deleted = $this->noteDeleter->deleteNote($noteId, $loggedInUserId);
 
                 if ($deleted) {
                     return $this->responder->respondWithJson($response, ['status' => 'success']);
@@ -70,7 +71,7 @@ final class NoteDeleteAction
 
                 $response = $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'warning', 'message' => 'Post not deleted.']
+                    ['status' => 'warning', 'message' => 'Note not deleted.']
                 );
                 $flash = $this->session->getFlash();
                 // If not deleted, inform user

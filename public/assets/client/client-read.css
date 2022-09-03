@@ -13,7 +13,7 @@
     }
 
     #status-and-assigned-user-select-containers {
-        margin: 0 auto auto auto; /* Make it be on the top of right flex container and centered for mobile */
+        margin: 0 auto 40px auto; /* Make it be on the top of right flex container and centered for mobile */
         flex-grow: 1; /*Needed to display max-width fit-content*/
         display: inline-flex;
         flex-wrap: wrap;
@@ -72,17 +72,31 @@
         font-size: 13px;
         margin: 0 0 5px 7px;
     }
+
     .textarea-label {
         margin: 0 0 7px 20px;
         color: black;
         font-weight: normal;
     }
+
+    .delete-note-btn{
+        width: 15px;
+        vertical-align: middle;
+        margin-left: 10px;
+        cursor: pointer;
+        display: none;
+    }
+    .note-container:hover .delete-note-btn {
+        display: inline-block;
+    }
+
     .note-created-date {
         float: right;
         margin-right: 20px;
         font-size: 12px;
         margin-top: 4px;
     }
+
 
     /*Flex container containing notes under activity and personal infos */
     #client-activity-personal-info-container {
@@ -92,7 +106,8 @@
         justify-content: space-between;
         column-gap: 5vw;
     }
-    #client-activity-personal-info-container > div{
+
+    #client-activity-personal-info-container > div {
         flex-basis: 100%;
     }
 
@@ -181,48 +196,58 @@
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
-
     #main-note-textarea-div {
         /*For the flex items to wrap*/
         min-width: 470px;
+    }
+
+    #status-and-assigned-user-select-containers {
+        margin-top: 20px;
     }
 }
 
 /* last iPad portrait breakpoint is at 768 */
 @media (min-width: 769px) {
-    .main-note-status-assigned-user-div{
+    .main-note-status-assigned-user-div {
         margin-right: 4vw;
     }
+
     #status-and-assigned-user-select-containers {
         /*grid-template-columns: none;*/
         column-gap: 5vw;
         justify-content: end;
         flex-basis: auto;
     }
-    #client-activity-personal-info-container{
+
+    #client-activity-personal-info-container {
         flex-wrap: nowrap;
         column-gap: 5vw;
         margin-right: 4vw;
     }
-    #client-activity-personal-info-container > div{
+
+    #client-activity-personal-info-container > div {
         flex-basis: auto;
     }
-    #client-activity-textarea-container{
+
+    #client-activity-textarea-container {
         flex-grow: 1;
     }
-    #client-personal-info-flex-container{
+
+    #client-personal-info-flex-container {
         flex-grow: 0;
         display: inline-block; /*From display flex to inline-block to wrap elements the easiest way*/
     }
+
     #client-personal-info-flex-container div {
         display: grid; /*From inline-grid to grid to prevent being on only one line for desktop*/
     }
-    }
+}
 
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
-    #client-activity-personal-info-container{
+    #client-activity-personal-info-container {
         /*column-gap: 10vw;*/
+        margin-top: 0;
     }
 }
 

@@ -20,7 +20,6 @@ export function addNewNoteTextarea() {
                     </div>
                 </div>
             </div>`);
-
     // Refresh activity textareas event listeners to count new ones in too
     initActivityTextareasEventListeners();
     // Make that newly created textarea resize automatically as well
@@ -77,8 +76,6 @@ export function insertNewNoteToDb(textarea) {
                     // Hide checkmark loader "cleanly" so that it's not broken on the next input
                     hideCheckmarkLoader(circleLoader);
                 }
-
-
             }
         }
     };

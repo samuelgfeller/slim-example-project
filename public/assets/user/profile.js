@@ -1,4 +1,6 @@
 // First name
+import {createAlertModal} from "../general/js/alert-modal.js";
+
 let firstNameEditIco = document.getElementById('edit-first-name-ico');
 firstNameEditIco.addEventListener('click', function () {
     // let firstNameValSpan = document.getElementById('first-name-val');

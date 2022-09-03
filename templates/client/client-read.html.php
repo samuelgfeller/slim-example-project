@@ -21,7 +21,7 @@ $this->addAttribute('css', [
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
-$this->addAttribute('js', ['assets/general/js/alert-modal.js']);
+$this->addAttribute('js', []);
 // Js files that import things from other js files
 $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 ?>
@@ -82,9 +82,11 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
         <?php
         foreach ($clientAggregate->notes as $note) { ?>
             <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
-            <div>
+            <div id="note<?= $note->noteId ?>-container" class="note-container">
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><?= html($note->userFullName) ?><span
+                       class="discrete-label textarea-label"><?= html($note->userFullName) ?> <img
+                            class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
+                    data-note-id="<?= $note->noteId ?>"><span
                             class="discrete-text note-created-date"><?=
                     (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
