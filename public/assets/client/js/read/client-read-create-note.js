@@ -6,8 +6,11 @@ import {
 } from "./client-read-text-area-event-listener-setup.js";
 
 export function addNewNoteTextarea() {
-    // Insert after end of activity header and not container as header comes as first element
-    document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
+    // Check if bubble already exists and only create new one if there isn't one already
+    let existingNewNoteBubble = document.getElementById('new-note');
+    if (existingNewNoteBubble === null) {
+        // Insert after end of activity header and not container as header comes as first element
+        document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note"
                        class="discrete-label textarea-label">
                        <span class="label-user-full-name"></span>
@@ -26,14 +29,17 @@ export function addNewNoteTextarea() {
                     </div>
                 </div>
             </div>`);
-    // Refresh activity textareas event listeners to count new ones in too
-    initActivityTextareasEventListeners();
-    // Make that newly created textarea resize automatically as well
-    initAutoResizingTextareas();
+        // Refresh activity textareas event listeners to count new ones in too
+        initActivityTextareasEventListeners();
+        // Make that newly created textarea resize automatically as well
+        initAutoResizingTextareas();
 
-    // Has to be after textarea event listener init
-    let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
-    textarea.focus();
+        // Has to be after textarea event listener init
+        let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
+        textarea.focus();
+    } else {
+        existingNewNoteBubble.focus();
+    }
 }
 
 
