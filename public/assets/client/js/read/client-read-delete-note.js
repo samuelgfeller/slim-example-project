@@ -6,7 +6,16 @@
  */
 import {basePath} from "../../../general/js/config.js";
 
+/**
+ * Make delete request to db
+ * @param noteId numeric id
+ * @param noteContainer
+ */
 export function deleteNoteRequestToDb(noteId, noteContainer) {
+    // Show loader
+    let circleLoader = document.getElementById('note'+noteId).parentNode.querySelector('.circle-loader');
+    circleLoader.style.display = 'inline-block';
+
     // Make ajax call
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
