@@ -18,8 +18,7 @@ export function changeUserIsTyping(value) {
  * This function is called each time after adding new note
  */
 export function initActivityTextareasEventListeners() {
-    // Add delete event listeners
-    initDeleteBtnEventListeners();
+
     // Target all textareas
     let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
@@ -27,25 +26,8 @@ export function initActivityTextareasEventListeners() {
 
     let textareaInputPauseTimeoutId;
     for (let textarea of clientReadTextareas) {
-        // Get delete btn with note label to show it on textarea focus
-        let delBtn = null;
-        if (!textarea.classList.contains('main-textarea')){
-            let delBtn = document.querySelector('label[for="note'+textarea.dataset.noteId+'"]')
-                .closest('.delete-note-btn');
-        }
-
-        textarea.addEventListener('focus', function (e) {
-            this.removeAttribute('readonly');
-            if (delBtn !== null) {
-                delBtn.style.display = 'inline-block';
-            }
-        });
-        textarea.addEventListener('focusout', function (e) {
-            this.setAttribute('readonly', 'readonly');
-            if (delBtn !== null) {
-                delBtn.style.display = 'none';
-            }
-        });
+        // Called when new note is created as well
+        toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
 
         textarea.addEventListener('input', function () {
             userIsTyping = true;
@@ -56,10 +38,12 @@ export function initActivityTextareasEventListeners() {
             textareaInputPauseTimeoutId = setTimeout(function () {
                 // Runs 1 second after the last change
                 let noteId = textarea.dataset.noteId;
-                if (noteId !== 'new-note') {
-                    saveNoteChangeToDb.call(textarea, noteId);
-                } else {
-                    insertNewNoteToDb(textarea);
+                if (textarea.checkValidity() !== false) {
+                    if (noteId !== 'new-note') {
+                        saveNoteChangeToDb.call(textarea, noteId);
+                    } else {
+                        insertNewNoteToDb(textarea);
+                    }
                 }
             }, 1000);
         });
@@ -67,20 +51,61 @@ export function initActivityTextareasEventListeners() {
     }
 }
 
-function initDeleteBtnEventListeners() {
+export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
+    // Get delete btn with note label to show it on textarea focus
+    let delBtn = null;
+    if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
+        delBtn = document.querySelector('.delete-note-btn[data-note-id="' + textarea.dataset.noteId + '"]');
+    }
+
+    textarea.addEventListener('focus', function (e) {
+        this.removeAttribute('readonly');
+        // let delBtn = findDOMDelBtnWithTextarea(textarea);
+        if (delBtn !== null) {
+            delBtn.style.display = 'inline-block';
+        }
+    });
+    textarea.addEventListener('focusout', function (e) {
+        this.setAttribute('readonly', 'readonly');
+        // let delBtn = findDOMDelBtnWithTextarea(textarea);
+        if (delBtn !== null) {
+            // Remove display property from element to make it show on hover (default css behaviour)
+            delBtn.style.display = null;
+        }
+    });
+
+    // Display if already focus as the focus event listener is not triggered when new note is created as there is already focus before
+    if (document.activeElement === textarea) {
+        if (delBtn !== null) {
+            delBtn.style.display = 'inline-block';
+        }
+    }
+}
+
+export function initAllDeleteBtnEventListeners() {
     let deleteNoteButtons = document.querySelectorAll('.delete-note-btn');
     for (const deleteNoteBtn of deleteNoteButtons) {
-        deleteNoteBtn.addEventListener('click', () => {
-            let noteId = deleteNoteBtn.dataset.noteId;
-            let title = 'Are you sure that you want to delete this note?';
-            let info = '';
-            createAlertModal(title, info, () => {
-                deleteNoteRequestToDb(noteId, document.getElementById(
-                    'note' + noteId + '-container'
-                ));
-            });
-        });
+        // In separate function as this one is called once on page load and then the single one on each creation
+        addDeleteNoteBtnEventListener(deleteNoteBtn);
     }
+}
+
+/**
+ * Adds event listener to del btn to open modal box and delete note on confirmation
+ *
+ * @param deleteNoteBtn
+ */
+export function addDeleteNoteBtnEventListener(deleteNoteBtn){
+    deleteNoteBtn.addEventListener('click', () => {
+        let noteId = deleteNoteBtn.dataset.noteId;
+        let title = 'Are you sure that you want to delete this note?';
+        let info = '';
+        createAlertModal(title, info, () => {
+            deleteNoteRequestToDb(noteId, document.getElementById(
+                'note' + noteId + '-container'
+            ));
+        });
+    });
 }
 
 export function hideCheckmarkLoader(checkmarkLoader) {

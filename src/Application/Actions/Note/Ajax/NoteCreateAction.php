@@ -4,11 +4,10 @@ namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Service\NoteCreator;
+use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\OutputEscapeService;
-use App\Infrastructure\User\UserFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,6 +36,7 @@ final class NoteCreateAction
         private readonly NoteCreator $noteCreator,
         private readonly SessionInterface $session,
         private readonly UserFinder $userFinder,
+        protected readonly NoteFinder $noteFinder,
 
     ) {
         $this->responder = $responder;
@@ -66,6 +66,7 @@ final class NoteCreateAction
                 && count($noteData) === 2) {
                 try {
                     $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
+                    $noteDataFromDb = $this->noteFinder->findNote($insertId);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),
@@ -78,7 +79,8 @@ final class NoteCreateAction
                     // camelCase according to Google recommendation
                     return $this->responder->respondWithJson($response, [
                         'status' => 'success',
-                        'data' => ['userFullName' => $user->firstName . ' ' . $user->surname, 'noteId' => $insertId],
+                        'data' => ['userFullName' => $user->firstName . ' ' . $user->surname, 'noteId' => $insertId,
+                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d.m.Y • H:i')],
                     ], 201);
                 }
                 $response = $this->responder->respondWithJson($response, [

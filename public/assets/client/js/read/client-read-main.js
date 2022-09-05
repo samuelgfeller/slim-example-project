@@ -1,10 +1,17 @@
-import {initActivityTextareasEventListeners} from "./client-read-text-area-event-listener-setup.js";
+import {
+    initActivityTextareasEventListeners, initAllDeleteBtnEventListeners
+} from "./client-read-text-area-event-listener-setup.js";
 import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 
 
 // Script loaded with defer so waiting for DOMContentLoaded is not needed
 initActivityTextareasEventListeners();
+// Add note delete btn event listeners
+// The reason it is not in initTextareasEventListeners() is that event listener were set up twice and alert modal
+// were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllDeleteBtnEventListeners
+// AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
+initAllDeleteBtnEventListeners();
 
 // After plus button is clicked, textarea for new note should be added
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);

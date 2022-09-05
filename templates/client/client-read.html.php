@@ -82,10 +82,11 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
         <?php
         foreach ($clientAggregate->notes as $note) { ?>
             <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
+            <!-- If below is changed, addNewNoteTextarea() and insertNewNoteToDb() callback have to be updated as well -->
             <div id="note<?= $note->noteId ?>-container" class="note-container">
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><?= html($note->userFullName) ?> <img
-                            class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
+                       class="discrete-label textarea-label"><span class="label-user-full-name"><?= html($note->userFullName) ?>
+                    </span> <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
                     data-note-id="<?= $note->noteId ?>"><span
                             class="discrete-text note-created-date"><?=
                     (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
@@ -94,6 +95,7 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea" id="note<?= $note->noteId ?>"
                               data-note-id="<?= $note->noteId ?>"
+                              minlength="4" maxlength="500"
                               readonly="readonly" name="message"><?= html($note->noteMessage) ?></textarea>
                     <div class="circle-loader client-read" data-note-id="<?= $note->noteId ?>">
                         <div class="checkmark draw"></div>
