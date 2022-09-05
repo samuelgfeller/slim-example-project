@@ -61,7 +61,7 @@ class ClientFinder
     public function findClientAggregate(int $clientId): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
-        $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId, true   );
+        $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId, true);
         return $clientResultAggregate;
     }
 

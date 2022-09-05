@@ -32,10 +32,9 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div" data-note-id="1">
-        <textarea name="" id="first-tx" class="auto-resize-textarea main-textarea">
-Joffrey ist von Alkohol-Sucht betroffen und hat dadurch seine Arbeitsstelle verloren
-und seine Frau hat sich von ihm getrennt. Er möchte die Kinder wieder sehen aber dafür
-muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
+        <textarea name="message" class="auto-resize-textarea main-textarea"
+                  data-note-id="<?= $clientAggregate->mainNoteData->id ?>"
+        ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">
             <div class="checkmark draw"></div>
         </div>
@@ -85,11 +84,13 @@ muss er seinen Alkohol-Konsum in Begriff bekommen.</textarea>
             <!-- If below is changed, addNewNoteTextarea() and insertNewNoteToDb() callback have to be updated as well -->
             <div id="note<?= $note->noteId ?>-container" class="note-container">
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><span class="label-user-full-name"><?= html($note->userFullName) ?>
+                       class="discrete-label textarea-label"><span class="label-user-full-name"><?= html(
+                            $note->userFullName
+                        ) ?>
                     </span> <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
-                    data-note-id="<?= $note->noteId ?>"><span
+                                 data-note-id="<?= $note->noteId ?>"><span
                             class="discrete-text note-created-date"><?=
-                    (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
+                        (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->

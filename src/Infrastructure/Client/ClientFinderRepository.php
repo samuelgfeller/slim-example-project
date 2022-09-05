@@ -13,9 +13,9 @@ use http\Client;
 
 class ClientFinderRepository
 {
-
-    // To prevent duplicate code the client aggregate select fields for ClientResultAggregateData are in this array below
-    private array $clientAggregateSelectFields = [
+    // ClientList select fields are the base (requires the least amount) which can be extended in constructor
+    // To prevent duplicate code the client list aggregate select fields are in this array below
+    private array $clientListAggregateSelectFields = [
         // Client data retrieved with original name to populate parent class ClientData
         'id' => 'client.id',
         'first_name' => 'client.first_name',
@@ -24,10 +24,11 @@ class ClientFinderRepository
         'location' => 'client.location',
         'phone' => 'client.phone',
         'email' => 'client.email',
-        'note' => 'client.note',
         'sex' => 'client.sex',
+        'client_message' => 'client.client_message',
         'user_id' => 'client.user_id',
         'client_status_id' => 'client.client_status_id',
+        'note_id' => 'client.note_id',
         'updated_at' => 'client.updated_at',
         'created_at' => 'client.created_at',
         // User data prefixed with user_
@@ -36,11 +37,20 @@ class ClientFinderRepository
         // Client status data prefixed with client_status_
         'client_status_name' => 'client_status.name',
     ];
+    // In constructor extended client list select fields
+    private array $clientReadAggregateSelectFields = [];
 
     public function __construct(
         private QueryFactory $queryFactory,
         private Hydrator $hydrator
     ) {
+        $this->clientReadAggregateSelectFields = array_merge($this->clientListAggregateSelectFields, [
+            // Main note data prefixed with `note_`
+            // Only necessary note fields
+            'note_message' => 'note.message',
+            'note_user_id' => 'note.user_id',
+            'note_updated_at' => 'note.updated_at'
+        ]);
     }
 
     /**
@@ -57,7 +67,7 @@ class ClientFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('client');
         $query->select(
-            $this->clientAggregateSelectFields
+            $this->clientListAggregateSelectFields
         )// Multiple joins doc: https://book.cakephp.org/4/en/orm/query-builder.html#adding-joins
         ->join([
             // `user` is alias and has to be same as $clientAggregateSelectFields (could be `u` as well as long as its consistent)
@@ -66,7 +76,7 @@ class ClientFinderRepository
                 'table' => 'client_status',
                 'type' => 'LEFT',
                 'conditions' => 'client.client_status_id = client_status.id'
-            ]
+            ],
         ])
             ->andWhere(
                 ['client.deleted_at IS' => null]
@@ -93,7 +103,7 @@ class ClientFinderRepository
     }
 
     /**
-     * Return client with relevant aggregate data
+     * Return client with relevant aggregate data for client read
      *
      * @param int $id
      * @return ClientResultAggregateData
@@ -102,7 +112,7 @@ class ClientFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('client');
 
-        $query->select($this->clientAggregateSelectFields)
+        $query->select($this->clientReadAggregateSelectFields)
             ->join([
                 // `user` is alias and has to be same as $clientAggregateSelectFields (could be `u` as well as long as its consistent)
                 'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'client.user_id = user.id'],
@@ -110,7 +120,12 @@ class ClientFinderRepository
                     'table' => 'client_status',
                     'type' => 'LEFT',
                     'conditions' => 'client.client_status_id = client_status.id'
-                ]
+                ],
+                'note' => [
+                    'table' => 'note',
+                    'type' => 'LEFT',
+                    'conditions' => 'client.note_id = note.id and note.deleted_at IS NULL'
+                ],
             ])
             ->andWhere(
                 ['client.id' => $id, 'client.deleted_at IS' => null]
@@ -120,7 +135,6 @@ class ClientFinderRepository
         // Instantiate UserPost DTO
         return new ClientResultAggregateData($resultRows);
     }
-
 
 
     /**
@@ -154,7 +168,7 @@ class ClientFinderRepository
         $query = $this->queryFactory->newQuery()->from('client');
 
         $query->select(
-            $this->clientAggregateSelectFields
+            $this->clientListAggregateSelectFields
         )->join(['table' => 'user', 'conditions' => 'client.user_id = user.id'])
             ->join(['table' => 'client_status', 'conditions' => 'client.client_status_id = client_status.id'])
             ->andWhere(

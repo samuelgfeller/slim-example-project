@@ -15,11 +15,12 @@ class ClientData
     public ?string $location;
     public ?string $phone;
     public ?string $email;
-    public ?string $note;
     // https://ocelot.ca/blog/blog/2013/09/16/representing-sex-in-databases/
     public ?string $sex; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
+    public ?string $client_message; // Message that client submitted via webform
     public ?int $user_id;
     public ?int $client_status_id;
+    public ?int $note_id; /* Main note */
     public ?\DateTimeImmutable $updated_at;
     public ?\DateTimeImmutable $created_at;
 
@@ -40,10 +41,11 @@ class ClientData
         $this->location = $reader->findAsString('location');
         $this->phone = $reader->findAsString('phone');
         $this->email = $reader->findAsString('email');
-        $this->note = $reader->findAsString('note');
         $this->sex = $reader->findAsString('sex');
+        $this->client_message = $reader->findAsString('client_message');
         $this->user_id = $reader->findAsInt('user_id');
         $this->client_status_id = $reader->findAsInt('client_status_id');
+        $this->note_id = $reader->findAsInt('client_status_id');
         $this->updated_at = $reader->findAsDateTimeImmutable('updated_at');
         $this->created_at = $reader->findAsDateTimeImmutable('created_at');
 
