@@ -5,6 +5,7 @@
  * @param noteContainer
  */
 import {basePath} from "../../../general/js/config.js";
+import {hideCheckmarkLoader} from "./client-read-text-area-event-listener-setup.js";
 
 /**
  * Make delete request to db
@@ -18,7 +19,7 @@ export function deleteNoteRequestToDb(noteId, noteContainer) {
     let circleLoader = textarea.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
 
-    noteContainer.style.opacity = '0.4';
+    noteContainer.style.opacity = '0.5';
 
     // Make ajax call
     let xHttp = new XMLHttpRequest();
@@ -26,6 +27,8 @@ export function deleteNoteRequestToDb(noteId, noteContainer) {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
             // Fail
             if (xHttp.status !== 201 && xHttp.status !== 200) {
+                hideCheckmarkLoader(circleLoader);
+                noteContainer.style.opacity = '1';
                 // Default fail handler
                 handleFail(xHttp);
             }

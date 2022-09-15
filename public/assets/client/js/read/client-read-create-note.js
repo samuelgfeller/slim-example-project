@@ -1,18 +1,21 @@
 import {basePath} from "../../../general/js/config.js";
 import {
-    addDeleteNoteBtnEventListener,
+    addDeleteNoteBtnEventListener, addTextareaInputEventListener,
     hideCheckmarkLoader,
     initActivityTextareasEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
 
-let noteCreationHideCheckMarkTimeout;
+let noteCreationHideCheckMarkTimeout = [];
 
 /**
  * Clears the timeout of hiding the checkmark loader after note creation
- * Same function also exists on save of existing note
+ * Same function also exists on save of existing note.
+ * I don't fully understand why but if I don't check the note id here as well, it makes
  */
-export function disableHideCheckMarkTimeoutOnCreation() {
-    clearTimeout(noteCreationHideCheckMarkTimeout);
+export function disableHideCheckMarkTimeoutOnCreation(noteId) {
+    if (noteCreationHideCheckMarkTimeout['noteId'] === noteId) {
+        clearTimeout(noteCreationHideCheckMarkTimeout['timeoutId']);
+    }
 }
 
 export function addNewNoteTextarea() {
@@ -33,14 +36,15 @@ export function addNewNoteTextarea() {
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea" id="new-note"
                               data-note-id="new-note" minlength="4" maxlength="500"
-                              readonly="readonly" name="message"></textarea>
+                              name="message"></textarea>
                     <div class="circle-loader client-read" data-note-id="">
                         <div class="checkmark draw"></div>
                     </div>
                 </div>
             </div>`);
-        // Refresh activity textareas event listeners to count new ones in too
-        initActivityTextareasEventListeners();
+        // Refresh all activity textareas event listeners to count new ones in too didn't work as it created
+        // duplicate events like saving but this simply adds event listener to targets textarea
+        addTextareaInputEventListener(document.getElementById('new-note'));
         // Make that newly created textarea resize automatically as well
         initAutoResizingTextareas();
 
@@ -130,8 +134,9 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     // Add container id
     noteContainer.id = 'note' + noteId + '-container';
 
+    noteCreationHideCheckMarkTimeout['noteId'] = noteId;
     // Remove checkmark after x sec
-    noteCreationHideCheckMarkTimeout = setTimeout(function () {
+    noteCreationHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
         // Hide circle loader and its child the checkmark
         // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
         hideCheckmarkLoader(circleLoader,);

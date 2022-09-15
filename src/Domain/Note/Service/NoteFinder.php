@@ -59,16 +59,17 @@ class NoteFinder
     }
 
     /**
-     * Return all notes which are linked to the given client
+     * Return all notes except the main note that are linked to the given client
      *
      * @param int $clientId
+     * @param bool $orderDesc
      * @return NoteWithUserData[]
      */
     public function findAllNotesFromClient(int $clientId, bool $orderDesc = false): array
     {
         $allNotes = $this->noteFinderRepository->findAllNotesExceptMainWithUserByClientId($clientId);
 //        $this->changeDateFormat($allNotes);
-//        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
+        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;
     }
 

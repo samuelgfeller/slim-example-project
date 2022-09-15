@@ -23,66 +23,77 @@ export function initActivityTextareasEventListeners() {
     let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
-    let textareaInputPauseTimeoutId;
 
     for (let textarea of clientReadTextareas) {
         // Called when new note is created as well
         toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
 
-        textarea.addEventListener('input', function () {
-            let noteId = textarea.dataset.noteId;
-            userIsTypingOnNoteId = noteId;
-            // Hide loader if there was one
-            hideCheckmarkLoader(this.parentNode.querySelector('.circle-loader'));
-            // Clear timeout that hides it after note update or creation if there was one
-            disableHideCheckMarkTimeoutOnUpdate();
-            disableHideCheckMarkTimeoutOnCreation();
-            // Only save if 1 second writing pause
-            clearTimeout(textareaInputPauseTimeoutId);
-            textareaInputPauseTimeoutId = setTimeout(function () {
-                // Runs 1 second after the last change
-                if (textarea.checkValidity() !== false) {
-                    if (noteId === 'new-note') {
-                        insertNewNoteToDb(textarea);
-                    } else if (noteId === 'new-main-note') {
-                        insertNewNoteToDb(textarea, true)
-                    } else {
-                        saveNoteChangeToDb.call(textarea, noteId);
-                    }
-                }
-            }, 1000);
-        });
+        // In own function to be able to be called individually for new note to prevent that they have duplicate event listeners
+        // Which happened when I called initActivityTextareasEventListeners after adding new textarea and update request was fired twice
+        addTextareaInputEventListener(textarea);
+
         // textarea.addEventListener('change', saveNoteChangeToDb, false)
     }
 }
 
+let textareaInputPauseTimeoutId;
+export function addTextareaInputEventListener(textarea){
+    textarea.addEventListener('input', function () {
+        let noteId = textarea.dataset.noteId;
+        userIsTypingOnNoteId = noteId;
+        // Hide loader if there was one
+        hideCheckmarkLoader(this.parentNode.querySelector('.circle-loader'));
+        // Clear timeout that hides it after note update or creation if there was one
+        disableHideCheckMarkTimeoutOnUpdate(noteId);
+        disableHideCheckMarkTimeoutOnCreation();
+        // Only save if 1 second writing pause
+        clearTimeout(textareaInputPauseTimeoutId);
+        textareaInputPauseTimeoutId = setTimeout(function () {
+            // Runs 1 second after the last change
+            if (textarea.checkValidity() !== false) {
+                if (noteId === 'new-note') {
+                    insertNewNoteToDb(textarea);
+                } else if (noteId === 'new-main-note') {
+                    insertNewNoteToDb(textarea, true)
+                } else {
+                    saveNoteChangeToDb.call(textarea, noteId);
+                }
+            }
+        }, 1000);
+    });
+}
+
 export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
-    // Get delete btn with note label to show it on textarea focus
-    let delBtn = null;
-    if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
-        delBtn = document.querySelector('.delete-note-btn[data-note-id="' + textarea.dataset.noteId + '"]');
-    }
+    // Del btn and removing readonly only matters if textarea can be edited
+    if (textarea.dataset.editable === '1') {
 
-    textarea.addEventListener('focus', function (e) {
-        this.removeAttribute('readonly');
-        // let delBtn = findDOMDelBtnWithTextarea(textarea);
-        if (delBtn !== null) {
-            delBtn.style.display = 'inline-block';
+        // Get delete btn with note label to show it on textarea focus
+        let delBtn = null;
+        if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
+            delBtn = document.querySelector('.delete-note-btn[data-note-id="' + textarea.dataset.noteId + '"]');
         }
-    });
-    textarea.addEventListener('focusout', function (e) {
-        this.setAttribute('readonly', 'readonly');
-        // let delBtn = findDOMDelBtnWithTextarea(textarea);
-        if (delBtn !== null) {
-            // Remove display property from element to make it show on hover (default css behaviour)
-            delBtn.style.display = null;
-        }
-    });
 
-    // Display if already focus as the focus event listener is not triggered when new note is created as there is already focus before
-    if (document.activeElement === textarea) {
-        if (delBtn !== null) {
-            delBtn.style.display = 'inline-block';
+        textarea.addEventListener('focus', function (e) {
+            this.removeAttribute('readonly');
+            // let delBtn = findDOMDelBtnWithTextarea(textarea);
+            if (delBtn !== null) {
+                delBtn.style.display = 'inline-block';
+            }
+        });
+        textarea.addEventListener('focusout', function (e) {
+            this.setAttribute('readonly', 'readonly');
+            // let delBtn = findDOMDelBtnWithTextarea(textarea);
+            if (delBtn !== null) {
+                // Remove display property from element to make it show on hover (default css behaviour)
+                delBtn.style.display = null;
+            }
+        });
+
+        // Display if already focus as the focus event listener is not triggered when new note is created as there is already focus before
+        if (document.activeElement === textarea) {
+            if (delBtn !== null) {
+                delBtn.style.display = 'inline-block';
+            }
         }
     }
 }
@@ -100,7 +111,7 @@ export function initAllDeleteBtnEventListeners() {
  *
  * @param deleteNoteBtn
  */
-export function addDeleteNoteBtnEventListener(deleteNoteBtn){
+export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     deleteNoteBtn.addEventListener('click', () => {
         let noteId = deleteNoteBtn.dataset.noteId;
         let title = 'Are you sure that you want to delete this note?';

@@ -18,11 +18,11 @@ class NoteUserRightSetter
     ) { }
 
     /**
-     * Add userUpdateRight attribute to given UserNoteData with
+     * Populate $userMutationRights attribute to given UserNoteData or array with
      * logged-in user mutation right.
      *
      * I'm not sure if that is a good practice to accept collections and single objects both in the same function,
-     * but I have seen this in a PHP function and thought it was practical.
+     * but I have already seen this in a PHP function and thought it was practical.
      * @param NoteWithUserData[]|NoteWithUserData $userNoteData
      *
      * @return void In PHP, an object variable doesn't contain the object itself as value. It only contains an object

@@ -137,9 +137,12 @@
         margin-bottom: 20px;
     }
 
-    #client-activity-textarea-container textarea:focus {
+    #client-activity-textarea-container textarea:not([data-editable="0"]):focus {
         outline: #eef0f1;
         box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
+    }
+    #client-activity-textarea-container textarea[data-editable="0"]:focus{
+        outline: 1px solid #cccccc;
     }
 
     .circle-loader.client-read {

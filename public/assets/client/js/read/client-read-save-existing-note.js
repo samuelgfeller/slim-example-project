@@ -1,7 +1,11 @@
 import {basePath} from "../../../general/js/config.js";
-import {changeUserIsTyping, hideCheckmarkLoader, userIsTypingOnNoteId} from "./client-read-text-area-event-listener-setup.js";
+import {
+    changeUserIsTyping,
+    hideCheckmarkLoader,
+    userIsTypingOnNoteId
+} from "./client-read-text-area-event-listener-setup.js";
 
-let noteSaveHideCheckMarkTimeout;
+let noteSaveHideCheckMarkTimeout = [];
 
 /**
  * When note is saved, the checkmark loader is displayed 3 seconds later
@@ -9,8 +13,10 @@ let noteSaveHideCheckMarkTimeout;
  * meantime as it could hide the checkmark loader that should be displayed
  * for the next save request.
  */
-export function disableHideCheckMarkTimeoutOnUpdate() {
-    clearTimeout(noteSaveHideCheckMarkTimeout);
+export function disableHideCheckMarkTimeoutOnUpdate(noteId) {
+    if (noteSaveHideCheckMarkTimeout['noteId'] === noteId) {
+        clearTimeout(noteSaveHideCheckMarkTimeout['timeoutId']);
+    }
 }
 
 /**
@@ -47,13 +53,14 @@ export function saveNoteChangeToDb(noteId) {
                         circleLoader.querySelector('.checkmark').style.display = 'block';
                         let tx = document.querySelector('#main-note-textarea-div textarea')
                         tx.value = tx.value + ' done';
+                        noteSaveHideCheckMarkTimeout['noteId'] = noteId;
                         // Remove checkmark after 1 sec
-                        noteSaveHideCheckMarkTimeout = setTimeout(function () {
+                        noteSaveHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
                             // Hide circle loader and its child the checkmark
                             // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
                             hideCheckmarkLoader(circleLoader);
                         }, 3000);
-                    }else{
+                    } else {
                         // Hide checkmark loader "cleanly" so that it's not broken on the next input
                         hideCheckmarkLoader(circleLoader);
                     }

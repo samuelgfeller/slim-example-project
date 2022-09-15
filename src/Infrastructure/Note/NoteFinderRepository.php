@@ -153,7 +153,7 @@ class NoteFinderRepository
      *
      * @param int $clientId
      * @param bool $orderDesc
-     * @return NoteWithUserData
+     * @return NoteWithUserData[]
      */
     public function findAllNotesExceptMainWithUserByClientId(int $clientId, bool $orderDesc = false): array
     {
