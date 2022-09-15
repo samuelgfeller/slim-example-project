@@ -138,7 +138,7 @@ class NoteFinderRepository
             ]
         )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
             [
-                'note.user_id' => $userId, // Not unsafe as its not an expression and thus escaped by querybuilder
+                'note.user_id' => $userId, // Not unsafe as it's not an expression and thus escaped by querybuilder
                 'note.deleted_at IS' => null
             ]
         );
@@ -149,11 +149,13 @@ class NoteFinderRepository
 
     /**
      * Return all notes which are linked to the given client
+     * EXCEPT the main note which is handled differently
      *
      * @param int $clientId
-     * @return NoteWithUserData[]
+     * @param bool $orderDesc
+     * @return NoteWithUserData
      */
-    public function findAllNotesWithUserByClientId(int $clientId, bool $orderDesc = false): array
+    public function findAllNotesExceptMainWithUserByClientId(int $clientId, bool $orderDesc = false): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
@@ -161,6 +163,7 @@ class NoteFinderRepository
 
         $query->select(
             [
+                'client_main_note' => 'client.main_note_id',
                 'note_id' => 'note.id',
                 'user_id' => 'user.id',
                 'note_message' => 'note.message',
@@ -169,12 +172,19 @@ class NoteFinderRepository
                 'user_full_name' => $concatName,
                 'user_role' => 'user.role',
             ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
-            [
-                'note.client_id' => $clientId, // Not unsafe as it's not an expression and thus escaped by querybuilder
-                'note.deleted_at IS' => null
-            ]
-        )->orderDesc('note.created_at');
+        )->join([
+            'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],
+            'client' => ['table' => 'client', 'type' => 'LEFT', 'conditions' => 'note.client_id = client.id']
+        ])
+            ->andWhere([
+                    // Not unsafe as it's not an expression and thus escaped by querybuilder
+                    'note.client_id' => $clientId,
+                    // We have to tell the query builder when the string is literal or if it's a column, it doesn't
+                    // detect that alone. https://discourse.cakephp.org/t/query-builder-documentation-examples-without-orm/10471
+                    'note.id <>' => $query->identifier('client.main_note_id'),
+                    'note.deleted_at IS' => null
+                ]
+            )->orderDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);

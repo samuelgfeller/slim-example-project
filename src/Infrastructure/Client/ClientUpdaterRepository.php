@@ -26,4 +26,17 @@ class ClientUpdaterRepository
         $query = $this->queryFactory->newQuery()->update('client')->set($data)->where(['id' => $clientId]);
         return $query->execute()->rowCount() > 0;
     }
+
+    /**
+     * Add main note to client
+     *
+     * @param int|string $mainNoteId
+     * @param int|string $clientId
+     * @return void
+     */
+    public function addMainNoteToClient(int|string $mainNoteId, int|string $clientId)
+    {
+        $query = $this->queryFactory->newQuery()->update('client')->set($data)->where(['id' => $clientId]);
+        return $query->execute()->rowCount() > 0;
+    }
 }

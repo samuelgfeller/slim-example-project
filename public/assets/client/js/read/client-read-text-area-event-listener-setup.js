@@ -1,16 +1,16 @@
-import {saveNoteChangeToDb} from "./client-read-save-existing-note.js";
-import {insertNewNoteToDb} from "./client-read-create-note.js";
+import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js";
+import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js";
 import {deleteNoteRequestToDb} from "./client-read-delete-note.js";
 import {createAlertModal} from "../../../general/js/alert-modal.js";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is
-// still typing. Otherwise, the callback of the "old" ajax request to save shows the checkmark loader when it's done
-export let userIsTyping = false; // Has to be outside function to export and import properly
+// still typing. Otherwise, the callback of the "old" ajax request to save, shows the checkmark loader when it's done
+// If the user starts typing on another note, the checkmark loader on the note before should still appear hence on note id
+export let userIsTypingOnNoteId = false; // Has to be outside function to export and import properly
 // To change this variable from another file, a function has to be created to modify it https://stackoverflow.com/a/53723394/9013718
 export function changeUserIsTyping(value) {
-    userIsTyping = value;
-
+    userIsTypingOnNoteId = value;
 }
 
 /**
@@ -19,30 +19,35 @@ export function changeUserIsTyping(value) {
  */
 export function initActivityTextareasEventListeners() {
 
-    // Target all textareas
+    // Target all textareas including main note
     let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
-
     let textareaInputPauseTimeoutId;
+
     for (let textarea of clientReadTextareas) {
         // Called when new note is created as well
         toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
 
         textarea.addEventListener('input', function () {
-            userIsTyping = true;
+            let noteId = textarea.dataset.noteId;
+            userIsTypingOnNoteId = noteId;
             // Hide loader if there was one
             hideCheckmarkLoader(this.parentNode.querySelector('.circle-loader'));
+            // Clear timeout that hides it after note update or creation if there was one
+            disableHideCheckMarkTimeoutOnUpdate();
+            disableHideCheckMarkTimeoutOnCreation();
             // Only save if 1 second writing pause
             clearTimeout(textareaInputPauseTimeoutId);
             textareaInputPauseTimeoutId = setTimeout(function () {
                 // Runs 1 second after the last change
-                let noteId = textarea.dataset.noteId;
                 if (textarea.checkValidity() !== false) {
-                    if (noteId !== 'new-note') {
-                        saveNoteChangeToDb.call(textarea, noteId);
-                    } else {
+                    if (noteId === 'new-note') {
                         insertNewNoteToDb(textarea);
+                    } else if (noteId === 'new-main-note') {
+                        insertNewNoteToDb(textarea, true)
+                    } else {
+                        saveNoteChangeToDb.call(textarea, noteId);
                     }
                 }
             }, 1000);

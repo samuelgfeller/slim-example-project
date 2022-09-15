@@ -6,7 +6,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Post\Exception\InvalidNoteFilterException;
+use App\Domain\Note\Exception\InvalidNoteFilterException;
 use Odan\Session\SessionInterface;
 
 class ClientFilterFinder

@@ -58,15 +58,15 @@ CREATE TABLE `client` (
                           `sex` ENUM('M','F','O') NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
                           `user_id` INT(11) NULL DEFAULT NULL,
                           `client_status_id` INT(11) NULL DEFAULT NULL,
-                          `note_id` INT(11) NULL DEFAULT NULL COMMENT 'Main note',
+                          `main_note_id` INT(11) NULL DEFAULT NULL COMMENT 'Main note',
                           `updated_at` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
                           `created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
                           `deleted_at` DATETIME NULL DEFAULT NULL,
                           PRIMARY KEY (`id`) USING BTREE,
                           INDEX `FK_client_user` (`user_id`) USING BTREE,
                           INDEX `FK_client_status` (`client_status_id`) USING BTREE,
-                          INDEX `FK_client_note` (`note_id`) USING BTREE,
-                          CONSTRAINT `FK_client_note` FOREIGN KEY (`note_id`) REFERENCES `note` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+                          INDEX `FK_client_note` (`main_note_id`) USING BTREE,
+                          CONSTRAINT `FK_client_note` FOREIGN KEY (`main_note_id`) REFERENCES `note` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
                           CONSTRAINT `FK_client_status` FOREIGN KEY (`client_status_id`) REFERENCES `client_status` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
                           CONSTRAINT `FK_client_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 )

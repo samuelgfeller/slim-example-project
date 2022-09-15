@@ -44,7 +44,7 @@ class ClientResultAggregateData extends ClientData
         ]);
         // Populate mainNote if set (only when read)
         $this->mainNoteData = new NoteData([
-            'id' => $clientResultData['note_id'] ?? null,
+            'id' => $clientResultData['main_note_id'] ?? null,
             'message' => $clientResultData['note_message'] ?? null,
             'user_id' => $clientResultData['note_user_id'] ?? null,
             'updated_at' => $clientResultData['note_updated_at'] ?? null,

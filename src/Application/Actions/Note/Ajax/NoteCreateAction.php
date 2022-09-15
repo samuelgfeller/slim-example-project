@@ -62,8 +62,9 @@ final class NoteCreateAction
 
             // If a html form name changes, these changes have to be done in the data class constructor
             // Check that request body syntax is formatted right (if changed, )
-            if (null !== $noteData && [] !== $noteData && isset($noteData['message'], $noteData['client_id'])
-                && count($noteData) === 2) {
+            if (null !== $noteData && [] !== $noteData
+                && isset($noteData['message'], $noteData['client_id'], $noteData['is_main_note'])
+                && count($noteData) === 3) {
                 try {
                     $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
                     $noteDataFromDb = $this->noteFinder->findNote($insertId);
@@ -79,8 +80,11 @@ final class NoteCreateAction
                     // camelCase according to Google recommendation
                     return $this->responder->respondWithJson($response, [
                         'status' => 'success',
-                        'data' => ['userFullName' => $user->firstName . ' ' . $user->surname, 'noteId' => $insertId,
-                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d.m.Y • H:i')],
+                        'data' => [
+                            'userFullName' => $user->firstName . ' ' . $user->surname,
+                            'noteId' => $insertId,
+                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d.m.Y • H:i')
+                        ],
                     ], 201);
                 }
                 $response = $this->responder->respondWithJson($response, [

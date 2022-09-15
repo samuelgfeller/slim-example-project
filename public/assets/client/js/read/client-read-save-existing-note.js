@@ -1,6 +1,23 @@
 import {basePath} from "../../../general/js/config.js";
-import {changeUserIsTyping, hideCheckmarkLoader, userIsTyping} from "./client-read-text-area-event-listener-setup.js";
+import {changeUserIsTyping, hideCheckmarkLoader, userIsTypingOnNoteId} from "./client-read-text-area-event-listener-setup.js";
 
+let noteSaveHideCheckMarkTimeout;
+
+/**
+ * When note is saved, the checkmark loader is displayed 3 seconds later
+ * it gets hidden but this should not happen if the user typed in the
+ * meantime as it could hide the checkmark loader that should be displayed
+ * for the next save request.
+ */
+export function disableHideCheckMarkTimeoutOnUpdate() {
+    clearTimeout(noteSaveHideCheckMarkTimeout);
+}
+
+/**
+ * Save note changes to database
+ *
+ * @param noteId
+ */
 export function saveNoteChangeToDb(noteId) {
     // Setting the var to false, to compare it on success. If it is not false anymore, it means that the user typed
     changeUserIsTyping(false);
@@ -21,15 +38,17 @@ export function saveNoteChangeToDb(noteId) {
             // Success
             else {
                 let textStatus = JSON.parse(xHttp.responseText).status;
-                if (userIsTyping === false) {
+                // Only show checkmark loader if user didn't type on the same note in the meantime
+                if (userIsTypingOnNoteId === false || userIsTypingOnNoteId !== noteId) {
                     // Show checkmark only on status success and if user is not typing
                     if (textStatus === 'success') {
                         // Show checkmark in loader
                         circleLoader.classList.add('load-complete');
                         circleLoader.querySelector('.checkmark').style.display = 'block';
-
+                        let tx = document.querySelector('#main-note-textarea-div textarea')
+                        tx.value = tx.value + ' done';
                         // Remove checkmark after 1 sec
-                        setTimeout(function () {
+                        noteSaveHideCheckMarkTimeout = setTimeout(function () {
                             // Hide circle loader and its child the checkmark
                             // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
                             hideCheckmarkLoader(circleLoader);
@@ -39,7 +58,6 @@ export function saveNoteChangeToDb(noteId) {
                         hideCheckmarkLoader(circleLoader);
                     }
                 }
-
             }
         }
     };

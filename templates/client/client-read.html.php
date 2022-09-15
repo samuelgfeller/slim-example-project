@@ -31,9 +31,9 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <h1><?= html($clientAggregate->first_name . ' ' . $clientAggregate->last_name) ?></h1>
 
 <div class="main-note-status-assigned-user-div">
-    <div id="main-note-textarea-div" data-note-id="1">
+    <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
-                  data-note-id="<?= $clientAggregate->mainNoteData->id ?>"
+                  data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">
             <div class="checkmark draw"></div>
@@ -79,9 +79,10 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <div class="plus-btn" id="create-note-btn"></div>
         </div>
         <?php
-        foreach ($clientAggregate->notes as $note) { ?>
-            <!-- Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong -->
-            <!-- If below is changed, addNewNoteTextarea() and insertNewNoteToDb() callback have to be updated as well -->
+        foreach ($clientAggregate->notes as $note) {
+            // Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong
+            // If below is changed, addNewNoteTextarea() and insertNewNoteToDb() callback have to be updated as well
+            ?>
             <div id="note<?= $note->noteId ?>-container" class="note-container">
                 <label for="note<?= $note->noteId ?>"
                        class="discrete-label textarea-label"><span class="label-user-full-name"><?= html(

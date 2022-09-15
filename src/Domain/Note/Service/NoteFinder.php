@@ -66,7 +66,7 @@ class NoteFinder
      */
     public function findAllNotesFromClient(int $clientId, bool $orderDesc = false): array
     {
-        $allNotes = $this->noteFinderRepository->findAllNotesWithUserByClientId($clientId);
+        $allNotes = $this->noteFinderRepository->findAllNotesExceptMainWithUserByClientId($clientId);
 //        $this->changeDateFormat($allNotes);
 //        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;

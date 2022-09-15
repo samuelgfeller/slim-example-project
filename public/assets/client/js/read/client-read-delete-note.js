@@ -12,9 +12,13 @@ import {basePath} from "../../../general/js/config.js";
  * @param noteContainer
  */
 export function deleteNoteRequestToDb(noteId, noteContainer) {
+    // Find correct note inside note container
+    let textarea = noteContainer.querySelector('textarea');
     // Show loader
-    let circleLoader = document.getElementById('note'+noteId).parentNode.querySelector('.circle-loader');
+    let circleLoader = textarea.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
+
+    noteContainer.style.opacity = '0.4';
 
     // Make ajax call
     let xHttp = new XMLHttpRequest();

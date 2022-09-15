@@ -28,7 +28,7 @@ class ClientFinderRepository
         'client_message' => 'client.client_message',
         'user_id' => 'client.user_id',
         'client_status_id' => 'client.client_status_id',
-        'note_id' => 'client.note_id',
+        'main_note_id' => 'client.main_note_id',
         'updated_at' => 'client.updated_at',
         'created_at' => 'client.created_at',
         // User data prefixed with user_
@@ -124,7 +124,7 @@ class ClientFinderRepository
                 'note' => [
                     'table' => 'note',
                     'type' => 'LEFT',
-                    'conditions' => 'client.note_id = note.id and note.deleted_at IS NULL'
+                    'conditions' => 'client.main_note_id = note.id and note.deleted_at IS NULL'
                 ],
             ])
             ->andWhere(

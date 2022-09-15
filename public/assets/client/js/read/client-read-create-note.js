@@ -5,6 +5,16 @@ import {
     initActivityTextareasEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
 
+let noteCreationHideCheckMarkTimeout;
+
+/**
+ * Clears the timeout of hiding the checkmark loader after note creation
+ * Same function also exists on save of existing note
+ */
+export function disableHideCheckMarkTimeoutOnCreation() {
+    clearTimeout(noteCreationHideCheckMarkTimeout);
+}
+
 export function addNewNoteTextarea() {
     // Check if bubble already exists and only create new one if there isn't one already
     let existingNewNoteBubble = document.getElementById('new-note');
@@ -43,7 +53,7 @@ export function addNewNoteTextarea() {
 }
 
 
-export function insertNewNoteToDb(textarea) {
+export function insertNewNoteToDb(textarea, isMainNote = false) {
     // By using querySelector on the targeted textarea parent it's certain that the right circleLoader is targeted
     let circleLoader = textarea.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
@@ -80,7 +90,8 @@ export function insertNewNoteToDb(textarea) {
     xHttp.send(JSON.stringify({
         [textarea.name]: textarea.value,
         // Not camelCase as html form names are underline too
-        client_id: document.getElementById('client-id').value
+        client_id: document.getElementById('client-id').value,
+        is_main_note: isMainNote ? 1 : 0,
     }));
 }
 
@@ -119,10 +130,10 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     // Add container id
     noteContainer.id = 'note' + noteId + '-container';
 
-    // Remove checkmark after 1 sec
-    setTimeout(function () {
+    // Remove checkmark after x sec
+    noteCreationHideCheckMarkTimeout = setTimeout(function () {
         // Hide circle loader and its child the checkmark
         // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
-        hideCheckmarkLoader(circleLoader);
+        hideCheckmarkLoader(circleLoader,);
     }, 3000);
 }
