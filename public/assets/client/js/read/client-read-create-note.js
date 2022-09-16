@@ -13,7 +13,9 @@ let noteCreationHideCheckMarkTimeout = [];
  * I don't fully understand why but if I don't check the note id here as well, it makes
  */
 export function disableHideCheckMarkTimeoutOnCreation(noteId) {
-    if (noteCreationHideCheckMarkTimeout['noteId'] === noteId) {
+    // parseInt necessary here as one is an int and the other a string
+    if (parseInt(noteCreationHideCheckMarkTimeout['noteId']) === parseInt(noteId)) {
+        // Clear the timeout that hides the loader 3s after creation (in case it re-appears after new input pause before 3s)
         clearTimeout(noteCreationHideCheckMarkTimeout['timeoutId']);
     }
 }
@@ -42,14 +44,15 @@ export function addNewNoteTextarea() {
                     </div>
                 </div>
             </div>`);
+        let textarea = document.getElementById('new-note');
+        // let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
         // Refresh all activity textareas event listeners to count new ones in too didn't work as it created
         // duplicate events like saving but this simply adds event listener to targets textarea
-        addTextareaInputEventListener(document.getElementById('new-note'));
+        addTextareaInputEventListener(textarea);
         // Make that newly created textarea resize automatically as well
         initAutoResizingTextareas();
 
         // Has to be after textarea event listener init
-        let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
         textarea.focus();
     } else {
         existingNewNoteBubble.focus();
@@ -122,13 +125,17 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     let label = noteContainer.querySelector('label.textarea-label');
     label.setAttribute('for', textarea.id);
     label.querySelector('.label-user-full-name').innerHTML = responseData.userFullName;
-    label.querySelector('.delete-note-btn').dataset.noteId = noteId;
+    let delBtn = label.querySelector('.delete-note-btn');
+    delBtn.dataset.noteId = noteId;
+    delBtn.style.display = null;
     label.querySelector('.note-created-date').innerHTML = responseData.createdDateFormatted;
 
     // Add note id to loader
     textarea.parentNode.querySelector('.circle-loader').dataset.noteId = noteId;
-    // Add the read only event listener and display del btn
+
+    // Add the read only event listener
     toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
+
     // Make delete button work
     addDeleteNoteBtnEventListener(document.querySelector('.delete-note-btn[data-note-id="' + noteId + '"]'));
     // Add container id
@@ -139,6 +146,6 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     noteCreationHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
         // Hide circle loader and its child the checkmark
         // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
-        hideCheckmarkLoader(circleLoader,);
+        hideCheckmarkLoader(circleLoader, 'create');
     }, 3000);
 }

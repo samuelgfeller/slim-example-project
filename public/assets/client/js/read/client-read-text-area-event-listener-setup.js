@@ -52,7 +52,7 @@ export function addTextareaInputEventListener(textarea){
         hideCheckmarkLoader(this.parentNode.querySelector('.circle-loader'));
         // Clear timeout that hides it after note update or creation if there was one
         disableHideCheckMarkTimeoutOnUpdate(noteId);
-        disableHideCheckMarkTimeoutOnCreation();
+        disableHideCheckMarkTimeoutOnCreation(noteId);
         // Only save if 1 second writing pause
         clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
@@ -133,7 +133,8 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     });
 }
 
-export function hideCheckmarkLoader(checkmarkLoader) {
+export function hideCheckmarkLoader(checkmarkLoader, a) {
+    console.log(a);
     checkmarkLoader.classList.remove('load-complete');
     checkmarkLoader.querySelector('.checkmark').style.display = 'none';
     checkmarkLoader.style.display = 'none';

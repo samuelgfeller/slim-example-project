@@ -14,7 +14,7 @@ let noteSaveHideCheckMarkTimeout = [];
  * for the next save request.
  */
 export function disableHideCheckMarkTimeoutOnUpdate(noteId) {
-    if (noteSaveHideCheckMarkTimeout['noteId'] === noteId) {
+    if (parseInt(noteSaveHideCheckMarkTimeout['noteId']) === parseInt(noteId)) {
         clearTimeout(noteSaveHideCheckMarkTimeout['timeoutId']);
     }
 }
