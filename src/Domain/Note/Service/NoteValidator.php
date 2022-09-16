@@ -77,7 +77,8 @@ class NoteValidator extends AppValidation
      */
     protected function validateMessage($noteMsg, ValidationResult $validationResult, bool $required): void
     {
-        if (null !== $noteMsg && '' !== $noteMsg) {
+        // Not test if empty string as user could submit note with empty string which has to be checked
+        if (null !== $noteMsg) {
             $this->validateLengthMax($noteMsg, 'message', $validationResult, 500);
             $this->validateLengthMin($noteMsg, 'message', $validationResult, 4);
         } elseif (true === $required) {

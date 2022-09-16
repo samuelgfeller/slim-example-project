@@ -28,6 +28,13 @@ export function initActivityTextareasEventListeners() {
         // Called when new note is created as well
         toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
 
+        // On init, add read-only attribute to each textarea with js so that if user clicks on a textarea before
+        // full page load, he can continue to write
+        if (document.activeElement !== textarea) {
+            textarea.setAttribute('readonly', 'readonly');
+        }
+
+
         // In own function to be able to be called individually for new note to prevent that they have duplicate event listeners
         // Which happened when I called initActivityTextareasEventListeners after adding new textarea and update request was fired twice
         addTextareaInputEventListener(textarea);
@@ -50,7 +57,7 @@ export function addTextareaInputEventListener(textarea){
         clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            if (textarea.checkValidity() !== false) {
+            if (textarea.checkValidity() !== false && textarea.value.length > 0) {
                 if (noteId === 'new-note') {
                     insertNewNoteToDb(textarea);
                 } else if (noteId === 'new-main-note') {
@@ -58,6 +65,8 @@ export function addTextareaInputEventListener(textarea){
                 } else {
                     saveNoteChangeToDb.call(textarea, noteId);
                 }
+            } else{
+                textarea.reportValidity();
             }
         }, 1000);
     });

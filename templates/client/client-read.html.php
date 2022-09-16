@@ -105,7 +105,6 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                               data-note-id="<?= $note->noteId ?>"
                               minlength="4" maxlength="500"
                               data-editable="<?= $note->userMutationRight === 'all' ? 1 : 0 ?>"
-                              readonly="readonly"
                               name="message"><?= html($note->noteMessage) ?></textarea>
                     <div class="circle-loader client-read" data-note-id="<?= $note->noteId ?>">
                         <div class="checkmark draw"></div>

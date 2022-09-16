@@ -51,8 +51,7 @@ export function saveNoteChangeToDb(noteId) {
                         // Show checkmark in loader
                         circleLoader.classList.add('load-complete');
                         circleLoader.querySelector('.checkmark').style.display = 'block';
-                        let tx = document.querySelector('#main-note-textarea-div textarea')
-                        tx.value = tx.value + ' done';
+
                         noteSaveHideCheckMarkTimeout['noteId'] = noteId;
                         // Remove checkmark after 1 sec
                         noteSaveHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
