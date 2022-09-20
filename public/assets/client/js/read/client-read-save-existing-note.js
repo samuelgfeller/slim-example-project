@@ -40,6 +40,7 @@ export function saveNoteChangeToDb(noteId) {
             if (xHttp.status !== 201 && xHttp.status !== 200) {
                 // Default fail handler
                 handleFail(xHttp);
+                hideCheckmarkLoader(circleLoader, 'Save existing fail');
             }
             // Success
             else {
@@ -57,11 +58,11 @@ export function saveNoteChangeToDb(noteId) {
                         noteSaveHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
                             // Hide circle loader and its child the checkmark
                             // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
-                            hideCheckmarkLoader(circleLoader);
+                            hideCheckmarkLoader(circleLoader, '3s after successful save');
                         }, 3000);
                     } else {
                         // Hide checkmark loader "cleanly" so that it's not broken on the next input
-                        hideCheckmarkLoader(circleLoader);
+                        hideCheckmarkLoader(circleLoader, 'Non success note save');
                     }
                 }
             }

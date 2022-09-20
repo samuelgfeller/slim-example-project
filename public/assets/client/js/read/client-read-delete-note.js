@@ -27,7 +27,7 @@ export function deleteNoteRequestToDb(noteId, noteContainer) {
         if (xHttp.readyState === XMLHttpRequest.DONE) {
             // Fail
             if (xHttp.status !== 201 && xHttp.status !== 200) {
-                hideCheckmarkLoader(circleLoader);
+                hideCheckmarkLoader(circleLoader, 'Delete note fail');
                 noteContainer.style.opacity = '1';
                 // Default fail handler
                 handleFail(xHttp);

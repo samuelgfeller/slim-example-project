@@ -83,7 +83,7 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
                     populateNewNoteDomAttributes(textarea, response.data);
                 } else {
                     // Hide checkmark loader "cleanly" so that it's not broken on the next input
-                    hideCheckmarkLoader(circleLoader);
+                    hideCheckmarkLoader(circleLoader, 'Client create note after non success creation');
                 }
             }
         }
@@ -146,6 +146,6 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     noteCreationHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
         // Hide circle loader and its child the checkmark
         // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
-        hideCheckmarkLoader(circleLoader, 'create');
+        hideCheckmarkLoader(circleLoader, '3s after note creation');
     }, 3000);
 }

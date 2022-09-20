@@ -44,32 +44,60 @@ export function initActivityTextareasEventListeners() {
 }
 
 let textareaInputPauseTimeoutId;
-export function addTextareaInputEventListener(textarea){
+
+export function addTextareaInputEventListener(textarea) {
+    let noteId = textarea.dataset.noteId;
+
+    // Remove focus when ctrl + enter is pressed
+    textarea.addEventListener('keypress', function (e) {
+        if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
+            textareaInputEventFunction(textarea, noteId, true);
+
+            // Clear input pause timeout as we already submit it here instantly
+            // clearTimeout(textareaInputPauseTimeoutId);
+            // // Clear timeout that hides circle loader after note update or creation if there was one as we want it to finish
+            // disableHideCheckMarkTimeoutOnUpdate(noteId);
+            // disableHideCheckMarkTimeoutOnCreation(noteId);
+            // // Change the var userIsTypingOnNoteId to the note id as it will prevent the response of an "old" ajax call to hide checkmark
+            // userIsTypingOnNoteId = noteId;
+            // // Submit changes
+            submitTextareaInputs(textarea, noteId);
+            textarea.blur(); // Focus out
+        }
+    });
     textarea.addEventListener('input', function () {
-        let noteId = textarea.dataset.noteId;
-        userIsTypingOnNoteId = noteId;
-        // Hide loader if there was one
-        hideCheckmarkLoader(this.parentNode.querySelector('.circle-loader'));
-        // Clear timeout that hides it after note update or creation if there was one
-        disableHideCheckMarkTimeoutOnUpdate(noteId);
-        disableHideCheckMarkTimeoutOnCreation(noteId);
-        // Only save if 1 second writing pause
-        clearTimeout(textareaInputPauseTimeoutId);
+        textareaInputEventFunction(textarea, noteId);
+    });
+}
+function textareaInputEventFunction(textarea, noteId, withoutSubmit = false){
+    console.log('hey');
+    userIsTypingOnNoteId = noteId;
+    // Hide loader if there was one
+    hideCheckmarkLoader(textarea.parentNode.querySelector('.circle-loader'), 'New input');
+    // Clear timeout that hides it after note update or creation if there was one
+    disableHideCheckMarkTimeoutOnUpdate(noteId);
+    disableHideCheckMarkTimeoutOnCreation(noteId);
+    // Only save if 1 second writing pause
+    clearTimeout(textareaInputPauseTimeoutId);
+    if (withoutSubmit === false) {
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            if (textarea.checkValidity() !== false && textarea.value.length > 0) {
-                if (noteId === 'new-note') {
-                    insertNewNoteToDb(textarea);
-                } else if (noteId === 'new-main-note') {
-                    insertNewNoteToDb(textarea, true)
-                } else {
-                    saveNoteChangeToDb.call(textarea, noteId);
-                }
-            } else{
-                textarea.reportValidity();
-            }
+            submitTextareaInputs(textarea, noteId)
         }, 1000);
-    });
+    }
+}
+function submitTextareaInputs(textarea, noteId){
+    if (textarea.checkValidity() !== false && textarea.value.length > 0) {
+        if (noteId === 'new-note') {
+            insertNewNoteToDb(textarea);
+        } else if (noteId === 'new-main-note') {
+            insertNewNoteToDb(textarea, true)
+        } else {
+            saveNoteChangeToDb.call(textarea, noteId);
+        }
+    } else {
+        textarea.reportValidity();
+    }
 }
 
 export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
@@ -124,8 +152,8 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     deleteNoteBtn.addEventListener('click', () => {
         let noteId = deleteNoteBtn.dataset.noteId;
         let title = 'Are you sure that you want to delete this note?';
-        let info = '';
-        createAlertModal(title, info, () => {
+        let info = 'Once the note is deleted, it can only be recovered by a database administrator.';
+        createAlertModal(title, '', () => {
             deleteNoteRequestToDb(noteId, document.getElementById(
                 'note' + noteId + '-container'
             ));
@@ -133,8 +161,8 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     });
 }
 
-export function hideCheckmarkLoader(checkmarkLoader, a) {
-    console.log(a);
+export function hideCheckmarkLoader(checkmarkLoader, origin) {
+    console.log(origin);
     checkmarkLoader.classList.remove('load-complete');
     checkmarkLoader.querySelector('.checkmark').style.display = 'none';
     checkmarkLoader.style.display = 'none';
