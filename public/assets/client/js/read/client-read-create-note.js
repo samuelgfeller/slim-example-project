@@ -121,25 +121,26 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     let noteId = responseData.noteId;
     textarea.id = 'note' + noteId;
     textarea.dataset.noteId = noteId;
+    // If noteContainer is null it means that it's the main textarea which doesn't have a label
+    if (noteContainer !== null) {
     // There are 2 parents before the label is a child
-    let label = noteContainer.querySelector('label.textarea-label');
-    label.setAttribute('for', textarea.id);
-    label.querySelector('.note-left-side-label-span').innerHTML = responseData.createdDateFormatted;
-    let delBtn = label.querySelector('.delete-note-btn');
-    delBtn.dataset.noteId = noteId;
-    delBtn.style.display = null;
-    label.querySelector('.note-right-side-label-span').innerHTML = responseData.userFullName;
-
+        let label = noteContainer.querySelector('label.textarea-label');
+        label.setAttribute('for', textarea.id);
+        label.querySelector('.note-left-side-label-span').innerHTML = responseData.createdDateFormatted;
+        let delBtn = label.querySelector('.delete-note-btn');
+        delBtn.dataset.noteId = noteId;
+        delBtn.style.display = null;
+        label.querySelector('.note-right-side-label-span').innerHTML = responseData.userFullName;
+        // Add container id
+        noteContainer.id = 'note' + noteId + '-container';
+        // Make delete button work
+        addDeleteNoteBtnEventListener(document.querySelector('.delete-note-btn[data-note-id="' + noteId + '"]'));
+    }
     // Add note id to loader
     textarea.parentNode.querySelector('.circle-loader').dataset.noteId = noteId;
 
     // Add the read only event listener
     toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
-
-    // Make delete button work
-    addDeleteNoteBtnEventListener(document.querySelector('.delete-note-btn[data-note-id="' + noteId + '"]'));
-    // Add container id
-    noteContainer.id = 'note' + noteId + '-container';
 
     noteCreationHideCheckMarkTimeout['noteId'] = noteId;
     // Remove checkmark after x sec

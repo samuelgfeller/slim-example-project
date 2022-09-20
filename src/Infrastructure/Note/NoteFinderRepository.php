@@ -176,12 +176,15 @@ class NoteFinderRepository
             'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],
             'client' => ['table' => 'client', 'type' => 'LEFT', 'conditions' => 'note.client_id = client.id']
         ])
-            ->andWhere([
+            ->where([
                     // Not unsafe as it's not an expression and thus escaped by querybuilder
                     'note.client_id' => $clientId,
                     // We have to tell the query builder when the string is literal or if it's a column, it doesn't
                     // detect that alone. https://discourse.cakephp.org/t/query-builder-documentation-examples-without-orm/10471
-                    'note.id <>' => $query->identifier('client.main_note_id'),
+                    'OR' => [
+                        'note.id <>' => $query->identifier('client.main_note_id'),
+                        'client.main_note_id IS' => null
+                    ],
                     'note.deleted_at IS' => null
                 ]
             )->orderDesc('note.created_at');
