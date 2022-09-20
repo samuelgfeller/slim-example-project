@@ -51,53 +51,37 @@ export function addTextareaInputEventListener(textarea) {
     // Remove focus when ctrl + enter is pressed
     textarea.addEventListener('keypress', function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
-            textareaInputEventFunction(textarea, noteId, true);
-
-            // Clear input pause timeout as we already submit it here instantly
-            // clearTimeout(textareaInputPauseTimeoutId);
-            // // Clear timeout that hides circle loader after note update or creation if there was one as we want it to finish
-            // disableHideCheckMarkTimeoutOnUpdate(noteId);
-            // disableHideCheckMarkTimeoutOnCreation(noteId);
-            // // Change the var userIsTypingOnNoteId to the note id as it will prevent the response of an "old" ajax call to hide checkmark
-            // userIsTypingOnNoteId = noteId;
-            // // Submit changes
-            submitTextareaInputs(textarea, noteId);
-            textarea.blur(); // Focus out
+            // Focus out
+            textarea.blur();
+            // Ideally it would save directly to give the user the feedback but that adds quit a bit of complexity
+            // especially with loaders and hiding them (or NOT hiding them if ctrl + enter is pressed right after an
+            // input pause and this level of optimisation is not needed for this project
         }
     });
     textarea.addEventListener('input', function () {
-        textareaInputEventFunction(textarea, noteId);
-    });
-}
-function textareaInputEventFunction(textarea, noteId, withoutSubmit = false){
-    console.log('hey');
-    userIsTypingOnNoteId = noteId;
-    // Hide loader if there was one
-    hideCheckmarkLoader(textarea.parentNode.querySelector('.circle-loader'), 'New input');
-    // Clear timeout that hides it after note update or creation if there was one
-    disableHideCheckMarkTimeoutOnUpdate(noteId);
-    disableHideCheckMarkTimeoutOnCreation(noteId);
-    // Only save if 1 second writing pause
-    clearTimeout(textareaInputPauseTimeoutId);
-    if (withoutSubmit === false) {
+        userIsTypingOnNoteId = noteId;
+        // Hide loader if there was one
+        hideCheckmarkLoader(textarea.parentNode.querySelector('.circle-loader'), 'New input');
+        // Clear timeout that hides it after note update or creation if there was one
+        disableHideCheckMarkTimeoutOnUpdate(noteId);
+        disableHideCheckMarkTimeoutOnCreation(noteId);
+        // Only save if 1 second writing pause
+        clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            submitTextareaInputs(textarea, noteId)
+            if (textarea.checkValidity() !== false && textarea.value.length > 0) {
+                if (noteId === 'new-note') {
+                    insertNewNoteToDb(textarea);
+                } else if (noteId === 'new-main-note') {
+                    insertNewNoteToDb(textarea, true)
+                } else {
+                    saveNoteChangeToDb.call(textarea, noteId);
+                }
+            } else {
+                textarea.reportValidity();
+            }
         }, 1000);
-    }
-}
-function submitTextareaInputs(textarea, noteId){
-    if (textarea.checkValidity() !== false && textarea.value.length > 0) {
-        if (noteId === 'new-note') {
-            insertNewNoteToDb(textarea);
-        } else if (noteId === 'new-main-note') {
-            insertNewNoteToDb(textarea, true)
-        } else {
-            saveNoteChangeToDb.call(textarea, noteId);
-        }
-    } else {
-        textarea.reportValidity();
-    }
+    });
 }
 
 export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
