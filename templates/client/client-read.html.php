@@ -86,18 +86,16 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             ?>
             <div id="note<?= $note->noteId ?>-container" class="note-container">
                 <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><span class="label-user-full-name"><?= html(
-                            $note->userFullName
-                        ) ?>
+                       class="discrete-label textarea-label"><span class="note-left-side-label-span"><?=
+                        (new \DateTime($note->noteCreatedAt))->format('d. F Y • H:i') ?>
                     </span>
                     <?php
                     if ($note->userMutationRight === 'all') { ?>
                         <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
-                             data-note-id="<?= $note->noteId ?>"><span
-                                class="discrete-text note-created-date"><?=
-                            (new \DateTime($note->noteCreatedAt))->format('d.m.Y • H:i') ?></span>
+                             data-note-id="<?= $note->noteId ?>">
                         <?php
-                    } ?></label>
+                    } ?><span class="discrete-text note-right-side-label-span"><?= html($note->userFullName) ?></span>
+                </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->

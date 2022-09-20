@@ -90,7 +90,7 @@
         display: inline-block;
     }
 
-    .note-created-date {
+    .note-right-side-label-span {
         float: right;
         margin-right: 20px;
         font-size: 12px;

@@ -28,11 +28,11 @@ export function addNewNoteTextarea() {
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note"
                        class="discrete-label textarea-label">
-                       <span class="label-user-full-name"></span>
+                       <span class="note-left-side-label-span"></span>
                        <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" data-note-id=""
                        style="display: none">
                        <span
-                            class="discrete-text note-created-date"></span></label>
+                            class="discrete-text note-right-side-label-span"></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
@@ -124,11 +124,11 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     // There are 2 parents before the label is a child
     let label = noteContainer.querySelector('label.textarea-label');
     label.setAttribute('for', textarea.id);
-    label.querySelector('.label-user-full-name').innerHTML = responseData.userFullName;
+    label.querySelector('.note-left-side-label-span').innerHTML = responseData.createdDateFormatted;
     let delBtn = label.querySelector('.delete-note-btn');
     delBtn.dataset.noteId = noteId;
     delBtn.style.display = null;
-    label.querySelector('.note-created-date').innerHTML = responseData.createdDateFormatted;
+    label.querySelector('.note-right-side-label-span').innerHTML = responseData.userFullName;
 
     // Add note id to loader
     textarea.parentNode.querySelector('.circle-loader').dataset.noteId = noteId;
