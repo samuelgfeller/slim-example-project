@@ -51,7 +51,7 @@ a {
     color: black;
 }
 
-h2, h1{
+h2, h1, h3{
     color: black;
     text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);
     font-family: SF-Pro Display, Helvetica, sans-serif;
@@ -62,6 +62,9 @@ h1{
 }
 h2{
     font-size: 2em;
+}
+h3{
+    font-size: 1.5em;
 }
 
 a:hover {
@@ -108,7 +111,6 @@ a:hover {
 .btn{
     background-color: var(--layout-main-button-color);
     border: none;
-    color: black;
     padding: 8px 20px;
     margin: 15px 0 0;
     border-radius: 4444px;
@@ -124,6 +126,9 @@ a:hover {
     box-shadow: 0 0 10px #c1c1c1;
     font-weight: normal; /* For when <a> to behave as button */
 }
+.btn:focus{
+    background: #cbcbcb;
+}
 .btn:disabled{
     background: whitesmoke;
     color: grey;
@@ -131,11 +136,16 @@ a:hover {
 }
 
 .btn-red{
-    background: #ff8d81;
+    /*background: #ff8d81;*/
     /*border: 1px solid #b2180e;*/
 }
 .btn-red:hover {
-    background-color: #ff6b6b;
+    background-color: #ff9b9b;
+    /*border: 2px solid tomato;*/
+    /*background: initial;*/
+}
+.btn-red:focus {
+    background: #ec6969;
 }
 
 .discrete-link{

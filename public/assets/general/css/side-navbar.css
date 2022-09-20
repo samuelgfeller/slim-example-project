@@ -21,7 +21,7 @@
         transition: max-width .5s ease-out;
         white-space: nowrap;
         overflow: hidden;
-        z-index: 999;
+        z-index: 99;
         background: white;
         position: fixed;
         bottom: 100px;
@@ -96,7 +96,7 @@
         background: #2e3e50;
         border-radius: 99px;
         position: fixed;
-        z-index: 999;
+        z-index: 99;
         bottom: 30px;
         left: 15px;
         width: 70px;
@@ -214,7 +214,7 @@
     #nav-container {
         position: fixed;
         /*The z-index matters most here as its the most parent context of the menu*/
-        z-index: 999;
+        z-index: 99;
     }
 }
 

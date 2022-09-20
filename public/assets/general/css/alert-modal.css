@@ -3,7 +3,7 @@
     /* The Modal (background) */
     #alert-modal {
         position: fixed; /* Stay in place */
-        z-index: 10; /* Sit on top of content placeholder but below flash */
+        z-index: 100; /* Sit on top of content placeholder and flash message and nav menu */
         left: 0;
         top: 0;
         width: 100%;
@@ -20,11 +20,11 @@
         column-gap: 20px;
         align-items: center;
 
-        width: 100%;
+        width: 90%;
         max-width: 450px;
-        border-radius: 25px;
+        border-radius: 50px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border: 5px solid #b2180e;
+        border: 5px solid var(--layout-main-color);
         font-size: 1.1em;
         text-align: center;
         background-color: #f2f2f2;
@@ -41,25 +41,31 @@
 
     /* Modal Header */
     #alert-modal-header {
-        padding: 2px 0;
+        /*padding: 2px 0;*/
     }
 
     /* Modal Body */
-    #alert-modal-body {
-        padding: 2px 0;
+    #alert-modal-body h3 {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        color: var(--layout-main-color);
     }
 
     /* Modal Footer */
     #alert-modal-footer {
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
         width: 100%;
     }
 
     /* Enhance borders */
     #alert-modal-footer .btn {
-        font-size: 1.1em;
-        border-width: 2px;
+        /*font-size: 1.1em;*/
+        /*border-width: 2px;*/
+    }
+    #alert-modal-cancel-btn{
+        background: #eeeeee;
     }
 }
 

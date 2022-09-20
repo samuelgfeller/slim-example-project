@@ -43,7 +43,7 @@ class ClientUpdater
 
         // Find note in db to compare its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
-//sleep(1);
+
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own client or user as all users should be able to update all clients

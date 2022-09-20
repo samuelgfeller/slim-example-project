@@ -33,12 +33,12 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
         // '<img src="assets/general/img/warning-icon.svg" alt="warning">' +
         '</div>' +
         '<div id="alert-modal-body">' +
-        '<h2>' + title + '</h2>' +
+        '<h3>' + title + '</h3>' +
         '<p>' + info + '</p>' +
         '</div>' +
         '<div id="alert-modal-footer">' +
-        '<button class="btn btn-red" id="alert-modal-confirm-btn">' + btnString + '</button>' +
         '<button class="btn" id="alert-modal-cancel-btn">Cancel</button>' +
+        '<button class="btn btn-red" id="alert-modal-confirm-btn">' + btnString + '<span style="color: tomato">&nbsp ⬤ </span></button>' +
         '</div>' +
         '</div>' +
         '</div>';
@@ -47,6 +47,9 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
 
     // Add event listener on confirmation
     document.getElementById('alert-modal-confirm-btn').addEventListener('click', confirmationEventFunction);
+
+    // Not working idk why
+    document.getElementById('alert-modal-cancel-btn').focus();
 }
 
 function closeAlertModal() {

@@ -96,31 +96,30 @@ return function (App $app) {
         // Client requests where user DOESN'T need to be authenticated
         $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
 
-        $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)->setName(
-            'client-read-page'
-        );
+        $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)
+            ->setName('client-read-page')->add(UserAuthenticationMiddleware::class);
         /* For api response action:
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
          https://stackoverflow.com/a/19287394/9013718
          return $this->responder->respondWithJson($response, $postWithUser); */
         // Client requests where user DOES need to be authenticated
-        $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)->setName(
-            'client-submit-create'
-        )->add(
-            UserAuthenticationMiddleware::class
-        );
-        $group->put('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientUpdateAction::class)->add(
-            UserAuthenticationMiddleware::class
-        )->setName('client-submit-update');
-        $group->delete('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientDeleteAction::class)->add(
-            UserAuthenticationMiddleware::class
-        )->setName('client-submit-delete');
+        $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)
+            ->setName('client-submit-create')->add(UserAuthenticationMiddleware::class);
+        $group->put('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientUpdateAction::class)
+            ->add(UserAuthenticationMiddleware::class)->setName('client-submit-update');
+        $group->delete('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientDeleteAction::class)
+            ->add(UserAuthenticationMiddleware::class)->setName('client-submit-delete');
     });
 
     // Page actions routes outside /posts as they are needed by Ajax after page load
     // All clients with status whose status is not closed
-    $app->get('/all-clients', \App\Application\Actions\Client\ClientListAllPageAction::class)->setName('client-list-all-page');
-    $app->get('/clients-assigned-to-me', \App\Application\Actions\Client\ClientListAssignedToMePageAction::class)->setName(
+    $app->get('/all-clients', \App\Application\Actions\Client\ClientListAllPageAction::class)->setName(
+        'client-list-all-page'
+    )->add(UserAuthenticationMiddleware::class);
+    $app->get(
+        '/clients-assigned-to-me',
+        \App\Application\Actions\Client\ClientListAssignedToMePageAction::class
+    )->setName(
         'client-list-assigned-to-me-page'
     )->add(UserAuthenticationMiddleware::class);
 
@@ -158,7 +157,6 @@ return function (App $app) {
      * //     */
     $app->map(
         ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) use ($app) {
-
         throw new HttpNotFoundException(
             $request, 'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
             <br>Basepath: "' . $app->getBasePath() . '"'
