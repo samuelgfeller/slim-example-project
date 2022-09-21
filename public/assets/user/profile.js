@@ -184,9 +184,9 @@ function submitValueChange(submitBtnId, inputName) {
     xHttp.open('PUT', basePath + 'users/' + userId, true);
 
     xHttp.setRequestHeader("Content-type", "application/json");
-    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
-    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "profile-page");
+    xHttp.setRequestHeader("Redirect-to-route-name-if-unauthorized", "profile-page");
 
     // inputName in square brackets to be evaluated https://stackoverflow.com/a/11508490/9013718
     xHttp.send(JSON.stringify({[inputName]: inputElement.value}));
@@ -260,9 +260,9 @@ function submitDeleteAccount(){
     xHttp.open('DELETE', basePath + 'users/' + userId, true);
 
     xHttp.setRequestHeader("Content-type", "application/json");
-    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
-    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "profile-page");
+    xHttp.setRequestHeader("Redirect-to-route-name-if-unauthorized", "profile-page");
 
     xHttp.send();
 }

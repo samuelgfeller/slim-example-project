@@ -1,4 +1,4 @@
-import {loadClients} from "./list/client-loading.js";
+import {loadClients} from "./list/client-list-loading.js";
 
 /**
  * Submit client deletion
@@ -38,10 +38,10 @@ function submitDeleteClient(clientId) {
 
     // Read client infos
     xHttp.open('DELETE', basePath + 'clients/' + clientId, true);
-    // Important to add content type json and "Redirect-to-if-unauthorized" header for the UserAuthenticationMiddleware
+    // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
     xHttp.setRequestHeader("Content-type", "application/json");
-    xHttp.setRequestHeader("Redirect-to-if-unauthorized", "client-list-assigned-to-me-page");
+    xHttp.setRequestHeader("Redirect-to-route-name-if-unauthorized", "client-list-assigned-to-me-page");
 
     xHttp.send();
 }

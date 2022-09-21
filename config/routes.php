@@ -136,16 +136,12 @@ return function (App $app) {
         // Note requests where user DOES need to be authenticated
         $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
             'note-submit-create'
-        )->add(
-            UserAuthenticationMiddleware::class
         );
-        $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateAction::class)->add(
-            UserAuthenticationMiddleware::class
-        )->setName('note-submit-update');
-        $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteAction::class)->add(
-            UserAuthenticationMiddleware::class
-        )->setName('note-submit-delete');
-    });
+        $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateAction::class)
+            ->setName('note-submit-update');
+        $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteAction::class)
+            ->setName('note-submit-delete');
+    })->add(UserAuthenticationMiddleware::class);
 
 //    $app->get( '/favicon.ico', function ($request, $response) {
 //        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');

@@ -149,13 +149,12 @@ class NoteFinderRepository
 
     /**
      * Return all notes which are linked to the given client
-     * EXCEPT the main note which is handled differently
+     * from most recent to oldest EXCEPT for the main note
      *
      * @param int $clientId
-     * @param bool $orderDesc
      * @return NoteWithUserData[]
      */
-    public function findAllNotesExceptMainWithUserByClientId(int $clientId, bool $orderDesc = false): array
+    public function findAllNotesExceptMainWithUserByClientId(int $clientId): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
 

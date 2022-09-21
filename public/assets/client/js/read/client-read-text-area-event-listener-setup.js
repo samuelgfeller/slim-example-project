@@ -23,6 +23,7 @@ export function initActivityTextareasEventListeners() {
     let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
+    console.log(clientReadTextareas);
 
     for (let textarea of clientReadTextareas) {
         // Called when new note is created as well

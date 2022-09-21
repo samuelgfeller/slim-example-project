@@ -1,5 +1,5 @@
-import {getClientProfileCardHtml} from "../templates/client-profile-card.html.js";
-import {displayClientProfileCardLoadingPlaceholder, removeContentPlaceholder} from "./client-loading-placeholder.js";
+import {getClientProfileCardHtml} from "../templates/client-list-profile-card.html.js";
+import {displayClientProfileCardLoadingPlaceholder, removeClientCardContentPlaceholder} from "./client-list-loading-placeholder.js";
 import {basePath} from "../../../general/js/config.js";
 
 /**
@@ -21,7 +21,7 @@ export function loadClients() {
             }
             // If status code 401 user is not logged in
             if (xHttp.status === 401) {
-                removeContentPlaceholder();
+                removeClientCardContentPlaceholder();
                 document.getElementById('client-wrapper').insertAdjacentHTML('afterend',
                     '<p>Please <a href="' + JSON.parse(xHttp.responseText).loginUrl +
                     '">login</a> to access clients assigned to you.</p>');
@@ -29,7 +29,7 @@ export function loadClients() {
             // Success
             else {
                 let response = JSON.parse(xHttp.responseText);
-                removeContentPlaceholder();
+                removeClientCardContentPlaceholder();
                 console.log(response.clients);
                 addClientsToDom(response.clients, response.users, response.statuses);
             }

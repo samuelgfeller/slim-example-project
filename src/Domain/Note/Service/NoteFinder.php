@@ -62,13 +62,12 @@ class NoteFinder
      * Return all notes except the main note that are linked to the given client
      *
      * @param int $clientId
-     * @param bool $orderDesc
      * @return NoteWithUserData[]
      */
-    public function findAllNotesFromClient(int $clientId, bool $orderDesc = false): array
+    public function findAllNotesFromClient(int $clientId): array
     {
         $allNotes = $this->noteFinderRepository->findAllNotesExceptMainWithUserByClientId($clientId);
-//        $this->changeDateFormat($allNotes);
+        $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
         $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;
     }
@@ -87,15 +86,11 @@ class NoteFinder
         // Tested in NoteListActionTest
         foreach ($userNotes as $userNote) {
             // Change updated at format
-            $userNote->noteUpdatedAt = $userNote->noteUpdatedAt ? date(
-                $format,
-                strtotime($userNote->noteUpdatedAt)
-            ) : null;
+            $userNote->noteUpdatedAt = $userNote->noteUpdatedAt ? (new \DateTime($userNote->noteUpdatedAt))
+                ->format($format) : null;
             // Change created at format
-            $userNote->noteCreatedAt = $userNote->noteCreatedAt ? date(
-                $format,
-                strtotime($userNote->noteCreatedAt)
-            ) : null;
+            $userNote->noteCreatedAt = $userNote->noteCreatedAt ? (new \DateTime($userNote->noteCreatedAt))
+                ->format($format) : null;
         }
     }
 }

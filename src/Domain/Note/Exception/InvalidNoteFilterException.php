@@ -2,10 +2,12 @@
 
 namespace App\Domain\Note\Exception;
 
+use Slim\Exception\HttpBadRequestException;
+
 /**
  * Class ValidationException.
  */
-class InvalidNoteFilterException extends \RuntimeException
+class InvalidNoteFilterException extends HttpBadRequestException
 {
 
     public function __construct($message)

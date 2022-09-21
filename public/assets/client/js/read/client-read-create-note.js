@@ -21,6 +21,11 @@ export function disableHideCheckMarkTimeoutOnCreation(noteId) {
 }
 
 export function addNewNoteTextarea() {
+    // Hide no note info if there is one
+    let noNotesInfo = document.getElementById('no-notes-info');
+    if (noNotesInfo !== null) {
+        noNotesInfo.remove();
+    }
     // Check if bubble already exists and only create new one if there isn't one already
     let existingNewNoteBubble = document.getElementById('new-note');
     if (existingNewNoteBubble === null) {

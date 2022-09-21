@@ -78,40 +78,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <h2>Aktivität</h2>
             <div class="plus-btn" id="create-note-btn"></div>
         </div>
-        <?php
-        //! ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED IN client-read-create-note.js AS WELL addNewNoteTextarea, populateNewNoteDomAttributes
-        foreach ($clientAggregate->notes as $note) {
-            // Textarea and loader have to be in a div for the absolute positioned loaders to know to which textarea they belong
-            // If below is changed, addNewNoteTextarea() and insertNewNoteToDb() callback have to be updated as well
-            ?>
-            <div id="note<?= $note->noteId ?>-container" class="note-container">
-                <label for="note<?= $note->noteId ?>"
-                       class="discrete-label textarea-label"><span class="note-left-side-label-span"><?=
-                        (new \DateTime($note->noteCreatedAt))->format('d. F Y • H:i') ?>
-                    </span>
-                    <?php
-                    if ($note->userMutationRight === 'all') { ?>
-                        <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
-                             data-note-id="<?= $note->noteId ?>">
-                        <?php
-                    } ?><span class="discrete-text note-right-side-label-span"><?= html($note->userFullName) ?></span>
-                </label>
-                <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
-                <div class="relative">
-                    <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
-                    <textarea class="auto-resize-textarea" id="note<?= $note->noteId ?>"
-                              data-note-id="<?= $note->noteId ?>"
-                              minlength="4" maxlength="500"
-                              data-editable="<?= $note->userMutationRight === 'all' ? 1 : 0 ?>"
-                              name="message"><?= html($note->noteMessage) ?></textarea>
-                    <div class="circle-loader client-read" data-note-id="<?= $note->noteId ?>">
-                        <div class="checkmark draw"></div>
-                    </div>
-                </div>
-            </div>
-
-            <?php
-        } ?>
+        <!--  Notes are populated here via ajax  -->
     </div>
 
     <div id="client-personal-info-flex-container">

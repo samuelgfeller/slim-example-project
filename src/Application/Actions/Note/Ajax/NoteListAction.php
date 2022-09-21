@@ -44,7 +44,7 @@ final class NoteListAction
     ): ResponseInterface {
         try {
             // Retrieve notes with given filter values (or none)
-            $userNotes = $this->noteFilterFinder->findNotesWithFilter($request->getQueryParams());
+            $filteredNotes = $this->noteFilterFinder->findNotesWithFilter($request->getQueryParams());
         } catch (InvalidNoteFilterException $invalidNoteFilterException) {
             return $this->responder->respondWithJson(
                 $response,
@@ -69,6 +69,6 @@ final class NoteListAction
                 401
             );
         }
-        return $this->responder->respondWithJson($response, $userNotes);
+        return $this->responder->respondWithJson($response, $filteredNotes);
     }
 }

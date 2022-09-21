@@ -15,8 +15,7 @@ class NoteFilterFinder
     public function __construct(
         private NoteFinder $noteFinder,
         private SessionInterface $session,
-    )
-    {
+    ) {
     }
 
     /**
@@ -32,9 +31,9 @@ class NoteFilterFinder
         // Filter 'user'
         if (isset($params['user'])) {
             // To display own notes, the client sends the filter user=session
-            if ($params['user'] === 'session'){
+            if ($params['user'] === 'session') {
                 // User has to be logged-in to access own-notes
-                if(($userId = $this->session->get('user_id')) !== null){
+                if (($userId = $this->session->get('user_id')) !== null) {
                     $params['user'] = $userId;
                 } else {
                     throw new UnauthorizedException('You have to be logged in to access own-notes');
@@ -46,9 +45,21 @@ class NoteFilterFinder
             }
             return $this->noteFinder->findAllNotesFromUser((int)$params['user']);
         }
+
+        // Filter client id
+        if (isset($params['client_id'])) {
+            // To display own notes, the client sends the filter user=session
+            if (is_numeric($params['client_id'])) {
+                // User is already logged in as UserAuthenticationMiddleware is present for the note group
+                return $this->noteFinder->findAllNotesFromClient((int)$params['client_id'], true);
+            }
+            // Exception message tested in NoteFilterProvider.php
+            throw new InvalidNoteFilterException('client_id has to be numeric.');
+        }
         // Other filters here
 
-        // If there is no filter, all notes should be returned
-        return $this->noteFinder->findAllNotesWithUsers();
+
+        // If there is no filter, an empty array is returned
+        return [];
     }
 }

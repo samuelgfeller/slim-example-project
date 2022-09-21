@@ -1,4 +1,4 @@
-import {loadClients} from "./client-loading.js";
+import {loadClients} from "./client-list-loading.js";
 import {basePath} from "../../../general/js/config.js";
 
 // Load clients at page startup
