@@ -84,25 +84,30 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     <div id="client-personal-info-flex-container">
 
         <?php
-        if ($clientAggregate->phone) { ?>
-            <div tabindex="0">
+        if ($clientAggregate->location) { ?>
+            <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
                 <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
                 <span><?= $clientAggregate->location ?></span>
-            </div>
+            </a>
             <?php
         }
         if ($clientAggregate->phone) { ?>
-            <div tabindex="0">
+            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
                 <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
                 <span><?= $clientAggregate->phone ?></span>
-            </div>
+            </a>
             <?php
         }
         if ($clientAggregate->email) { ?>
-            <div tabindex="0">
+            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank">
                 <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
-                <span><?= $clientAggregate->email ?></span>
-            </div>
+                <?php
+                $emailParts = explode('@', $clientAggregate->email);
+                ?>
+                <div id="email-div">
+                <span id="email-prefix"><?= $emailParts[0] ?></span><br><span id="email-suffix">@<?= $emailParts[1] ?></span>
+                </div>
+            </a>
             <?php
         } ?>
     </div>

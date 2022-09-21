@@ -79,13 +79,14 @@
         font-weight: normal;
     }
 
-    .delete-note-btn{
+    .delete-note-btn {
         width: 13px;
         vertical-align: middle;
         margin-left: 10px;
         cursor: pointer;
         display: none;
     }
+
     .note-container:hover .delete-note-btn {
         display: inline-block;
     }
@@ -141,7 +142,8 @@
         outline: #eef0f1;
         box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
     }
-    #client-activity-textarea-container textarea[data-editable="0"]:focus{
+
+    #client-activity-textarea-container textarea[data-editable="0"]:focus {
         outline: 1px solid #cccccc;
     }
 
@@ -161,12 +163,12 @@
         border-radius: 30px;
         /*float: right;*/
         height: auto;
-        margin: 26px 0 0 0; /* For the wrapped main textarea to not be too narrow */
+        margin: 26px 0 0 0; /* For the wrapped main textarea to not be too narrow same height as title */
         box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
         align-self: start; /*Make it not expand to the same height as activity notes*/
     }
 
-    #client-personal-info-flex-container div {
+    #client-personal-info-flex-container a {
         display: inline-grid;
         grid-template-columns: 20px auto;
         grid-row: auto;
@@ -180,17 +182,34 @@
         white-space: nowrap;
     }
 
+    #email-div {
+        line-height: 1;
+    }
+    /*mail prefix*/
+    #email-div span:nth-of-type(1) {
+        font-size: 19px;
+    }
+    /*mail suffix*/
+    #email-div span:nth-of-type(2) {
+        font-size: 17px;
+    }
+
     /*Increase icon size*/
-    #client-personal-info-flex-container div img {
+    #client-personal-info-flex-container a img {
         width: 20px;
     }
 
-    #client-personal-info-flex-container div:hover {
-        box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
-        background: rgba(0, 0, 0, 0.05);
+    #client-personal-info-flex-container a {
+        text-decoration: none;
     }
 
-    #client-personal-info-flex-container div:focus {
+    #client-personal-info-flex-container a:hover {
+        box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
+        background: rgba(0, 0, 0, 0.05);
+        font-weight: normal;
+    }
+
+    #client-personal-info-flex-container a:focus {
         background: rgba(0, 0, 0, 0.1);
     }
 
@@ -239,9 +258,10 @@
     #client-personal-info-flex-container {
         flex-grow: 0;
         display: inline-block; /*From display flex to inline-block to wrap elements the easiest way*/
+        max-width: 400px;
     }
 
-    #client-personal-info-flex-container div {
+    #client-personal-info-flex-container a {
         display: grid; /*From inline-grid to grid to prevent being on only one line for desktop*/
     }
 }
