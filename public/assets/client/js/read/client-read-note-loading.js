@@ -1,11 +1,15 @@
 import {basePath} from "../../../general/js/config.js";
 import {getNoteHtml} from "./client-read-template-note.html.js";
+import {
+    displayClientNoteLoadingPlaceholder,
+    removeClientNoteContentPlaceholder
+} from "./client-read-note-loading-placeholder.js";
 
 /**
  * Loading notes into dom
  */
 export function loadClientNotes(callbackFunction) {
-    // displayClientProfileCardLoadingPlaceholder();
+    displayClientNoteLoadingPlaceholder();
 
     let clientId = document.getElementById('client-id').value;
     let queryParams = 'client_id=' + clientId;
@@ -28,9 +32,7 @@ export function loadClientNotes(callbackFunction) {
             // Success
             else {
                 let parsedResponse = JSON.parse(xHttp.responseText);
-                console.log('hey boys');
-                // removeClientCardContentPlaceholder();
-                // console.log(response.clients);
+                removeClientNoteContentPlaceholder();
                 addNotesToDom(parsedResponse);
                 callbackFunction();
             }

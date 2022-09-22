@@ -18,6 +18,8 @@ $this->addAttribute('css', [
     'assets/general/css/alert-modal.css',
     'assets/general/css/loader/animated-checkmark.css',
     'assets/general/css/plus-button.css',
+    'assets/general/css/content-placeholder.css',
+    'assets/general/css/client-list-loading-placeholder.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
@@ -73,7 +75,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
 <div id="client-activity-personal-info-container">
 
-    <div id="client-activity-textarea-container">
+    <div id="client-activity-textarea-container" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
         <div class="vertical-center" id="activity-header">
             <h2>Aktivität</h2>
             <div class="plus-btn" id="create-note-btn"></div>

@@ -17,7 +17,6 @@ class ClientFinder
 {
     public function __construct(
         private readonly ClientFinderRepository  $clientFinderRepository,
-        private readonly ClientUserRightSetter $clientUserRightSetter,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
@@ -56,12 +55,17 @@ class ClientFinder
      * Find one client in the database with aggregate
      *
      * @param int $clientId
+     * @param bool $includingNotes
      * @return ClientResultAggregateData
      */
-    public function findClientAggregate(int $clientId): ClientResultAggregateData
+    public function findClientAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
-        $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId, true);
+        if ($includingNotes === true) {
+            $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId);
+        } else {
+            $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
+        }
         return $clientResultAggregate;
     }
 

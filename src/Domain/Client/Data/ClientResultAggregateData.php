@@ -21,6 +21,8 @@ class ClientResultAggregateData extends ClientData
     public ?UserData $userData;
     /** @var NoteWithUserData[]|null $notes */
     public ?array $notes = null;
+    // Amount of notes for the client to know how many content placeholders to display
+    public ?int $notesAmount = null;
     // As this below is only relevant for client read, this ClientResult data class could be renamed into ClientListResult
     // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
     public ?NoteData $mainNoteData = null; // Main note data

@@ -11,28 +11,6 @@
         background: #f8f8f8;
     }
 
-    .moving-loading-placeholder-part-wrapper {
-        position: relative;
-        height: 100%;
-        width: 100%;
-        background-color: rgb(231, 231, 231);
-        z-index: 8;
-        overflow: hidden;
-        border-radius: 5px;
-    }
-
-    .moving-loading-placeholder-part {
-        position: absolute;
-        left: -45%;
-        height: 100%;
-        width: 45%;
-        background-image: linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        background-image: -moz-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        background-image: -webkit-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-        animation: loading 1s infinite;
-        z-index: 9;
-    }
-
     .client-profile-card-loading-placeholder-header {
         height: 115px;
     }
@@ -127,11 +105,3 @@
     }
 }
 
-@keyframes loading {
-    0% {
-        left: -45%;
-    }
-    100% {
-        left: 100%;
-    }
-}

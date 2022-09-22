@@ -192,5 +192,37 @@ class NoteFinderRepository
         return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
     }
 
+    /**
+     * Find amount of notes without counting the main note
+     *
+     * @param int $clientId
+     * @return int
+     */
+    public function findClientNotesAmount(int $clientId): int
+    {
+        $query = $this->queryFactory->newQuery()->from('client');
+
+        $query->select(
+            [
+                'amount' => $query->func()->count('n.id'),
+            ]
+        )->join([
+            'n' => ['table' => 'note', 'type' => 'LEFT', 'conditions' => 'n.client_id = client.id'],
+        ])
+            ->where([
+                    'client.id' => $clientId,
+                    // The main note should not be counted in
+                    'OR' => [
+                        'n.id <>' => $query->identifier('client.main_note_id'),
+                        'client.main_note_id IS' => null, // Returns 0 is there no main note otherwise
+                    ],
+                    'n.deleted_at IS' => null
+                ]
+            );
+        // Return amount of notes
+        $amount = (int)$query->execute()->fetch('assoc')['amount'];
+        return $amount;
+    }
+
 
 }

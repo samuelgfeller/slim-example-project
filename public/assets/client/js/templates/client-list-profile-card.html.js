@@ -61,10 +61,10 @@ export function getClientProfileCardLoadingPlaceholderHtml() {
         <div class="client-profile-card-loading-placeholder-header">
             <div class="client-profile-card-avatar-age-loading-placeholder">
                 <div class="client-profile-card-avatar-loading-placeholder">
-                <!-- Avatar-->
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
-                </div>
+                    <!-- Avatar-->
+                    <div class="moving-loading-placeholder-part-wrapper">
+                        <div class="moving-loading-placeholder-part"></div>
+                    </div>
                 </div>
                 <!-- Age -->
                 <div class="client-profile-card-age-loading-placeholder">

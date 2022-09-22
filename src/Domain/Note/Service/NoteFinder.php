@@ -73,6 +73,18 @@ class NoteFinder
     }
 
     /**
+     * Return the number of notes attached to a client
+     *
+     * @param int $clientId
+     * @return int
+     */
+    public function findClientNotesAmount(int $clientId): int
+    {
+        return $this->noteFinderRepository->findClientNotesAmount($clientId);
+    }
+
+
+    /**
      * Change created and updated date format from SQL datetime to
      * something we are used to see in Switzerland
      *
