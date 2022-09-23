@@ -39,7 +39,7 @@ final class ClientReadAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $clientAggregate = $this->clientFinder->findClientAggregate((int)$args['client_id']);
+        $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
 
         // json_encode transforms object with public attributes to camelCase which matches Google recommendation
         // https://stackoverflow.com/a/19287394/9013718

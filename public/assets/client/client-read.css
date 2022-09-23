@@ -57,7 +57,8 @@
     }
 
     .main-note-status-assigned-user-div select {
-        /*border: 3px solid #2e3e50;*/
+        border: 3px solid #2e3e50;
+        padding: 7px;
         background: #f3f3f3;
         color: #2e3e50;
         font-weight: bold;

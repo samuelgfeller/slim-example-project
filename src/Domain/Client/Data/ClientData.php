@@ -20,7 +20,6 @@ class ClientData
     public ?string $client_message; // Message that client submitted via webform
     public ?int $user_id;
     public ?int $client_status_id;
-    public ?int $main_note_id; /* Main note named for clarity */
     public ?\DateTimeImmutable $updated_at;
     public ?\DateTimeImmutable $created_at;
 
@@ -45,7 +44,6 @@ class ClientData
         $this->client_message = $reader->findAsString('client_message');
         $this->user_id = $reader->findAsInt('user_id');
         $this->client_status_id = $reader->findAsInt('client_status_id');
-        $this->main_note_id = $reader->findAsInt('main_note_id');
         $this->updated_at = $reader->findAsDateTimeImmutable('updated_at');
         $this->created_at = $reader->findAsDateTimeImmutable('created_at');
 
@@ -71,7 +69,6 @@ class ClientData
             'location' => $this->location,
             'phone' => $this->phone,
             'email' => $this->email,
-            'main_note_id' => $this->main_note_id,
             'sex' => $this->sex,
             'user_id' => $this->user_id,
             'client_status_id' => $this->client_status_id,

@@ -103,7 +103,7 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
         [textarea.name]: textarea.value,
         // Not camelCase as html form names are underline too
         client_id: document.getElementById('client-id').value,
-        is_main_note: isMainNote ? 1 : 0,
+        is_main: isMainNote ? 1 : 0,
     }));
 }
 

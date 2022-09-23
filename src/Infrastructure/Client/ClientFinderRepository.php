@@ -28,7 +28,6 @@ class ClientFinderRepository
         'client_message' => 'client.client_message',
         'user_id' => 'client.user_id',
         'client_status_id' => 'client.client_status_id',
-        'main_note_id' => 'client.main_note_id',
         'updated_at' => 'client.updated_at',
         'created_at' => 'client.created_at',
         // User data prefixed with user_
@@ -37,16 +36,17 @@ class ClientFinderRepository
         // Client status data prefixed with client_status_
         'client_status_name' => 'client_status.name',
     ];
-    // In constructor extended client list select fields
-    private array $clientReadAggregateSelectFields = [];
+    // In constructor extended client list select fields for READ
+    private array $clientReadAggregateSelectFields;
 
     public function __construct(
-        private QueryFactory $queryFactory,
-        private Hydrator $hydrator
+        private readonly QueryFactory $queryFactory,
+        private readonly Hydrator $hydrator
     ) {
         $this->clientReadAggregateSelectFields = array_merge($this->clientListAggregateSelectFields, [
             // Main note data prefixed with `note_`
             // Only necessary note fields
+            'main_note_id' => 'note.id',
             'note_message' => 'note.message',
             'note_user_id' => 'note.user_id',
             'note_updated_at' => 'note.updated_at'
@@ -124,7 +124,7 @@ class ClientFinderRepository
                 'note' => [
                     'table' => 'note',
                     'type' => 'LEFT',
-                    'conditions' => 'client.main_note_id = note.id and note.deleted_at IS NULL'
+                    'conditions' => 'client.id = note.client_id AND note.deleted_at IS NULL AND note.is_main = 1'
                 ],
             ])
             ->andWhere(

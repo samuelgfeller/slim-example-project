@@ -162,7 +162,6 @@ class NoteFinderRepository
 
         $query->select(
             [
-                'client_main_note' => 'client.main_note_id',
                 'note_id' => 'note.id',
                 'user_id' => 'user.id',
                 'note_message' => 'note.message',
@@ -173,17 +172,11 @@ class NoteFinderRepository
             ]
         )->join([
             'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],
-            'client' => ['table' => 'client', 'type' => 'LEFT', 'conditions' => 'note.client_id = client.id']
         ])
             ->where([
                     // Not unsafe as it's not an expression and thus escaped by querybuilder
                     'note.client_id' => $clientId,
-                    // We have to tell the query builder when the string is literal or if it's a column, it doesn't
-                    // detect that alone. https://discourse.cakephp.org/t/query-builder-documentation-examples-without-orm/10471
-                    'OR' => [
-                        'note.id <>' => $query->identifier('client.main_note_id'),
-                        'client.main_note_id IS' => null
-                    ],
+                    'note.is_main' => 0,
                     'note.deleted_at IS' => null
                 ]
             )->orderDesc('note.created_at');
@@ -212,10 +205,7 @@ class NoteFinderRepository
             ->where([
                     'client.id' => $clientId,
                     // The main note should not be counted in
-                    'OR' => [
-                        'n.id <>' => $query->identifier('client.main_note_id'),
-                        'client.main_note_id IS' => null, // Returns 0 is there no main note otherwise
-                    ],
+                    'n.is_main' => 0,
                     'n.deleted_at IS' => null
                 ]
             );
@@ -223,6 +213,5 @@ class NoteFinderRepository
         $amount = (int)$query->execute()->fetch('assoc')['amount'];
         return $amount;
     }
-
 
 }

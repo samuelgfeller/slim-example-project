@@ -44,17 +44,14 @@ class NoteCreator
 
         // If it's a new main note, create and add it to the client
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-        if ($noteData['is_main_note'] === 1 || $noteData['is_main_note'] === '1') {
+        if ($noteData['is_main'] === 1 || $noteData['is_main'] === '1') {
             // Check user rights but for now everybody that is logged in can create main note
             if ($userRole === 'admin' || $userRole === 'user') {
-                $noteId = $this->noteCreatorRepository->insertNote($note->toArray());
-                // Add main note id to client
-                $this->clientUpdaterRepository->updateClient(['main_note_id' => $noteId], $note->clientId);
-                return $noteId;
+                return $this->noteCreatorRepository->insertNote($note->toArray());
             }
             // User does not have needed rights to access area or function
             $this->logger->notice(
-                'User ' . $loggedInUserId . ' tried to update other note with id: ' . $loggedInUserId
+                'User ' . $loggedInUserId . ' tried to create main note with client id: ' . $note->clientId
             );
             throw new ForbiddenException('Not allowed to change that note.');
         }

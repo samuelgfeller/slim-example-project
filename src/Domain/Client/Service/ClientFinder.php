@@ -58,7 +58,7 @@ class ClientFinder
      * @param bool $includingNotes
      * @return ClientResultAggregateData
      */
-    public function findClientAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
+    public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
         if ($includingNotes === true) {
@@ -68,6 +68,8 @@ class ClientFinder
         }
         return $clientResultAggregate;
     }
+
+
 
     /**
      * Return all posts which are linked to the given user

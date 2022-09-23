@@ -63,7 +63,7 @@ final class NoteCreateAction
             // If a html form name changes, these changes have to be done in the data class constructor
             // Check that request body syntax is formatted right (if changed, )
             if (null !== $noteData && [] !== $noteData
-                && isset($noteData['message'], $noteData['client_id'], $noteData['is_main_note'])
+                && isset($noteData['message'], $noteData['client_id'], $noteData['is_main'])
                 && count($noteData) === 3) {
                 try {
                     $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
