@@ -62,7 +62,7 @@ class ClientFinder
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
         if ($includingNotes === true) {
-            $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClient($clientId);
+            $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);
         } else {
             $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
         }

@@ -64,7 +64,7 @@ class NoteFinder
      * @param int $clientId
      * @return NoteWithUserData[]
      */
-    public function findAllNotesFromClient(int $clientId): array
+    public function findAllNotesFromClientExceptMain(int $clientId): array
     {
         $allNotes = $this->noteFinderRepository->findAllNotesExceptMainWithUserByClientId($clientId);
         $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english

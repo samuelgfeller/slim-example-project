@@ -4,6 +4,7 @@
 namespace App\Domain\Note\Data;
 
 use App\Common\ArrayReader;
+use App\Domain\User\Data\MutationRight;
 
 /**
  * Note with user info
@@ -11,18 +12,15 @@ use App\Common\ArrayReader;
 class NoteWithUserData
 {
     public ?int $noteId;
-    public ?int $userId;
     public ?string $noteMessage;
     public ?string $noteCreatedAt;
     public ?string $noteUpdatedAt;
+    public ?int $userId;
     public ?string $userFullName;
     public ?string $userRole;
 
     // Not note value from db, populated in NoteUserRightSetter
-    public ?string $userMutationRight;
-
-    public const MUTATION_PERMISSION_ALL = 'all';
-    public const MUTATION_PERMISSION_NONE = 'none';
+    public ?MutationRight $userMutationRight; // json_encode automatically takes $enum->value
 
     /**
      * Note constructor.

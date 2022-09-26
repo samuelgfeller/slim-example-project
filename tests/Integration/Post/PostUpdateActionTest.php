@@ -179,7 +179,7 @@ class PostUpdateActionTest extends TestCase
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
      * and that the authentication middleware provides the correct login url
-     * if Redirect-to-if-unauthorized header is set
+     * if Redirect-to-route-name-if-unauthorized header is set
      *
      * @return void
      */
@@ -207,7 +207,7 @@ class PostUpdateActionTest extends TestCase
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
         $redirectAfterLoginRouteName = 'client-list-assigned-to-me-page';
-        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', 'client-list-assigned-to-me-page');
+        $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', 'client-list-assigned-to-me-page');
 
         // Make request
         $response = $this->app->handle($request);
@@ -222,7 +222,7 @@ class PostUpdateActionTest extends TestCase
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 
-        // Expected is the original post message as it has to be unchanged
+        // Expected is the original post message as i   t has to be unchanged
         $expected = ['message' => $postRow['message']];
 
         // Assert that content of selected fields (which are the keys of the $expected array) are same as expected

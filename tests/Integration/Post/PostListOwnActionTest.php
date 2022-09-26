@@ -3,17 +3,17 @@
 namespace App\Test\Integration\Post;
 
 use App\Domain\Post\Data\UserNoteData;
-use App\Test\Traits\AppTestTrait;
+use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 
 /**
  * - post list own page access while logged-in

@@ -178,7 +178,7 @@ class UserSubmitUpdateActionTest extends TestCase
             ]);
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
         $redirectAfterLoginRouteName = 'profile-page';
-        $request = $request->withAddedHeader('Redirect-to-if-unauthorized', $redirectAfterLoginRouteName);
+        $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
 
         $response = $this->app->handle($request);
         // Server returns 401 on json requests when not logged in

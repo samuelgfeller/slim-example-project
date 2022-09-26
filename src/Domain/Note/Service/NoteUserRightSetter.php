@@ -4,6 +4,7 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Note\Data\NoteWithUserData;
+use App\Domain\User\Data\MutationRight;
 use Odan\Session\SessionInterface;
 
 /**
@@ -49,13 +50,13 @@ class NoteUserRightSetter
     private function setUserRightsOnNote(NoteWithUserData $userNote): void
     {
         // Default is no rights
-        $userNote->userMutationRight = NoteWithUserData::MUTATION_PERMISSION_NONE;
+        $userNote->userMutationRight = MutationRight::NONE;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
 
             if ($userNote->userId === $loggedInUserId || $userRole === 'admin') {
-                $userNote->userMutationRight = NoteWithUserData::MUTATION_PERMISSION_ALL;
+                $userNote->userMutationRight = MutationRight::ALL;
             }
         }
     }

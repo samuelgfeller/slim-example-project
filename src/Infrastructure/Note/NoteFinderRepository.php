@@ -163,10 +163,10 @@ class NoteFinderRepository
         $query->select(
             [
                 'note_id' => 'note.id',
-                'user_id' => 'user.id',
                 'note_message' => 'note.message',
-                'note_created_at' => 'note.created_at',
                 'note_updated_at' => 'note.updated_at',
+                'note_created_at' => 'note.created_at',
+                'user_id' => 'user.id',
                 'user_full_name' => $concatName,
                 'user_role' => 'user.role',
             ]
