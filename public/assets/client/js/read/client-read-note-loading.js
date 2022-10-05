@@ -41,9 +41,10 @@ export function loadClientNotes(callbackFunction) {
 
     // For GET requests, query params have to be passed in the url directly. They are ignored in send()
     xHttp.open('GET', basePath + 'notes?' + queryParams, true);
+
+    xHttp.setRequestHeader("Content-type", "application/json");
     // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
-    xHttp.setRequestHeader("Content-type", "application/json");
     xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" + clientId);
 
 

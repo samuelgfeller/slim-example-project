@@ -1,4 +1,3 @@
-
 /**
  * Create and display flash message from the client side
  * Display server side flash: flash-messages.html.php
@@ -6,11 +5,11 @@
  * @param {string} typeName (success | error | warning | info)
  * @param {string} message flash message content
  */
-function createFlashMessage(typeName, message){
+function createFlashMessage(typeName, message) {
     // Wrapper
     let container = document.getElementById("flash-container");
     // If it isn't "undefined" and it isn't "null", then it exists.
-    if(typeof(container) === 'undefined' || container === null) {
+    if (typeof (container) === 'undefined' || container === null) {
         // console.log(wrapper === null);
         container = document.createElement('aside');
         container.id = 'flash-container';
@@ -32,7 +31,7 @@ function createFlashMessage(typeName, message){
     // Third child: img
     let icon = document.createElement('img');
     icon.className = 'open';
-    switch (typeName){
+    switch (typeName) {
         case 'success':
             // icon.className = typeName;
             icon.src = 'assets/general/img/checkmark.svg';
@@ -84,23 +83,29 @@ function createFlashMessage(typeName, message){
  *
  * @param {XMLHttpRequest} xhr
  */
-function handleFail(xhr){
+function handleFail(xhr) {
     // Example: 404 Not Found
     let errorMsg = xhr.status + ' ' + xhr.statusText;
 
-    if (xhr.status === 401){
+    if (xhr.status === 401) {
         // Overwriting general error message to unauthorized
         errorMsg += '<br>Access denied please log in and try again.';
+        let responseData = JSON.parse(xhr.responseText);
+        // If login url is provided by the server, redirect client to it
+        if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
+            window.location.href = responseData.loginUrl;
+        }
     }
-    if (xhr.status === 403){
+
+    if (xhr.status === 403) {
         errorMsg += '<br>Forbidden. You do not have access to this area or function';
     }
 
-    if (xhr.status === 500){
+    if (xhr.status === 500) {
         errorMsg += '<br>Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
     }
 
-    // If validation error ignore the default message and create specific one
+// If validation error ignore the default message and create specific one
     if (xhr.status === 422) {
         if (xhr.getResponseHeader('Content-type') === 'application/json') {
             errorMsg = '';
@@ -110,12 +115,12 @@ function handleFail(xhr){
             for (const error of validationErrors.data.errors) {
                 errorMsg += error.message + ' for <b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b><br>';
             }
-        } else{
+        } else {
             // Default error message when server returns 422 but not json
             errorMsg = 'Validation error. Something could not have been validate on the server.';
         }
     }
 
-    // Output error to user
+// Output error to user
     createFlashMessage('error', errorMsg);
 }

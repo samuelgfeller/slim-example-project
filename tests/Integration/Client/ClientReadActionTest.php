@@ -149,5 +149,33 @@ class ClientReadActionTest extends TestCase
         $this->assertJsonData($expectedResponseArray, $response);
     }
 
+    /**
+     * Test when note-list request is made from client-read page
+     * without being authenticated.
+     *
+     * @return void
+     */
+    public function testClientReadNotesLoad_unauthenticated(): void
+    {
+        $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
+            ->withQueryParams(['client_id' => 1]);
+
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+
+        // Make request
+        $response = $this->app->handle($request);
+
+        // Assert response HTTP status code: 401 Unauthorized
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+
+        // Build expected login url as UserAuthenticationMiddleware.php does
+        $expectedLoginUrl = $this->urlFor(
+            'login-page', [], ['redirect' => $redirectToUrlAfterLogin]
+        );
+        // Assert that response contains correct login url
+        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+    }
+
 
 }

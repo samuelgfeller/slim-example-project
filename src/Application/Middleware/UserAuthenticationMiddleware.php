@@ -51,7 +51,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
         // If header Redirect-to-route-name-if-unauthorized is set, add it to the query params of the login route
         if (($routeName = $request->getHeaderLine('Redirect-to-url-if-unauthorized')) !== '') {
             // Redirect to after login
-            $queryParams['redirect'] = $this->responder->urlFor($routeName);
+            $queryParams['redirect'] = $routeName;
         }
 
 
