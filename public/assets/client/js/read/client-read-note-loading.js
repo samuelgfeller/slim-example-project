@@ -70,7 +70,7 @@ function addNotesToDom(notes) {
     for (const note of notes) {
         // Client card HTML
         let noteHtml = getNoteHtml(
-            note.noteId, note.noteCreatedAt, note.userMutationRight, note.userFullName, note.noteMessage
+            note.noteId, note.noteCreatedAt, note.userMutationRights, note.userFullName, note.noteMessage
         );
 
         // Add to DOM

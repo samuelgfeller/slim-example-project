@@ -47,6 +47,21 @@ trait DatabaseExtensionTestTrait
     }
 
     /**
+     * Returns the record with the highest id of the given table.
+     *
+     * @param string $table Table name
+     *
+     * @return array last inserted row
+     */
+    protected function findLastInsertedTableRow(string $table): array {
+        $sql = sprintf('SELECT * FROM `%s` ORDER BY id DESC LIMIT 1', $table);
+        $statement = $this->createPreparedStatement($sql);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Asserts that results of given table are the same as the given row.
      *
      * @param array $expectedRow Row expected to find

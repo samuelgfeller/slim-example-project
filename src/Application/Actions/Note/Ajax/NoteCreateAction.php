@@ -83,7 +83,7 @@ final class NoteCreateAction
                         'data' => [
                             'userFullName' => $user->firstName . ' ' . $user->surname,
                             'noteId' => $insertId,
-                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d.m.Y • H:i')
+                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d. F Y • H:i')
                         ],
                     ], 201);
                 }

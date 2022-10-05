@@ -4,7 +4,7 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Note\Data\NoteWithUserData;
-use App\Domain\User\Data\MutationRight;
+use App\Domain\User\Data\MutationRights;
 use Odan\Session\SessionInterface;
 
 /**
@@ -19,7 +19,7 @@ class NoteUserRightSetter
     ) { }
 
     /**
-     * Populate $userMutationRights attribute to given UserNoteData or array with
+     * Populate $userMutationRightss attribute to given UserNoteData or array with
      * logged-in user mutation right.
      *
      * I'm not sure if that is a good practice to accept collections and single objects both in the same function,
@@ -50,13 +50,13 @@ class NoteUserRightSetter
     private function setUserRightsOnNote(NoteWithUserData $userNote): void
     {
         // Default is no rights
-        $userNote->userMutationRight = MutationRight::NONE;
+        $userNote->userMutationRights = MutationRights::NONE;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
 
             if ($userNote->userId === $loggedInUserId || $userRole === 'admin') {
-                $userNote->userMutationRight = MutationRight::ALL;
+                $userNote->userMutationRights = MutationRights::ALL;
             }
         }
     }

@@ -87,8 +87,8 @@ export function addTextareaInputEventListener(textarea) {
 
 export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
     // Del btn and removing readonly only matters if textarea can be edited
+    console.log(textarea.dataset.editable === '1');
     if (textarea.dataset.editable === '1') {
-
         // Get delete btn with note label to show it on textarea focus
         let delBtn = null;
         if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {

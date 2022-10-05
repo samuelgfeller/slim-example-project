@@ -1,4 +1,4 @@
-# Programming cheatsheet
+# Programming cheatsheet with quick examples
 
 Testing cheatsheet: testing/testing-cheatsheet.md
 ```php
@@ -68,11 +68,7 @@ xHttp.send(JSON.stringify({
     client_id: document.getElementById('client-id').value
 }));
 ```
-Note: as seen above
-#### Adding Redirect-to-url-if-unauthorized or Redirect-to-route-name-if-unauthorized
-```js
-
-```
-
+**Note**: as seen above the custom request HTTP header `Redirect-to-url-if-unauthorized` is added. There is another custom
+header supported by the backend when the route can easily be created with the route name: `Redirect-to-route-name-if-unauthorized`.
 
 ## Style 

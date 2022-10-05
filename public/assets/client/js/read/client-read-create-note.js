@@ -98,7 +98,8 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
     xHttp.setRequestHeader("Content-type", "application/json");
     // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
     // to know to send the login url in the json response body and where to redirect back after a successful login
-    xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" + clientId);
+    xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" +
+        document.getElementById('client-id').value);
 
     // Data format: "fname=Henry&lname=Ford"
     // In [square brackets] to be evaluated

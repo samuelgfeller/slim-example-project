@@ -135,10 +135,10 @@ return function (App $app) {
         );
         // Note requests where user DOES need to be authenticated
         $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
-            'note-submit-create'
+            'note-submit-creation'
         );
         $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateAction::class)
-            ->setName('note-submit-update');
+            ->setName('note-submit-modification');
         $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteAction::class)
             ->setName('note-submit-delete');
     })->add(UserAuthenticationMiddleware::class);

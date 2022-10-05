@@ -1,19 +1,32 @@
 # Testing cheatsheet
 
-### Test traits
+## How to test 
+I strongly recommend (also to my future self) to write a bullet point list of exactly what should be tested for each page 
+and approximate values of what is expected for each point. This is the only way to have a global overview and not forget 
+cases. Also, it adds a lot of clarity and provides documentation when having to refactor things.  
+It can be quite hard to think about everything in advance though so instead of putting a lot of effort in trying to 
+think of all possible cases, I would write down the ones that come to mind and then while implementing more cases 
+will come to mind naturally and the list can be extended. 
+This could look like the following:
+
+
+## Test traits
 The needed [test traits](https://github.com/selective-php/test-traits) can be added right after the test class opening
 brackets. Here are some of them:
 ```php
-use AppTestTrait; // Custom
-use HttpTestTrait;
-use HttpJsonTestTrait;
-use RouteTestTrait;
-use DatabaseTestTrait;
-use FixtureTrait; // Custom
+class ClientReadActionTest extends TestCase
+{
+    use AppTestTrait; // Custom
+    use HttpTestTrait;
+    use HttpJsonTestTrait;
+    use RouteTestTrait;
+    use DatabaseTestTrait;
+    use FixtureTrait; // Custom
+    // ...
+}
 ```
 More on it and the whole testing setup can be found in [testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
 this is intended to be a cheatsheet in a working environment.
-
 
 ## Page actions
 Integration testing page actions is quite limited if the server renders the template serverside as the request body
@@ -75,14 +88,20 @@ use FixtureTrait;
 To insert only the records that are linked to the main ressource we want to test (or matching another specific criteria),
 the function `insertFixtureWhere` can be used like follows:
 ```php
+// Insert one client and needed dependencies
 $clientRow = (new ClientFixture())->records[0];
+// In array first to assert user data later
+$userRow = $this->findRecordsFromFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
+$this->insertFixture('user', $userRow);
+$this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
 $this->insertFixture('client', $clientRow);
 
 // HERE - Insert only linked notes
 $this->insertFixtureWhere(['client_id' => $clientRow['id']], NoteFixture::class);
 ```
+The dependencies for each fixture are in the fixture class php doc block (and the records foreign keys can be checked).
 
-### Create request
+## Create request
 For a json request and assertions later, the `HttpJsonTestTrait.php` is used.
 Request is created as follows:
 ```php
@@ -93,7 +112,9 @@ Very important note here, query params can be added directly in the `urlFor()` m
 **[that won't work](https://github.com/Nyholm/psr7/issues/181) if `nyholm/psr7`
 is used in the project.** So we have to explicitly use `->withQueryParams(['client_id' => 1])` like shown above.
 
-### Assert Json response
+## Assert Json response
+
+### Ressource loading
 If we want to test the notes attached to a client that are loaded via Ajax after a client-read request, I would firstly
 get all relevant note rows like follows:
 ```php
@@ -123,6 +144,61 @@ foreach ($noteRows as $noteRow) {
 $this->assertJsonData($expectedResponseArray, $response);
 ```
 At this point, additionally asserting the database content is pointless as the response body comes from the database.
+The paragraph [Assert user rights](Assert-user-rights) might be relevant if `userMutationRights` is part of the response.
+
+### Ressource creation
+Here is a typical fixtures' insertion, POST request with authentication and HTTP status code assertion.
+```php
+// A client linked to a non admin user is taken to be able to test user rights
+$nonAdminUserRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
+$this->insertFixture('user', $nonAdminUserRow);
+// Insert one client linked to this user
+$clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $nonAdminUserRow['id']], ClientFixture::class)[0];
+// In array first to assert user data later
+$this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+$this->insertFixture('client', $clientRow);
+
+$noteMessage = 'Test note'; 
+// Create request
+$request = $this->createJsonRequest(
+    'POST',
+    $this->urlFor('note-submit-creation', [
+        'message' => $noteMessage,
+        'client_id' => $clientRow['id'],
+    ])
+);
+
+// Simulate logged-in user 
+$loggedInUserId = $nonAdminUserRow['id'];
+$this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+// Make request
+$response = $this->app->handle($request);
+// Assert 201 Created redirect to login url
+self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
+```
+The database has to be asserted before the response content if it contains values from the database.
+#### Assert database
+To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
+```php
+// Assert database 
+// Find freshly inserted note
+$noteDbRow = $this->findLastInsertedTableRow('note');
+// Assert the row column values
+$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+```
+#### Assert creation response body
+```php
+// Assert response
+$expectedResponseJson = [
+    'status' => 'success',
+    'data' => [
+        'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
+        'noteId' => $noteDbRow['id'],
+        'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
+    ],
+];
+$this->assertJsonData($expectedResponseJson, $response);
+```
 
 #### Assert user rights
 See test on notes loaded by client_id on how I do it now, but currently I don't know the best way to implement this 
@@ -142,7 +218,7 @@ $hasMutationRight = static function (string $role, int $ownerId) use ($loggedInU
 foreach ($noteRows as $noteRow) {
     $expectedResponseArray[] = [
         // ...
-        'userMutationRight' => $hasMutationRight($loggedInUserRow['role'], $noteRow['user_id']),
+        'userMutationRights' => $hasMutationRight($loggedInUserRow['role'], $noteRow['user_id']),
     ];
 }
 ```
@@ -196,5 +272,4 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
 #### Assert response without custom header
-This is basically the same as [non-authenticated page action test](#non-authenticated-page-action-test). 
-
+This is basically the same as [non-authenticated page action test](#non-authenticated-page-action-test).
