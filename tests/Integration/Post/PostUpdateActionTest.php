@@ -235,7 +235,7 @@ class PostUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testPostDeleteAction_sameContentAsExisting(): void
+    public function testPostUpdateAction_sameContentAsExisting(): void
     {
         // Insert logged-in user with id 2 role: user
         $userRow = (new UserFixture())->records[1];

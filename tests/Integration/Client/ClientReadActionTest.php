@@ -195,15 +195,22 @@ class ClientReadActionTest extends TestCase
     /**
      * Test note creation on client-read page while being authenticated.
      *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserWhereConditionForNote()
      * @return void
      */
-    public function testClientReadNoteCreation(): void
+    public function testClientReadNoteCreation($userLinkedToClientData, $authenticatedUserData, $expectedResult): void
     {
         // To test as "neutral" as possible, a client linked to a non admin user is taken
-        $nonAdminUserRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
-        $this->insertFixture('user', $nonAdminUserRow);
+        // $nonAdminUserRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
+
+        $this->insertFixture('user', $userLinkedToClientData);
+        // If authenticated user and user that should be linked to client is different, insert authenticated user
+        if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']){
+            $this->insertFixture('user', $authenticatedUserData);
+        }
+
         // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $nonAdminUserRow['id']], ClientFixture::class)[0];
+        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']], ClientFixture::class)[0];
         // In array first to assert user data later
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         $this->insertFixture('client', $clientRow);
@@ -220,13 +227,13 @@ class ClientReadActionTest extends TestCase
             ]
         );
         // Simulate logged-in user
-        $loggedInUserId = $nonAdminUserRow['id'];
-        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+
         // Make request
         $response = $this->app->handle($request);
 
         // Assert 201 Created redirect to login url
-        self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
+        self::assertSame($expectedResult['creation'][StatusCodeInterface::class], $response->getStatusCode());
 
         // Assert database
         // Find freshly inserted note
@@ -238,7 +245,7 @@ class ClientReadActionTest extends TestCase
         $expectedResponseJson = [
             'status' => 'success',
             'data' => [
-                'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
+                'userFullName' => $authenticatedUserData['first_name'] . ' ' . $authenticatedUserData['surname'],
                 'noteId' => $noteDbRow['id'],
                 'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
             ],

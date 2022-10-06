@@ -42,5 +42,20 @@ class UserFixture
             'created_at' => '2021-02-01 00:00:01',
             'deleted_at' => null,
         ],
+        // User id 3: role user
+        [
+            'id' => 3,
+            'first_name' => 'Second',
+            'surname' => 'User',
+            'email' => 'user2@example.com',
+            // Password is 12345678
+            'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
+            'role' => 'user',
+            'status' => UserData::STATUS_ACTIVE,
+            'updated_at' => '2021-01-01 00:00:01',
+            'created_at' => '2021-02-01 00:00:01',
+            'deleted_at' => null,
+        ],
+
     ];
 }
