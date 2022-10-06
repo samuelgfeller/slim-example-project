@@ -1,14 +1,45 @@
 # Testing cheatsheet
 
-## How to test 
+## Start testing 
 I strongly recommend (also to my future self) to write a bullet point list of exactly what should be tested for each page 
 and approximate values of what is expected for each point. This is the only way to have a global overview and not forget 
-cases. Also, it adds a lot of clarity and provides documentation when having to refactor things.  
+cases. Also, it adds a lot of clarity and provides precious documentation when having to refactor things.  
 It can be quite hard to think about everything in advance though so instead of putting a lot of effort in trying to 
 think of all possible cases, I would write down the ones that come to mind and then while implementing more cases 
-will come to mind naturally and the list can be extended. 
-This could look like the following:
+will come to mind naturally and the list can be extended.
 
+### What to test
+This is a big question I have no answer to yet. For me the following useful tests come to mind:
+* Page actions.
+  * Authenticated page load
+    * With user role with the "lowest" rights but as owner.  
+    Expected: authenticated user should be able to see the page, so status code 200.
+    * Ideally with every different user role where logged-in user is not the owner.  
+    Expected result may depend on each role. Often multiple roles have the same "result". If every role can see the
+    same thing I would not write different test cases. 
+  * Unauthenticated page load
+    Expected: redirect to login page with correct query parameters to redirect back to previous page.
+* Ajax ressource loading (sub ressource loaded via Ajax like notes loaded on the client read page)
+  * Authenticated load
+    * *Sub ressource data load is most often covered by the authenticated page load test so not necessary.*
+    * Load sub ressource with different roles may be interesting if items returned in response body differ 
+    depending on the role of the logged-in user such as `userMutationRights` for instance.
+      * Load with every different type of user role. Ideally and if well maintained, only the roles where there are changes 
+      can be tested, but I think it would make sense to test each role each time per default.
+  * Unauthenticated load  
+    Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page.
+* Ajax ressource creation / modification / deletion
+  * Authenticated creation / modification / deletion submission
+    * User rights: creation / modification / deletion submit with each different user role as authenticated user would cover all cases.
+      1. As ressource owner (main ressource when creation) - non admin
+      2. As admin - non ressource owner
+      3. As non ressource owner - non admin
+      4. As any other user role that has a different expected behaviour and is relevant to test
+    * Validation: as authorized user but invalid form submission (does not apply for deletion)
+      1. With every different kind of possible validation error including 400 malformed body and with each field.
+  * Unauthenticated creation submission
+    Expected: Correct status code (401 Unauthorized) and login url in response body with correct query parameters that 
+    include url to the previous page.
 
 ## Test traits
 The needed [test traits](https://github.com/selective-php/test-traits) can be added right after the test class opening
@@ -25,7 +56,8 @@ class ClientReadActionTest extends TestCase
     // ...
 }
 ```
-More on it and the whole testing setup can be found in [testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
+More on it and the whole testing setup can be found in 
+testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
 this is intended to be a cheatsheet in a working environment.
 
 ## Page actions
