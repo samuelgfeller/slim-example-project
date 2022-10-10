@@ -21,7 +21,7 @@ trait FixtureTrait
      *  ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
      * @param class-string $fixtureClass
      * @param array $oppositeConditions optional NOT conditions. If ['id' => 1] is provided -> user 1 will NOT be returned
-     * @return array records matching the conditions
+     * @return array[] records matching the conditions
      */
     protected function findRecordsFromFixtureWhere(array $conditions, string $fixtureClass, array $oppositeConditions = []): array
     {

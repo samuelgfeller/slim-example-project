@@ -5,6 +5,7 @@ namespace App\Test\Integration\Client;
 
 
 use App\Domain\User\Data\MutationRights;
+use App\Domain\User\Data\UserData;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
@@ -19,6 +20,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Client read tests
@@ -199,7 +201,7 @@ class ClientReadActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserFixtureWhereConditionForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
      * @return void
      */
     public function testClientReadNoteCreation(
@@ -287,7 +289,7 @@ class ClientReadActionTest extends TestCase
      *   - 1 normal note that is linked to the same user and client
      *   - 1 normal note that is not linked to this user but the client
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserFixtureWhereConditionForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
      * @return void
      */
     public function testClientReadNoteModification(
@@ -391,6 +393,75 @@ class ClientReadActionTest extends TestCase
         $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+    }
+
+    /**
+     * Test note modification on client-read page with invalid data.
+     * Fixture dependencies:
+     *   - 1 client
+     *   - 1 user linked to client
+     *   - 1 note that is linked to the client and the user
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseData()
+     * @return void
+     */
+    public function testClientReadNoteModification_invalid(string $invalidMessage, array $expectedResponseData): void
+    {
+        // Add the minimal needed data
+        $clientData = (new ClientFixture())->records[0];
+        // Insert user linked to client and user that is logged in
+        $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
+        $this->insertFixture('user', $userData);
+        // Insert linked status
+        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
+        // Insert client
+        $this->insertFixture('client', $clientData);
+        // Insert note linked to client and user
+        $noteData = $this->findRecordsFromFixtureWhere(['client_id' => $clientData['id'], 'user_id' => $userData['id']],
+            NoteFixture::class)[0];
+        $this->insertFixture('note', $noteData);
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+
+        $request = $this->createJsonRequest(
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
+            ['message' => $invalidMessage]
+        );
+        $response = $this->app->handle($request);
+
+        // Assert 422 Unprocessable entity
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        // Assert json response data
+        $this->assertJsonData($expectedResponseData, $response);
+    }
+
+    /**
+     * Test client read note modification with malformed request body
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideMalformedNoteRequestBody()
+     * @return void
+     */
+    public function testClientReadNoteModification_malformedRequest(array $malformedRequestBody): void
+    {
+        // Action class should directly return error so only logged-in user has to be inserted
+        $userData = (new UserFixture())->records[0];
+        $this->insertFixture('user', $userData);
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+
+        $request = $this->createJsonRequest(
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
+            $malformedRequestBody
+        );
+        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        $this->expectException(HttpBadRequestException::class);
+        $this->expectExceptionMessage('Request body malformed.');
+
+        // Handle request after defining expected exceptions
+        $this->app->handle($request);
     }
 
     /**

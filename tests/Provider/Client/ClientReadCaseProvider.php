@@ -28,7 +28,7 @@ class ClientReadCaseProvider
      *                  }
      *           }
      */
-    public function provideUserFixtureWhereConditionForNote(): array
+    public function provideAuthenticatedAndLinkedUserForNote(): array
     {
         $userData = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
         return [
@@ -133,22 +133,23 @@ class ClientReadCaseProvider
      *
      * @return array
      */
-    public function providePostCreateInvalidData(): array
+    public function provideInvalidNoteAndExpectedResponseData(): array
     {
         // Message over 500 chars
         $tooLongMsg = 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-            iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
+
         return [
             [
-                'message_too_short' => ['message' => 'Me'],
-                'validation_error_response' => [
+                'message_too_short' => 'Me',
+                'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the post data that couldn\'t be validated',
+                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
                             0 => [
                                 'field' => 'message',
@@ -159,12 +160,12 @@ class ClientReadCaseProvider
                 ]
             ],
             [
-                'message_too_long' => ['message' => $tooLongMsg],
-                'validation_error_response' => [
+                'message_too_long' => $tooLongMsg,
+                'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the post data that couldn\'t be validated',
+                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
                             0 => [
                                 'field' => 'message',
@@ -177,5 +178,28 @@ class ClientReadCaseProvider
 
         ];
     }
+
+    /**
+     * Provide malformed note message request body
+     *
+     * @return array
+     */
+    public function provideMalformedNoteRequestBody(): array
+    {
+        return [
+            [
+                'wrong_key' => [
+                    'wrong_message_key' => 'Message',
+                ],
+            ],
+            [
+                'wrong_amount' => [
+                    'message' => 'Message',
+                    'second_key' => 'invalid',
+                ],
+            ]
+        ];
+    }
+
 
 }
