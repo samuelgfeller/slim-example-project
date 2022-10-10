@@ -280,7 +280,7 @@ class ClientReadActionTest extends TestCase
     }
 
     /**
-     * Test note creation on client-read page while being authenticated.
+     * Test note modification on client-read page while being authenticated.
      * Fixture dependencies:
      *   - 1 client that is linked to the non admin user retrieved in the provider
      *   - 1 main note that is linked to the same non admin user and to the client
@@ -370,12 +370,27 @@ class ClientReadActionTest extends TestCase
     }
 
     /**
-     * Test note creation on client-read page while being unauthenticated.
+     * Test note modification on client-read page while being unauthenticated.
      *
      * @return void
      */
     public function testClientReadNoteModification_unauthenticated(): void
     {
+        $request = $this->createJsonRequest(
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
+            ['message' => 'New test message',]
+        );
+        // Create url where client should be redirected to after login
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+        // Make request
+        $response = $this->app->handle($request);
+        // Assert response HTTP status code: 401 Unauthorized
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+        // Build expected login url as UserAuthenticationMiddleware.php does
+        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+        // Assert that response contains correct login url
+        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 
     /**
