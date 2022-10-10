@@ -16,7 +16,7 @@ class ClientFixture
 
     // Database records in 2d array
     public array $records = [
-        // Client id 1: user id 1, status id 1
+        // Client id 1: user id 2, status id 1
         [
             'id' => 1,
             'first_name' => 'Rachel',
@@ -27,13 +27,13 @@ class ClientFixture
             'email' => 'rachel.harmon@email.com',
             'sex' => 'F',
             'client_message' => null,
-            'user_id' => 1,
+            'user_id' => 2, // 1 would be admin and not the most suitable to test
             'client_status_id' => 1,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2022-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Client id 2: user id 1, status id 2
+        // Client id 2: user id 2, status id 2
         [
             'id' => 2,
             'first_name' => 'Timon Koch',
@@ -44,7 +44,7 @@ class ClientFixture
             'email' => 'timon.koch@email.com',
             'sex' => 'M',
             'client_message' => null,
-            'user_id' => 1,
+            'user_id' => 2,
             'client_status_id' => 2,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2022-01-01 00:00:01',

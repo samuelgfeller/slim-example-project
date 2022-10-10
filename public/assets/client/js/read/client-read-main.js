@@ -1,5 +1,5 @@
 import {
-    initActivityTextareasEventListeners, initAllDeleteBtnEventListeners
+    initNotesEventListeners, initAllDeleteBtnEventListeners
 } from "./client-read-text-area-event-listener-setup.js";
 import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
@@ -7,9 +7,9 @@ import {loadClientNotes} from "./client-read-note-loading.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
-    initActivityTextareasEventListeners();
+    initNotesEventListeners();
     // Add note delete btn event listeners
-    // The reason it is not in initTextareasEventListeners() is that event listener were set up twice and alert modal
+    // The reason it is not in initNotesEventListeners() is that event listener were set up twice and alert modal
     // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllDeleteBtnEventListeners
     // AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
     initAllDeleteBtnEventListeners();

@@ -14,29 +14,29 @@ class NoteFixture
     // Database records in 2d array
     public array $records = [
         // Client id 1
-        // Note id 1: is main note and linked to user 1
+        // Note id 1: is main note and linked to user 1 and client 1
         [
             'id' => 1,
-            'user_id' => 1,
+            'user_id' => 2, // Needed main note to be linked to user 2 in testClientReadNoteModification
             'client_id' => 1,
-            'message' => 'This is a test main note.',
+            'message' => 'This is a test main note created by user 2.',
             'is_main' => 1,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 2: is not main note and linked to user 1
+        // Note id 2: is not main note and linked to user 2 (non admin) and client 1
         [
             'id' => 2,
             'user_id' => 1,
             'client_id' => 1,
-            'message' => 'This is a normal note from the same user 1.',
+            'message' => 'This is a normal note from the user 1.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 3: is not main note and linked to user 2
+        // Note id 3: is not main note and linked to user 2 and client 1
         [
             'id' => 3,
             'user_id' => 2,
@@ -47,7 +47,7 @@ class NoteFixture
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 4: is not main note and linked to non admin user 2
+        // Note id 4: is not main note and linked to non admin user 2 and client 1
         [
             'id' => 4,
             'user_id' => 2,

@@ -17,7 +17,7 @@ export function changeUserIsTyping(value) {
  * Activity textareas are editable on click and auto save on input pause
  * This function is called each time after adding new note
  */
-export function initActivityTextareasEventListeners() {
+export function initNotesEventListeners() {
 
     // Target all textareas including main note
     let clientReadTextareas = document.querySelectorAll(

@@ -47,8 +47,8 @@ class NoteUpdater
 //sleep(1);
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-        // Check if it's admin or if it's its own note
-        if ($userRole === 'admin' || $noteFromDb->userId === $loggedInUserId) {
+        // Check if it's admin or if it's its own note or a main note that every logged-in user is allowed to modify
+        if ($userRole === 'admin' || $noteFromDb->userId === $loggedInUserId || $noteFromDb->isMain === 1) {
             // The only thing that a user can change on a note is its message
             if (null !== $note->message) {
                 // To be sure that only the message will be updated (not using toArray from object)

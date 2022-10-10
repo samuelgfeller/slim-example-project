@@ -15,6 +15,7 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Action.
@@ -68,30 +69,37 @@ final class NoteUpdateAction
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $noteIdToChange = (int)$args['note_id'];
             $noteValues = $request->getParsedBody();
+            // Check that request body syntax is formatted right (if changed, )
+            if (null !== $noteValues && [] !== $noteValues && isset($noteValues['message']) && count($noteValues) === 1) {
+                try {
+                    $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues, $loggedInUserId);
 
-            try {
-                $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues, $loggedInUserId);
-
-                if ($updated) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+                    if ($updated) {
+                        return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+                    }
+                    $response = $this->responder->respondWithJson($response, [
+                        'status' => 'warning',
+                        'message' => 'The note was not updated.'
+                    ]);
+                    return $response->withAddedHeader('Warning', 'The note was not updated.');
+                } catch (ValidationException $exception) {
+                    return $this->responder->respondWithJsonOnValidationError(
+                        $exception->getValidationResult(),
+                        $response
+                    );
+                } catch (ForbiddenException $fe) {
+                    return $this->responder->respondWithJson(
+                        $response,
+                        [
+                            // Response content asserted in ClientReadCaseProvider.php
+                            'status' => 'error',
+                            'message' => 'You can only edit your own note or need to be an admin to edit others'
+                        ],
+                        403
+                    );
                 }
-                $response = $this->responder->respondWithJson($response, [
-                    'status' => 'warning',
-                    'message' => 'The note was not updated.'
-                ]);
-                return $response->withAddedHeader('Warning', 'The note was not updated.');
-            } catch (ValidationException $exception) {
-                return $this->responder->respondWithJsonOnValidationError(
-                    $exception->getValidationResult(),
-                    $response
-                );
-            } catch (ForbiddenException $fe) {
-                return $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'error', 'message' => 'You can only edit your own note or need to be an admin to edit others'],
-                    403
-                );
             }
+            throw new HttpBadRequestException($request, 'Request body malformed.');
         }
 
         // Not logged in, let AuthenticationMiddleware handle redirect

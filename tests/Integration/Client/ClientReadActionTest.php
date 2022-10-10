@@ -40,6 +40,18 @@ class ClientReadActionTest extends TestCase
     use FixtureTrait;
 
     /**
+     * Returns the given $dateTime in the default note format
+     *
+     * @param string $dateTime
+     * @return string
+     */
+    private function dateTimeToClientReadNoteFormat(string $dateTime): string
+    {
+        return (new \DateTime($dateTime))->format('d. F Y • H:i');
+    }
+
+
+    /**
      * Test that user has to be logged in to display the page
      *
      * @return void
@@ -66,32 +78,23 @@ class ClientReadActionTest extends TestCase
     public function testClientReadPageAction_loggedIn(): void
     {
         // Add needed database values to correctly display the page
+        $clientData = (new ClientFixture())->records[0];
         // Insert user linked to client and user that is logged in
-        $this->insertFixture('user', (new UserFixture())->records[0]);
+        $this->insertFixtureWhere(['id' => $clientData['user_id']], UserFixture::class);
         // Insert linked status
-        $this->insertFixture('client_status', (new ClientStatusFixture())->records[0]);
+        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
         // Insert client that should be displayed
-        $this->insertFixture('client', (new ClientFixture())->records[0]);
+        $this->insertFixture('client', $clientData);
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', 1);
+        $this->container->get(SessionInterface::class)->set('user_id', $clientData['user_id']);
 
         $response = $this->app->handle($request);
         // Assert 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
     }
 
-    /**
-     * Returns the given $dateTime in the default note format
-     *
-     * @param string $dateTime
-     * @return string
-     */
-    private function dateTimeToClientReadNoteFormat(string $dateTime): string
-    {
-        return (new \DateTime($dateTime))->format('d. F Y • H:i');
-    }
 
     /**
      * On client read page display, notes attached to him are
@@ -193,25 +196,27 @@ class ClientReadActionTest extends TestCase
     }
 
     /**
-     * Test note creation on client-read page while being authenticated.
+     * Test main note and normal note update on client-read page while being authenticated
+     * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserWhereConditionForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserFixtureWhereConditionForNote()
      * @return void
      */
-    public function testClientReadNoteCreation($userLinkedToClientData, $authenticatedUserData, $expectedResult): void
-    {
-        // To test as "neutral" as possible, a client linked to a non admin user is taken
-        // $nonAdminUserRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
-
+    public function testClientReadNoteCreation(
+        array $userLinkedToClientData,
+        array $authenticatedUserData,
+        array $expectedResult
+    ): void {
         $this->insertFixture('user', $userLinkedToClientData);
         // If authenticated user and user that should be linked to client is different, insert authenticated user
-        if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']){
+        if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']) {
             $this->insertFixture('user', $authenticatedUserData);
         }
 
         // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']], ClientFixture::class)[0];
-        // In array first to assert user data later
+        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']],
+            ClientFixture::class)[0];
+        // Insert needed client status fixture
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         $this->insertFixture('client', $clientRow);
 
@@ -260,16 +265,108 @@ class ClientReadActionTest extends TestCase
      */
     public function testClientReadNoteCreation_unauthenticated(): void
     {
-        // xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" + clientId);
+        $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
+        // Create url where client should be redirected to after login
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+        // Make request
+        $response = $this->app->handle($request);
+        // Assert response HTTP status code: 401 Unauthorized
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+        // Build expected login url as UserAuthenticationMiddleware.php does
+        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+        // Assert that response contains correct login url
+        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 
     /**
      * Test note creation on client-read page while being authenticated.
+     * Fixture dependencies:
+     *   - 1 client that is linked to the non admin user retrieved in the provider
+     *   - 1 main note that is linked to the same non admin user and to the client
+     *   - 1 normal note that is linked to the same user and client
+     *   - 1 normal note that is not linked to this user but the client
      *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUserFixtureWhereConditionForNote()
      * @return void
      */
-    public function testClientReadNoteModification(): void
-    {
+    public function testClientReadNoteModification(
+        array $userLinkedToNoteData,
+        array $authenticatedUserData,
+        array $expectedResult
+    ): void {
+        $this->insertFixture('user', $userLinkedToNoteData);
+        // If authenticated user and user that should be linked to client is different, insert authenticated user
+        if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
+            $this->insertFixture('user', $authenticatedUserData);
+        }
+
+        // Insert one client linked to this user
+        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
+            ClientFixture::class)[0];
+        // In array first to assert user data later
+        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        $this->insertFixture('client', $clientRow);
+
+        // Insert main note attached to client and given "owner" user
+        $mainNoteData = $this->findRecordsFromFixtureWhere(
+            ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+            NoteFixture::class
+        )[0];
+        $this->insertFixture('note', $mainNoteData);
+        // Insert normal note attached to client and given "owner" user
+        $normalNoteData = $this->findRecordsFromFixtureWhere(
+            ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+            NoteFixture::class
+        )[0];
+        $this->insertFixture('note', $normalNoteData);
+
+        // Simulate logged-in user
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+
+        $newNoteMessage = 'New note message';
+        // --- MAIN note request ---
+        // Create request to edit main note
+        $mainNoteRequest = $this->createJsonRequest(
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteData['id']]),
+            ['message' => $newNoteMessage,]
+        );
+        // Make request
+        $mainNoteResponse = $this->app->handle($mainNoteRequest);
+
+        // Assert 200 OK note updated successfully
+        self::assertSame(
+            $expectedResult['modification']['main_note'][StatusCodeInterface::class],
+            $mainNoteResponse->getStatusCode()
+        );
+
+        // Database is always expected to change for the main note as every user can change it
+        $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
+
+        // Assert response
+        $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
+
+        // --- NORMAL NOTE REQUEST ---
+        $normalNoteRequest = $this->createJsonRequest(
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteData['id']]),
+            ['message' => $newNoteMessage,]
+        );
+        // Make request
+        $normalNoteResponse = $this->app->handle($normalNoteRequest);
+        self::assertSame(
+            $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
+            $normalNoteResponse->getStatusCode()
+        );
+
+        // If db is expected to change assert the new message
+        if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
+            $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteData['id']);
+        } else {
+            // If db is not expected to change message should remain the same as when it was inserted first
+            $this->assertTableRow(['message' => $normalNoteData['message']], 'note', $normalNoteData['id']);
+        }
+
+        $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
     }
 
     /**

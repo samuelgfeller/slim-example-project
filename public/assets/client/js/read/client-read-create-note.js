@@ -2,7 +2,7 @@ import {basePath} from "../../../general/js/config.js";
 import {
     addDeleteNoteBtnEventListener, addTextareaInputEventListener,
     hideCheckmarkLoader,
-    initActivityTextareasEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
+    initNotesEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
 
 let noteCreationHideCheckMarkTimeout = [];
