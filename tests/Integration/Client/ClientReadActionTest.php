@@ -282,6 +282,80 @@ class ClientReadActionTest extends TestCase
     }
 
     /**
+     * Test note creation on client-read page with invalid data.
+     * Fixture dependencies:
+     *   - 1 client
+     *   - 1 user linked to client
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseDataForCreation()
+     * @return void
+     */
+    public function testClientReadNoteCreation_invalid(
+        array $invalidRequestBody,
+        bool $existingMainNote,
+        array $expectedResponseData
+    ): void {
+        // Add the minimal needed data
+        $clientData = (new ClientFixture())->records[0];
+        // Insert user linked to client and user that is logged in
+        $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
+        $this->insertFixture('user', $userData);
+        // Insert linked status
+        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
+        // Insert client
+        $this->insertFixture('client', $clientData);
+        // Insert main note linked to client and user if data provider $existingMainNote is true
+        if ($existingMainNote === true) {
+            $this->insertFixtureWhere(['is_main' => 1, 'client_id' => $clientData['id'], 'user_id' => $userData['id']],
+                NoteFixture::class);
+        }
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+
+        $request = $this->createJsonRequest(
+            'POST',
+            $this->urlFor('note-submit-creation'),
+            $invalidRequestBody
+        );
+        $response = $this->app->handle($request);
+
+        // Assert 422 Unprocessable entity
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        // Assert json response data
+        $this->assertJsonData($expectedResponseData, $response);
+    }
+
+    /**
+     * Test client read note modification with malformed request body
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideNoteCreationMalformedRequestBody()
+     * @return void
+     */
+    public function testClientReadNoteCreation_malformedRequest(array $malformedRequestBody): void
+    {
+        // Action class should directly return error so only logged-in user has to be inserted
+        $userData = (new UserFixture())->records[0];
+        $this->insertFixture('user', $userData);
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+
+        $request = $this->createJsonRequest(
+            'POST',
+            $this->urlFor('note-submit-creation'),
+            $malformedRequestBody
+        );
+        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        $this->expectException(HttpBadRequestException::class);
+        $this->expectExceptionMessage('Request body malformed.');
+
+        // Handle request after defining expected exceptions
+        $this->app->handle($request);
+    }
+
+    /**
      * Test note modification on client-read page while being authenticated.
      * Fixture dependencies:
      *   - 1 client that is linked to the non admin user retrieved in the provider
@@ -402,7 +476,7 @@ class ClientReadActionTest extends TestCase
      *   - 1 user linked to client
      *   - 1 note that is linked to the client and the user
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseData()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseDataForModification()
      * @return void
      */
     public function testClientReadNoteModification_invalid(string $invalidMessage, array $expectedResponseData): void
@@ -453,7 +527,8 @@ class ClientReadActionTest extends TestCase
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
 
         $request = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
+            'PUT',
+            $this->urlFor('note-submit-modification', ['note_id' => 1]),
             $malformedRequestBody
         );
         // Bad Request (400) means that the client sent the request wrongly; it's a client error

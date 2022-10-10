@@ -113,7 +113,6 @@ class NoteValidator extends AppValidation
     {
         $exists = $this->noteValidatorRepository->mainNoteAlreadyExistsForClient($clientId);
         if ($exists === true) {
-            $validationResult->setMessage('Main note already exists');
             $validationResult->setError('is_main', 'Main note exists already');
 
             $this->logger->debug('Attempt to create main note but it already exists. Client: ' . $clientId);
@@ -131,7 +130,6 @@ class NoteValidator extends AppValidation
     {
         $exists = $this->userExistenceCheckerRepository->userExists($userId);
         if (!$exists) {
-            $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');
 
             $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
