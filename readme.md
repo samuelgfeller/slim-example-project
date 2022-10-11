@@ -12,7 +12,7 @@ and the [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project.
 
 ## Functionalities include:
 
-It will grow into a usable application for non-profit organizations that need a platform to the manage the people they
+It will grow into a usable application for non-profit organizations that need a platform to manage the people they
 are helping.  
 This project is done in collaboration with the organization [Retter in der Not](https://www.retter-in-der-not.org).
 
@@ -23,7 +23,6 @@ This project is done in collaboration with the organization [Retter in der Not](
 * Protection against rapid fire and distributed brute force attacks (time throttling and
   captcha) - [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/security-concept.md)
 * [Custom error handler](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/error-handling.md)
-* 
 
 ## Technologies
 
@@ -54,11 +53,10 @@ After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do 
   or [odan/twig-assets](https://github.com/odan/twig-assets))
 * If during the development of a larger project many libraries are being used, I will
     1. Install webpack and use it to download and compile/bundle my external dependencies (like jQuery, Bootstrap,
-       etc..) into a single JS file.
-    1. Link this static file in my global layout template(s). For this I don't need an asset function.
-    1. And then I can update my external dependencies with `npx webpack --mode=production`
-       But I think most smaller projects won't need enough to justify it. Thats why I left it out in this
-       example-project
+       etc.) into a single JS file.
+    1. Link this static file in my global layout template(s). For this, I don't need an asset function.
+    1. And then I can update my external dependencies with `npx webpack --mode=production`.
+       But I think most smaller projects won't need enough to justify it.
 
 ### Backend
 * **HTTP Router & Middleware**: [slimphp/Slim](https://github.com/slimphp/Slim)
