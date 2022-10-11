@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientDeleter;
+use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Service\NoteDeleter;
@@ -11,6 +11,7 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpMethodNotAllowedException;
 
 /**
  * Action.
@@ -77,6 +78,10 @@ final class NoteDeleteAction
                 // If not deleted, inform user
                 $flash->add('warning', 'The note was not deleted');
                 return $response->withAddedHeader('Warning', 'The note was not deleted');
+            } catch (NotAllowedException $notAllowedException) {
+                // Log event as this should not be able to happen with normal use. User has to manually make exact request
+                $this->logger->notice('Action not allowed, user ' . $loggedInUserId . ' tried to delete main note');
+                throw new HttpMethodNotAllowedException($request, $notAllowedException->getMessage());
             } catch (ForbiddenException $fe) {
                 // Log event as this should not be able to happen with normal use. User has to manually make exact request
                 $this->logger->notice(
@@ -85,7 +90,7 @@ final class NoteDeleteAction
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'You have to be admin or note creator to update this note'],
+                    ['status' => 'error', 'message' => 'You have to be note author to delete this note.'],
                     403
                 );
             }

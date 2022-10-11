@@ -32,7 +32,7 @@ class ClientReadCaseProvider
     {
         $userData = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
         return [
-            [ // ? Authenticated user is ressource owner - non admin
+            [ // ? Authenticated user is resource owner - non admin
                 // User to whom the note is linked
                 'owner_user' => $userData,
                 'authenticated_user' => $userData,
@@ -57,16 +57,25 @@ class ClientReadCaseProvider
                                 'status' => 'success',
                                 'data' => null,
                             ],
+                            // Is db supposed to change
                             'db_changed' => true,
                         ],
                     ],
                     'deletion' => [
-                        // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK
+                        // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                        'normal_note' => [
+                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
+                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                            'json_response' => [
+                                'status' => 'success',
+                            ],
+                            // Is db supposed to change
+                            'db_changed' => true,
+                        ],
                     ],
                 ],
             ],
-            [ // ? Authenticated user is admin - non ressource owner
+            [ // ? Authenticated user is admin - non resource owner
                 'owner_user' => $userData,
                 'authenticated_user' => $this->findRecordsFromFixtureWhere(['role' => 'admin'], UserFixture::class)[0],
                 'expected_result' => [
@@ -89,10 +98,22 @@ class ClientReadCaseProvider
                             ],
                             'db_changed' => true,
                         ],
-                    ]
+                    ],
+                    'deletion' => [
+                        // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                        'normal_note' => [
+                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
+                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                            'json_response' => [
+                                'status' => 'success',
+                            ],
+                            // Is db supposed to change
+                            'db_changed' => true,
+                        ],
+                    ],
                 ],
             ],
-            [ // ? Authenticated user is not the ressource owner and not admin
+            [ // ? Authenticated user is not the resource owner and not admin
                 'owner_user' => $userData,
                 // Get user with role user that is not the same then $userData
                 'authenticated_user' => $this->findRecordsFromFixtureWhere(
@@ -120,6 +141,19 @@ class ClientReadCaseProvider
                                 'status' => 'error',
                                 'message' => 'You can only edit your own note or need to be an admin to edit others'
                             ],
+                            'db_changed' => false,
+                        ],
+                    ],
+                    'deletion' => [
+                        // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                        'normal_note' => [
+                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
+                            StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+                            'json_response' => [
+                                'status' => 'error',
+                                'message' => 'You have to be note author to delete this note.',
+                            ],
+                            // Is db supposed to change
                             'db_changed' => false,
                         ],
                     ],
@@ -239,7 +273,6 @@ iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
 
         ];
     }
-
 
 
     /**

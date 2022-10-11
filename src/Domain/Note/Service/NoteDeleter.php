@@ -4,6 +4,7 @@
 namespace App\Domain\Note\Service;
 
 
+use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\Note\NoteDeleterRepository;
@@ -11,9 +12,9 @@ use App\Infrastructure\Note\NoteDeleterRepository;
 class NoteDeleter
 {
     public function __construct(
-        private NoteDeleterRepository $noteDeleterRepository,
-        private NoteFinder $noteFinder,
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly NoteDeleterRepository $noteDeleterRepository,
+        private readonly NoteFinder $noteFinder,
+        private readonly UserRoleFinderRepository $userRoleFinderRepository,
     ) { }
 
     /**
@@ -22,12 +23,17 @@ class NoteDeleter
      * @param int $noteId
      * @param int $loggedInUserId
      * @return bool
-     * @throws ForbiddenException
      */
     public function deleteNote(int $noteId, int $loggedInUserId): bool
     {
         // Find note in db to get its ownership
         $noteFromDb = $this->noteFinder->findNote($noteId);
+
+        // There is no option in GUI to delete main note
+        if ($noteFromDb->isMain === 1){
+            // Asserted in testClientReadNoteDeletion
+            throw new NotAllowedException('The main note cannot be deleted.');
+        }
 
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
 

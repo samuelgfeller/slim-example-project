@@ -55,7 +55,7 @@ trait FixtureTrait
 
     /**
      * If only specific fixtures should be inserted for instance
-     * linked to a specific ressource
+     * linked to a specific resource
      *
      * @param array<string, mixed> $conditions array of db column name and the expected value.
      * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
