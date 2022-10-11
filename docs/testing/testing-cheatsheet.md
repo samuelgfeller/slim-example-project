@@ -453,7 +453,9 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUr
 // Assert that response contains correct login url
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
-#### Assert response with `Redirect-to-route-name-if-unauthorized`
+<details>
+  <summary>Assert response with `Redirect-to-route-name-if-unauthorized`</summary>
+
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
     ->withQueryParams(['client_id' => 1]);
@@ -469,6 +471,8 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor
 // Assert that response contains correct login url
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
+</details>
+
 #### Assert response without custom header
 This is basically the same as [non-authenticated page action test](#non-authenticated-page-action-test).
 
@@ -637,95 +641,95 @@ public function testClientReadNoteModification_malformedRequest(array $malformed
 
 `tests/Integration/Client/ClientReadActionTest.php`
 ```php
-    /**
-     * Test note modification on client-read page while being authenticated.
-     * Fixture dependencies:
-     *   - 1 client that is linked to the non admin user retrieved in the provider
-     *   - 1 main note that is linked to the same non admin user and to the client
-     *   - 1 normal note that is linked to the same user and client
-     *   - 1 normal note that is not linked to this user but the client
-     *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
-     * @return void
-     */
-    public function testClientReadNoteModification(
-        array $userLinkedToNoteData,
-        array $authenticatedUserData,
-        array $expectedResult
-    ): void {
-        $this->insertFixture('user', $userLinkedToNoteData);
-        // If authenticated user and user that should be linked to client is different, insert authenticated user
-        if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $authenticatedUserData);
-        }
-
-        // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
-            ClientFixture::class)[0];
-        // In array first to assert user data later
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $this->insertFixture('client', $clientRow);
-
-        // Insert main note attached to client and given "owner" user
-        $mainNoteData = $this->findRecordsFromFixtureWhere(
-            ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
-            NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $mainNoteData);
-        // Insert normal note attached to client and given "owner" user
-        $normalNoteData = $this->findRecordsFromFixtureWhere(
-            ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
-            NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $normalNoteData);
-
-        // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
-
-        $newNoteMessage = 'New note message';
-        // --- *MAIN note request ---
-        // Create request to edit main note
-        $mainNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteData['id']]),
-            ['message' => $newNoteMessage,]
-        );
-        // Make request
-        $mainNoteResponse = $this->app->handle($mainNoteRequest);
-
-        // Assert 200 OK note updated successfully
-        self::assertSame(
-            $expectedResult['modification']['main_note'][StatusCodeInterface::class],
-            $mainNoteResponse->getStatusCode()
-        );
-
-        // Database is always expected to change for the main note as every user can change it
-        $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
-
-        // Assert response
-        $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
-
-        // --- *NORMAL NOTE REQUEST ---
-        $normalNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteData['id']]),
-            ['message' => $newNoteMessage,]
-        );
-        // Make request
-        $normalNoteResponse = $this->app->handle($normalNoteRequest);
-        self::assertSame(
-            $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
-            $normalNoteResponse->getStatusCode()
-        );
-
-        // If db is expected to change assert the new message
-        if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
-            $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteData['id']);
-        } else {
-            // If db is not expected to change message should remain the same as when it was inserted first
-            $this->assertTableRow(['message' => $normalNoteData['message']], 'note', $normalNoteData['id']);
-        }
-
-        $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
+/**
+ * Test note modification on client-read page while being authenticated.
+ * Fixture dependencies:
+ *   - 1 client that is linked to the non admin user retrieved in the provider
+ *   - 1 main note that is linked to the same non admin user and to the client
+ *   - 1 normal note that is linked to the same user and client
+ *   - 1 normal note that is not linked to this user but the client
+ *
+ * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+ * @return void
+ */
+public function testClientReadNoteModification(
+    array $userLinkedToNoteData,
+    array $authenticatedUserData,
+    array $expectedResult
+): void {
+    $this->insertFixture('user', $userLinkedToNoteData);
+    // If authenticated user and user that should be linked to client is different, insert authenticated user
+    if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
+        $this->insertFixture('user', $authenticatedUserData);
     }
+
+    // Insert one client linked to this user
+    $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
+        ClientFixture::class)[0];
+    // In array first to assert user data later
+    $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+    $this->insertFixture('client', $clientRow);
+
+    // Insert main note attached to client and given "owner" user
+    $mainNoteData = $this->findRecordsFromFixtureWhere(
+        ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+        NoteFixture::class
+    )[0];
+    $this->insertFixture('note', $mainNoteData);
+    // Insert normal note attached to client and given "owner" user
+    $normalNoteData = $this->findRecordsFromFixtureWhere(
+        ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+        NoteFixture::class
+    )[0];
+    $this->insertFixture('note', $normalNoteData);
+
+    // Simulate logged-in user
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+
+    $newNoteMessage = 'New note message';
+    // --- *MAIN note request ---
+    // Create request to edit main note
+    $mainNoteRequest = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteData['id']]),
+        ['message' => $newNoteMessage,]
+    );
+    // Make request
+    $mainNoteResponse = $this->app->handle($mainNoteRequest);
+
+    // Assert 200 OK note updated successfully
+    self::assertSame(
+        $expectedResult['modification']['main_note'][StatusCodeInterface::class],
+        $mainNoteResponse->getStatusCode()
+    );
+
+    // Database is always expected to change for the main note as every user can change it
+    $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
+
+    // Assert response
+    $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
+
+    // --- *NORMAL NOTE REQUEST ---
+    $normalNoteRequest = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteData['id']]),
+        ['message' => $newNoteMessage,]
+    );
+    // Make request
+    $normalNoteResponse = $this->app->handle($normalNoteRequest);
+    self::assertSame(
+        $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
+        $normalNoteResponse->getStatusCode()
+    );
+
+    // If db is expected to change assert the new message
+    if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
+        $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteData['id']);
+    } else {
+        // If db is not expected to change message should remain the same as when it was inserted first
+        $this->assertTableRow(['message' => $normalNoteData['message']], 'note', $normalNoteData['id']);
+    }
+
+    $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
+}
 ```
 </details>
 
