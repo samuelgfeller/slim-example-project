@@ -36,7 +36,8 @@ This is a big question I have no answer to yet. For me the following useful test
       3. As non ressource owner - non admin
       4. As any other user role that has a different expected behaviour and is relevant to test
     * Validation: as authorized user but invalid form submission (does not apply for deletion)
-      1. With every different kind of possible validation error including 400 malformed body and with each field.
+      1. With every different kind of possible validation error for each field 
+      2. 400 malformed body requests where keys are missing or wrongly named  
   * Unauthenticated creation submission
     Expected: Correct status code (401 Unauthorized) and login url in response body with correct query parameters that 
     include url to the previous page.
@@ -57,7 +58,7 @@ class ClientReadActionTest extends TestCase
 }
 ```
 More on it and the whole testing setup can be found in 
-testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
+[testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
 this is intended to be a cheatsheet in a working environment.
 
 ## Page actions
@@ -176,63 +177,9 @@ foreach ($noteRows as $noteRow) {
 $this->assertJsonData($expectedResponseArray, $response);
 ```
 At this point, additionally asserting the database content is pointless as the response body comes from the database.
-The paragraph [Assert user rights](Assert-user-rights) might be relevant if `userMutationRights` is part of the response.
 
-### Ressource creation
-Here is a typical fixtures' insertion, POST request with authentication and HTTP status code assertion.
-```php
-// A client linked to a non admin user is taken to be able to test user rights
-$nonAdminUserRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
-$this->insertFixture('user', $nonAdminUserRow);
-// Insert one client linked to this user
-$clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $nonAdminUserRow['id']], ClientFixture::class)[0];
-// In array first to assert user data later
-$this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-$this->insertFixture('client', $clientRow);
-
-$noteMessage = 'Test note'; 
-// Create request
-$request = $this->createJsonRequest(
-    'POST',
-    $this->urlFor('note-submit-creation', [
-        'message' => $noteMessage,
-        'client_id' => $clientRow['id'],
-    ])
-);
-
-// Simulate logged-in user 
-$loggedInUserId = $nonAdminUserRow['id'];
-$this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
-// Make request
-$response = $this->app->handle($request);
-// Assert 201 Created redirect to login url
-self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
-```
-The database has to be asserted before the response content if it contains values from the database.
-#### Assert database
-To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
-```php
-// Assert database 
-// Find freshly inserted note
-$noteDbRow = $this->findLastInsertedTableRow('note');
-// Assert the row column values
-$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
-```
-#### Assert creation response body
-```php
-// Assert response
-$expectedResponseJson = [
-    'status' => 'success',
-    'data' => [
-        'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
-        'noteId' => $noteDbRow['id'],
-        'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
-    ],
-];
-$this->assertJsonData($expectedResponseJson, $response);
-```
-
-#### Assert user rights
+[//]: # (The paragraph [Assert user rights]&#40;Assert-user-rights&#41; might be relevant if `userMutationRights` is part of the response.)
+#### Assert mutation rights 
 See test on notes loaded by client_id on how I do it now, but currently I don't know the best way to implement this 
 dynamically.
 
@@ -255,6 +202,78 @@ foreach ($noteRows as $noteRow) {
 }
 ```
 
+### Test ressource manipulation with different user roles
+To test the behaviour of all relevant different user roles I use a data provider that returns the user infos for 
+the logged-in user, ressource user and expected result so that the same function can be used for all roles.
+
+Here is a typical fixtures' insertion, POST request with authentication and HTTP status code assertion for 
+ressource creation with different user roles. Examples of ressource modification and deletion test are at the bottom.
+`tests/Provider/Client/ClientReadCaseProvider.php`
+```php
+/**
+ * Test note creation on client-read page while being authenticated 
+ * with different user roles.
+ *
+ * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+ * @return void
+ */
+public function testClientReadNoteCreation(array $userLinkedToClientData, array $authenticatedUserData, array $expectedResult): void
+{
+    $this->insertFixture('user', $userLinkedToClientData);
+    // If authenticated user and user that should be linked to client is different, insert authenticated user
+    if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']) {
+        $this->insertFixture('user', $authenticatedUserData);
+    }
+    // Insert one client linked to this user
+    $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']],
+        ClientFixture::class)[0];
+    // In array first to assert user data later
+    $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+    $this->insertFixture('client', $clientRow);
+    // Create request
+    $noteMessage = 'Test note';
+    $request = $this->createJsonRequest(
+        'POST',
+        $this->urlFor('note-submit-creation'),
+        [
+            'message' => $noteMessage,
+            'client_id' => $clientRow['id'],
+            'is_main' => 0
+        ]
+    );
+    // Simulate logged-in user
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+    // Make request
+    $response = $this->app->handle($request);
+    // Assert 201 Created redirect to login url
+    self::assertSame($expectedResult['creation'][StatusCodeInterface::class], $response->getStatusCode());
+    // Asserting database is below ...
+}
+```
+The database has to be asserted before the response content if it contains values from the database.
+#### Assert database
+To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
+```php
+// Assert database 
+// Find freshly inserted note
+$noteDbRow = $this->findLastInsertedTableRow('note');
+// Assert the row column values
+$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+```
+#### Assert response body
+```php
+// Assert response
+$expectedResponseJson = [
+    'status' => 'success',
+    'data' => [
+        'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
+        'noteId' => $noteDbRow['id'],
+        'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
+    ],
+];
+$this->assertJsonData($expectedResponseJson, $response);
+```
+
 ### Assert JSON response when unauthenticated
 When protected AJAX request is sent to the server and user is not logged-in, the client should redirect the user to 
 the login form. The redirect action [cannot be initiated by the server](https://github.com/odan/slim4-tutorial/issues/44), 
@@ -272,6 +291,10 @@ This is done by the `AuthenticationMiddleware` with the help of one of two custo
 `Redirect-to-url-if-unauthorized` or `Redirect-to-route-name-if-unauthorized`.
 
 #### Assert response with `Redirect-to-url-if-unauthorized`
+```js
+// Content-type has to be json
+xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" + clientId);
+```
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
     ->withQueryParams(['client_id' => 1]);
@@ -305,3 +328,160 @@ $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
 #### Assert response without custom header
 This is basically the same as [non-authenticated page action test](#non-authenticated-page-action-test).
+
+### Test validation and assert errors 
+Form fields generally have specific criteria that are validated.
+#### Generate Validation cases with a case provider
+To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
+`tests/Provider/Client/ClientReadCaseProvider.php`
+```php
+/**
+ * Returns combinations of invalid data to trigger validation exception.
+ *
+ * @return array
+ */
+public function provideInvalidNoteAndExpectedResponseData(): array
+{
+    // Message over 500 chars
+    $tooLongMsg = 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
+
+    return [
+        [
+            'message_too_short' => 'Me',
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'data' => [
+                    'message' => 'There is something in the note data that couldn\'t be validated',
+                    'errors' => [
+                        0 => [
+                            'field' => 'message',
+                            'message' => 'Required minimum length is 4',
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
+            'message_too_long' => $tooLongMsg,
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'data' => [
+                    'message' => 'There is something in the note data that couldn\'t be validated',
+                    'errors' => [
+                        0 => [
+                            'field' => 'message',
+                            'message' => 'Required maximum length is 500',
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
+    ];
+}
+```
+#### Test validation on ressource modification
+This is the full test where a note is edited with invalid inputs given by the data provider above:
+`tests/Integration/Client/ClientReadActionTest.php`
+```php
+/**
+ * Test note modification on client-read page with invalid data.
+ * Fixture dependencies:
+ *   - 1 client
+ *   - 1 user linked to client
+ *   - 1 note that is linked to the client and the user
+ *
+ * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseData()
+ * @return void
+ */
+public function testClientReadNoteModification_invalid(string $invalidMessage, array $expectedResponseData): void
+{
+    // Add the minimal needed data
+    $clientData = (new ClientFixture())->records[0];
+    // Insert user linked to client and user that is logged in
+    $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
+    $this->insertFixture('user', $userData);
+    // Insert linked status
+    $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
+    // Insert client
+    $this->insertFixture('client', $clientData);
+    // Insert note linked to client and user
+    $noteData = $this->findRecordsFromFixtureWhere(['client_id' => $clientData['id'], 'user_id' => $userData['id']]
+        NoteFixture::class)[0];
+    $this->insertFixture('note', $noteData);
+    // Simulate logged-in user with same user as linked to client
+    $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+    $request = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
+        ['message' => $invalidMessage]
+    );
+    $response = $this->app->handle($request);
+    // Assert 422 Unprocessable entity
+    self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+    // Assert json response data
+    $this->assertJsonData($expectedResponseData, $response);
+}
+```
+
+#### Test malformed request body
+When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys). 
+Here as well in order to not having to write multiple tests, I'm using a data provider:
+
+`tests/Provider/Client/ClientReadCaseProvider.php`
+```php
+/**
+ * Provide malformed note message request body
+ * 
+ * @return array
+ */
+public function provideMalformedNoteRequestBody(): array
+{
+    return [
+        [
+            'wrong_key' => [
+                'wrong_message_key' => 'Message',
+            ],
+        ],
+        [
+            'wrong_amount' => [
+                'message' => 'Message',
+                'second_key' => 'invalid',
+            ],
+        ]
+    ];
+}
+```
+And the actual test function:
+`tests/Integration/Client/ClientReadActionTest.php`
+```php
+/**
+ * Test client read note modification with malformed request body
+ *
+ * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideMalformedNoteRequestBody()
+ * @return void
+ */
+public function testClientReadNoteModification_malformedRequest(array $malformedRequestBody): void
+{
+    // Action class should directly return error so only logged-in user has to be inserted
+    $userData = (new UserFixture())->records[0];
+    $this->insertFixture('user', $userData);
+    // Simulate logged-in user with same user as linked to client
+    $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+    $request = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
+        $malformedRequestBody
+    );
+    // Bad Request (400) means that the client sent the request wrongly; it's a client error
+    $this->expectException(HttpBadRequestException::class);
+    $this->expectExceptionMessage('Request body malformed.');
+    // Handle request after defining expected exceptions
+    $this->app->handle($request);
+}
+```
+
