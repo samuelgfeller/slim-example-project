@@ -28,12 +28,24 @@ class ClientFinder
     /**
      * Gives all undeleted clients from db with aggregate data
      *
+     * @param array $filterParams default deleted_at null
      * @return ClientResultDataCollection
      */
-    public function findAllClientsWithAggregate(): ClientResultDataCollection
+    public function findClientsWithAggregates(array $filterParams = ['deleted_at' => null]): ClientResultDataCollection
     {
+        // Build where array for cakephp query builder
+        $queryBuilderWhereArray = [];
+        foreach ($filterParams as $column => $value) {
+            // If expected value is "null" the word "IS" is needed in the array key right after the column
+            $is = '';
+            if ($value === null){
+                $is = ' IS'; // To be added right after column
+            }
+            $queryBuilderWhereArray["client.$column$is"] = $value;
+        }
+
         $clientResultCollection = new ClientResultDataCollection();
-        $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsWithResultAggregate();
+        $clientResultCollection->clients = $this->clientFinderRepository->findClientsWithResultAggregate($queryBuilderWhereArray);
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllStatusesForDropdown();
         $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
             $this->userFinderRepository->findAllUsers()

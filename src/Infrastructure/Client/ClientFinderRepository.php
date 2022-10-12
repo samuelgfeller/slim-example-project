@@ -9,7 +9,6 @@ use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
-use http\Client;
 
 class ClientFinderRepository
 {
@@ -63,7 +62,7 @@ class ClientFinderRepository
      *
      * @return ClientData[]
      */
-    public function findAllClientsWithResultAggregate(): array
+    public function findClientsWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
         $query = $this->queryFactory->newQuery()->from('client');
         $query->select(
@@ -78,9 +77,7 @@ class ClientFinderRepository
                 'conditions' => 'client.client_status_id = client_status.id'
             ],
         ])
-            ->andWhere(
-                ['client.deleted_at IS' => null]
-            );
+            ->andWhere($whereArray);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);

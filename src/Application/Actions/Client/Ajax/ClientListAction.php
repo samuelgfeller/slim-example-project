@@ -3,10 +3,9 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Note\Exception\InvalidNoteFilterException;
-use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,13 +45,13 @@ final class ClientListAction
         try {
             // Retrieve posts with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
-        } catch (InvalidNoteFilterException $invalidPostFilterException) {
+        } catch (InvalidClientFilterException $invalidClientFilterException) {
             return $this->responder->respondWithJson(
                 $response,
                 // Response format tested in PostFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidPostFilterException->getMessage()
+                    'message' => $invalidClientFilterException->getMessage()
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );

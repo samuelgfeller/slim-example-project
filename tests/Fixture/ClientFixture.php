@@ -84,5 +84,22 @@ class ClientFixture
             'created_at' => '2022-01-01 00:00:01',
             'deleted_at' => '2022-01-01 00:00:02',
         ],
+        // Client id 5: user id 1, status id 1
+        [
+            'id' => 5,
+            'first_name' => 'Client to',
+            'last_name' => 'Admin',
+            'birthdate' => '1980-06-21',
+            'location' => 'Basel',
+            'phone' => '079 364 33 28',
+            'email' => 'client.to.admin@email.com',
+            'sex' => 'F',
+            'client_message' => 'Test client message',
+            'user_id' => 1,
+            'client_status_id' => 1,
+            'updated_at' => '2021-01-01 00:00:01',
+            'created_at' => '2022-01-01 00:00:01',
+            'deleted_at' => null,
+        ],
     ];
 }

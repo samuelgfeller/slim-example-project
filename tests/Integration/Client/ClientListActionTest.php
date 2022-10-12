@@ -86,24 +86,29 @@ class ClientListActionTest extends TestCase
     /**
      * Request list of all clients
      * Fixtures dependency:
-     *      UserFixture: one user (for session), all users linked to any clients in client fixture
-     *      ClientStatusFixture: all clients statuses linked to any client
-     *      ClientFixture: at least one active client and one deleted
+     *      UserFixture: one user (for session), all users linked to clients in client fixture
+     *      ClientStatusFixture: all clients statuses linked in client fixture
+     *      ClientFixture: - at least one active clients that is linked to the
+     *                     first user with role 'user' (authenticated user).
+     *                     - one that is deleted
+     *                     - one that is linked to other user
      *
+     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideValidClientListFilters()
+     *
+     * @param array<string, mixed> $queryParams
+     * @param array<string, mixed> $rowFilter
      * @return void
      */
-    public function testClientListClientLoadAction(): void
+    public function testClientListClientLoadAction(array $queryParams, array $rowFilter): void
     {
-        // Insert users and statuts linked to clients
-        $this->insertFixtures([UserFixture::class, ClientStatusFixture::class]);
-
-        // Insert all clients including deleted one
-        $this->insertFixtureWhere(['deleted_at' => null], ClientFixture::class);
+        // Insert users and statuts linked to clients and all clients including deleted one
+        $this->insertFixtures([UserFixture::class, ClientStatusFixture::class, ClientFixture::class]);
 
         $request = $this->createJsonRequest(
             'GET',
             $this->urlFor('client-list')
-        );
+        )   // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+        ->withQueryParams($queryParams);
 
         // Simulate logged-in user with role user
         $loggedInUserId = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0]['id'];
@@ -114,8 +119,13 @@ class ClientListActionTest extends TestCase
         // Assert: 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
-        // Find all but deleted clients as they are expected to returned by the server
-        $clientRows = $this->findRecordsFromFixtureWhere(['deleted_at' => null], ClientFixture::class);
+        // If user_id is 'session' replace it with the authenticated user id
+        if (isset($rowFilter['user_id']) && $rowFilter['user_id'] === 'session'){
+            $rowFilter['user_id'] = $loggedInUserId;
+        }
+        // Filter fixture records with given row filter params
+        $clientRows = $this->findRecordsFromFixtureWhere($rowFilter, ClientFixture::class);
+
         // Create expected array based on fixture records
         $expected = [];
         foreach ($clientRows as $clientRow) {
@@ -138,7 +148,8 @@ class ClientListActionTest extends TestCase
                 'age' => (new \DateTime())->diff(new \DateTime($clientRow['birthdate']))->y,
                 'notes' => null,
                 'notesAmount' => null,
-                'mainNoteData' => (array)new NoteData(), // Empty on client list but perhaps added later to display on hover
+                'mainNoteData' => (array)new NoteData(),
+                // Empty on client list but perhaps added later to display on hover
             ];
         }
         $clientStatuses = $this->findRecordsFromFixtureWhere(['deleted_at' => null], ClientStatusFixture::class);
@@ -157,61 +168,9 @@ class ClientListActionTest extends TestCase
     }
 
     /**
-     * Request list of clients matching given filters
-     * Fixtures dependency:
-     *      UserFixture: one user with id 1 (for session)(better if at least two)
-     *      ClientFixture: one client (better if at least two)
-     *
-     * @dataProvider \App\Test\Provider\Client\ClientFilterCaseProvider::provideValidFilter()
-     *
-     * @param array $queryParams Filter as GET paramets
-     * @param array<string, mixed> $recordFilter Filter as record filter like ['col' => 'value']
-     * @return void
-     */
-    public function testClientListAction_withFilters(array $queryParams, array $recordFilter): void
-    {
-        // All user fixtures required to insert all client fixtures
-        $this->insertFixtures([UserFixture::class, ClientFixture::class]);
-
-        $request = $this->createRequest(
-            'GET',
-            $this->urlFor('client-list', [], $queryParams)
-        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-        ->withQueryParams($queryParams);
-
-        $response = $this->app->handle($request);
-
-        // Assert: 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
-
-        // Create expected array based on fixture records
-        $expected = [];
-        // Get clients records matching filter
-        $clientRecords = $this->findRecordsFromFixtureWhere($recordFilter, ClientFixture::class);
-        foreach ($clientRecords as $clientRow) {
-            // Linked user record
-            $userRow = $this->findRecordsFromFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class)[0];
-            // Build expected array
-            $expected[] = [
-                // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
-                'clientId' => $clientRow['id'],
-                'userId' => $userRow['id'],
-                'clientMessage' => $clientRow['message'],
-                'clientCreatedAt' => $this->changeDateFormat($clientRow['created_at']),
-                'clientUpdatedAt' => $this->changeDateFormat($clientRow['updated_at']),
-                'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
-                'userRole' => $userRow['role'],
-                'userMutationRights' => UserNoteData::MUTATION_PERMISSION_NONE, // None as not logged in
-            ];
-        }
-
-        $this->assertJsonData($expected, $response);
-    }
-
-    /**
      * Request list of clients but with invalid filter
      *
-     * @dataProvider \App\Test\Provider\Client\ClientFilterCaseProvider::provideInvalidFilter()
+     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideInvalidClientListFilter()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
@@ -219,9 +178,12 @@ class ClientListActionTest extends TestCase
      */
     public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
     {
+        $this->insertFixture('user', (new UserFixture())->records[0]);
+        $this->container->get(SessionInterface::class)->set('user_id', 1);
+
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('client-list', [], $queryParams)
+            $this->urlFor('client-list')
         ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set
         ->withQueryParams($queryParams);
 
