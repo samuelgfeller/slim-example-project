@@ -16,11 +16,11 @@ final class ArrayReader
     /**
      * Constructor.
      *
-     * @param array $data Data
+     * @param null|array $data Data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = [])
     {
-        $this->data = $data;
+        $this->data = $data ?? [];
     }
 
     /**

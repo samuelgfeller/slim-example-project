@@ -8,7 +8,7 @@ use App\Domain\Note\Data\NoteData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\Note\NoteValidatorRepository;
-use App\Infrastructure\User\UserExistenceCheckerRepository;
+use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 
 /**
  * Class NoteValidator
@@ -20,11 +20,11 @@ class NoteValidator extends AppValidation
      * NoteValidator constructor.
      *
      * @param LoggerFactory $logger
-     * @param UserExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
      */
     public function __construct(
         LoggerFactory $logger,
-        private readonly UserExistenceCheckerRepository $userExistenceCheckerRepository,
+        private readonly ResourceExistenceCheckerRepository $userExistenceCheckerRepository,
         private readonly NoteValidatorRepository $noteValidatorRepository,
     ) {
         parent::__construct(
@@ -128,7 +128,7 @@ class NoteValidator extends AppValidation
      */
     protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
-        $exists = $this->userExistenceCheckerRepository->userExists($userId);
+        $exists = $this->userExistenceCheckerRepository->rowExists($userId);
         if (!$exists) {
             $validationResult->setError('user', 'User not existing');
 

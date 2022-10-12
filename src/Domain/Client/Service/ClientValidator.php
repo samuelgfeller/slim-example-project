@@ -2,12 +2,12 @@
 
 namespace App\Domain\Client\Service;
 
+use App\Domain\Client\Data\ClientData;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Client\Data\ClientData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\User\UserExistenceCheckerRepository;
+use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 
 /**
  * Class PostValidator
@@ -19,11 +19,11 @@ class ClientValidator extends AppValidation
      * PostValidator constructor.
      *
      * @param LoggerFactory $logger
-     * @param UserExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
      */
     public function __construct(
         LoggerFactory $logger,
-        private UserExistenceCheckerRepository $userExistenceCheckerRepository
+        private ResourceExistenceCheckerRepository $userExistenceCheckerRepository
     ) {
         parent::__construct(
             $logger->addFileHandler('error.log')->createInstance('post-validation')
@@ -61,17 +61,18 @@ class ClientValidator extends AppValidation
 
         if ($client->clientStatusId !== null) {
             $this->validateNumeric($client->clientStatusId, 'client_status_id', false, $validationResult);
+            $this->validateExistence($client->clientStatusId, 'client_status', $validationResult);
         }
         if ($client->userId !== null) {
             $this->validateNumeric($client->userId, 'user_id', false, $validationResult);
-            $this->validateUserExistence($client->userId, $validationResult);
+            $this->validateExistence($client->userId, 'user', $validationResult);
         }
 
         if ($client->firstName !== null) {
             $this->validateName($client->firstName, 'first_name', false, $validationResult);
         }
-        if ($client->last_name !== null) {
-            $this->validateName($client->last_name, 'surname', false, $validationResult);
+        if ($client->lastName !== null) {
+            $this->validateName($client->lastName, 'surname', false, $validationResult);
         }
         if ($client->email !== null) {
             $this->validateEmail($client->email, false, $validationResult);
@@ -113,7 +114,7 @@ class ClientValidator extends AppValidation
     protected function validateUser($userId, ValidationResult $validationResult, bool $required): void
     {
         if (null !== $userId && '' !== $userId && $userId !== 0) {
-            $this->validateUserExistence($userId, $validationResult);
+            $this->validateExistence($userId, 'user', $validationResult);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('user_id', 'user_id required but not given');
@@ -127,14 +128,14 @@ class ClientValidator extends AppValidation
      * @param int $userId
      * @param ValidationResult $validationResult
      */
-    protected function validateUserExistence(int $userId, ValidationResult $validationResult): void
+    protected function validateExistence(int $userId, string $table, ValidationResult $validationResult): void
     {
-        $exists = $this->userExistenceCheckerRepository->userExists($userId);
+        $exists = $this->userExistenceCheckerRepository->rowExists($userId, $table);
         if (!$exists) {
-            $validationResult->setMessage('User not found');
-            $validationResult->setError('user', 'User not existing');
+            $validationResult->setMessage(mb_strtoupper($table) . ' not found');
+            $validationResult->setError($table, mb_strtoupper($table) . ' not existing');
 
-            $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
+            $this->logger->debug("Checked for $table id $userId but it didn\'t exist in validation");
         }
     }
 

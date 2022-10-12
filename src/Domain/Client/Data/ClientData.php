@@ -30,9 +30,9 @@ class ClientData
 
     /**
      * Client Data constructor.
-     * @param array $clientData
+     * @param array|null $clientData
      */
-    public function __construct(array $clientData = [])
+    public function __construct(?array $clientData = [])
     {
         $reader = new ArrayReader($clientData);
         $this->id = $reader->findAsInt('id');

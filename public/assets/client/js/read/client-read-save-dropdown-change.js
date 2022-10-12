@@ -26,11 +26,12 @@ export function saveClientReadDropdownChange() {
     let clientId = document.getElementById('client-id').value;
     xHttp.open('PUT', basePath + 'clients' + '/' + clientId, true);
     xHttp.setRequestHeader("Content-type", "application/json");
+    xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
 
-// Data format: "fname=Henry&lname=Ford"
-// In [square brackets] to be evaluated
+    // Data format: "fname=Henry&lname=Ford"
+    // In [square brackets] to be evaluated
     xHttp.send(JSON.stringify({
-// this is the textarea
+    // this is the textarea
         [this.name]: this.value,
     }));
 }

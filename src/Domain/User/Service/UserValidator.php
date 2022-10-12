@@ -7,7 +7,7 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Data\UserData;
 use App\Domain\Validation\AppValidation;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\User\UserExistenceCheckerRepository;
+use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 
 /**
  * Class UserValidator
@@ -19,11 +19,11 @@ class UserValidator extends AppValidation
      * UserValidator constructor.
      *
      * @param LoggerFactory $logger
-     * @param UserExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
      */
     public function __construct(
         LoggerFactory $logger,
-        private UserExistenceCheckerRepository $userExistenceCheckerRepository
+        private ResourceExistenceCheckerRepository $userExistenceCheckerRepository
     ) {
         parent::__construct(
             $logger->addFileHandler('error.log')->createInstance('user-validation')
@@ -181,7 +181,7 @@ class UserValidator extends AppValidation
 
     protected function validateUserExistence($userId, ValidationResult $validationResult): void
     {
-        $exists = $this->userExistenceCheckerRepository->userExists($userId);
+        $exists = $this->userExistenceCheckerRepository->rowExists($userId);
         if (!$exists) {
             $validationResult->setMessage('User not found');
             $validationResult->setError('user', 'User not existing');

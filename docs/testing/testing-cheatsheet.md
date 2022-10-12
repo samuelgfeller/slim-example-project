@@ -437,7 +437,7 @@ This is done by the `AuthenticationMiddleware` with the help of one of two custo
 #### Assert response with `Redirect-to-url-if-unauthorized`
 ```js
 // Content-type has to be json
-xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" + clientId);
+xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
 ```
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))

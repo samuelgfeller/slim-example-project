@@ -5,8 +5,8 @@ namespace App\Test\Unit\User;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Service\UserUpdater;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\User\UserExistenceCheckerRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
+use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ class UserUpdaterTest extends TestCase
     {
         $this->mock(UserUpdaterRepository::class)->expects(self::once())->method('updateUser')->willReturn(true);
         // Used in Validation to check user existence
-        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
+        $this->mock(ResourceExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
         $this->mock(UserRoleFinderRepository::class)->method('getUserRoleById')->willReturn('user');
 
         $service = $this->container->get(UserUpdater::class);
@@ -45,7 +45,7 @@ class UserUpdaterTest extends TestCase
         // In this test user exists so every invalid data from invalidUserProvider() can throw
         // its error. Otherwise there would be always the error because of the exist and each data
         // could not be tested
-        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
+        $this->mock(ResourceExistenceCheckerRepository::class)->method('userExists')->willReturn(true);
 
         $service = $this->container->get(UserUpdater::class);
 
@@ -64,7 +64,7 @@ class UserUpdaterTest extends TestCase
     {
         // Mock because it is used by the validation logic
         // Point of this test is not existing user
-        $this->mock(UserExistenceCheckerRepository::class)->method('userExists')->willReturn(false);
+        $this->mock(ResourceExistenceCheckerRepository::class)->method('userExists')->willReturn(false);
 
         $service = $this->container->get(UserUpdater::class);
 
