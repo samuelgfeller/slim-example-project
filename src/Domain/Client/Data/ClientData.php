@@ -4,48 +4,50 @@ namespace App\Domain\Client\Data;
 
 
 use App\Common\ArrayReader;
+use App\Common\DateTimeImmutable;
 
 class ClientData
 {
 
     public ?int $id;
-    public ?string $first_name;
-    public ?string $last_name;
-    public ?\DateTimeImmutable $birthdate; // DateTimeImmutable to not change original reference when modified
+    public ?string $firstName;
+    public ?string $lastName;
+    // DateTimeImmutable to not change original reference when modified
+    public ?DateTimeImmutable $birthdate;
     public ?string $location;
     public ?string $phone;
     public ?string $email;
     // https://ocelot.ca/blog/blog/2013/09/16/representing-sex-in-databases/
     public ?string $sex; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
-    public ?string $client_message; // Message that client submitted via webform
-    public ?int $user_id;
-    public ?int $client_status_id;
-    public ?\DateTimeImmutable $updated_at;
-    public ?\DateTimeImmutable $created_at;
+    public ?string $clientMessage; // Message that client submitted via webform
+    public ?int $userId;
+    public ?int $clientStatusId;
+    public ?DateTimeImmutable $updatedAt;
+    public ?DateTimeImmutable $createdAt;
 
     // Not database field but here so that age doesn't have to be calculated in view
     public ?int $age;
 
     /**
      * Client Data constructor.
-     * @param array|null $clientData
+     * @param array $clientData
      */
-    public function __construct(array $clientData = null)
+    public function __construct(array $clientData = [])
     {
         $reader = new ArrayReader($clientData);
         $this->id = $reader->findAsInt('id');
-        $this->first_name = $reader->findAsString('first_name');
-        $this->last_name = $reader->findAsString('last_name');
+        $this->firstName = $reader->findAsString('first_name');
+        $this->lastName = $reader->findAsString('last_name');
         $this->birthdate = $reader->findAsDateTimeImmutable('birthdate');
         $this->location = $reader->findAsString('location');
         $this->phone = $reader->findAsString('phone');
         $this->email = $reader->findAsString('email');
         $this->sex = $reader->findAsString('sex');
-        $this->client_message = $reader->findAsString('client_message');
-        $this->user_id = $reader->findAsInt('user_id');
-        $this->client_status_id = $reader->findAsInt('client_status_id');
-        $this->updated_at = $reader->findAsDateTimeImmutable('updated_at');
-        $this->created_at = $reader->findAsDateTimeImmutable('created_at');
+        $this->clientMessage = $reader->findAsString('client_message');
+        $this->userId = $reader->findAsInt('user_id');
+        $this->clientStatusId = $reader->findAsInt('client_status_id');
+        $this->updatedAt = $reader->findAsDateTimeImmutable('updated_at');
+        $this->createdAt = $reader->findAsDateTimeImmutable('created_at');
 
         if ($this->birthdate){
             $this->age = (new \DateTime())->diff($this->birthdate)->y;
@@ -63,15 +65,15 @@ class ClientData
     {
         $clientArray = [
             // id set below
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
             'birthdate' => $this->birthdate,
             'location' => $this->location,
             'phone' => $this->phone,
             'email' => $this->email,
             'sex' => $this->sex,
-            'user_id' => $this->user_id,
-            'client_status_id' => $this->client_status_id,
+            'user_id' => $this->userId,
+            'client_status_id' => $this->clientStatusId,
         ];
 
         // Not include required, from db non-nullable values if they are null -> for update

@@ -229,9 +229,9 @@ final class ArrayReader
      * @param string $key The key
      * @param string|null $default The default value
      *
-     * @return \DateTimeImmutable|null The value
+     * @return DateTimeImmutable|null The value
      */
-    public function findAsDateTimeImmutable(string $key, string $default = null): ?\DateTimeImmutable
+    public function findAsDateTimeImmutable(string $key, string $default = null): ?DateTimeImmutable
     {
         $value = $this->find($key, $default);
 
@@ -239,7 +239,7 @@ final class ArrayReader
             return null;
         }
 
-        return new \DateTimeImmutable($value);
+        return new DateTimeImmutable($value);
     }
 
     /**
