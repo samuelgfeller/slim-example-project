@@ -24,9 +24,9 @@ class NoteWithUserData
 
     /**
      * Note constructor.
-     * @param array|null $noteData
+     * @param array $noteData
      */
-    public function __construct(array $noteData = null)
+    public function __construct(array $noteData = [])
     {
         $arrayReader = new ArrayReader($noteData);
         $this->noteId = $arrayReader->findAsInt('note_id');

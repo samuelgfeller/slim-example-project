@@ -30,7 +30,6 @@ export function loadClients() {
             else {
                 let response = JSON.parse(xHttp.responseText);
                 removeClientCardContentPlaceholder();
-                console.log(response.clients);
                 addClientsToDom(response.clients, response.users, response.statuses);
             }
         }
@@ -63,8 +62,8 @@ function addClientsToDom(clients, allUsers, allStatuses) {
     // Loop over clients and add to DOM
     for (const client of clients) {
         // Client card HTML
-        let clientProfileCardHtml = getClientProfileCardHtml(clientContainer, client.id, client.first_name, client.last_name,
-            client.age, client.sex, client.location, client.phone, client.user_id, client.client_status_id, allUsers,
+        let clientProfileCardHtml = getClientProfileCardHtml(clientContainer, client.id, client.firstName, client.lastName,
+            client.age, client.sex, client.location, client.phone, client.userId, client.clientStatusId, allUsers,
             allStatuses);
 
         // Add to DOM

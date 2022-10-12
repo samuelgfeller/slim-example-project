@@ -33,7 +33,7 @@ class ClientDeleter
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
 
         // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $clientFromDb->user_id === $loggedInUserId) {
+        if ($userRole === 'admin' || $clientFromDb->userId === $loggedInUserId) {
             return $this->clientDeleterRepository->deleteClient($postId);
         }
         throw new ForbiddenException('You have to be admin or the post creator to update this post');

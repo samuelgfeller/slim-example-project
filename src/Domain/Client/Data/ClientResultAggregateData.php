@@ -17,8 +17,8 @@ use App\Domain\User\Data\UserData;
 class ClientResultAggregateData extends ClientData
 {
 
-    public ?ClientStatusData $clientStatusData;
-    public ?UserData $userData;
+    // public ?ClientStatusData $clientStatusData;
+    // public ?UserData $userData;
     /** @var NoteWithUserData[]|null $notes */
     public ?array $notes = null;
     // Amount of notes for the client to know how many content placeholders to display
@@ -29,21 +29,21 @@ class ClientResultAggregateData extends ClientData
 
     /**
      * Client Data constructor.
-     * @param array|null $clientResultData
+     * @param array $clientResultData
      */
-    public function __construct(array $clientResultData = null)
+    public function __construct(array $clientResultData = [])
     {
         parent::__construct($clientResultData);
 
         // Aggregate DTOs populated with values relevant to client result
-        $this->clientStatusData = new ClientStatusData([
-            'name' => $clientResultData['status_name'] ?? null
-        ]);
+        // $this->clientStatusData = new ClientStatusData([
+        //     'name' => $clientResultData['status_name'] ?? null
+        // ]);
         // User data populated with values relevant to client result
-        $this->userData = new UserData([
-            'first_name' => $clientResultData['user_first_name'] ?? null,
-            'surname' => $clientResultData['user_surname'] ?? null,
-        ]);
+        // $this->userData = new UserData([
+        //     'first_name' => $clientResultData['user_first_name'] ?? null,
+        //     'surname' => $clientResultData['user_surname'] ?? null,
+        // ]);
         // Populate mainNote if set (only when read)
         $this->mainNoteData = new NoteData([
             'id' => $clientResultData['main_note_id'] ?? null,

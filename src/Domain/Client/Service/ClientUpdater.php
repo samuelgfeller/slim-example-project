@@ -47,15 +47,15 @@ class ClientUpdater
         // I write the role logic always for each function and not a general service "isAuthorised" function because it's too different every time
         $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own client or user as all users should be able to update all clients
-        if ($userRole === 'admin' || $clientFromDb->user_id === $loggedInUserId || $userRole === 'user') {
+        if ($userRole === 'admin' || $clientFromDb->userId === $loggedInUserId || $userRole === 'user') {
             $updateData = [];
-            if (null !== $client->client_status_id) {
+            if (null !== $client->clientStatusId) {
                 // To be sure that only the message will be updated
-                $updateData['client_status_id'] = $client->client_status_id;
+                $updateData['client_status_id'] = $client->clientStatusId;
             }
-            if (null !== $client->user_id) {
+            if (null !== $client->userId) {
                 // To be sure that only the message will be updated
-                $updateData['user_id'] = $client->user_id;
+                $updateData['user_id'] = $client->userId;
             }
 
             return $this->clientUpdaterRepository->updateClient($updateData, $clientId);

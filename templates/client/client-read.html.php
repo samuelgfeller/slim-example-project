@@ -30,7 +30,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <!-- Store client id on the page for js to read it -->
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
-<h1><?= html($clientAggregate->first_name . ' ' . $clientAggregate->last_name) ?></h1>
+<h1><?= html($clientAggregate->firstName . ' ' . $clientAggregate->lastName) ?></h1>
 
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div">
@@ -50,7 +50,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
-                    $selected = $statusId === $clientAggregate->client_status_id ? 'selected' : '';
+                    $selected = $statusId === $clientAggregate->clientStatusId ? 'selected' : '';
                     echo "<option value='$statusId' $selected>$statusName</option>";
                 }
                 ?>
@@ -64,7 +64,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->users as $id => $name) {
-                    $selected = $id === $clientAggregate->user_id ? 'selected' : '';
+                    $selected = $id === $clientAggregate->userId ? 'selected' : '';
                     echo "<option value='$id' $selected>$name</option>";
                 }
                 ?>

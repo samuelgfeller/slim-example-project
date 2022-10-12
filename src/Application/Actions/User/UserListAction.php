@@ -16,12 +16,7 @@ use Psr\Log\LoggerInterface;
  */
 final class UserListAction
 {
-    private Responder $responder;
-
     protected LoggerInterface $logger;
-
-    protected OutputEscapeService $outputEscapeService;
-
 
     /**
      * The constructor.
@@ -30,19 +25,15 @@ final class UserListAction
      * @param LoggerFactory $logger
      * @param UserFinder $userFinder
      * @param UserRoleFinder $userRoleFinder
-     * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
-        Responder $responder,
+        private readonly Responder $responder,
         LoggerFactory $logger,
         private UserFinder $userFinder,
         private UserRoleFinder $userRoleFinder,
-        OutputEscapeService $outputEscapeService
     ) {
-        $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')
             ->createInstance('user-list');
-        $this->outputEscapeService = $outputEscapeService;
     }
 
     /**

@@ -22,7 +22,7 @@ class NoteData
      * Note constructor.
      * @param array|null $noteData
      */
-    public function __construct(array $noteData = null)
+    public function __construct(?array $noteData = null)
     {
         $arrayReader = new ArrayReader($noteData);
         $this->id = $arrayReader->findAsInt('id');

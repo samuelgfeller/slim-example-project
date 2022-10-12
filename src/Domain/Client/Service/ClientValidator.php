@@ -59,16 +59,16 @@ class ClientValidator extends AppValidation
         // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
-        if ($client->client_status_id !== null) {
-            $this->validateNumeric($client->client_status_id, 'client_status_id', false, $validationResult);
+        if ($client->clientStatusId !== null) {
+            $this->validateNumeric($client->clientStatusId, 'client_status_id', false, $validationResult);
         }
-        if ($client->user_id !== null) {
-            $this->validateNumeric($client->user_id, 'user_id', false, $validationResult);
-            $this->validateUserExistence($client->user_id, $validationResult);
+        if ($client->userId !== null) {
+            $this->validateNumeric($client->userId, 'user_id', false, $validationResult);
+            $this->validateUserExistence($client->userId, $validationResult);
         }
 
-        if ($client->first_name !== null) {
-            $this->validateName($client->first_name, 'first_name', false, $validationResult);
+        if ($client->firstName !== null) {
+            $this->validateName($client->firstName, 'first_name', false, $validationResult);
         }
         if ($client->last_name !== null) {
             $this->validateName($client->last_name, 'surname', false, $validationResult);

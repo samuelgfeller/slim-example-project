@@ -35,7 +35,7 @@ class ClientReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_notLoggedIn(): void
+    public function testClientReadPageAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
@@ -54,7 +54,7 @@ class ClientReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_loggedIn(): void
+    public function testClientReadPageAction_authenticated(): void
     {
         // Add needed database values to correctly display the page
         $clientData = (new ClientFixture())->records[0];

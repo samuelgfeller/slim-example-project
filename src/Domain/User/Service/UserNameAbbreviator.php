@@ -8,7 +8,6 @@ use App\Infrastructure\User\UserFinderRepository;
 class UserNameAbbreviator
 {
     public function __construct(
-        private readonly UserFinderRepository $userFinderRepository,
     )
     {
     }
@@ -54,12 +53,11 @@ class UserNameAbbreviator
      * Firstnames are privileged but if there is a duplicate,
      * the first last name chars are added.
      *
+     * @param UserData[] $users original users
      * @return array array of users with abbreviated full names
      */
-    public function findUserNamesForDropdown(): array
+    public function abbreviateUserNamesForDropdown(array $users): array
     {
-        $users = $this->userFinderRepository->findAllUsers();
-
         $outputNames = [];
         $groupedUsers = [];
 

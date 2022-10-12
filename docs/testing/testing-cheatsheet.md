@@ -26,6 +26,7 @@ This is a big question I have no answer to yet. For me the following useful test
     depending on the role of the logged-in user such as `userMutationRights` for instance.
       * Load with every different type of user role. Ideally and if well maintained, only the roles where there are changes 
       can be tested, but I think it would make sense to test each role each time per default.
+    * Test that deleted resource is NOT in response.
   * Unauthenticated load  
     Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page.
 * Ajax resource creation / modification / deletion
@@ -147,7 +148,7 @@ is used in the project.** So we have to explicitly use `->withQueryParams(['clie
 
 ## Assert Json response
 
-### resource loading
+### Resource loading
 If we want to test the notes attached to a client that are loaded via Ajax after a client-read request, I would firstly
 get all relevant note rows like follows:
 ```php

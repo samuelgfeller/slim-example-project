@@ -12,11 +12,13 @@ use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
+use App\Infrastructure\User\UserFinderRepository;
 
 class ClientFinder
 {
     public function __construct(
-        private readonly ClientFinderRepository  $clientFinderRepository,
+        private readonly ClientFinderRepository $clientFinderRepository,
+        private readonly UserFinderRepository $userFinderRepository,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
@@ -33,7 +35,9 @@ class ClientFinder
         $clientResultCollection = new ClientResultDataCollection();
         $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsWithResultAggregate();
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllStatusesForDropdown();
-        $clientResultCollection->users = $this->userNameAbbreviator->findUserNamesForDropdown();
+        $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
+            $this->userFinderRepository->findAllUsers()
+        );
 
         // Add permissions on what logged-in user is allowed to do with object
 //        $this->clientUserRightSetter->defineUserRightsOnClients($allClientResults);
@@ -70,7 +74,6 @@ class ClientFinder
     }
 
 
-
     /**
      * Return all posts which are linked to the given user
      *
@@ -94,7 +97,7 @@ class ClientFinder
     {
         return new ClientDropdownValuesData(
             $this->clientStatusFinderRepository->findAllStatusesForDropdown(),
-            $this->userNameAbbreviator->findUserNamesForDropdown(),
+            $this->userNameAbbreviator->abbreviateUserNamesForDropdown($this->userFinderRepository->findAllUsers()),
         );
     }
 

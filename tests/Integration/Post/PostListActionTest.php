@@ -41,7 +41,7 @@ class PostListActionTest extends TestCase
     public function testPostListAllPageAction(): void
     {
         // Test not logged in
-        $requestNotLoggedIn = $this->createRequest('GET', $this->urlFor('client-list-all-page'));
+        $requestNotLoggedIn = $this->createRequest('GET', $this->urlFor('client-list-page'));
         $responseNotLoggedIn = $this->app->handle($requestNotLoggedIn);
         self::assertSame(StatusCodeInterface::STATUS_OK, $responseNotLoggedIn->getStatusCode());
 
@@ -53,7 +53,7 @@ class PostListActionTest extends TestCase
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
-        $requestLoggedIn = $this->createRequest('GET', $this->urlFor('client-list-all-page'));
+        $requestLoggedIn = $this->createRequest('GET', $this->urlFor('client-list-page'));
         $responseLoggedIn = $this->app->handle($requestLoggedIn);
 
         // Assert: 200 OK
