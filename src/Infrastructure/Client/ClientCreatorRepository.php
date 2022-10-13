@@ -15,13 +15,13 @@ class ClientCreatorRepository
     }
 
     /**
-     * Insert post in database
+     * Insert client in database
      *
      * @param array $data key is column name
      * @return int lastInsertId
      */
-    public function insertPost(array $data): int
+    public function insertClient(array $data): int
     {
-        return (int)$this->queryFactory->newInsert($data)->into('post')->execute()->lastInsertId();
+        return (int)$this->queryFactory->newInsert($data)->into('client')->execute()->lastInsertId();
     }
 }

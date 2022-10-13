@@ -67,7 +67,7 @@ CREATE TABLE `client`
     `last_name`        VARCHAR(100)       NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
     `birthdate`        DATE               NULL     DEFAULT NULL,
     `location`         VARCHAR(100)       NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-    `phone`            VARCHAR(15)        NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+    `phone`            VARCHAR(20)        NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
     `email`            VARCHAR(254)       NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
     `sex`              ENUM ('M','F','O') NULL     DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
     `client_message`   VARCHAR(1000)      NULL     DEFAULT NULL COMMENT 'Message that client submitted via webform' COLLATE 'utf8mb4_unicode_ci',

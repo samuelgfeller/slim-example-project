@@ -102,8 +102,8 @@ final class Validator
     function validateName(
         string $name,
         string $fieldName,
-        bool $required,
-        ValidationResult $validationResult
+        ValidationResult $validationResult,
+        bool $required = false,
     ): void {
         if ('' !== $name) {
             $this->validateLengthMax($name, $fieldName, $validationResult, 100);
@@ -124,8 +124,8 @@ final class Validator
     public
     function validateEmail(
         string|null $email,
-        bool $required,
-        ValidationResult $validationResult
+        ValidationResult $validationResult,
+        bool $required = false,
     ): void {
         // Email filter will fail if email is empty and if it's optional it shouldn't throw an error
         if (null !== $email && '' !== $email) {
@@ -149,8 +149,9 @@ final class Validator
     public
     function validateBirthdate(
         DateTimeImmutable|null $birthdate,
+        ValidationResult $validationResult,
         bool $required,
-        ValidationResult $validationResult
+        $birthdateUserInput = null,
     ): void {
         // Email filter will fail if email is empty and if it's optional it shouldn't throw an error
         if (null !== $birthdate) {
@@ -161,6 +162,10 @@ final class Validator
             if ($birthdate->getTimestamp() > $now->getTimestamp() ||
                 $birthdate->getTimestamp() < $oldestAge->getTimestamp()) {
                 $validationResult->setError('birthdate', 'Invalid birthdate');
+            }
+            // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
+            if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
+                $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input.');
             }
         } elseif (true === $required) {
             // If it is null and required
@@ -206,8 +211,8 @@ final class Validator
     public function validateNumeric(
         string|null|int $numericValue,
         string $fieldName,
-        bool $required,
         ValidationResult $validationResult,
+        bool $required = false,
     ): void {
         if (null !== $numericValue && '' !== $numericValue) {
             if (is_numeric($numericValue) === false) {

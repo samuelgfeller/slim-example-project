@@ -30,8 +30,8 @@ final class ClientCreateAction
      * @param ClientCreator $clientCreator
      */
     public function __construct(
-        Responder                $responder,
-        private readonly ClientCreator    $clientCreator,
+        Responder $responder,
+        private readonly ClientCreator $clientCreator,
         private readonly SessionInterface $session,
     ) {
         $this->responder = $responder;
@@ -53,13 +53,27 @@ final class ClientCreateAction
         array $args
     ): ResponseInterface {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $postData = $request->getParsedBody();
+            $clientValues = $request->getParsedBody();
 
             // If a html form name changes, these changes have to be done in the data class constructor
-            // Check that request body syntax is formatted right (if changed, )
-            if (null !== $postData && [] !== $postData && isset($postData['message']) && count($postData) === 1) {
+            // Check that request body syntax is formatted right (tested in ClientCreateActionTest - malformedRequest)
+            // isset cannot be used in this context as it returns false if the key exists but is null, and we don't want
+            // to test required fields here, just that the request body syntax is right
+            if (null !== $clientValues && [] !== $clientValues && !array_diff([
+                    'client_status_id',
+                    'user_id',
+                    'first_name',
+                    'last_name',
+                    'phone',
+                    'location',
+                    'birthdate',
+                    'email',
+                    'sex',
+                ], array_keys($clientValues)) && (count($clientValues) === 9 ||
+                    // client_message may be present in request body or not
+                    (array_key_exists('client_message', $clientValues) && count($clientValues) === 10))) {
                 try {
-                    $insertId = $this->clientCreator->createPost($postData, $loggedInUserId);
+                    $insertId = $this->clientCreator->createClient($clientValues, $loggedInUserId);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),

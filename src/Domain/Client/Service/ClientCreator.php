@@ -5,31 +5,40 @@ namespace App\Domain\Client\Service;
 
 
 use App\Domain\Client\Data\ClientData;
-use App\Infrastructure\Note\NoteCreatorRepository;
+use App\Domain\Exceptions\ForbiddenException;
+use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Infrastructure\Client\ClientCreatorRepository;
 
 class ClientCreator
 {
 
     public function __construct(
-        private ClientValidator       $postValidator,
-        private NoteCreatorRepository $postCreatorRepository
-    ) { }
+        private readonly ClientValidator $clientValidator,
+        private readonly ClientCreatorRepository $clientCreatorRepository,
+        private readonly UserRoleFinderRepository $userRoleFinderRepository
+    ) {
+    }
 
     /**
-     * Post creation logic
-     * Called by Action
+     * Validate user input values and client
      *
-     * @param array $postData
      * @param int $loggedInUserId
-     *
      * @return int insert id
      */
-    public function createPost(array $postData, int $loggedInUserId): int
+    public function createClient(array $clientValues, int $loggedInUserId): int
     {
-        $post = new ClientData($postData);
-        $post->userId = $loggedInUserId;
-        $this->postValidator->validatePostCreation($post);
+        $client = new ClientData($clientValues);
+        $this->clientValidator->validateClientCreation($client, $clientValues['birthdate'] ?? null);
 
-        return $this->postCreatorRepository->insertPost($post->toArrayForDatabase());
+        $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
+        // All users can create clients
+        if ($userRole === 'admin' || $userRole === 'user') {
+            return $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
+        }
+        // User does not have needed rights to access area or function
+        // $this->logger->notice(
+        //     'User ' . $loggedInUserId . ' tried to create client but isn\'t allowed.'
+        // );
+        throw new ForbiddenException('Not allowed to create client.');
     }
 }

@@ -67,11 +67,12 @@ class ClientData
             // id set below
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'birthdate' => $this->birthdate,
+            'birthdate' => $this->birthdate->format('Y-m-d'),
             'location' => $this->location,
             'phone' => $this->phone,
             'email' => $this->email,
             'sex' => $this->sex,
+            'client_message' => $this->clientMessage,
             'user_id' => $this->userId,
             'client_status_id' => $this->clientStatusId,
         ];
