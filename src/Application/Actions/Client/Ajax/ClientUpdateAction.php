@@ -12,6 +12,7 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Action.
@@ -64,29 +65,55 @@ final class ClientUpdateAction
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $clientId = (int)$args['client_id'];
             $clientValues = $request->getParsedBody();
-
-            try {
-                $updated = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
-
-                if ($updated) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            // If request body empty, the update logic doesn't have to run
+            if ($clientValues !== [] && $clientValues !== null) {
+            // Check that given client request body keys are valid
+                foreach ($clientValues as $key => $clientValue) {
+                    // Check if request body keys are all one of the following columns that may be changed
+                    if (!in_array($key, [
+                        'client_status_id',
+                        'user_id',
+                        'first_name',
+                        'last_name',
+                        'phone',
+                        'location',
+                        'birthdate',
+                        'email',
+                        'sex'
+                    ])) {
+                        throw new HttpBadRequestException(
+                            $request,
+                            'Request body malformed.'
+                        );
+                    }
                 }
-                $response = $this->responder->respondWithJson($response, [
-                    'status' => 'warning',
-                    'message' => 'The client was not updated.'
-                ]);
-                return $response->withAddedHeader('Warning', 'The client was not updated.');
-            } catch (ValidationException $exception) {
-                return $this->responder->respondWithJsonOnValidationError(
-                    $exception->getValidationResult(),
-                    $response
-                );
-            } catch (ForbiddenException $fe) {
-                return $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'error', 'message' => 'You can only edit your own client or be an admin to edit others'],
-                    403
-                );
+                // Try to update client with given values
+                try {
+                    $updated = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
+
+                    if ($updated) {
+                        return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+                    }
+                    $response = $this->responder->respondWithJson($response, [
+                        'status' => 'warning',
+                        'message' => 'The client was not updated.'
+                    ]);
+                    return $response->withAddedHeader('Warning', 'The client was not updated.');
+                } catch (ValidationException $exception) {
+                    return $this->responder->respondWithJsonOnValidationError(
+                        $exception->getValidationResult(),
+                        $response
+                    );
+                } catch (ForbiddenException $fe) {
+                    return $this->responder->respondWithJson(
+                        $response,
+                        [
+                            'status' => 'error',
+                            'message' => 'You can only edit your own client or be an admin to edit others'
+                        ],
+                        403
+                    );
+                }
             }
         }
 

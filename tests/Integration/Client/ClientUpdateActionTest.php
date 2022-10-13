@@ -17,6 +17,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Client update integration test:
@@ -36,7 +37,6 @@ class ClientUpdateActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTrait;
-
 
     /**
      * Test that client values can be changed when authenticated.
@@ -196,5 +196,34 @@ class ClientUpdateActionTest extends TestCase
         $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.'], $response);
 
         $this->assertTableRow(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
+    }
+
+    /**
+     * Test client modification with malformed request body
+     *
+     * @return void
+     */
+    public function testClientSubmitUpdateAction_malformedRequest(): void
+    {
+        // Action class should directly return error so only logged-in user has to be inserted
+        $userData = (new UserFixture())->records[0];
+        $this->insertFixture('user', $userData);
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('client-submit-update', ['client_id' => 1]),
+            // The update request can format the request body pretty freely as long as it doesn't contain a non-allowed key
+            // so to test only one invalid key is enough
+            ['non_existing_key' => 'value']
+        );
+        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        $this->expectException(HttpBadRequestException::class);
+        $this->expectExceptionMessage('Request body malformed.');
+
+        // Handle request after defining expected exceptions
+        $this->app->handle($request);
     }
 }
