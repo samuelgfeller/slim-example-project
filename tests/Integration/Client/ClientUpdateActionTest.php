@@ -101,7 +101,7 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test client values validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideInvalidClientValuesAndExpectedResponseData()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateUpdateCaseProvider::invalidClientValuesAndExpectedResponseData()
      * @return void
      */
     public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void

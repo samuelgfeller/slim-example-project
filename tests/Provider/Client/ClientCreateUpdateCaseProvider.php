@@ -2,15 +2,15 @@
 
 namespace App\Test\Provider\Client;
 
-class ClientUpdateCaseProvider
+class ClientCreateUpdateCaseProvider
 {
     /**
      * Returns combinations of invalid data to trigger validation exception
-     * for note creation.
+     * for client modification and creation.
      *
      * @return array
      */
-    public function provideInvalidClientValuesAndExpectedResponseData(): array
+    public function invalidClientValuesAndExpectedResponseData(): array
     {
         // The goal is to include as many values as possible that should trigger validation errors in each iteration
         return [
@@ -76,16 +76,17 @@ class ClientUpdateCaseProvider
             [
                 // Most values too long
                 'request_body' => [
-                    'first_name' => 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiii', // 101 chars
-                    'last_name' => 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiii', // 101 chars
+                    'first_name' => str_repeat('i', 101), // 101 chars
+                    'last_name' => str_repeat('i', 101),
                     'birthdate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'), // 1 day in the future
-                    'location' => 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiii', // 101 chars
-                    'phone' => '071 121 12 12 12', // 16 chars
+                    'location' => str_repeat('i', 101),
+                    'phone' => '+41 0071 121 12 12 12', // 21 chars
                     'email' => 'test$@test.ch', // invalid email
                     'sex' => '', // empty string
+                    // All keys are needed as same dataset is used for create which always expects all keys
+                    // and the json_response has to be equal too so the value can't be null.
+                    'user_id' => '999', // non-existing user
+                    'client_status_id' => '999', // non-existing status
                 ],
                 'json_response' => [
                     'status' => 'error',
@@ -94,24 +95,32 @@ iiiiiiiiiiiiiiiiiiiiiiiiiiiii', // 101 chars
                         'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
                             0 => [
+                                'field' => 'client_status',
+                                'message' => 'Client_status not existing',
+                            ],
+                            1 => [
+                                'field' => 'user',
+                                'message' => 'User not existing',
+                            ],
+                            2 => [
                                 'field' => 'first_name',
                                 'message' => 'Required maximum length is 100',
                             ],
-                            1 => [
+                            3 => [
                                 'field' => 'last_name',
                                 'message' => 'Required maximum length is 100',
                             ],
-                            2 => [
+                            4 => [
                                 'field' => 'birthdate',
                                 'message' => 'Invalid birthdate',
                             ],
-                            3 => [
+                            5 => [
                                 'field' => 'location',
                                 'message' => 'Required maximum length is 100',
                             ],
-                            4 => [
+                            6 => [
                                 'field' => 'phone',
-                                'message' => 'Required maximum length is 15',
+                                'message' => 'Required maximum length is 20',
                             ],
                         ]
                     ]

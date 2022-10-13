@@ -146,7 +146,40 @@ Very important note here, query params can be added directly in the `urlFor()` m
 **[that won't work](https://github.com/Nyholm/psr7/issues/181) if `nyholm/psr7`
 is used in the project.** So we have to explicitly use `->withQueryParams(['client_id' => 1])` like shown above.
 
+### Simulate session, execute request and assert status code
+```php
+// Simulate logged-in user
+$this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+// Handle request
+$response = $this->app->handle($request);
+// Assert 200 OK
+self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+```
+
 ## Assert Json response
+
+The database has to be asserted before the response content if it contains values from the database.
+### Assert database
+To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
+```php
+// Assert database 
+// Find freshly inserted note
+$noteDbRow = $this->findLastInsertedTableRow('note');
+// Assert the row column values
+$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+```
+### Assert response body
+```php
+// Assert response
+$this->assertJsonData([
+    'status' => 'success',
+    'data' => [
+        'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
+        'noteId' => $noteDbRow['id'],
+        'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
+    ],
+], $response);
+```
 
 ### Resource loading
 If we want to test the notes attached to a client that are loaded via Ajax after a client-read request, I would firstly
@@ -203,7 +236,7 @@ foreach ($noteRows as $noteRow) {
 }
 ```
 
-### Test resource manipulation with different user roles
+### Test resource manipulation (create, update) with different user roles
 To test the behaviour of all relevant different user roles I use a data provider that returns the user infos for 
 the logged-in user, resource user and expected result so that the same function can be used for all roles.
 <details>
@@ -390,31 +423,9 @@ public function testClientReadNoteCreation(array $userLinkedToClientData, array 
     $response = $this->app->handle($request);
     // Assert 201 Created redirect to login url
     self::assertSame($expectedResult['creation'][StatusCodeInterface::class], $response->getStatusCode());
-    // Asserting database is below ...
+    
+    // Asserting database and response is above under the sections "Assert database" and "Assert response body"
 }
-```
-The database has to be asserted before the response content if it contains values from the database.
-#### Assert database
-To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
-```php
-// Assert database 
-// Find freshly inserted note
-$noteDbRow = $this->findLastInsertedTableRow('note');
-// Assert the row column values
-$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
-```
-#### Assert response body
-```php
-// Assert response
-$expectedResponseJson = [
-    'status' => 'success',
-    'data' => [
-        'userFullName' => $nonAdminUserRow['first_name'] . ' ' . $nonAdminUserRow['surname'],
-        'noteId' => $noteDbRow['id'],
-        'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
-    ],
-];
-$this->assertJsonData($expectedResponseJson, $response);
 ```
 
 
@@ -462,7 +473,7 @@ $request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
     ->withQueryParams(['client_id' => 1]);
 // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
 $redirectAfterLoginRouteName = 'page-route-name';
-$request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', 'page-route-name');
+$request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
 // Make request
 $response = $this->app->handle($request);
 // Assert response HTTP status code: 401 Unauthorized
