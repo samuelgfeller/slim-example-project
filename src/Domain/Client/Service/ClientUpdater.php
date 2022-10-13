@@ -16,7 +16,6 @@ class ClientUpdater
     private LoggerInterface $logger;
 
     public function __construct(
-        private ClientValidator $postValidator,
         private ClientUpdaterRepository $clientUpdaterRepository,
         private UserRoleFinderRepository $userRoleFinderRepository,
         private readonly ClientValidator $clientValidator,
@@ -39,7 +38,7 @@ class ClientUpdater
     {
         // Init object for validation
         $client = new ClientData($clientValues);
-        $this->clientValidator->validateClientUpdate($client);
+        $this->clientValidator->validateClientUpdate($client, $clientValues['birthdate'] ?? null);
 
         // Find note in db to compare its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
@@ -49,13 +48,33 @@ class ClientUpdater
         // Check if it's admin or if it's its own client or user as all users should be able to update all clients
         if ($userRole === 'admin' || $clientFromDb->userId === $loggedInUserId || $userRole === 'user') {
             $updateData = [];
+            // To be sure that only the wanted column is updated it is added to the $updateData if set
             if (null !== $client->clientStatusId) {
-                // To be sure that only the message will be updated
                 $updateData['client_status_id'] = $client->clientStatusId;
             }
             if (null !== $client->userId) {
-                // To be sure that only the message will be updated
                 $updateData['user_id'] = $client->userId;
+            }
+            if (null !== $client->firstName) {
+                $updateData['first_name'] = $client->firstName;
+            }
+            if (null !== $client->lastName) {
+                $updateData['last_name'] = $client->lastName;
+            }
+            if (null !== $client->phone) {
+                $updateData['phone'] = $client->phone;
+            }
+            if (null !== $client->location) {
+                $updateData['location'] = $client->location;
+            }
+            if (null !== $client->birthdate) {
+                $updateData['birthdate'] = $client->birthdate->format('Y-m-d');
+            }
+            if (null !== $client->email) {
+                $updateData['email'] = $client->email;
+            }
+            if (null !== $client->sex) {
+                $updateData['sex'] = $client->sex;
             }
 
             return $this->clientUpdaterRepository->updateClient($updateData, $clientId);

@@ -36,13 +36,16 @@ dealing with data.
   
 ## Templates
 * Follow [general files and folders](#General-files-and-folders) rules
-* View templates that are displayed to the user are in the module sub folder and just end
-  with `.php`: e.g.  `login-page.php`.   
-  *Note*: previous `.html` is useless as emails and other views are in their respective sub-folder.
-  It is very clear in the path name which type it is and there is no autocompletion anyway as it's 
-  written in a string.
+* View templates that are displayed to the user are in the module sub folder and must end
+  with `.html.php`: e.g.  `login-page.html.php`.
 * Email templates, PDF and other views MUST be in a respective sub folder 
   (`email/email-template.php` or `pdf/pdf-template.php`)   
+
+### HTML elements
+* IDs and class names words MUST be separated by a hyphen: `class-name`
+* Form `name` attributes words MUST be separated by an underscore and MUST be similar to the database
+column name: `name="input_name"`.  
+The reason is that `Data` classes are populated via constructor from the parsed request body.
   
 ## Tests 
 * **Folder and files** MUST be in PascalCase format meaning starting with an uppercase and then each word

@@ -5,29 +5,26 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\AppValidation;
+use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 
 /**
- * Class PostValidator
+ * Client user input validator
  */
-class ClientValidator extends AppValidation
+class ClientValidator
 {
 
     /**
      * PostValidator constructor.
      *
      * @param LoggerFactory $logger
-     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param Validator $validator
      */
     public function __construct(
         LoggerFactory $logger,
-        private ResourceExistenceCheckerRepository $userExistenceCheckerRepository
+        private readonly Validator $validator,
     ) {
-        parent::__construct(
-            $logger->addFileHandler('error.log')->createInstance('post-validation')
-        );
+        $logger->addFileHandler('error.log')->createInstance('post-validation');
     }
 
     /**
@@ -41,66 +38,71 @@ class ClientValidator extends AppValidation
         // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
 
-        $this->validateMessage($post->message, $validationResult, true);
+        $this->validateMessage($post->message, true, $validationResult);
         // It's a bit pointless to check user existence as user should always exist if he's logged in
-        $this->validateUser($post->userId, $validationResult, true);
+        $this->validator->validateExistence($post->userId, 'user', $validationResult, true);
 
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
     }
 
     /**
      * Validate post update
      *
      * @param ClientData $client
-     * @throws ValidationException
+     * @param string|null $birthDateValue original value from request to validate the date
      */
-    public function validateClientUpdate(ClientData $client): void
+    public function validateClientUpdate(ClientData $client, null|string $birthDateValue = null): void
     {
         // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
-        $validationResult = new ValidationResult('There is something in the post data that couldn\'t be validated');
+        $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
 
         if ($client->clientStatusId !== null) {
-            $this->validateNumeric($client->clientStatusId, 'client_status_id', false, $validationResult);
-            $this->validateExistence($client->clientStatusId, 'client_status', $validationResult);
+            $this->validator->validateNumeric($client->clientStatusId, 'client_status_id', false, $validationResult);
+            $this->validator->validateExistence($client->clientStatusId, 'client_status', $validationResult);
         }
         if ($client->userId !== null) {
-            $this->validateNumeric($client->userId, 'user_id', false, $validationResult);
-            $this->validateExistence($client->userId, 'user', $validationResult);
+            $this->validator->validateNumeric($client->userId, 'user_id', false, $validationResult);
+            $this->validator->validateExistence($client->userId, 'user', $validationResult);
         }
-
         if ($client->firstName !== null) {
-            $this->validateName($client->firstName, 'first_name', false, $validationResult);
+            $this->validator->validateName($client->firstName, 'first_name', false, $validationResult);
         }
         if ($client->lastName !== null) {
-            $this->validateName($client->lastName, 'surname', false, $validationResult);
+            $this->validator->validateName($client->lastName, 'surname', false, $validationResult);
         }
         if ($client->email !== null) {
-            $this->validateEmail($client->email, false, $validationResult);
+            $this->validator->validateEmail($client->email, false, $validationResult);
         }
-
-        // Todo birthdate, location, phone etc
-
-        $this->throwOnError($validationResult);
-    }
-
-    protected function validateNumeric(
-        string|null|int $numericValue,
-        string $fieldName,
-        bool $required,
-        ValidationResult $validationResult,
-    ): void {
-        if (null !== $numericValue && '' !== $numericValue) {
-            if (is_numeric($numericValue) === false) {
-                $validationResult->setError($fieldName, 'Value should be numeric but wasn\'t.');
+        if ($client->birthdate !== null) {
+            $this->validator->validateBirthdate($client->birthdate, false, $validationResult);
+            // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
+            if ($birthDateValue !== null && $client->birthdate->format('Y-m-d') !== $birthDateValue) {
+                $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input.');
             }
-        } elseif (true === $required) {
-            // If it is null or empty string and required
-            $validationResult->setError($fieldName, 'Field is required but not given');
         }
+        if ($client->location !== null) {
+            $this->validateLocation($client->location, false, $validationResult);
+        }
+        if ($client->phone !== null) {
+            $this->validatePhone($client->phone, false, $validationResult);
+        }
+        if ($client->sex !== null) {
+            $this->validateSex($client->sex, false, $validationResult);
+        }
+
+        $this->validator->throwOnError($validationResult);
     }
 
 
-    protected function validateMessage($postMsg, ValidationResult $validationResult, bool $required): void
+    /**
+     * Validate client message input
+     *
+     * @param $postMsg
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
+    protected function validateMessage($postMsg, bool $required, ValidationResult $validationResult): void
     {
         if (null !== $postMsg && '' !== $postMsg) {
             $this->validateLengthMax($postMsg, 'message', $validationResult, 500);
@@ -111,32 +113,63 @@ class ClientValidator extends AppValidation
         }
     }
 
-    protected function validateUser($userId, ValidationResult $validationResult, bool $required): void
+    /**
+     * Validate client location input
+     *
+     * @param $location
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
+    protected function validateLocation($location, bool $required, ValidationResult $validationResult): void
     {
-        if (null !== $userId && '' !== $userId && $userId !== 0) {
-            $this->validateExistence($userId, 'user', $validationResult);
+        if (null !== $location && '' !== $location) {
+            $this->validator->validateLengthMax($location, 'location', $validationResult, 100);
+            $this->validator->validateLengthMin($location, 'location', $validationResult, 3);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('user_id', 'user_id required but not given');
+            $validationResult->setError('location', 'Location is required but not given');
         }
     }
 
     /**
-     * Check if user exists
-     * Same function than in UserValidator.
+     * Validate client phone input
      *
-     * @param int $userId
+     * @param $value
      * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
      */
-    protected function validateExistence(int $userId, string $table, ValidationResult $validationResult): void
+    protected function validatePhone($value, bool $required, ValidationResult $validationResult): void
     {
-        $exists = $this->userExistenceCheckerRepository->rowExists($userId, $table);
-        if (!$exists) {
-            $validationResult->setMessage(mb_strtoupper($table) . ' not found');
-            $validationResult->setError($table, mb_strtoupper($table) . ' not existing');
-
-            $this->logger->debug("Checked for $table id $userId but it didn\'t exist in validation");
+        if (null !== $value && '' !== $value) {
+            $this->validator->validateLengthMax($value, 'phone', $validationResult, 15);
+            $this->validator->validateLengthMin($value, 'phone', $validationResult, 3);
+        } elseif (true === $required) {
+            // If it is null or empty string and required
+            $validationResult->setError('phone', 'Phone is required but not given');
         }
     }
+
+    /**
+     * Validate client sex input
+     *
+     * @param $value
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
+    protected function validateSex($value, bool $required, ValidationResult $validationResult): void
+    {
+        if (null !== $value && '' !== $value) {
+            if (!in_array($value, ['M', 'F', 'O'])){
+                $validationResult->setError('sex', 'Invalid sex value given. Allowed are M, F and O.');
+            }
+        } elseif (true === $required) {
+            // If it is null or empty string and required
+            $validationResult->setError('sex', 'Sex is required but not given');
+        }
+    }
+
 
 }
