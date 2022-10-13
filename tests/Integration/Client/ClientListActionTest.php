@@ -176,7 +176,7 @@ class ClientListActionTest extends TestCase
      * @param array $expectedBody Expected response body
      * @return void
      */
-    public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
+    public function testClientListClientLoadAction_invalidFilters(array $queryParams, array $expectedBody): void
     {
         $this->insertFixture('user', (new UserFixture())->records[0]);
         $this->container->get(SessionInterface::class)->set('user_id', 1);
@@ -192,50 +192,5 @@ class ClientListActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
         $this->assertJsonData($expectedBody, $response);
-    }
-
-    /**
-     * Request list of all clients when admin is logged in
-     * Expected is that all clients have all permissions
-     *
-     * Fixtures dependency:
-     *      UserFixture: one user with id 1 (for session)(better if at least two)
-     *      ClientFixture: one client (better if at least two)
-     *
-     * @return void
-     */
-    public function testClientListAction_asAdmin(): void
-    {
-        // All user fixtures required to insert all client fixtures
-        $this->insertFixtures([UserFixture::class, ClientFixture::class]);
-
-        // Logged in user 1 role 'admin'
-        $this->container->get(SessionInterface::class)->set('user_id', 1);
-
-        $request = $this->createJsonRequest(
-            'GET',
-            $this->urlFor('client-list')
-        );
-
-        $response = $this->app->handle($request);
-
-        // Assert: 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
-
-        // Assert that mutation permission is all on all clients
-        foreach ($this->getJsonData($response) as $client) {
-            self::assertSame(UserNoteData::MUTATION_PERMISSION_ALL, $client['userMutationRights']);
-        }
-    }
-
-    /**
-     * ClientFinder changes the date into the default format in Europe
-     *
-     * @param string|null $date
-     * @return string|null
-     */
-    private function changeDateFormat(?string $date): ?string
-    {
-        return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
     }
 }
