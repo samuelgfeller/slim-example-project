@@ -68,7 +68,7 @@ class ClientValidator
             $this->validator->validateName($client->firstName, 'first_name', false, $validationResult);
         }
         if ($client->lastName !== null) {
-            $this->validator->validateName($client->lastName, 'surname', false, $validationResult);
+            $this->validator->validateName($client->lastName, 'last_name', false, $validationResult);
         }
         if ($client->email !== null) {
             $this->validator->validateEmail($client->email, false, $validationResult);
@@ -163,7 +163,7 @@ class ClientValidator
     {
         if (null !== $value && '' !== $value) {
             if (!in_array($value, ['M', 'F', 'O'])){
-                $validationResult->setError('sex', 'Invalid sex value given. Allowed are M, F and O.');
+                $validationResult->setError('sex', 'Invalid sex value given. Allowed are M, F and O');
             }
         } elseif (true === $required) {
             // If it is null or empty string and required

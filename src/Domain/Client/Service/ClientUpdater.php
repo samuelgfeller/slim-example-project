@@ -16,8 +16,8 @@ class ClientUpdater
     private LoggerInterface $logger;
 
     public function __construct(
-        private ClientUpdaterRepository $clientUpdaterRepository,
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly ClientUpdaterRepository $clientUpdaterRepository,
+        private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
         LoggerFactory $logger
@@ -84,7 +84,7 @@ class ClientUpdater
             'User ' . $loggedInUserId . ' tried to update client with id: ' . $loggedInUserId .
             ' but isn\'t allowed.'
         );
-        throw new ForbiddenException('Not allowed to change that client as it\'s linked to another user.');
+        throw new ForbiddenException('Not allowed to change that client.');
     }
 
 

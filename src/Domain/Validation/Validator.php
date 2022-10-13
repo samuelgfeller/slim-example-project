@@ -185,7 +185,6 @@ final class Validator
         if (null !== $rowId && $rowId !== 0) {
             $exists = $this->userExistenceCheckerRepository->rowExists($rowId, $table);
             if (!$exists) {
-                $validationResult->setMessage(ucfirst($table) . ' not found');
                 $validationResult->setError($table, ucfirst($table) . ' not existing');
 
                 $this->logger->debug("Checked for $table id $rowId but it didn\'t exist in validation");

@@ -19,14 +19,13 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
 
 /**
- * Post update integration test:
+ * Client update integration test:
  * - normal update
- * - edit other post as user (403 Forbidden)
- * - edit other post as admin
- * - edit request but with the same content as existing (expected warning that nothing changed in response)
- * NOT in this test (not useful enough to me):
- * - edit non-existing post as admin (expected warning that nothing changed)
- * - edit non-existing post as user (expected forbidden exception)
+ * - invalid note update
+ * - unauthenticated client update
+ * - client update request with value to change being the same as in database
+ * NOT in this test:
+ * - edit non-existing client - reason: delete request on non-existing client is tested
  */
 class ClientUpdateActionTest extends TestCase
 {
@@ -100,6 +99,43 @@ class ClientUpdateActionTest extends TestCase
     }
 
     /**
+     * Test client values validation.
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideInvalidClientValuesAndExpectedResponseData()
+     * @return void
+     */
+    public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
+    {
+        // Add one client
+        $clientRow = (new ClientFixture())->records[0];
+        // Insert user linked to client and user that is logged in
+        $this->insertFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
+        // Insert linked status
+        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        // Insert client that will be used for this test
+        $this->insertFixture('client', $clientRow);
+
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('client-submit-update', ['client_id' => 1]),
+            $requestBody
+        );
+
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+
+        $response = $this->app->handle($request);
+        // Assert 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        // database should be unchanged
+        $this->assertTableRow($clientRow, 'client', $clientRow['id']);
+
+        $this->assertJsonData($jsonResponse, $response);
+    }
+
+
+    /**
      * Test that dropdown values client status and assigned user
      * can be changed when authenticated. Any user role can do this.
      *
@@ -151,7 +187,6 @@ class ClientUpdateActionTest extends TestCase
             ['first_name' => $clientRow['first_name']]
         );
 
-
         $response = $this->app->handle($request);
 
         // Assert: 200 OK
@@ -162,12 +197,4 @@ class ClientUpdateActionTest extends TestCase
 
         $this->assertTableRow(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
     }
-
-    /**
-     * The following tests are NOT done here:
-     * - User trying to edit client which doesn't exist (expected Forbiddden)
-     * - Admin trying to edit post that doesn't exist (expected return false)
-     * They are being tested in ClientDeleteActionTest and the logic is quite similar,
-     * so I don't think its necessary again.
-     */
 }
