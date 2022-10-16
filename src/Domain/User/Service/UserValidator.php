@@ -3,33 +3,21 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Data\UserData;
-use App\Domain\Validation\AppValidation;
+use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
-use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 
 /**
  * Class UserValidator
  */
-class UserValidator extends AppValidation
+class UserValidator
 {
 
-    /**
-     * UserValidator constructor.
-     *
-     * @param LoggerFactory $logger
-     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
-     */
     public function __construct(
-        LoggerFactory $logger,
-        private ResourceExistenceCheckerRepository $userExistenceCheckerRepository
-    ) {
-        parent::__construct(
-            $logger->addFileHandler('error.log')->createInstance('user-validation')
-        );
+        private readonly Validator $validator,
+    )
+    {
     }
-
 
     /**
      * Validate updating the user.
@@ -41,19 +29,20 @@ class UserValidator extends AppValidation
     public function validateUserUpdate(int $userId, UserData $user): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
-        $this->validateUserExistence($userId, $validationResult);
+        // Check that user exists
+        $this->validator->validateExistence($userId, 'user', $validationResult, true);
         if ($user->firstName !== null) {
-            $this->validateName($user->firstName, 'first_name', false, $validationResult);
+            $this->validator->validateName($user->firstName, 'first_name', false, $validationResult);
         }
         if ($user->surname !== null) {
-            $this->validateName($user->surname, 'surname', false, $validationResult);
+            $this->validator->validateName($user->surname, 'surname', false, $validationResult);
         }
         if ($user->email !== null) {
-            $this->validateEmail($user->email, false, $validationResult);
+            $this->validator->validateEmail($user->email, false, $validationResult);
         }
 
         // If the validation failed, throw the exception that will be caught in the Controller
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
 
         return $validationResult;
     }
@@ -71,13 +60,13 @@ class UserValidator extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to register');
         // If user obj has null values that are validated, TypeError is thrown and that's correct as these are values
         // coming from the client and it needs to be checked earlier (in action) that they are set accordingly
-        $this->validateName($user->firstName, 'first_name', true, $validationResult);
-        $this->validateName($user->surname, 'surname', true, $validationResult);
-        $this->validateEmail($user->email, true, $validationResult);
+        $this->validator->validateName($user->firstName, 'first_name', true, $validationResult);
+        $this->validator->validateName($user->surname, 'surname', true, $validationResult);
+        $this->validator->validateEmail($user->email, true, $validationResult);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
-        $this->throwOnError($validationResult); // Thrown at the end so all errors are included
+        $this->validator->throwOnError($validationResult); // Thrown at the end so all errors are included
 
         return $validationResult;
     }
@@ -95,11 +84,11 @@ class UserValidator extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
-        $this->validateEmail($user->email, true, $validationResult);
+        $this->validator->validateEmail($user->email, true, $validationResult);
         $this->validatePassword($user->password, true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
 
         return $validationResult;
     }
@@ -116,7 +105,7 @@ class UserValidator extends AppValidation
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
-        $this->validateEmail($user->email, true, $validationResult);
+        $this->validator->validateEmail($user->email, true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->throwOnError($validationResult);
@@ -151,7 +140,7 @@ class UserValidator extends AppValidation
 
         if ($validationResultIsGiven === false) {
             // If the validation failed, throw the exception which will be caught in the Controller
-            $this->throwOnError($validationResult); // Thrown at the end so all errors are included
+            $this->validator->throwOnError($validationResult); // Thrown at the end so all errors are included
         }
     }
 
@@ -172,7 +161,7 @@ class UserValidator extends AppValidation
     ): void {
         // Required check done here (and not validatePasswords) because login validation uses it as well
         if (null !== $password && '' !== $password) {
-            $this->validateLengthMin($password, $fieldName, $validationResult, 3);
+            $this->validator->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required but not given
             $validationResult->setError($fieldName, 'Password required but not given');

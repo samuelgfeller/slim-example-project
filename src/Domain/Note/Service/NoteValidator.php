@@ -5,31 +5,32 @@ namespace App\Domain\Note\Service;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Validation\AppValidation;
+use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
 use App\Infrastructure\Note\NoteValidatorRepository;
-use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class NoteValidator
  */
-class NoteValidator extends AppValidation
+class NoteValidator
 {
+
+    private LoggerInterface $logger;
 
     /**
      * NoteValidator constructor.
      *
-     * @param LoggerFactory $logger
-     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param NoteValidatorRepository $noteValidatorRepository
+     * @param Validator $validator
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(
-        LoggerFactory $logger,
-        private readonly ResourceExistenceCheckerRepository $userExistenceCheckerRepository,
         private readonly NoteValidatorRepository $noteValidatorRepository,
+        private readonly Validator $validator,
+        private readonly LoggerFactory $loggerFactory,
     ) {
-        parent::__construct(
-            $logger->addFileHandler('error.log')->createInstance('note-validation')
-        );
+        $this->logger = $this->loggerFactory->addFileHandler('error.log')->createInstance('note-validation');
     }
 
     /**
@@ -48,9 +49,9 @@ class NoteValidator extends AppValidation
             $this->validateIsMainNote($note->clientId, $validationResult);
         }
         // It's a bit pointless to check user existence as user should always exist if he's logged in but here is how I'd do it
-        $this->validateUser($note->userId, $validationResult, true);
+        $this->validator->validateExistence($note->userId, 'user', $validationResult, true);
 
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
     }
 
     /**
@@ -68,7 +69,7 @@ class NoteValidator extends AppValidation
             $this->validateMessage($note->message, $validationResult, false);
         }
 
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
     }
 
 
@@ -84,21 +85,11 @@ class NoteValidator extends AppValidation
     {
         // Not test if empty string as user could submit note with empty string which has to be checked
         if (null !== $noteMsg) {
-            $this->validateLengthMax($noteMsg, 'message', $validationResult, 500);
-            $this->validateLengthMin($noteMsg, 'message', $validationResult, 4);
+            $this->validator->validateLengthMax($noteMsg, 'message', $validationResult, 500);
+            $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, 4);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('message', 'Message is required but not given');
-        }
-    }
-
-    protected function validateUser($userId, ValidationResult $validationResult, bool $required): void
-    {
-        if (null !== $userId && '' !== $userId && $userId !== 0) {
-            $this->validateUserExistence($userId, $validationResult);
-        } elseif (true === $required) {
-            // If it is null or empty string and required
-            $validationResult->setError('user_id', 'user_id required but not given');
         }
     }
 
@@ -118,22 +109,4 @@ class NoteValidator extends AppValidation
             $this->logger->debug('Attempt to create main note but it already exists. Client: ' . $clientId);
         }
     }
-
-    /**
-     * Check if user exists
-     * Same function than in UserValidator.
-     *
-     * @param $userId
-     * @param ValidationResult $validationResult
-     */
-    protected function validateUserExistence($userId, ValidationResult $validationResult): void
-    {
-        $exists = $this->userExistenceCheckerRepository->rowExists($userId);
-        if (!$exists) {
-            $validationResult->setError('user', 'User not existing');
-
-            $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
-        }
-    }
-
 }
