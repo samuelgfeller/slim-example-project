@@ -13,6 +13,16 @@
     font-weight: bold;
 }
 @font-face {
+    font-family: SF-Pro-Text;
+    src: url(../fonts/SF-Pro/SF-Pro-Text-Medium.otf);
+    font-weight: 500;
+}
+@font-face {
+    font-family: SF-Pro-Text;
+    src: url(../fonts/SF-Pro/SF-Pro-Text-Thin.otf);
+    font-weight: 300;
+}
+@font-face {
     font-family: SF-Pro Display;
     src: url(../fonts/SF-Pro/SF-Pro-Display-Bold.otf);
 }
