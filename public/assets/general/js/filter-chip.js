@@ -67,7 +67,6 @@ function moveFilterChipToAvailableCollection() {
 // Show chip that says that there are no more filters button
 function toggleNoMoreFilters() {
     let noMoreFilterSpan = document.getElementById('no-more-available-filters-span');
-    console.log(availableFilterDiv.childElementCount);
     // If there is less than one child in the available filter div (1 is the noMoreFilterSpan)
     if (availableFilterDiv.childElementCount === 1) {
         noMoreFilterSpan.style.display = 'inline-block';

@@ -5,7 +5,11 @@ import {basePath} from "../../../general/js/config.js";
 loadClients();
 
 // Event delegation (event listeners on dynamically loaded elements)
-document.addEventListener('click', function (e) {
+document.addEventListener('click', initClientListEventDelegationActions);
+// For mouse wheel click
+document.addEventListener('auxclick', initClientListEventDelegationActions);
+
+function initClientListEventDelegationActions(e) {
     // Submit form on create button click
     if (e.target && e.target.id === 'submit-btn-create-client') {
         submitCreateClient();
@@ -30,16 +34,16 @@ document.addEventListener('click', function (e) {
     const card = e.target.closest('.client-profile-card');
     if (card && e.target.tagName !== 'SELECT') {
         const linkToOpenClient = basePath + 'clients/' + card.dataset.clientId;
-        // Detect if user wants to open in new tab with mouse middle button or ctrl key
-        if (e.key === 2 || e.button === 1 || e.ctrlKey){
+        // Detect if user wants to open in new tab with mouse middle wheel button or ctrl key
+        if (e.key === 2 || e.button === 1 || e.ctrlKey) {
             // Open link in new tab
             window.open(linkToOpenClient);
-        }else{
+        } else {
             window.location = linkToOpenClient;
         }
         // console.log('redirect to ' + card.dataset.clientId);
     }
-});
+}
 
 document.addEventListener('keydown', function (e) {
     // When user focuses the card with the keyboard (tab or arrow keys)

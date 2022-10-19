@@ -87,7 +87,7 @@ export function addTextareaInputEventListener(textarea) {
 
 export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
     // Del btn and removing readonly only matters if textarea can be edited
-    console.log(textarea.dataset.editable === '1');
+    // console.log(textarea.dataset.editable === '1');
     if (textarea.dataset.editable === '1') {
         // Get delete btn with note label to show it on textarea focus
         let delBtn = null;
@@ -147,7 +147,7 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
 }
 
 export function hideCheckmarkLoader(checkmarkLoader, origin) {
-    console.log(origin);
+    // console.log(origin);
     checkmarkLoader.classList.remove('load-complete');
     checkmarkLoader.querySelector('.checkmark').style.display = 'none';
     checkmarkLoader.style.display = 'none';
