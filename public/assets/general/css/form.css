@@ -12,7 +12,7 @@
         /*background-color: var(--layout-main-color);*/
     }
     /* Form design source: https://codepen.io/abergin/pen/vYmaPE */
-    .form-container {
+    .page-form-container {
         width: 100%;
         margin: 30px 0;
         border-radius: 33px;
@@ -26,9 +26,10 @@
         padding: 25px 15px;
     }
 
-    .transition, .form-input-group label, .form-input-group input, .form input[type=submit], .submit-btn {
+    .transition, .form-input-group label, .form-input-group input, .form input[type=submit] {
         transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
     }
+    /*Animated form input group*/
     .form-input-group {
         position: relative;
         padding: 10px 0;
@@ -43,7 +44,7 @@
         transform-origin: left center;
         color: var(--layout-darker-main-color);
         /*color: black;*/
-        font-weight: 100;
+        /*font-weight: 100;*/
         letter-spacing: 0.01em;
         box-sizing: border-box;
         padding: 10px 15px;
@@ -53,20 +54,21 @@
         z-index: 2;
         pointer-events: none;
     }
+
     .form-input-group input, .form-input{
         appearance: none;
         border: none;
         /*box-shadow: 0 2px 10px rgba(63, 135, 166, 0.2);*/
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         font-size: 17px;
-        width: 100%;
+        width: 100%; /*Container should reduce width*/
         display: block;
         box-sizing: border-box;
         padding: 10px 15px;
         border-radius: 60px;
         color: black;
-        font-weight: 100;
-        letter-spacing: 0.01em;
+        /*font-weight: 100;*/
+        letter-spacing: 0.02em;
         position: relative;
         z-index: 1;
     }
@@ -130,7 +132,7 @@
         cursor: default;
     }
 
-    .form-container.invalid-input:focus, input.invalid-input:focus{
+    .page-form-container.invalid-input:focus, input.invalid-input:focus{
     }
 
     .invalid-form-container{
@@ -174,14 +176,14 @@
 }
 
 @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-    .form-container {
+    .page-form-container {
         width: 90%;
         padding: 35px 25px;
         border-radius: 40px;
     }
 }
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
-    .form-container {
+    .page-form-container {
         width: 60%;
         box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
     }

@@ -16,7 +16,7 @@ $this->addAttribute('css', [
     'assets/general/css/form.css',
     'assets/general/css/loader/three-dots-loader.css',
     'assets/general/css/plus-button.css',
-    'assets/general/css/modal.css',
+    'assets/general/css/modal/form-modal.css',
     'assets/post/post.css',
 ]);
 $this->addAttribute('js', ['assets/post/post.js', 'assets/general/js/modal.js']);

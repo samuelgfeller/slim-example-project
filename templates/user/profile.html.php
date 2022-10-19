@@ -13,7 +13,7 @@ $this->setLayout('layout.html.php');
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
     'assets/general/css/form.css',
-    'assets/general/css/alert-modal.css',
+    'assets/general/css/modal/alert-modal.css',
     'assets/general/css/loader/three-dots-loader.css',
     // profile.css has to come last to overwrite other styles
     'assets/user/profile.css'

@@ -3,7 +3,7 @@
     /* The Modal (background) */
     #modal {
         position: fixed; /* Stay in place */
-        z-index: 10; /* Sit on top of content placeholder but below flash */
+        z-index: 100; /* Sit on top of content placeholder but below flash */
         padding-top: 100px; /* Location of the box */
         left: 0;
         top: 0;
@@ -29,7 +29,7 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
         animation-name: fade-in-modal;
         animation-duration: 0.4s;
-        backdrop-filter: blur(20px);
+        /*backdrop-filter: blur(20px);*/
     }
 
     /* The Close Button */
@@ -68,6 +68,18 @@
         /*color: white;*/
     }
 
+    /*Wide form input group with label and input being max half wide and wrapping */
+    .wide-modal-form{
+        display: grid;
+        gap: 20px 40px;
+    }
+    .wide-modal-form-input-group label{
+        padding: 6px 15px;
+        display: inline-block; /*For label to take into account padding*/
+        letter-spacing: 0.02em;
+    }
+
+
     /* Overwrite form.css style to match better modal */
     .form-input {
         background-color: rgba(255, 255, 255, 0.75);
@@ -83,15 +95,27 @@
         background-color: rgba(255, 255, 255, 0.5);
     }
 
+    .form-select{
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-size: 15px;
+        width: 100%;
+        display: block;
+        padding: 10px 15px;
+        border-radius: 60px;
+        color: black;
+        letter-spacing: 0.01em;
+    }
+
     .modal-form input[type=submit], .modal-submit-btn {
         /*padding: 6px 6px;*/
         width: 30%;
         min-width: 160px;
         float: right;
-        margin-top: 15px;
+        margin-top: 20px;
         color: black;
-        border-radius: 15px;
-        padding: 10px;
+        border-radius: 99px;
+        padding: 12px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         background: rgba(255, 255, 255, 0.75);
     }
@@ -144,6 +168,10 @@
     #modal-box {
         width: 80%;
         padding: 2px 30px 30px 30px;
+    }
+
+    .wide-modal-form {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

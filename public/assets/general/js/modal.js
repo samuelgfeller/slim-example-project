@@ -21,24 +21,15 @@ document.addEventListener('click', function (e) {
  */
 function createModal(header, body, footer, container) {
     // Insert parts into entire modal structure
-    let htmlString = '<div id="modal">' +
-        '<div id="modal-box">' +
         // '<div  id="modal-container">' +
-        '<div id="modal-header">' +
-        '<span id="close-modal">&times;</span>' +
-        header +
-        '</div>' +
-        '<div id="modal-body">' +
-        body +
-        '</div>' +
-        '<div id="modal-footer">' +
-        footer +
-        '</div>' +
-        '</div>' +
-        // '</div>' +
-        '</div>';
+    let htmlString = `<div id="modal">
+<div id="modal-box">
+<div id="modal-header"><span id="close-modal">&times;</span>${header}</div>
+<div id="modal-body">${body}</div>
+<div id="modal-footer">${footer}</div>
+</div></div>`;
     // Insert at end of page content which is in <main></main>
-    document.getElementsByTagName('main')[0].insertAdjacentHTML('beforeend', htmlString);
+    document.getElementsByTagName('main')[0].insertAdjacentHTML('beforebegin', htmlString);
 }
 
 function closeModal() {

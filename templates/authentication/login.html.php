@@ -18,7 +18,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
 <h2>Login</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-container <?= isset($formError) ? ' invalid-form-container' : '' ?>" id="login-form-container">
+<div class="page-form-container <?= isset($formError) ? ' invalid-form-container' : '' ?>" id="login-form-container">
     <form action="<?= $route->urlFor('login-submit', [], $queryParams ?? []) ?>"
           id="login-form" class="form" method="post" autocomplete="on">
 

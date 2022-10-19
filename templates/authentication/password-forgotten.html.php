@@ -16,7 +16,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Password recovery</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-container <?= isset($formError) ? ' invalid-input' : '' ?>" id="password-forgotten-form-container">
+<div class="page-form-container <?= isset($formError) ? ' invalid-input' : '' ?>" id="password-forgotten-form-container">
     <form action="<?= $route->urlFor('password-forgotten-email-submit') ?>"
           class="form" method="post" autocomplete="on">
 

@@ -43,6 +43,15 @@
     main h1{
         margin-top: 0;
     }
+    /* Remove bottom margin as well when header is in vertical-center div to align all elements in the middle */
+    .vertical-center h1{
+        margin-bottom: 0;
+    }
+    .vertical-center {
+        /*Approximately same as normal h1 bottom margin*/
+        margin-bottom: 25px;
+    }
+
     footer{
         flex: none;
         /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
@@ -102,10 +111,6 @@
     main {
         margin-top: 10px;
         margin-left: 100px;
-    }
-    main h1{
-        /*Add normal margin for desktop*/
-        margin-top: auto;
     }
 }
 @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */

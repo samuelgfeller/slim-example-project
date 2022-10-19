@@ -20,7 +20,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 <h2>Change password</h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
-<div class="form-container <?= isset($formError) ? ' form-error' : '' ?>">
+<div class="page-form-container <?= isset($formError) ? ' form-error' : '' ?>">
     <form action="<?= $route->urlFor('change-password-submit') ?>"
           class="form" method="post" autocomplete="on">
 

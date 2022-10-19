@@ -15,7 +15,7 @@ $this->addAttribute('css', [
     // post.css has to come last to overwrite other styles
     'assets/general/css/form.css',
     'assets/general/css/plus-button.css',
-    'assets/general/css/modal.css',
+    'assets/general/css/modal/form-modal.css',
     'assets/post/post.css',
 ]);
 $this->addAttribute('js', ['assets/post/post.js', 'assets/general/js/modal.js']);

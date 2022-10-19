@@ -1,15 +1,18 @@
-import {loadClients} from "./list/client-list-loading.js";
+import {loadClients} from "../list/client-list-loading.js";
 
 /**
  * Create and display modal box to create a new client
  */
-function createClientModal() {
-    let header = '<h2>Client</h2>';
-    let body = '<div class="form modal-form">' + '<textarea rows="4" cols="50" name="message" ' +
-        'id="create-message-textarea" class="form-input" ' + 'placeholder="Your message here." minlength="4" ' +
-        'maxlength="500" required></textarea>' + '</div>';
-    let footer = '<button type="button" id="submit-btn-create-client" class="submit-btn modal-submit-btn">' +
-        'Create client</button>' + '<div class="clearfix"></div>' + '</div>';
+export function createClientModal() {
+    let header = '<h2>Create client</h2>';
+    let body = `<div class="form modal-form">
+<div>
+<textarea rows="4" cols="50" name="message" id="create-message-textarea" class="form-input" 
+placeholder="Your message here." minlength="4" maxlength="500" required></textarea>
+</div>
+</div>`;
+    let footer = `<button type="button" id="submit-btn-create-client" class="submit-btn modal-submit-btn">Create client</button>
+<div class="clearfix"></div></div>`;
     document.getElementById('client-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
     let container = document.getElementById('create-client-div');
     createModal(header, body, footer, container);

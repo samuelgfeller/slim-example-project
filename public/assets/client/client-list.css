@@ -1,5 +1,10 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
+    #create-client-btn{
+        /*margin-top: 0;*/
+        width: 40px;
+        height: 40px;
+    }
     /* Cards */
     #client-wrapper {
         width: 100%;
