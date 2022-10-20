@@ -118,7 +118,7 @@ class ClientValidator
     {
         if (null !== $value && '' !== $value) {
             $this->validator->validateNumeric($value, 'user_id', $validationResult, $required);
-            $this->validator->validateExistence($value, 'user', $validationResult, $required);
+            $this->validator->validateExistence((int)$value, 'user', $validationResult, $required);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('user_id', 'user_id is required but not given');
@@ -140,7 +140,7 @@ class ClientValidator
     ): void {
         if (null !== $value && '' !== $value) {
             $this->validator->validateNumeric($value, 'client_status_id', $validationResult, $required);
-            $this->validator->validateExistence($value, 'client_status', $validationResult, $required);
+            $this->validator->validateExistence((int)$value, 'client_status', $validationResult, $required);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('client_status_id', 'client_status_id is required but not given');

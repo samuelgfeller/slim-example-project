@@ -86,6 +86,21 @@ class ClientAuthorizationChecker
                 if (array_key_exists('last_name', $clientDataToUpdate)) {
                     $grantedUpdateKeys[] = 'last_name';
                 }
+                if (array_key_exists('birthdate', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'birthdate';
+                }
+                if (array_key_exists('location', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'location';
+                }
+                if (array_key_exists('phone', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'phone';
+                }
+                if (array_key_exists('email', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'email';
+                }
+                if (array_key_exists('sex', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'sex';
+                }
 
                 // Everything that owner and managing_advisor is permitted to do
                 // advisor may only edit client_status_id if he's owner | managing_advisor and higher is allowed

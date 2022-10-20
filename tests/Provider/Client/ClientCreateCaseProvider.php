@@ -58,12 +58,12 @@ class ClientCreateCaseProvider
      */
     public function provideUsersAndExpectedResultForClientCreation(): array
     {
-        // Insert user role fixture
+        // Get users with different roles
         $managingAdvisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
         $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
         $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
 
-        $expectedSuccessfulJsonResponse = [
+        $expectedAuthorizedJsonResponse = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
             'db_entry_created' => true,
             'json_response' => [
@@ -80,25 +80,26 @@ class ClientCreateCaseProvider
             ]
         ];
         return [
-            [ // ? Authenticated user is newcomer - not allowed
+            // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+            [ // ? Newcomer owner - not allowed
                 'user_linked_to_client' => $newcomerData,
                 'authenticated_user' => $newcomerData,
                 'expected_result' => $expectedUnauthorizedJsonResponse
             ],
-            [ // ? Authenticated user is advisor and linked user_id authenticated user - allowed
+            [ // ? Advisor owner - allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $advisorData,
-                'expected_result' => $expectedSuccessfulJsonResponse,
+                'expected_result' => $expectedAuthorizedJsonResponse,
             ],
-            [ // ? Authenticated user is advisor but linked user_id is not authenticated user - not allowed
+            [ // ? Advisor not owner - not allowed
                 'user_linked_to_client' => $newcomerData,
                 'authenticated_user' => $advisorData,
                 'expected_result' => $expectedUnauthorizedJsonResponse,
             ],
-            [ // ? Authenticated user is managing advisor and linked user_id is not authenticated user - allowed
+            [ // ? Managing not owner - allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $managingAdvisorData,
-                'expected_result' => $expectedSuccessfulJsonResponse,
+                'expected_result' => $expectedAuthorizedJsonResponse,
             ],
 
         ];

@@ -109,7 +109,7 @@ final class ClientUpdateAction
                         $response,
                         [
                             'status' => 'error',
-                            'message' => 'You can only edit your own client or be an admin to edit others'
+                            'message' => 'Not allowed to update client.'
                         ],
                         403
                     );

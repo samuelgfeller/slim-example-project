@@ -40,61 +40,71 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test that client values can be changed when authenticated.
      * Any user role can do this, so it's not necessary to test them with a data provider.
+     * Fixture dependency
+     *  - User with id 1 higher than user linked to client
+     *  - Client status with id 1 higher than status linked to first client
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate()
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_authenticated(): void
-    {
-        // Add one client
+    public function testClientSubmitUpdateAction_authenticated(
+        array $userDataLinkedToClient,
+        array $authenticatedUserData,
+        array $requestData,
+        array $expectedResult
+    ): void {
+        $this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that should be linked to client is different, insert both
+        if ($userDataLinkedToClient['id'] !== $authenticatedUserData['id']) {
+            $this->insertFixture('user', $userDataLinkedToClient);
+        }
+
+        // Get one client data from fixture
         $clientRow = (new ClientFixture())->records[0];
-        // Insert user linked to client and user that is logged in
-        $this->insertFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
+        // Change the linked user to be the given one
+        $clientRow['user_id'] = $userDataLinkedToClient['id'];
         // Insert linked status
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         // Insert client that will be used for this test
         $this->insertFixture('client', $clientRow);
-        // Insert other user and client status that used for the modification request
-        $newUserId = $clientRow['user_id'] + 1;
-        $this->insertFixtureWhere(['id' => $newUserId], UserFixture::class);
-        $newClientStatusId = $clientRow['client_status_id'] + 1;
-        $this->insertFixtureWhere(['id' => $newClientStatusId], ClientStatusFixture::class);
 
-        $newValues = [
-            // Change user and client status id to 1 more than current
-            'first_name' => 'NewFirstName',
-            'last_name' => 'NewLastName',
-            'birthdate' => '1999-10-22',
-            'location' => 'NewLocation',
-            'phone' => '011 111 11 11',
-            'email' => 'new.email@test.ch',
-            'sex' => 'O',
-            'user_id' => $newUserId,
-            'client_status_id' => $newClientStatusId,
-        ];
+        // Insert other user and client status that are used for the modification request if needed
+        if (isset($requestData['user_id'])) {
+            // Add 1 to user_id linked to client
+            $requestData['user_id'] = $clientRow['user_id'] + 1;
+            $this->insertFixtureWhere(['id' => $requestData['user_id']], UserFixture::class);
+        }
+        if (isset($requestData['client_status_id'])) {
+            // Add 1 to client status id
+            $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
+            $this->insertFixtureWhere(['id' => $requestData['client_status_id']], ClientStatusFixture::class);
+        }
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-submit-update', ['client_id' => 1]),
-            $newValues
+            $this->urlFor('client-submit-update', ['client_id' => $clientRow['id']]),
+            $requestData
         );
 
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
 
         $response = $this->app->handle($request);
-        // Assert 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+        // Assert status code
+        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
-        // As HTML form elements names are the same as the database columns, the same array that was sent in the request
-        // can be taken to assert the database
-        $this->assertTableRow($newValues, 'client', $clientRow['id']);
+        // Assert database
+        if ($expectedResult['db_changed'] === true) {
+            // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
+            // Check that data in request body was changed
+            $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
+        } else {
+            // If db is not expected to change, data should remain the same as when it was inserted from the fixture
+            $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
+        }
 
-        // Assert json response
-        $expectedResponseJson = [
-            'status' => 'success',
-            'data' => null,
-        ];
-        $this->assertJsonData($expectedResponseJson, $response);
+        $this->assertJsonData($expectedResult['json_response'], $response);
     }
 
     /**
