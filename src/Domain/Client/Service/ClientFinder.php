@@ -4,6 +4,7 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Data\ClientResultAggregateData;
@@ -22,11 +23,13 @@ class ClientFinder
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
+        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
     ) {
     }
 
     /**
-     * Gives all undeleted clients from db with aggregate data
+     * Gives clients from db with aggregate data
+     * matching given filter params
      *
      * @param array $filterParams default deleted_at null
      * @return ClientResultDataCollection
@@ -77,12 +80,14 @@ class ClientFinder
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
-        if ($includingNotes === true) {
-            $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);
-        } else {
-            $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
+        if ($this->clientAuthorizationChecker->isGrantedToReadClient($clientResultAggregate->userId)) {
+            if ($includingNotes === true) {
+                $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);
+            } else {
+                $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
+            }
+            return $clientResultAggregate;
         }
-        return $clientResultAggregate;
     }
 
 

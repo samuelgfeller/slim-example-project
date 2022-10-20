@@ -3,6 +3,7 @@
 namespace App\Domain\Client\Authorization;
 
 use App\Domain\Client\Data\ClientData;
+use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
@@ -139,5 +140,51 @@ class ClientAuthorizationChecker
         );
         return false;
     }
+
+    /**
+     * Check if authenticated user is allowed to read client
+     *
+     * @param int $ownerId
+     * @return bool
+     */
+    public function isGrantedToReadClient(int $ownerId): bool
+    {
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+
+            // Newcomer are allowed to see all clients regardless of owner
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['newcomer']){
+                return true;
+            }
+        }
+        $this->logger->notice(
+            'User ' . $loggedInUserId . ' tried to read client but isn\'t allowed.'
+        );
+        return false;
+    }
+
+
+    /**
+     * Instead of isGrantedToListClient this function checks
+     * with isGrantedToReadClient and removes clients that
+     * authenticated user may not see.
+     *
+     * @param ClientResultAggregateData[] $clients
+     * @return ClientResultAggregateData[]
+     */
+    public function removeNonAuthorizedClientsFromList(array $clients): array
+    {
+        $authorizedClients = [];
+        foreach ($clients as $client) {
+            // Check if authenticated user is allowed to read each client and if yes, add it to the return array
+            if($this->isGrantedToReadClient($client->userId)) {
+                $authorizedClients[] = $client;
+            }
+        }
+        return $authorizedClients;
+    }
+
 
 }

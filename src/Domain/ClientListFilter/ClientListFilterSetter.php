@@ -14,21 +14,24 @@ class ClientListFilterSetter
     }
 
     /**
+     * Returns active and inactive list filters
+     *
      * @return array
      */
     public function findClientListFilters(): array
     {
-        $allClientListFilters = $this->clientListFilterFinderRepository->findAllClientListFilters();
+        $allClientFilters = $this->clientListFilterFinderRepository->findAllClientListFilters();
         $this->session->set('client_list_filter', [1, 2, 3]);
         $returnArray = [];
+        // Check which filters are active in session
         if (($activeFilters = $this->session->get('client_list_filter')) !== null) {
             foreach ($activeFilters as $activeFilterId) {
-                $returnArray['active'][$activeFilterId] = $allClientListFilters[$activeFilterId];
-                // Remove filter from $allClientListFilters if it's an active filter
-                unset($allClientListFilters[$activeFilterId]);
+                $returnArray['active'][$activeFilterId] = $allClientFilters[$activeFilterId];
+                // Remove filter from $allClientFilters if it's an active filter
+                unset($allClientFilters[$activeFilterId]);
             }
         }
-        $returnArray['inactive'] = $allClientListFilters;
+        $returnArray['inactive'] = $allClientFilters;
 
         return $returnArray;
     }

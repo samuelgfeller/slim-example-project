@@ -115,7 +115,7 @@ return function (App $app) {
 
     // Page actions routes outside /posts as they are needed by Ajax after page load
     // All clients with status whose status is not closed
-    $app->get('/all-clients', \App\Application\Actions\Client\ClientListAllPageAction::class)->setName(
+    $app->get('/clients/list', \App\Application\Actions\Client\ClientListPageAction::class)->setName(
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
     $app->get(

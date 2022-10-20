@@ -4,14 +4,13 @@ namespace App\Application\Actions\Client;
 
 use App\Application\Responder\Responder;
 use App\Domain\ClientListFilter\ClientListFilterSetter;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Action.
  */
-final class ClientListAllPageAction
+final class ClientListPageAction
 {
     /**
      * The constructor.
@@ -40,9 +39,10 @@ final class ClientListAllPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
+        // Clients are loaded dynamically with js after page load for a faster loading time
+        // Retrieving available filters
         $clientListFilters = $this->clientListFilterSetter->findClientListFilters();
         $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);
-        // Loading the page. All posts are loaded dynamically with js after page load for a fast loading time
         return $this->responder->render($response, 'client/clients-list.html.php');
     }
 }
