@@ -142,18 +142,23 @@ final class Validator
     /**
      * Validate birthdate
      *
-     * @param DateTimeImmutable|null $birthdate
-     * @param bool $required
+     * @param DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
+     * @param bool $required
+     * @param null $birthdateUserInput
      */
     public
     function validateBirthdate(
-        DateTimeImmutable|null $birthdate,
+        DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
-        bool $required,
+        bool $required = false,
         $birthdateUserInput = null,
     ): void {
-        // Email filter will fail if email is empty and if it's optional it shouldn't throw an error
+        // If birthdate is string, change it to DateTimeImmutable object for validation
+        if (is_string($birthdate) === true && !empty($birthdate)){
+            $birthdateUserInput = $birthdate;
+            $birthdate = new \DateTimeImmutable($birthdate);
+        }
         if (null !== $birthdate) {
             $now = new \DateTimeImmutable('now');
             // $now is not changed with ->sub as its immutable

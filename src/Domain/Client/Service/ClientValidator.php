@@ -64,40 +64,40 @@ class ClientValidator
     /**
      * Validate post update
      *
-     * @param ClientData $client
-     * @param string|null $birthdateValue original value from request to validate the date
+     * @param array $clientValues values that user wants to change
      */
-    public function validateClientUpdate(ClientData $client, null|string $birthdateValue = null): void
+    public function validateClientUpdate(array $clientValues): void
     {
         // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
 
-        if ($client->clientStatusId !== null) {
-            $this->validateClientStatusId($client->clientStatusId, $validationResult, false);
+        // Using array_key_exists instead of isset as isset returns false if value is null and key exists
+        if (array_key_exists('client_status_id', $clientValues)) {
+            $this->validateClientStatusId($clientValues['client_status_id'], $validationResult, false);
         }
-        if ($client->userId !== null) {
-            $this->validateUserId($client->userId, $validationResult, false);
+        if (array_key_exists('user_id', $clientValues)) {
+            $this->validateUserId($clientValues['user_id'], $validationResult, false);
         }
-        if ($client->firstName !== null) {
-            $this->validator->validateName($client->firstName, 'first_name', $validationResult, false);
+        if (array_key_exists('first_name', $clientValues)) {
+            $this->validator->validateName($clientValues['first_name'], 'first_name', $validationResult, false);
         }
-        if ($client->lastName !== null) {
-            $this->validator->validateName($client->lastName, 'last_name', $validationResult, false);
+        if (array_key_exists('last_name', $clientValues)) {
+            $this->validator->validateName($clientValues['last_name'], 'last_name', $validationResult, false);
         }
-        if ($client->email !== null) {
-            $this->validator->validateEmail($client->email, $validationResult, false);
+        if (array_key_exists('email', $clientValues)) {
+            $this->validator->validateEmail($clientValues['email'], $validationResult, false);
         }
-        if ($client->birthdate !== null) {
-            $this->validator->validateBirthdate($client->birthdate, $validationResult, false, $birthdateValue);
+        if (array_key_exists('birthdate', $clientValues)) {
+            $this->validator->validateBirthdate($clientValues['birthdate'], $validationResult, false);
         }
-        if ($client->location !== null) {
-            $this->validateLocation($client->location, $validationResult, false);
+        if (array_key_exists('location', $clientValues)) {
+            $this->validateLocation($clientValues['location'], $validationResult, false);
         }
-        if ($client->phone !== null) {
-            $this->validatePhone($client->phone, $validationResult, false);
+        if (array_key_exists('phone', $clientValues)) {
+            $this->validatePhone($clientValues['phone'], $validationResult, false);
         }
-        if ($client->sex !== null) {
-            $this->validateSex($client->sex, $validationResult, false);
+        if (array_key_exists('sex', $clientValues)) {
+            $this->validateSex($clientValues['sex'], $validationResult, false);
         }
 
         $this->validator->throwOnError($validationResult);

@@ -84,7 +84,7 @@ class UserValidator
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
-        $this->validator->validateEmail($user->email, true, $validationResult);
+        $this->validator->validateEmail($user->email, $validationResult, true);
         $this->validatePassword($user->password, true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Controller
