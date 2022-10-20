@@ -13,8 +13,8 @@ class ClientReadCaseProvider
     use FixtureTrait;
 
     /**
-     * Provides where conditions for logged-in users and user that are linked to note
-     * as well as the expected result
+     * Provides logged-in user and user linked to note along
+     * the expected result
      *
      * @return array{
      *              array{
@@ -28,7 +28,7 @@ class ClientReadCaseProvider
      *                  }
      *           }
      */
-    public function provideAuthenticatedAndLinkedUserForNote(): array
+    public function provideUsersAndExpectedResultForNoteMutation(): array
     {
         $userData = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
         return [

@@ -3,6 +3,7 @@
 namespace App\Test\Traits;
 
 use App\Domain\Factory\LoggerFactory;
+use App\Test\Fixture\UserRoleFixture;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -51,7 +52,7 @@ trait AppTestTrait
 
         // If setUp() is called in a testClass that uses DatabaseTestTrait, the method setUpDatabase() exists
         if (method_exists($this, 'setUpDatabase')) {
-            // Check that database name in config contains the the word "test"
+            // Check that database name in config contains the word "test"
             // This is a double security check to prevent unwanted use of dev db for testing
             if (strpos($container->get('settings')['db']['database'], 'test') === false) {
                 throw new UnexpectedValueException('Test database name MUST contain the word "test"');
@@ -59,6 +60,8 @@ trait AppTestTrait
 
             // Create tables, truncate old ones
             $this->setUpDatabase(__DIR__ . '/../../resources/schema/schema.sql');
+            // Always insert user roles so that it doesn't have to be done inside each test function that uses users
+            $this->insertFixtures([UserRoleFixture::class]);
         }
 
         // Per default not set when script executed with cli and used at least in all security checks

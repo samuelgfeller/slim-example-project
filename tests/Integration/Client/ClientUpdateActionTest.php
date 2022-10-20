@@ -8,7 +8,6 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

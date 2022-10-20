@@ -46,7 +46,7 @@ class ClientReadNoteUpdateActionTest extends TestCase
      *   - 1 normal note that is linked to the same user and client
      *   - 1 normal note that is not linked to this user but the client
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
      * @return void
      */
     public function testClientReadNoteModification(

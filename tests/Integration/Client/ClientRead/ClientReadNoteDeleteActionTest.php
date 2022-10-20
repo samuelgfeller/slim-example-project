@@ -39,7 +39,7 @@ class ClientReadNoteDeleteActionTest extends TestCase
      * Test normal and main note deletion on client-read page
      * while being authenticated.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
      * @return void
      */
     public function testClientReadNoteDeletion(

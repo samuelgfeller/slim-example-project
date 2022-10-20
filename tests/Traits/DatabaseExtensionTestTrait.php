@@ -53,12 +53,13 @@ trait DatabaseExtensionTestTrait
      *
      * @return array last inserted row
      */
-    protected function findLastInsertedTableRow(string $table): array {
+    protected function findLastInsertedTableRow(string $table): array
+    {
         $sql = sprintf('SELECT * FROM `%s` ORDER BY id DESC LIMIT 1', $table);
         $statement = $this->createPreparedStatement($sql);
         $statement->execute();
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC) ?? [];
     }
 
     /**

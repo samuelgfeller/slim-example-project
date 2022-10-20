@@ -52,7 +52,7 @@ class ClientReadNoteCreateActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
      * @return void
      */
     public function testClientReadNoteCreation(

@@ -33,7 +33,7 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToCreateClient(ClientData $client): bool
     {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -70,7 +70,7 @@ class ClientAuthorizationChecker
     public function isGrantedToUpdateClient(array $clientDataToUpdate, int $ownerId): bool
     {
         $grantedUpdateKeys = [];
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
              * (lower hierarchy number means higher privilege) */
@@ -125,7 +125,7 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToDeleteClient(int $ownerId): bool
     {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -136,7 +136,7 @@ class ClientAuthorizationChecker
             }
         }
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to delete client ' . $clientId . ' but isn\'t allowed.'
+            'User ' . $loggedInUserId . ' tried to delete client but isn\'t allowed.'
         );
         return false;
     }
@@ -149,7 +149,7 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToReadClient(int $ownerId): bool
     {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();

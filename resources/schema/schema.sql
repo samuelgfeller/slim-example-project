@@ -1,19 +1,27 @@
-CREATE TABLE `user`
+create table user_role
 (
-    `id`            INT(11) UNSIGNED                                    NOT NULL AUTO_INCREMENT,
-    `first_name`    VARCHAR(100)                                        NOT NULL COLLATE utf8mb4_unicode_ci,
-    `surname`       VARCHAR(100)                                        NOT NULL COLLATE utf8mb4_unicode_ci,
-    `email`         VARCHAR(254)                                        NOT NULL COLLATE utf8mb4_unicode_ci,
-    `password_hash` VARCHAR(300)                                        NOT NULL COLLATE utf8mb4_unicode_ci,
-    `role`          VARCHAR(50)                                         NOT NULL DEFAULT 'user' COLLATE utf8mb4_unicode_ci,
-    `status`        ENUM ('active','locked', 'unverified', 'suspended') NULL     DEFAULT 'unverified' COLLATE utf8mb4_unicode_ci,
-    `updated_at`    DATETIME                                            NULL     DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-    `created_at`    DATETIME                                            NOT NULL DEFAULT current_timestamp(),
-    `deleted_at`    DATETIME                                            NULL     DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) COLLATE = utf8mb4_unicode_ci
-  ENGINE = InnoDB
-;
+    id        int UNSIGNED auto_increment primary key,
+    name      varchar(30) not null,
+    hierarchy int         null
+)
+    charset = utf8mb4;
+
+create table `user`
+(
+    id            int UNSIGNED auto_increment primary key,
+    first_name    varchar(100)                                                                     not null,
+    surname       varchar(100)                                                                     not null,
+    email         varchar(254)                                                                     not null,
+    password_hash varchar(300)                                                                     not null,
+    user_role_id  int unsigned                                                  default 0                   not null,
+    `status`      enum ('active', 'locked', 'unverified', 'suspended') default 'unverified'        null,
+    updated_at    datetime                                             default current_timestamp() null on update current_timestamp(),
+    created_at    datetime                                             default current_timestamp() null,
+    deleted_at    datetime                                                                         null,
+    constraint FK_user_user_role
+        foreign key (user_role_id) references user_role (id)
+);
+
 
 -- User token verification used for email validation at registration AND for password reset
 CREATE TABLE `user_verification`

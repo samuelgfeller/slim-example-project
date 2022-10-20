@@ -4,6 +4,7 @@ namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Client\Service\ClientCreator;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
@@ -79,10 +80,19 @@ final class ClientCreateAction
                         $exception->getValidationResult(),
                         $response
                     );
+                } catch (ForbiddenException $forbiddenException) {
+                    return $this->responder->respondWithJson(
+                        $response,
+                        [
+                            'status' => 'error',
+                            'message' => 'Not allowed to create a client.'
+                        ],
+                        403
+                    );
                 }
 
                 if (0 !== $insertId) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success'], 201);
+                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',

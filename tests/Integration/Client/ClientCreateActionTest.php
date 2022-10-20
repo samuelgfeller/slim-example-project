@@ -38,13 +38,21 @@ class ClientCreateActionTest extends TestCase
     /**
      * Client creation with valid data
      *
+     * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::provideUsersAndExpectedResultForClientCreation()
      * @return void
      */
-    public function testClientCreateAction(): void
-    {
-        // Test client insert with user
-        $userRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
-        $this->insertFixture('user', $userRow);
+    public function testClientSubmitCreateAction_authorization(
+        array $userDataLinkedToClient,
+        array $authenticatedUserData,
+        array $expectedResult
+    ): void {
+        $this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that should be linked to client is different, insert both
+        if ($userDataLinkedToClient['id'] !== $authenticatedUserData['id']) {
+            $this->insertFixture('user', $userDataLinkedToClient);
+        }
+
+        // Client status is not authorization relevant for client creation
         $clientStatusRow = (new ClientStatusFixture())->records[0];
         $this->insertFixture('client_status', $clientStatusRow);
 
@@ -56,13 +64,12 @@ class ClientCreateActionTest extends TestCase
             'phone' => '+41 77 222 22 22',
             'email' => 'new-user@email.com',
             'sex' => 'M',
-            'client_message' => 'This is a message submitted by the client directly.',
-            'user_id' => $userRow['id'],
+            'user_id' => $userDataLinkedToClient['id'],
             'client_status_id' => $clientStatusRow['id'],
         ];
 
         // Simulate session
-        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
         // Make request
         $request = $this->createJsonRequest(
             'POST',
@@ -71,15 +78,24 @@ class ClientCreateActionTest extends TestCase
         );
         $response = $this->app->handle($request);
         // Assert response status code: 201 Created
-        self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
+        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
-        // Assert database
-        // Find freshly inserted client
-        $noteDbRow = $this->findLastInsertedTableRow('client');
-        // Assert the row column values that were inserted
-        $this->assertTableRow($clientCreationValues, 'client', (int)$noteDbRow['id']);
+        // If db record is expected to be created assert that
+        if ($expectedResult['db_entry_created'] === true) {
+            $clientDbRow = $this->findLastInsertedTableRow('client');
+            // Assert that db entry corresponds to the given client creation values. This is possible as the keys
+            // that the frontend sends to the server are the same as database columns.
+            // It is done with the function assertTableRow even though we already have the clientDbRow for simplicity
+            $this->assertTableRow($clientCreationValues, 'client', $clientDbRow['id']);
+            // The same check could also be done with array_intersect_key (which removes any keys from the db array
+            // that are not present in the creation values array) like this
+            // self::assertSame($clientCreationValues, array_intersect_key($clientDbRow, $clientCreationValues));
+        } else {
+            // 0 rows expected in client table
+            $this->assertTableRowCount(0, 'client');
+        }
 
-        $this->assertJsonData(['status' => 'success'], $response);
+        $this->assertJsonData($expectedResult['json_response'], $response);
     }
 
     /**
@@ -92,7 +108,8 @@ class ClientCreateActionTest extends TestCase
      */
     public function testClientSubmitCreateAction_invalid($requestBody, $jsonResponse): void
     {
-        $userRow = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
+        // Insert managing advisor user which is allowed to create clients
+        $userRow = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
         $this->insertFixture('user', $userRow);
         $clientStatusRow = (new ClientStatusFixture())->records[0];
         $this->insertFixture('client_status', $clientStatusRow);
@@ -122,7 +139,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientCreateAction_unauthenticated(): void
+    public function testClientSubmitCreateAction_unauthenticated(): void
     {
         // Create request (no body needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-submit-create'), []);

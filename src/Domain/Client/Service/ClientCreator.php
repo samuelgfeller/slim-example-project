@@ -17,20 +17,20 @@ class ClientCreator
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
     ) {
-
     }
 
     /**
      * Validate user input values and client
      *
      * @return int insert id
+     * @throws ForbiddenException
      */
     public function createClient(array $clientValues): int
     {
         $client = new ClientData($clientValues);
         $this->clientValidator->validateClientCreation($client, $clientValues['birthdate'] ?? null);
 
-        if ($this->clientAuthorizationChecker->isGrantedToCreateClient($client)){
+        if ($this->clientAuthorizationChecker->isGrantedToCreateClient($client)) {
             return $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
         }
 
