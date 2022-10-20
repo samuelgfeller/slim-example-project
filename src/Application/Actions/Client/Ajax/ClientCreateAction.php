@@ -73,7 +73,7 @@ final class ClientCreateAction
                     // client_message may be present in request body or not
                     (array_key_exists('client_message', $clientValues) && count($clientValues) === 10))) {
                 try {
-                    $insertId = $this->clientCreator->createClient($clientValues, $loggedInUserId);
+                    $insertId = $this->clientCreator->createClient($clientValues);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),

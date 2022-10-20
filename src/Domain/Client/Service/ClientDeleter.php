@@ -4,6 +4,7 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\Client\ClientDeleterRepository;
@@ -12,30 +13,28 @@ use App\Infrastructure\Note\NoteDeleterRepository;
 class ClientDeleter
 {
     public function __construct(
-        private readonly ClientDeleterRepository  $clientDeleterRepository,
-        private readonly ClientFinder             $clientFinder,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-    ) { }
+        private readonly ClientDeleterRepository $clientDeleterRepository,
+        private readonly ClientFinder $clientFinder,
+        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+    ) {
+    }
 
     /**
      * Delete one post logic
      *
-     * @param int $postId
-     * @param int $loggedInUserId
+     * @param int $clientId
      * @return bool
      * @throws ForbiddenException
      */
-    public function deleteClient(int $postId, int $loggedInUserId): bool
+    public function deleteClient(int $clientId): bool
     {
         // Find post in db to get its ownership
-        $clientFromDb = $this->clientFinder->findClient($postId);
+        $clientFromDb = $this->clientFinder->findClient($clientId);
 
-        $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-
-        // Check if it's admin or if it's its own post
-        if ($userRole === 'admin' || $clientFromDb->userId === $loggedInUserId) {
-            return $this->clientDeleterRepository->deleteClient($postId);
+        if ($this->clientAuthorizationChecker->isGrantedToDeleteClient($clientFromDb->userId)) {
+            return $this->clientDeleterRepository->deleteClient($clientId);
         }
-        throw new ForbiddenException('You have to be admin or the post creator to update this post');
+
+        throw new ForbiddenException('Not allowed to delete client.');
     }
 }

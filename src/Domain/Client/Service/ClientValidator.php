@@ -28,7 +28,7 @@ class ClientValidator
     }
 
     /**
-     * Validate post creation
+     * Validate client creation
      *
      * @param ClientData $client
      * @throws ValidationException

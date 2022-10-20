@@ -2,17 +2,57 @@
 
 namespace App\Domain\Client\Authorization;
 
+use App\Domain\Client\Data\ClientData;
+use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Check if user are permitted to do actions
+ * Roles: newcomer < advisor < managing_advisor < administrator
+ */
 class ClientAuthorizationChecker
 {
+    private LoggerInterface $logger;
 
     public function __construct(
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly SessionInterface $session,
-    )
+        LoggerFactory $loggerFactory
+    ) {
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('client-authorization');
+    }
+
+    /**
+     * Check if authenticated user is allowed to create client
+     *
+     * @param ClientData $client
+     * @return bool
+     */
+    public function isGrantedToCreateClient(ClientData $client): bool
     {
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+
+            // Newcomer is not allowed to do anything
+            // If hierarchy number is greater or equals newcomer it means that user is not allowed
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['advisor']) {
+                // Advisor may create clients but can't assign them to someone other than himself - managing advisor can
+                // Link user to someone else is the only restriction
+                if ($client->userId === $loggedInUserId ||
+                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
+                    // If at least advisor and client user id is authenticated user, or it's a managing_advisor -> granted
+                    return true;
+                }
+            }
+        }
+        $this->logger->notice(
+            'User ' . $loggedInUserId . ' tried to create client but isn\'t allowed.'
+        );
+        return false;
     }
 
     /**
@@ -66,9 +106,38 @@ class ClientAuthorizationChecker
         foreach ($clientDataToUpdate as $key => $value) {
             // If at least one array key doesn't exist in $grantedUpdateKeys it means that user is not permitted
             if (!in_array($key, $grantedUpdateKeys, true)) {
+                $this->logger->notice(
+                    'User ' . $loggedInUserId . ' tried to update client but isn\'t allowed to change' .
+                    $key . ' to "' . $value . '".'
+                );
                 return false;
             }
         }
         return true;
     }
+
+    /**
+     * Check if authenticated user is allowed to delete client
+     *
+     * @param int $ownerId
+     * @return bool
+     */
+    public function isGrantedToDeleteClient(int $ownerId): bool
+    {
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+
+            // Only managing_advisor and higher are allowed to delete client so user has to at least have this role
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
+                return true;
+            }
+        }
+        $this->logger->notice(
+            'User ' . $loggedInUserId . ' tried to delete client ' . $clientId . ' but isn\'t allowed.'
+        );
+        return false;
+    }
+
 }

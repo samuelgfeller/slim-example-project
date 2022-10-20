@@ -62,7 +62,7 @@ final class ClientDeleteAction
 
             try {
                 // Delete client logic
-                $deleted = $this->clientDeleter->deleteClient($clientId, $loggedInUserId);
+                $deleted = $this->clientDeleter->deleteClient($clientId);
 
                 if ($deleted) {
                     return $this->responder->respondWithJson($response, ['status' => 'success']);

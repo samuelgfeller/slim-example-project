@@ -36,7 +36,7 @@ class UserRoleFinderRepository
     public function getUserRoleDataFromUser(int $userId): UserRoleData
     {
         $query = $this->queryFactory->newQuery()
-            ->select(['user_role.id', 'user_role.name', 'user_role.sub_role'])
+            ->select(['user_role.id', 'user_role.name', 'user_role.hierarchy'])
             ->from('user')
             ->leftJoin('user_role', ['user.user_role_id = user_role.id'])
             ->where(['user.deleted_at IS' => null, 'user.id' => $userId]);
@@ -44,24 +44,24 @@ class UserRoleFinderRepository
         $userRoleData = new UserRoleData();
         $userRoleData->id = $roleResultRow['id'];
         $userRoleData->name = $roleResultRow['name'];
-        $userRoleData->subRole = $roleResultRow['sub_role'];
+        $userRoleData->hierarchy = $roleResultRow['hierarchy'];
         return $userRoleData;
     }
 
 
     /**
-     * Retrieve user role
+     * Get user role hierarchies mapped by name
      *
-     * @return array
+     * @return array{role_name: int}
      */
     public function getUserRolesHierarchies(): array
     {
-        $query = $this->queryFactory->newQuery()->select(['id', 'name', 'sub_role'])->from('user_role');
+        $query = $this->queryFactory->newQuery()->select(['id', 'name', 'hierarchy'])->from('user_role');
         $resultRows = $query->execute()->fetchAll('assoc');
 
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
-            $userRoles[$resultRow['id']] = [$resultRow['name'] => $resultRow['sub_role']];
+            $userRoles[$resultRow['name']] = $resultRow['hierarchy'];
         }
         return $userRoles;
     }

@@ -21,7 +21,7 @@ class ClientDeleterRepository
      */
     public function deleteClient(int $id): bool
     {
-        $query = $this->queryFactory->newDelete('post')->where(['id' => $id]);
+        $query = $this->queryFactory->newDelete('client')->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 
