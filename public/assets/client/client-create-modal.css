@@ -1,8 +1,17 @@
 #modal {
-    padding-top: 60px;
+    /*padding-top: 60px;*/
 }
 
-#modal-box {
-    /*min-width: 500px;*/
-    width: 80%;
+@media (min-width: 641px) {
+    #modal-box {
+        /*min-width: 500px;*/
+        width: 90%;
+    }
+}
+
+@media (min-width: 753px) {
+    #modal-box {
+        /*min-width: 500px;*/
+        width: 80%;
+    }
 }
