@@ -37,7 +37,7 @@ class NoteUpdater
         // Find note in db to compare its ownership
         $noteFromDb = $this->noteFinder->findNote($noteId);
 
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->userId, $noteFromDb->isMain)) {
+        if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain, $noteFromDb->userId)) {
             // The only thing that a user can change on a note is its message
             if (null !== $note->message) {
                 // $updateData in own array instead of object::toArray() to be sure that only the message can be updated

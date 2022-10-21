@@ -49,7 +49,7 @@
         width: 100%;
     }
 
-    #main-note-textarea-div textarea:focus {
+    #main-note-textarea-div textarea:not([data-editable="0"]):focus {
         /*color: #2e3e50;*/
         /*border: 4px solid #9cbae3;*/
         outline: #2e3e50;
@@ -146,6 +146,7 @@
 
     #client-activity-textarea-container textarea[data-editable="0"]:focus {
         outline: 1px solid #cccccc;
+        box-shadow: none;
     }
 
     .circle-loader.client-read {
@@ -186,10 +187,12 @@
     #email-div {
         line-height: 1;
     }
+
     /*mail prefix*/
     #email-div span:nth-of-type(1) {
         font-size: 19px;
     }
+
     /*mail suffix*/
     #email-div span:nth-of-type(2) {
         font-size: 17px;
@@ -214,14 +217,14 @@
         background: rgba(0, 0, 0, 0.1);
     }
 
-    .client-note-loading-placeholder{
+    .client-note-loading-placeholder {
         width: 100%;
         min-width: 232px;
         border-radius: 30px;
         margin-bottom: 30px;
     }
 
-    .client-note-upper-placeholder-container{
+    .client-note-upper-placeholder-container {
         display: grid;
         grid-template-columns: minmax(0, 190px) minmax(0, 130px);
         grid-template-rows: auto;
@@ -230,16 +233,18 @@
         gap: 25px;
         /*justify-items: end;*/
     }
+
     /* Target only first divs with >*/
-    .client-note-upper-placeholder-container > div{
+    .client-note-upper-placeholder-container > div {
         height: 18px;
     }
+
     .client-note-upper-placeholder-container .moving-loading-placeholder-part-wrapper {
         /* Lighten up the background color of this line as the background is white */
         background-color: rgb(238, 238, 238);
     }
 
-    .client-note-lower-placeholder-container{
+    .client-note-lower-placeholder-container {
         /* Prevent the margin from parent and child to collapse https://stackoverflow.com/a/1939980/9013718 */
         overflow: hidden;
         margin-top: 10px;
@@ -248,11 +253,13 @@
         background: rgb(245, 245, 245);
         border-radius: 30px;
     }
-    .client-note-first-text-line-placeholder{
+
+    .client-note-first-text-line-placeholder {
         width: 80%;
         margin-top: 18px;
     }
-    .client-note-second-text-line-placeholder{
+
+    .client-note-second-text-line-placeholder {
         width: 50%;
         margin-top: 10px;
     }

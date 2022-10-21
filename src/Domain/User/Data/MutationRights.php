@@ -4,8 +4,16 @@ namespace App\Domain\User\Data;
 
 enum MutationRights: string
 {
-    case ALL = 'all';
-    case READ = 'read';
+    // No rights
     case NONE = 'none';
-    case OWN = 'own';
+    // Allowed to read all entries
+    case READ = 'read';
+    // Allowed to read and create all entries
+    case CREATE = 'create';
+    // Allowed to read, create and update all entries
+    case UPDATE = 'update';
+    // Allowed to read, create, update and delete all entries
+    case DELETE = 'delete';
+    // Allowed to do everything on each note
+    case ALL = 'all';
 }

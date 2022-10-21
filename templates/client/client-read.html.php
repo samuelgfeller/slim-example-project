@@ -34,7 +34,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div">
-        <textarea name="message" class="auto-resize-textarea main-textarea" data-editable="1"
+        <textarea name="message" class="auto-resize-textarea main-textarea"
+                  data-editable="<?= $clientAggregate->mainNoteData->mutationRights->value === 'all' ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">

@@ -9,7 +9,10 @@ use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
+use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Service\NoteFinder;
+use App\Domain\User\Data\MutationRights;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
@@ -24,6 +27,7 @@ class ClientFinder
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
     ) {
     }
 
@@ -41,14 +45,16 @@ class ClientFinder
         foreach ($filterParams as $column => $value) {
             // If expected value is "null" the word "IS" is needed in the array key right after the column
             $is = '';
-            if ($value === null){
+            if ($value === null) {
                 $is = ' IS'; // To be added right after column
             }
             $queryBuilderWhereArray["client.$column$is"] = $value;
         }
 
         $clientResultCollection = new ClientResultDataCollection();
-        $clientResultCollection->clients = $this->clientFinderRepository->findClientsWithResultAggregate($queryBuilderWhereArray);
+        $clientResultCollection->clients = $this->clientFinderRepository->findClientsWithResultAggregate(
+            $queryBuilderWhereArray
+        );
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllStatusesForDropdown();
         $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
             $this->userFinderRepository->findAllUsers()
@@ -81,6 +87,13 @@ class ClientFinder
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
         if ($this->clientAuthorizationChecker->isGrantedToReadClient($clientResultAggregate->userId)) {
+            // Set mutation right on main note
+            if ($this->noteAuthorizationChecker->isGrantedToUpdate(1, null, $clientResultAggregate->userId)) {
+                $clientResultAggregate->mainNoteData->mutationRights = MutationRights::ALL;
+            }else{
+                $clientResultAggregate->mainNoteData->mutationRights = MutationRights::READ;
+            }
+
             if ($includingNotes === true) {
                 $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);
             } else {
@@ -88,6 +101,7 @@ class ClientFinder
             }
             return $clientResultAggregate;
         }
+        throw new ForbiddenException('Not allowed to read client.');
     }
 
 

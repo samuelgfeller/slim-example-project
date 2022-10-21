@@ -12,8 +12,8 @@ use App\Infrastructure\Note\NoteFinderRepository;
 class NoteFinder
 {
     public function __construct(
-        private NoteFinderRepository $noteFinderRepository,
-        private NoteAuthorizationSetter $noteUserRightSetter,
+        private readonly NoteFinderRepository $noteFinderRepository,
+        private readonly NoteAuthorizationSetter $noteUserRightSetter,
     ) {
     }
 
@@ -26,9 +26,7 @@ class NoteFinder
     {
         $allNotes = $this->noteFinderRepository->findAllNotesWithUsers();
         $this->changeDateFormat($allNotes);
-        // In PHP, an object variable doesn't contain the object itself as value. It only contains an object identifier
-        // meaning the reference is passed and changes are made on the original reference that can be used further
-        // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
+
         $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;
     }
@@ -67,6 +65,9 @@ class NoteFinder
     public function findAllNotesFromClientExceptMain(int $clientId): array
     {
         $allNotes = $this->noteFinderRepository->findAllNotesExceptMainWithUserByClientId($clientId);
+        // In PHP, an object variable doesn't contain the object itself as value. It only contains an object identifier
+        // meaning the reference is passed and changes are made on the original reference that can be used further
+        // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
         $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
         return $allNotes;

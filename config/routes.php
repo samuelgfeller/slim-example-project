@@ -127,7 +127,7 @@ return function (App $app) {
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
-        // $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
+        $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
 
         // $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteReadAction::class)->setName(
         //     'note-read'

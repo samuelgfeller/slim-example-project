@@ -11,9 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Note list all and own action.
+ * List notes linked to user action.
  */
-final class DELETEDNoteListAction
+final class NoteListAction
 {
     /**
      * The constructor.
@@ -22,8 +22,8 @@ final class DELETEDNoteListAction
      * @param NoteFilterFinder $noteFilterFinder
      */
     public function __construct(
-        private Responder $responder,
-        private NoteFilterFinder $noteFilterFinder,
+        private readonly Responder $responder,
+        private readonly NoteFilterFinder $noteFilterFinder,
     ) {
     }
 
