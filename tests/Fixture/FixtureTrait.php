@@ -14,6 +14,47 @@ trait FixtureTrait
     use DatabaseTestTrait;
 
     /**
+     * Takes default record and modifies it to suit given attributes.
+     * This makes a lot more sense than storing all different kinds
+     * of records in each fixture and then searching them as the test
+     * function can control fixtures and there is no dependencies.
+     *
+     * @param array $attributes
+     * @param string $fixtureClass
+     * @param int $amount amount rows that will be returned
+     * @return array either one row of requested fixture or array of rows if $amount is higher than 1
+     */
+    protected function getFixtureRecordsWithAttributes(array $attributes, string $fixtureClass, int $amount = 1): array
+    {
+        $fixture = new $fixtureClass();
+        $rows = $fixture->records;
+        $returnArray = [];
+        $rowKey = 0;
+        // To have a pool of different data; instead of taking one basic record when multiple records are asked,
+        // this iterates over the existing records
+        for ($i = 0; $i <= $amount; $i++){
+            // If there are no more rows for the row key, reset it to 0
+            if (!isset($rows[$rowKey])){
+                $rowKey = 0;
+            }
+            // Add given attributes to row
+            foreach ($attributes as $colum => $value) {
+                // Set value to given attribute value
+                $rows[$rowKey][$colum] = $value;
+            }
+            // Remove id from row key
+            unset($rows[$rowKey]['id']);
+            $returnArray[] = $rows[$rowKey];
+            ++$rowKey;
+        }
+
+        if ($amount === 1){
+            return $returnArray[0];
+        }
+        return $returnArray;
+    }
+
+    /**
      * Returns fixture rows where given condition matches
      * Note: this relies on the function of selective/test-traits DatabaseTestTrait.php
      *
@@ -23,8 +64,11 @@ trait FixtureTrait
      * @param array $oppositeConditions optional NOT conditions. If ['id' => 1] is provided -> user 1 will NOT be returned
      * @return array[] records matching the conditions
      */
-    protected function findRecordsFromFixtureWhere(array $conditions, string $fixtureClass, array $oppositeConditions = []): array
-    {
+    protected function findRecordsFromFixtureWhere(
+        array $conditions,
+        string $fixtureClass,
+        array $oppositeConditions = []
+    ): array {
         $fixture = new $fixtureClass();
         $rows = $fixture->records;
         $matchingRecords = [];

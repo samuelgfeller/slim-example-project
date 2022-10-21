@@ -25,7 +25,7 @@ class ClientUpdateCaseProvider
         $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
         $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
 
-        $expectedAuthorizedJsonResponse = [
+        $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             'db_changed' => true,
             'json_response' => [
@@ -33,7 +33,7 @@ class ClientUpdateCaseProvider
                 'data' => null,
             ],
         ];
-        $expectedUnauthorizedJsonResponse = [
+        $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
             'db_changed' => false,
             'json_response' => [
@@ -61,32 +61,32 @@ class ClientUpdateCaseProvider
                 'user_linked_to_client' => $newcomerData,
                 'authenticated_user' => $newcomerData,
                 'data_to_be_changed' => ['first_name' => 'value'],
-                'expected_result' => $expectedUnauthorizedJsonResponse
+                'expected_result' => $unauthorizedResult
             ],
             // * Advisor
             [ // ? Advisor owner - data to be changed allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $advisorData,
                 'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
-                'expected_result' => $expectedAuthorizedJsonResponse,
+                'expected_result' => $authorizedResult,
             ],
             [ // ? Advisor owner - data to be changed not allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $advisorData,
                 'data_to_be_changed' => ['user_id' => 'new'],
-                'expected_result' => $expectedUnauthorizedJsonResponse,
+                'expected_result' => $unauthorizedResult,
             ],
             [ // ? Advisor not owner - data to be changed allowed
                 'user_linked_to_client' => $managingAdvisorData,
                 'authenticated_user' => $advisorData,
                 'data_to_be_changed' => $basicClientDataChanges,
-                'expected_result' => $expectedAuthorizedJsonResponse,
+                'expected_result' => $authorizedResult,
             ],
             [ // ? Advisor not owner - data to be changed not allowed
                 'user_linked_to_client' => $managingAdvisorData,
                 'authenticated_user' => $advisorData,
                 'data_to_be_changed' => ['client_status_id' => 'new'],
-                'expected_result' => $expectedUnauthorizedJsonResponse,
+                'expected_result' => $unauthorizedResult,
             ],
 
             // * Managing advisor
@@ -97,7 +97,7 @@ class ClientUpdateCaseProvider
                     $basicClientDataChanges,
                     ['client_status_id' => 'new', 'user_id' => 'new']
                 ),
-                'expected_result' => $expectedAuthorizedJsonResponse,
+                'expected_result' => $authorizedResult,
             ],
 
         ];

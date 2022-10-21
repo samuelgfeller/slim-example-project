@@ -19,7 +19,7 @@ class ClientDeleteCaseProvider
             $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
             $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
 
-            $expectedAuthorizedJsonResponse = [
+            $authorizedResult = [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                 'db_changed' => true,
                 'json_response' => [
@@ -27,7 +27,7 @@ class ClientDeleteCaseProvider
                     'data' => null,
                 ],
             ];
-            $expectedUnauthorizedJsonResponse = [
+            $unauthorizedResult = [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
                 'db_changed' => false,
                 'json_response' => [
@@ -42,19 +42,19 @@ class ClientDeleteCaseProvider
                 [ // ? Newcomer owner - not allowed
                     'user_linked_to_client' => $newcomerData,
                     'authenticated_user' => $newcomerData,
-                    'expected_result' => $expectedUnauthorizedJsonResponse
+                    'expected_result' => $unauthorizedResult
                 ],
                 // * Advisor
                 [ // ? Advisor owner - not allowed
                     'user_linked_to_client' => $advisorData,
                     'authenticated_user' => $advisorData,
-                    'expected_result' => $expectedUnauthorizedJsonResponse,
+                    'expected_result' => $unauthorizedResult,
                 ],
                 // * Managing advisor
                 [ // ? Managing advisor not owner - allowed
                     'user_linked_to_client' => $advisorData,
                     'authenticated_user' => $managingAdvisorData,
-                    'expected_result' => $expectedAuthorizedJsonResponse,
+                    'expected_result' => $authorizedResult,
                 ],
 
             ];

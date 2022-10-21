@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Test\Integration\Client\ClientRead;
+namespace App\Test\Integration\Note;
 
-use App\Domain\User\Data\MutationRights;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
+use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use \App\Test\Traits\AppTestTrait;
-use \Selective\TestTrait\Traits\HttpTestTrait;
-use \Selective\TestTrait\Traits\HttpJsonTestTrait;
-use \Selective\TestTrait\Traits\RouteTestTrait;
-use \Selective\TestTrait\Traits\DatabaseTestTrait;
-use \App\Test\Traits\DatabaseExtensionTestTrait;
-use \App\Test\Fixture\FixtureTrait;
+use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -26,7 +25,7 @@ use Slim\Exception\HttpBadRequestException;
  *  - Invalid data (validation test)
  *  - Malformed request body
  */
-class ClientReadNoteCreateActionTest extends TestCase
+class NoteCreateActionTest extends TestCase
 {
     use AppTestTrait;
     use HttpTestTrait;
@@ -55,7 +54,7 @@ class ClientReadNoteCreateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
      * @return void
      */
-    public function testClientReadNoteCreation(
+    public function testNoteSubmitCreateAction(
         array $userLinkedToClientData,
         array $authenticatedUserData,
         array $expectedResult
@@ -67,11 +66,11 @@ class ClientReadNoteCreateActionTest extends TestCase
         }
 
         // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']],
-            ClientFixture::class)[0];
+        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToClientData['id']],
+            ClientFixture::class);
         // Insert needed client status fixture
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $this->insertFixture('client', $clientRow);
+        $clientRow['id'] = $this->insertFixture('client', $clientRow);
 
         // Create request
         $noteMessage = 'Test note';
@@ -116,7 +115,7 @@ class ClientReadNoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadNoteCreation_unauthenticated(): void
+    public function testNoteSubmitCreateAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
         // Create url where client should be redirected to after login
@@ -141,7 +140,7 @@ class ClientReadNoteCreateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseDataForCreation()
      * @return void
      */
-    public function testClientReadNoteCreation_invalid(
+    public function testNoteSubmitCreateAction_invalid(
         array $invalidRequestBody,
         bool $existingMainNote,
         array $expectedResponseData
@@ -157,8 +156,12 @@ class ClientReadNoteCreateActionTest extends TestCase
         $this->insertFixture('client', $clientData);
         // Insert main note linked to client and user if data provider $existingMainNote is true
         if ($existingMainNote === true) {
-            $this->insertFixtureWhere(['is_main' => 1, 'client_id' => $clientData['id'], 'user_id' => $userData['id']],
-                NoteFixture::class);
+            // Creating main note row with correct values
+            $mainNoteRow = (new NoteFixture())->records[0];
+            $mainNoteRow['is_main'] = 1;
+            $mainNoteRow['client_id'] = $clientData['id'];
+            $mainNoteRow['user_id'] = $userData['id'];
+            $this->insertFixture('note', $mainNoteRow);
         }
 
         // Simulate logged-in user with same user as linked to client
@@ -184,7 +187,7 @@ class ClientReadNoteCreateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideNoteCreationMalformedRequestBody()
      * @return void
      */
-    public function testClientReadNoteCreation_malformedRequest(array $malformedRequestBody): void
+    public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = (new UserFixture())->records[0];

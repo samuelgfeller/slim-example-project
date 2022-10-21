@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Test\Integration\Client\ClientRead;
+namespace App\Test\Integration\Note;
 
-use App\Domain\User\Data\MutationRights;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
+use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\NoteFixture;
-use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use \App\Test\Traits\AppTestTrait;
-use \Selective\TestTrait\Traits\HttpTestTrait;
-use \Selective\TestTrait\Traits\HttpJsonTestTrait;
-use \Selective\TestTrait\Traits\RouteTestTrait;
-use \Selective\TestTrait\Traits\DatabaseTestTrait;
-use \App\Test\Traits\DatabaseExtensionTestTrait;
-use \App\Test\Fixture\FixtureTrait;
+use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpMethodNotAllowedException;
 
 /**

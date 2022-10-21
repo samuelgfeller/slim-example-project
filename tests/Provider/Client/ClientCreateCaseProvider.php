@@ -63,7 +63,7 @@ class ClientCreateCaseProvider
         $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
         $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
 
-        $expectedAuthorizedJsonResponse = [
+        $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
             'db_entry_created' => true,
             'json_response' => [
@@ -71,7 +71,7 @@ class ClientCreateCaseProvider
                 'data' => null,
             ],
         ];
-        $expectedUnauthorizedJsonResponse = [
+        $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
             'db_entry_created' => false,
             'json_response' => [
@@ -84,24 +84,23 @@ class ClientCreateCaseProvider
             [ // ? Newcomer owner - not allowed
                 'user_linked_to_client' => $newcomerData,
                 'authenticated_user' => $newcomerData,
-                'expected_result' => $expectedUnauthorizedJsonResponse
+                'expected_result' => $unauthorizedResult
             ],
             [ // ? Advisor owner - allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $advisorData,
-                'expected_result' => $expectedAuthorizedJsonResponse,
+                'expected_result' => $authorizedResult,
             ],
             [ // ? Advisor not owner - not allowed
                 'user_linked_to_client' => $newcomerData,
                 'authenticated_user' => $advisorData,
-                'expected_result' => $expectedUnauthorizedJsonResponse,
+                'expected_result' => $unauthorizedResult,
             ],
             [ // ? Managing not owner - allowed
                 'user_linked_to_client' => $advisorData,
                 'authenticated_user' => $managingAdvisorData,
-                'expected_result' => $expectedAuthorizedJsonResponse,
+                'expected_result' => $authorizedResult,
             ],
-
         ];
     }
 }

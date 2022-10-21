@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Test\Integration\Client\ClientRead;
+namespace App\Test\Integration\Note;
 
-use App\Domain\User\Data\MutationRights;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
+use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use \App\Test\Traits\AppTestTrait;
-use \Selective\TestTrait\Traits\HttpTestTrait;
-use \Selective\TestTrait\Traits\HttpJsonTestTrait;
-use \Selective\TestTrait\Traits\RouteTestTrait;
-use \Selective\TestTrait\Traits\DatabaseTestTrait;
-use \App\Test\Traits\DatabaseExtensionTestTrait;
-use \App\Test\Fixture\FixtureTrait;
+use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 
@@ -27,7 +26,7 @@ use Slim\Exception\HttpBadRequestException;
  *  - Invalid data (validation test)
  *  - Malformed request body
  */
-class ClientReadNoteUpdateActionTest extends TestCase
+class NoteUpdateActionTest extends TestCase
 {
 
     use AppTestTrait;
@@ -39,17 +38,12 @@ class ClientReadNoteUpdateActionTest extends TestCase
     use FixtureTrait;
 
     /**
-     * Test note modification on client-read page while being authenticated.
-     * Fixture dependencies:
-     *   - 1 client that is linked to the non admin user retrieved in the provider
-     *   - 1 main note that is linked to the same non admin user and to the client
-     *   - 1 normal note that is linked to the same user and client
-     *   - 1 normal note that is not linked to this user but the client
+     * Test note modification on client-read page while being authenticated
      *
      * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
      * @return void
      */
-    public function testClientReadNoteModification(
+    public function testNoteModification(
         array $userLinkedToNoteData,
         array $authenticatedUserData,
         array $expectedResult
@@ -61,24 +55,25 @@ class ClientReadNoteUpdateActionTest extends TestCase
         }
 
         // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
-            ClientFixture::class)[0];
+        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToNoteData['id']],
+            ClientFixture::class);
         // In array first to assert user data later
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         $this->insertFixture('client', $clientRow);
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteData = $this->findRecordsFromFixtureWhere(
+        $mainNoteData = $this->getFixtureRecordsWithAttributes(
             ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
             NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $mainNoteData);
+        );
+        $mainNoteData['id'] = $this->insertFixture('note', $mainNoteData);
+
         // Insert normal note attached to client and given "owner" user
-        $normalNoteData = $this->findRecordsFromFixtureWhere(
+        $normalNoteData = $this->getFixtureRecordsWithAttributes(
             ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
             NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $normalNoteData);
+        );
+        $normalNoteData['id'] = $this->insertFixture('note', $normalNoteData);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
@@ -99,8 +94,12 @@ class ClientReadNoteUpdateActionTest extends TestCase
             $mainNoteResponse->getStatusCode()
         );
 
-        // Database is always expected to change for the main note as every user can change it
-        $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
+        if ($expectedResult['modification']['main_note']['db_changed'] === true) {
+            $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
+        } else {
+            // If db is not expected to change message should remain the same as when it was inserted first
+            $this->assertTableRow(['message' => $mainNoteData['message']], 'note', $mainNoteData['id']);
+        }
 
         // Assert response
         $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);

@@ -13,8 +13,9 @@ class ClientReadCaseProvider
     use FixtureTrait;
 
     /**
-     * Provides logged-in user and user linked to note along
-     * the expected result
+     * Provides logged-in user and user linked to note along the expected result
+     * As the permissions are a lot more simple than for client for instance,
+     * CRUD cases are all in this function
      *
      * @return array{
      *              array{
@@ -30,132 +31,120 @@ class ClientReadCaseProvider
      */
     public function provideUsersAndExpectedResultForNoteMutation(): array
     {
-        $userData = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
+        // Get users with the different roles
+        $managingAdvisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
+        $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
+        $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
+
+        $authorizedResult = [
+            // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
+            // https://stackoverflow.com/a/2342589/9013718
+            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+            // Is db supposed to change
+            'db_changed' => true,
+            'json_response' => [
+                'status' => 'success',
+                'data' => null,
+            ],
+        ];
+        $unauthorizedResult = [
+            StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+            'db_changed' => false,
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Not allowed to change note.',
+            ]
+        ];
+        $unauthorizedUpdateResult = $unauthorizedResult;
+        $unauthorizedUpdateResult['json_response']['message'] = 'Not allowed to change note.';
+        $unauthorizedDeleteResult = $unauthorizedResult;
+        $unauthorizedDeleteResult['json_response']['message'] = 'Not allowed to delete note.';
+        $authorizedCreateResult = [StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED];
+
         return [
-            [ // ? Authenticated user is resource owner - non admin
-                // User to whom the note is linked
-                'owner_user' => $userData,
-                'authenticated_user' => $userData,
+            [ // ? newcomer not owner
+                // User to whom the note (or client for creation) is linked
+                'owner_user' => $advisorData,
+                'authenticated_user' => $newcomerData,
                 'expected_result' => [
-                    'creation' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-                    ],
+                    // Allowed to create note on client where user is not owner
+                    'creation' => $authorizedCreateResult,
                     'modification' => [
-                        // All users may edit the main note but only change their own so there are different expected results
-                        'main_note' => [
-                            // For a PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
-                            // https://stackoverflow.com/a/2342589/9013718
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                                'data' => null,
-                            ],
-                        ],
-                        'normal_note' => [
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                                'data' => null,
-                            ],
-                            // Is db supposed to change
-                            'db_changed' => true,
-                        ],
+                        'main_note' => $unauthorizedUpdateResult,
+                        'normal_note' => $unauthorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => [
-                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                            ],
-                            // Is db supposed to change
-                            'db_changed' => true,
-                        ],
+                        'normal_note' => $unauthorizedDeleteResult
                     ],
                 ],
             ],
-            [ // ? Authenticated user is admin - non resource owner
-                'owner_user' => $userData,
-                'authenticated_user' => $this->findRecordsFromFixtureWhere(['role' => 'admin'], UserFixture::class)[0],
+            [ // ? newcomer owner
+                // User to whom the note (or client for creation) is linked
+                'owner_user' => $newcomerData,
+                'authenticated_user' => $newcomerData,
                 'expected_result' => [
                     'creation' => [
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
                     ],
                     'modification' => [
-                        'main_note' => [
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                                'data' => null,
-                            ],
-                        ],
-                        'normal_note' => [
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                                'data' => null,
-                            ],
-                            'db_changed' => true,
-                        ],
+                        // Newcomer may not edit client basic data which has the same rights as the main note
+                        'main_note' => $unauthorizedUpdateResult,
+                        'normal_note' => $authorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => [
-                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                            ],
-                            // Is db supposed to change
-                            'db_changed' => true,
-                        ],
+                        'normal_note' => $authorizedResult
                     ],
                 ],
             ],
-            [ // ? Authenticated user is not the resource owner and not admin
-                'owner_user' => $userData,
-                // Get user with role user that is not the same then $userData
-                'authenticated_user' => $this->findRecordsFromFixtureWhere(
-                    ['role' => 'user'],
-                    UserFixture::class,
-                    ['id' => $userData['id']]
-                )[0],
+            [ // ? advisor owner
+                // User to whom the note (or client for creation) is linked
+                'owner_user' => $advisorData,
+                'authenticated_user' => $advisorData,
                 'expected_result' => [
-                    'creation' => [
-                        // Should be created as users that are not linked to client are able to create notes - this will be different for mutation
+                    'creation' => [ // Allowed to create note on client where user is not owner
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
                     ],
                     'modification' => [
-                        // All users may edit the main note but only change their own so there are different expected results
-                        'main_note' => [
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                            'json_response' => [
-                                'status' => 'success',
-                                'data' => null,
-                            ],
-                        ],
-                        'normal_note' => [
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-                            'json_response' => [
-                                'status' => 'error',
-                                'message' => 'You can only edit your own note or need to be an admin to edit others'
-                            ],
-                            'db_changed' => false,
-                        ],
+                        'main_note' => $authorizedResult,
+                        'normal_note' => $authorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => [
-                            // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                            StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-                            'json_response' => [
-                                'status' => 'error',
-                                'message' => 'You have to be note author to delete this note.',
-                            ],
-                            // Is db supposed to change
-                            'db_changed' => false,
-                        ],
+                        'normal_note' => $authorizedResult
+                    ],
+                ],
+            ],
+            [ // ? advisor not owner
+                // User to whom the note (or client for creation) is linked
+                'owner_user' => $managingAdvisorData,
+                'authenticated_user' => $advisorData,
+                'expected_result' => [
+                    'creation' => $authorizedCreateResult,
+                    'modification' => [
+                        'main_note' => $authorizedResult,
+                        'normal_note' => $unauthorizedUpdateResult,
+                    ],
+                    'deletion' => [
+                        // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                        'normal_note' => $unauthorizedDeleteResult
+                    ],
+                ],
+            ],
+            [ // ? managing advisor not owner
+                // User to whom the note (or client for creation) is linked
+                'owner_user' => $advisorData,
+                'authenticated_user' => $managingAdvisorData,
+                'expected_result' => [
+                    'creation' => $authorizedCreateResult,
+                    'modification' => [
+                        'main_note' => $authorizedResult,
+                        'normal_note' => $authorizedResult,
+                    ],
+                    'deletion' => [
+                        // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                        'normal_note' => $authorizedResult
                     ],
                 ],
             ],
@@ -202,7 +191,7 @@ iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
             ],
             [
                 // Too long
-                'request_body' => ['message' => $tooLongMsg, 'is_main' => 1, 'client_id' => 1],
+                'request_body' => ['message' => $tooLongMsg, 'is_main' => 0, 'client_id' => 1],
                 'existing_main_note' => false,
                 'json_response' => [
                     'status' => 'error',

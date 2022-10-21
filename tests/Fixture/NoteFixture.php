@@ -17,42 +17,42 @@ class NoteFixture
         // Note id 1: is main note and linked to user 1 and client 1
         [
             'id' => 1,
-            'user_id' => 2, // Needed main note to be linked to user 2 in testClientReadNoteModification
+            'user_id' => 10, // Needed main note to be linked to user 10 in testNotesSubmitUpdateAction
             'client_id' => 1,
-            'message' => 'This is a test main note created by user 2.',
+            'message' => 'This is a test main note.',
             'is_main' => 1,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 2: is not main note and linked to user 2 (non admin) and client 1
+        // Note id 2: is not main note and linked to user 10 and client 1
         [
             'id' => 2,
-            'user_id' => 1,
+            'user_id' => 10,
             'client_id' => 1,
-            'message' => 'This is a normal note from the user 1.',
+            'message' => 'This is a normal note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 3: is not main note and linked to user 2 and client 1
+        // Note id 3
         [
             'id' => 3,
-            'user_id' => 2,
+            'user_id' => 20,
             'client_id' => 1,
-            'message' => 'This is a normal note from the user 2.',
+            'message' => 'This is a normal note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
         ],
-        // Note id 4: is not main note and linked to non admin user 2 and client 1
+        // Note id 4
         [
             'id' => 4,
-            'user_id' => 2,
+            'user_id' => 20,
             'client_id' => 1,
-            'message' => 'This is a second normal note from the user 2.',
+            'message' => 'This is a second normal note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -64,7 +64,7 @@ class NoteFixture
             'id' => 5,
             'user_id' => 1,
             'client_id' => 1,
-            'message' => 'This is a deleted note attached to user 1.',
+            'message' => 'This is a deleted note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -88,7 +88,7 @@ class NoteFixture
             'id' => 7,
             'user_id' => 1,
             'client_id' => 2,
-            'message' => 'This is a normal note from the same user 1.',
+            'message' => 'This is a normal note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
