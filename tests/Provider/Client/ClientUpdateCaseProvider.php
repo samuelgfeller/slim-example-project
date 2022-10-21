@@ -20,7 +20,7 @@ class ClientUpdateCaseProvider
      */
     public function provideUsersAndExpectedResultForClientUpdate(): array
     {
-        // Get users with different roles
+        // Get users with the different roles
         $managingAdvisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
         $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
         $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
