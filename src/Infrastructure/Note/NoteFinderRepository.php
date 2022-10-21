@@ -37,7 +37,7 @@ class NoteFinderRepository
                 'note_updated_at' => 'note.updated_at',
                 'user_full_name' => $concatName,
                 'user_email' => 'user.email',
-                'user_role' => 'user.role',
+                'user_role_id' => 'user.user_role_id',
             ]
         )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
             ['note.deleted_at IS' => null]
@@ -83,7 +83,7 @@ class NoteFinderRepository
                 'note_created_at' => 'note.created_at',
                 'note_updated_at' => 'note.updated_at',
                 'user_full_name' => $concatName,
-                'user_role' => 'user.role',
+                'user_role_id' => 'user.user_role_id',
             ]
         )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
             ['note.id' => $id, 'note.deleted_at IS' => null]
@@ -134,7 +134,7 @@ class NoteFinderRepository
                 'note_created_at' => 'note.created_at',
                 'note_updated_at' => 'note.updated_at',
                 'user_full_name' => $concatName,
-                'user_role' => 'user.role',
+                'user_role_id' => 'user.user_role_id',
             ]
         )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
             [
@@ -168,7 +168,7 @@ class NoteFinderRepository
                 'note_created_at' => 'note.created_at',
                 'user_id' => 'user.id',
                 'user_full_name' => $concatName,
-                'user_role' => 'user.role',
+                'user_role_id' => 'user.user_role_id',
             ]
         )->join([
             'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],

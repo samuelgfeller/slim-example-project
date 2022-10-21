@@ -64,7 +64,7 @@ final class NoteDeleteAction
 
             try {
                 // Delete note logic
-                $deleted = $this->noteDeleter->deleteNote($noteId, $loggedInUserId);
+                $deleted = $this->noteDeleter->deleteNote($noteId);
 
                 if ($deleted) {
                     return $this->responder->respondWithJson($response, ['status' => 'success']);

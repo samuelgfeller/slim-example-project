@@ -127,12 +127,11 @@ return function (App $app) {
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
-        // Note requests where user DOESN'T need to be authenticated
-        $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
+        // $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
 
-        $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteReadAction::class)->setName(
-            'note-read'
-        );
+        // $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteReadAction::class)->setName(
+        //     'note-read'
+        // );
         // Note requests where user DOES need to be authenticated
         $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
             'note-submit-creation'

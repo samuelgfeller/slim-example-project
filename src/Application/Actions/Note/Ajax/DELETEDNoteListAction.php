@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Note list all and own action.
  */
-final class NoteListAction
+final class DELETEDNoteListAction
 {
     /**
      * The constructor.

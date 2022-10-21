@@ -6,7 +6,7 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Infrastructure\Note\NoteDeleterRepository;
 
 class NoteDeleter
@@ -14,17 +14,16 @@ class NoteDeleter
     public function __construct(
         private readonly NoteDeleterRepository $noteDeleterRepository,
         private readonly NoteFinder $noteFinder,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
     ) { }
 
     /**
      * Delete one note logic
      *
      * @param int $noteId
-     * @param int $loggedInUserId
      * @return bool
      */
-    public function deleteNote(int $noteId, int $loggedInUserId): bool
+    public function deleteNote(int $noteId): bool
     {
         // Find note in db to get its ownership
         $noteFromDb = $this->noteFinder->findNote($noteId);
@@ -35,10 +34,7 @@ class NoteDeleter
             throw new NotAllowedException('The main note cannot be deleted.');
         }
 
-        $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-
-        // Check if it's admin or if it's its own note
-        if ($userRole === 'admin' || $noteFromDb->userId === $loggedInUserId) {
+        if ($this->noteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)){
             return $this->noteDeleterRepository->deleteNote($noteId);
         }
         throw new ForbiddenException('You have to be admin or the note creator to update this note');

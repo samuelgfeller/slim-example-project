@@ -101,7 +101,7 @@ class ClientListActionTest extends TestCase
      */
     public function testClientListClientLoadAction(array $queryParams, array $rowFilter): void
     {
-        // Insert users and statuts linked to clients and all clients including deleted one
+        // Insert users and status linked to clients and all clients including deleted one
         $this->insertFixtures([UserFixture::class, ClientStatusFixture::class, ClientFixture::class]);
 
         $request = $this->createJsonRequest(

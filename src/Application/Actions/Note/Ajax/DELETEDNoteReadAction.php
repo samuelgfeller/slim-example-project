@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class NoteReadAction
+final class DELETEDNoteReadAction
 {
     /**
      * The constructor.

@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\Note\Service\NoteFinder;
@@ -73,6 +74,15 @@ final class NoteCreateAction
                         $exception->getValidationResult(),
                         $response
                     );
+                } catch (ForbiddenException $forbiddenException) {
+                    return $this->responder->respondWithJson(
+                        $response,
+                        [// Response content asserted in ClientReadCaseProvider.php
+                            'status' => 'error',
+                            'message' => 'Not allowed to create note.'
+                        ],
+                        403
+                    );
                 }
 
                 if (0 !== $insertId) {
@@ -83,7 +93,9 @@ final class NoteCreateAction
                         'data' => [
                             'userFullName' => $user->firstName . ' ' . $user->surname,
                             'noteId' => $insertId,
-                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format('d. F Y • H:i')
+                            'createdDateFormatted' => (new \DateTime($noteDataFromDb->createdAt))->format(
+                                'd. F Y • H:i'
+                            )
                         ],
                     ], 201);
                 }

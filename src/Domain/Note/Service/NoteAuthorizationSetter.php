@@ -2,24 +2,25 @@
 
 namespace App\Domain\Note\Service;
 
-use App\Domain\Authentication\Service\UserRoleFinder;
+use App\Domain\Authorization\UserRole;
 use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\User\Data\MutationRights;
+use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
 
 /**
  * The client should know when to display edit and delete icons
  * Admins can edit all notes, users only their own
  */
-class NoteUserRightSetter
+class NoteAuthorizationSetter
 {
     public function __construct(
-        private SessionInterface $session,
-        private UserRoleFinder $userRoleFinder,
+        private readonly SessionInterface $session,
+        private readonly UserRoleFinderRepository $userRoleFinderRepository,
     ) { }
 
     /**
-     * Populate $userMutationRightss attribute to given UserNoteData or array with
+     * Populate $userMutationRights attribute to given UserNoteData or array with
      * logged-in user mutation right.
      *
      * I'm not sure if that is a good practice to accept collections and single objects both in the same function,
@@ -43,19 +44,23 @@ class NoteUserRightSetter
 
     /**
      * Add userUpdateRight attribute to given UserNoteData with
-     * logged-in user mutation right.
+     * authenticated user mutation rights.
      *
      * @param NoteWithUserData $userNote
  */
     private function setUserRightsOnNote(NoteWithUserData $userNote): void
     {
         // Default is no rights
-        $userNote->userMutationRights = MutationRights::NONE;
+        $userNote->userMutationRights = MutationRights::READ;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-            if ($userNote->userId === $loggedInUserId || $userRole === 'admin') {
+            // If owner or managing_advisor or higher privilege
+            if ($userNote->userId === $loggedInUserId ||
+                $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 $userNote->userMutationRights = MutationRights::ALL;
             }
         }

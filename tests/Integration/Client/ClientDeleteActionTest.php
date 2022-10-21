@@ -19,7 +19,9 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use App\Test\Traits\RouteTestTrait;
 
 /**
- * Copied and pasted content from post for now
+ * Client submit delete action tests
+ *  - Authenticated with different user roles
+ *  - Unauthenticated
  */
 class ClientDeleteActionTest extends TestCase
 {
@@ -84,6 +86,7 @@ class ClientDeleteActionTest extends TestCase
         $this->assertJsonData($expectedResult['json_response'], $response);
     }
 
+
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
      * and that the authentication middleware provides the correct login url
@@ -114,5 +117,10 @@ class ClientDeleteActionTest extends TestCase
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
+
+
+    // Unchanged content test not done as it's not being used by the frontend
+    // Malformed request body also not so relevant as there is no body for deletion
+    // Invalid data not relevant either as there is no data in the request body
 
 }

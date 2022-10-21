@@ -72,7 +72,7 @@ final class NoteUpdateAction
             // Check that request body syntax is formatted right (if changed, )
             if (null !== $noteValues && [] !== $noteValues && isset($noteValues['message']) && count($noteValues) === 1) {
                 try {
-                    $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues, $loggedInUserId);
+                    $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
 
                     if ($updated) {
                         return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
@@ -93,7 +93,7 @@ final class NoteUpdateAction
                         [
                             // Response content asserted in ClientReadCaseProvider.php
                             'status' => 'error',
-                            'message' => 'You can only edit your own note or need to be an admin to edit others'
+                            'message' => 'Not allowed to change note.'
                         ],
                         403
                     );

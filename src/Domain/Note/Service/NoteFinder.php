@@ -13,7 +13,7 @@ class NoteFinder
 {
     public function __construct(
         private NoteFinderRepository $noteFinderRepository,
-        private NoteUserRightSetter $noteUserRightSetter,
+        private NoteAuthorizationSetter $noteUserRightSetter,
     ) {
     }
 

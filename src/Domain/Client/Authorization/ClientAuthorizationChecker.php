@@ -101,6 +101,7 @@ class ClientAuthorizationChecker
                 if (array_key_exists('sex', $clientDataToUpdate)) {
                     $grantedUpdateKeys[] = 'sex';
                 }
+                /** Update main note authorization is in @see NoteAuthorizationChecker::isGrantedToUpdate () */
 
                 // Everything that owner and managing_advisor is permitted to do
                 // advisor may only edit client_status_id if he's owner | managing_advisor and higher is allowed
@@ -170,7 +171,7 @@ class ClientAuthorizationChecker
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Newcomer are allowed to see all clients regardless of owner
-            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['newcomer']){
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['newcomer']) {
                 return true;
             }
         }
@@ -194,7 +195,7 @@ class ClientAuthorizationChecker
         $authorizedClients = [];
         foreach ($clients as $client) {
             // Check if authenticated user is allowed to read each client and if yes, add it to the return array
-            if($this->isGrantedToReadClient($client->userId)) {
+            if ($this->isGrantedToReadClient($client->userId)) {
                 $authorizedClients[] = $client;
             }
         }
