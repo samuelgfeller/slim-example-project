@@ -31,7 +31,7 @@ class ClientDeleter
         // Find post in db to get its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
-        if ($this->clientAuthorizationChecker->isGrantedToDeleteClient($clientFromDb->userId)) {
+        if ($this->clientAuthorizationChecker->isGrantedToDelete($clientFromDb->userId)) {
             return $this->clientDeleterRepository->deleteClient($clientId);
         }
 

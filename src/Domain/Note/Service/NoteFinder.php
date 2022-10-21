@@ -4,9 +4,9 @@
 namespace App\Domain\Note\Service;
 
 
+use App\Domain\Note\Authorization\NoteAuthorizationSetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
-use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Note\NoteFinderRepository;
 
 class NoteFinder

@@ -131,7 +131,7 @@ function addPostsToDom(posts) {
     for (const post of posts) {
         // Set delete and edit buttons but only if user is viewing its own posts
         let ownPostsButtons = '';
-        if (post.userMutationRights === 'all') {
+        if (post.mutationRights === 'all') {
             ownPostsButtons = '<img src="assets/general/img/edit_icon.svg" class="card-edit-icon cursor-pointer" ' +
                 'data-id="' + post.postId + '" alt="edit">' +
                 '<img src="assets/general/img/del_icon.svg" class="card-del-icon cursor-pointer" ' +

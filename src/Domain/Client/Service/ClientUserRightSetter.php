@@ -49,13 +49,13 @@ class ClientUserRightSetter
     private function defineUserRightsOnClient(ClientResultAggregateData $clientResultAggregateData): void
     {
         // Default is no rights
-//        $clientResultAggregateData->userMutationRights = UserPostData::MUTATION_PERMISSION_NONE;
+//        $clientResultAggregateData->mutationRights = UserPostData::MUTATION_PERMISSION_NONE;
 //
 //        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
 //            $userRole = $this->userRoleFinder->getUserRoleById($loggedInUserId);
 //
 //            if ($clientResultAggregateData->userId === $loggedInUserId || $userRole === 'admin') {
-//                $clientResultAggregateData->userMutationRights = UserPostData::MUTATION_PERMISSION_ALL;
+//                $clientResultAggregateData->mutationRights = UserPostData::MUTATION_PERMISSION_ALL;
 //            }
 //        }
     }

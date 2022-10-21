@@ -7,6 +7,8 @@
  */
 
 
+use App\Domain\User\Data\MutationRights;
+
 $this->setLayout('layout.html.php');
 ?>
 
@@ -35,7 +37,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
-                  data-editable="<?= $clientAggregate->mainNoteData->mutationRights->value === 'all' ? '1' : '0' ?>"
+                  data-editable="<?= $clientAggregate->mainNoteData->mutationRights->value ===
+                  MutationRights::ALL ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">
@@ -47,7 +50,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!-- Status select options-->
         <div>
             <label for="client-status" class="discrete-label">Status</label>
-            <select name="client_status_id" class="default-select">
+            <select name="client_status_id" class="default-select"
+                <?= $clientAggregate->clientStatusMutationRights === MutationRights::ALL ? '' : 'disabled' ?>>
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
@@ -61,9 +65,10 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!-- Assigned user select options-->
         <div>
             <label for="assigned-user" class="discrete-label">Helper</label>
-            <select name="user_id" class="default-select" id="assigned-user">
+            <select name="user_id" class="default-select" id="assigned-user"
+                <?= $clientAggregate->assignedUserMutationRights === MutationRights::ALL ? '' : 'disabled' ?>>
                 <?php
-                // Client status select options
+                // Linked user select options
                 foreach ($dropdownValues->users as $id => $name) {
                     $selected = $id === $clientAggregate->userId ? 'selected' : '';
                     echo "<option value='$id' $selected>$name</option>";
@@ -108,7 +113,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 $emailParts = explode('@', $clientAggregate->email);
                 ?>
                 <div id="email-div">
-                <span id="email-prefix"><?= $emailParts[0] ?></span><br><span id="email-suffix">@<?= $emailParts[1] ?></span>
+                    <span id="email-prefix"><?= $emailParts[0] ?></span><br><span
+                            id="email-suffix">@<?= $emailParts[1] ?></span>
                 </div>
             </a>
             <?php

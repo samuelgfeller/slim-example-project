@@ -30,7 +30,7 @@ class ClientCreator
         $client = new ClientData($clientValues);
         $this->clientValidator->validateClientCreation($client, $clientValues['birthdate'] ?? null);
 
-        if ($this->clientAuthorizationChecker->isGrantedToCreateClient($client)) {
+        if ($this->clientAuthorizationChecker->isGrantedToCreate($client)) {
             return $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
         }
 

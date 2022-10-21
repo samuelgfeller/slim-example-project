@@ -1,4 +1,4 @@
-export function getNoteHtml(noteId, noteCreatedAt, userMutationRights, userFullName, message) {
+export function getNoteHtml(noteId, noteCreatedAt, mutationRights, userFullName, message) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes
 
@@ -8,7 +8,7 @@ export function getNoteHtml(noteId, noteCreatedAt, userMutationRights, userFullN
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
                     ${// Following function is in paranthesis and called with () at the end to be interpreted 
         (() => {
-            if (userHasMutationRights(userMutationRights)) {
+            if (userHasMutationRights(mutationRights)) {
                 return `<img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
                                                                           data-note-id="${noteId}">`;
             }
@@ -22,7 +22,7 @@ export function getNoteHtml(noteId, noteCreatedAt, userMutationRights, userFullN
                     <textarea class="auto-resize-textarea" id="note${noteId}"
                               data-note-id="${noteId}"
                               minlength="4" maxlength="500"
-                              data-editable="${userHasMutationRights(userMutationRights) ? '1' : '0'}"
+                              data-editable="${userHasMutationRights(mutationRights) ? '1' : '0'}"
                               name="message">${message}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">
                         <div class="checkmark draw"></div>
@@ -35,11 +35,11 @@ export function getNoteHtml(noteId, noteCreatedAt, userMutationRights, userFullN
  * Testing if user has rights logic in own function
  * to be easier to adapt later on.
  *
- * @param userMutationRights
+ * @param mutationRights
  * @return {boolean}
  */
-function userHasMutationRights(userMutationRights) {
-    return userMutationRights === 'all';
+function userHasMutationRights(mutationRights) {
+    return mutationRights === 'all';
 }
 
 export function getClientNoteLoadingPlaceholderHtml() {

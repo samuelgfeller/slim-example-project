@@ -10,7 +10,6 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\Client\ClientUpdaterRepository;
-use http\Client;
 use Psr\Log\LoggerInterface;
 
 class ClientUpdater
@@ -45,7 +44,7 @@ class ClientUpdater
         // Find note in db to compare its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
-        if ($this->clientAuthorizationChecker->isGrantedToUpdateClient($clientValues, $clientFromDb->userId)) {
+        if ($this->clientAuthorizationChecker->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
             $updateData = [];
             // Additional check (next to malformed body in action) to be sure that only columns that may be updated are
             // in the final $updateData array

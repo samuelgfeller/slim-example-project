@@ -3,10 +3,9 @@
 namespace App\Domain\Client\Data;
 
 
-use App\Domain\ClientStatus\Data\ClientStatusData;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
-use App\Domain\User\Data\UserData;
+use App\Domain\User\Data\MutationRights;
 
 /**
  * Aggregate DTO to store ClientData combined with
@@ -26,6 +25,9 @@ class ClientResultAggregateData extends ClientData
     // As this below is only relevant for client read, this ClientResult data class could be renamed into ClientListResult
     // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
     public ?NoteData $mainNoteData = null; // Main note data
+
+    public ?MutationRights $clientStatusMutationRights = null;
+    public ?MutationRights $assignedUserMutationRights = null;
 
     /**
      * Client Data constructor.

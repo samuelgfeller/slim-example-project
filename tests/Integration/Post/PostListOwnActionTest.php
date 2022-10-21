@@ -118,7 +118,7 @@ class PostListOwnActionTest extends TestCase
                 'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
-                'userMutationRights' => UserNoteData::MUTATION_PERMISSION_ALL, // All as its own posts
+                'mutationRights' => UserNoteData::MUTATION_PERMISSION_ALL, // All as its own posts
             ];
         }
 

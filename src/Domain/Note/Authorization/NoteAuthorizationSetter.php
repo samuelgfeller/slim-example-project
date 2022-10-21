@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Domain\Note\Service;
+namespace App\Domain\Note\Authorization;
 
 use App\Domain\Authorization\UserRole;
+use App\Domain\Client\Data\ClientResultAggregateData;
+use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\User\Data\MutationRights;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
@@ -17,10 +19,11 @@ class NoteAuthorizationSetter
     public function __construct(
         private readonly SessionInterface $session,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
-    ) { }
+    ) {
+    }
 
     /**
-     * Populate $userMutationRights attribute to given UserNoteData or array with
+     * Populate $mutationRights attribute to given UserNoteData or array with
      * logged-in user mutation right.
      *
      * I'm not sure if that is a good practice to accept collections and single objects both in the same function,
@@ -47,11 +50,11 @@ class NoteAuthorizationSetter
      * authenticated user mutation rights.
      *
      * @param NoteWithUserData $userNote
- */
+     */
     private function setUserRightsOnNote(NoteWithUserData $userNote): void
     {
         // Default is no rights
-        $userNote->userMutationRights = MutationRights::READ;
+        $userNote->mutationRights = MutationRights::READ;
 
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -61,7 +64,7 @@ class NoteAuthorizationSetter
             // If owner or managing_advisor or higher privilege
             if ($userNote->userId === $loggedInUserId ||
                 $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
-                $userNote->userMutationRights = MutationRights::ALL;
+                $userNote->mutationRights = MutationRights::ALL;
             }
         }
     }

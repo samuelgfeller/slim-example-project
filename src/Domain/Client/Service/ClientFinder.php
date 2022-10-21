@@ -5,14 +5,13 @@ namespace App\Domain\Client\Service;
 
 
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Authorization\ClientAuthorizationSetter;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\ForbiddenException;
-use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Service\NoteFinder;
-use App\Domain\User\Data\MutationRights;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
@@ -27,7 +26,7 @@ class ClientFinder
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly ClientAuthorizationSetter $clientAuthorizationSetter,
     ) {
     }
 
@@ -86,13 +85,15 @@ class ClientFinder
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
-        if ($this->clientAuthorizationChecker->isGrantedToReadClient($clientResultAggregate->userId)) {
+        if ($this->clientAuthorizationChecker->isGrantedToRead($clientResultAggregate->userId)) {
             // Set mutation right on main note
-            if ($this->noteAuthorizationChecker->isGrantedToUpdate(1, null, $clientResultAggregate->userId)) {
-                $clientResultAggregate->mainNoteData->mutationRights = MutationRights::ALL;
-            }else{
-                $clientResultAggregate->mainNoteData->mutationRights = MutationRights::READ;
-            }
+            $this->clientAuthorizationSetter->setUserRightsOnMainNote(
+                $clientResultAggregate->mainNoteData,
+                $clientResultAggregate->userId
+            );
+
+            // Set user rights for assigned user and client status for frontend
+            $this->clientAuthorizationSetter->setUserRightsForClientDropdowns($clientResultAggregate);
 
             if ($includingNotes === true) {
                 $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);

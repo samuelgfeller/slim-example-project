@@ -105,7 +105,7 @@ class PostListActionTest extends TestCase
                 'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
                 // If it's the user's own post, all rights but otherwise none
-                'userMutationRights' => $loggedInUserId ===
+                'mutationRights' => $loggedInUserId ===
                 $postRow['user_id'] ? UserNoteData::MUTATION_PERMISSION_ALL : UserNoteData::MUTATION_PERMISSION_NONE,
             ];
         }
@@ -158,7 +158,7 @@ class PostListActionTest extends TestCase
                 'postUpdatedAt' => $this->changeDateFormat($postRow['updated_at']),
                 'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
                 'userRole' => $userRow['role'],
-                'userMutationRights' => UserNoteData::MUTATION_PERMISSION_NONE, // None as not logged in
+                'mutationRights' => UserNoteData::MUTATION_PERMISSION_NONE, // None as not logged in
             ];
         }
 
@@ -219,7 +219,7 @@ class PostListActionTest extends TestCase
 
         // Assert that mutation permission is all on all posts
         foreach ($this->getJsonData($response) as $post) {
-            self::assertSame(UserNoteData::MUTATION_PERMISSION_ALL, $post['userMutationRights']);
+            self::assertSame(UserNoteData::MUTATION_PERMISSION_ALL, $post['mutationRights']);
         }
     }
 

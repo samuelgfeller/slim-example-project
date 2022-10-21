@@ -98,7 +98,7 @@ class ClientReadNoteLoadActionTest extends TestCase
                 'userRole' => $userRow['role'],
                 // Has to match user rights rules in NoteUserRightSetter.php
                 // Currently don't know the best way to implement this dynamically
-                'userMutationRights' => $hasMutationRight($loggedInUserRow['role'], $noteRow['user_id']),
+                'mutationRights' => $hasMutationRight($loggedInUserRow['role'], $noteRow['user_id']),
             ];
         }
 

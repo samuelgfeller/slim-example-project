@@ -83,7 +83,7 @@ class NoteAuthorizationChecker
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
             if (($isMain === 0 && ($loggedInUserId === $noteOwnerId ||
                         $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value])) ||
-                // If it's a main note, advisors and higher may edit it and client ownership would be relevant here
+                // If it's a main note, advisors and higher may edit it and $clientOwnerId would be relevant here
                 ($isMain === 1 && // Should be identical to client update basic info authorization
                     $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])
             ) {

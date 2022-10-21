@@ -20,7 +20,7 @@ class NoteWithUserData
     public ?int $userRoleId;
 
     // Not note value from db, populated in NoteUserRightSetter
-    public ?MutationRights $userMutationRights; // json_encode automatically takes $enum->value
+    public ?MutationRights $mutationRights; // json_encode automatically takes $enum->value
 
     /**
      * Note constructor.

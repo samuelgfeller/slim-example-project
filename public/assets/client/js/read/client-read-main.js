@@ -22,8 +22,8 @@ loadClientNotes(() => {
 // After plus button is clicked, textarea for new note should be added
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
 
-const clientStatus = document.querySelector('select[name="client_status_id"]');
+const clientStatus = document.querySelector('select[name="client_status_id"]:not([disabled])');
 clientStatus.addEventListener('change', saveClientReadDropdownChange);
 
-const assignedUser = document.querySelector('select[name="user_id"]');
+const assignedUser = document.querySelector('select[name="user_id"]:not([disabled])');
 assignedUser.addEventListener('change', saveClientReadDropdownChange);

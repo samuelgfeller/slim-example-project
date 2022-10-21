@@ -31,7 +31,7 @@ class ClientAuthorizationChecker
      * @param ClientData $client
      * @return bool
      */
-    public function isGrantedToCreateClient(ClientData $client): bool
+    public function isGrantedToCreate(ClientData $client): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -64,10 +64,10 @@ class ClientAuthorizationChecker
      * depending on what the user wants to update
      *
      * @param int $ownerId user_id linked to client
-     *
+     * @param bool $logIfForbidden expected false when function is called for user right setting
      * @return bool
      */
-    public function isGrantedToUpdateClient(array $clientDataToUpdate, int $ownerId): bool
+    public function isGrantedToUpdate(array $clientDataToUpdate, int $ownerId, bool $logIfForbidden = true): bool
     {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -139,7 +139,7 @@ class ClientAuthorizationChecker
      * @param int $ownerId
      * @return bool
      */
-    public function isGrantedToDeleteClient(int $ownerId): bool
+    public function isGrantedToDelete(int $ownerId): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -163,7 +163,7 @@ class ClientAuthorizationChecker
      * @param int $ownerId
      * @return bool
      */
-    public function isGrantedToReadClient(int $ownerId): bool
+    public function isGrantedToRead(int $ownerId): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -195,7 +195,7 @@ class ClientAuthorizationChecker
         $authorizedClients = [];
         foreach ($clients as $client) {
             // Check if authenticated user is allowed to read each client and if yes, add it to the return array
-            if ($this->isGrantedToReadClient($client->userId)) {
+            if ($this->isGrantedToRead($client->userId)) {
                 $authorizedClients[] = $client;
             }
         }
