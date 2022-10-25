@@ -3,9 +3,9 @@
 namespace App\Domain\Client\Data;
 
 
+use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
-use App\Domain\User\Data\MutationRights;
 
 /**
  * Aggregate DTO to store ClientData combined with
@@ -26,8 +26,8 @@ class ClientResultAggregateData extends ClientData
     // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
     public ?NoteData $mainNoteData = null; // Main note data
 
-    public ?MutationRights $clientStatusMutationRights = null;
-    public ?MutationRights $assignedUserMutationRights = null;
+    public ?Privilege $clientStatusPrivilege = null;
+    public ?Privilege $assignedUserPrivilege = null;
 
     /**
      * Client Data constructor.

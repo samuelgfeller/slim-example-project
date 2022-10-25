@@ -7,7 +7,7 @@
  */
 
 
-use App\Domain\User\Data\MutationRights;
+use App\Domain\Authorization\Privilege;
 
 $this->setLayout('layout.html.php');
 ?>
@@ -37,8 +37,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <div class="main-note-status-assigned-user-div">
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
-                  data-editable="<?= $clientAggregate->mainNoteData->mutationRights->value ===
-                  MutationRights::ALL ? '1' : '0' ?>"
+                  data-editable="<?= $clientAggregate->mainNoteData->privilege
+                      ->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">
@@ -51,7 +51,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <div>
             <label for="client-status" class="discrete-label">Status</label>
             <select name="client_status_id" class="default-select"
-                <?= $clientAggregate->clientStatusMutationRights === MutationRights::ALL ? '' : 'disabled' ?>>
+                <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
+                    ? '' : 'disabled' ?>>
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
@@ -66,7 +67,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <div>
             <label for="assigned-user" class="discrete-label">Helper</label>
             <select name="user_id" class="default-select" id="assigned-user"
-                <?= $clientAggregate->assignedUserMutationRights === MutationRights::ALL ? '' : 'disabled' ?>>
+                <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                 <?php
                 // Linked user select options
                 foreach ($dropdownValues->users as $id => $name) {

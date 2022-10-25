@@ -1,4 +1,4 @@
-export function getNoteHtml(noteId, noteCreatedAt, mutationRights, userFullName, message) {
+export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, message) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes
 
@@ -8,7 +8,7 @@ export function getNoteHtml(noteId, noteCreatedAt, mutationRights, userFullName,
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
                     ${// Following function is in paranthesis and called with () at the end to be interpreted 
         (() => {
-            if (userHasMutationRights(mutationRights)) {
+            if (userHasPrivilegeTo(privilege, 'D')) {
                 return `<img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
                                                                           data-note-id="${noteId}">`;
             }
@@ -22,7 +22,7 @@ export function getNoteHtml(noteId, noteCreatedAt, mutationRights, userFullName,
                     <textarea class="auto-resize-textarea" id="note${noteId}"
                               data-note-id="${noteId}"
                               minlength="4" maxlength="500"
-                              data-editable="${userHasMutationRights(mutationRights) ? '1' : '0'}"
+                              data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
                               name="message">${message}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">
                         <div class="checkmark draw"></div>
@@ -32,14 +32,31 @@ export function getNoteHtml(noteId, noteCreatedAt, mutationRights, userFullName,
 }
 
 /**
- * Testing if user has rights logic in own function
- * to be easier to adapt later on.
- *
- * @param mutationRights
+ * Check if user has required privilege
+ * If the received privilege contains one
+ * of the following letters, it means:
+ *  D - Delete - Highest privilege, may also do other actions
+ *  U - Update - May also create and read but not delete
+ *  C - Create - May also read
+ *  R - Read - May only read but do nothing else
+ *  *
+ * @param actualPrivilege
  * @return {boolean}
  */
-function userHasMutationRights(mutationRights) {
-    return mutationRights === 'all';
+function userHasPrivilegeTo(actualPrivilege, requiredPrivilege) {
+    switch (requiredPrivilege) {
+        // Starting from the highest privilege to the lowest
+        case 'D':
+            return actualPrivilege.includes('D');
+        case 'U':
+            return actualPrivilege.includes('U');
+        case 'C':
+            return actualPrivilege.includes('C');
+        case 'R':
+            return actualPrivilege.includes('R');
+        default:
+            return false;
+    }
 }
 
 export function getClientNoteLoadingPlaceholderHtml() {

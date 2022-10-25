@@ -4,7 +4,7 @@
 namespace App\Domain\Note\Data;
 
 use App\Common\ArrayReader;
-use App\Domain\User\Data\MutationRights;
+use App\Domain\Authorization\Privilege;
 
 /**
  * Note with user info
@@ -20,7 +20,7 @@ class NoteWithUserData
     public ?int $userRoleId;
 
     // Not note value from db, populated in NoteUserRightSetter
-    public ?MutationRights $mutationRights; // json_encode automatically takes $enum->value
+    public ?Privilege $privilege; // json_encode automatically takes $enum->value
 
     /**
      * Note constructor.

@@ -4,7 +4,7 @@
 namespace App\Domain\Note\Service;
 
 
-use App\Domain\Note\Authorization\NoteAuthorizationSetter;
+use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
 use App\Infrastructure\Note\NoteFinderRepository;
@@ -13,22 +13,24 @@ class NoteFinder
 {
     public function __construct(
         private readonly NoteFinderRepository $noteFinderRepository,
-        private readonly NoteAuthorizationSetter $noteUserRightSetter,
+        private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
     ) {
     }
 
     /**
-     * Gives all undeleted notes from db with name of user
+     * Populate $privilege attribute of given NoteWithUserData array
      *
-     * @return NoteData[]
+     * @param NoteWithUserData[] $notes
+     *
+     * @return void In PHP, an object variable doesn't contain the object itself as value. It only contains an object
+     * identifier meaning the reference is passed and changes are made on the original reference that can be used further
+     * https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
      */
-    public function findAllNotesWithUsers(): array
+    private function setNotePrivilege(array $notes): void
     {
-        $allNotes = $this->noteFinderRepository->findAllNotesWithUsers();
-        $this->changeDateFormat($allNotes);
-
-        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
-        return $allNotes;
+        foreach ($notes as $userNote) {
+            $userNote->privilege = $this->noteAuthorizationGetter->getNotePrivilege($userNote->userId);
+        }
     }
 
     /**
@@ -52,7 +54,7 @@ class NoteFinder
     {
         $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
         $this->changeDateFormat($allNotes);
-        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
+        $this->setNotePrivilege($allNotes);
         return $allNotes;
     }
 
@@ -69,7 +71,7 @@ class NoteFinder
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
-        $this->noteUserRightSetter->setUserRightsOnNotes($allNotes);
+        $this->setNotePrivilege($allNotes);
         return $allNotes;
     }
 

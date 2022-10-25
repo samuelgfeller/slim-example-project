@@ -4,7 +4,7 @@ namespace App\Domain\Note\Data;
 
 
 use App\Common\ArrayReader;
-use App\Domain\User\Data\MutationRights;
+use App\Domain\Authorization\Privilege;
 use App\Domain\User\Data\UserData;
 
 class NoteData
@@ -20,7 +20,7 @@ class NoteData
     public ?UserData $user;
 
     // User mutation rights from authenticated user
-    public ?MutationRights $mutationRights; // json_encode automatically takes $enum->value
+    public ?Privilege $privilege; // json_encode automatically takes $enum->value
 
     /**
      * Note constructor.

@@ -23,19 +23,30 @@ class NoteAuthorizationChecker
     /**
      * Check if authenticated user is allowed to read note
      *
-     * @param int $ownerId
+     * @param int $isMain
+     * @param int|null $noteOwnerId optional owner id when main note
+     * @param int|null $clientOwnerId client owner might become relevant
      * @return bool
      */
-    public function isGrantedToRead(int $ownerId): bool
-    {
+    public function isGrantedToRead(
+        int $isMain = 0,
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
-            // newcomers may see all notes
+            // newcomers may see all notes and main notes todo except if sensitive
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) {
                 return true;
             }
+        }
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to read note but isn\'t allowed'
+            );
         }
         return false;
     }
@@ -44,9 +55,10 @@ class NoteAuthorizationChecker
      * Check if authenticated user is allowed to create note
      *
      * @param int $isMain
+     * @param int|null $clientOwnerId client owner might become relevant
      * @return bool
      */
-    public function isGrantedToCreate(int $isMain): bool
+    public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -59,9 +71,11 @@ class NoteAuthorizationChecker
                 return true;
             }
         }
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to create note but isn\'t allowed'
-        );
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to create note but isn\'t allowed'
+            );
+        }
         return false;
     }
 
@@ -70,11 +84,16 @@ class NoteAuthorizationChecker
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
-     * @param int|null $clientOwnerId for main note the client owner could be relevant in the future
+     * @param int|null $clientOwnerId client owner might become relevant
      * @return bool
      */
-    public function isGrantedToUpdate(int $isMain, ?int $noteOwnerId = null, ?int $clientOwnerId = null): bool
-    {
+    public
+    function isGrantedToUpdate(
+        int $isMain,
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
@@ -91,38 +110,46 @@ class NoteAuthorizationChecker
             }
         }
         // User does not have needed rights to access area or function
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update note but isn\'t allowed'
-        );
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to update note but isn\'t allowed'
+            );
+        }
         return false;
     }
 
 
     /**
      * Check if authenticated user is allowed to delete note
+     * Main note is not deletable so no need for this argument
      *
-     * @param int $ownerId
+     * @param int|null $noteOwnerId
+     * @param int|null $clientOwnerId
      * @return bool
      */
-    public function isGrantedToDelete(int $ownerId): bool
-    {
+    public
+    function isGrantedToDelete(
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
-            if ($loggedInUserId === $ownerId ||
+            if ($loggedInUserId === $noteOwnerId ||
                 $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 return true;
             }
         }
         // User does not have needed rights to access area or function
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to delete note but isn\'t allowed'
-        );
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to delete note but isn\'t allowed'
+            );
+        }
         return false;
     }
-
-
 }

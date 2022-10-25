@@ -64,10 +64,10 @@ class ClientAuthorizationChecker
      * depending on what the user wants to update
      *
      * @param int $ownerId user_id linked to client
-     * @param bool $logIfForbidden expected false when function is called for user right setting
+     * @param bool $log log if forbidden expected false when function is called for privilege setting
      * @return bool
      */
-    public function isGrantedToUpdate(array $clientDataToUpdate, int $ownerId, bool $logIfForbidden = true): bool
+    public function isGrantedToUpdate(array $clientDataToUpdate, int $ownerId, bool $log = true): bool
     {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -123,10 +123,12 @@ class ClientAuthorizationChecker
         foreach ($clientDataToUpdate as $key => $value) {
             // If at least one array key doesn't exist in $grantedUpdateKeys it means that user is not permitted
             if (!in_array($key, $grantedUpdateKeys, true)) {
-                $this->logger->notice(
-                    'User ' . $loggedInUserId . ' tried to update client but isn\'t allowed to change' .
-                    $key . ' to "' . $value . '".'
-                );
+                if ($log === true) {
+                    $this->logger->notice(
+                        'User ' . $loggedInUserId . ' tried to update client but isn\'t allowed to change' .
+                        $key . ' to "' . $value . '".'
+                    );
+                }
                 return false;
             }
         }
@@ -137,9 +139,10 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to delete client
      *
      * @param int $ownerId
+     * @param bool $log log if forbidden expected false when function is called for privilege setting
      * @return bool
      */
-    public function isGrantedToDelete(int $ownerId): bool
+    public function isGrantedToDelete(int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -151,9 +154,11 @@ class ClientAuthorizationChecker
                 return true;
             }
         }
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to delete client but isn\'t allowed.'
-        );
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to delete client but isn\'t allowed.'
+            );
+        }
         return false;
     }
 
@@ -161,9 +166,10 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to read client
      *
      * @param int $ownerId
+     * @param bool $log log if forbidden expected false when function is called for privilege setting
      * @return bool
      */
-    public function isGrantedToRead(int $ownerId): bool
+    public function isGrantedToRead(int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
@@ -175,9 +181,11 @@ class ClientAuthorizationChecker
                 return true;
             }
         }
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to read client but isn\'t allowed.'
-        );
+        if ($log === true) {
+            $this->logger->notice(
+                'User ' . $loggedInUserId . ' tried to read client but isn\'t allowed.'
+            );
+        }
         return false;
     }
 
