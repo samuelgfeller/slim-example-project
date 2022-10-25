@@ -51,7 +51,7 @@ class NoteCreateActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
      * @return void
      */
     public function testNoteSubmitCreateAction(
@@ -59,10 +59,12 @@ class NoteCreateActionTest extends TestCase
         array $authenticatedUserData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $userLinkedToClientData);
-        // If authenticated user and user that should be linked to client is different, insert authenticated user
-        if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = $this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that should be linked to client is different, insert both
+        if ($userLinkedToClientData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userLinkedToClientData['id'] = $this->insertFixture('user', $userLinkedToClientData);
+        } else {
+            $userLinkedToClientData['id'] = $authenticatedUserData['id'];
         }
 
         // Insert one client linked to this user
@@ -137,7 +139,7 @@ class NoteCreateActionTest extends TestCase
      *   - 1 client
      *   - 1 user linked to client
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseDataForCreation()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForCreation()
      * @return void
      */
     public function testNoteSubmitCreateAction_invalid(
@@ -148,12 +150,12 @@ class NoteCreateActionTest extends TestCase
         // Add the minimal needed data
         $clientData = (new ClientFixture())->records[0];
         // Insert user linked to client and user that is logged in
-        $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->getFixtureRecordsWithAttributes(['id' => $clientData['user_id']], UserFixture::class);
+        $userData['id'] = $this->insertFixture('user', $userData);
         // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
         // Insert client
-        $this->insertFixture('client', $clientData);
+        $clientData['id'] = $this->insertFixture('client', $clientData);
         // Insert main note linked to client and user if data provider $existingMainNote is true
         if ($existingMainNote === true) {
             // Creating main note row with correct values
@@ -184,7 +186,7 @@ class NoteCreateActionTest extends TestCase
     /**
      * Test client read note modification with malformed request body
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideNoteCreationMalformedRequestBody()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteCreationMalformedRequestBody()
      * @return void
      */
     public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void

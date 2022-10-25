@@ -1,17 +1,17 @@
 <?php
 
 
-namespace App\Test\Integration\Client\ClientRead;
+namespace App\Test\Integration\Client;
 
 
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use App\Test\Traits\AppTestTrait;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;

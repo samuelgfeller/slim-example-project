@@ -54,10 +54,12 @@ class ClientUpdateActionTest extends TestCase
         array $requestData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
         // If authenticated user and user that should be linked to client is different, insert both
-        if ($userDataLinkedToClient['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $userDataLinkedToClient);
+        if ($userDataLinkedToClient['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userDataLinkedToClient['id'] = (int)$this->insertFixture('user', $userDataLinkedToClient);
+        } else {
+            $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
         }
 
         // Get one client data from fixture
@@ -65,7 +67,7 @@ class ClientUpdateActionTest extends TestCase
         // Change the linked user to be the given one
         $clientRow['user_id'] = $userDataLinkedToClient['id'];
         // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         // Insert client that will be used for this test
         $this->insertFixture('client', $clientRow);
 
@@ -73,12 +75,12 @@ class ClientUpdateActionTest extends TestCase
         if (isset($requestData['user_id'])) {
             // Add 1 to user_id linked to client
             $requestData['user_id'] = $clientRow['user_id'] + 1;
-            $this->insertFixtureWhere(['id' => $requestData['user_id']], UserFixture::class);
+            $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], UserFixture::class);
         }
         if (isset($requestData['client_status_id'])) {
             // Add 1 to client status id
             $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
-            $this->insertFixtureWhere(['id' => $requestData['client_status_id']], ClientStatusFixture::class);
+            $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], ClientStatusFixture::class);
         }
 
         $request = $this->createJsonRequest(

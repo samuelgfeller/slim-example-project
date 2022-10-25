@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Test\Provider\Client;
+namespace App\Test\Provider\Note;
 
 
 use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 
-class ClientReadCaseProvider
+class NoteCaseProvider
 {
     use FixtureTrait;
 
@@ -29,12 +29,12 @@ class ClientReadCaseProvider
      *                  }
      *           }
      */
-    public function provideUsersAndExpectedResultForNoteMutation(): array
+    public function provideUsersAndExpectedResultForNoteCrud(): array
     {
         // Get users with the different roles
-        $managingAdvisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
-        $advisorData = $this->findRecordsFromFixtureWhere(['user_role_id' => 3], UserFixture::class)[0];
-        $newcomerData = $this->findRecordsFromFixtureWhere(['user_role_id' => 4], UserFixture::class)[0];
+        $managingAdvisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
+        $advisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 3], UserFixture::class);
+        $newcomerData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 4], UserFixture::class);
 
         $authorizedResult = [
             // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
@@ -69,6 +69,7 @@ class ClientReadCaseProvider
                 'expected_result' => [
                     // Allowed to create note on client where user is not owner
                     'creation' => $authorizedCreateResult,
+                    'read' => $authorizedCreateResult,
                     'modification' => [
                         'main_note' => $unauthorizedUpdateResult,
                         'normal_note' => $unauthorizedResult,

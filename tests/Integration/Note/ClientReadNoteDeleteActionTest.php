@@ -37,7 +37,7 @@ class ClientReadNoteDeleteActionTest extends TestCase
      * Test normal and main note deletion on client-read page
      * while being authenticated.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
      * @return void
      */
     public function testClientReadNoteDeletion(
@@ -45,20 +45,22 @@ class ClientReadNoteDeleteActionTest extends TestCase
         array $authenticatedUserData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $userLinkedToNoteData);
-        // If authenticated user and user that is linked to client is different, insert authenticated user
-        if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that is linked to client is different, insert both
+        if ($userLinkedToNoteData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userLinkedToNoteData['id'] = (int)$this->insertFixture('user', $userLinkedToNoteData);
+        }else{
+            $userLinkedToNoteData['id'] = $authenticatedUserData['id'];
         }
         // Insert one client linked to this user
-        $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
-            ClientFixture::class)[0];
+        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToNoteData['id']],
+            ClientFixture::class);
         // In array first to assert user data later
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $this->insertFixture('client', $clientRow);
+        $clientRow['id'] = (int)$this->insertFixture('client', $clientRow);
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteData = $this->findRecordsFromFixtureWhere(
+        $mainNoteData = $this->getFixtureRecordsWithAttributes(
             [
                 'is_main' => 1,
                 'user_id' => $userLinkedToNoteData['id'],
@@ -66,10 +68,10 @@ class ClientReadNoteDeleteActionTest extends TestCase
                 'deleted_at' => null
             ],
             NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $mainNoteData);
+        );
+        $mainNoteData['id'] = $this->insertFixture('note', $mainNoteData);
         // Insert normal note attached to client and given "owner" user
-        $normalNoteData = $this->findRecordsFromFixtureWhere(
+        $normalNoteData = $this->getFixtureRecordsWithAttributes(
             [
                 'is_main' => 0,
                 'user_id' => $userLinkedToNoteData['id'],
@@ -77,8 +79,8 @@ class ClientReadNoteDeleteActionTest extends TestCase
                 'deleted_at' => null
             ],
             NoteFixture::class
-        )[0];
-        $this->insertFixture('note', $normalNoteData);
+        );
+        $normalNoteData['id'] = $this->insertFixture('note', $normalNoteData);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);

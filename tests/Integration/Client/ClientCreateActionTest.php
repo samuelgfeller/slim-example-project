@@ -46,10 +46,12 @@ class ClientCreateActionTest extends TestCase
         array $authenticatedUserData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
         // If authenticated user and user that should be linked to client is different, insert both
-        if ($userDataLinkedToClient['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $userDataLinkedToClient);
+        if ($userDataLinkedToClient['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userDataLinkedToClient['id'] = (int)$this->insertFixture('user', $userDataLinkedToClient);
+        } else {
+            $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
         }
 
         // Client status is not authorization relevant for client creation
@@ -109,8 +111,8 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateAction_invalid($requestBody, $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userRow = $this->findRecordsFromFixtureWhere(['user_role_id' => 2], UserFixture::class)[0];
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
+        $userRow['id'] = $this->insertFixture('user', $userRow);
         $clientStatusRow = (new ClientStatusFixture())->records[0];
         $this->insertFixture('client_status', $clientStatusRow);
 

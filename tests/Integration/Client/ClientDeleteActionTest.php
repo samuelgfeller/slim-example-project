@@ -44,10 +44,12 @@ class ClientDeleteActionTest extends TestCase
         array $authenticatedUserData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
         // If authenticated user and user that should be linked to client is different, insert both
-        if ($userDataLinkedToClient['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $userDataLinkedToClient);
+        if ($userDataLinkedToClient['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userDataLinkedToClient['id'] = (int)$this->insertFixture('user', $userDataLinkedToClient);
+        } else {
+            $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
         }
 
         // Get one client data from fixture

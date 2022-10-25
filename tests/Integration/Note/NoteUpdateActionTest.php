@@ -40,18 +40,20 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test note modification on client-read page while being authenticated
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideUsersAndExpectedResultForNoteMutation()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
      * @return void
      */
-    public function testNoteModification(
+    public function testNoteUpdateAction(
         array $userLinkedToNoteData,
         array $authenticatedUserData,
         array $expectedResult
     ): void {
-        $this->insertFixture('user', $userLinkedToNoteData);
-        // If authenticated user and user that should be linked to client is different, insert authenticated user
-        if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
-            $this->insertFixture('user', $authenticatedUserData);
+        $authenticatedUserData['id'] = $this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that should be linked to client is different, insert both
+        if ($userLinkedToNoteData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $userLinkedToNoteData['id'] = $this->insertFixture('user', $userLinkedToNoteData);
+        } else {
+            $userLinkedToNoteData['id'] = $authenticatedUserData['id'];
         }
 
         // Insert one client linked to this user
@@ -59,7 +61,7 @@ class NoteUpdateActionTest extends TestCase
             ClientFixture::class);
         // In array first to assert user data later
         $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $this->insertFixture('client', $clientRow);
+        $clientRow['id'] = $this->insertFixture('client', $clientRow);
 
         // Insert main note attached to client and given "owner" user
         $mainNoteData = $this->getFixtureRecordsWithAttributes(
@@ -132,7 +134,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadNoteModification_unauthenticated(): void
+    public function testNoteUpdateAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
@@ -158,10 +160,10 @@ class NoteUpdateActionTest extends TestCase
      *   - 1 user linked to client
      *   - 1 note that is linked to the client and the user
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseDataForModification()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForModification()
      * @return void
      */
-    public function testClientReadNoteModification_invalid(string $invalidMessage, array $expectedResponseData): void
+    public function testNoteUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Add the minimal needed data
         $clientData = (new ClientFixture())->records[0];
@@ -196,10 +198,10 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test client read note modification with malformed request body
      *
-     * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideMalformedNoteRequestBody()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideMalformedNoteRequestBody()
      * @return void
      */
-    public function testClientReadNoteModification_malformedRequest(array $malformedRequestBody): void
+    public function testNoteUpdateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = (new UserFixture())->records[0];
