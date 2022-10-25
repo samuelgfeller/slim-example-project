@@ -17,7 +17,6 @@ class NoteWithUserData
     public ?string $noteUpdatedAt;
     public ?int $userId;
     public ?string $userFullName;
-    public ?int $userRoleId;
 
     // Not note value from db, populated in NoteUserRightSetter
     public ?Privilege $privilege; // json_encode automatically takes $enum->value
@@ -35,6 +34,5 @@ class NoteWithUserData
         $this->noteCreatedAt = $arrayReader->findAsString('note_created_at');
         $this->noteUpdatedAt = $arrayReader->findAsString('note_updated_at');
         $this->userFullName = $arrayReader->findAsString('user_full_name');
-        $this->userRoleId = $arrayReader->findAsString('user_role_id');
     }
 }

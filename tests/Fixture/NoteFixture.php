@@ -13,13 +13,11 @@ class NoteFixture
 
     // Database records in 2d array
     public array $records = [
-        // Client id 1
-        // Note id 1: is main note and linked to user 1 and client 1
         [
             'id' => 1,
-            'user_id' => 10, // Needed main note to be linked to user 10 in testNotesSubmitUpdateAction
+            'user_id' => 10,
             'client_id' => 1,
-            'message' => 'This is a test main note.',
+            'message' => 'This is the first fixture note.',
             'is_main' => 1,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -30,7 +28,7 @@ class NoteFixture
             'id' => 2,
             'user_id' => 10,
             'client_id' => 1,
-            'message' => 'This is a normal note.',
+            'message' => 'This is the second fixture note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -41,7 +39,7 @@ class NoteFixture
             'id' => 3,
             'user_id' => 20,
             'client_id' => 1,
-            'message' => 'This is a normal note.',
+            'message' => 'This is the third fixture note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -52,7 +50,7 @@ class NoteFixture
             'id' => 4,
             'user_id' => 20,
             'client_id' => 1,
-            'message' => 'This is a second normal note.',
+            'message' => 'This is the fourth fixture note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
@@ -64,7 +62,7 @@ class NoteFixture
             'id' => 5,
             'user_id' => 1,
             'client_id' => 1,
-            'message' => 'This is a deleted note.',
+            'message' => 'This is the sixth fixture note.',
             'is_main' => 0,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',

@@ -55,31 +55,46 @@ trait FixtureTrait
     }
 
     /**
-     * Inserts fixtures with given attributes
+     * Inserts fixtures with given attributes and returns rows with id
      *
      * @param array<string, mixed> $attributes array of db column name and the expected value.
      * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
      * @param class-string $fixtureClass
      * @param int $amount
-     * @return array|int|false last insert id when amount = 1 or array of last insert ids when more than 1 inserted
+     * @return array row when $amount is 1 or array of rows when more than 1 inserted
      */
     protected function insertFixturesWithAttributes(
         array $attributes,
         string $fixtureClass,
         int $amount = 1
-    ): array|int|false {
+    ): array {
         $records = $this->getFixtureRecordsWithAttributes($attributes, $fixtureClass, $amount);
         // Check if $records is a collection of records or only one
         if (!(isset($records[0]) && is_array($records[0]))) {
-            // If only one record, insert it and return last insert id
-            return (int)$this->insertFixture((new $fixtureClass())->table, $records);
+            $row = $records;
+            // If only one record, insert it and return row
+            $row['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+            return $row;
         }
         // Loop through records and insert them
-        $lastInsertIds = [];
-        foreach ($records as $row) {
-            $lastInsertIds[] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+        foreach ($records as $key => $row) {
+            // Insert records and add id to collection
+            $records[$key]['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
         }
-        return $lastInsertIds;
+        return $records;
+    }
+
+    /**
+     * Insert multiple given fixture rows
+     *
+     * @return array rows with id
+     */
+    protected function insertFixtureRows(string $table, array $rows): array
+    {
+        foreach ($rows as $key => $row) {
+            $rows[$key]['id'] = (int)$this->insertFixture($table, $row);
+        }
+        return $rows;
     }
 
     /**

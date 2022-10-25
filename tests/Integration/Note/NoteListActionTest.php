@@ -40,78 +40,68 @@ class NoteListActionTest extends TestCase
     /**
      * On client read page display, linked notes are loaded with ajax.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
+     * Different privileges of notes depending on authenticated user and
+     * note owner are tested with the provider.
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersNotesAndExpectedResultForList()
+     *
+     * @param array $noteOwnerUserData
+     * @param array $authenticatedUserData
+     * @param array $expectedResult
      * @return void
      */
     public function testNoteListAction(
-        array $userLinkedToClientData,
+        array $noteOwnerUserData,
         array $authenticatedUserData,
         array $expectedResult
-    ): void
-    {
-        // Insert linked users to client and notes
-        $authenticatedUserData['id'] = $this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that should be linked to client is different, insert both
-        if ($userLinkedToClientData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userLinkedToClientData['id'] = $this->insertFixture('user', $userLinkedToClientData);
+    ): void {
+        // Insert authenticated user
+        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
+        // If authenticated user and user that should be linked to note is different, insert both
+        if ($noteOwnerUserData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
+            $noteOwnerUserData['id'] = (int)$this->insertFixture('user', $noteOwnerUserData);
         } else {
-            $userLinkedToClientData['id'] = $authenticatedUserData['id'];
+            $noteOwnerUserData['id'] = $authenticatedUserData['id'];
         }
 
+        // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
+        // because note read rights change (e.g. that newcomers may not see the notes from everyone), the
+        // client owner id has to be added to the provider
+        $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+        // Get client row
+        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $clientOwnerId], ClientFixture::class);
         // Insert linked status (only first one to make dynamic expected array)
-        $clientStatusRow = (new ClientStatusFixture())->records[0];
-        $this->insertFixture('client_status', $clientStatusRow);
-        // Insert client (only first one to make dynamic expected array)
-        $clientRow = (new ClientFixture())->records[0];
-        $clientRow['id'] = $this->insertFixture('client', $clientRow);
-        // Insert only linked notes
-        $this->insertFixturesWithAttributes(['client_id' => $clientRow['id']], NoteFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        // Insert client row after client status
+        $clientRow['id'] = (int)$this->insertFixture('client', $clientRow);
 
-        $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
+        // Insert linked note. Only one per test to simplify assertions with different privileges
+        $noteData = $this->insertFixturesWithAttributes(
+            ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $noteOwnerUserData['id'], 'deleted_at' => null],
+            NoteFixture::class
+        );
+
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
-
+        // Make request
+        $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
         $response = $this->app->handle($request);
-        // Assert 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
-        // Removing first note from $noteRows as it is a main note that must not be in this response
-        $noteRows = $this->getFixtureRecordsWithAttributes(
-            ['is_main' => 0, 'client_id' => $clientRow['id'], 'deleted_at' => null],
-            NoteFixture::class, 3
-        );
-        // Get logged-in user row to test user rights
-        // $loggedInUserRow = $this->findRecordsFromFixtureWhere(['id' => $loggedInUserId], UserFixture::class)[0];
+        // Assert status code
+        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
-        $this->container->get(NoteAuthorizationChecker::class);
-
-        // Determine which mutation rights user has
-        $hasMutationRight = static function (string $role, int $ownerId) use ($authenticatedUserData['id']): string {
-            // Basically same as js function userHasMutationRights() in client-read-template-note.html.js
-            return $role === 'admin' || $authenticatedUserData['id'] === $ownerId
-                ? Privilege::ALL->value : Privilege::NONE->value;
-        };
-
-        $expectedResponseArray = [];
-
-        foreach ($noteRows as $noteRow) {
-            // Get linked user record
-            $userRow = $this->findRecordsFromFixtureWhere(['id' => $noteRow['user_id']], UserFixture::class)[0];
-            $expectedResponseArray[] = [
-                // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
-                'noteId' => $noteRow['id'],
-                'noteMessage' => $noteRow['message'],
-                // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
-                'noteCreatedAt' => (new \DateTime($noteRow['created_at']))->format('d. F Y • H:i'),
-                'noteUpdatedAt' => (new \DateTime($noteRow['updated_at']))->format('d. F Y • H:i'),
-                'userId' => $noteRow['user_id'],
-                'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
-                'userRole' => $userRow['role'],
-                // Has to match user rights rules in NoteUserRightSetter.php
-                // Currently don't know the best way to implement this dynamically
-                'mutationRights' => $hasMutationRight($authenticatedUserData['user_role_id'], $noteRow['user_id']),
-            ];
-        }
+        $expectedResponseArray[] = [
+            // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+            'noteId' => $noteData['id'],
+            'noteMessage' => $noteData['message'],
+            // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
+            'noteCreatedAt' => (new \DateTime($noteData['created_at']))->format('d. F Y • H:i'),
+            'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
+            'userId' => $noteData['user_id'],
+            'userFullName' => $noteOwnerUserData['first_name'] . ' ' . $noteOwnerUserData['surname'],
+            // Has to match user rights rules in NoteUserRightSetter.php
+            // Currently don't know the best way to implement this dynamically
+            'privilege' => $expectedResult['privilege']->value,
+        ];
 
         // Assert response data
         $this->assertJsonData($expectedResponseArray, $response);

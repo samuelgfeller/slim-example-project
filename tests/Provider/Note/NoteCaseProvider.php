@@ -4,6 +4,7 @@
 namespace App\Test\Provider\Note;
 
 
+use App\Domain\Authorization\Privilege;
 use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
@@ -11,6 +12,49 @@ use Fig\Http\Message\StatusCodeInterface;
 class NoteCaseProvider
 {
     use FixtureTrait;
+
+    /**
+     * Even though this is for the list test, one note
+     * at a time is tested for clarity and simplicity.
+     *
+     * @return array[]
+     */
+    public function provideUsersNotesAndExpectedResultForList(): array
+    {
+        // Get users with the different roles
+        $managingAdvisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
+        $advisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 3], UserFixture::class);
+        $newcomerData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 4], UserFixture::class);
+
+        return [
+            [// ? newcomer not owner of note
+                'note_owner' => $advisorData,
+                'authenticated_user' => $newcomerData,
+                'expected_result' => [
+                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                    'privilege' => Privilege::CREATE
+                ],
+            ],
+            [// ? newcomer owner of note
+                'note_owner' => $newcomerData,
+                'authenticated_user' => $newcomerData,
+                'expected_result' => [
+                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                    'privilege' => Privilege::DELETE
+                ],
+            ],
+            // Advisor would be the same as newcomer
+            [// ? managing advisor not owner of note
+                'note_owner' => $advisorData,
+                'authenticated_user' => $managingAdvisorData,
+                'expected_result' => [
+                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                    // Full privilege, so it must not be tested further
+                    'privilege' => Privilege::DELETE
+                ],
+            ],
+        ];
+    }
 
     /**
      * Provides logged-in user and user linked to note along the expected result
@@ -69,7 +113,6 @@ class NoteCaseProvider
                 'expected_result' => [
                     // Allowed to create note on client where user is not owner
                     'creation' => $authorizedCreateResult,
-                    'read' => $authorizedCreateResult,
                     'modification' => [
                         'main_note' => $unauthorizedUpdateResult,
                         'normal_note' => $unauthorizedResult,

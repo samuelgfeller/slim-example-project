@@ -168,7 +168,6 @@ class NoteFinderRepository
                 'note_created_at' => 'note.created_at',
                 'user_id' => 'user.id',
                 'user_full_name' => $concatName,
-                'user_role_id' => 'user.user_role_id',
             ]
         )->join([
             'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],
