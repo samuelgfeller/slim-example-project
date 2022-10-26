@@ -56,6 +56,8 @@ trait FixtureTrait
 
     /**
      * Inserts fixtures with given attributes and returns rows with id
+     * This has to advantage to remove the dependency of each fixtures'
+     * records as the relevant values are passed by the given $attributes.
      *
      * @param array<string, mixed> $attributes array of db column name and the expected value.
      * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]

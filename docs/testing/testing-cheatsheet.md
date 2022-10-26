@@ -10,57 +10,39 @@ will come to mind naturally and the list can be extended.
 
 ### What to test
 This is a big question I have no answer to yet. For me the following useful tests come to mind:
-* Page actions.
+* Page actions
   * Authenticated page load
-    * With user role with the "lowest" rights but as owner.  
-    Expected: authenticated user should be able to see the page, so status code 200.
-    * Ideally with every different user role where logged-in user is not the owner.  
+    * With user role with the "lowest" rights but as owner  
+    Expected: authenticated user should be able to see the page, so status code 200
+    * Ideally with every different user role where logged-in user is not the owner   
     Expected result may depend on each role. Often multiple roles have the same "result". If every role can see the
-    same thing I would not write different test cases. 
+    same thing I would not write different test cases
   * Unauthenticated page load
-    Expected: redirect to login page with correct query parameters to redirect back to previous page.
+    Expected: redirect to login page with correct query parameters to redirect back to previous page
 * Ajax resource loading (sub resource loaded via Ajax like notes loaded on the client read page)
   * Authenticated load
     * *Sub resource data load is most often covered by the authenticated page load test so not necessary.*
     * Load sub resource with different roles may be interesting if items returned in response body differ 
-    depending on the role of the logged-in user such as `userMutationRights` for instance.
-      * Load with every different type of user role. Ideally and if well maintained, only the roles where there are changes 
-      can be tested, but I think it would make sense to test each role each time per default.
-    * Test that deleted resource is NOT in response.
+    depending on the role of the logged-in user (asserting `$privilege` for instance)
+      * Load with every different type of user role. Ideally and if well maintained, only the roles where there are 
+        relevant changes to be tested
+    * Test that deleted resource is NOT in response
   * Unauthenticated load  
-    Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page.
+    Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page
 * Ajax resource creation / modification / deletion
   * Authenticated creation / modification / deletion submission
-    * User rights: creation / modification / deletion submit with each different user role as authenticated user would cover all cases.
-      1. As resource owner (main resource when creation) - non admin
-      2. As admin - non resource owner
-      3. As non resource owner - non admin
-      4. As any other user role that has a different expected behaviour and is relevant to test
+    * User rights: creation / modification / deletion submit with each different user role as authenticated user
+      1. Each role as resource owner (main resource owner for creation) - *e.g. role "newcomer" and owner, "advisor" and owner etc.*
+      2. Each role NOT as owner - *e.g. role "newcomer" and not owner, "advisor" and not owner etc.*
+         * Not every role is needed as roles work in a hierarchical way. It doesn't have to be tested further than the lowest 
+         privilege that is allowed to perform action when not owner. *e.g. "admin" can do at least everything "managing_advisor" can do*
+      3. Any other user role that has a different expected behaviour and is relevant to test
     * Validation: as authorized user but invalid form submission (does not apply for deletion)
       1. With every different kind of possible validation error for each field 
       2. 400 malformed body requests where keys are missing or wrongly named  
   * Unauthenticated creation submission
     Expected: Correct status code (401 Unauthorized) and login url in response body with correct query parameters that 
-    include url to the previous page.
-
-## Test traits
-The needed [test traits](https://github.com/selective-php/test-traits) can be added right after the test class opening
-brackets. Here are some of them:
-```php
-class ClientReadActionTest extends TestCase
-{
-    use AppTestTrait; // Custom
-    use HttpTestTrait;
-    use HttpJsonTestTrait;
-    use RouteTestTrait;
-    use DatabaseTestTrait;
-    use FixtureTrait; // Custom
-    // ...
-}
-```
-More on it and the whole testing setup can be found in 
-[testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
-this is intended to be a cheatsheet in a working environment.
+    include url to the previous page
 
 ## Page actions
 Integration testing page actions is quite limited if the server renders the template serverside as the request body
@@ -70,17 +52,27 @@ What we can test however is that the page loads with an expected status code and
 he is redirected to the login page. 
 
 ### Authenticated page action test
-Here is the code. Fixtures are explained below.
+The needed [test traits](https://github.com/selective-php/test-traits) can be added right after the test class opening
+brackets. More on it and the whole testing setup can be found in 
+[testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
+this is intended to be a cheatsheet in a working environment. Fixture use is explained below.
 ```php
-public function testClientReadPageAction_loggedIn(): void
+use AppTestTrait; // Custom
+use HttpTestTrait;
+use RouteTestTrait;
+use DatabaseTestTrait;
+use FixtureTrait; // Custom
+
+public function testClientReadPageAction_authenticated(): void
 {
-    // Add needed database values to correctly display the page 
-    // Insert user linked to client and user that is logged in
-    $this->insertFixture('user', (new UserFixture())->records[0]);
-    // Insert linked status
-    $this->insertFixture('client_status', (new ClientStatusFixture())->records[0]);
-    // Insert client that should be displayed
-    $this->insertFixture('client', (new ClientFixture())->records[0]);
+    // Insert linked and authenticated user
+    $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+    // Insert linked client status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Add needed database values to correctly display the page
+    $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
+        ClientFixture::class);
+        
     $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
     // Simulate logged-in user with logged-in user id
     $this->container->get(SessionInterface::class)->set('user_id', 1);
@@ -93,7 +85,7 @@ public function testClientReadPageAction_loggedIn(): void
 ### Non-authenticated page action test
 This test is also useful to test if the automatic redirect in the `UserAuthenticationMiddleware` is correct. 
 ```php
-public function testClientReadPageAction_notLoggedIn(): void
+public function testClientReadPageAction_unauthenticated(): void
 {
     // Request route to client read page while not being logged in
     $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
@@ -109,7 +101,7 @@ public function testClientReadPageAction_notLoggedIn(): void
 
 ## JSON requests
 Now with JSON requests we can test a lot more things. I like to render the templates minimally on the server and 
-prefer to load linked contents via an AJAX JSON request. This allows for a faster page load and with good content
+prefer to load linked contents via an Ajax JSON request. This allows for a faster page load and with good content
 placeholders it's nice for the users as well.
 
 ### Fixtures utility
@@ -118,22 +110,39 @@ To be able to test more agilely with fixtures, I created the `FixtureTrait.php`:
 ```php
 use FixtureTrait;
 ```
+The main advantage is being in control of the fixtures in the test function. The `$records` values of the `Fixture` 
+are not relevant (it just has to be valid and the first `deleted_at` must be `null`). The needed records 
+are "shaped" in the test function meaning the relevant attributes are all set during the test. This means that we don't
+depend on the `$records` containing right ids or values which would be a nightmare to maintain if 
+change are made to the fixture records. Using one pool for a lot of different functions goes against 
+[single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle). 
 
-To insert only the records that are linked to the main resource we want to test (or matching another specific criteria),
-the function `insertFixtureWhere` can be used like follows:
+
+#### `insertFixturesWithAttributes(array $attributes, string $fixtureClass, int $amount = 1): array`
+Parameters are 
+* `$attributes` where an associative array is expected with as key the column and value the value 
+we want to attribute to this column. 
+* `$fixtureClass` where the class string of a fixture is expected such as `UserFixture::class`.
+* `$amount` the amount of rows you want to generate.
+
+**Returns an associative array of the inserted row including the id.**
+
+To insert only the records that matching specific criteria, the function `insertFixturesWithAttributes` could be used like follows:
 ```php
-// Insert one client and needed dependencies
-$clientRow = (new ClientFixture())->records[0];
-// In array first to assert user data later
-$userRow = $this->findRecordsFromFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
-$this->insertFixture('user', $userRow);
-$this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-$this->insertFixture('client', $clientRow);
-
-// HERE - Insert only linked notes
-$this->insertFixtureWhere(['client_id' => $clientRow['id']], NoteFixture::class);
+$clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+// Insert linked status
+$clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+// Insert client row
+$clientRow = $this->insertFixturesWithAttributes(
+    ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
+    ClientFixture::class
+);
+// Insert linked note
+$noteRow = $this->insertFixturesWithAttributes(
+    ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $clientOwnerId],
+    NoteFixture::class
+);
 ```
-The dependencies for each fixture are in the fixture class php doc block (and the records foreign keys can be checked).
 
 ## Create request
 For a json request and assertions later, the `HttpJsonTestTrait.php` is used.
@@ -156,8 +165,7 @@ $response = $this->app->handle($request);
 self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 ```
 
-## Assert Json response
-
+## Assert JSON response
 The database has to be asserted before the response content if it contains values from the database.
 ### Assert database
 To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
@@ -166,8 +174,10 @@ To be able to use extended select functions, `use DatabaseExtensionTestTrait;` h
 // Find freshly inserted note
 $noteDbRow = $this->findLastInsertedTableRow('note');
 // Assert the row column values
-$this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+$this->assertTableRowEquals(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
 ```
+`$this->assertTableRow` strictly asserts database with given array. If the order of keys does not matter, 
+I'd use `assertTableRowEquals` to prevent false positive test failures.
 ### Assert response body
 ```php
 // Assert response
@@ -181,7 +191,93 @@ $this->assertJsonData([
 ], $response);
 ```
 
+### Test and assert CRUD requests
+Examples of whole CRUD test functions with different user roles: 
+**[Test and assert CRUD requests examples](#test-and-assert-CRUD-requests-examples)**
+
+### Test validation and assert errors
+Form fields generally have specific criteria like a minimum length or specific format that are validated.
+
+Test function, provider and assertions: **[Test validation and assert errors example](#test-validation-and-assert-errors-example)**.
+
+### Test and assert malformed request body
+When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys).
+
+Test function, provider and assertions: **[Test and assert malformed request body example](#test-and-assert-malformed-request-body-example)**.
+
+## Test and assert JSON response when unauthenticated
+When protected Ajax request is sent to the server and user is not logged-in, the client should redirect the user to 
+the login form. The redirect action [cannot be initiated by the server](https://github.com/odan/slim4-tutorial/issues/44), 
+so it has to be done by the client.
+This is the simplified code inside the default Ajax handleFail() method:
+```js
+// Not logged in, redirect to login url
+if (xhr.status === 401) {
+    window.location.href = JSON.parse(xhr.responseText).loginUrl;
+}
+```
+Not only should the client be redirected to the login page, but also redirected back to the where he/she was before having
+to log in again. To make this possible, the server has to respond with the full login url with redirect back query params.   
+This is done by the `AuthenticationMiddleware` with the help of one of two custom HTTP headers 
+`Redirect-to-url-if-unauthorized` or `Redirect-to-route-name-if-unauthorized`.
+
+#### Assert response with `Redirect-to-url-if-unauthorized`
+```js
+// Content-type has to be json
+xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
+```
+```php
+$request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
+    ->withQueryParams(['client_id' => 1]);
+// Create url where client should be redirected to after login    
+$redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+$request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+// Make request
+$response = $this->app->handle($request);
+// Assert response HTTP status code: 401 Unauthorized
+self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+// Build expected login url as UserAuthenticationMiddleware.php does
+$expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+// Assert that response contains correct login url
+$this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+```
+<details>
+  <summary><h4>Assert response with `Redirect-to-route-name-if-unauthorized`</h4></summary>
+
+```php
+$request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
+    ->withQueryParams(['client_id' => 1]);
+// Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
+$redirectAfterLoginRouteName = 'page-route-name';
+$request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
+// Make request
+$response = $this->app->handle($request);
+// Assert response HTTP status code: 401 Unauthorized
+self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+// Build expected login url as UserAuthenticationMiddleware.php does
+$expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]);
+// Assert that response contains correct login url
+$this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+```
+</details>
+
+Asserting unauthenticated response without custom header is basically the same as 
+[non-authenticated page action test](#non-authenticated-page-action-test).
+
+## Test and assert CRUD requests examples
 ### Resource loading
+<details>
+  <summary><h4>List with privilege assertion but without filter</h4></summary>
+Client list test action
+
+</details>
+
+<details>
+<summary><h4>List with filter and privilege assertion</h4></summary>
+Client list test action
+
+</details>
+
 If we want to test the notes attached to a client that are loaded via Ajax after a client-read request, I would firstly
 get all relevant note rows like follows:
 ```php
@@ -236,7 +332,7 @@ foreach ($noteRows as $noteRow) {
 }
 ```
 
-### Test resource manipulation (create, update) with different user roles
+### Assert resource manipulation (create, update) with different user roles
 To test the behaviour of all relevant different user roles I use a data provider that returns the user infos for 
 the logged-in user, resource user and expected result so that the same function can be used for all roles.
 <details>
@@ -428,69 +524,10 @@ public function testClientReadNoteCreation(array $userLinkedToClientData, array 
 }
 ```
 
-
-### Assert JSON response when unauthenticated
-When protected AJAX request is sent to the server and user is not logged-in, the client should redirect the user to 
-the login form. The redirect action [cannot be initiated by the server](https://github.com/odan/slim4-tutorial/issues/44), 
-so it has to be done by the client.
-This is the simplified code inside the default Ajax handleFail() method:
-```js
-// Not logged in, redirect to login url
-if (xhr.status === 401) {
-    window.location.href = JSON.parse(xhr.responseText).loginUrl;
-}
-```
-Not only should the client be redirected to the login page, but also redirected back to the where he/she was before having
-to log in again. To make this possible, the server has to respond with the full login url with redirect back query params.   
-This is done by the `AuthenticationMiddleware` with the help of one of two custom HTTP headers 
-`Redirect-to-url-if-unauthorized` or `Redirect-to-route-name-if-unauthorized`.
-
-#### Assert response with `Redirect-to-url-if-unauthorized`
-```js
-// Content-type has to be json
-xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
-```
-```php
-$request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
-    ->withQueryParams(['client_id' => 1]);
-// Create url where client should be redirected to after login    
-$redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
-$request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
-// Make request
-$response = $this->app->handle($request);
-// Assert response HTTP status code: 401 Unauthorized
-self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
-// Build expected login url as UserAuthenticationMiddleware.php does
-$expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
-// Assert that response contains correct login url
-$this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
-```
-<details>
-  <summary>Assert response with `Redirect-to-route-name-if-unauthorized`</summary>
-
-```php
-$request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
-    ->withQueryParams(['client_id' => 1]);
-// Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-$redirectAfterLoginRouteName = 'page-route-name';
-$request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
-// Make request
-$response = $this->app->handle($request);
-// Assert response HTTP status code: 401 Unauthorized
-self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
-// Build expected login url as UserAuthenticationMiddleware.php does
-$expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]);
-// Assert that response contains correct login url
-$this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
-```
-</details>
-
-#### Assert response without custom header
-This is basically the same as [non-authenticated page action test](#non-authenticated-page-action-test).
-
-### Test validation and assert errors 
-Form fields generally have specific criteria that are validated.
-#### Generate Validation cases with a case provider
+## Test validation and assert errors example
+Form fields generally have specific criteria like a minimum length or specific format that are validated.
+This can and should be tested.
+### Generate Validation cases with a case provider
 To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
 `tests/Provider/Client/ClientReadCaseProvider.php`
 ```php
@@ -545,7 +582,7 @@ iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
     ];
 }
 ```
-#### Test validation on resource modification
+### Test validation on resource modification
 This is the full test where a note is edited with invalid inputs given by the data provider above:
 `tests/Integration/Client/ClientReadActionTest.php`
 ```php
@@ -588,9 +625,10 @@ public function testClientReadNoteModification_invalid(string $invalidMessage, a
 }
 ```
 
-#### Test malformed request body
-When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys). 
-Here as well in order to not having to write multiple tests, I'm using a data provider:
+## Test and assert malformed request body example
+When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys).
+
+In order to not having to write multiple tests, I'm using a data provider:
 
 `tests/Provider/Client/ClientReadCaseProvider.php`
 ```php
