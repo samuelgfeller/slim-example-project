@@ -62,14 +62,13 @@ class ClientUpdateActionTest extends TestCase
             $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
         }
 
-        // Get one client data from fixture
-        $clientRow = (new ClientFixture())->records[0];
-        // Change the linked user to be the given one
-        $clientRow['user_id'] = $userDataLinkedToClient['id'];
-        // Insert linked status
-        $this->insertFixturesWithAttributes(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        // Insert client status
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $this->insertFixture('client', $clientRow);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['client_status_id' => $clientStatusId, 'user_id' => $userDataLinkedToClient['id']],
+            ClientFixture::class
+        );
 
         // Insert other user and client status that are used for the modification request if needed
         if (isset($requestData['user_id'])) {
@@ -117,14 +116,11 @@ class ClientUpdateActionTest extends TestCase
      */
     public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
     {
-        // Add one client
-        $clientRow = (new ClientFixture())->records[0];
-        // Insert user linked to client and user that is logged in
-        $this->insertFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
-        // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $this->insertFixture('client', $clientRow);
+        $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
+            ClientFixture::class);
 
         $request = $this->createJsonRequest(
             'PUT',
@@ -179,14 +175,11 @@ class ClientUpdateActionTest extends TestCase
      */
     public function testClientSubmitUpdateAction_unchangedContent(): void
     {
-        // Add one client
-        $clientRow = (new ClientFixture())->records[0];
-        // Insert user linked to client and user that is logged in
-        $this->insertFixtureWhere(['id' => $clientRow['user_id']], UserFixture::class);
-        // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $this->insertFixture('client', $clientRow);
+        $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
+            ClientFixture::class);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
@@ -217,8 +210,7 @@ class ClientUpdateActionTest extends TestCase
     public function testClientSubmitUpdateAction_malformedRequest(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
-        $userData = (new UserFixture())->records[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);

@@ -22,7 +22,7 @@ use Slim\Exception\HttpMethodNotAllowedException;
  *  - Authenticated with different user roles
  *  - Unauthenticated
  */
-class ClientReadNoteDeleteActionTest extends TestCase
+class NoteDeleteActionTest extends TestCase
 {
 
     use AppTestTrait;
@@ -60,7 +60,7 @@ class ClientReadNoteDeleteActionTest extends TestCase
         $clientRow['id'] = (int)$this->insertFixture('client', $clientRow);
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteData = $this->getFixtureRecordsWithAttributes(
+        $mainNoteData = $this->insertFixturesWithAttributes(
             [
                 'is_main' => 1,
                 'user_id' => $userLinkedToNoteData['id'],
@@ -69,9 +69,9 @@ class ClientReadNoteDeleteActionTest extends TestCase
             ],
             NoteFixture::class
         );
-        $mainNoteData['id'] = $this->insertFixture('note', $mainNoteData);
+
         // Insert normal note attached to client and given "owner" user
-        $normalNoteData = $this->getFixtureRecordsWithAttributes(
+        $normalNoteData = $this->insertFixturesWithAttributes(
             [
                 'is_main' => 0,
                 'user_id' => $userLinkedToNoteData['id'],
@@ -80,7 +80,6 @@ class ClientReadNoteDeleteActionTest extends TestCase
             ],
             NoteFixture::class
         );
-        $normalNoteData['id'] = $this->insertFixture('note', $normalNoteData);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);

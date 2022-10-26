@@ -21,8 +21,8 @@ class ClientListFilterSetter
     public function findClientListFilters(): array
     {
         $allClientFilters = $this->clientListFilterFinderRepository->findAllClientListFilters();
-        $this->session->set('client_list_filter', [1, 2, 3]);
-        $returnArray = [];
+        // $this->session->set('client_list_filter', [1, 2, 3]);
+        $returnArray['active'] = [];
         // Check which filters are active in session
         if (($activeFilters = $this->session->get('client_list_filter')) !== null) {
             foreach ($activeFilters as $activeFilterId) {

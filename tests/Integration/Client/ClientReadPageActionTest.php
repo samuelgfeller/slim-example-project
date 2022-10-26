@@ -56,18 +56,17 @@ class ClientReadPageActionTest extends TestCase
      */
     public function testClientReadPageAction_authenticated(): void
     {
-        // Add needed database values to correctly display the page
-        $clientData = (new ClientFixture())->records[0];
-        // Insert user linked to client and user that is logged in
-        $this->insertFixtureWhere(['id' => $clientData['user_id']], UserFixture::class);
+        // Insert linked user
+        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
         // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
-        // Insert client that should be displayed
-        $this->insertFixture('client', $clientData);
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Add needed database values to correctly display the page
+        $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
+            ClientFixture::class);
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientData['user_id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
 
         $response = $this->app->handle($request);
         // Assert 200 OK

@@ -14,7 +14,7 @@ class UserFixture
 
     // Database records in 2d array
     public array $records = [
-        // User id 1: role admin
+        // First user should not be deleted
         [
             'id' => 1,
             'first_name' => 'Admin',

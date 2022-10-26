@@ -166,18 +166,18 @@ class NoteUpdateActionTest extends TestCase
     public function testNoteUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Add the minimal needed data
-        $clientData = (new ClientFixture())->records[0];
+        $clientData = $this->getFixtureRecordsWithAttributes(['deleted_at' => null], ClientFixture::class);
         // Insert user linked to client and user that is logged in
-        $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->insertFixturesWithAttributes(['id' => $clientData['user_id']], UserFixture::class);
         // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
         // Insert client
-        $this->insertFixture('client', $clientData);
+        $clientData['id'] = $this->insertFixture('client', $clientData);
         // Insert note linked to client and user
-        $noteData = $this->findRecordsFromFixtureWhere(['client_id' => $clientData['id'], 'user_id' => $userData['id']],
-            NoteFixture::class)[0];
-        $this->insertFixture('note', $noteData);
+        $noteData = $this->insertFixturesWithAttributes(
+            ['client_id' => $clientData['id'], 'user_id' => $userData['id']],
+            NoteFixture::class
+        );
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
@@ -204,8 +204,7 @@ class NoteUpdateActionTest extends TestCase
     public function testNoteUpdateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
-        $userData = (new UserFixture())->records[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);

@@ -71,7 +71,7 @@ class NoteCreateActionTest extends TestCase
         $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToClientData['id']],
             ClientFixture::class);
         // Insert needed client status fixture
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
         $clientRow['id'] = $this->insertFixture('client', $clientRow);
 
         // Create request
@@ -192,8 +192,7 @@ class NoteCreateActionTest extends TestCase
     public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
-        $userData = (new UserFixture())->records[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);

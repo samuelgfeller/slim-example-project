@@ -52,14 +52,13 @@ class ClientDeleteActionTest extends TestCase
             $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
         }
 
-        // Get one client data from fixture
-        $clientRow = (new ClientFixture())->records[0];
-        // Change the linked user to be the given one
-        $clientRow['user_id'] = $userDataLinkedToClient['id'];
-        // Insert linked status
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        // Insert client that will be used for this test
-        $this->insertFixture('client', $clientRow);
+        // Insert client status
+        $clientStatusData = $this->insertFixturesWithAttributes([], ClientStatusFixture::class);
+        // Insert client linked to given user
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['client_status_id' => $clientStatusData['id'], 'user_id' => $userDataLinkedToClient['id']],
+            ClientFixture::class
+        );
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);

@@ -13,6 +13,7 @@ class ClientStatusFixture
 
     // Database records in 2d array
     public array $records = [
+        // First record must have deleted_at => null
         [
             'id' => 1,
             'name' => 'Action pending',

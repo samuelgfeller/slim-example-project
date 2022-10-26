@@ -13,7 +13,7 @@ create table `user`
     surname       varchar(100)                                                                     not null,
     email         varchar(254)                                                                     not null,
     password_hash varchar(300)                                                                     not null,
-    user_role_id  int unsigned                                                  default 0                   not null,
+    user_role_id  int unsigned                                         default 0                   not null,
     `status`      enum ('active', 'locked', 'unverified', 'suspended') default 'unverified'        null,
     updated_at    datetime                                             default current_timestamp() null on update current_timestamp(),
     created_at    datetime                                             default current_timestamp() null,
@@ -113,3 +113,13 @@ CREATE TABLE `note`
     COLLATE = 'utf8mb4_unicode_ci'
     ENGINE = InnoDB
 ;
+
+
+create table client_list_filter
+(
+    id        int auto_increment
+        primary key,
+    name      varchar(50)  not null,
+    get_param varchar(500) null comment 'HTTP GET parameter'
+);
+

@@ -50,9 +50,8 @@ class ClientListActionTest extends TestCase
      */
     public function testClientListPageAction_authenticated(): void
     {
-        // Insert logged-in user
-        $userRow = (new UserFixture())->records[0];
-        $this->insertFixture('user', $userRow);
+        // Insert logged-in user with lowest privilege
+        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 4], UserFixture::class);
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
         // Simulate logged-in user with logged-in user id

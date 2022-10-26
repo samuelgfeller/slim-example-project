@@ -55,8 +55,7 @@ class ClientCreateActionTest extends TestCase
         }
 
         // Client status is not authorization relevant for client creation
-        $clientStatusRow = (new ClientStatusFixture())->records[0];
-        $this->insertFixture('client_status', $clientStatusRow);
+        $clientStatusRow = $this->insertFixturesWithAttributes([], ClientStatusFixture::class);
 
         $clientCreationValues = [
             'first_name' => 'New',
@@ -111,10 +110,9 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateAction_invalid($requestBody, $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userRow = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
-        $userRow['id'] = $this->insertFixture('user', $userRow);
-        $clientStatusRow = (new ClientStatusFixture())->records[0];
-        $this->insertFixture('client_status', $clientStatusRow);
+        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class);
+
+        $clientStatusRow = $this->insertFixturesWithAttributes([], ClientStatusFixture::class);
 
         // Simulate session
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
@@ -168,8 +166,7 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateAction_malformedRequest($requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
-        $userData = (new UserFixture())->records[0];
-        $this->insertFixture('user', $userData);
+        $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
