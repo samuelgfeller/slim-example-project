@@ -22,22 +22,22 @@ class NoteCaseProvider
     public function provideUsersNotesAndExpectedResultForList(): array
     {
         // Get users with the different roles
-        $managingAdvisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
-        $advisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 3], UserFixture::class);
-        $newcomerData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 4], UserFixture::class);
+        $managingAdvisorRow = ['user_role_id' => 2];
+        $advisorRow = ['user_role_id' => 3];
+        $newcomerRow = ['user_role_id' => 4];
 
         return [
             [// ? newcomer not owner of note
-                'note_owner' => $advisorData,
-                'authenticated_user' => $newcomerData,
+                'note_owner' => $advisorRow,
+                'authenticated_user' => $newcomerRow,
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'privilege' => Privilege::CREATE
                 ],
             ],
             [// ? newcomer owner of note
-                'note_owner' => $newcomerData,
-                'authenticated_user' => $newcomerData,
+                'note_owner' => $newcomerRow,
+                'authenticated_user' => $newcomerRow,
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'privilege' => Privilege::DELETE
@@ -45,8 +45,8 @@ class NoteCaseProvider
             ],
             // Advisor would be the same as newcomer
             [// ? managing advisor not owner of note
-                'note_owner' => $advisorData,
-                'authenticated_user' => $managingAdvisorData,
+                'note_owner' => $advisorRow,
+                'authenticated_user' => $managingAdvisorRow,
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     // Full privilege, so it must not be tested further
@@ -59,7 +59,7 @@ class NoteCaseProvider
     /**
      * Provides logged-in user and user linked to note along the expected result
      * As the permissions are a lot more simple than for client for instance,
-     * CRUD cases are all in this function
+     * Create Update Delete cases are all in this function
      *
      * @return array{
      *              array{
@@ -73,12 +73,12 @@ class NoteCaseProvider
      *                  }
      *           }
      */
-    public function provideUsersAndExpectedResultForNoteCrud(): array
+    public function provideUserAttributesAndExpectedResultForNoteCUD(): array
     {
         // Get users with the different roles
-        $managingAdvisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
-        $advisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 3], UserFixture::class);
-        $newcomerData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 4], UserFixture::class);
+        $managingAdvisorAttributes = ['user_role_id' => 2];
+        $advisorAttributes = ['user_role_id' => 3];
+        $newcomerAttributes = ['user_role_id' => 4];
 
         $authorizedResult = [
             // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
@@ -108,8 +108,8 @@ class NoteCaseProvider
         return [
             [ // ? newcomer not owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorData,
-                'authenticated_user' => $newcomerData,
+                'owner_user' => $advisorAttributes,
+                'authenticated_user' => $newcomerAttributes,
                 'expected_result' => [
                     // Allowed to create note on client where user is not owner
                     'creation' => $authorizedCreateResult,
@@ -125,8 +125,8 @@ class NoteCaseProvider
             ],
             [ // ? newcomer owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $newcomerData,
-                'authenticated_user' => $newcomerData,
+                'owner_user' => $newcomerAttributes,
+                'authenticated_user' => $newcomerAttributes,
                 'expected_result' => [
                     'creation' => [
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
@@ -144,8 +144,8 @@ class NoteCaseProvider
             ],
             [ // ? advisor owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorData,
-                'authenticated_user' => $advisorData,
+                'owner_user' => $advisorAttributes,
+                'authenticated_user' => $advisorAttributes,
                 'expected_result' => [
                     'creation' => [ // Allowed to create note on client where user is not owner
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
@@ -162,8 +162,8 @@ class NoteCaseProvider
             ],
             [ // ? advisor not owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $managingAdvisorData,
-                'authenticated_user' => $advisorData,
+                'owner_user' => $managingAdvisorAttributes,
+                'authenticated_user' => $advisorAttributes,
                 'expected_result' => [
                     'creation' => $authorizedCreateResult,
                     'modification' => [
@@ -178,8 +178,8 @@ class NoteCaseProvider
             ],
             [ // ? managing advisor not owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorData,
-                'authenticated_user' => $managingAdvisorData,
+                'owner_user' => $advisorAttributes,
+                'authenticated_user' => $managingAdvisorAttributes,
                 'expected_result' => [
                     'creation' => $authorizedCreateResult,
                     'modification' => [

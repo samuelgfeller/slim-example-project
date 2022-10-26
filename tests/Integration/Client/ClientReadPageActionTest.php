@@ -31,6 +31,30 @@ class ClientReadPageActionTest extends TestCase
     use FixtureTrait;
 
     /**
+     * Normal page action while being authenticated
+     *
+     * @return void
+     */
+    public function testClientReadPageAction_authenticated(): void
+    {
+        // Insert linked and authenticated user
+        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        // Insert linked client status
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Add needed database values to correctly display the page
+        $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
+            ClientFixture::class);
+
+        $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+
+        $response = $this->app->handle($request);
+        // Assert 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+    }
+
+    /**
      * Test that user has to be logged in to display the page
      *
      * @return void
@@ -47,29 +71,5 @@ class ClientReadPageActionTest extends TestCase
         // Build expected login url with redirect to initial request route as UserAuthenticationMiddleware.php does
         $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $requestRoute]);
         self::assertSame($expectedLoginUrl, $response->getHeaderLine('Location'));
-    }
-
-    /**
-     * Normal page action while being authenticated
-     *
-     * @return void
-     */
-    public function testClientReadPageAction_authenticated(): void
-    {
-        // Insert linked user
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
-        // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
-        // Add needed database values to correctly display the page
-        $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class);
-
-        $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
-        // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
-
-        $response = $this->app->handle($request);
-        // Assert 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
     }
 }

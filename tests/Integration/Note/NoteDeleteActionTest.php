@@ -6,6 +6,7 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\NoteFixture;
+use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -37,33 +38,36 @@ class NoteDeleteActionTest extends TestCase
      * Test normal and main note deletion on client-read page
      * while being authenticated.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
      * @return void
      */
     public function testClientReadNoteDeletion(
-        array $userLinkedToNoteData,
-        array $authenticatedUserData,
+        array $userLinkedToNoteAttr,
+        array $authenticatedUserAttr,
         array $expectedResult
     ): void {
-        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that is linked to client is different, insert both
-        if ($userLinkedToNoteData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userLinkedToNoteData['id'] = (int)$this->insertFixture('user', $userLinkedToNoteData);
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+            $userLinkedToNoteRow = $authenticatedUserRow;
         }else{
-            $userLinkedToNoteData['id'] = $authenticatedUserData['id'];
+            // If authenticated user and owner user is not the same, insert owner
+            $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
         }
+
+        // Insert linked status
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert one client linked to this user
-        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToNoteData['id']],
-            ClientFixture::class);
-        // In array first to assert user data later
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $clientRow['id'] = (int)$this->insertFixture('client', $clientRow);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
 
         // Insert main note attached to client and given "owner" user
         $mainNoteData = $this->insertFixturesWithAttributes(
             [
                 'is_main' => 1,
-                'user_id' => $userLinkedToNoteData['id'],
+                'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
                 'deleted_at' => null
             ],
@@ -74,7 +78,7 @@ class NoteDeleteActionTest extends TestCase
         $normalNoteData = $this->insertFixturesWithAttributes(
             [
                 'is_main' => 0,
-                'user_id' => $userLinkedToNoteData['id'],
+                'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
                 'deleted_at' => null
             ],
@@ -82,7 +86,7 @@ class NoteDeleteActionTest extends TestCase
         );
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         // --- *MAIN note request ---
         // Create request to edit main note

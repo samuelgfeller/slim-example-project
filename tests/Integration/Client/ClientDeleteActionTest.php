@@ -37,31 +37,36 @@ class ClientDeleteActionTest extends TestCase
      * Test user delete client with different roles
      *
      * @dataProvider \App\Test\Provider\Client\ClientDeleteCaseProvider::provideUsersForClientDelete()
+     *
+     * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
+     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
     public function testClientDeleteAction_authenticated(
-        array $userDataLinkedToClient,
-        array $authenticatedUserData,
+        array $userLinkedToClientAttr,
+        array $authenticatedUserAttr,
         array $expectedResult
     ): void {
-        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that should be linked to client is different, insert both
-        if ($userDataLinkedToClient['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userDataLinkedToClient['id'] = (int)$this->insertFixture('user', $userDataLinkedToClient);
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userLinkedToClientAttr) {
+            $userLinkedToClientRow = $authenticatedUserRow;
         } else {
-            $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
+            // If authenticated user and owner user is not the same, insert owner
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
         }
 
         // Insert client status
-        $clientStatusData = $this->insertFixturesWithAttributes([], ClientStatusFixture::class);
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client linked to given user
         $clientRow = $this->insertFixturesWithAttributes(
-            ['client_status_id' => $clientStatusData['id'], 'user_id' => $userDataLinkedToClient['id']],
+            ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
             ClientFixture::class
         );
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $request = $this->createJsonRequest(
             'DELETE',

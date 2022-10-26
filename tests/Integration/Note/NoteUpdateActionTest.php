@@ -40,51 +40,51 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test note modification on client-read page while being authenticated
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
      * @return void
      */
     public function testNoteUpdateAction(
-        array $userLinkedToNoteData,
-        array $authenticatedUserData,
+        array $userLinkedToNoteAttr,
+        array $authenticatedUserAttr,
         array $expectedResult
     ): void {
-        $authenticatedUserData['id'] = $this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that should be linked to client is different, insert both
-        if ($userLinkedToNoteData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userLinkedToNoteData['id'] = $this->insertFixture('user', $userLinkedToNoteData);
-        } else {
-            $userLinkedToNoteData['id'] = $authenticatedUserData['id'];
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+            $userLinkedToNoteRow = $authenticatedUserRow;
+        }else{
+            // If authenticated user and owner user is not the same, insert owner
+            $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
         }
 
+        // Insert linked status
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert one client linked to this user
-        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToNoteData['id']],
-            ClientFixture::class);
-        // In array first to assert user data later
-        $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $clientRow['id'] = $this->insertFixture('client', $clientRow);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteData = $this->getFixtureRecordsWithAttributes(
-            ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+        $mainNoteRow = $this->insertFixturesWithAttributes(
+            ['is_main' => 1, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
             NoteFixture::class
         );
-        $mainNoteData['id'] = $this->insertFixture('note', $mainNoteData);
 
         // Insert normal note attached to client and given "owner" user
-        $normalNoteData = $this->getFixtureRecordsWithAttributes(
-            ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
+        $normalNoteRow = $this->insertFixturesWithAttributes(
+            ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
             NoteFixture::class
         );
-        $normalNoteData['id'] = $this->insertFixture('note', $normalNoteData);
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $newNoteMessage = 'New note message';
         // --- *MAIN note request ---
         // Create request to edit main note
         $mainNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteData['id']]),
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
             ['message' => $newNoteMessage,]
         );
         // Make request
@@ -97,10 +97,10 @@ class NoteUpdateActionTest extends TestCase
         );
 
         if ($expectedResult['modification']['main_note']['db_changed'] === true) {
-            $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
+            $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteRow['id']);
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
-            $this->assertTableRow(['message' => $mainNoteData['message']], 'note', $mainNoteData['id']);
+            $this->assertTableRow(['message' => $mainNoteRow['message']], 'note', $mainNoteRow['id']);
         }
 
         // Assert response
@@ -108,7 +108,7 @@ class NoteUpdateActionTest extends TestCase
 
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteData['id']]),
+            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
             ['message' => $newNoteMessage,]
         );
         // Make request
@@ -120,10 +120,10 @@ class NoteUpdateActionTest extends TestCase
 
         // If db is expected to change assert the new message
         if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
-            $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteData['id']);
+            $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteRow['id']);
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
-            $this->assertTableRow(['message' => $normalNoteData['message']], 'note', $normalNoteData['id']);
+            $this->assertTableRow(['message' => $normalNoteRow['message']], 'note', $normalNoteRow['id']);
         }
 
         $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
@@ -165,22 +165,24 @@ class NoteUpdateActionTest extends TestCase
      */
     public function testNoteUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
-        // Add the minimal needed data
-        $clientData = $this->getFixtureRecordsWithAttributes(['deleted_at' => null], ClientFixture::class);
-        // Insert user linked to client and user that is logged in
-        $userData = $this->insertFixturesWithAttributes(['id' => $clientData['user_id']], UserFixture::class);
+        // Insert authorized user
+        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
         // Insert linked status
-        $this->insertFixturesWithAttributes(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
-        // Insert client
-        $clientData['id'] = $this->insertFixture('client', $clientData);
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Insert client row
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $userId, 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
+
         // Insert note linked to client and user
         $noteData = $this->insertFixturesWithAttributes(
-            ['client_id' => $clientData['id'], 'user_id' => $userData['id']],
+            ['client_id' => $clientRow['id'], 'user_id' => $userId],
             NoteFixture::class
         );
 
         // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),

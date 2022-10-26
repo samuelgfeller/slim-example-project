@@ -15,9 +15,9 @@ class ClientDeleteCaseProvider
     public function provideUsersForClientDelete(): array
         {
             // Get users with different roles
-            $managingAdvisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 2], UserFixture::class);
-            $advisorData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 3], UserFixture::class);
-            $newcomerData = $this->getFixtureRecordsWithAttributes(['user_role_id' => 4], UserFixture::class);
+            $managingAdvisorAttributes = ['user_role_id' => 2];
+            $advisorAttributes = ['user_role_id' => 3];
+            $newcomerAttributes = ['user_role_id' => 4];
 
             $authorizedResult = [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
@@ -40,20 +40,20 @@ class ClientDeleteCaseProvider
             return [
                 // * Newcomer
                 [ // ? Newcomer owner - not allowed
-                    'user_linked_to_client' => $newcomerData,
-                    'authenticated_user' => $newcomerData,
+                    'user_linked_to_client' => $newcomerAttributes,
+                    'authenticated_user' => $newcomerAttributes,
                     'expected_result' => $unauthorizedResult
                 ],
                 // * Advisor
                 [ // ? Advisor owner - not allowed
-                    'user_linked_to_client' => $advisorData,
-                    'authenticated_user' => $advisorData,
+                    'user_linked_to_client' => $advisorAttributes,
+                    'authenticated_user' => $advisorAttributes,
                     'expected_result' => $unauthorizedResult,
                 ],
                 // * Managing advisor
                 [ // ? Managing advisor not owner - allowed
-                    'user_linked_to_client' => $advisorData,
-                    'authenticated_user' => $managingAdvisorData,
+                    'user_linked_to_client' => $advisorAttributes,
+                    'authenticated_user' => $managingAdvisorAttributes,
                     'expected_result' => $authorizedResult,
                 ],
 

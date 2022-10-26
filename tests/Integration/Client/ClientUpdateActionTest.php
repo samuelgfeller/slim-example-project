@@ -46,27 +46,32 @@ class ClientUpdateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate()
      *
+     * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
+     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $requestData array of data for the request body
+     * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
     public function testClientSubmitUpdateAction_authenticated(
-        array $userDataLinkedToClient,
-        array $authenticatedUserData,
+        array $userLinkedToClientAttr,
+        array $authenticatedUserAttr,
         array $requestData,
         array $expectedResult
     ): void {
-        $authenticatedUserData['id'] = (int)$this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that should be linked to client is different, insert both
-        if ($userDataLinkedToClient['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userDataLinkedToClient['id'] = (int)$this->insertFixture('user', $userDataLinkedToClient);
-        } else {
-            $userDataLinkedToClient['id'] = $authenticatedUserData['id'];
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userLinkedToClientAttr) {
+            $userLinkedToClientRow = $authenticatedUserRow;
+        }else{
+            // If authenticated user and owner user is not the same, insert owner
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
         }
 
         // Insert client status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixturesWithAttributes(
-            ['client_status_id' => $clientStatusId, 'user_id' => $userDataLinkedToClient['id']],
+            ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
             ClientFixture::class
         );
 
@@ -89,7 +94,7 @@ class ClientUpdateActionTest extends TestCase
         );
 
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $response = $this->app->handle($request);
         // Assert status code

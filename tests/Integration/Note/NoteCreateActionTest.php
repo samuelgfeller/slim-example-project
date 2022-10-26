@@ -51,28 +51,30 @@ class NoteCreateActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersAndExpectedResultForNoteCrud()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
      * @return void
      */
     public function testNoteSubmitCreateAction(
-        array $userLinkedToClientData,
-        array $authenticatedUserData,
+        array $userLinkedToNoteAttr,
+        array $authenticatedUserAttr,
         array $expectedResult
     ): void {
-        $authenticatedUserData['id'] = $this->insertFixture('user', $authenticatedUserData);
-        // If authenticated user and user that should be linked to client is different, insert both
-        if ($userLinkedToClientData['user_role_id'] !== $authenticatedUserData['user_role_id']) {
-            $userLinkedToClientData['id'] = $this->insertFixture('user', $userLinkedToClientData);
-        } else {
-            $userLinkedToClientData['id'] = $authenticatedUserData['id'];
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+            $userLinkedToClientRow = $authenticatedUserRow;
+        }else{
+            // If authenticated user and owner user is not the same, insert owner
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
         }
 
-        // Insert one client linked to this user
-        $clientRow = $this->getFixtureRecordsWithAttributes(['user_id' => $userLinkedToClientData['id']],
-            ClientFixture::class);
         // Insert needed client status fixture
-        $this->insertFixturesWithAttributes(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-        $clientRow['id'] = $this->insertFixture('client', $clientRow);
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Insert one client linked to this user
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
 
         // Create request
         $noteMessage = 'Test note';
@@ -86,7 +88,7 @@ class NoteCreateActionTest extends TestCase
             ]
         );
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         // Make request
         $response = $this->app->handle($request);
@@ -104,7 +106,7 @@ class NoteCreateActionTest extends TestCase
         $expectedResponseJson = [
             'status' => 'success',
             'data' => [
-                'userFullName' => $authenticatedUserData['first_name'] . ' ' . $authenticatedUserData['surname'],
+                'userFullName' => $authenticatedUserRow['first_name'] . ' ' . $authenticatedUserRow['surname'],
                 'noteId' => $noteDbRow['id'],
                 'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
             ],
@@ -147,27 +149,28 @@ class NoteCreateActionTest extends TestCase
         bool $existingMainNote,
         array $expectedResponseData
     ): void {
-        // Add the minimal needed data
-        $clientData = (new ClientFixture())->records[0];
-        // Insert user linked to client and user that is logged in
-        $userData = $this->getFixtureRecordsWithAttributes(['id' => $clientData['user_id']], UserFixture::class);
-        $userData['id'] = $this->insertFixture('user', $userData);
+        // Insert user that is authorized to create
+        $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
         // Insert linked status
-        $this->insertFixturesWithAttributes(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
-        // Insert client
-        $clientData['id'] = $this->insertFixture('client', $clientData);
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Insert client row
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
+
         // Insert main note linked to client and user if data provider $existingMainNote is true
         if ($existingMainNote === true) {
             // Creating main note row with correct values
             $mainNoteRow = (new NoteFixture())->records[0];
             $mainNoteRow['is_main'] = 1;
-            $mainNoteRow['client_id'] = $clientData['id'];
-            $mainNoteRow['user_id'] = $userData['id'];
+            $mainNoteRow['client_id'] = $clientRow['id'];
+            $mainNoteRow['user_id'] = $clientOwnerId;
             $this->insertFixture('note', $mainNoteRow);
         }
 
         // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $clientOwnerId);
 
         $request = $this->createJsonRequest(
             'POST',
@@ -192,7 +195,7 @@ class NoteCreateActionTest extends TestCase
     public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
-        $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);
+        $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
 
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
