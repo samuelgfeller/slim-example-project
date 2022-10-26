@@ -116,10 +116,11 @@ class ClientUpdateActionTest extends TestCase
      */
     public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
     {
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        // Insert user that is allowed to change content
+        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
+        $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
             ClientFixture::class);
 
         $request = $this->createJsonRequest(
@@ -136,7 +137,7 @@ class ClientUpdateActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
         // database should be unchanged
-        $this->assertTableRow($clientRow, 'client', $clientRow['id']);
+        $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
 
         $this->assertJsonData($jsonResponse, $response);
     }
@@ -175,10 +176,11 @@ class ClientUpdateActionTest extends TestCase
      */
     public function testClientSubmitUpdateAction_unchangedContent(): void
     {
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        // Insert user that is allowed to change content
+        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
+        $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
             ClientFixture::class);
 
         // Simulate logged-in user
@@ -199,7 +201,7 @@ class ClientUpdateActionTest extends TestCase
         // Assert that response contains warning
         $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.'], $response);
 
-        $this->assertTableRow(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
+        $this->assertTableRowEquals(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
     }
 
     /**
