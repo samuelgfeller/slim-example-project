@@ -39,11 +39,15 @@ class NoteUpdateActionTest extends TestCase
 
     /**
      * Test note modification on client-read page while being authenticated
+     * with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
-    public function testNoteUpdateAction(
+    public function testNoteSubmitUpdateAction(
         array $userLinkedToNoteAttr,
         array $authenticatedUserAttr,
         array $expectedResult
@@ -134,7 +138,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteUpdateAction_unauthenticated(): void
+    public function testNoteSubmitUpdateAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
@@ -163,7 +167,7 @@ class NoteUpdateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForModification()
      * @return void
      */
-    public function testNoteUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
+    public function testNoteSubmitUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Insert authorized user
         $userId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
@@ -203,7 +207,7 @@ class NoteUpdateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideMalformedNoteRequestBody()
      * @return void
      */
-    public function testNoteUpdateAction_malformedRequest(array $malformedRequestBody): void
+    public function testNoteSubmitUpdateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);

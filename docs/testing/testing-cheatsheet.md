@@ -25,7 +25,7 @@ This is a big question I have no answer to yet. For me the following useful test
     * Load sub resource with different roles may be interesting if items returned in response body differ 
     depending on the role of the logged-in user (asserting `$privilege` for instance)
       * Load with every different type of user role. Ideally and if well maintained, only the roles where there are 
-        relevant changes to be tested
+        relevant changes to be tested [example](#provider-for-note-list-action-test)
     * Test that deleted resource is NOT in response
   * Unauthenticated load  
     Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page
@@ -118,15 +118,16 @@ change are made to the fixture records. Using one pool for a lot of different fu
 [single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle). 
 
 
-#### `insertFixturesWithAttributes(array $attributes, string $fixtureClass, int $amount = 1): array`
+#### `insertFixturesWithAttributes()`
 Parameters are 
 * `$attributes` where an associative array is expected with as key the column and value the value 
 we want to attribute to this column. 
 * `$fixtureClass` where the class string of a fixture is expected such as `UserFixture::class`.
-* `$amount` the amount of rows you want to generate.
+* `$amount` optional amount of rows you want to generate. Default 1.
 
-**Returns an associative array of the inserted row including the id.**
+Return value is an associative array of the inserted row including the id.
 
+#### Usage example
 To insert only the records that matching specific criteria, the function `insertFixturesWithAttributes` could be used like follows:
 ```php
 $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
@@ -266,242 +267,296 @@ Asserting unauthenticated response without custom header is basically the same a
 
 ## Test and assert CRUD requests examples
 ### Resource loading
-<details>
-  <summary><h4>List with privilege assertion but without filter</h4></summary>
-Client list test action
-
-</details>
 
 <details>
-<summary><h4>List with filter and privilege assertion</h4></summary>
-Client list test action
+  <summary><h4>List action test example with privilege assertion but without filter</h4></summary>
 
-</details>
-
-If we want to test the notes attached to a client that are loaded via Ajax after a client-read request, I would firstly
-get all relevant note rows like follows:
-```php
-$noteRows = $this->findRecordsFromFixtureWhere(['is_main' => 0, 'client_id' => $clientRow['user_id']], NoteFixture::class);
-```
-
-Then, as we have multiple notes, init the `$expectedResponseArray` and loop over the resource under test `$noteRows`.  
-Note the attached user is also retrieved with `findRecordsFromFixtureWhere()`.
-```php
-$expectedResponseArray = [];
-
-foreach ($noteRows as $noteRow) {
-    // Get linked user record
-    $userRow = $this->findRecordsFromFixtureWhere(['id' => $noteRow['user_id']], UserFixture::class)[0];
-    $expectedResponseArray[] = [
-        // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
-        'noteId' => $noteRow['id'],
-        'noteMessage' => $noteRow['message'],
-        'noteUpdatedAt' => $noteRow['updated_at'],
-        'noteCreatedAt' => $noteRow['created_at'],
-        'userFullName' => $userRow['first_name'] . ' ' . $userRow['surname'],
-        'userId' => $noteRow['user_id'],
-        'userRole' => $userRow['role'],
-    ];
-}
-// Assert response data
-$this->assertJsonData($expectedResponseArray, $response);
-```
-At this point, additionally asserting the database content is pointless as the response body comes from the database.
-
-[//]: # (The paragraph [Assert user rights]&#40;Assert-user-rights&#41; might be relevant if `userMutationRights` is part of the response.)
-#### Assert mutation rights 
-See test on notes loaded by client_id on how I do it now, but currently I don't know the best way to implement this 
-dynamically.
-
-```php
-// Get logged-in user row to test user rights
-$loggedInUserRow = $this->findRecordsFromFixtureWhere(['id' => $loggedInUserId], UserFixture::class)[0];
-
-// Determine which mutation rights user has
-$hasMutationRight = static function (string $role, int $ownerId) use ($loggedInUserId): string {
-    // Basically same as js function userHasMutationRights() in client-read-template-note.html.js
-    // Has to match user rights rules in NoteUserRightSetter.php
-    return $role === 'admin' || $loggedInUserId === $ownerId
-        ? MutationRight::ALL->value : MutationRight::NONE->value;
-};
-foreach ($noteRows as $noteRow) {
-    $expectedResponseArray[] = [
-        // ...
-        'userMutationRights' => $hasMutationRight($loggedInUserRow['role'], $noteRow['user_id']),
-    ];
-}
-```
-
-### Assert resource manipulation (create, update) with different user roles
-To test the behaviour of all relevant different user roles I use a data provider that returns the user infos for 
-the logged-in user, resource user and expected result so that the same function can be used for all roles.
-<details>
-  <summary>Show data provider content</summary>
-
-`tests/Provider/Client/ClientReadCaseProvider.php`
-```php
-public function provideAuthenticatedAndLinkedUserForNote(): array
-{
-    $userData = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0];
-    return [
-        [ // ? Authenticated user is resource owner - non admin
-            // User to whom the note is linked
-            'owner_user' => $userData,
-            'authenticated_user' => $userData,
-            'expected_result' => [
-                'creation' => [
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-                ],
-                'modification' => [
-                    // All users may edit the main note but only change their own so there are different expected results
-                    'main_note' => [
-                        // For a PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
-                        // https://stackoverflow.com/a/2342589/9013718
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                            'data' => null,
-                        ],
-                    ],
-                    'normal_note' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                            'data' => null,
-                        ],
-                        // Is db supposed to change
-                        'db_changed' => true,
-                    ],
-                ],
-                'deletion' => [
-                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                    'normal_note' => [
-                        // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                        ],
-                        // Is db supposed to change
-                        'db_changed' => true,
-                    ],
-                ],
-            ],
-        ],
-        [ // ? Authenticated user is admin - non resource owner
-            'owner_user' => $userData,
-            'authenticated_user' => $this->findRecordsFromFixtureWhere(['role' => 'admin'], UserFixture::class)[0],
-            'expected_result' => [
-                'creation' => [
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-                ],
-                'modification' => [
-                    'main_note' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                            'data' => null,
-                        ],
-                    ],
-                    'normal_note' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                            'data' => null,
-                        ],
-                        'db_changed' => true,
-                    ],
-                ],
-                'deletion' => [
-                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                    'normal_note' => [
-                        // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                        ],
-                        // Is db supposed to change
-                        'db_changed' => true,
-                    ],
-                ],
-            ],
-        ],
-        [ // ? Authenticated user is not the resource owner and not admin
-            'owner_user' => $userData,
-            // Get user with role user that is not the same then $userData
-            'authenticated_user' => $this->findRecordsFromFixtureWhere(
-                ['role' => 'user'],
-                UserFixture::class,
-                ['id' => $userData['id']]
-            )[0],
-            'expected_result' => [
-                'creation' => [
-                    // Should be created as users that are not linked to client are able to create notes - this will be diff
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-                ],
-                'modification' => [
-                    // All users may edit the main note but only change their own so there are different expected results
-                    'main_note' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                        'json_response' => [
-                            'status' => 'success',
-                            'data' => null,
-                        ],
-                    ],
-                    'normal_note' => [
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-                        'json_response' => [
-                            'status' => 'error',
-                            'message' => 'You can only edit your own note or need to be an admin to edit others'
-                        ],
-                        'db_changed' => false,
-                    ],
-                ],
-                'deletion' => [
-                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                    'normal_note' => [
-                        // For a DELETE request: HTTP 200 or HTTP 204 should imply "resource deleted successfully"
-                        StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-                        'json_response' => [
-                            'status' => 'error',
-                            'message' => 'You have to be note author to delete this note.',
-                        ],
-                        // Is db supposed to change
-                        'db_changed' => false,
-                    ],
-                ],
-            ],
-        ],
-    ];
-}
-```
-Modification and deletion examples are at the bottom. 
-</details>
-
-Here is a typical fixtures' insertion, POST request with authentication and HTTP status code assertion for 
-resource creation with different user roles.
-
-`tests/Integration/Client/ClientReadActionTest.php`
+#### Test note list action
 ```php
 /**
- * Test note creation on client-read page while being authenticated 
- * with different user roles.
+ * Tests notes that are loaded with ajax on client read page.
  *
- * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
+ * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteList()
+ * Different privileges of notes depending on authenticated user and
+ * note owner are tested with the provider.
+ *
+ * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code and privilege
  * @return void
  */
-public function testClientReadNoteCreation(array $userLinkedToClientData, array $authenticatedUserData, array $expectedResult): void
-{
-    $this->insertFixture('user', $userLinkedToClientData);
-    // If authenticated user and user that should be linked to client is different, insert authenticated user
-    if ($userLinkedToClientData['id'] !== $authenticatedUserData['id']) {
-        $this->insertFixture('user', $authenticatedUserData);
+public function testNoteListAction(
+    array $userLinkedToNoteAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+        $userLinkedToNoteRow = $authenticatedUserRow;
+    }else{
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
     }
+    // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
+    // because note read rights change (e.g. that newcomers may not see the notes from everyone), the
+    // client owner id has to be added to the provider
+    $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+    // Insert linked status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert client row
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
+        ClientFixture::class
+    );
+    // Insert linked note. Only one per test to simplify assertions with different privileges
+    $noteData = $this->insertFixturesWithAttributes(
+        ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $userLinkedToNoteRow['id']],
+        NoteFixture::class
+    );
+    // Simulate logged-in user with logged-in user id
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+    // Make request
+    $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
+    $response = $this->app->handle($request);
+    // Assert status code
+    self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+    $expectedResponseArray[] = [
+        // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+        'noteId' => $noteData['id'],
+        'noteMessage' => $noteData['message'],
+        // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
+        'noteCreatedAt' => (new \DateTime($noteData['created_at']))->format('d. F Y • H:i'),
+        'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
+        'userId' => $noteData['user_id'],
+        'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
+        // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
+        'privilege' => $expectedResult['privilege']->value,
+    ];
+    // Assert response data
+    $this->assertJsonData($expectedResponseArray, $response);
+}
+```
+#### Provider for note list action test
+All different relevant combinations of user roles are provided in the following data provider. There are not 
+so much cases because newcomer and advisor owner may only change their own posts and managing_advisor and higher 
+are allowed to edit others' notes.
+```php
+public function provideUserAttributesAndExpectedResultForNoteList(): array
+{
+    // Get users with the different roles
+    $managingAdvisorRow = ['user_role_id' => 2];
+    $advisorRow = ['user_role_id' => 3];
+    $newcomerRow = ['user_role_id' => 4];
+    return [
+        [// ? newcomer not owner of note
+            'note_owner' => $advisorRow,
+            'authenticated_user' => $newcomerRow,
+            'expected_result' => [
+                StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                'privilege' => Privilege::CREATE
+            ],
+        ],
+        [// ? newcomer owner of note
+            'note_owner' => $newcomerRow,
+            'authenticated_user' => $newcomerRow,
+            'expected_result' => [
+                StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                'privilege' => Privilege::DELETE
+            ],
+        ],
+        // Advisor owner would be the same as newcomer
+        [// ? managing advisor not owner of note
+            'note_owner' => $advisorRow,
+            'authenticated_user' => $managingAdvisorRow,
+            'expected_result' => [
+                StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+                // Full privilege, so it must not be tested further
+                'privilege' => Privilege::DELETE
+            ],
+        ],
+    ];
+}
+```
+
+</details>
+
+<details>
+<summary><h4>List action test with filter and privilege assertion</h4></summary>
+Client list test action
+
+</details>
+
+### Test and assert basic data mutation (create, update and delete actions) with one provider 
+To test the behaviour of all relevant different user roles a data provider is used that returns the relevant user attributes 
+for the logged-in user, resource owner and expected result so that the same test function can be used for all roles.  
+
+Examples below are on the notes and they have a little added complexity as they can be a "main note" that changes the 
+privileges and expected results.  
+<details>
+  <summary><h4>NoteCaseProvider for create update and delete</h4></summary>
+
+`tests/Provider/Note/NoteCaseProvider.php`
+```php
+public function provideUserAttributesAndExpectedResultForNoteCUD(): array
+{
+    // Set different user role attributes
+    $managingAdvisorAttributes = ['user_role_id' => 2];
+    $advisorAttributes = ['user_role_id' => 3];
+    $newcomerAttributes = ['user_role_id' => 4];
+    $authorizedResult = [
+        // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
+        // https://stackoverflow.com/a/2342589/9013718
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+        // Is db supposed to change
+        'db_changed' => true,
+        'json_response' => [
+            'status' => 'success',
+            'data' => null,
+        ],
+    ];
+    $unauthorizedResult = [
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+        'db_changed' => false,
+        'json_response' => [
+            'status' => 'error',
+            'message' => 'Not allowed to change note.',
+        ]
+    ];
+    $unauthorizedUpdateResult = $unauthorizedResult;
+    $unauthorizedUpdateResult['json_response']['message'] = 'Not allowed to change note.';
+    $unauthorizedDeleteResult = $unauthorizedResult;
+    $unauthorizedDeleteResult['json_response']['message'] = 'Not allowed to delete note.';
+    $authorizedCreateResult = [StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED];
+    return [
+        [ // ? newcomer not owner
+            // User to whom the note (or client for creation) is linked
+            'owner_user' => $advisorAttributes,
+            'authenticated_user' => $newcomerAttributes,
+            'expected_result' => [
+                // Allowed to create note on client where user is not owner
+                'creation' => $authorizedCreateResult,
+                'modification' => [
+                    'main_note' => $unauthorizedUpdateResult,
+                    'normal_note' => $unauthorizedResult,
+                ],
+                'deletion' => [
+                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                    'normal_note' => $unauthorizedDeleteResult
+                ],
+            ],
+        ],
+        [ // ? newcomer owner
+            // User to whom the note (or client for creation) is linked
+            'owner_user' => $newcomerAttributes,
+            'authenticated_user' => $newcomerAttributes,
+            'expected_result' => [
+                'creation' => [
+                    StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
+                ],
+                'modification' => [
+                    // Newcomer may not edit client basic data which has the same rights as the main note
+                    'main_note' => $unauthorizedUpdateResult,
+                    'normal_note' => $authorizedResult,
+                ],
+                'deletion' => [
+                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                    'normal_note' => $authorizedResult
+                ],
+            ],
+        ],
+        [ // ? advisor owner
+            // User to whom the note (or client for creation) is linked
+            'owner_user' => $advisorAttributes,
+            'authenticated_user' => $advisorAttributes,
+            'expected_result' => [
+                'creation' => [ // Allowed to create note on client where user is not owner
+                    StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
+                ],
+                'modification' => [
+                    'main_note' => $authorizedResult,
+                    'normal_note' => $authorizedResult,
+                ],
+                'deletion' => [
+                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                    'normal_note' => $authorizedResult
+                ],
+            ],
+        ],
+        [ // ? advisor not owner
+            // User to whom the note (or client for creation) is linked
+            'owner_user' => $managingAdvisorAttributes,
+            'authenticated_user' => $advisorAttributes,
+            'expected_result' => [
+                'creation' => $authorizedCreateResult,
+                'modification' => [
+                    'main_note' => $authorizedResult,
+                    'normal_note' => $unauthorizedUpdateResult,
+                ],
+                'deletion' => [
+                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                    'normal_note' => $unauthorizedDeleteResult
+                ],
+            ],
+        ],
+        [ // ? managing advisor not owner
+            // User to whom the note (or client for creation) is linked
+            'owner_user' => $advisorAttributes,
+            'authenticated_user' => $managingAdvisorAttributes,
+            'expected_result' => [
+                'creation' => $authorizedCreateResult,
+                'modification' => [
+                    'main_note' => $authorizedResult,
+                    'normal_note' => $authorizedResult,
+                ],
+                'deletion' => [
+                    // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
+                    'normal_note' => $authorizedResult
+                ],
+            ],
+        ],
+    ];
+}
+```
+</details>
+
+
+<details>
+  <summary><h4>Note create action test</h4></summary>
+
+`tests/Integration/Note/NoteCreateActionTest.php`
+```php
+/**
+ * Test main note and normal note update on client-read page while being authenticated
+ * with different user roles.
+ *
+ * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+ * 
+ * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+ * @return void
+ */
+public function testNoteSubmitCreateAction(
+    array $userLinkedToNoteAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+        $userLinkedToClientRow = $authenticatedUserRow;
+    } else {
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
+    }
+    // Insert needed client status fixture
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert one client linked to this user
-    $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToClientData['id']],
-        ClientFixture::class)[0];
-    // In array first to assert user data later
-    $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-    $this->insertFixture('client', $clientRow);
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
+        ClientFixture::class
+    );
     // Create request
     $noteMessage = 'Test note';
     $request = $this->createJsonRequest(
@@ -514,15 +569,214 @@ public function testClientReadNoteCreation(array $userLinkedToClientData, array 
         ]
     );
     // Simulate logged-in user
-    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     // Make request
     $response = $this->app->handle($request);
     // Assert 201 Created redirect to login url
     self::assertSame($expectedResult['creation'][StatusCodeInterface::class], $response->getStatusCode());
-    
-    // Asserting database and response is above under the sections "Assert database" and "Assert response body"
+    // Assert database
+    // Find freshly inserted note
+    $noteDbRow = $this->findLastInsertedTableRow('note');
+    // Assert the row column values
+    $this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+    // Assert response
+    $expectedResponseJson = [
+        'status' => 'success',
+        'data' => [
+            'userFullName' => $authenticatedUserRow['first_name'] . ' ' . $authenticatedUserRow['surname'],
+            'noteId' => $noteDbRow['id'],
+            'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
+        ],
+    ];
+    $this->assertJsonData($expectedResponseJson, $response);
 }
 ```
+</details>
+
+<details>
+  <summary><h4>Note update action test</h4></summary>
+
+```php
+/**
+ * Test note modification on client-read page while being authenticated
+ * with different user roles.
+ *
+ * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+ * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+ * @return void
+ */
+public function testNoteSubmitUpdateAction(
+    array $userLinkedToNoteAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+        $userLinkedToNoteRow = $authenticatedUserRow;
+    }else{
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
+    }
+    // Insert linked status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert one client linked to this user
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+        ClientFixture::class
+    );
+    // Insert main note attached to client and given "owner" user
+    $mainNoteRow = $this->insertFixturesWithAttributes(
+        ['is_main' => 1, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
+        NoteFixture::class
+    );
+    // Insert normal note attached to client and given "owner" user
+    $normalNoteRow = $this->insertFixturesWithAttributes(
+        ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
+        NoteFixture::class
+    );
+    // Simulate logged-in user
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+    $newNoteMessage = 'New note message';
+    // --- *MAIN note request ---
+    // Create request to edit main note
+    $mainNoteRequest = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
+        ['message' => $newNoteMessage,]
+    );
+    // Make request
+    $mainNoteResponse = $this->app->handle($mainNoteRequest);
+    // Assert 200 OK note updated successfully
+    self::assertSame(
+        $expectedResult['modification']['main_note'][StatusCodeInterface::class],
+        $mainNoteResponse->getStatusCode()
+    );
+    if ($expectedResult['modification']['main_note']['db_changed'] === true) {
+        $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteRow['id']);
+    } else {
+        // If db is not expected to change message should remain the same as when it was inserted first
+        $this->assertTableRow(['message' => $mainNoteRow['message']], 'note', $mainNoteRow['id']);
+    }
+    // Assert response
+    $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
+    // --- *NORMAL NOTE REQUEST ---
+    $normalNoteRequest = $this->createJsonRequest(
+        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
+        ['message' => $newNoteMessage,]
+    );
+    // Make request
+    $normalNoteResponse = $this->app->handle($normalNoteRequest);
+    self::assertSame(
+        $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
+        $normalNoteResponse->getStatusCode()
+    );
+    // If db is expected to change assert the new message
+    if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
+        $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteRow['id']);
+    } else {
+        // If db is not expected to change message should remain the same as when it was inserted first
+        $this->assertTableRow(['message' => $normalNoteRow['message']], 'note', $normalNoteRow['id']);
+    }
+    $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
+}
+```
+</details>
+
+<details>
+  <summary><h4>Note delete action test</h4></summary>
+
+```php
+/**
+ * Test normal and main note deletion on client-read page
+ * while being authenticated with different user roles.
+ *
+ * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+ * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+ * @return void
+ */
+public function testNoteSubmitDeleteAction(
+    array $userLinkedToNoteAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
+        $userLinkedToNoteRow = $authenticatedUserRow;
+    }else{
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
+    }
+    // Insert linked status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert one client linked to this user
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+        ClientFixture::class
+    );
+    // Insert main note attached to client and given "owner" user
+    $mainNoteData = $this->insertFixturesWithAttributes(
+        [
+            'is_main' => 1,
+            'user_id' => $userLinkedToNoteRow['id'],
+            'client_id' => $clientRow['id'],
+        ],
+        NoteFixture::class
+    );
+    // Insert normal note attached to client and given "owner" user
+    $normalNoteData = $this->insertFixturesWithAttributes(
+        [
+            'is_main' => 0,
+            'user_id' => $userLinkedToNoteRow['id'],
+            'client_id' => $clientRow['id'],
+        ],
+        NoteFixture::class
+    );
+    // Simulate logged-in user
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+    // --- *MAIN note request ---
+    // Create request to edit main note
+    $mainNoteRequest = $this->createJsonRequest(
+        'DELETE',
+        $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
+    );
+    // As deleting the main note is not a valid request the server throws an HttpMethodNotAllowed exception
+    $this->expectException(HttpMethodNotAllowedException::class);
+    $this->expectExceptionMessage('The main note cannot be deleted.');
+    // Make request
+    $this->app->handle($mainNoteRequest);
+    // Database is not expected to change for the main note as there is no way to delete it from the frontend
+    $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
+    // --- *NORMAL NOTE REQUEST ---
+    $normalNoteRequest = $this->createJsonRequest(
+        'DELETE',
+        $this->urlFor('note-submit-delete', ['note_id' => $normalNoteData['id']]),
+    );
+    // Make request
+    $normalNoteResponse = $this->app->handle($normalNoteRequest);
+    self::assertSame(
+        $expectedResult['deletion']['normal_note'][StatusCodeInterface::class],
+        $normalNoteResponse->getStatusCode()
+    );
+    // Assert database
+    $noteDeletedAtValue = $this->findTableRowById('note', $normalNoteData['id'])['deleted_at'];
+    // If db is expected to change assert the new message (when provided authenticated user is allowed to do action)
+    if ($expectedResult['deletion']['normal_note']['db_changed'] === true) {
+        // Test that deleted at is not null
+        self::assertNotNull($noteDeletedAtValue);
+    } else {
+        // If db is not expected to change message should remain the same as when it was inserted first
+        self::assertNull($noteDeletedAtValue);
+    }
+    $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
+}
+```
+</details>
+
 
 ## Test validation and assert errors example
 Form fields generally have specific criteria like a minimum length or specific format that are validated.

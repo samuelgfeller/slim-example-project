@@ -20,7 +20,7 @@ class ClientUpdateCaseProvider
      */
     public function provideUsersAndExpectedResultForClientUpdate(): array
     {
-        // Get users with the different roles
+        // Set different user role attributes
         $managingAdvisorRow = ['user_role_id' => 2];
         $advisorRow = ['user_role_id' => 3];
         $newcomerRow = ['user_role_id' => 4];

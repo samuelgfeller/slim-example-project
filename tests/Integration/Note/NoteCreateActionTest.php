@@ -12,6 +12,8 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -52,6 +54,10 @@ class NoteCreateActionTest extends TestCase
      * with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     *
+     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
     public function testNoteSubmitCreateAction(
@@ -63,7 +69,7 @@ class NoteCreateActionTest extends TestCase
         $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
         if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
-        }else{
+        } else {
             // If authenticated user and owner user is not the same, insert owner
             $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
         }

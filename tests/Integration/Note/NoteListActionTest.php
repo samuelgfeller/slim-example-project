@@ -38,9 +38,9 @@ class NoteListActionTest extends TestCase
 
 
     /**
-     * On client read page display, linked notes are loaded with ajax.
+     * Tests notes that are loaded with ajax on client read page.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUsersNotesAndExpectedResultForList()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteList()
      * Different privileges of notes depending on authenticated user and
      * note owner are tested with the provider.
      *
@@ -70,7 +70,7 @@ class NoteListActionTest extends TestCase
         // Insert linked status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
 
-        // Get client row
+        // Insert client row
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
             ClientFixture::class
@@ -100,8 +100,7 @@ class NoteListActionTest extends TestCase
             'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
             'userId' => $noteData['user_id'],
             'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
-            // Has to match user rights rules in NoteUserRightSetter.php
-            // Currently don't know the best way to implement this dynamically
+            // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
             'privilege' => $expectedResult['privilege']->value,
         ];
 

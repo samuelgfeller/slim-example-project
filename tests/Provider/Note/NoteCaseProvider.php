@@ -14,14 +14,13 @@ class NoteCaseProvider
     use FixtureTrait;
 
     /**
-     * Even though this is for the list test, one note
-     * at a time is tested for clarity and simplicity.
+     * One note at a time is tested for clarity and simplicity.
      *
      * @return array[]
      */
-    public function provideUsersNotesAndExpectedResultForList(): array
+    public function provideUserAttributesAndExpectedResultForNoteList(): array
     {
-        // Get users with the different roles
+        // Set different user role attributes
         $managingAdvisorRow = ['user_role_id' => 2];
         $advisorRow = ['user_role_id' => 3];
         $newcomerRow = ['user_role_id' => 4];
@@ -43,7 +42,7 @@ class NoteCaseProvider
                     'privilege' => Privilege::DELETE
                 ],
             ],
-            // Advisor would be the same as newcomer
+            // Advisor owner would be the same as newcomer
             [// ? managing advisor not owner of note
                 'note_owner' => $advisorRow,
                 'authenticated_user' => $managingAdvisorRow,
@@ -75,7 +74,7 @@ class NoteCaseProvider
      */
     public function provideUserAttributesAndExpectedResultForNoteCUD(): array
     {
-        // Get users with the different roles
+        // Set different user role attributes
         $managingAdvisorAttributes = ['user_role_id' => 2];
         $advisorAttributes = ['user_role_id' => 3];
         $newcomerAttributes = ['user_role_id' => 4];

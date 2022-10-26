@@ -12,6 +12,8 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -36,12 +38,15 @@ class NoteDeleteActionTest extends TestCase
 
     /**
      * Test normal and main note deletion on client-read page
-     * while being authenticated.
+     * while being authenticated with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
+     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
-    public function testClientReadNoteDeletion(
+    public function testNoteSubmitDeleteAction(
         array $userLinkedToNoteAttr,
         array $authenticatedUserAttr,
         array $expectedResult
@@ -69,7 +74,6 @@ class NoteDeleteActionTest extends TestCase
                 'is_main' => 1,
                 'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
-                'deleted_at' => null
             ],
             NoteFixture::class
         );
@@ -80,7 +84,6 @@ class NoteDeleteActionTest extends TestCase
                 'is_main' => 0,
                 'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
-                'deleted_at' => null
             ],
             NoteFixture::class
         );
@@ -137,7 +140,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadNoteDeletion_unauthenticated(): void
+    public function testNoteSubmitDeleteAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',
