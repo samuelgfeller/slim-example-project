@@ -204,7 +204,7 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test client read note modification with malformed request body
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideMalformedNoteRequestBody()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideMalformedNoteRequestBodyForUpdate()
      * @return void
      */
     public function testNoteSubmitUpdateAction_malformedRequest(array $malformedRequestBody): void

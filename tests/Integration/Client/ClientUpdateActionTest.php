@@ -12,6 +12,8 @@ use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -38,11 +40,7 @@ class ClientUpdateActionTest extends TestCase
     use FixtureTrait;
 
     /**
-     * Test that client values can be changed when authenticated.
-     * Any user role can do this, so it's not necessary to test them with a data provider.
-     * Fixture dependency
-     *  - User with id 1 higher than user linked to client
-     *  - Client status with id 1 higher than status linked to first client
+     * Test client values update when authenticated with different user roles.
      *
      * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate()
      *
@@ -117,6 +115,8 @@ class ClientUpdateActionTest extends TestCase
      * Test client values validation.
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateUpdateCaseProvider::invalidClientValuesAndExpectedResponseData()
+     * @param $requestBody
+     * @param $jsonResponse
      * @return void
      */
     public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
@@ -229,7 +229,7 @@ class ClientUpdateActionTest extends TestCase
             // so to test only one invalid key is enough
             ['non_existing_key' => 'value']
         );
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        // 400 Bad Request means that the client sent the request wrongly; it's a client error
         $this->expectException(HttpBadRequestException::class);
         $this->expectExceptionMessage('Request body malformed.');
 

@@ -83,14 +83,7 @@ class ClientListActionTest extends TestCase
 
 
     /**
-     * Request list of all clients
-     * Fixtures dependency:
-     *      UserFixture: one user (for session), all users linked to clients in client fixture
-     *      ClientStatusFixture: all clients statuses linked in client fixture
-     *      ClientFixture: - at least one active clients that is linked to the
-     *                     first user with role 'user' (authenticated user).
-     *                     - one that is deleted
-     *                     - one that is linked to other user
+     * Test list of clients
      *
      * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideValidClientListFilters()
      *
@@ -98,7 +91,7 @@ class ClientListActionTest extends TestCase
      * @param array<string, mixed> $rowFilter
      * @return void
      */
-    public function testClientListClientLoadAction(array $queryParams, array $rowFilter): void
+    public function testClientListAction(array $queryParams, array $rowFilter): void
     {
         // Insert users and status linked to clients and all clients including deleted one
         $this->insertFixtures([UserFixture::class, ClientStatusFixture::class, ClientFixture::class]);
@@ -175,7 +168,7 @@ class ClientListActionTest extends TestCase
      * @param array $expectedBody Expected response body
      * @return void
      */
-    public function testClientListClientLoadAction_invalidFilters(array $queryParams, array $expectedBody): void
+    public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
     {
         $this->insertFixture('user', (new UserFixture())->records[0]);
         $this->container->get(SessionInterface::class)->set('user_id', 1);

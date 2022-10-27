@@ -193,9 +193,11 @@ class NoteCreateActionTest extends TestCase
     }
 
     /**
-     * Test client read note modification with malformed request body
+     * Test client read note creation with different
+     * combinations of malformed request body.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteCreationMalformedRequestBody()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteMalformedRequestBodyForCreation()
+     * @param array $malformedRequestBody
      * @return void
      */
     public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void

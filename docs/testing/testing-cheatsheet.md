@@ -202,9 +202,11 @@ Form fields generally have specific criteria like a minimum length or specific f
 Test function, provider and assertions: **[Test validation and assert errors example](#test-validation-and-assert-errors-example)**.
 
 ### Test and assert malformed request body
-When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys).
+When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys)
+the server should respond with 400 Bad Request.
 
-Test function, provider and assertions: **[Test and assert malformed request body example](#test-and-assert-malformed-request-body-example)**.
+Test function, provider and assertions: 
+**[Malformed request body provider and test function example](#malformed-request-body-provider-and-test-function-example)**.
 
 ## Test and assert JSON response when unauthenticated
 When protected Ajax request is sent to the server and user is not logged-in, the client should redirect the user to 
@@ -243,7 +245,7 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUr
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
 <details>
-  <summary><h4>Assert response with `Redirect-to-route-name-if-unauthorized`</h4></summary>
+  <summary><h4>Assert response with <code>Redirect-to-route-name-if-unauthorized</code></h4></summary>
 
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
@@ -266,7 +268,7 @@ Asserting unauthenticated response without custom header is basically the same a
 [non-authenticated page action test](#non-authenticated-page-action-test).
 
 ## Test and assert CRUD requests examples
-### Resource loading
+### Data loading
 
 <details>
   <summary><h4>List action test example with privilege assertion but without filter</h4></summary>
@@ -383,11 +385,15 @@ public function provideUserAttributesAndExpectedResultForNoteList(): array
 
 <details>
 <summary><h4>List action test with filter and privilege assertion</h4></summary>
+
+Client read is basically only a page action test as the values are rendered by the server and not client.
+Client list however is rendered by the client via Ajax request, it's good for testing.
+
 Client list test action
 
 </details>
 
-### Test and assert basic data mutation (create, update and delete actions) with one provider 
+### Basic data mutation (create, update and delete actions) with one provider 
 To test the behaviour of all relevant different user roles a data provider is used that returns the relevant user attributes 
 for the logged-in user, resource owner and expected result so that the same test function can be used for all roles.  
 
@@ -520,7 +526,6 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
 ```
 </details>
 
-
 <details>
   <summary><h4>Note create action test</h4></summary>
 
@@ -596,6 +601,7 @@ public function testNoteSubmitCreateAction(
 <details>
   <summary><h4>Note update action test</h4></summary>
 
+`tests/Integration/Note/NoteUpdateActionTest.php`
 ```php
 /**
  * Test note modification on client-read page while being authenticated
@@ -687,6 +693,7 @@ public function testNoteSubmitUpdateAction(
 <details>
   <summary><h4>Note delete action test</h4></summary>
 
+`tests/Integration/Note/NoteDeleteActionTest.php`
 ```php
 /**
  * Test normal and main note deletion on client-read page
@@ -778,154 +785,647 @@ public function testNoteSubmitDeleteAction(
 </details>
 
 
-## Test validation and assert errors example
-Form fields generally have specific criteria like a minimum length or specific format that are validated.
-This can and should be tested.
-### Generate Validation cases with a case provider
-To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
-`tests/Provider/Client/ClientReadCaseProvider.php`
+### Data mutation with individual provider
+For more complex cases where each test function has different relevant test parameters and privileges between 
+create, read, update or delete actions and which column is targeted.
+
+<details>
+  <summary><h4>Client create action test and provider</h4></summary>
+
+`tests/Integration/Client/ClientCreateActionTest.php`
 ```php
 /**
- * Returns combinations of invalid data to trigger validation exception.
+ * Client creation with valid data
  *
- * @return array
+ * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::provideUsersAndExpectedResultForClientCreation()
+ *
+ * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+ * @return void
  */
-public function provideInvalidNoteAndExpectedResponseData(): array
+public function testClientSubmitCreateAction_authorization(
+    array $userLinkedToClientAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
+        $userLinkedToClientRow = $authenticatedUserRow;
+    }else{
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
+    }
+    // Client status is not authorization relevant for client creation
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientCreationValues = [
+        'first_name' => 'New',
+        'last_name' => 'Client',
+        'birthdate' => '2000-03-15',
+        'location' => 'Basel',
+        'phone' => '+41 77 222 22 22',
+        'email' => 'new-user@email.com',
+        'sex' => 'M',
+        'user_id' => $userLinkedToClientRow['id'],
+        'client_status_id' => $clientStatusId,
+    ];
+    // Simulate session
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+    // Make request
+    $request = $this->createJsonRequest(
+        'POST',
+        $this->urlFor('client-submit-create'),
+        $clientCreationValues
+    );
+    $response = $this->app->handle($request);
+    // Assert response status code: 201 Created
+    self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+    // If db record is expected to be created assert that
+    if ($expectedResult['db_entry_created'] === true) {
+        $clientDbRow = $this->findLastInsertedTableRow('client');
+        // Assert that db entry corresponds to the given client creation values. This is possible as the keys
+        // that the frontend sends to the server are the same as database columns.
+        // It is done with the function assertTableRow even though we already have the clientDbRow for simplicity
+        $this->assertTableRowEquals($clientCreationValues, 'client', $clientDbRow['id']);
+    } else {
+        // 0 rows expected in client table
+        $this->assertTableRowCount(0, 'client');
+    }
+    $this->assertJsonData($expectedResult['json_response'], $response);
+}
+```
+
+`tests/Provider/Client/ClientCreateCaseProvider.php`
+```php
+public function provideUsersAndExpectedResultForClientCreation(): array
 {
-    // Message over 500 chars
-    $tooLongMsg = 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii';
-
+    // Get users with different roles
+    $managingAdvisorAttributes = ['user_role_id' => 2];
+    $advisorAttributes = ['user_role_id' => 3];
+    $newcomerAttributes = ['user_role_id' => 4];
+    $authorizedResult = [
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
+        'db_entry_created' => true,
+        'json_response' => [
+            'status' => 'success',
+            'data' => null,
+        ],
+    ];
+    $unauthorizedResult = [
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+        'db_entry_created' => false,
+        'json_response' => [
+            'status' => 'error',
+            'message' => 'Not allowed to create a client.',
+        ]
+    ];
     return [
-        [
-            'message_too_short' => 'Me',
-            'json_response' => [
-                'status' => 'error',
-                'message' => 'Validation error',
-                'data' => [
-                    'message' => 'There is something in the note data that couldn\'t be validated',
-                    'errors' => [
-                        0 => [
-                            'field' => 'message',
-                            'message' => 'Required minimum length is 4',
-                        ]
-                    ]
-                ]
-            ]
+        // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+        [ // ? Newcomer owner - not allowed
+            'user_linked_to_client' => $newcomerAttributes,
+            'authenticated_user' => $newcomerAttributes,
+            'expected_result' => $unauthorizedResult
         ],
-        [
-            'message_too_long' => $tooLongMsg,
-            'json_response' => [
-                'status' => 'error',
-                'message' => 'Validation error',
-                'data' => [
-                    'message' => 'There is something in the note data that couldn\'t be validated',
-                    'errors' => [
-                        0 => [
-                            'field' => 'message',
-                            'message' => 'Required maximum length is 500',
-                        ]
-                    ]
-                ]
-            ]
+        [ // ? Advisor owner - allowed
+            'user_linked_to_client' => $advisorAttributes,
+            'authenticated_user' => $advisorAttributes,
+            'expected_result' => $authorizedResult,
         ],
-
+        [ // ? Advisor not owner - not allowed
+            'user_linked_to_client' => $newcomerAttributes,
+            'authenticated_user' => $advisorAttributes,
+            'expected_result' => $unauthorizedResult,
+        ],
+        [ // ? Managing not owner - allowed
+            'user_linked_to_client' => $advisorAttributes,
+            'authenticated_user' => $managingAdvisorAttributes,
+            'expected_result' => $authorizedResult,
+        ],
     ];
 }
 ```
-### Test validation on resource modification
-This is the full test where a note is edited with invalid inputs given by the data provider above:
-`tests/Integration/Client/ClientReadActionTest.php`
+
+</details>
+
+<details>
+  <summary><h4>Client update action test and provider</h4></summary>
+
+As there are different authorization rules for some columns, the data to be changed is also passed via data
+provider.
+
+`tests/Integration/Client/ClientUpdateActionTest.php`
 ```php
 /**
- * Test note modification on client-read page with invalid data.
- * Fixture dependencies:
- *   - 1 client
- *   - 1 user linked to client
- *   - 1 note that is linked to the client and the user
+ * Test client values update when authenticated with different user roles.
  *
- * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideInvalidNoteAndExpectedResponseData()
+ * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate
+ *
+ * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $requestData array of data for the request body
+ * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
  * @return void
  */
-public function testClientReadNoteModification_invalid(string $invalidMessage, array $expectedResponseData): void
-{
-    // Add the minimal needed data
-    $clientData = (new ClientFixture())->records[0];
-    // Insert user linked to client and user that is logged in
-    $userData = $this->findRecordsFromFixtureWhere(['id' => $clientData['user_id']], UserFixture::class)[0];
-    $this->insertFixture('user', $userData);
-    // Insert linked status
-    $this->insertFixtureWhere(['id' => $clientData['client_status_id']], ClientStatusFixture::class);
-    // Insert client
-    $this->insertFixture('client', $clientData);
-    // Insert note linked to client and user
-    $noteData = $this->findRecordsFromFixtureWhere(['client_id' => $clientData['id'], 'user_id' => $userData['id']]
-        NoteFixture::class)[0];
-    $this->insertFixture('note', $noteData);
-    // Simulate logged-in user with same user as linked to client
-    $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
-    $request = $this->createJsonRequest(
-        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
-        ['message' => $invalidMessage]
+public function testClientSubmitUpdateAction_authenticated(
+    array $userLinkedToClientAttr,
+    array $authenticatedUserAttr,
+    array $requestData,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
+        $userLinkedToClientRow = $authenticatedUserRow;
+    }else{
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class)
+    }
+    // Insert client status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert client that will be used for this test
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
+        ClientFixture::class
     );
+    // Insert other user and client status that are used for the modification request if needed
+    if (isset($requestData['user_id'])) {
+        // Add 1 to user_id linked to client
+        $requestData['user_id'] = $clientRow['user_id'] + 1;
+        $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], UserFixture::class);
+    }
+    if (isset($requestData['client_status_id'])) {
+        // Add 1 to client status id
+        $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
+        $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], ClientStatusFixture::clas
+    }
+    $request = $this->createJsonRequest(
+        'PUT',
+        $this->urlFor('client-submit-update', ['client_id' => $clientRow['id']]),
+        $requestData
+    );
+    // Simulate logged-in user with logged-in user id
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     $response = $this->app->handle($request);
-    // Assert 422 Unprocessable entity
-    self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-    // Assert json response data
-    $this->assertJsonData($expectedResponseData, $response);
+    // Assert status code
+    self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+    // Assert database
+    if ($expectedResult['db_changed'] === true) {
+        // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
+        // Check that data in request body was changed
+        $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
+    } else {
+        // If db is not expected to change, data should remain the same as when it was inserted from the fixture
+        $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
+    }
+    $this->assertJsonData($expectedResult['json_response'], $response);
 }
 ```
 
-## Test and assert malformed request body example
-When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys).
+`tests/Provider/Client/ClientUpdateCaseProvider.php`
+```php
+public function provideUsersAndExpectedResultForClientUpdate(): array
+{
+    // Set different user role attributes
+    $managingAdvisorRow = ['user_role_id' => 2];
+    $advisorRow = ['user_role_id' => 3];
+    $newcomerRow = ['user_role_id' => 4];
+    $authorizedResult = [
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+        'db_changed' => true,
+        'json_response' => [
+            'status' => 'success',
+            'data' => null,
+        ],
+    ];
+    $unauthorizedResult = [
+        StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+        'db_changed' => false,
+        'json_response' => [
+            'status' => 'error',
+            'message' => 'Not allowed to update client.',
+        ]
+    ];
+    $basicClientDataChanges = [
+        'first_name' => 'NewFirstName',
+        'last_name' => 'NewLastName',
+        'birthdate' => '1999-10-22',
+        'location' => 'NewLocation',
+        'phone' => '011 111 11 11',
+        'email' => 'new.email@test.ch',
+        'sex' => 'O',
+    ];
+    // To avoid testing each column separately for each user role, the most basic change is taken to test
+    // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database
+    return [
+        // * Newcomer
+        // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+        [ // ? Newcomer owner - data to be changed is the one with the least privilege needed - not allowed
+            'user_linked_to_client' => $newcomerRow,
+            'authenticated_user' => $newcomerRow,
+            'data_to_be_changed' => ['first_name' => 'value'],
+            'expected_result' => $unauthorizedResult
+        ],
+        // * Advisor
+        [ // ? Advisor owner - data to be changed allowed
+            'user_linked_to_client' => $advisorRow,
+            'authenticated_user' => $advisorRow,
+            'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
+            'expected_result' => $authorizedResult,
+        ],
+        [ // ? Advisor owner - data to be changed not allowed
+            'user_linked_to_client' => $advisorRow,
+            'authenticated_user' => $advisorRow,
+            'data_to_be_changed' => ['user_id' => 'new'],
+            'expected_result' => $unauthorizedResult,
+        ],
+        [ // ? Advisor not owner - data to be changed allowed
+            'user_linked_to_client' => $managingAdvisorRow,
+            'authenticated_user' => $advisorRow,
+            'data_to_be_changed' => $basicClientDataChanges,
+            'expected_result' => $authorizedResult,
+        ],
+        [ // ? Advisor not owner - data to be changed not allowed
+            'user_linked_to_client' => $managingAdvisorRow,
+            'authenticated_user' => $advisorRow,
+            'data_to_be_changed' => ['client_status_id' => 'new'],
+            'expected_result' => $unauthorizedResult,
+        ],
+        // * Managing advisor
+        [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
+            'user_linked_to_client' => $advisorRow,
+            'authenticated_user' => $managingAdvisorRow,
+            'data_to_be_changed' => array_merge(
+                $basicClientDataChanges,
+                ['client_status_id' => 'new', 'user_id' => 'new']
+            ),
+            'expected_result' => $authorizedResult,
+        ],
+    ];
+}
+```
+</details>
 
-In order to not having to write multiple tests, I'm using a data provider:
+<details>
+  <summary><h4>Client delete action test and provider</h4></summary>
 
-`tests/Provider/Client/ClientReadCaseProvider.php`
+`tests/Integration/Client/ClientDeleteActionTest.php`
 ```php
 /**
- * Provide malformed note message request body
- * 
- * @return array
+ * Test delete client submit with different authenticated user roles.
+ *
+ * @dataProvider \App\Test\Provider\Client\ClientDeleteCaseProvider::provideUsersForClientDelete()
+ *
+ * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
+ * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+ * @return void
  */
-public function provideMalformedNoteRequestBody(): array
+public function testClientSubmitDeleteAction_authenticated(
+    array $userLinkedToClientAttr,
+    array $authenticatedUserAttr,
+    array $expectedResult
+): void {
+    // Insert authenticated user and user linked to resource with given attributes containing the user role
+    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
+        $userLinkedToClientRow = $authenticatedUserRow;
+    } else {
+        // If authenticated user and owner user is not the same, insert owner
+        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
+    }
+    // Insert client status
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert client linked to given user
+    $clientRow = $this->insertFixturesWithAttributes(
+        ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
+        ClientFixture::class
+    );
+    // Simulate logged-in user
+    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+    $request = $this->createJsonRequest(
+        'DELETE',
+        // Post delete route with id like /posts/1
+        $this->urlFor('client-submit-delete', ['client_id' => $clientRow['id']]),
+    );
+    $response = $this->app->handle($request);
+    // Assert: 200 OK
+    self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+    // Assert database
+    if ($expectedResult['db_changed'] === true) {
+        // Assert that deleted_at is NOT null
+        self::assertNotNull($this->getTableRowById('client', $clientRow['id'], ['deleted_at']));
+    } else {
+        // If db is not expected to change, data should remain the same as when it was inserted from the fixture
+        $this->assertTableRow(['deleted_at' => null], 'client', $clientRow['id']);
+    }
+    // Assert response json content
+    $this->assertJsonData($expectedResult['json_response'], $response);
+}
+```
+
+`tests/Provider/Client/ClientDeleteCaseProvider.php`
+```php
+public function provideUsersForClientDelete(): array
+    {
+        // Get users with different roles
+        $managingAdvisorAttributes = ['user_role_id' => 2];
+        $advisorAttributes = ['user_role_id' => 3];
+        $newcomerAttributes = ['user_role_id' => 4];
+        $authorizedResult = [
+            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+            'db_changed' => true,
+            'json_response' => [
+                'status' => 'success',
+                'data' => null,
+            ],
+        ];
+        $unauthorizedResult = [
+            StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
+            'db_changed' => false,
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Not allowed to delete client.',
+            ]
+        ];
+        // Permissions for deletion are quite simple: only managing advisors and higher may delete clients
+        return [
+            // * Newcomer
+            [ // ? Newcomer owner - not allowed
+                // Technically this test case is not relevant as higher hierarchy role is also not allowed to perform action  
+                'user_linked_to_client' => $newcomerAttributes,
+                'authenticated_user' => $newcomerAttributes,
+                'expected_result' => $unauthorizedResult
+            ],
+            // * Advisor
+            [ // ? Advisor owner - not allowed
+                'user_linked_to_client' => $advisorAttributes,
+                'authenticated_user' => $advisorAttributes,
+                'expected_result' => $unauthorizedResult,
+            ],
+            // * Managing advisor
+            [ // ? Managing advisor not owner - allowed
+                'user_linked_to_client' => $advisorAttributes,
+                'authenticated_user' => $managingAdvisorAttributes,
+                'expected_result' => $authorizedResult,
+            ],
+        ];
+    }
+```
+</details>
+
+## Test validation and assert errors example
+Form fields generally have specific criteria like a minimum length or specific format that are validated on the server.
+This hast to be tested.
+### Generate validation cases with a case provider
+To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
+For creation and modification the validity rules are the same so one provider can be used for both in this case.
+But if the fields have disparities it may very well be necessary to use a provider for each action.
+
+<details>
+  <summary><h4>Case provider <code>tests/Provider/Client/ClientCreateUpdateCaseProvider.php</code></h4></summary>
+
+```php
+public function invalidClientValuesAndExpectedResponseData(): array
 {
+    // The goal is to include as many values as possible that should trigger validation errors in each iteration
     return [
         [
-            'wrong_key' => [
-                'wrong_message_key' => 'Message',
+            // Most values too short
+            'request_body' => [
+                'first_name' => 'T',
+                'last_name' => 'A',
+                'birthdate' => '1850-01-01', // too old
+                'location' => 'La',
+                'phone' => '07',
+                'email' => 'test@test', // missing extension
+                'sex' => 'A', // invalid value
+                'user_id' => '999', // non-existing user
+                'client_status_id' => '999', // non-existing status
             ],
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'data' => [
+                    'message' => 'There is something in the client data that couldn\'t be validated',
+                    'errors' => [
+                        0 => [
+                            'field' => 'client_status',
+                            'message' => 'Client_status not existing',
+                        ],
+                        1 => [
+                            'field' => 'user',
+                            'message' => 'User not existing',
+                        ],
+                        2 => [
+                            'field' => 'first_name',
+                            'message' => 'Required minimum length is 2',
+                        ],
+                        3 => [
+                            'field' => 'last_name',
+                            'message' => 'Required minimum length is 2',
+                        ],
+                        4 => [
+                            'field' => 'email',
+                            'message' => 'Invalid email address',
+                        ],
+                        5 => [
+                            'field' => 'birthdate',
+                            'message' => 'Invalid birthdate',
+                        ],
+                        6 => [
+                            'field' => 'location',
+                            'message' => 'Required minimum length is 3',
+                        ],
+                        7 => [
+                            'field' => 'phone',
+                            'message' => 'Required minimum length is 3',
+                        ],
+                        8 => [
+                            'field' => 'sex',
+                            'message' => 'Invalid sex value given. Allowed are M, F and O',
+                        ],
+                    ]
+                ]
+            ]
         ],
         [
-            'wrong_amount' => [
-                'message' => 'Message',
-                'second_key' => 'invalid',
+            // Most values too long
+            'request_body' => [
+                'first_name' => str_repeat('i', 101), // 101 chars
+                'last_name' => str_repeat('i', 101),
+                'birthdate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'), // 1 day in the future
+                'location' => str_repeat('i', 101),
+                'phone' => '+41 0071 121 12 12 12', // 21 chars
+                'email' => 'test$@test.ch', // invalid email
+                'sex' => '', // empty string
+                // All keys are needed as same dataset is used for create which always expects all keys
+                // and the json_response has to be equal too so the value can't be null.
+                'user_id' => '999', // non-existing user
+                'client_status_id' => '999', // non-existing status
             ],
+            'json_response' => [
+                'status' => 'error',
+                'message' => 'Validation error',
+                'data' => [
+                    'message' => 'There is something in the client data that couldn\'t be validated',
+                    'errors' => [
+                        0 => [
+                            'field' => 'client_status',
+                            'message' => 'Client_status not existing',
+                        ],
+                        1 => [
+                            'field' => 'user',
+                            'message' => 'User not existing',
+                        ],
+                        2 => [
+                            'field' => 'first_name',
+                            'message' => 'Required maximum length is 100',
+                        ],
+                        3 => [
+                            'field' => 'last_name',
+                            'message' => 'Required maximum length is 100',
+                        ],
+                        4 => [
+                            'field' => 'birthdate',
+                            'message' => 'Invalid birthdate',
+                        ],
+                        5 => [
+                            'field' => 'location',
+                            'message' => 'Required maximum length is 100',
+                        ],
+                        6 => [
+                            'field' => 'phone',
+                            'message' => 'Required maximum length is 20',
+                        ],
+                    ]
+                ]
+            ]
         ]
     ];
 }
 ```
-And the actual test function:
-`tests/Integration/Client/ClientReadActionTest.php`
+
+</details>
+
+### Test validation on resource modification
+This is the full test where a client is edited with invalid inputs given by the data provider above.
+
+<details>
+  <summary><h4>Test function <code>tests/Integration/Client/ClientUpdateActionTest.php</code></h4></summary>
+
 ```php
 /**
- * Test client read note modification with malformed request body
+ * Test client values validation.
  *
- * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideMalformedNoteRequestBody()
+ * @dataProvider \App\Test\Provider\Client\ClientCreateUpdateCaseProvider::invalidClientValuesAndExpectedResponseData()
+ * @param $requestBody
+ * @param $jsonResponse
  * @return void
  */
-public function testClientReadNoteModification_malformedRequest(array $malformedRequestBody): void
+public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
+{
+    // Insert user that is allowed to change content
+    $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    // Insert client that will be used for this test
+    $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
+        ClientFixture::class);
+    $request = $this->createJsonRequest(
+        'PUT',
+        $this->urlFor('client-submit-update', ['client_id' => 1]),
+        $requestBody
+    );
+    // Simulate logged-in user with logged-in user id
+    $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+    $response = $this->app->handle($request);
+    // Assert 200 OK
+    self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+    // database should be unchanged
+    $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
+    $this->assertJsonData($jsonResponse, $response);
+}
+```
+
+</details>
+
+## Test and assert malformed request body example
+When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys)
+the server should respond with 400 Bad Request.
+
+The different combination of malformed request body are provided via data provider. It doesn't have to be 
+so extensive though, I don't know if I will implement it so thoroughly for each module but that would cover most cases.
+
+### Malformed request body provider and test function example
+
+<details>
+  <summary><h4>Case provider <code>tests/Provider/Note/NoteCaseProvider.php</code></h4></summary>
+
+```php
+public function provideNoteMalformedRequestBodyForCreation(): array
+{
+    return [
+        [
+            [
+                'message_wrong' => 'Message', // wrong message key name
+                'client_id' => 1,
+                'is_main' => 1,
+            ],
+        ],
+        [
+            [
+                'message' => 'Message',
+                'client_id_wrong' => 1, // wrong client id
+                'is_main' => 1,
+            ],
+        ],
+        [
+            [
+                'message' => 'Message',
+                'client_id' => 1,
+                'is_main_wrong' => 1, // wrong is_main
+            ],
+        ],
+        [
+            [ // One key too much
+                'message' => 'Message',
+                'client_id' => 1,
+                'is_main' => 1,
+                'extra_key' => 1, // wrong is_main
+            ],
+        ],
+        [
+            [ // Missing is_main
+                'message' => 'Message',
+                'client_id' => 1,
+            ],
+        ],
+    ];
+}
+```
+</details>
+
+<details>
+  <summary><h4>Test function <code>tests/Integration/Note/NoteCreateActionTest.php</code></h4></summary>
+
+```php
+/**
+ * Test client read note creation with different 
+ * combinations of malformed request body.
+ *
+ * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteMalformedRequestBodyForCreation()
+ * @param array $malformedRequestBody
+ * @return void
+ */
+public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
 {
     // Action class should directly return error so only logged-in user has to be inserted
-    $userData = (new UserFixture())->records[0];
-    $this->insertFixture('user', $userData);
+    $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
     // Simulate logged-in user with same user as linked to client
     $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
     $request = $this->createJsonRequest(
-        'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
+        'POST',
+        $this->urlFor('note-submit-creation'),
         $malformedRequestBody
     );
     // Bad Request (400) means that the client sent the request wrongly; it's a client error
@@ -935,195 +1435,8 @@ public function testClientReadNoteModification_malformedRequest(array $malformed
     $this->app->handle($request);
 }
 ```
-  
+</details>
 
 -----
 
-## More examples
-<details>
-  <summary><b>Client read normal and main note modification with different user roles</b></summary>
-
-`tests/Integration/Client/ClientReadActionTest.php`
-```php
-/**
- * Test note modification on client-read page while being authenticated.
- * Fixture dependencies:
- *   - 1 client that is linked to the non admin user retrieved in the provider
- *   - 1 main note that is linked to the same non admin user and to the client
- *   - 1 normal note that is linked to the same user and client
- *   - 1 normal note that is not linked to this user but the client
- *
- * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
- * @return void
- */
-public function testClientReadNoteModification(
-    array $userLinkedToNoteData,
-    array $authenticatedUserData,
-    array $expectedResult
-): void {
-    $this->insertFixture('user', $userLinkedToNoteData);
-    // If authenticated user and user that should be linked to client is different, insert authenticated user
-    if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
-        $this->insertFixture('user', $authenticatedUserData);
-    }
-
-    // Insert one client linked to this user
-    $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
-        ClientFixture::class)[0];
-    // In array first to assert user data later
-    $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-    $this->insertFixture('client', $clientRow);
-
-    // Insert main note attached to client and given "owner" user
-    $mainNoteData = $this->findRecordsFromFixtureWhere(
-        ['is_main' => 1, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
-        NoteFixture::class
-    )[0];
-    $this->insertFixture('note', $mainNoteData);
-    // Insert normal note attached to client and given "owner" user
-    $normalNoteData = $this->findRecordsFromFixtureWhere(
-        ['is_main' => 0, 'user_id' => $userLinkedToNoteData['id'], 'client_id' => $clientRow['id']],
-        NoteFixture::class
-    )[0];
-    $this->insertFixture('note', $normalNoteData);
-
-    // Simulate logged-in user
-    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
-
-    $newNoteMessage = 'New note message';
-    // --- *MAIN note request ---
-    // Create request to edit main note
-    $mainNoteRequest = $this->createJsonRequest(
-        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteData['id']]),
-        ['message' => $newNoteMessage,]
-    );
-    // Make request
-    $mainNoteResponse = $this->app->handle($mainNoteRequest);
-
-    // Assert 200 OK note updated successfully
-    self::assertSame(
-        $expectedResult['modification']['main_note'][StatusCodeInterface::class],
-        $mainNoteResponse->getStatusCode()
-    );
-
-    // Database is always expected to change for the main note as every user can change it
-    $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteData['id']);
-
-    // Assert response
-    $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
-
-    // --- *NORMAL NOTE REQUEST ---
-    $normalNoteRequest = $this->createJsonRequest(
-        'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteData['id']]),
-        ['message' => $newNoteMessage,]
-    );
-    // Make request
-    $normalNoteResponse = $this->app->handle($normalNoteRequest);
-    self::assertSame(
-        $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
-        $normalNoteResponse->getStatusCode()
-    );
-
-    // If db is expected to change assert the new message
-    if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
-        $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteData['id']);
-    } else {
-        // If db is not expected to change message should remain the same as when it was inserted first
-        $this->assertTableRow(['message' => $normalNoteData['message']], 'note', $normalNoteData['id']);
-    }
-
-    $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
-}
-```
-</details>
-
-<details>
-  <summary><b>Client read normal and main note deletion with different user roles</b></summary>
-
-`tests/Integration/Client/ClientReadActionTest.php`
-```php
-/**
- * Test normal and main note deletion on client-read page
- * while being authenticated.
- *
- * @dataProvider \App\Test\Provider\Client\ClientReadCaseProvider::provideAuthenticatedAndLinkedUserForNote()
- * @return void
- */
-public function testClientReadNoteDeletion(
-    array $userLinkedToNoteData,
-    array $authenticatedUserData,
-    array $expectedResult
-): void {
-    $this->insertFixture('user', $userLinkedToNoteData);
-    // If authenticated user and user that is linked to client is different, insert authenticated user
-    if ($userLinkedToNoteData['id'] !== $authenticatedUserData['id']) {
-        $this->insertFixture('user', $authenticatedUserData);
-    }
-    // Insert one client linked to this user
-    $clientRow = $this->findRecordsFromFixtureWhere(['user_id' => $userLinkedToNoteData['id']],
-        ClientFixture::class)[0];
-    // In array first to assert user data later
-    $this->insertFixtureWhere(['id' => $clientRow['client_status_id']], ClientStatusFixture::class);
-    $this->insertFixture('client', $clientRow);
-    // Insert main note attached to client and given "owner" user
-    $mainNoteData = $this->findRecordsFromFixtureWhere(
-        [
-            'is_main' => 1,
-            'user_id' => $userLinkedToNoteData['id'],
-            'client_id' => $clientRow['id'],
-            'deleted_at' => null
-        ],
-        NoteFixture::class
-    )[0];
-    $this->insertFixture('note', $mainNoteData);
-    // Insert normal note attached to client and given "owner" user
-    $normalNoteData = $this->findRecordsFromFixtureWhere(
-        [
-            'is_main' => 0,
-            'user_id' => $userLinkedToNoteData['id'],
-            'client_id' => $clientRow['id'],
-            'deleted_at' => null
-        ],
-        NoteFixture::class
-    )[0];
-    $this->insertFixture('note', $normalNoteData);
-    // Simulate logged-in user
-    $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
-    // --- *MAIN note request ---
-    // Create request to edit main note
-    $mainNoteRequest = $this->createJsonRequest(
-        'DELETE',
-        $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
-    );
-    // As deleting the main note is not a valid request the server throws an HttpMethodNotAllowed exception
-    $this->expectException(HttpMethodNotAllowedException::class);
-    $this->expectExceptionMessage('The main note cannot be deleted.');
-    // Make request
-    $this->app->handle($mainNoteRequest);
-    // Database is not expected to change for the main note as there is no way to delete it from the frontend
-    $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
-    // --- *NORMAL NOTE REQUEST ---
-    $normalNoteRequest = $this->createJsonRequest(
-        'DELETE',
-        $this->urlFor('note-submit-delete', ['note_id' => $normalNoteData['id']]),
-    );
-    // Make request
-    $normalNoteResponse = $this->app->handle($normalNoteRequest);
-    self::assertSame(
-        $expectedResult['deletion']['normal_note'][StatusCodeInterface::class],
-        $normalNoteResponse->getStatusCode()
-    );
-    // Assert database
-    $noteDeletedAtValue = $this->findTableRowById('note', $normalNoteData['id'])['deleted_at'];
-    // If db is expected to change assert the new message (when provided authenticated user is allowed to do action)
-    if ($expectedResult['deletion']['normal_note']['db_changed'] === true) {
-        // Test that deleted at is not null
-        self::assertNotNull($noteDeletedAtValue);
-    } else {
-        // If db is not expected to change message should remain the same as when it was inserted first
-        self::assertNull($noteDeletedAtValue);
-    }
-    $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
-}
-```
-</details>
+[//]: # (## More examples)

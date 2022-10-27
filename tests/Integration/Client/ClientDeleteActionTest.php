@@ -34,7 +34,7 @@ class ClientDeleteActionTest extends TestCase
     use FixtureTrait;
 
     /**
-     * Test user delete client with different roles
+     * Test delete client submit with different authenticated user roles.
      *
      * @dataProvider \App\Test\Provider\Client\ClientDeleteCaseProvider::provideUsersForClientDelete()
      *
@@ -43,7 +43,7 @@ class ClientDeleteActionTest extends TestCase
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
-    public function testClientDeleteAction_authenticated(
+    public function testClientSubmitDeleteAction_authenticated(
         array $userLinkedToClientAttr,
         array $authenticatedUserAttr,
         array $expectedResult
@@ -100,7 +100,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientDeleteAction_unauthenticated(): void
+    public function testClientSubmitDeleteAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',
