@@ -1,9 +1,9 @@
 import {basePath} from "../../../general/js/config.js";
-import {createClientModal} from "./client-creation.js";
+import {displayClientCreateModal} from "./client-creation.js";
 
 
 document.getElementById('create-client-btn').addEventListener('click', e => {
-    createClientModal();
+    displayClientCreateModal();
 });
 
 

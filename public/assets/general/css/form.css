@@ -1,4 +1,4 @@
-:root{
+:root {
     --outer-box-border-radius: 40px;
     --input-boder-radius: 100px;
     --formColor: #6592a2;
@@ -6,11 +6,12 @@
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
-@media (min-width:100px) {
+@media (min-width: 100px) {
     .form-background {
         width: 100%;
         /*background-color: var(--layout-main-color);*/
     }
+
     /* Form design source: https://codepen.io/abergin/pen/vYmaPE */
     .page-form-container {
         width: 100%;
@@ -29,17 +30,21 @@
     .transition, .form-input-group label, .form-input-group input, .form input[type=submit] {
         transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
     }
+
     /*Animated form input group*/
     .form-input-group {
         position: relative;
         padding: 10px 0;
     }
+
     .form-input-group:first-of-type {
         padding-top: 0;
     }
+
     .form-input-group:last-of-type {
         padding-bottom: 0;
     }
+
     .form-input-group label {
         transform-origin: left center;
         color: var(--layout-darker-main-color);
@@ -55,7 +60,7 @@
         pointer-events: none;
     }
 
-    .form-input-group input, .form-input{
+    .form-input-group input, .form-input {
         appearance: none;
         border: none;
         /*box-shadow: 0 2px 10px rgba(63, 135, 166, 0.2);*/
@@ -72,18 +77,62 @@
         position: relative;
         z-index: 1;
     }
+
     .form-input-group textarea, textarea.form-input {
         border-radius: 20px;
         padding: 15px;
     }
+
+    /*Radio button styling https://moderncss.dev/pure-css-custom-styled-radio-buttons/ */
+    .form-input-group label.form-radio-input, .form-radio-input {
+        display: grid;
+        grid-template-columns: 1em auto;
+        gap: 0.5em;
+        margin-top: 10px;
+        margin-left: 7px;
+    }
+
+    .form-radio-input input[type="radio"] {
+        appearance: none;
+        background-color: #fff;
+        margin: 0;
+        font: inherit; /* Inherit font size */
+        width: 1.15em;
+        height: 1.15em;
+        border: 0.15em solid var(--layout-main-color);
+        border-radius: 50%;
+        /* adjustments so the input stays horizontally centered in relation to the first line of the label text */
+        /*transform: translateY(-0.075em);*/
+        display: grid;
+        place-content: center;
+    }
+
+    .form-radio-input input[type="radio"]:before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--layout-main-color);
+    }
+
+    .form-radio-input input[type="radio"]:checked:before {
+        transform: scale(1);
+
+    }
+
+
     .form-input-group input:hover, .form-input:hover {
         /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .form-input-group input:focus, .form-input:focus {
         outline: none;
         border-bottom: none;
     }
+
     /* Form input focus when input is inside .form-input-group and thus with floating label */
     .form-input-group input:focus {
         margin-top: 30px;
@@ -91,16 +140,19 @@
         color: white;
     }
 
-    .form-input-group input:-webkit-autofill:focus{
+    .form-input-group input:-webkit-autofill:focus {
         /*top: 30px;*/
     }
+
     .form-input-group input:valid, .form-input-group input:-webkit-autofill {
         margin-top: 30px;
     }
+
     .form-input-group input:focus ~ label {
         transform: translate(0, -200%);
         color: black;
     }
+
     .form-input-group input:valid ~ label,
     .form-input-group input:-webkit-autofill ~ label {
         transform: translate(0, -200%);
@@ -108,7 +160,7 @@
 
     .form input[type=submit], .submit-btn {
         width: 50%;
-        border:none;
+        border: none;
         /*box-shadow: 0 0 10px rgba(63, 135, 166, 0.2);*/
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         color: var(--layout-darker-main-color);
@@ -132,19 +184,20 @@
         cursor: default;
     }
 
-    .page-form-container.invalid-input:focus, input.invalid-input:focus{
+    .page-form-container.invalid-input:focus, input.invalid-input:focus {
     }
 
-    .invalid-form-container{
+    .invalid-form-container {
         /* No effects yet, can be added */
     }
 
     /* When form input group is faulty after submit (server response) */
-    .input-group-error label{
+    .input-group-error label {
         color: #9f0009;
         font-weight: bold;
     }
-    .input-group-error input, input.invalid-input{
+
+    .input-group-error input, input.invalid-input {
         border-bottom: 2px solid #c0000a;
     }
 
@@ -155,7 +208,7 @@
         font-size: 0.9em;
     }
 
-    #form-general-error-msg{
+    #form-general-error-msg {
         margin-bottom: 55px;
     }
 
@@ -170,25 +223,33 @@
         color: #d66500;
     }
 
-    .content-below-input{
+    .content-below-input {
         margin-left: 15px;
     }
 }
 
-@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     .page-form-container {
         width: 90%;
         padding: 35px 25px;
         border-radius: 40px;
     }
 }
-@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
+
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
     .page-form-container {
         width: 60%;
         box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
     }
 }
-@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+
+@media (min-width: 1025px) {
+    /* big landscape tablets, laptops, and desktops */
 
 }
-@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+
+@media (min-width: 1281px) {
+    /* hi-res laptops and desktops */
+}
