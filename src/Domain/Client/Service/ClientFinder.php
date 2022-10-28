@@ -130,17 +130,4 @@ class ClientFinder
         return $clientResultCollection;
     }
 
-    /**
-     * Find all dropdown values for a client
-     *
-     * @return ClientDropdownValuesData
-     */
-    public function findClientDropdownValues(): ClientDropdownValuesData
-    {
-        return new ClientDropdownValuesData(
-            $this->clientStatusFinderRepository->findAllStatusesForDropdown(),
-            $this->userNameAbbreviator->abbreviateUserNamesForDropdown($this->userFinderRepository->findAllUsers()),
-        );
-    }
-
 }

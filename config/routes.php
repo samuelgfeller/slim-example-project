@@ -95,16 +95,15 @@ return function (App $app) {
 
     // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
     $app->group('/clients', function (RouteCollectorProxy $group) {
-        // Client requests where user DOESN'T need to be authenticated
-        $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
-
         $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)
             ->setName('client-read-page');
+
+        $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
+        // Client create and update form are rendered by the client and need to have the dropdown options
+        $group->get('dropdown-options', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
         /* For api response action:
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
-         https://stackoverflow.com/a/19287394/9013718
-         return $this->responder->respondWithJson($response, $postWithUser); */
-        // Client requests where user DOES need to be authenticated
+         https://stackoverflow.com/a/19287394/9013718 */
         $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)
             ->setName('client-submit-create');
         $group->put('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientUpdateAction::class)

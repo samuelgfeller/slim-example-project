@@ -3,10 +3,8 @@
 namespace App\Application\Actions\Client;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Client\Service\ClientFinder;
-use App\Domain\Note\Service\NoteFinder;
-use App\Infrastructure\Client\ClientDeleterRepository;
+use App\Domain\Client\Service\ClientUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -24,6 +22,7 @@ final class ClientReadPageAction
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientFinder $clientFinder,
+        protected readonly ClientUtilFinder $clientUtilFinder,
     ) {
     }
 
@@ -43,7 +42,7 @@ final class ClientReadPageAction
         array $args
     ): ResponseInterface {
         $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id'], false);
-        $dropdownValues = $this->clientFinder->findClientDropdownValues();
+        $dropdownValues = $this->clientUtilFinder->findClientDropdownValues();
 
         return $this->responder->render(
             $response,

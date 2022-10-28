@@ -19,32 +19,25 @@ use Slim\Exception\HttpBadRequestException;
  */
 final class ClientUpdateAction
 {
-    /**
-     * @var Responder
-     */
-    private Responder $responder;
     protected LoggerInterface $logger;
 
 
     /**
      * The constructor.
      *
-     * @param Responder $responder The responder
+     * @param Responder $responder
      * @param SessionInterface $session
      * @param ClientUpdater $clientUpdater
      * @param LoggerFactory $logger
-     * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
-        Responder $responder,
+        protected readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly ClientUpdater $clientUpdater,
         LoggerFactory $logger,
         OutputEscapeService $outputEscapeService,
     ) {
-        $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('client-update');
-        $this->outputEscapeService = $outputEscapeService;
     }
 
     /**
@@ -67,7 +60,7 @@ final class ClientUpdateAction
             $clientValues = $request->getParsedBody();
             // If request body empty, the update logic doesn't have to run
             if ($clientValues !== [] && $clientValues !== null) {
-            // Check that given client request body keys are valid
+                // Check that given client request body keys are valid
                 foreach ($clientValues as $key => $clientValue) {
                     // Check if request body keys are all one of the following columns that may be changed
                     if (!in_array($key, [

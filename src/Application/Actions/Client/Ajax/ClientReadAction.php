@@ -3,10 +3,7 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Client\Service\ClientFinder;
-use App\Domain\Note\Service\NoteFinder;
-use App\Infrastructure\Client\ClientDeleterRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
