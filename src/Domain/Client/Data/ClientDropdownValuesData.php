@@ -10,16 +10,16 @@ class ClientDropdownValuesData
     // [int:id => string:name]
     public ?array $statuses;
     public ?array $users;
-    public ?array $sexes = ['M' => 'Male', 'F' => 'Female', 'O' => 'Other', 'NULL' => null];
+    public ?array $sexes = ['M' => 'Male', 'F' => 'Female', 'O' => 'Other'];
 
     public function __construct(
         ?array $statuses = null,
         ?array $users = null,
-        ?array $sexes = null,
+        // ?array $sexes = null,
     )
     {
         $this->statuses = $statuses;
         $this->users = $users;
-        $this->sexes = $sexes;
+        // $this->sexes = $sexes;
     }
 }

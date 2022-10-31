@@ -53,20 +53,7 @@ class ClientUtilGetDropdownOptionsAction
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
-        } // If user requests its own posts he has to be logged in
-        catch (UnauthorizedException $unauthorizedException) {
-            // Respond with status code 401 Unauthorized which is caught in the Ajax call
-            return $this->responder->respondWithJson(
-                $response,
-                [
-                    'loginUrl' => $this->responder->urlFor(
-                        'login-page',
-                        [],
-                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')])
-                ],
-                401
-            );
         }
-        return $this->responder->respondWithJson($response, $clientResultCollection);
+        return $this->responder->respondWithJson($response, $dropdownOptions);
     }
 }

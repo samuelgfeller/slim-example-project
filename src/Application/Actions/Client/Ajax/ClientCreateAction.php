@@ -18,24 +18,17 @@ use Slim\Exception\HttpBadRequestException;
 final class ClientCreateAction
 {
     /**
-     * @var Responder
-     */
-    private Responder $responder;
-    protected OutputEscapeService $outputEscapeService;
-
-
-    /**
      * The constructor.
      *
      * @param Responder $responder The responder
      * @param ClientCreator $clientCreator
+     * @param SessionInterface $session
      */
     public function __construct(
-        Responder $responder,
+        private readonly Responder $responder,
         private readonly ClientCreator $clientCreator,
         private readonly SessionInterface $session,
     ) {
-        $this->responder = $responder;
     }
 
     /**

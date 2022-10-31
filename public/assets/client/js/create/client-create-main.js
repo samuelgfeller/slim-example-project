@@ -1,9 +1,20 @@
 import {basePath} from "../../../general/js/config.js";
 import {displayClientCreateModal} from "./client-creation.js";
+import {loadClientDropdownOptions} from "../client-util.js";
+import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../templates/client-template-util.js";
 
 
 document.getElementById('create-client-btn').addEventListener('click', e => {
     displayClientCreateModal();
+    // load dropdown options into client create modal
+    loadClientDropdownOptions((dropdownOptions) => {
+        let assignedUserOptions = getDropdownAsHtmlOptions(dropdownOptions.users);
+        document.getElementById('assigned-user-select').insertAdjacentHTML("beforeend", assignedUserOptions);
+        let clientStatusDropdown = getDropdownAsHtmlOptions(dropdownOptions.statuses);
+        document.getElementById('client-status-select').insertAdjacentHTML('beforeend', clientStatusDropdown);
+        let clientSexRadioButtons = getRadioButtonsAsHtml(dropdownOptions.sexes, 'sex');
+        document.getElementById('client-sex-input-group-div').insertAdjacentHTML('beforeend', clientSexRadioButtons);
+    });
 });
 
 

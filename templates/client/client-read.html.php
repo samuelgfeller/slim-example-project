@@ -66,8 +66,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
         <!-- Assigned user select options-->
         <div>
-            <label for="assigned-user" class="discrete-label">Helper</label>
-            <select name="user_id" class="default-select" id="assigned-user"
+            <label for="assigned-user-select" class="discrete-label">Helper</label>
+            <select name="user_id" class="default-select" id="assigned-user-select"
                 <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                 <?php
                 // Linked user select options

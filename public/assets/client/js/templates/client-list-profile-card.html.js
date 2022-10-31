@@ -1,4 +1,4 @@
-import {getAvatarPath, getDropdownOptions} from "./client-template-util.js";
+import {getAvatarPath, getDropdownAsHtmlOptions} from "./client-template-util.js";
 
 /**
  * HTML code for client profile card
@@ -43,12 +43,12 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
         <div class="profile-card-assignee-and-status">
             <div>
                 <select name="assigned-user" class="default-select">
-                ${getDropdownOptions(allUsers, assignedUserId)}
+                ${getDropdownAsHtmlOptions(allUsers, assignedUserId)}
                 </select>
             </div>
             <div>
                 <select name="status" class="default-select">
-                ${getDropdownOptions(allStatuses, statusId)}
+                ${getDropdownAsHtmlOptions(allStatuses, statusId)}
                 </select>
             </div>
         </div>

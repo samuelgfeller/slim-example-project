@@ -90,6 +90,7 @@
         gap: 0.5em;
         margin-top: 10px;
         margin-left: 7px;
+        cursor: pointer;
     }
 
     .form-radio-input input[type="radio"] {
@@ -105,6 +106,7 @@
         /*transform: translateY(-0.075em);*/
         display: grid;
         place-content: center;
+        cursor: pointer;
     }
 
     .form-radio-input input[type="radio"]:before {

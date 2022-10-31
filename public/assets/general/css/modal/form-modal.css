@@ -140,7 +140,7 @@
 
 @media (min-width: 641px) {
     #modal {
-        padding-top: 100px; /* Location of the box */
+        padding-top: 50px; /* Location of the box */
     }
 
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
