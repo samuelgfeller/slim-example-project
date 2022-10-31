@@ -1,6 +1,6 @@
 <?php
 
-use App\Application\Handler\DefaultErrorHandler;
+use App\Application\ErrorHandler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;

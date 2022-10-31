@@ -3,10 +3,10 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Application\Validation\RequestBodyKeysValidator;
 use App\Domain\Client\Service\ClientCreator;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,6 +28,7 @@ final class ClientCreateAction
         private readonly Responder $responder,
         private readonly ClientCreator $clientCreator,
         private readonly SessionInterface $session,
+        private readonly RequestBodyKeysValidator $requestBodyKeysValidator,
     ) {
     }
 
@@ -49,23 +50,20 @@ final class ClientCreateAction
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             $clientValues = $request->getParsedBody();
 
-            // If a html form name changes, these changes have to be done in the data class constructor
+            // If html form names change they have to be adapted in the data class attributes too (e.g. ClientData)
             // Check that request body syntax is formatted right (tested in ClientCreateActionTest - malformedRequest)
-            // isset cannot be used in this context as it returns false if the key exists but is null, and we don't want
-            // to test required fields here, just that the request body syntax is right
-            if (null !== $clientValues && [] !== $clientValues && !array_diff([
-                    'client_status_id',
-                    'user_id',
-                    'first_name',
-                    'last_name',
-                    'phone',
-                    'location',
-                    'birthdate',
-                    'email',
-                    'sex',
-                ], array_keys($clientValues)) && (count($clientValues) === 9 ||
-                    // client_message may be present in request body or not
-                    (array_key_exists('client_message', $clientValues) && count($clientValues) === 10))) {
+            if ($this->requestBodyKeysValidator->requestBodyHasValidKeys($clientValues, [
+                'client_status_id',
+                'user_id',
+                'first_name',
+                'last_name',
+                'phone',
+                'location',
+                'main_note',
+                'birthdate',
+                'email',
+            ], // Html radio buttons and checkboxes are not sent over by the client if they are not set hence optional
+                ['sex'])) {
                 try {
                     $insertId = $this->clientCreator->createClient($clientValues);
                 } catch (ValidationException $exception) {

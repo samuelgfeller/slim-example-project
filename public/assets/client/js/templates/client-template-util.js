@@ -34,7 +34,6 @@ export function getRadioButtonsAsHtml(allEntries, inputName, checkedKey = 0){
     return radioButtonsHtml;
 }
 
-
 /**
  * Determine avatar path with sex
  *

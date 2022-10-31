@@ -44,9 +44,9 @@ class NoteValidator
         // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
-        $this->validateMessage($note->message, $validationResult, true);
+        $this->validateNoteMessage($note->message, $validationResult, false);
         if ($note->isMain === 1) {
-            $this->validateIsMainNote($note->clientId, $validationResult);
+            $this->validateMainNote($note->clientId, $validationResult);
         }
         // It's a bit pointless to check user existence as user should always exist if he's logged in but here is how I'd do it
         $this->validator->validateExistence($note->userId, 'user', $validationResult, true);
@@ -66,7 +66,7 @@ class NoteValidator
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
         if (null !== $note->message) {
-            $this->validateMessage($note->message, $validationResult, false);
+            $this->validateNoteMessage($note->message, $validationResult, false);
         }
 
         $this->validator->throwOnError($validationResult);
@@ -81,7 +81,7 @@ class NoteValidator
      * @param bool $required
      * @return void
      */
-    protected function validateMessage($noteMsg, ValidationResult $validationResult, bool $required): void
+    protected function validateNoteMessage($noteMsg, ValidationResult $validationResult, bool $required): void
     {
         // Not test if empty string as user could submit note with empty string which has to be checked
         if (null !== $noteMsg) {
@@ -94,13 +94,13 @@ class NoteValidator
     }
 
     /**
-     * Validate that if if_main is true its valid
+     * Validate if main note can be created
      *
      * @param int $clientId
      * @param ValidationResult $validationResult
      * @return void
      */
-    protected function validateIsMainNote(int $clientId, ValidationResult $validationResult): void
+    protected function validateMainNote(int $clientId, ValidationResult $validationResult): void
     {
         $exists = $this->noteValidatorRepository->mainNoteAlreadyExistsForClient($clientId);
         if ($exists === true) {

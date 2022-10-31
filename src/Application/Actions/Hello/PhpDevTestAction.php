@@ -4,7 +4,7 @@
 namespace App\Application\Actions\Hello;
 
 use App\Application\Responder\Responder;
-use App\Domain\Hello\PhpDevTester;
+use App\Application\Validation\RequestBodyKeysValidator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,9 +14,10 @@ use Psr\Http\Message\ServerRequestInterface;
 class PhpDevTestAction
 {
     public function __construct(
-        private Responder $responder,
-        private PhpDevTester $phpDevTester
-    ) { }
+        private readonly Responder $responder,
+        private readonly RequestBodyKeysValidator $requestBodyKeysValidator
+    ) {
+    }
 
     /**
      * Action.
@@ -32,9 +33,22 @@ class PhpDevTestAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
+        $parsedBody = [
+            'client_status_id' => 2,
+            'sex2' => 2,
+        ];
+        $requiredKeys = [
+            'client_status_id',
+            'sex',
+        ];
+        $optionalKeys = [
+            'sex2',
+        ];
+        $success = false;
 
-        $this->phpDevTester->testInheritanceInjection();
+        var_dump($this->requestBodyKeysValidator->requestBodyHasValidKeys($parsedBody, $requiredKeys, $optionalKeys));
 
-        return $this->responder->respondWithJson($response, ['success' => 'true']);
+
+        return $this->responder->createResponse($response, ['success' => $success]);
     }
 }

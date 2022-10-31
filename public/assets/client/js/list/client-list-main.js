@@ -10,10 +10,6 @@ document.addEventListener('click', initClientListEventDelegationActions);
 document.addEventListener('auxclick', initClientListEventDelegationActions);
 
 function initClientListEventDelegationActions(e) {
-    // Submit form on create button click
-    if (e.target && e.target.id === 'submit-btn-create-client') {
-        submitCreateClient();
-    }
     // Open edit client modal after edit button click in client box
     if (e.target && e.target.className.includes('card-edit-icon')) {
         let clientId = e.target.dataset.id;

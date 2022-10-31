@@ -13,10 +13,12 @@ class NoteData
     public ?int $userId;
     public ?int $clientId;
     public ?string $message;
-    public ?int $isMain;
+    public ?int $isMain; // int 1 or 0
     public ?string $createdAt;
     public ?string $updatedAt;
     public ?string $deletedAt;
+
+    // Not in database
     public ?UserData $user;
 
     // User mutation rights from authenticated user

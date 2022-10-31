@@ -235,7 +235,7 @@ final class ArrayReader
     {
         $value = $this->find($key, $default);
 
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return null;
         }
 

@@ -11,9 +11,15 @@ return function (App $app) {
     // Home page
 //    $app->redirect('/', 'hello', 301)->setName('home-page');
     $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
+    $app->post('/hello', function ($request, $response){
+        // var_dump($request->getParsedBody(), $request->getQueryParams());
+        return $response;
+    })->setName('hello-test-post');
     $app->get('/', \App\Application\Actions\Hello\HelloAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
+    $app->get('/test', \App\Application\Actions\Hello\PhpDevTestAction::class)->setName('test');
+
 
     // Authentication - pages and Ajax submit
     $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(

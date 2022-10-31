@@ -5,6 +5,8 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Service\NoteValidator;
 use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
 

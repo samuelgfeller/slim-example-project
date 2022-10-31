@@ -62,7 +62,8 @@ function addNotesToDom(notes) {
 
     // If no results, tell user so
     if (notes.length === 0) {
-        noteContainer.insertAdjacentHTML('afterend', '<p id="no-notes-info">No notes were found.</p>')
+        // document.getElementById('client-activity-personal-info-container').insertAdjacentHTML('afterend', '<br><p id="no-notes-info">No notes were found.</p>')
+        noteContainer.insertAdjacentHTML('beforeend', '<p id="no-notes-info">No notes were found.</p>')
     }
 
 

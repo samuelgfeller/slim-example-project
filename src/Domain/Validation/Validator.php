@@ -60,12 +60,12 @@ final class Validator
      */
     public
     function validateLengthMin(
-        $value,
-        $fieldName,
+        string|int|null $value,
+        string $fieldName,
         ValidationResult $validationResult,
-        $length = 3
+        int $length = 3
     ): void {
-        if (strlen(trim($value)) < $length) {
+        if (strlen(trim((string)$value)) < $length) {
             $validationResult->setError($fieldName, sprintf('Required minimum length is %s', $length));
         }
     }
@@ -73,19 +73,19 @@ final class Validator
     /**
      * Check if a values string length is more than a defined value.
      *
-     * @param $value
+     * @param string|int|null $value
      * @param $fieldName
      * @param ValidationResult $validationResult
      * @param int $length
      */
     public
     function validateLengthMax(
-        $value,
-        $fieldName,
+        string|int|null $value,
+        string $fieldName,
         ValidationResult $validationResult,
-        $length = 255
+        int $length = 255
     ): void {
-        if (strlen(trim($value)) > $length) {
+        if (strlen(trim((string)$value)) > $length) {
             $validationResult->setError($fieldName, sprintf('Required maximum length is %s', $length));
         }
     }
@@ -93,19 +93,19 @@ final class Validator
     /**
      * Validate Name.
      *
-     * @param string $name
+     * @param string|null $name
      * @param string $fieldName first_name or surname
-     * @param bool $required on update the name doesn't have to be set but on creation it has
      * @param ValidationResult $validationResult
+     * @param bool $required on update the name doesn't have to be set but on creation it has
      */
     public
     function validateName(
-        string $name,
+        ?string $name,
         string $fieldName,
         ValidationResult $validationResult,
         bool $required = false,
     ): void {
-        if ('' !== $name) {
+        if ('' !== $name && null !== $name) {
             $this->validateLengthMax($name, $fieldName, $validationResult, 100);
             $this->validateLengthMin($name, $fieldName, $validationResult, 2);
         } // elseif only executed if previous "if" is falsy
@@ -145,14 +145,14 @@ final class Validator
      * @param DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
      * @param bool $required
-     * @param null $birthdateUserInput
+     * @param null|string $birthdateUserInput
      */
     public
     function validateBirthdate(
         DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
         bool $required = false,
-        $birthdateUserInput = null,
+        null|string $birthdateUserInput = null,
     ): void {
         // If birthdate is string, change it to DateTimeImmutable object for validation
         if (is_string($birthdate) === true && !empty($birthdate)){

@@ -5,6 +5,7 @@ namespace App\Domain\Client\Data;
 
 use App\Common\ArrayReader;
 use App\Common\DateTimeImmutable;
+use App\Domain\Note\Data\NoteData;
 
 class ClientData
 {
@@ -67,7 +68,8 @@ class ClientData
             // id set below
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'birthdate' => $this->birthdate->format('Y-m-d'),
+            // If birthdate not null, return given format
+            'birthdate' => $this->birthdate?->format('Y-m-d'),
             'location' => $this->location,
             'phone' => $this->phone,
             'email' => $this->email,

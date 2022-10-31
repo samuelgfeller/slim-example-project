@@ -99,8 +99,9 @@
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
     }
 
-    .form-input:disabled {
-        background-color: rgba(255, 255, 255, 0.5);
+    .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled {
+        background-color: rgb(238 238 238);
+        color: grey;
     }
 
     .form-select {

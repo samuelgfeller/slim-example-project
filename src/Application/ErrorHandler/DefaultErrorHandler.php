@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Handler;
+namespace App\Application\ErrorHandler;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
