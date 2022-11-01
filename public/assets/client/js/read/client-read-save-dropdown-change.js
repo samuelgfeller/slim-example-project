@@ -1,4 +1,5 @@
 import {basePath} from "../../../general/js/config.js";
+import {handleFail} from "../../../general/js/requests/fail-handler.js";
 
 export function saveClientReadDropdownChange() {
     // Make ajax call

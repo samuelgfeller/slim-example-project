@@ -194,8 +194,8 @@
     }
 
     /* When form input group is faulty after submit (server response) */
-    .input-group-error label {
-        color: #9f0009;
+    .input-group-error label, label.invalid-input {
+        /*color: #9f0009;*/
         font-weight: bold;
     }
 
@@ -206,7 +206,7 @@
     .err-msg {
         padding: 10px 0 0 15px;
         display: block;
-        /*color: #9f0009;*/
+        color: #9f0009;
         font-size: 0.9em;
     }
 

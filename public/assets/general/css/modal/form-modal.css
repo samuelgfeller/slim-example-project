@@ -3,7 +3,7 @@
     /* The Modal (background) */
     #modal {
         position: fixed; /* Stay in place */
-        z-index: 100; /* Sit on top of content placeholder but below flash */
+        z-index: 100; /* Sit on top of content placeholder but below .flash */
         padding-top: 20px; /* Location of the box */
         left: 0;
         top: 0;
@@ -90,13 +90,17 @@
 
     /* Overwrite form.css style to match better modal */
     .form-input {
-        background-color: rgba(255, 255, 255, 0.75);
+        background-color: rgba(255, 255, 255, 0.7);
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
     }
 
     .form-input:hover {
-        /* Keep box shadow on hover */
+        /* Keep the same box shadow on hover */
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
+        background-color: rgb(255, 255, 255);
+    }
+    .form-input:focus{
+        background-color: rgb(255, 255, 255);
     }
 
     .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled {

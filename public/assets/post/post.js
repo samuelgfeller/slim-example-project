@@ -3,6 +3,8 @@
 // const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
 // Load posts on
+import {handleFail} from "../general/js/requests/fail-handler.js";
+
 loadPosts();
 
 // Open modal box to create new post after click on plus button

@@ -14,7 +14,7 @@ $this->setLayout('layout.html.php');
 
 <?php
 // Define assets that should be included
-$this->addAttribute('js', ['assets/auth/password-strength-checker.js']);
+$this->addAttribute('jsModules', ['assets/auth/password-strength-checker.js']);
 $this->addAttribute('css', ['assets/general/css/form.css']); ?>
 
 <h2>Change password</h2>

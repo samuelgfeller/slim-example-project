@@ -6,20 +6,23 @@ export function displayClientCreateModal() {
     let body = `<div class="modal-form">
 <form action="javascript:void(0);" class="wide-modal-form" id="create-client-modal-form">
         <div class="wide-modal-form-input-group">
-            <label>First name</label>
-            <input type="text" name="first_name" placeholder="Hans" class="form-input" minlength="2" maxlength="100">
+            <label for="first-name-input">First name</label>
+            <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
+            minlength="1" maxlength="100">
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Last name</label>
-            <input type="text" name="last_name" placeholder="Zimmer" class="form-input" minlength="2" maxlength="100">
+            <label for="last-name-input">Last name</label>
+            <input type="text" name="last_name" id="last-name-input" placeholder="Zimmer" class="form-input" 
+            minlength="1" maxlength="100">
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Birthdate</label>
-            <input type="date" name="birthdate" placeholder="15.03.2000" class="form-input">
+            <label for="birthdate-input">Birthdate</label>
+            <input type="date" name="birthdate" id="birthdate-input" placeholder="15.03.2000" class="form-input">
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Location</label>
-            <input type="text" placeholder="Basel" name="location" class="form-input" minlength="2" maxlength="100">
+            <label for="location-input">Location</label>
+            <input type="text" placeholder="Basel" id="location-input" name="location" class="form-input" minlength="2" 
+            maxlength="100">
         </div>
         <div class="wide-modal-form-input-group double-width-modal-form-input-group">
             <label for="create-message-textarea" class="form-label">Main note</label>
@@ -28,24 +31,26 @@ export function displayClientCreateModal() {
         </div>
         <div class="wide-modal-form-input-group" id="client-sex-input-group-div">
             <label>Sex</label><br>
-            <!-- Sex radio buttons are added after modal load   -->
+            <!-- Sex radio buttons are added after modal load client-template-util.js  -->
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Phone number</label>
-            <input type="text" name="phone" placeholder="061 422 32 11" class="form-input" minlength="3" maxlength="20">
+            <label for="phone-input">Phone number</label>
+            <input type="text" name="phone" id="phone-input" placeholder="061 422 32 11" class="form-input" 
+            minlength="3" maxlength="20">
         </div>
         <div class="wide-modal-form-input-group">
-            <label>E-Mail</label>
-            <input type="text" name="email" placeholder="mail@example.com" class="form-input" maxlength="254">
+            <label for="email-input">E-Mail</label>
+            <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
+            maxlength="254">
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Assigned user</label>
+            <label for="assigned-user-select">Assigned user</label>
             <select name="user_id" class="form-select" id="assigned-user-select">
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
         <div class="wide-modal-form-input-group">
-            <label>Status</label>
+            <label for="client-status-select">Status</label>
             <select name="client_status_id" id="client-status-select" class="form-select">
             <!-- Dropdown options loaded afterwards -->
             </select>

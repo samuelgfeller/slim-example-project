@@ -4,6 +4,7 @@ import {
     hideCheckmarkLoader,
     initNotesEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
+import {handleFail} from "../../../general/js/requests/fail-handler.js";
 
 let noteCreationHideCheckMarkTimeout = [];
 

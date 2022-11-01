@@ -4,6 +4,7 @@ import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
 } from "./client-read-note-loading-placeholder.js";
+import {handleFail} from "../../../general/js/requests/fail-handler.js";
 
 /**
  * Loading notes into dom

@@ -71,7 +71,7 @@
                 <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
                     'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/people.svg" alt="Non-assigned">
-                <img src="assets/general/img/nav/people_hover.svg" alt="People">
+                <img src="assets/general/img/nav/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
             </a>
             <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>"
@@ -91,6 +91,13 @@
                 <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
                 <span class="nav-span">Profile</span>
             </a>
+            <a href="<?= $route->urlFor('profile-page') ?>"
+                <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/logout.svg" alt="Logout">
+                <img src="assets/general/img/nav/logout-filled.svg" alt="Logout">
+                <span class="nav-span">Logout</span>
+            </a>
+
 
 
         </nav>

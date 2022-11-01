@@ -18,7 +18,7 @@
     border: none;
     padding: 0;
     align-items: stretch;
-    z-index: 11; /* On top of content placeholder .activity and #modal */
+    z-index: 101; /* On top of content placeholder .activity and #modal */
 }
 
 .flash-close-btn {

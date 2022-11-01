@@ -1,5 +1,6 @@
 import {basePath} from "../../../general/js/config.js";
 import {loadClients} from "../list/client-list-loading.js";
+import {handleFail} from "../../../general/js/requests/fail-handler.js";
 
 /**
  * Send client creation to server
@@ -12,11 +13,17 @@ export function submitCreateClient() {
         createForm.reportValidity();
         return;
     }
+    // Check that either firstname or last name is set
+    let firstNameInp = createForm.querySelector('#first-name-input');
+    let lastNameInp = createForm.querySelector('#last-name-input');
+    if (firstNameInp.value === '' && lastNameInp.value === ''){
+        firstNameInp.style.borderBottom = '2px solid #c0000a';
+        confirm('Please fill out either the first name or last name');
+        return;
+    }
 
     // Serialize form data before disabling form elements
-    let form = document.getElementById('create-client-modal-form');
-    // Get form data
-    let formData = getFormData(form);
+    let formData = getFormData(createForm);
     // Disable form to indicate that the request is made AFTER getting form data as FormData doesn't consider disabled fields
     toggleDisableForm('create-client-modal-form');
 

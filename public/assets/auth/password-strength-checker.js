@@ -1,4 +1,6 @@
 // Init vars
+import {handleFail} from "../general/js/requests/fail-handler.js";
+
 let password1Inp = document.getElementById('password1-inp')
 let password2Inp = document.getElementById('password2-inp');
 

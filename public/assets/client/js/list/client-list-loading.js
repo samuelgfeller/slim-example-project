@@ -1,6 +1,7 @@
 import {getClientProfileCardHtml} from "../templates/client-list-profile-card.html.js";
 import {displayClientProfileCardLoadingPlaceholder, removeClientCardContentPlaceholder} from "./client-list-loading-placeholder.js";
 import {basePath} from "../../../general/js/config.js";
+import {handleFail} from "../../../general/js/requests/fail-handler.js";
 
 /**
  *  Load clients into DOM
