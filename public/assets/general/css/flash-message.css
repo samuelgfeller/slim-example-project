@@ -1,7 +1,7 @@
 #flash-container {
     right: 50px;
     position: fixed;
-    z-index: 101; /* On top of content placeholder .activity and #modal */
+    z-index: 101; /* On top of content placeholder and #modal */
 }
 .flash {
     width: 340px;
@@ -25,6 +25,7 @@
 
 .flash-close-btn {
     position: absolute;
+    display: none;
     /*top: -10px; !* Large font size and time symbol pretty small it has to be pushed upwards*!*/
     right: 10px;
     height: 20px;
@@ -33,6 +34,9 @@
     color: #6e6e6e;
     cursor: pointer;
     align-self: flex-start;
+}
+.flash:hover .flash-close-btn{
+    display: block;
 }
 
 /* Color / icon part of flash */

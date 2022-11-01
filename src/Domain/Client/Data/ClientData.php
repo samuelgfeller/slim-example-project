@@ -27,7 +27,7 @@ class ClientData
     public ?DateTimeImmutable $createdAt;
 
     // Not database field but here so that age doesn't have to be calculated in view
-    public ?int $age;
+    public ?int $age = null;
 
     /**
      * Client Data constructor.

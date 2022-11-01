@@ -4,6 +4,7 @@ import {
 import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
+import {initAutoResizingTextareas} from "../../../general/js/default.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -23,7 +24,7 @@ loadClientNotes(() => {
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
 
 const clientStatus = document.querySelector('select[name="client_status_id"]:not([disabled])');
-clientStatus.addEventListener('change', saveClientReadDropdownChange);
+clientStatus?.addEventListener('change', saveClientReadDropdownChange);
 
 const assignedUser = document.querySelector('select[name="user_id"]:not([disabled])');
-assignedUser.addEventListener('change', saveClientReadDropdownChange);
+assignedUser?.addEventListener('change', saveClientReadDropdownChange);

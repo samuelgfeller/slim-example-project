@@ -25,20 +25,35 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
         <!-- other div needed to attach bubble to img -->
         <div class="profile-card-avatar">
             <img src=${getAvatarPath(sex)} alt="avatar">
-            <span class="profile-card-age">${age}</span>
+    ${(() => { // Only display age if content not empty
+        if (age !== null && age !== '') {
+            return `<span class="profile-card-age">${age}</span>`
+        }
+        return '';
+    })()}
         </div>
     </div>
     <div class="profile-card-content">
-        <h3>${firstName} ${lastName}</h3>
+        <h3>${firstName !== null ? firstName : ''} ${lastName !== null ? lastName : ''}</h3>
         <div class="profile-card-infos-flexbox">
-            <div>
-                <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                <span>${location}</span>
-            </div>
-            <div>
-                <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                <span>${phoneNumber}</span>
-            </div>
+    ${(() => { // Only display location icon and content if not empty 
+        if (location !== null && location !== '') {
+            return `<div>
+                        <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
+                        <span>${location}</span>
+                    </div>`
+        }
+        return '';
+    })()}
+    ${(() => { // Only display location icon and content if not empty 
+        if (phoneNumber !== null && phoneNumber !== '') {
+            return `<div>
+                        <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+                        <span>${phoneNumber}</span>
+                    </div>`
+        }
+        return '';
+    })()}
         </div>
         <div class="profile-card-assignee-and-status">
             <div>

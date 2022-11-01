@@ -30,7 +30,7 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
     let htmlString = '<div id="alert-modal">' +
         '<div id="alert-modal-box">' +
         '<div id="alert-modal-icon">' +
-        // '<img src="assets/general/img/warning-icon.svg" alt="warning">' +
+        // '<img src="assets/general/img/flash-warning.svg" alt="warning">' +
         '</div>' +
         '<div id="alert-modal-body">' +
         '<h3>' + title + '</h3>' +

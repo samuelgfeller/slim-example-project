@@ -4,7 +4,6 @@ import {createFlashMessage} from "../../../general/js/requests/flash-message.js"
 
 // Load clients at page startup
 loadClients();
-createFlashMessage('success', 'Client created successfully.');
 
 // Event delegation (event listeners on dynamically loaded elements)
 document.addEventListener('click', initClientListEventDelegationActions);

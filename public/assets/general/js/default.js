@@ -1,5 +1,3 @@
-import {showFlashMessages} from "./requests/flash-message.js";
-
 window.addEventListener("load", function (event) {
     /** Class with no animation on page load */
     let elements = document.getElementsByClassName("no-animation-on-page-load");
@@ -49,7 +47,7 @@ window.addEventListener("DOMContentLoaded", function (event) {
  * Source: https://stackoverflow.com/a/25621277/9013718
  * Known issue: https://stackoverflow.com/q/73475416/9013718
  */
-function initAutoResizingTextareas() {
+export function initAutoResizingTextareas() {
     // Target all textarea fields that have class name auto-resize-textarea
     let textareas = document.getElementsByClassName("auto-resize-textarea");
     // Init observer to call resizeTextarea when the dimensions of the textareas change

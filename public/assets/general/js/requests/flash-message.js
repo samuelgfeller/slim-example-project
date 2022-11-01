@@ -34,19 +34,19 @@ export function createFlashMessage(typeName, message) {
     switch (typeName) {
         case 'success':
             // icon.className = typeName;
-            icon.src = 'assets/general/img/checkmark.svg';
+            icon.src = 'assets/general/img/flash-checkmark.svg';
             icon.alt = 'success';
             break;
         case 'warning':
-            icon.src = 'assets/general/img/warning-icon.svg';
+            icon.src = 'assets/general/img/flash-warning.svg';
             icon.alt = 'success';
             break;
         case 'info':
-            icon.src = 'assets/general/img/info-icon.svg';
+            icon.src = 'assets/general/img/flash-info.svg';
             icon.alt = 'success';
             break;
         case 'error':
-            icon.src = 'assets/general/img/cross-icon.svg';
+            icon.src = 'assets/general/img/flash-error.svg';
             icon.alt = 'error';
             break;
     }
@@ -101,7 +101,6 @@ export function showFlashMessages() {
         flashFig.addEventListener('click', function () {
             slideFlashOut(flash);
         });
-
 
         setTimeout(slideFlashOut, (index * 1000) + 8000, flash);
     });

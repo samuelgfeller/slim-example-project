@@ -38,9 +38,10 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
                   minlength="4" maxlength="500"
-                  data-editable="<?= $clientAggregate->mainNoteData->privilege
-                      ->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
+                  data-editable="<?= $clientAggregate->mainNoteData
+                      ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
+                  placeholder="New main note"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-read">
             <div class="checkmark draw"></div>
@@ -91,36 +92,38 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!--  Notes are populated here via ajax  -->
     </div>
 
-    <div id="client-personal-info-flex-container">
-
-        <?php
-        if ($clientAggregate->location) { ?>
-            <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
-                <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-                <span><?= $clientAggregate->location ?></span>
-            </a>
+    <?php
+    if ($clientAggregate->location || $clientAggregate->phone || $clientAggregate->email) { ?>
+        <div id="client-personal-info-flex-container">
             <?php
-        }
-        if ($clientAggregate->phone) { ?>
-            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
-                <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                <span><?= $clientAggregate->phone ?></span>
-            </a>
-            <?php
-        }
-        if ($clientAggregate->email) { ?>
-            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank">
-                <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+            if ($clientAggregate->location) { ?>
+                <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
+                    <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
+                    <span><?= $clientAggregate->location ?></span>
+                </a>
                 <?php
-                $emailParts = explode('@', $clientAggregate->email);
-                ?>
-                <div id="email-div">
-                    <span id="email-prefix"><?= $emailParts[0] ?></span><br><span
-                            id="email-suffix">@<?= $emailParts[1] ?></span>
-                </div>
-            </a>
-            <?php
-        } ?>
-    </div>
-
+            }
+            if ($clientAggregate->phone) { ?>
+                <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
+                    <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+                    <span><?= $clientAggregate->phone ?></span>
+                </a>
+                <?php
+            }
+            if ($clientAggregate->email) { ?>
+                <a href="mailto:<?= $clientAggregate->email ?>" target="_blank">
+                    <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+                    <?php
+                    $emailParts = explode('@', $clientAggregate->email);
+                    ?>
+                    <div id="email-div">
+                        <span id="email-prefix"><?= $emailParts[0] ?></span><br><span
+                                id="email-suffix">@<?= $emailParts[1] ?></span>
+                    </div>
+                </a>
+                <?php
+            } ?>
+        </div>
+        <?php
+    } ?>
 </div>
