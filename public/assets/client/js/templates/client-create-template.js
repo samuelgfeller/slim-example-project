@@ -26,7 +26,8 @@ export function displayClientCreateModal() {
         </div>
         <div class="wide-modal-form-input-group double-width-modal-form-input-group">
             <label for="create-message-textarea" class="form-label">Main note</label>
-            <textarea rows="4" cols="50" name="main_note" id="create-message-textarea" class="form-input"
+            <!-- Name has to be "message" as it's the name used in note validation -->
+            <textarea rows="4" cols="50" name="message" id="create-message-textarea" class="form-input"
                       placeholder="Your message here." minlength="4" maxlength="500"></textarea>
         </div>
         <div class="wide-modal-form-input-group" id="client-sex-input-group-div">

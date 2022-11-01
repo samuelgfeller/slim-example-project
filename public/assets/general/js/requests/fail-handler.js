@@ -35,7 +35,14 @@ export function handleFail(xhr) {
             errorMsg = '';
             let json = xhr.response;
             let validationResponse = JSON.parse(json);
-
+            // Remove any existing previous error messages as this is the result of a new request
+            for (const errorMsg of document.querySelectorAll('strong.err-msg')){
+                errorMsg?.remove();
+            }
+            // Remove the classname invalid-input on any element that had it
+            for (const elementWithInvalidInput of document.querySelectorAll('.invalid-input')){
+                elementWithInvalidInput.classList.remove('invalid-input');
+            }
             // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
             for (const error of validationResponse.data.errors) {
                 displayFormInputErrorMessage(error.field, error.message);

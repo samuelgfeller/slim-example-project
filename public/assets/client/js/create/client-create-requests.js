@@ -1,6 +1,7 @@
 import {basePath} from "../../../general/js/config.js";
 import {loadClients} from "../list/client-list-loading.js";
 import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {displayFormInputErrorMessage} from "../../../general/js/validation/form-validation.js";
 
 /**
  * Send client creation to server
@@ -17,8 +18,7 @@ export function submitCreateClient() {
     let firstNameInp = createForm.querySelector('#first-name-input');
     let lastNameInp = createForm.querySelector('#last-name-input');
     if (firstNameInp.value === '' && lastNameInp.value === ''){
-        firstNameInp.style.borderBottom = '2px solid #c0000a';
-        confirm('Please fill out either the first name or last name');
+        displayFormInputErrorMessage('first_name', 'Please fill out either the first name or last name');
         return;
     }
 

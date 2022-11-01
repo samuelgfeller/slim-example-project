@@ -7,8 +7,10 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Exceptions\ValidationException;
 use App\Domain\Note\Service\NoteCreator;
 use App\Infrastructure\Client\ClientCreatorRepository;
+use App\Infrastructure\Client\ClientDeleterRepository;
 
 class ClientCreator
 {
@@ -18,6 +20,7 @@ class ClientCreator
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly NoteCreator $noteCreator,
+        private readonly ClientDeleterRepository $clientDeleterRepository,
     ) {
     }
 
@@ -36,13 +39,20 @@ class ClientCreator
         if ($this->clientAuthorizationChecker->isGrantedToCreate($client)) {
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Create main note
-            $this->noteCreator->createNote([
-                'message' => $clientValues['main_note'],
-                'client_id' => $clientId,
-                'user_id' => $client->userId,
-                'is_main' => 1
-            ]);
-            return $clientId;
+            try {
+                $this->noteCreator->createNote([
+                    'message' => $clientValues['message'],
+                    'client_id' => $clientId,
+                    'user_id' => $client->userId,
+                    'is_main' => 1
+                ]);
+                return $clientId;
+            } catch (ValidationException $validationException){
+                // Main note creation wasn't successful so user has to adapt form and will re-submit all client data
+                // and to prevent duplicate the newly created client has to be deleted
+                $this->clientDeleterRepository->hardDeleteClient($clientId);
+                throw $validationException;
+            }
         }
 
         throw new ForbiddenException('Not allowed to create client.');

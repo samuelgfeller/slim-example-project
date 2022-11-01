@@ -59,7 +59,7 @@ final class ClientCreateAction
                 'last_name',
                 'phone',
                 'location',
-                'main_note',
+                'message',
                 'birthdate',
                 'email',
             ], // Html radio buttons and checkboxes are not sent over by the client if they are not set hence optional

@@ -14,7 +14,7 @@ class ClientDeleterRepository
     ) { }
 
     /**
-     * Delete post from database
+     * Mark client as deleted in database
      *
      * @param int $id
      * @return bool
@@ -22,6 +22,18 @@ class ClientDeleterRepository
     public function deleteClient(int $id): bool
     {
         $query = $this->queryFactory->newDelete('client')->where(['id' => $id]);
+        return $query->execute()->rowCount() > 0;
+    }
+
+    /**
+     * Delete client from database permanently
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function hardDeleteClient(int $id): bool
+    {
+        $query = $this->queryFactory->newQuery()->delete('client')->where(['id' => $id]);
         return $query->execute()->rowCount() > 0;
     }
 
