@@ -76,3 +76,47 @@ export function createFlashMessage(typeName, message) {
     // Make it visible to the user
     showFlashMessages();
 }
+
+/**
+ * Display flash messages to user
+ *
+ * In own function to be run client side after loading
+ */
+export function showFlashMessages() {
+    let flashes = document.getElementsByClassName("flash");
+    Array.from(flashes).forEach(function (flash, index) {
+        if (index === 0) {
+            // Add first without timeout
+            flash.className += ' slide-in'
+        } else {
+            setTimeout(function () {
+                flash.className += ' slide-in'
+            }, index * 1000); // https://stackoverflow.com/a/45500721/9013718 (second snippet)
+        }
+        let closeBtn = flash.querySelector('.flash-close-btn');
+        closeBtn.addEventListener('click', function () {
+            slideFlashOut(flash);
+        });
+        let flashFig = flash.querySelector('.flash-fig');
+        flashFig.addEventListener('click', function () {
+            slideFlashOut(flash);
+        });
+
+
+        setTimeout(slideFlashOut, (index * 1000) + 8000, flash);
+    });
+}
+
+/**
+ * Remove flash message after a few seconds of display
+ *
+ * @param flash
+ */
+function slideFlashOut(flash) {
+    flash.className = flash.className.replace('slide-in', "slide-out");
+    // Hide a bit later so that page content can go to its place again
+    setTimeout(function () {
+        flash.style.display = 'none';
+        flash.remove();
+    }, 800); // .slide-out animation is 0.9s
+}

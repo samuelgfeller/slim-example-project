@@ -2,6 +2,7 @@ import {basePath} from "../../../general/js/config.js";
 import {loadClients} from "../list/client-list-loading.js";
 import {handleFail} from "../../../general/js/requests/fail-handler.js";
 import {displayFormInputErrorMessage} from "../../../general/js/validation/form-validation.js";
+import {createFlashMessage} from "../../../general/js/requests/flash-message.js";
 
 /**
  * Send client creation to server
@@ -40,6 +41,7 @@ export function submitCreateClient() {
             // Success
             else {
                 closeModal();
+                createFlashMessage('success', 'Client created successfully.');
                 loadClients();
             }
         }

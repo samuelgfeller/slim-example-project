@@ -23,6 +23,7 @@ final class ClientCreateAction
      * @param Responder $responder The responder
      * @param ClientCreator $clientCreator
      * @param SessionInterface $session
+     * @param RequestBodyKeysValidator $requestBodyKeysValidator
      */
     public function __construct(
         private readonly Responder $responder,

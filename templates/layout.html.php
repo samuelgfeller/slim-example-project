@@ -23,17 +23,19 @@
     <?php
     // Define layout assets
     $layoutCss = [
-        'assets/general/css/default.css',
         'assets/general/css/general.css',
+        'assets/general/css/default.css',
         'assets/general/css/layout.css',
         'assets/general/css/side-navbar.css',
-        'assets/general/css/flash.css'
+        'assets/general/css/flash-message.css',
     ];
     $layoutJs = [
         'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
-        'assets/general/js/default.js',
         'assets/general/js/general.js',
         'assets/general/js/navbar.js',
+    ];
+    $layoutJsModules = [
+        'assets/general/js/default.js',
     ];
 
     // fetch() includes another template into the current template
@@ -44,7 +46,7 @@
             'stylesheets' => array_merge($layoutCss, $css ?? []),
             'scripts' => array_merge($layoutJs, $js ?? []),
             // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => $jsModules ?? [],
+            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
         ]
     );
     ?>

@@ -32,7 +32,7 @@ export function displayClientCreateModal() {
         </div>
         <div class="wide-modal-form-input-group" id="client-sex-input-group-div">
             <label>Sex</label><br>
-            <!-- Sex radio buttons are added after modal load client-template-util.js  -->
+            <!-- Sex radio buttons are added after modal load in client-template-util.js  -->
         </div>
         <div class="wide-modal-form-input-group">
             <label for="phone-input">Phone number</label>

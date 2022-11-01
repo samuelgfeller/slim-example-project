@@ -56,7 +56,7 @@ class ClientValidator
 
         $this->validatePhone($client->phone, $validationResult, false);
 
-        $this->validateSex($client->sex, $validationResult, true);
+        $this->validateSex($client->sex, $validationResult, false);
 
         $this->validateClientMessage($client->clientMessage, $validationResult, false);
 

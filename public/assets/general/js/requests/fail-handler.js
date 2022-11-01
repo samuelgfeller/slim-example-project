@@ -47,7 +47,7 @@ export function handleFail(xhr) {
             for (const error of validationResponse.data.errors) {
                 displayFormInputErrorMessage(error.field, error.message);
                 // Flash error message with details
-                errorMsg += error.message + ' for <b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b><br>';
+                errorMsg += error.message + ' in the field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b>"<br>';
             }
         } else {
             // Default error message when server returns 422 but not json
