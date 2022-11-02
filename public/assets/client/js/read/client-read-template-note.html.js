@@ -21,7 +21,7 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea" id="note${noteId}"
                               data-note-id="${noteId}"
-                              minlength="4" maxlength="500"
+                              minlength="4" maxlength="500" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
                               name="message">${message}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">

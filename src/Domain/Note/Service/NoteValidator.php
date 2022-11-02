@@ -44,9 +44,11 @@ class NoteValidator
         // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
-        $this->validateNoteMessage($note->message, $validationResult, false);
         if ($note->isMain === 1) {
+            $this->validateNoteMessage($note->message, $validationResult, false, 0);
             $this->validateMainNote($note->clientId, $validationResult);
+        } else {
+            $this->validateNoteMessage($note->message, $validationResult, false);
         }
         // It's a bit pointless to check user existence as user should always exist if he's logged in but here is how I'd do it
         $this->validator->validateExistence($note->userId, 'user', $validationResult, true);
@@ -66,7 +68,12 @@ class NoteValidator
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
         if (null !== $note->message) {
-            $this->validateNoteMessage($note->message, $validationResult, false);
+            if ($note->isMain === 1){
+                // If main note, min length is 0 as it's not possible to delete it
+                $this->validateNoteMessage($note->message, $validationResult, false, 0);
+            }else{
+                $this->validateNoteMessage($note->message, $validationResult, false);
+            }
         }
 
         $this->validator->throwOnError($validationResult);
@@ -79,14 +86,20 @@ class NoteValidator
      * @param $noteMsg
      * @param ValidationResult $validationResult
      * @param bool $required
+     * @param int $minLength the min length for a normal note is 4
+     * but as main note cannot be deleted, it has to be 0 for the main note
      * @return void
      */
-    protected function validateNoteMessage($noteMsg, ValidationResult $validationResult, bool $required): void
-    {
+    protected function validateNoteMessage(
+        $noteMsg,
+        ValidationResult $validationResult,
+        bool $required,
+        int $minLength = 4
+    ): void {
         // Not test if empty string as user could submit note with empty string which has to be checked
         if (null !== $noteMsg) {
             $this->validator->validateLengthMax($noteMsg, 'message', $validationResult, 500);
-            $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, 4);
+            $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('message', 'Message is required but not given');

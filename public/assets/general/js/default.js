@@ -1,3 +1,5 @@
+import {showFlashMessages} from "./requests/flash-message.js";
+
 window.addEventListener("load", function (event) {
     /** Class with no animation on page load */
     let elements = document.getElementsByClassName("no-animation-on-page-load");

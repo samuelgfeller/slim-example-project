@@ -77,5 +77,8 @@ export function saveNoteChangeToDb(noteId) {
 
     // Data format: "fname=Henry&lname=Ford"
     // In [square brackets] to be evaluated
-    xHttp.send(JSON.stringify({[this.name]: this.value})); // this is the textarea
+    xHttp.send(JSON.stringify({
+        [this.name]: this.value,
+        is_main: this.classList.contains('main-textarea') ? 1 : 0,
+    })); // this is the textarea
 }

@@ -69,12 +69,14 @@ export function addTextareaInputEventListener(textarea) {
         clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            if (textarea.checkValidity() !== false && textarea.value.length > 0) {
+            console.log(textarea.checkValidity());
+            if (textarea.checkValidity() !== false) {
                 if (noteId === 'new-note') {
                     insertNewNoteToDb(textarea);
                 } else if (noteId === 'new-main-note') {
                     insertNewNoteToDb(textarea, true)
                 } else {
+                    // Call function to save note passing textarea as "this" and noteId as argument
                     saveNoteChangeToDb.call(textarea, noteId);
                 }
             } else {

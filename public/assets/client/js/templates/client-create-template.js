@@ -8,12 +8,12 @@ export function displayClientCreateModal() {
         <div class="wide-modal-form-input-group">
             <label for="first-name-input">First name</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
-            minlength="1" maxlength="100">
+            minlength="2" maxlength="100">
         </div>
         <div class="wide-modal-form-input-group">
             <label for="last-name-input">Last name</label>
             <input type="text" name="last_name" id="last-name-input" placeholder="Zimmer" class="form-input" 
-            minlength="1" maxlength="100">
+            minlength="2" maxlength="100">
         </div>
         <div class="wide-modal-form-input-group">
             <label for="birthdate-input">Birthdate</label>
@@ -28,7 +28,7 @@ export function displayClientCreateModal() {
             <label for="create-message-textarea" class="form-label">Main note</label>
             <!-- Name has to be "message" as it's the name used in note validation -->
             <textarea rows="4" cols="50" name="message" id="create-message-textarea" class="form-input"
-                      placeholder="Your message here." minlength="4" maxlength="500"></textarea>
+                      placeholder="Your message here." minlength="0" maxlength="500"></textarea>
         </div>
         <div class="wide-modal-form-input-group" id="client-sex-input-group-div">
             <label>Sex</label><br>

@@ -32,23 +32,10 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <!-- Store client id on the page for js to read it -->
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
-<h1><?= html($clientAggregate->firstName . ' ' . $clientAggregate->lastName) ?></h1>
-
-<div class="main-note-status-assigned-user-div">
-    <div id="main-note-textarea-div">
-        <textarea name="message" class="auto-resize-textarea main-textarea"
-                  minlength="4" maxlength="500"
-                  data-editable="<?= $clientAggregate->mainNoteData
-                      ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
-                  data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
-                  placeholder="New main note"
-        ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
-        <div class="circle-loader client-read">
-            <div class="checkmark draw"></div>
-        </div>
-    </div>
+<div id="title-and-dropdown-flexbox">
+    <h1 id=""><?= html($clientAggregate->firstName . ' ' . $clientAggregate->lastName) ?></h1>
     <!-- Status and assigned user select options containers -->
-    <div id="status-and-assigned-user-select-containers">
+    <div id="status-and-assigned-user-select-container">
         <!-- Status select options-->
         <div>
             <label for="client-status" class="discrete-label">Status</label>
@@ -80,6 +67,22 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             </select>
         </div>
     </div>
+</div>
+
+<div class="main-note-status-assigned-user-div">
+    <div id="main-note-textarea-div">
+        <textarea name="message" class="auto-resize-textarea main-textarea"
+                  minlength="0" maxlength="500"
+                  data-editable="<?= $clientAggregate->mainNoteData
+                      ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
+                  data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
+                  placeholder="New main note"
+        ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
+        <div class="circle-loader client-read">
+            <div class="checkmark draw"></div>
+        </div>
+    </div>
+
 </div>
 
 <div id="client-activity-personal-info-container">

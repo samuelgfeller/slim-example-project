@@ -3,18 +3,14 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRoleFinder;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Service\NoteFinder;
 use App\Domain\Note\Service\NoteUpdater;
-use App\Domain\Validation\OutputEscapeService;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -23,32 +19,21 @@ use Slim\Exception\HttpBadRequestException;
 final class NoteUpdateAction
 {
     /**
-     * @var Responder
-     */
-    private Responder $responder;
-    protected LoggerInterface $logger;
-    protected OutputEscapeService $outputEscapeService;
-
-
-    /**
      * The constructor.
      *
      * @param Responder $responder The responder
      * @param SessionInterface $session
      * @param NoteUpdater $noteUpdater
      * @param LoggerFactory $logger
-     * @param OutputEscapeService $outputEscapeService
      */
     public function __construct(
-        Responder $responder,
-        private SessionInterface $session,
-        private NoteUpdater $noteUpdater,
+        private readonly Responder $responder,
+        private readonly SessionInterface $session,
+        private readonly NoteUpdater $noteUpdater,
         LoggerFactory $logger,
-        OutputEscapeService $outputEscapeService,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker
     ) {
-        $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('note-update');
-        $this->outputEscapeService = $outputEscapeService;
     }
 
     /**
@@ -70,7 +55,7 @@ final class NoteUpdateAction
             $noteIdToChange = (int)$args['note_id'];
             $noteValues = $request->getParsedBody();
             // Check that request body syntax is formatted right (if changed, )
-            if (null !== $noteValues && [] !== $noteValues && isset($noteValues['message']) && count($noteValues) === 1) {
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($noteValues, ['message', 'is_main'])) {
                 try {
                     $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
 

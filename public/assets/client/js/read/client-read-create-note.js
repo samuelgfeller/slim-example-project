@@ -1,10 +1,10 @@
 import {basePath} from "../../../general/js/config.js";
 import {
     addDeleteNoteBtnEventListener, addTextareaInputEventListener,
-    hideCheckmarkLoader,
-    initNotesEventListeners, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
+    hideCheckmarkLoader, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
 import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {initAutoResizingTextareas} from "../../../general/js/default.js";
 
 let noteCreationHideCheckMarkTimeout = [];
 

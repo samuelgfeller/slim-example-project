@@ -1,5 +1,11 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
+    #title-and-dropdown-flexbox{
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 4vw;
+    }
+
     .main-note-status-assigned-user-div {
         display: flex;
         justify-content: space-between;
@@ -12,20 +18,21 @@
     .main-note-status-assigned-user-div > div {
     }
 
-    #status-and-assigned-user-select-containers {
+    #status-and-assigned-user-select-container {
         margin: 0 auto 0 auto; /* Make it be on the top of right flex container and centered for mobile */
         flex-grow: 1; /*Needed to display max-width fit-content*/
         display: inline-flex;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        /*column-gap: 0;*/
+        column-gap: 3vw;
         row-gap: 20px;
         /*height: min-content;*/
         /* I wanted to do a nested flexbox (with both dropdowns) or grid that wraps before the container wraps
         but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718 */
+        margin-bottom: 30px; /* Same bottom margin than header */
     }
 
-    #status-and-assigned-user-select-containers > div {
+    #status-and-assigned-user-select-container > div {
     }
 
 
@@ -56,7 +63,7 @@
         box-shadow: 0 2px 10px rgba(46, 62, 80, 0.5);
     }
 
-    .main-note-status-assigned-user-div select {
+    #status-and-assigned-user-select-container select {
         border: 3px solid #2e3e50;
         padding: 7px;
         background: #f3f3f3;
@@ -272,8 +279,8 @@
         min-width: 470px;
     }
 
-    #status-and-assigned-user-select-containers {
-        margin-top: 20px;
+    #status-and-assigned-user-select-container {
+        /*margin-top: 20px;*/
     }
 }
 
@@ -283,8 +290,9 @@
         margin-right: 4vw;
     }
 
-    #status-and-assigned-user-select-containers {
+    #status-and-assigned-user-select-container {
         /*grid-template-columns: none;*/
+        margin-right: 4vw;
         column-gap: 5vw;
         justify-content: end;
         flex-basis: auto;
@@ -325,9 +333,12 @@
 
 /*Very large screens*/
 @media (min-width: 1250px) {
-    #status-and-assigned-user-select-containers {
+    #status-and-assigned-user-select-container {
         /*grid-template-columns: 1fr 1fr;*/
         column-gap: 5vw;
+    }
+    #main-note-textarea-div textarea {
+        width: 70%;
     }
 }
 

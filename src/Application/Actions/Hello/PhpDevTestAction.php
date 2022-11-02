@@ -4,7 +4,7 @@
 namespace App\Application\Actions\Hello;
 
 use App\Application\Responder\Responder;
-use App\Application\Validation\RequestBodyKeysValidator;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -15,7 +15,7 @@ class PhpDevTestAction
 {
     public function __construct(
         private readonly Responder $responder,
-        private readonly RequestBodyKeysValidator $requestBodyKeysValidator
+        private readonly MalformedRequestBodyChecker $requestBodyKeysValidator
     ) {
     }
 

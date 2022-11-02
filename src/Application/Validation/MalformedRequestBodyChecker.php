@@ -5,7 +5,7 @@ namespace App\Application\Validation;
 /**
  * Validate that request body contains the given keys
  */
-class RequestBodyKeysValidator
+class MalformedRequestBodyChecker
 {
 
     /**

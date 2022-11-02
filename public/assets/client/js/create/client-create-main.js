@@ -32,25 +32,3 @@ function addClientDropdownOptionsToCreateModal(dropdownOptions) {
     document.getElementById('client-sex-input-group-div').insertAdjacentHTML('beforeend', clientSexRadioButtons);
 }
 
-
-/**
- * Show client modal loader
- */
-function showClientModalLoader() {
-    document.getElementById('modal-footer').insertAdjacentHTML('afterbegin',
-        '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
-    let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
-    submitBtn.classList.add('modal-submit-btn-loading');
-    submitBtn.disabled = true;
-}
-
-/**
- * Hide client modal loader
- */
-function hideClientModalLoader() {
-    document.getElementsByClassName('lds-ellipsis')[0].remove();
-    let submitBtn = document.getElementsByClassName('modal-submit-btn')[0];
-    submitBtn.classList.remove('modal-submit-btn-loading');
-    submitBtn.disabled = false;
-}
-

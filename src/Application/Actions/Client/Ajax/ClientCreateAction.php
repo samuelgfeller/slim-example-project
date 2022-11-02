@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Application\Validation\RequestBodyKeysValidator;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientCreator;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
@@ -23,13 +23,13 @@ final class ClientCreateAction
      * @param Responder $responder The responder
      * @param ClientCreator $clientCreator
      * @param SessionInterface $session
-     * @param RequestBodyKeysValidator $requestBodyKeysValidator
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientCreator $clientCreator,
         private readonly SessionInterface $session,
-        private readonly RequestBodyKeysValidator $requestBodyKeysValidator,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
     }
 
@@ -53,7 +53,7 @@ final class ClientCreateAction
 
             // If html form names change they have to be adapted in the data class attributes too (e.g. ClientData)
             // Check that request body syntax is formatted right (tested in ClientCreateActionTest - malformedRequest)
-            if ($this->requestBodyKeysValidator->requestBodyHasValidKeys($clientValues, [
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($clientValues, [
                 'client_status_id',
                 'user_id',
                 'first_name',

@@ -40,12 +40,15 @@ class ClientCreator
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Create main note
             try {
-                $this->noteCreator->createNote([
-                    'message' => $clientValues['message'],
-                    'client_id' => $clientId,
-                    'user_id' => $client->userId,
-                    'is_main' => 1
-                ]);
+                if (!empty($clientValues['message'])) {
+                    // Create main note if message is not empty
+                    $this->noteCreator->createNote([
+                        'message' => $clientValues['message'],
+                        'client_id' => $clientId,
+                        'user_id' => $client->userId,
+                        'is_main' => 1
+                    ]);
+                }
                 return $clientId;
             } catch (ValidationException $validationException){
                 // Main note creation wasn't successful so user has to adapt form and will re-submit all client data
