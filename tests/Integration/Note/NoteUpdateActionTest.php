@@ -89,7 +89,7 @@ class NoteUpdateActionTest extends TestCase
         // Create request to edit main note
         $mainNoteRequest = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
-            ['message' => $newNoteMessage,]
+            ['message' => $newNoteMessage, 'is_main' => 1]
         );
         // Make request
         $mainNoteResponse = $this->app->handle($mainNoteRequest);
@@ -113,7 +113,7 @@ class NoteUpdateActionTest extends TestCase
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
-            ['message' => $newNoteMessage,]
+            ['message' => $newNoteMessage, 'is_main' => 0]
         );
         // Make request
         $normalNoteResponse = $this->app->handle($normalNoteRequest);
@@ -159,12 +159,10 @@ class NoteUpdateActionTest extends TestCase
 
     /**
      * Test note modification on client-read page with invalid data.
-     * Fixture dependencies:
-     *   - 1 client
-     *   - 1 user linked to client
-     *   - 1 note that is linked to the client and the user
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForModification()
+     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForUpdate()
+     * @param string $invalidMessage
+     * @param array $expectedResponseData
      * @return void
      */
     public function testNoteSubmitUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
@@ -190,7 +188,7 @@ class NoteUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
-            ['message' => $invalidMessage]
+            ['message' => $invalidMessage, 'is_main' => 0]
         );
         $response = $this->app->handle($request);
 

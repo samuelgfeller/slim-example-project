@@ -54,7 +54,7 @@ class ClientCreateActionTest extends TestCase
         $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
         if ($authenticatedUserAttr === $userLinkedToClientAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
-        }else{
+        } else {
             // If authenticated user and owner user is not the same, insert owner
             $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
         }
@@ -72,6 +72,7 @@ class ClientCreateActionTest extends TestCase
             'sex' => 'M',
             'user_id' => $userLinkedToClientRow['id'],
             'client_status_id' => $clientStatusId,
+            'message' => 'Test main note.',
         ];
 
         // Simulate session
@@ -88,6 +89,9 @@ class ClientCreateActionTest extends TestCase
 
         // If db record is expected to be created assert that
         if ($expectedResult['db_entry_created'] === true) {
+            // Remove main note from client creation values as message is stored in different table
+            $noteValues['message'] = $clientCreationValues['message'];
+            unset($clientCreationValues['message']);
             $clientDbRow = $this->findLastInsertedTableRow('client');
             // Assert that db entry corresponds to the given client creation values. This is possible as the keys
             // that the frontend sends to the server are the same as database columns.
@@ -96,6 +100,9 @@ class ClientCreateActionTest extends TestCase
             // The same check could also be done with array_intersect_key (which removes any keys from the db array
             // that are not present in the creation values array) like this
             // self::assertSame($clientCreationValues, array_intersect_key($clientDbRow, $clientCreationValues));
+
+            // Test that main note was created
+            $this->assertTableRowEquals($noteValues, 'note', $this->findLastInsertedTableRow('note')['id']);
         } else {
             // 0 rows expected in client table
             $this->assertTableRowCount(0, 'client');
@@ -105,22 +112,24 @@ class ClientCreateActionTest extends TestCase
     }
 
     /**
-     * Test client values validation.
-     * Test data for cases is the same as client update.
-     * It's not optimal as required values can't be tested but good enough for now.
+     * Test client creation values validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateUpdateCaseProvider::invalidClientValuesAndExpectedResponseData()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::invalidClientCreationValuesAndExpectedResponseData()
      * @return void
      */
     public function testClientSubmitCreateAction_invalid($requestBody, $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class);
-
-        $clientStatusRow = $this->insertFixturesWithAttributes([], ClientStatusFixture::class);
+        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // To test note message validation when submitted in client creation form the client values have to be valid
+        if ($requestBody['user_id'] === 'valid' && $requestBody['client_status_id'] === 'valid') {
+            $requestBody['user_id'] = $userId;
+            $requestBody['client_status_id'] = $clientStatusId;
+        }
 
         // Simulate session
-        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(
             'POST',

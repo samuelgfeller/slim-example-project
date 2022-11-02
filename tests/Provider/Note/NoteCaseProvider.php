@@ -204,8 +204,26 @@ class NoteCaseProvider
     {
         return [
             [
-                // Too short and already existing main note
-                'request_body' => ['message' => 'Sh', 'is_main' => 1, 'client_id' => 1],
+                // Already existing main note (message as string shorter than 4 chars is allowed)
+                'request_body' => ['message' => 'as', 'is_main' => 1, 'client_id' => 1],
+                'existing_main_note' => true,
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'message' => 'There is something in the note data that couldn\'t be validated',
+                        'errors' => [
+                            0 => [
+                                'field' => 'is_main',
+                                'message' => 'Main note exists already'
+                            ],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                // Note message too short
+                'request_body' => ['message' => 'as', 'is_main' => 0, 'client_id' => 1],
                 'existing_main_note' => true,
                 'json_response' => [
                     'status' => 'error',
@@ -216,10 +234,6 @@ class NoteCaseProvider
                             0 => [
                                 'field' => 'message',
                                 'message' => 'Required minimum length is 4',
-                            ],
-                            1 => [
-                                'field' => 'is_main',
-                                'message' => 'Main note exists already'
                             ],
                         ]
                     ]
@@ -253,7 +267,7 @@ class NoteCaseProvider
      *
      * @return array
      */
-    public function provideInvalidNoteAndExpectedResponseDataForModification(): array
+    public function provideInvalidNoteAndExpectedResponseDataForUpdate(): array
     {
         return [
             [
