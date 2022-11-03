@@ -19,15 +19,13 @@
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
 
-    #first-name-h1-edit-icon-div {
-    }
-
     .partial-header-edit-icon-div:hover .contenteditable-edit-icon {
         display: inline-block;
     }
-    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 */
+    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
+    have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
     /* Display outline when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover + h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
+    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
         outline: 3px solid #2e3e50;
         border-radius: 10px;
         background: #f1f1f1;
@@ -51,6 +49,7 @@
         display: none;
         right: -7px;
         top: -3px;
+        z-index: 1;
     }
     .contenteditable-save-icon{
 

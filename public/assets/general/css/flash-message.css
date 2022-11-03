@@ -10,7 +10,7 @@
     border-radius: 20px;
     /*background: white;*/
     display: flex;
-    margin: 25px 0 10px 25px;
+    margin: 25px 0 10px 0px;
     transform: translateX(130%);
     opacity: 0;
     overflow: hidden; /* Prevent color from overflowing rounded border */

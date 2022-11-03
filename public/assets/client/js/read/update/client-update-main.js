@@ -5,44 +5,59 @@ import {submitClientUpdate} from "./client-update-request.js";
  */
 export function makeClientValueEditable() {
     let editIcon = this;
-    let h1Container = this.parentNode;
-    let h1 = h1Container.querySelector('h1');
+    let fieldContainer = this.parentNode;
+    let field = fieldContainer.querySelector(fieldContainer.dataset.fieldElement);
 
     editIcon.style.display = 'none';
 
-    // Slick would be to replace the word "edit" of the edit icon for the save button but that puts a dependency
-    // on the id that can be avoided when just appending a word
+    // Slick would be to replace the word "edit" of the edit icon with "save" for the save button but that puts a dependency
+    // on the id name that can be avoided when just appending a word
     let saveBtnId = editIcon.id + '-save';
 
-    h1.contentEditable = 'true';
+    field.contentEditable = 'true';
+    field.focus();
     // Add save button but hidden until an input is made
-    h1Container.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
+    fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
                                                       class="contenteditable-save-icon cursor-pointer" alt="Save"
                                                       id="${saveBtnId}" style="display: none">`);
     let saveBtn = document.getElementById(saveBtnId);
 
-    h1Container.addEventListener('keypress', function (e) {
+    fieldContainer.addEventListener('keypress', function (e) {
         // Save on enter keypress or ctrl enter / cmd enter
         if (e.key === 'Enter' || (e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
-            // Prevent new line
+            // Prevent new line on enter key press
             e.preventDefault();
-            saveClientValue(h1, editIcon, saveBtn);
+            // Triggers focusout event that is caught in event listener and saves client value
+            field.contentEditable = 'false';
         }
     });
-    h1Container.addEventListener('input', () => {
+    // Display save button after the first input
+    fieldContainer.addEventListener('input', () => {
         if (saveBtn.style.display === 'none') {
             saveBtn.style.display = 'inline-block';
         }
     });
-    saveBtn.addEventListener('click', e => {
-        saveClientValue(h1, editIcon, saveBtn);
-    })
+    saveBtn.addEventListener('click', () => {
+        // Triggers focusout event that is caught in event listener and saves client value
+        field.contentEditable = 'false';
+    });
+    // Save on focusout - has to be direct function call and not anonymous function as otherwise the
+    // event listener would be registered multiple times: https://stackoverflow.com/a/47337711/9013718
+    field.addEventListener('focusout', saveClientValue);
 }
 
-function saveClientValue(h1, editIcon, saveBtn) {
-    h1.contentEditable = 'false';
-    editIcon.style.display = null; // Default display
-    saveBtn.remove();
-    console.log(h1.dataset.name);
-    submitClientUpdate(h1.dataset.name, h1.textContent.trim());
+/**
+ * Make field non-editable and make call function that
+ * makes client update request
+ */
+function saveClientValue() {
+    // "this" is the field
+    let fieldContainer = this.parentNode;
+    this.contentEditable = 'false';
+    fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
+    // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
+    let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
+    // Only remove it if it exists to prevent error
+    saveIcon.remove();
+    submitClientUpdate(this.dataset.name, this.textContent.trim());
 }

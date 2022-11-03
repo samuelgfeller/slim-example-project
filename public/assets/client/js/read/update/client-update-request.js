@@ -15,7 +15,7 @@ export function submitClientUpdate(field, value){
             }
             // Success
             else {
-                createFlashMessage('success', field.replace('_', ' ') + ' was updated.');
+                // createFlashMessage('success', field.replace('_', ' ') + ' was updated.');
             }
         }
     };
