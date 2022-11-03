@@ -1,12 +1,28 @@
 import {submitClientUpdate} from "./client-update-request.js";
 
+function preventLinkOpening(e) {
+    /* Prevent link from being opened */
+    e.preventDefault();
+}
+
 /**
  * Make text value as editable and attach event listeners
  */
 export function makeClientValueEditable() {
+
     let editIcon = this;
     let fieldContainer = this.parentNode;
-    let field = fieldContainer.querySelector(fieldContainer.dataset.fieldElement);
+    let fieldElement = fieldContainer.dataset.fieldElement;
+    let field = fieldContainer.querySelector(fieldElement);
+    // Field element is usually the field element but there are special cases like when the parent is <a> and content span
+    if (fieldElement === 'a-span') {
+        field = fieldContainer.querySelector('span');
+        let a = fieldContainer.closest('a');
+        // Add class to prevent :focus css rule. It is removed in saveClientValue()
+        a.classList.add('currently-editable');
+        // Add
+        a.addEventListener('click', preventLinkOpening);
+    }
 
     editIcon.style.display = 'none';
 
@@ -16,6 +32,7 @@ export function makeClientValueEditable() {
 
     field.contentEditable = 'true';
     field.focus();
+
     // Add save button but hidden until an input is made
     fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
                                                       class="contenteditable-save-icon cursor-pointer" alt="Save"
@@ -53,6 +70,12 @@ export function makeClientValueEditable() {
 function saveClientValue() {
     // "this" is the field
     let fieldContainer = this.parentNode;
+    // Remove event listener that prevented the link (parent of span) from opening
+    if (fieldContainer.dataset.fieldElement === 'a-span') {
+        let a = fieldContainer.closest('a');
+        a.classList.remove('currently-editable');
+        a.removeEventListener('click', preventLinkOpening);
+    }
     this.contentEditable = 'false';
     fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
     // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
@@ -60,4 +83,5 @@ function saveClientValue() {
     // Only remove it if it exists to prevent error
     saveIcon.remove();
     submitClientUpdate(this.dataset.name, this.textContent.trim());
+
 }

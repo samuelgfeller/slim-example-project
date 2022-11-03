@@ -21,7 +21,6 @@ $this->addAttribute('css', [
     'assets/general/css/loader/animated-checkmark.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/content-placeholder.css',
-    'assets/general/css/client-list-loading-placeholder.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
@@ -36,13 +35,15 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     <div id="full-header-edit-icon-container">
         <div class="partial-header-edit-icon-div" data-field-element="h1">
             <!-- Img has to be before title because we are only able to style next sibling in css -->
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                 id="edit-first-name-btn" tabindex="0">
+            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                 alt="Edit"
+                 id="edit-first-name-btn">
             <h1 data-name="first_name"><?= html($clientAggregate->firstName) ?></h1>
         </div>
         <div class="partial-header-edit-icon-div" data-field-element="h1">
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                 id="edit-last-name-btn" tabindex="0">
+            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                 alt="Edit"
+                 id="edit-last-name-btn">
             <h1 data-name="last_name"> <?= html($clientAggregate->lastName) ?></h1>
         </div>
     </div>
@@ -114,14 +115,24 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             if ($clientAggregate->location) { ?>
                 <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
                     <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-                    <span><?= $clientAggregate->location ?></span>
+                    <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-location-btn">
+                        <span data-name="location"><?= $clientAggregate->location ?></span>
+                    </div>
                 </a>
                 <?php
             }
             if ($clientAggregate->phone) { ?>
                 <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
                     <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                    <span><?= $clientAggregate->phone ?></span>
+                    <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-phone-btn">
+                        <span data-name="phone"><?= $clientAggregate->phone ?></span>
+                    </div>
                 </a>
                 <?php
             }
@@ -131,9 +142,14 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                     <?php
                     $emailParts = explode('@', $clientAggregate->email);
                     ?>
-                    <div id="email-div">
-                        <span id="email-prefix"><?= $emailParts[0] ?></span><br><span
-                                id="email-suffix">@<?= $emailParts[1] ?></span>
+                    <div id="email-div" class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-email-btn">
+                        <span id="email-prefix" data-name="email"><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
+                        <!--<span id="email-prefix">--><?php //= $emailParts[0] ?><!--</span><br><span-->
+                                <!--id="email-suffix">@--><?php //= $emailParts[1] ?><!--</span>-->
+
                     </div>
                 </a>
                 <?php

@@ -8,7 +8,6 @@
 
     #full-header-edit-icon-container {
         margin-bottom: 25px;
-
     }
 
     /*Div containing first or last name*/
@@ -18,18 +17,32 @@
         padding-right: 15px;
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
+    .partial-personal-info-and-edit-icon-div{
+        position: relative;
+        padding-right: 13px;
+    }
 
-    .partial-header-edit-icon-div:hover .contenteditable-edit-icon {
+    .partial-header-edit-icon-div:hover .contenteditable-edit-icon,
+    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon
+    {
         display: inline-block;
     }
+
     /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
     have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
-    /* Display outline when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
+    /* Display outline on h1 when hover on edit icon and when contenteditable is true */
+    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"]{
         outline: 3px solid #2e3e50;
         border-radius: 10px;
         background: #f1f1f1;
     }
+    /* Display outline on span element */
+    .contenteditable-edit-icon:hover ~ span, #client-personal-info-flex-container span[contenteditable="true"] {
+        outline: 2px solid #2e3e50;
+        border-radius: 5px;
+        background: #f1f1f1;
+    }
+
 
     #title-and-dropdown-flexbox h1 {
         display: inline-block;
@@ -44,15 +57,12 @@
         width: 22px;
         padding: 2px;
         border-radius: 99px;
-        border: 2px solid #2e3e50;
+        border: 1px solid #2e3e50;
         background: #d8dee8;
         display: none;
         right: -7px;
         top: -3px;
         z-index: 1;
-    }
-    .contenteditable-save-icon{
-
     }
 
     .main-note-div {
@@ -234,10 +244,13 @@
         align-items: center;
         padding: 10px 15px;
         border-radius: 22px;
-        cursor: pointer;
         margin-top: 0px;
         font-size: 20px;
         white-space: nowrap;
+    }
+
+    #client-personal-info-flex-container a span{
+        padding: 5px;
     }
 
     #email-div {
@@ -263,14 +276,10 @@
         text-decoration: none;
     }
 
-    #client-personal-info-flex-container a:hover {
+    #client-personal-info-flex-container a:hover:not(a.currently-editable) {
         box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
         background: rgba(0, 0, 0, 0.05);
         font-weight: normal;
-    }
-
-    #client-personal-info-flex-container a:focus {
-        background: rgba(0, 0, 0, 0.1);
     }
 
     .client-note-loading-placeholder {
@@ -372,7 +381,7 @@
         margin-right: 4vw;
     }
 
-    #client-activity-personal-info-container{
+    #client-activity-personal-info-container {
         margin-right: 4vw;
     }
 }

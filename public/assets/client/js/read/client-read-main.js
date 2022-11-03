@@ -32,5 +32,10 @@ const assignedUser = document.querySelector('select[name="user_id"]:not([disable
 assignedUser?.addEventListener('change', saveClientReadDropdownChange);
 
 // Edit client values event listeners
+// First and last name
 document.querySelector('#edit-first-name-btn').addEventListener('click', makeClientValueEditable);
 document.querySelector('#edit-last-name-btn').addEventListener('click', makeClientValueEditable);
+// Personal info
+document.querySelector('#edit-location-btn').addEventListener('click', makeClientValueEditable);
+document.querySelector('#edit-phone-btn').addEventListener('click', makeClientValueEditable);
+document.querySelector('#edit-email-btn').addEventListener('click', makeClientValueEditable);

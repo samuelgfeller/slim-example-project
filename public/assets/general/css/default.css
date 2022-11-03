@@ -77,10 +77,16 @@ h3{
     font-size: 1.5em;
 }
 
-a:hover {
+a:hover:not(a.currently-editable) {
     /*text-shadow: 0 0 1px black;*/
     font-weight: bold;
     text-decoration: none;
+}
+a.currently-editable{
+    cursor: default;
+}
+[contenteditable="true"]{
+    cursor: text;
 }
 
 .no-style-a, .no-style-a:hover{
