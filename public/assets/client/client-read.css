@@ -1,12 +1,56 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    #title-and-dropdown-flexbox{
+    #title-and-dropdown-flexbox {
         display: flex;
         flex-wrap: wrap;
         column-gap: 4vw;
     }
 
-    .main-note-status-assigned-user-div {
+    #full-header-edit-icon-container {
+        margin-bottom: 25px;
+
+    }
+
+    /*Div containing first or last name*/
+    .partial-header-edit-icon-div {
+        display: inline-block;
+        position: relative;
+        padding-right: 15px;
+        float: left; /* Prevent not hoverable whitespace between partial header divs*/
+    }
+
+    #first-name-h1-edit-icon-div {
+    }
+
+    .partial-header-edit-icon-div:hover .edit-icon {
+        display: inline-block;
+    }
+    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 */
+    .partial-header-edit-icon-div .edit-icon:hover + h1 {
+        outline: 1px solid #8098ad;
+        border-radius: 10px;
+        background: #f1f1f1;
+    }
+
+    #title-and-dropdown-flexbox h1 {
+        display: inline-block;
+        /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
+        margin-bottom: 0;
+        padding: 5px;
+    }
+
+    .edit-icon {
+        position: absolute;
+        width: 20px;
+        padding: 2px;
+        border-radius: 99px;
+        border: 1px solid #2e3e50;
+        background: #d8dee8;
+        display: none;
+        right: -5px;
+    }
+
+    .main-note-div {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap-reverse;
@@ -15,7 +59,7 @@
     }
 
     /*Style only direct div children*/
-    .main-note-status-assigned-user-div > div {
+    .main-note-div > div {
     }
 
     #status-and-assigned-user-select-container {
@@ -285,23 +329,11 @@
 }
 
 /* last iPad portrait breakpoint is at 768 */
-@media (min-width: 769px) {
-    .main-note-status-assigned-user-div {
-        margin-right: 4vw;
-    }
-
-    #status-and-assigned-user-select-container {
-        /*grid-template-columns: none;*/
-        margin-right: 4vw;
-        column-gap: 5vw;
-        justify-content: end;
-        flex-basis: auto;
-    }
-
+@media (min-width: 768px) {
     #client-activity-personal-info-container {
         flex-wrap: nowrap;
         column-gap: 5vw;
-        margin-right: 4vw;
+
     }
 
     #client-activity-personal-info-container > div {
@@ -323,6 +355,30 @@
     }
 }
 
+@media (min-width: 840px) {
+    .main-note-div {
+        margin-right: 4vw;
+    }
+
+    #status-and-assigned-user-select-container {
+        /*grid-template-columns: none;*/
+        justify-content: end;
+        flex-basis: auto;
+        margin-right: 4vw;
+    }
+
+    #client-activity-personal-info-container{
+        margin-right: 4vw;
+    }
+}
+
+/*@media (min-width: 818px) {*/
+/*    #status-and-assigned-user-select-container {*/
+/*        column-gap: 5vw;*/
+/*        margin-right: 4vw;*/
+/*    }*/
+/*}*/
+
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
     #client-activity-personal-info-container {
@@ -337,6 +393,7 @@
         /*grid-template-columns: 1fr 1fr;*/
         column-gap: 5vw;
     }
+
     #main-note-textarea-div textarea {
         width: 70%;
     }

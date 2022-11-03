@@ -31,7 +31,7 @@ $this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-mod
         <div class="profile-value-div">
             <!-- This span has to be before the edit icon as it's used in js with previousElementSibling -->
             <span class="profile-value"><?= $user->firstName ?></span>
-            <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+            <img src="assets/general/img/edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
                  id="edit-first-name-ico">
         </div>
     </div>
@@ -39,7 +39,7 @@ $this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-mod
         <label class="profile-value-title" for="surname-input">Surname:</label>
         <div class="profile-value-div">
             <span id="surname-val" class="profile-value"><?= $user->surname ?></span>
-            <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+            <img src="assets/general/img/edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
                  id="edit-surname-ico">
         </div>
     </div>
@@ -47,7 +47,7 @@ $this->addAttribute('js', ['assets/user/profile.js','assets/general/js/alert-mod
         <label class="profile-value-title" for="email-input">Email:</label>
         <div class="profile-value-div">
             <span id="email-val" class="profile-value"><?= $user->email ?></span>
-            <img src="assets/general/img/edit_icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+            <img src="assets/general/img/edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
                  id="edit-email-ico">
         </div>
     </div>

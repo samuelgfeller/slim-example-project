@@ -33,7 +33,19 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
-    <h1 id=""><?= html($clientAggregate->firstName . ' ' . $clientAggregate->lastName) ?></h1>
+    <div id="full-header-edit-icon-container">
+        <div class="partial-header-edit-icon-div" id="first-name-h1-edit-icon-div">
+            <!-- Img has to be before title because we are only able to style next sibling in css -->
+            <img src="assets/general/img/material-outline-edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+                 id="edit-first-name-icon">
+            <h1><?= html($clientAggregate->firstName) ?></h1>
+        </div>
+        <div class="partial-header-edit-icon-div">
+            <img src="assets/general/img/material-outline-edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
+                 id="edit-last-name-icon">
+            <h1> <?= html($clientAggregate->lastName) ?></h1>
+        </div>
+    </div>
     <!-- Status and assigned user select options containers -->
     <div id="status-and-assigned-user-select-container">
         <!-- Status select options-->
@@ -69,7 +81,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     </div>
 </div>
 
-<div class="main-note-status-assigned-user-div">
+<div class="main-note-div">
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
                   minlength="0" maxlength="500"

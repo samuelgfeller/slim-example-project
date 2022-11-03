@@ -93,7 +93,7 @@
                 <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
                 <span class="nav-span">Profile</span>
             </a>
-            <a href="<?= $route->urlFor('profile-page') ?>"
+            <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/logout.svg" alt="Logout">
                 <img src="assets/general/img/nav/logout-filled.svg" alt="Logout">

@@ -17,3 +17,17 @@
         width: 80%;
     }
 }
+
+@media (min-width: 1500px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box {
+        width: 70%;
+    }
+}
+
+@media (min-width: 1700px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box {
+        width: 60%;
+    }
+}
