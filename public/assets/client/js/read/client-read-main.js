@@ -5,6 +5,7 @@ import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
+import {makeClientValueEditable} from "./update/client-update-main.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -20,11 +21,16 @@ loadClientNotes(() => {
 });
 
 
+// New note button event listener
 // After plus button is clicked, textarea for new note should be added
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
 
+// Dropdown client status and assigned user change event listener
 const clientStatus = document.querySelector('select[name="client_status_id"]:not([disabled])');
 clientStatus?.addEventListener('change', saveClientReadDropdownChange);
-
 const assignedUser = document.querySelector('select[name="user_id"]:not([disabled])');
 assignedUser?.addEventListener('change', saveClientReadDropdownChange);
+
+// Edit client values event listeners
+document.querySelector('#edit-first-name-btn').addEventListener('click', makeClientValueEditable);
+document.querySelector('#edit-last-name-btn').addEventListener('click', makeClientValueEditable);

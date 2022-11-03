@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientUpdater;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
@@ -35,7 +36,7 @@ final class ClientUpdateAction
         private readonly SessionInterface $session,
         private readonly ClientUpdater $clientUpdater,
         LoggerFactory $logger,
-        OutputEscapeService $outputEscapeService,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('client-update');
     }
@@ -59,27 +60,17 @@ final class ClientUpdateAction
             $clientId = (int)$args['client_id'];
             $clientValues = $request->getParsedBody();
             // If request body empty, the update logic doesn't have to run
-            if ($clientValues !== [] && $clientValues !== null) {
-                // Check that given client request body keys are valid
-                foreach ($clientValues as $key => $clientValue) {
-                    // Check if request body keys are all one of the following columns that may be changed
-                    if (!in_array($key, [
-                        'client_status_id',
-                        'user_id',
-                        'first_name',
-                        'last_name',
-                        'phone',
-                        'location',
-                        'birthdate',
-                        'email',
-                        'sex'
-                    ])) {
-                        throw new HttpBadRequestException(
-                            $request,
-                            'Request body malformed.'
-                        );
-                    }
-                }
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($clientValues, [], [
+                'client_status_id',
+                'user_id',
+                'first_name',
+                'last_name',
+                'phone',
+                'location',
+                'birthdate',
+                'email',
+                'sex'
+            ])) {
                 // Try to update client with given values
                 try {
                     $updated = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
@@ -108,6 +99,7 @@ final class ClientUpdateAction
                     );
                 }
             }
+            throw new HttpBadRequestException($request, 'Request body malformed.');
         }
 
         // Not logged in, let AuthenticationMiddleware handle redirect

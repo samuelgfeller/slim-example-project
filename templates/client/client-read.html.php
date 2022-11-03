@@ -36,14 +36,14 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     <div id="full-header-edit-icon-container">
         <div class="partial-header-edit-icon-div" id="first-name-h1-edit-icon-div">
             <!-- Img has to be before title because we are only able to style next sibling in css -->
-            <img src="assets/general/img/material-outline-edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
-                 id="edit-first-name-icon">
-            <h1><?= html($clientAggregate->firstName) ?></h1>
+            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                 id="edit-first-name-btn" tabindex="0">
+            <h1 data-name="first_name"><?= html($clientAggregate->firstName) ?></h1>
         </div>
         <div class="partial-header-edit-icon-div">
-            <img src="assets/general/img/material-outline-edit-icon.svg" class="edit-icon cursor-pointer" alt="Edit"
-                 id="edit-last-name-icon">
-            <h1> <?= html($clientAggregate->lastName) ?></h1>
+            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                 id="edit-last-name-btn" tabindex="0">
+            <h1 data-name="last_name"> <?= html($clientAggregate->lastName) ?></h1>
         </div>
     </div>
     <!-- Status and assigned user select options containers -->

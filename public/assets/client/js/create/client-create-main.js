@@ -1,7 +1,7 @@
 import {loadClientDropdownOptions} from "../client-util.js";
 import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../templates/client-template-util.js";
 import {displayClientCreateModal} from "../templates/client-create-template.js";
-import {submitCreateClient} from "./client-create-requests.js";
+import {submitCreateClient} from "./client-create-request.js";
 
 // Init event listeners
 document.getElementById('create-client-btn').addEventListener('click', e => {
