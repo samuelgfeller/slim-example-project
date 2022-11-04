@@ -105,11 +105,11 @@ class UserSubmitUpdateActionTest extends TestCase
                         ],
                         1 => [
                             'field' => 'first_name',
-                            'message' => 'Required minimum length is 2',
+                            'message' => 'Minimum length is 2',
                         ],
                         2 => [
                             'field' => 'surname',
-                            'message' => 'Required minimum length is 2',
+                            'message' => 'Minimum length is 2',
                         ],
                         3 => [
                             'field' => 'email',

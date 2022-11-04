@@ -44,7 +44,7 @@ class PostCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'message',
-                                'message' => 'Required minimum length is 4',
+                                'message' => 'Minimum length is 4',
                             ]
                         ]
                     ]
@@ -60,7 +60,7 @@ class PostCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'message',
-                                'message' => 'Required maximum length is 500',
+                                'message' => 'Maximum length is 500',
                             ]
                         ]
                     ]

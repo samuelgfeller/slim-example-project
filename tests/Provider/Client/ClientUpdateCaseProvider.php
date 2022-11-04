@@ -142,11 +142,11 @@ class ClientUpdateCaseProvider
                             ],
                             2 => [
                                 'field' => 'first_name',
-                                'message' => 'Required minimum length is 2',
+                                'message' => 'Minimum length is 2',
                             ],
                             3 => [
                                 'field' => 'last_name',
-                                'message' => 'Required minimum length is 2',
+                                'message' => 'Minimum length is 2',
                             ],
                             4 => [
                                 'field' => 'email',
@@ -158,11 +158,11 @@ class ClientUpdateCaseProvider
                             ],
                             6 => [
                                 'field' => 'location',
-                                'message' => 'Required minimum length is 3',
+                                'message' => 'Minimum length is 3',
                             ],
                             7 => [
                                 'field' => 'phone',
-                                'message' => 'Required minimum length is 3',
+                                'message' => 'Minimum length is 3',
                             ],
                             8 => [
                                 'field' => 'sex',
@@ -203,11 +203,11 @@ class ClientUpdateCaseProvider
                             ],
                             2 => [
                                 'field' => 'first_name',
-                                'message' => 'Required maximum length is 100',
+                                'message' => 'Maximum length is 100',
                             ],
                             3 => [
                                 'field' => 'last_name',
-                                'message' => 'Required maximum length is 100',
+                                'message' => 'Maximum length is 100',
                             ],
                             4 => [
                                 'field' => 'birthdate',
@@ -215,11 +215,11 @@ class ClientUpdateCaseProvider
                             ],
                             5 => [
                                 'field' => 'location',
-                                'message' => 'Required maximum length is 100',
+                                'message' => 'Maximum length is 100',
                             ],
                             6 => [
                                 'field' => 'phone',
-                                'message' => 'Required maximum length is 20',
+                                'message' => 'Maximum length is 20',
                             ],
                         ]
                     ]

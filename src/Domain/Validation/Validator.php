@@ -66,7 +66,7 @@ final class Validator
         int $length = 3
     ): void {
         if (strlen(trim((string)$value)) < $length) {
-            $validationResult->setError($fieldName, sprintf('Required minimum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf('Minimum length is %s', $length));
         }
     }
 
@@ -86,7 +86,7 @@ final class Validator
         int $length = 255
     ): void {
         if (strlen(trim((string)$value)) > $length) {
-            $validationResult->setError($fieldName, sprintf('Required maximum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf('Maximum length is %s', $length));
         }
     }
 

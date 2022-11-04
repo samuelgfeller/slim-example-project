@@ -49,7 +49,8 @@
         /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
         margin-bottom: 0;
         padding: 5px 5px 5px 3px;
-        white-space: nowrap;
+        overflow-wrap: anywhere;
+        white-space: break-spaces;
     }
 
     .contenteditable-edit-icon, .contenteditable-save-icon {
@@ -250,21 +251,24 @@
     }
 
     #client-personal-info-flex-container a span{
+        line-height: 25px;
+        overflow-wrap: anywhere;
+        white-space: break-spaces;
         padding: 5px;
     }
 
     #email-div {
-        line-height: 1;
+        /*line-height: 1;*/
     }
 
     /*mail prefix*/
     #email-div span:nth-of-type(1) {
-        font-size: 19px;
+        /*font-size: 19px;*/
     }
 
     /*mail suffix*/
-    #email-div span:nth-of-type(2) {
-        font-size: 17px;
+    #email-div span {
+        font-size: 18px;
     }
 
     /*Increase icon size*/

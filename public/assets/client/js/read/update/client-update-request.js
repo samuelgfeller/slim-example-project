@@ -1,7 +1,5 @@
-import {handleFail} from "../../../../general/js/requests/fail-handler.js";
-import {hideCheckmarkLoader, userIsTypingOnNoteId} from "../client-read-text-area-event-listener-setup.js";
+import {handleFail, removeValidationErrorMessages} from "../../../../general/js/requests/fail-handler.js";
 import {basePath} from "../../../../general/js/config.js";
-import {createFlashMessage} from "../../../../general/js/requests/flash-message.js";
 
 export function submitClientUpdate(field, value){
     // Make ajax call
@@ -15,6 +13,8 @@ export function submitClientUpdate(field, value){
             }
             // Success
             else {
+                // Remove previous validation messages
+                removeValidationErrorMessages();
                 // createFlashMessage('success', field.replace('_', ' ') + ' was updated.');
             }
         }
