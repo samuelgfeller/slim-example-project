@@ -4,7 +4,7 @@
  * @param fieldName
  * @param errorMessage
  */
-export function displayFormInputErrorMessage(fieldName, errorMessage) {
+export function displayValidationErrorMessage(fieldName, errorMessage) {
     let field = document.querySelector(`[name="${fieldName}"]`);
     if (field === null) {
         // Contenteditable field

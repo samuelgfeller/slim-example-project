@@ -1,4 +1,4 @@
-import {displayFormInputErrorMessage} from "../validation/form-validation.js";
+import {displayValidationErrorMessage} from "../validation/form-validation.js";
 import {createFlashMessage} from "./flash-message.js";
 
 /**
@@ -38,7 +38,7 @@ export function handleFail(xhr) {
             removeValidationErrorMessages();
             // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
             for (const error of validationResponse.data.errors) {
-                displayFormInputErrorMessage(error.field, error.message);
+                displayValidationErrorMessage(error.field, error.message);
                 // Flash error message with details
                 errorMsg += error.message + ' for the field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b>"<br>';
             }

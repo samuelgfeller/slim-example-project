@@ -66,7 +66,7 @@
         z-index: 1;
     }
 
-    .main-note-div {
+    #main-note-div {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap-reverse;
@@ -75,7 +75,7 @@
     }
 
     /*Style only direct div children*/
-    .main-note-div > div {
+    #main-note-div > div {
     }
 
     #status-and-assigned-user-select-container {
@@ -374,7 +374,7 @@
 }
 
 @media (min-width: 840px) {
-    .main-note-div {
+    #main-note-div {
         margin-right: 4vw;
     }
 
@@ -412,7 +412,7 @@
         column-gap: 5vw;
     }
 
-    #main-note-textarea-div textarea {
+    #main-note-div{
         width: 70%;
     }
 }

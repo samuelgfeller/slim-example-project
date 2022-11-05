@@ -5,7 +5,7 @@ import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
-import {makeClientValueEditable} from "./update/client-update-main.js";
+import {makeFieldValueEditable} from "./update/client-update-main.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -33,9 +33,9 @@ assignedUser?.addEventListener('change', saveClientReadDropdownChange);
 
 // Edit client values event listeners
 // First and last name
-document.querySelector('#edit-first-name-btn').addEventListener('click', makeClientValueEditable);
-document.querySelector('#edit-last-name-btn').addEventListener('click', makeClientValueEditable);
+document.querySelector('#edit-first-name-btn').addEventListener('click', makeFieldValueEditable);
+document.querySelector('#edit-last-name-btn').addEventListener('click', makeFieldValueEditable);
 // Personal info
-document.querySelector('#edit-location-btn').addEventListener('click', makeClientValueEditable);
-document.querySelector('#edit-phone-btn').addEventListener('click', makeClientValueEditable);
-document.querySelector('#edit-email-btn').addEventListener('click', makeClientValueEditable);
+document.querySelector('#edit-location-btn').addEventListener('click', makeFieldValueEditable);
+document.querySelector('#edit-phone-btn').addEventListener('click', makeFieldValueEditable);
+document.querySelector('#edit-email-btn').addEventListener('click', makeFieldValueEditable);

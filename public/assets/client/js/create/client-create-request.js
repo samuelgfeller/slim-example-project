@@ -1,7 +1,7 @@
 import {basePath} from "../../../general/js/config.js";
 import {loadClients} from "../list/client-list-loading.js";
 import {handleFail} from "../../../general/js/requests/fail-handler.js";
-import {displayFormInputErrorMessage} from "../../../general/js/validation/form-validation.js";
+import {displayValidationErrorMessage} from "../../../general/js/validation/form-validation.js";
 import {createFlashMessage} from "../../../general/js/requests/flash-message.js";
 
 /**
@@ -19,7 +19,7 @@ export function submitCreateClient() {
     let firstNameInp = createForm.querySelector('#first-name-input');
     let lastNameInp = createForm.querySelector('#last-name-input');
     if (firstNameInp.value === '' && lastNameInp.value === ''){
-        displayFormInputErrorMessage('first_name', 'Please fill out either the first name or last name');
+        displayValidationErrorMessage('first_name', 'Please fill out either the first name or last name');
         return;
     }
 

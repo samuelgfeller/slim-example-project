@@ -161,7 +161,7 @@ class ClientValidator
     {
         if (null !== $location && '' !== $location) {
             $this->validator->validateLengthMax($location, 'location', $validationResult, 100);
-            $this->validator->validateLengthMin($location, 'location', $validationResult, 3);
+            $this->validator->validateLengthMin($location, 'location', $validationResult, 2);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('location', 'Location is required but not given');

@@ -38,13 +38,15 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
                  alt="Edit"
                  id="edit-first-name-btn">
-            <h1 data-name="first_name" spellcheck="false"><?= html($clientAggregate->firstName) ?></h1>
+            <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                html($clientAggregate->firstName) ?></h1>
         </div>
         <div class="partial-header-edit-icon-div" data-field-element="h1">
             <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
                  alt="Edit"
                  id="edit-last-name-btn">
-            <h1 data-name="last_name" spellcheck="false"> <?= html($clientAggregate->lastName) ?></h1>
+            <h1 data-name="last_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                html($clientAggregate->lastName) ?></h1>
         </div>
     </div>
     <!-- Status and assigned user select options containers -->
@@ -82,7 +84,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     </div>
 </div>
 
-<div class="main-note-div">
+<div id="main-note-div">
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
                   minlength="0" maxlength="500"
@@ -119,7 +121,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                         <img src="assets/general/img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
-                        <span data-name="location" spellcheck="false"><?= $clientAggregate->location ?></span>
+                        <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                            $clientAggregate->location ?></span>
                     </div>
                 </a>
                 <?php
@@ -131,7 +134,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                         <img src="assets/general/img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
-                        <span data-name="phone" spellcheck="false"><?= $clientAggregate->phone ?></span>
+                        <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
+                            $clientAggregate->phone ?></span>
                     </div>
                 </a>
                 <?php
@@ -146,7 +150,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                         <img src="assets/general/img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
-                        <span id="email-prefix" spellcheck="false" data-name="email" data-max-length="256"
+                        <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
                         ><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
                     </div>
                 </a>
