@@ -34,17 +34,25 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 <div id="title-and-dropdown-flexbox">
     <div id="full-header-edit-icon-container">
         <div class="partial-header-edit-icon-div" data-field-element="h1">
-            <!-- Img has to be before title because we are only able to style next sibling in css -->
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
-                 alt="Edit"
-                 id="edit-first-name-btn">
+            <?php
+            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                <!-- Img has to be before title because we are only able to style next sibling in css -->
+                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                     alt="Edit"
+                     id="edit-first-name-btn">
+                <?php
+            } ?>
             <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                 html($clientAggregate->firstName) ?></h1>
         </div>
         <div class="partial-header-edit-icon-div" data-field-element="h1">
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
-                 alt="Edit"
-                 id="edit-last-name-btn">
+            <?php
+            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                     alt="Edit"
+                     id="edit-last-name-btn">
+                <?php
+            } ?>
             <h1 data-name="last_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                 html($clientAggregate->lastName) ?></h1>
         </div>
@@ -118,9 +126,13 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
                     <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
                     <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                        <img src="assets/general/img/material-edit-icon.svg"
-                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                             id="edit-location-btn">
+                        <?php
+                        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                            <img src="assets/general/img/material-edit-icon.svg"
+                                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                                 id="edit-location-btn">
+                            <?php
+                        } ?>
                         <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                             $clientAggregate->location ?></span>
                     </div>
@@ -131,9 +143,13 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
                     <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
                     <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                        <img src="assets/general/img/material-edit-icon.svg"
-                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                             id="edit-phone-btn">
+                        <?php
+                        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                            <img src="assets/general/img/material-edit-icon.svg"
+                                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                                 id="edit-phone-btn">
+                            <?php
+                        } ?>
                         <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
                             $clientAggregate->phone ?></span>
                     </div>
@@ -147,9 +163,13 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                     $emailParts = explode('@', $clientAggregate->email);
                     ?>
                     <div id="email-div" class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                        <img src="assets/general/img/material-edit-icon.svg"
-                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                             id="edit-email-btn">
+                        <?php
+                        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                            <img src="assets/general/img/material-edit-icon.svg"
+                                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                                 id="edit-email-btn">
+                            <?php
+                        } ?>
                         <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
                         ><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
                     </div>

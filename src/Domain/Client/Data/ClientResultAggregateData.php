@@ -26,6 +26,8 @@ class ClientResultAggregateData extends ClientData
     // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
     public ?NoteData $mainNoteData = null; // Main note data
 
+    // Client main data privilege (first-, second name, phone, email, location)
+    public ?Privilege $mainDataPrivilege = null;
     public ?Privilege $clientStatusPrivilege = null;
     public ?Privilege $assignedUserPrivilege = null;
 

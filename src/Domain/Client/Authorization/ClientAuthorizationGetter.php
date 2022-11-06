@@ -30,4 +30,20 @@ class ClientAuthorizationGetter
          }
          return Privilege::NONE;
     }
+
+    /**
+     * Returns what authenticated user is allowed to do with client main data
+     *
+     * @param int $clientOwnerId
+     * @return Privilege
+     */
+    public function getUpdatePrivilegeForClientMainData(int $clientOwnerId): Privilege
+    {
+        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
+         if ($this->clientAuthorizationChecker->isGrantedToUpdate(['main_data' => 'value'], $clientOwnerId, false)) {
+             return Privilege::UPDATE;
+         }
+         return Privilege::NONE;
+    }
+
 }

@@ -88,7 +88,11 @@ class ClientFinder
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
         if ($this->clientAuthorizationChecker->isGrantedToRead($clientResultAggregate->userId)) {
-            // Set mutation right on main note
+            // Set client mutation privilege
+            $clientResultAggregate->mainDataPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientMainData(
+                $clientResultAggregate->userId
+            );
+            // Set main note privilege
             $clientResultAggregate->mainNoteData->privilege = $this->noteAuthorizationGetter->getMainNotePrivilege(
                 $clientResultAggregate->mainNoteData->userId,
                 $clientResultAggregate->userId

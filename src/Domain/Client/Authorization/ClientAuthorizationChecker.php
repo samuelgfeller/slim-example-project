@@ -80,6 +80,11 @@ class ClientAuthorizationChecker
             // If logged-in hierarchy value is smaller or equal advisor -> granted
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['advisor']) {
                 // Things that advisor is allowed to change for all client records even when not owner
+                // "main_data" is the same as the group of columns that follows it
+                if (array_key_exists('main_data', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'main_data';
+                }
+                // Same as main data but in separate columns to be returned as granted keys
                 if (array_key_exists('first_name', $clientDataToUpdate)) {
                     $grantedUpdateKeys[] = 'first_name';
                 }
