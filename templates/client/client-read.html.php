@@ -119,9 +119,57 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     </div>
 
     <?php
-    if ($clientAggregate->location || $clientAggregate->phone || $clientAggregate->email) { ?>
+    if ($clientAggregate->sex || $clientAggregate->birthdate || $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email) { ?>
         <div id="client-personal-info-flex-container">
             <?php
+            if ($clientAggregate->birthdate) { ?>
+                <div>
+                    <!--<span>--><?php
+                    //= (new DateTime())->diff($clientAggregate->birthdate)->y ?><!--</span>-->
+                    <img src="assets/general/img/birthdate-icon.svg" class="profile-card-content-icon" alt="phone">
+                    <div class="partial-personal-info-and-edit-icon-div" data-field-element="span">
+                        <?php
+                        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                            <img src="assets/general/img/material-edit-icon.svg"
+                                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                                 id="edit-birthdate-btn">
+                            <?php
+                        } ?>
+                        <span spellcheck="false" data-name="birthdate" data-maxlength="254"
+                        ><?= $clientAggregate->birthdate->format('d.m.Y') ?><span id="age-sub-span"
+                            >  •  <?= (new DateTime())->diff($clientAggregate->birthdate)->y ?></span></span>
+                    </div>
+                </div>
+                <?php
+            }
+            if ($clientAggregate->sex) { ?>
+                <div>
+                    <img src="assets/general/img/gender-icon.svg" class="profile-card-content-icon" alt="phone">
+                    <div class="partial-personal-info-and-edit-icon-div" data-field-element="select">
+                        <?php
+                        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                            <img src="assets/general/img/material-edit-icon.svg"
+                                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                                 id="edit-sex-btn">
+                            <select name="sex" class="default-select" id="sex-select">
+                                <option value="NULL"></option>
+                                <?php
+                                // Linked user select options
+                                foreach ($dropdownValues->sexes as $id => $name) {
+                                    $selected = $id === $clientAggregate->sex ? 'selected' : '';
+                                    echo "<option value='$id' $selected>$name</option>";
+                                }
+                                ?>
+                            </select>
+                            <?php
+                        } ?>
+
+                        <span spellcheck="false" data-name="sex" data-maxlength="254"
+                        ><?= $dropdownValues->sexes[$clientAggregate->sex] ?></span>
+                    </div>
+                </div>
+                <?php
+            }
             if ($clientAggregate->location) { ?>
                 <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
                     <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">

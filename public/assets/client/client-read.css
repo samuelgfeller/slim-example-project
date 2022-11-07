@@ -17,25 +17,26 @@
         padding-right: 15px;
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
-    .partial-personal-info-and-edit-icon-div{
+
+    .partial-personal-info-and-edit-icon-div {
         position: relative;
         padding-right: 13px;
     }
 
     .partial-header-edit-icon-div:hover .contenteditable-edit-icon,
-    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon
-    {
+    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon {
         display: inline-block;
     }
 
     /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
     have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
     /* Display outline on h1 when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"]{
+    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
         outline: 3px solid #2e3e50;
         border-radius: 10px;
         background: #f1f1f1;
     }
+
     /* Display outline on span element */
     .contenteditable-edit-icon:hover ~ span, #client-personal-info-flex-container span[contenteditable="true"] {
         outline: 2px solid #2e3e50;
@@ -54,13 +55,13 @@
     }
 
     .contenteditable-edit-icon, .contenteditable-save-icon {
+        display: none;
         position: absolute;
-        width: 22px;
+        width: 20px;
         padding: 2px;
         border-radius: 99px;
         border: 1px solid #2e3e50;
         background: #d8dee8;
-        display: none;
         right: -7px;
         top: -3px;
         z-index: 1;
@@ -237,28 +238,40 @@
         align-self: start; /*Make it not expand to the same height as activity notes*/
     }
 
-    #client-personal-info-flex-container a {
+    #client-personal-info-flex-container a, #client-personal-info-flex-container > div {
         display: inline-grid;
         grid-template-columns: 20px auto;
         grid-row: auto;
         grid-column-gap: 15px;
         align-items: center;
-        padding: 10px 15px;
+        padding: 5px 15px;
         border-radius: 22px;
         margin-top: 0px;
         font-size: 20px;
         white-space: nowrap;
     }
-
-    #client-personal-info-flex-container a span{
-        line-height: 25px;
+    #client-personal-info-flex-container *{
+        /*Also break things like validation error message*/
         overflow-wrap: anywhere;
         white-space: break-spaces;
+    }
+    #client-personal-info-flex-container a span, #client-personal-info-flex-container > div span {
+        line-height: 25px;
         padding: 5px;
+        display: inline-block;
+    }
+    #client-personal-info-flex-container select{
+        font-size: 17px;
+        display: none;
+    }
+    #client-personal-info-flex-container strong.err-msg, #full-header-edit-icon-container strong.err-msg{
+        /*Remove padding left on non-form fields*/
+        padding-left: 0;
     }
 
-    #email-div {
-        /*line-height: 1;*/
+    #age-sub-span {
+        /*As its a nested span, the parent would have twice the padding */
+        padding: 0!important;
     }
 
     /*mail prefix*/
@@ -272,7 +285,7 @@
     }
 
     /*Increase icon size*/
-    #client-personal-info-flex-container a img {
+    #client-personal-info-flex-container a img, #client-personal-info-flex-container > div img {
         width: 20px;
     }
 
@@ -368,7 +381,7 @@
         max-width: 400px;
     }
 
-    #client-personal-info-flex-container a {
+    #client-personal-info-flex-container a, #client-personal-info-flex-container div {
         display: grid; /*From inline-grid to grid to prevent being on only one line for desktop*/
     }
 }
@@ -412,7 +425,7 @@
         column-gap: 5vw;
     }
 
-    #main-note-div{
+    #main-note-div {
         width: 70%;
     }
 }

@@ -154,12 +154,19 @@ final class Validator
         bool $required = false,
         null|string $birthdateUserInput = null,
     ): void {
-        // If birthdate is string, change it to DateTimeImmutable object for validation
-        if (is_string($birthdate) === true && !empty($birthdate)){
-            $birthdateUserInput = $birthdate;
-            $birthdate = new \DateTimeImmutable($birthdate);
-        }
+        // Validate that date user input is valid data
         if (null !== $birthdate) {
+            // If $birthdate is string, determine if string is a date https://stackoverflow.com/a/24401462/9013718
+            if (is_string($birthdate) === true && !empty($birthdate) && (bool)strtotime($birthdate)) {
+                // If birthdate is string, change it to DateTimeImmutable object for validation
+                $birthdate = new \DateTimeImmutable($birthdate);
+            } elseif (!$birthdate instanceof DateTimeImmutable) {
+                // Birthdate is not null, not a string with valid date and also not an instance of the custom
+                // DateTimeImmutable format (from the data object) it means that its invalid
+                $validationResult->setError('birthdate', 'Invalid birthdate');
+                return;
+            }
+
             $now = new \DateTimeImmutable('now');
             // $now is not changed with ->sub as its immutable
             $oldestAge = $now->sub(new \DateInterval('P130Y'));
@@ -169,9 +176,10 @@ final class Validator
                 $validationResult->setError('birthdate', 'Invalid birthdate');
             }
             // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
-            if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
-                $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input.');
-            }
+            // There are cases where client submits data in different format than Y-m-d so this check was removed
+            // if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
+            //     $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input');
+            // }
         } elseif (true === $required) {
             // If it is null and required
             $validationResult->setError('birthdate', 'Birthdate required but not given');
@@ -186,7 +194,8 @@ final class Validator
      * @param ValidationResult $validationResult
      * @param bool $required
      */
-    public function validateExistence(
+    public
+    function validateExistence(
         ?int $rowId,
         string $table,
         ValidationResult $validationResult,
@@ -213,7 +222,8 @@ final class Validator
      * @param ValidationResult $validationResult
      * @return void
      */
-    public function validateNumeric(
+    public
+    function validateNumeric(
         string|null|int $numericValue,
         string $fieldName,
         ValidationResult $validationResult,

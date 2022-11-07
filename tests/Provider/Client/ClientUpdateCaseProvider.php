@@ -166,7 +166,7 @@ class ClientUpdateCaseProvider
                             ],
                             8 => [
                                 'field' => 'sex',
-                                'message' => 'Invalid sex value given. Allowed are M, F and O',
+                                'message' => 'Invalid sex value given.',
                             ],
                         ]
                     ]

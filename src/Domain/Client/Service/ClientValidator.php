@@ -199,7 +199,7 @@ class ClientValidator
     {
         if (null !== $value && '' !== $value) {
             if (!in_array($value, ['M', 'F', 'O'])) {
-                $validationResult->setError('sex', 'Invalid sex value given. Allowed are M, F and O');
+                $validationResult->setError('sex', 'Invalid sex value given.');
             }
         } elseif (true === $required) {
             // If it is null or empty string and required

@@ -24,22 +24,26 @@ export function makeFieldValueEditable() {
         // Add event listener that prevents the link opening in direct function call as anonymous functions can't be removed
         a.addEventListener('click', preventLinkOpening);
     }
+    // Remove age addition from birthdate span to edit the date
+    if (field.dataset.name === 'birthdate'){
+        field.querySelector('#age-sub-span').remove();
+    }
 
+    // Hide edit icon, make field editable and focus it
     editIcon.style.display = 'none';
+    field.contentEditable = 'true';
+    field.focus();
 
     // Slick would be to replace the word "edit" of the edit icon with "save" for the save button but that puts a dependency
     // on the id name that can be avoided when just appending a word
     let saveBtnId = editIcon.id + '-save';
-
-    field.contentEditable = 'true';
-    field.focus();
-
     // Add save button but hidden until an input is made
     fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
                                                       class="contenteditable-save-icon cursor-pointer" alt="Save"
                                                       id="${saveBtnId}" style="display: none">`);
     let saveBtn = document.getElementById(saveBtnId);
 
+    // Save on enter key press
     fieldContainer.addEventListener('keypress', function (e) {
         // Save on enter keypress or ctrl enter / cmd enter
         if (e.key === 'Enter' || (e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
@@ -47,7 +51,6 @@ export function makeFieldValueEditable() {
             e.preventDefault();
             // Triggers focusout event that is caught in event listener and saves client value
             field.contentEditable = 'false';
-            // disableContenteditableAndSaveClientValue.call(field);
         }
     });
     // Display save button after the first input
@@ -58,9 +61,9 @@ export function makeFieldValueEditable() {
     });
     // Save btn event listener is not needed as by clicking on the button the focus goes out of the edited field
     // saveBtn.addEventListener('click', () => {
-    //     disableContenteditableAndSaveClientValue.call(field);
+    //     validateContentEditableAndSaveClientValue.call(field);
     // });
-    field.addEventListener('focusout', disableContenteditableAndSaveClientValue);
+    field.addEventListener('focusout', validateContentEditableAndSaveClientValue);
 
 }
 
@@ -68,12 +71,10 @@ export function makeFieldValueEditable() {
  * Validate frontend, disable contenteditable and make
  * update request.
  */
-function disableContenteditableAndSaveClientValue() {
+function validateContentEditableAndSaveClientValue() {
     // "this" is the field
     if (clientValueFieldIsValid.call(this)) {
-        console.log('disableContenteditableAndSaveClientValue and is valid');
         removeValidationErrorMessages();
-
         // Save on focusout - has to be direct function call and not anonymous function as otherwise the
         // event listener would be registered multiple times: https://stackoverflow.com/a/47337711/9013718
         // this.addEventListener('focusout', saveClientValue);
@@ -82,7 +83,7 @@ function disableContenteditableAndSaveClientValue() {
         // this.focus();
         // Triggers focusout event that is caught in event listener and saves client value
         // this.contentEditable = 'false';
-        saveClientValue.call(this);
+        saveClientValueAndDisableContentEditable.call(this);
         // Remove event listener as it is registered to call "saveClientValue" after one successful change but
         // that doesn't mean that it is also valid the times after
         // this.removeEventListener('focusout', saveClientValue);
@@ -99,11 +100,11 @@ function disableContenteditableAndSaveClientValue() {
  * Make field non-editable and make call function that
  * makes client update request
  */
-function saveClientValue() {
+function saveClientValueAndDisableContentEditable() {
     // If submit unsuccessful the field focus should not get away
     let clientUpdateRequestPromise = submitClientUpdate(this.dataset.name, this.textContent.trim());
-    clientUpdateRequestPromise.then(success => {
-        if (success === true) {
+    clientUpdateRequestPromise.then(successData => {
+        if (successData.success === true) {
             // "this" is the field
             let fieldContainer = this.parentNode;
             // Remove event listener that prevented the link (parent of span) from opening
@@ -118,6 +119,10 @@ function saveClientValue() {
             let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
             // Only remove it if it exists to prevent error
             saveIcon.remove();
+            // If birthdate field, add span with age
+            if (this.dataset.name === 'birthdate'){
+                this.insertAdjacentHTML('beforeend', `<span id="age-sub-span">  •  ${successData.data.age}</span>`);
+            }
         } else {
             // If request not successful,
             this.contentEditable = 'true';
@@ -135,7 +140,6 @@ function saveClientValue() {
 function clientValueFieldIsValid() {
     let textContent = this.textContent.trim();
     let fieldName = this.dataset.name;
-    console.log('length: ' + textContent.length);
     let minLength = this.dataset.minlength;
     // console.log('min ' + minLength);
     if (minLength !== undefined && textContent.length < parseInt(minLength)) {

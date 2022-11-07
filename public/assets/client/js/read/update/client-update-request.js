@@ -18,15 +18,15 @@ export function submitClientUpdate(field, value) {
                 if (xHttp.status !== 201 && xHttp.status !== 200) {
                     // Default fail handler
                     handleFail(xHttp);
-                    resolve(false);
+                    resolve({success: false});
                 }
                 // Success
                 else {
                     // Remove previous validation messages
                     removeValidationErrorMessages();
-                    console.log('wtf');
                     // createFlashMessage('success', field.replace('_', ' ') + ' was updated.');
-                    resolve(true);
+                    // resolve with object containing success and data
+                    resolve({success: true, data: JSON.parse(xHttp.responseText).data});
                 }
             }
         };

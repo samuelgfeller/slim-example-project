@@ -73,14 +73,15 @@ final class ClientUpdateAction
             ])) {
                 // Try to update client with given values
                 try {
-                    $updated = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
+                    $updateData = $this->clientUpdater->updateClient($clientId, $clientValues, $loggedInUserId);
 
-                    if ($updated) {
-                        return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+                    if ($updateData['updated']) {
+                        return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => $updateData['data']]);
                     }
                     $response = $this->responder->respondWithJson($response, [
                         'status' => 'warning',
-                        'message' => 'The client was not updated.'
+                        'message' => 'The client was not updated.',
+                        'data' => $updateData['data'],
                     ]);
                     return $response->withAddedHeader('Warning', 'The client was not updated.');
                 } catch (ValidationException $exception) {

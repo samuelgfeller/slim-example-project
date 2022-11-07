@@ -34,9 +34,9 @@ class ClientUpdater
      * @param int $clientId id of post being changed
      * @param array|null $clientValues values that user wants to change
      * @param int $loggedInUserId
-     * @return bool if update was successful
+     * @return array update infos containing status and optionally other
      */
-    public function updateClient(int $clientId, null|array $clientValues, int $loggedInUserId): bool
+    public function updateClient(int $clientId, null|array $clientValues, int $loggedInUserId): array
     {
         // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
         $this->clientValidator->validateClientUpdate($clientValues);
@@ -46,6 +46,7 @@ class ClientUpdater
 
         if ($this->clientAuthorizationChecker->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
             $updateData = [];
+            $responseData = null;
             // Additional check (next to malformed body in action) to be sure that only columns that may be updated are
             // in the final $updateData array
             foreach ($clientValues as $column => $value) {
@@ -66,13 +67,17 @@ class ClientUpdater
                     throw new NotAllowedException('Not allowed to change client column ' . $column);
                 }
             }
-
             if (isset($updateData['birthdate'])) {
-                // Change datetime format if set
-                $updateData['birthdate'] = (new \DateTime($updateData['birthdate']))->format('Y-m-d');
+                $birthdate = new \DateTime($updateData['birthdate']);
+                // Change datetime format to database
+                $updateData['birthdate'] = $birthdate->format('Y-m-d');
+                $responseData['age'] = (new \DateTime())->diff($birthdate)->y;
             }
 
-            return $this->clientUpdaterRepository->updateClient($updateData, $clientId);
+            return [
+                'updated' => $this->clientUpdaterRepository->updateClient($updateData, $clientId),
+                'data' => $responseData,
+            ];
         }
 
 // User does not have needed rights to access area or function
