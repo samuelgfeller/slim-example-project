@@ -46,7 +46,7 @@ export function getAvatarPath(sex){
         case 'F':
             return "assets/client/img/avatar_female.svg";
         case 'O':
-        case null:
+        default:
             return "assets/client/img/avatar_neutral.svg";
     }
 }

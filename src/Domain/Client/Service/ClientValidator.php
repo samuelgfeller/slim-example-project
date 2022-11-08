@@ -198,7 +198,7 @@ class ClientValidator
     protected function validateSex($value, ValidationResult $validationResult, bool $required = false): void
     {
         if (null !== $value && '' !== $value) {
-            if (!in_array($value, ['M', 'F', 'O'])) {
+            if (!in_array($value, ['M', 'F', 'O', ''], true)) {
                 $validationResult->setError('sex', 'Invalid sex value given.');
             }
         } elseif (true === $required) {

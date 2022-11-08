@@ -155,7 +155,7 @@ final class Validator
         null|string $birthdateUserInput = null,
     ): void {
         // Validate that date user input is valid data
-        if (null !== $birthdate) {
+        if (null !== $birthdate && '' !== $birthdate) {
             // If $birthdate is string, determine if string is a date https://stackoverflow.com/a/24401462/9013718
             if (is_string($birthdate) === true && !empty($birthdate) && (bool)strtotime($birthdate)) {
                 // If birthdate is string, change it to DateTimeImmutable object for validation

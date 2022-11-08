@@ -15,6 +15,11 @@ export function makeFieldSelectValueEditable() {
             if (successData.success === false) {
                 // Re enable editable select on error
                 showEditableSelect(editIcon, select, span);
+            }else{
+                // If success is true and select value was empty string, remove dropdown from client personal infos
+                if (select.value === '' || select.value === 'NULL'){
+                    fieldContainer.parentNode.remove();
+                }
             }
         });
     });

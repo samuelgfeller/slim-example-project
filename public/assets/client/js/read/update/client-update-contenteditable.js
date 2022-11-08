@@ -24,15 +24,22 @@ export function makeFieldValueEditable() {
         // Add event listener that prevents the link opening in direct function call as anonymous functions can't be removed
         a.addEventListener('click', preventLinkOpening);
     }
+    // Lock min-width for the container to not shrink during editing
+    let personalInfoContainer = document.querySelector('#client-personal-info-flex-container');
+    personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
     // Remove age addition from birthdate span to edit the date
-    if (field.dataset.name === 'birthdate'){
+    if (field.dataset.name === 'birthdate') {
         field.querySelector('#age-sub-span').remove();
     }
 
-    // Hide edit icon, make field editable and focus it
+    // Hide edit icon, make field editable, focus it and remove &nbsp; if empty
     editIcon.style.display = 'none';
     field.contentEditable = 'true';
     field.focus();
+    console.log(field.innerHTML);
+    if (field.innerHTML === '&nbsp;') {
+        field.innerHTML = '';
+    }
 
     // Slick would be to replace the word "edit" of the edit icon with "save" for the save button but that puts a dependency
     // on the id name that can be avoided when just appending a word
@@ -101,27 +108,40 @@ function validateContentEditableAndSaveClientValue() {
  * makes client update request
  */
 function saveClientValueAndDisableContentEditable() {
+    // "this" is the field
+    let fieldContainer = this.parentNode;
+    let submitValue = this.textContent.trim();
     // If submit unsuccessful the field focus should not get away
-    let clientUpdateRequestPromise = submitClientUpdate(this.dataset.name, this.textContent.trim());
+    let clientUpdateRequestPromise = submitClientUpdate(this.dataset.name, submitValue);
     clientUpdateRequestPromise.then(successData => {
         if (successData.success === true) {
-            // "this" is the field
-            let fieldContainer = this.parentNode;
-            // Remove event listener that prevented the link (parent of span) from opening
-            if (fieldContainer.dataset.fieldElement === 'a-span') {
-                let a = fieldContainer.closest('a');
-                a.classList.remove('currently-editable');
-                a.removeEventListener('click', preventLinkOpening);
-            }
-            this.contentEditable = 'false';
-            fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
-            // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
-            let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
-            // Only remove it if it exists to prevent error
-            saveIcon.remove();
-            // If birthdate field, add span with age
-            if (this.dataset.name === 'birthdate'){
-                this.insertAdjacentHTML('beforeend', `<span id="age-sub-span">  •  ${successData.data.age}</span>`);
+            // Reset min width of personal info container
+            document.querySelector('#client-personal-info-flex-container').style.minWidth = null;
+            // If success true and submit value was empty string, remove it from client personal infos box but not if header
+            if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.fieldElement === 'a-span') {
+                fieldContainer.parentNode.remove();
+            } else {
+                // Remove event listener that prevented the link (parent of span) from opening
+                if (fieldContainer.dataset.fieldElement === 'a-span') {
+                    let a = fieldContainer.closest('a');
+                    a.classList.remove('currently-editable');
+                    a.removeEventListener('click', preventLinkOpening);
+                }
+                // If empty submit value successfully submitted, and it's not a personal info, add a &nbsp; for it to be
+                // visible on hover and edited later
+                if (submitValue === ''){
+                    fieldContainer.querySelector(fieldContainer.dataset.fieldElement).innerHTML = '&nbsp;';
+                }
+                this.contentEditable = 'false';
+                fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
+                // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
+                let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
+                // Only remove it if it exists to prevent error in case field was unchanged
+                saveIcon?.remove();
+                // If birthdate field, add span with age
+                if (this.dataset.name === 'birthdate') {
+                    this.insertAdjacentHTML('beforeend', `<span id="age-sub-span">&nbsp; •&nbsp; ${successData.data.age}</span>`);
+                }
             }
         } else {
             // If request not successful,
@@ -140,25 +160,27 @@ function saveClientValueAndDisableContentEditable() {
 function clientValueFieldIsValid() {
     let textContent = this.textContent.trim();
     let fieldName = this.dataset.name;
-    let minLength = this.dataset.minlength;
-    // console.log('min ' + minLength);
-    if (minLength !== undefined && textContent.length < parseInt(minLength)) {
-        displayValidationErrorMessage(fieldName, 'Minimum length is ' + minLength);
-        return false;
-    }
-
-    let maxLength = this.dataset.maxlength;
-    // console.log('max ' + maxLength);
-    if (maxLength !== undefined && textContent.length > parseInt(maxLength)) {
-        displayValidationErrorMessage(fieldName, 'Maximum length is ' + maxLength);
-        return false;
-    }
 
     let required = this.dataset.required;
     if (required !== undefined && required === 'true' && textContent.length === 0) {
         displayValidationErrorMessage(fieldName, 'Required field');
         return false;
     }
+
+    // Check that length is either 0 or more than given minlength (0 is checked with required above)
+    let minLength = this.dataset.minlength;
+    if (minLength !== undefined && (textContent.length < parseInt(minLength) && textContent.length !== 0)) {
+        displayValidationErrorMessage(fieldName, 'Minimum length is ' + minLength);
+        return false;
+    }
+
+    // Check that length is either 0 or more than given maxlength
+    let maxLength = this.dataset.maxlength;
+    if (maxLength !== undefined && (textContent.length > parseInt(maxLength) && textContent.length !== 0)) {
+        displayValidationErrorMessage(fieldName, 'Maximum length is ' + maxLength);
+        return false;
+    }
+
     // If no validation error was found
     return true;
 }

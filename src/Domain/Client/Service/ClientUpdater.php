@@ -68,10 +68,14 @@ class ClientUpdater
                 }
             }
             if (isset($updateData['birthdate'])) {
-                $birthdate = new \DateTime($updateData['birthdate']);
-                // Change datetime format to database
-                $updateData['birthdate'] = $birthdate->format('Y-m-d');
-                $responseData['age'] = (new \DateTime())->diff($birthdate)->y;
+                if ($updateData['birthdate'] === '') {
+                    $updateData['birthdate'] = null;
+                } else {
+                    $birthdate = new \DateTime($updateData['birthdate']);
+                    // Change datetime format to database
+                    $updateData['birthdate'] = $birthdate->format('Y-m-d');
+                    $responseData['age'] = (new \DateTime())->diff($birthdate)->y;
+                }
             }
 
             return [

@@ -99,9 +99,6 @@
                 <img src="assets/general/img/nav/logout-filled.svg" alt="Logout">
                 <span class="nav-span">Logout</span>
             </a>
-
-
-
         </nav>
         <div id="nav-mobile-toggle-icon">
             <div id="nav-burger-icon">

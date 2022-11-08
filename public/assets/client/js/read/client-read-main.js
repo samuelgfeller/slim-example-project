@@ -32,7 +32,7 @@ clientStatus?.addEventListener('change', saveClientReadDropdownChange);
 const assignedUser = document.querySelector('select[name="user_id"]:not([disabled])');
 assignedUser?.addEventListener('change', saveClientReadDropdownChange);
 
-// Edit client values event listeners
+// Edit client main values event listeners
 // First and last name
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeFieldValueEditable);
@@ -42,3 +42,5 @@ document.querySelector('#edit-phone-btn')?.addEventListener('click', makeFieldVa
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
+// Add new personal info
+let newPersonalInfoIconDiv = document.querySelector('#add-client-personal-info-btn-div');
