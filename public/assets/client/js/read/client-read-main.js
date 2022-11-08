@@ -7,6 +7,7 @@ import {loadClientNotes} from "./client-read-note-loading.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
 import {makeFieldValueEditable} from "./update/client-update-contenteditable.js";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js";
+import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -20,6 +21,8 @@ loadClientNotes(() => {
     // Manually init autoResizingTextareas to include the new ones as it's only done during page load and not afterwards
     initAutoResizingTextareas();
 });
+
+loadAvailablePersonalInfoIconsDiv();
 
 
 // New note button event listener
@@ -42,5 +45,5 @@ document.querySelector('#edit-phone-btn')?.addEventListener('click', makeFieldVa
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
-// Add new personal info
-let newPersonalInfoIconDiv = document.querySelector('#add-client-personal-info-btn-div');
+
+

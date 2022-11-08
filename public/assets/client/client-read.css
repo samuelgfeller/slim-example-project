@@ -291,6 +291,7 @@
     /*Increase icon size*/
     #client-personal-info-flex-container a img, #client-personal-info-flex-container > div img, .personal-info-icon {
         width: 20px;
+        height: 20px;
     }
 
     #client-personal-info-flex-container a {
@@ -303,7 +304,7 @@
         font-weight: normal;
     }
 
-    #add-client-personal-info-btn-div {
+    #add-client-personal-info-div {
         /*margin-left: 13px;*/
         padding: 6px;
         border-radius: 99px;
@@ -318,36 +319,31 @@
         max-width: 45px;
         transition: max-width .5s ease-out;
         overflow: hidden;
-
     }
-    #add-client-personal-info-btn-div:hover {
+    #add-client-personal-info-div:hover {
         max-width: 100%;
     }
 
-    #add-client-personal-info-btn-div img {
+    #add-client-personal-info-div img {
         min-width: 34px;
         height: 34px;
         padding: 7px;
         /*Increase width and height of 10px to cope for padding*/
         border-radius: 10px;
     }
-
-    #add-client-personal-info-btn-div img#toggle-personal-info-icons {
-        padding: 2px;
-        cursor: pointer;
-    }
-
-    #add-client-personal-info-btn-div img:hover {
+    #add-client-personal-info-div img:hover {
         box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
         background: rgba(0, 0, 0, 0.11);
         cursor: crosshair;
     }
 
-    #add-client-personal-info-btn-div img#toggle-personal-info-icons:hover {
+    #add-client-personal-info-div img#toggle-personal-info-icons {
+        cursor: pointer;
+    }
+    #add-client-personal-info-div img#toggle-personal-info-icons:hover {
         background: none;
         box-shadow: none;
     }
-
 
     .client-note-loading-placeholder {
         width: 100%;

@@ -21,6 +21,7 @@ $this->addAttribute('css', [
     'assets/general/css/loader/animated-checkmark.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/content-placeholder.css',
+    'assets/general/css/contenteditable.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/client-read.css'
 ]);
@@ -62,7 +63,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!-- Status select options-->
         <div>
             <label for="client-status" class="discrete-label">Status</label>
-            <select name="client_status_id" class="default-select"
+            <select data-name="client_status_id" class="default-select"
                 <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
                     ? '' : 'disabled' ?>>
                 <?php
@@ -118,134 +119,118 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!--  Notes are populated here via ajax  -->
     </div>
     <div id="client-personal-info-container">
-        <?php
-        if ($clientAggregate->sex || $clientAggregate->birthdate || $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email) { ?>
-            <div id="client-personal-info-flex-container">
-                <?php
-                if ($clientAggregate->birthdate) { ?>
-                    <div>
-                        <!--<span>--><?php
-                        //= (new DateTime())->diff($clientAggregate->birthdate)->y ?><!--</span>-->
-                        <img src="assets/general/img/birthdate-icon.svg" class="profile-card-content-icon" alt="phone">
-                        <div class="partial-personal-info-and-edit-icon-div" data-field-element="span">
-                            <?php
-                            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                                <img src="assets/general/img/material-edit-icon.svg"
-                                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                                     id="edit-birthdate-btn">
-                                <?php
-                            } ?>
-                            <span spellcheck="false" data-name="birthdate" data-maxlength="254"
-                            ><?= $clientAggregate->birthdate->format('d.m.Y') ?><span id="age-sub-span"
-                                >&nbsp; • &nbsp;<?= (new DateTime())->diff(
-                                        $clientAggregate->birthdate
-                                    )->y ?></span></span>
-                        </div>
-                    </div>
+        <div id="client-personal-info-flex-container">
+            <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
+            <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
+                <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
+                <div class="partial-personal-info-and-edit-icon-div" data-field-element="span"
+                     data-hide-if-empty="true">
                     <?php
-                }
-                if ($clientAggregate->sex) { ?>
-                    <div>
-                        <img src="assets/general/img/gender-icon.svg" class="profile-card-content-icon" alt="phone">
-                        <div class="partial-personal-info-and-edit-icon-div" data-field-element="select">
-                            <?php
-                            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                                <img src="assets/general/img/material-edit-icon.svg"
-                                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                                     id="edit-sex-btn">
-                                <select name="sex" class="default-select" id="sex-select">
-                                    <option value=""></option>
-                                    <?php
-                                    // Linked user select options
-                                    foreach ($dropdownValues->sexes as $id => $name) {
-                                        $selected = $id === $clientAggregate->sex ? 'selected' : '';
-                                        echo "<option value='$id' $selected>$name</option>";
-                                    }
-                                    ?>
-                                </select>
-                                <?php
-                            } ?>
-
-                            <span spellcheck="false" data-name="sex" data-maxlength="254"
-                            ><?= $dropdownValues->sexes[$clientAggregate->sex] ?></span>
-                        </div>
-                    </div>
-                    <?php
-                }
-                if ($clientAggregate->location) { ?>
-                    <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank">
-                        <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-                        <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                            <?php
-                            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                                <img src="assets/general/img/material-edit-icon.svg"
-                                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                                     id="edit-location-btn">
-                                <?php
-                            } ?>
-                            <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                                $clientAggregate->location ?></span>
-                        </div>
-                    </a>
-                    <?php
-                }
-                if ($clientAggregate->phone) { ?>
-                    <a href="tel:<?= $clientAggregate->phone ?>" target="_blank">
-                        <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                        <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                            <?php
-                            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                                <img src="assets/general/img/material-edit-icon.svg"
-                                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                                     id="edit-phone-btn">
-                                <?php
-                            } ?>
-                            <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
-                                $clientAggregate->phone ?></span>
-                        </div>
-                    </a>
-                    <?php
-                }
-                if ($clientAggregate->email) { ?>
-                    <a href="mailto:<?= $clientAggregate->email ?>" target="_blank">
-                        <img src="assets/client/img/email-icon.svg" class="profile-card-content-icon" alt="phone">
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-birthdate-btn">
                         <?php
-                        $emailParts = explode('@', $clientAggregate->email);
-                        ?>
-                        <div id="email-div" class="partial-personal-info-and-edit-icon-div" data-field-element="a-span">
-                            <?php
-                            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                                <img src="assets/general/img/material-edit-icon.svg"
-                                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                                     id="edit-email-btn">
-                                <?php
-                            } ?>
-                            <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
-                            ><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
-                        </div>
-                    </a>
+                    } ?>
+                    <span spellcheck="false" data-name="birthdate" data-maxlength="254"
+                          class="contenteditable-placeholder" data-placeholder="dd.mm.yyyy"
+                    ><?php
+                        if ($clientAggregate->birthdate) {
+                            echo $clientAggregate->birthdate->format('d.m.Y') ?><span id="age-sub-span"
+                            >&nbsp; • &nbsp;<?= (new DateTime())->diff(
+                            $clientAggregate->birthdate
+                        )->y ?></span><?php
+                        } else {
+                            echo '&nbsp;';
+                        } ?></span>
+                </div>
+            </div>
+            <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
+                <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <div class="partial-personal-info-and-edit-icon-div" data-field-element="select"
+                     data-hide-if-empty="true">
                     <?php
-                } ?>
-            </div>
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-sex-btn">
+                        <select name="sex" class="default-select" id="sex-select">
+                            <option value=""></option>
+                            <?php
+                            // Linked user select options
+                            foreach ($dropdownValues->sexes as $id => $name) {
+                                $selected = $id === $clientAggregate->sex ? 'selected' : '';
+                                echo "<option value='$id' $selected>$name</option>";
+                            }
+                            ?>
+                        </select>
+                        <?php
+                    } ?>
 
-            <?php
-        } ?>
-        <div id="">
-            <div id="add-client-personal-info-btn-div">
-                <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
-                <img src="assets/general/img/birthdate-icon.svg" class="default-icon" alt="birthdate">
-                <img src="assets/general/img/gender-icon.svg" class="default-icon" alt="sex">
-                <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-                <img src="assets/client/img/phone.svg" class="default-icon" alt="phone">
-                <img src="assets/client/img/email-icon.svg" class="default-icon" alt="email">
+                    <span spellcheck="false" data-name="sex" data-maxlength="254"
+                    ><?= $clientAggregate->sex ? $dropdownValues->sexes[$clientAggregate->sex] : '' ?></span>
+                </div>
             </div>
-            <div id="personal-info-icons-container">
-                <img src="assets/general/img/birthdate-icon.svg" class="default-icon" alt="birthdate">
-                <img src="assets/general/img/gender-icon.svg" class="default-icon" alt="sex">
-                <img src="assets/client/img/location_pin_icon.svg" class="default-icon" alt="location">
-                <img src="assets/client/img/phone.svg" class="default-icon" alt="phone">
-                <img src="assets/client/img/email-icon.svg" class="default-icon" alt="email">
-            </div>
+            <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
+               id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
+                <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
+                <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                     data-hide-if-empty="true">
+                    <?php
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-location-btn">
+                        <?php
+                    } ?>
+                    <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                        $clientAggregate->location ?></span>
+                </div>
+            </a>
+            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
+               id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
+                <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
+                <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                     data-hide-if-empty="true">
+                    <?php
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-phone-btn">
+                        <?php
+                    } ?>
+                    <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
+                        $clientAggregate->phone ?></span>
+                </div>
+            </a>
+            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
+               id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
+                <img src="assets/client/img/email-icon.svg" class="personal-info-icon" alt="email">
+                <div id="email-div" class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                     data-hide-if-empty="true">
+                    <?php
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-email-btn">
+                        <?php
+                    } ?>
+                    <?php
+                    $emailParts = $clientAggregate->email ? explode('@', $clientAggregate->email) : ['', '']; ?>
+                    <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
+                    ><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
+                </div>
+            </a>
+        </div>
+
+        <div id="add-client-personal-info-div">
+            <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
+            <!-- alt has to be the same as the field name -->
+            <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
+            <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
+            <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
+            <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
+            <img src="assets/client/img/email-icon.svg" class="personal-info-icon" alt="email">
         </div>
     </div>
 </div>

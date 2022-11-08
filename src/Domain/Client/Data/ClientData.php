@@ -11,16 +11,17 @@ class ClientData
 {
 
     public ?int $id;
-    public ?string $firstName;
-    public ?string $lastName;
+    // Optional values have to be init with null as they are used even when not set in client-read template
+    public ?string $firstName = null;
+    public ?string $lastName = null;
     // DateTimeImmutable to not change original reference when modified
-    public ?DateTimeImmutable $birthdate;
-    public ?string $location;
-    public ?string $phone;
-    public ?string $email;
+    public ?DateTimeImmutable $birthdate = null;
+    public ?string $location = null;
+    public ?string $phone = null;
+    public ?string $email = null;
     // https://ocelot.ca/blog/blog/2013/09/16/representing-sex-in-databases/
-    public ?string $sex; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
-    public ?string $clientMessage; // Message that client submitted via webform
+    public ?string $sex = null; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
+    public ?string $clientMessage = null; // Message that client submitted via webform
     public ?int $userId;
     public ?int $clientStatusId;
     public ?DateTimeImmutable $updatedAt;

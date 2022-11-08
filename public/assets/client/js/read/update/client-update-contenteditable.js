@@ -1,6 +1,10 @@
 import {submitClientUpdate} from "./client-update-request.js";
 import {displayValidationErrorMessage} from "../../../../general/js/validation/form-validation.js";
 import {removeValidationErrorMessages} from "../../../../general/js/requests/fail-handler.js";
+import {
+    addIconToAvailableDiv,
+    removeIconFromAvailableDiv
+} from "../client-read-personal-info.js";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */
@@ -29,14 +33,13 @@ export function makeFieldValueEditable() {
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
     // Remove age addition from birthdate span to edit the date
     if (field.dataset.name === 'birthdate') {
-        field.querySelector('#age-sub-span').remove();
+        field.querySelector('#age-sub-span')?.remove();
     }
 
     // Hide edit icon, make field editable, focus it and remove &nbsp; if empty
     editIcon.style.display = 'none';
     field.contentEditable = 'true';
     field.focus();
-    console.log(field.innerHTML);
     if (field.innerHTML === '&nbsp;') {
         field.innerHTML = '';
     }
@@ -44,10 +47,12 @@ export function makeFieldValueEditable() {
     // Slick would be to replace the word "edit" of the edit icon with "save" for the save button but that puts a dependency
     // on the id name that can be avoided when just appending a word
     let saveBtnId = editIcon.id + '-save';
-    // Add save button but hidden until an input is made
-    fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
+    // Add save button if not already existing but hidden until an input is made
+    if (document.querySelector('#' + saveBtnId) === null) {
+        fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/img/checkmark.svg"
                                                       class="contenteditable-save-icon cursor-pointer" alt="Save"
                                                       id="${saveBtnId}" style="display: none">`);
+    }
     let saveBtn = document.getElementById(saveBtnId);
 
     // Save on enter key press
@@ -117,9 +122,11 @@ function saveClientValueAndDisableContentEditable() {
         if (successData.success === true) {
             // Reset min width of personal info container
             document.querySelector('#client-personal-info-flex-container').style.minWidth = null;
+            let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + this.dataset.name + '"]');
             // If success true and submit value was empty string, remove it from client personal infos box but not if header
-            if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.fieldElement === 'a-span') {
-                fieldContainer.parentNode.remove();
+            if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
+                // Select dropdown container hidden in client-update-dropdown.js
+                addIconToAvailableDiv(availableIcon, fieldContainer.parentNode)
             } else {
                 // Remove event listener that prevented the link (parent of span) from opening
                 if (fieldContainer.dataset.fieldElement === 'a-span') {
@@ -127,20 +134,26 @@ function saveClientValueAndDisableContentEditable() {
                     a.classList.remove('currently-editable');
                     a.removeEventListener('click', preventLinkOpening);
                 }
-                // If empty submit value successfully submitted, and it's not a personal info, add a &nbsp; for it to be
-                // visible on hover and edited later
-                if (submitValue === ''){
+                // If empty submit value successfully submitted, and it doesn't have data-hide-if-empty="true",
+                // add a &nbsp; for it to be visible on hover and edited later
+                if (submitValue === '') {
                     fieldContainer.querySelector(fieldContainer.dataset.fieldElement).innerHTML = '&nbsp;';
                 }
                 this.contentEditable = 'false';
                 fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
                 // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
                 let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
+                console.log(saveIcon);
+                saveIcon.style.background = 'red';
                 // Only remove it if it exists to prevent error in case field was unchanged
                 saveIcon?.remove();
-                // If birthdate field, add span with age
                 if (this.dataset.name === 'birthdate') {
+                    // If birthdate field and not empty, add span with age
                     this.insertAdjacentHTML('beforeend', `<span id="age-sub-span">&nbsp; •&nbsp; ${successData.data.age}</span>`);
+                }
+                // Hide icon if it existed in the available personal info icon container
+                if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
+                    removeIconFromAvailableDiv(availableIcon);
                 }
             }
         } else {

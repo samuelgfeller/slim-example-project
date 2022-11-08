@@ -1,4 +1,8 @@
 import {submitClientUpdate} from "./client-update-request.js";
+import {
+    addIconToAvailableDiv,
+    removeIconFromAvailableDiv
+} from "../client-read-personal-info.js";
 
 export function makeFieldSelectValueEditable() {
     let editIcon = this;
@@ -15,10 +19,13 @@ export function makeFieldSelectValueEditable() {
             if (successData.success === false) {
                 // Re enable editable select on error
                 showEditableSelect(editIcon, select, span);
-            }else{
+            } else {
+                let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
                 // If success is true and select value was empty string, remove dropdown from client personal infos
-                if (select.value === '' || select.value === 'NULL'){
-                    fieldContainer.parentNode.remove();
+                if ((select.value === '' || select.value === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
+                    addIconToAvailableDiv(availableIcon, fieldContainer.parentNode);
+                }else if(fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
+                    removeIconFromAvailableDiv(availableIcon);
                 }
             }
         });
