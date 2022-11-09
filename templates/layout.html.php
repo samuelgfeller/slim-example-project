@@ -76,23 +76,23 @@
                 <img src="assets/general/img/nav/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
             </a>
-            <a href="<?= $route->urlFor('client-list-assigned-to-me-page') ?>"
-                <?= $currRouteName === 'client-list-assigned-to-me-page' ? 'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Assigned me">
-                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-                <span class="nav-span">Assigned to me</span>
-            </a>
-            <!--           <a href="<?
-            /*= $route->urlFor('register-page') */ ?>" <?
-            /*= $uri->getPath() === $route->urlFor(
-                            'register-page'
-                        ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
             <a href="<?= $route->urlFor('profile-page') ?>"
                 <?= in_array($currRouteName, ['profile-page', 'change-password-page']) ? 'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/gallery-tiles.svg" alt="Profile">
                 <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
                 <span class="nav-span">Profile</span>
             </a>
+            <a href="<?= $route->urlFor('user-list-page') ?>"
+                <?= $currRouteName === 'user-list-page' ? 'class="is-active"' : '' ?>>
+                <img src="assets/general/img/nav/users.svg" alt="Users">
+                <img src="assets/general/img/nav/users-filled.svg" alt="Users">
+                <span class="nav-span">Users</span>
+            </a>
+            <!--           <a href="<?
+            /*= $route->urlFor('register-page') */ ?>" <?
+            /*= $uri->getPath() === $route->urlFor(
+                            'register-page'
+                        ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/logout.svg" alt="Logout">

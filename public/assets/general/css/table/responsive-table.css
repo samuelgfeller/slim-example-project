@@ -1,0 +1,71 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    .responsive-table-container {
+        padding: 15px 30px;
+        border-radius: 30px;
+        background: #f1f1f1;
+        overflow-x: auto;
+    }
+
+    .responsive-table {
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    /*.responsive-table tr:not(:last-child) {*/
+    /*}*/
+    .responsive-table tr:not(:last-child) td, .responsive-table th {
+        border-bottom: 1px solid #c0c0c0;
+
+    }
+
+    .responsive-table td, .responsive-table th {
+        padding: 12px 20px;
+        text-align: left;
+        /*border: 1px solid black;*/
+    }
+
+    .responsive-table th {
+        font-weight: 500;
+        white-space: nowrap;
+        color: black;
+        letter-spacing: 0.03em;
+    }
+    .responsive-table a{
+        color: #2e3e50;
+    }
+
+    .responsive-table tbody tr:hover {
+        background: rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+    }
+
+    .responsive-table select {
+        background: inherit;
+    }
+
+    .responsive-table a {
+        text-decoration: none;
+    }
+    .column-hidden-on-mobile {
+        display: none;
+    }
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+}
+
+@media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    .column-hidden-on-mobile {
+        display: table-cell;
+    }
+}
+
+@media (min-width: 1100px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    .responsive-table-container {
+        display: inline-block;
+    }
+}

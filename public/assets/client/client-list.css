@@ -128,15 +128,13 @@
 
     .profile-card-assignee-and-status div {
         margin-top: 10px;
-    }
-
     /*For smallest version, min-width 80% that will be removed later*/
-    .profile-card-assignee-and-status div {
         min-width: 90%;
     }
 
     .profile-card-content select {
         width: 100%;
+        font-size: 12px;
     }
 
     .profile-client-card:hover {

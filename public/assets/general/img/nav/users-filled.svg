@@ -1,0 +1,8 @@
+<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users" xmlns="http://www.w3.org/2000/svg">
+  <defs></defs>
+  <path d="M 16.92 21 L 16.92 19 C 16.92 16.791 15.138 15 12.94 15 L 4.98 15 C 2.782 15 1 16.791 1 19 L 1 21" style="fill: rgb(0, 0, 0);"></path>
+  <circle cx="9" cy="7" r="4" style="fill: rgb(0, 0, 0);"></circle>
+  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+  <rect x="1" y="16.978" width="15.92" height="5.017" style="stroke: rgb(0, 0, 0); fill: rgb(0, 0, 0); stroke-width: 0px;"></rect>
+</svg>

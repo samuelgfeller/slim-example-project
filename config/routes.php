@@ -98,6 +98,9 @@ return function (App $app) {
             'user-delete-submit'
         );
     })->add(UserAuthenticationMiddleware::class);
+    $app->get('/users/list', \App\Application\Actions\User\UserListPageAction::class)->setName(
+        'user-list-page'
+    )->add(UserAuthenticationMiddleware::class);
 
     // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
     $app->group('/clients', function (RouteCollectorProxy $group) {

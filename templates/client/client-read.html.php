@@ -63,7 +63,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
         <!-- Status select options-->
         <div>
             <label for="client-status" class="discrete-label">Status</label>
-            <select data-name="client_status_id" class="default-select"
+            <select name="client_status_id" class="default-select"
                 <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
                     ? '' : 'disabled' ?>>
                 <?php
