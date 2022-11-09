@@ -204,7 +204,7 @@ class ClientUpdateActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that response contains warning
-        $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.'], $response);
+        $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.', 'data' => null], $response);
 
         $this->assertTableRowEquals(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
     }

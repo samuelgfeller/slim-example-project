@@ -123,7 +123,7 @@ class ClientCreateCaseProvider
                     'first_name' => 'T',
                     'last_name' => 'A',
                     'birthdate' => '1850-01-01', // too old
-                    'location' => 'La',
+                    'location' => 'L',
                     'phone' => '07',
                     'email' => 'test@test', // missing extension
                     'sex' => 'A', // invalid value
@@ -163,7 +163,7 @@ class ClientCreateCaseProvider
                             ],
                             6 => [
                                 'field' => 'location',
-                                'message' => 'Minimum length is 3',
+                                'message' => 'Minimum length is 2',
                             ],
                             7 => [
                                 'field' => 'phone',

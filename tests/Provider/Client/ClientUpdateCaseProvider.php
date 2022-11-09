@@ -25,12 +25,22 @@ class ClientUpdateCaseProvider
         $advisorRow = ['user_role_id' => 3];
         $newcomerRow = ['user_role_id' => 4];
 
+        $basicClientDataChanges = [
+            'first_name' => 'NewFirstName',
+            'last_name' => 'NewLastName',
+            'birthdate' => '1999-10-22',
+            'location' => 'NewLocation',
+            'phone' => '011 111 11 11',
+            'email' => 'new.email@test.ch',
+            'sex' => 'O',
+        ];
+
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             'db_changed' => true,
             'json_response' => [
                 'status' => 'success',
-                'data' => null,
+                'data' => ['age' => (new \DateTime())->diff(new \DateTime($basicClientDataChanges['birthdate']))->y],
             ],
         ];
         $unauthorizedResult = [
@@ -42,15 +52,6 @@ class ClientUpdateCaseProvider
             ]
         ];
 
-        $basicClientDataChanges = [
-            'first_name' => 'NewFirstName',
-            'last_name' => 'NewLastName',
-            'birthdate' => '1999-10-22',
-            'location' => 'NewLocation',
-            'phone' => '011 111 11 11',
-            'email' => 'new.email@test.ch',
-            'sex' => 'O',
-        ];
 
         // To avoid testing each column separately for each user role, the most basic change is taken to test
         // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database
@@ -119,7 +120,7 @@ class ClientUpdateCaseProvider
                     'first_name' => 'T',
                     'last_name' => 'A',
                     'birthdate' => '1850-01-01', // too old
-                    'location' => 'La',
+                    'location' => 'L',
                     'phone' => '07',
                     'email' => 'test@test', // missing extension
                     'sex' => 'A', // invalid value
@@ -158,7 +159,7 @@ class ClientUpdateCaseProvider
                             ],
                             6 => [
                                 'field' => 'location',
-                                'message' => 'Minimum length is 3',
+                                'message' => 'Minimum length is 2',
                             ],
                             7 => [
                                 'field' => 'phone',
