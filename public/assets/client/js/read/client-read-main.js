@@ -24,7 +24,6 @@ loadClientNotes(() => {
 
 loadAvailablePersonalInfoIconsDiv();
 
-
 // New note button event listener
 // After plus button is clicked, textarea for new note should be added
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
@@ -46,4 +45,21 @@ document.querySelector('#edit-email-btn')?.addEventListener('click', makeFieldVa
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeFieldValueEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
 
-
+// Toggle personal info edit icons
+let personalInfoEditIconsToggle = document.querySelector('#toggle-personal-info-edit-icons');
+let personalInfoContainer = document.querySelector('#client-personal-info-flex-container');
+personalInfoEditIconsToggle.addEventListener('click', () => {
+    let personalInfosEditIcons = document.querySelectorAll('#client-personal-info-flex-container div .contenteditable-edit-icon');
+    for (let editIcon of personalInfosEditIcons) {
+        editIcon.classList.toggle('always-displayed-icon');
+    }
+})
+// Display toggle if screen is touch device https://stackoverflow.com/a/13470899/9013718
+if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
+    personalInfoEditIconsToggle.style.display = 'inline-block';
+    // Increase right padding to not overlap edit icons
+    personalInfoContainer.style.paddingRight = '20px';
+}else{
+    personalInfoEditIconsToggle.style.display = 'none';
+    personalInfoContainer.style.paddingRight = null;
+}

@@ -120,6 +120,9 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     </div>
     <div id="client-personal-info-container">
         <div id="client-personal-info-flex-container">
+            <img src="assets/general/img/material-edit-icon.svg"
+                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                 id="toggle-personal-info-edit-icons">
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
