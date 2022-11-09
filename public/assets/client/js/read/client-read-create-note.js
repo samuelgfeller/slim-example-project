@@ -3,7 +3,7 @@ import {
     addDeleteNoteBtnEventListener, addTextareaInputEventListener,
     hideCheckmarkLoader, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
-import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {handleFail, removeValidationErrorMessages} from "../../../general/js/requests/fail-handler.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
 
 let noteCreationHideCheckMarkTimeout = [];
@@ -58,6 +58,7 @@ export function addNewNoteTextarea() {
         // Make that newly created textarea resize automatically as well
         initAutoResizingTextareas();
 
+        textarea.addEventListener('focusout', removeNewNoteTextareaIfEmpty);
         // Has to be after textarea event listener init
         textarea.focus();
     } else {
@@ -65,11 +66,19 @@ export function addNewNoteTextarea() {
     }
 }
 
+function removeNewNoteTextareaIfEmpty(){
+    // "this" is the textarea
+    if (this.value === ''){
+        this.remove();
+    }
+}
 
 export function insertNewNoteToDb(textarea, isMainNote = false) {
     // By using querySelector on the targeted textarea parent it's certain that the right circleLoader is targeted
     let circleLoader = textarea.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
+
+    textarea.removeEventListener('focusout', removeNewNoteTextareaIfEmpty);
 
     // Make ajax call
     let xHttp = new XMLHttpRequest();
@@ -78,10 +87,12 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
             // Fail
             if (xHttp.status !== 201 && xHttp.status !== 200) {
                 // Default fail handler
-                handleFail(xHttp);
+                handleFail(xHttp, textarea.id);
+                hideCheckmarkLoader(circleLoader, 'create new note fail');
             }
             // Success
             else {
+                removeValidationErrorMessages();
                 let response = JSON.parse(xHttp.responseText);
                 // Here it's not important to check if user is still typing as new note can be saved as soon as possible
                 // Show checkmark only on status success and if user is not typing

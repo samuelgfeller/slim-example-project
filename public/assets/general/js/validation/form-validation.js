@@ -3,13 +3,20 @@
  *
  * @param fieldName
  * @param errorMessage
- */
-export function displayValidationErrorMessage(fieldName, errorMessage) {
-    let field = document.querySelector(`[name="${fieldName}"]`);
+ * @param {null|string} domFieldId css id of dom field the fail is about in case fieldName is not unique
+ * */
+export function displayValidationErrorMessage(fieldName, errorMessage, domFieldId) {
+    let field;
+    if (domFieldId !== null) {
+        field = document.querySelector('#' + domFieldId);
+    } else {
+        field = document.querySelector(`[name="${fieldName}"]`);
+    }
     if (field === null) {
         // Contenteditable field
         field = document.querySelector(`[data-name="${fieldName}"]`);
     }
+    console.log(domFieldId, field);
     if (field !== null) {
         // If field is a checkbox, the error message placement is a bit different
         if (field.hasAttribute('type') && ['checkbox', 'radio'].includes(field.type)) {

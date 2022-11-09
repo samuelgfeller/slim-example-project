@@ -199,8 +199,8 @@
         font-weight: bold;
     }
 
-    .input-group-error input, input.invalid-input {
-        border-bottom: 2px solid #c0000a;
+    .input-group-error input, input.invalid-input, textarea.invalid-input {
+        border-bottom: 2px solid #c0000a !important; /*Important as form is overwritten by template specific css*/
     }
 
     .err-msg {

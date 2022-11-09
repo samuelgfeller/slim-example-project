@@ -4,7 +4,7 @@ import {
     hideCheckmarkLoader,
     userIsTypingOnNoteId
 } from "./client-read-text-area-event-listener-setup.js";
-import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {handleFail, removeValidationErrorMessages} from "../../../general/js/requests/fail-handler.js";
 
 let noteSaveHideCheckMarkTimeout = [];
 
@@ -33,6 +33,8 @@ export function saveNoteChangeToDb(noteId) {
     let circleLoader = this.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
 
+    // The textarea id is needed in the ajax call but "this" is the xHttp request inside the call
+    let textareaId = this.id;
     // Make ajax call
     let xHttp = new XMLHttpRequest();
     xHttp.onreadystatechange = function () {
@@ -40,11 +42,12 @@ export function saveNoteChangeToDb(noteId) {
             // Fail
             if (xHttp.status !== 201 && xHttp.status !== 200) {
                 // Default fail handler
-                handleFail(xHttp);
+                handleFail(xHttp, textareaId);
                 hideCheckmarkLoader(circleLoader, 'Save existing fail');
             }
             // Success
             else {
+                removeValidationErrorMessages();
                 let textStatus = JSON.parse(xHttp.responseText).status;
                 // Only show checkmark loader if user didn't type on the same note in the meantime
                 if (userIsTypingOnNoteId === false || userIsTypingOnNoteId !== noteId) {

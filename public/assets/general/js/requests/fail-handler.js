@@ -6,9 +6,11 @@ import {createFlashMessage} from "./flash-message.js";
  * information about which error it is
  *
  * @param {XMLHttpRequest} xhr
+ * @param {null|string} domFieldId css id of dom field the fail is about
  */
-export function handleFail(xhr) {
-    // Example: 404 Not Found
+export function handleFail(xhr, domFieldId = null) {
+    console.log(domFieldId);
+   // Example: 404 Not Found
     let errorMsg = xhr.status + ' ' + xhr.statusText;
 
     if (xhr.status === 401) {
@@ -38,7 +40,7 @@ export function handleFail(xhr) {
             removeValidationErrorMessages();
             // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
             for (const error of validationResponse.data.errors) {
-                displayValidationErrorMessage(error.field, error.message);
+                displayValidationErrorMessage(error.field, error.message, domFieldId);
                 // Flash error message with details
                 errorMsg += error.message + ' for the field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b>"<br>';
             }
