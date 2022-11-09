@@ -6,9 +6,9 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Authentication\UserRegistererRepository;
-use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -49,7 +49,7 @@ class UserRegisterer
         if ($existingUser->email !== null) {
             // If unverified and registered again, old user should be deleted and replaced with new input and verification
             // Reason: User could have lost the email or someone else tried to register under someone elses name
-            if ($existingUser->status === UserData::STATUS_UNVERIFIED) {
+            if ($existingUser->status === UserStatus::STATUS_UNVERIFIED) {
                 // Only delete the user and token but not return as function should continue normally and insert new user
                 $this->userAlreadyExistingHandler->handleUnverifiedExistingUser($existingUser);
             }else {
@@ -60,7 +60,7 @@ class UserRegisterer
         $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
 
         // Set default status and role
-        $user->status = UserData::STATUS_UNVERIFIED;
+        $user->status = UserStatus::STATUS_UNVERIFIED;
         $user->role = 'user';
 
         // Insert new user into database

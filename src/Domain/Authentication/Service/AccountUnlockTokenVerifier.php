@@ -6,7 +6,7 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
-use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Infrastructure\User\UserFinderRepository;
@@ -36,7 +36,7 @@ final class AccountUnlockTokenVerifier
         $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
 
         // Check if user is locked at all
-        if (UserData::STATUS_LOCKED !== $userStatus) {
+        if (UserStatus::STATUS_LOCKED !== $userStatus) {
             // User is not locked anymore but token not verified so VERY IMPORTANT to not log user in hence the exception
             throw new UserAlreadyVerifiedException('User account not locked anymore. Please log in.');
         }
@@ -50,7 +50,7 @@ final class AccountUnlockTokenVerifier
         ) {
 
             // Change user status to active
-            $this->userUpdaterRepository->changeUserStatus(UserData::STATUS_ACTIVE, $verification->userId);
+            $this->userUpdaterRepository->changeUserStatus(UserStatus::STATUS_ACTIVE, $verification->userId);
             // Mark token as being used only after making sure that user is active
             $this->verificationTokenUpdaterRepository->setVerificationEntryToUsed($verificationId);
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);

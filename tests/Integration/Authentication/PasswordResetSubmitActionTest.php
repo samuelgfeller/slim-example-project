@@ -3,7 +3,7 @@
 namespace App\Test\Integration\Authentication;
 
 use App\Domain\Authentication\Data\UserVerificationData;
-use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\RouteTestTrait;
@@ -89,7 +89,7 @@ class PasswordResetSubmitActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_UNVERIFIED;
+        $userRow['status'] = UserStatus::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -121,7 +121,7 @@ class PasswordResetSubmitActionTest extends TestCase
         );
 
         // Assert that password was not changed to the new one
-        $this->assertTableRowValue(UserData::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
 
         // Assert that user is not logged in
         self::assertNull($this->container->get(SessionInterface::class)->get('user_id'));

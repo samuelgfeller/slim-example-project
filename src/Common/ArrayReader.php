@@ -243,6 +243,28 @@ final class ArrayReader
     }
 
     /**
+     * Get value as given Enum or null.
+     *
+     * @template E
+     *
+     * @param string $key The key
+     * @param class-string<E> $enum
+     * @param string|null $default The default value
+     *
+     * @return E|null The value
+     */
+    public function findAsEnum(string $key, string $enum, string $default = null): null|object
+    {
+        $value = $this->find($key, $default);
+
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $enum::tryFrom($value);
+    }
+
+    /**
      * Find mixed value.
      *
      * @param string $path The path
@@ -250,7 +272,7 @@ final class ArrayReader
      *
      * @return mixed The value
      */
-    public function find(string $path, $default = null): mixed
+    public function find(string $path, mixed $default = null): mixed
     {
         $pathKeys = explode('.', $path);
 

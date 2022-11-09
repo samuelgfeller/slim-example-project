@@ -5,7 +5,7 @@ namespace App\Test\Integration\Client;
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -149,7 +149,7 @@ class ClientListActionTest extends TestCase
             $expected['statuses'][$clientStatus['id']] = $clientStatus['name'];
         }
         $allUsers = $this->findRecordsFromFixtureWhere(['deleted_at' => null], UserFixture::class);
-        $allUsersAsObjects = $this->container->get(Hydrator::class)->hydrate($allUsers, UserData::class);
+        $allUsersAsObjects = $this->container->get(Hydrator::class)->hydrate($allUsers, UserStatus::class);
         // Username abbreviator returns users in array with as key the user id and name the abbreviated name
         $expected['users'] = $this->container->get(UserNameAbbreviator::class)->abbreviateUserNamesForDropdown(
             $allUsersAsObjects

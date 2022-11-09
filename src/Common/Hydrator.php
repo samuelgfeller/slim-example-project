@@ -22,7 +22,8 @@ final class Hydrator
         $result = [];
 
         foreach ($rows as $row) {
-            $result[] = new $class($row);
+            // Some classes like UserData have a restriction
+            $result[] = new $class($row, true);
         }
 
         return $result;

@@ -3,15 +3,15 @@
 namespace App\Test\Integration\Authentication;
 
 use App\Domain\Authentication\Data\UserVerificationData;
-use App\Domain\User\Data\UserData;
-use App\Test\Traits\AppTestTrait;
+use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -40,7 +40,7 @@ class RegisterVerifyActionTest extends TestCase
     {
         // User needed to insert verification (taking first record from userFixture)
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_UNVERIFIED;
+        $userRow['status'] = UserStatus::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -66,7 +66,7 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is active on user
-        $this->assertTableRowValue(UserData::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is set meaning user is logged-in
@@ -86,7 +86,7 @@ class RegisterVerifyActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_ACTIVE;
+        $userRow['status'] = UserStatus::STATUS_ACTIVE;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -133,7 +133,7 @@ class RegisterVerifyActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_UNVERIFIED;
+        $userRow['status'] = UserStatus::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -166,7 +166,7 @@ class RegisterVerifyActionTest extends TestCase
         );
 
         // Assert that status is still unverified on user
-        $this->assertTableRowValue(UserData::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::STATUS_UNVERIFIED, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is not set

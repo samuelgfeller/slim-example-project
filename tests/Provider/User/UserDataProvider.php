@@ -3,6 +3,7 @@
 namespace App\Test\Provider\User;
 
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Test\Provider\TestHydrator;
 
 /**
@@ -95,7 +96,7 @@ class UserDataProvider
     {
         return [
             [
-                $this->hydrate($this->sampleUsers, UserData::class)
+                $this->hydrate($this->sampleUsers, UserStatus::class)
             ]
         ];
     }
@@ -136,7 +137,7 @@ class UserDataProvider
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                     'role' => 'admin',
-                    'status' => UserData::STATUS_ACTIVE,
+                    'status' => UserStatus::STATUS_ACTIVE,
                 ]
             ]
         ];
@@ -160,7 +161,7 @@ class UserDataProvider
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                     'role' => 'admin',
-                    'status' => UserData::STATUS_ACTIVE,
+                    'status' => UserStatus::STATUS_ACTIVE,
                 ])
             ]
         ];
@@ -191,7 +192,7 @@ class UserDataProvider
                     'email' => 'gates@email.com',
                     'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
                     'role' => 'admin',
-                    'status' => UserData::STATUS_ACTIVE,
+                    'status' => UserStatus::STATUS_ACTIVE,
                 ])
             ]
         ];

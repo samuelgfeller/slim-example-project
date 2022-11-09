@@ -3,6 +3,7 @@
 namespace App\Domain\User\Data;
 
 use App\Common\ArrayReader;
+use App\Domain\User\Enum\UserStatus;
 
 /**
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
@@ -21,8 +22,9 @@ class UserData
     public ?string $password;
     public ?string $password2;
     public ?string $passwordHash;
-    public ?string $status = null;
+    public ?UserStatus $status = null;
     public ?string $role = null;
+    public ?int $user_role_id = null;
     public ?string $createdAt;
     public ?string $updatedAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added there
@@ -55,8 +57,8 @@ class UserData
 
         // Making sure that role and status aren't filled with malicious data
         if ($notRestricted === true){
-            $this->status = $arrayReader->findAsString('status');
-            $this->role = $arrayReader->findAsString('role');
+            $this->status = $arrayReader->findAsEnum('status', UserStatus::class);
+            $this->user_role_id = $arrayReader->findAsInt('user_role_id');
         }
     }
 

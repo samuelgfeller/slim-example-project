@@ -23,4 +23,9 @@ class UserRoleFinder
     {
         return $this->userRoleFinderRepository->getUserRoleById($userId);
     }
+
+    public function findAllUserRolesForDropdown(): array
+    {
+        return $this->userRoleFinderRepository->findAllUserRoles();
+    }
 }

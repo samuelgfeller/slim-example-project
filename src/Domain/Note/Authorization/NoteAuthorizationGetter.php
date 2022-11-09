@@ -3,8 +3,6 @@
 namespace App\Domain\Note\Authorization;
 
 use App\Domain\Authorization\Privilege;
-use App\Domain\Authorization\UserRole;
-use App\Domain\Note\Data\NoteWithUserData;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
 

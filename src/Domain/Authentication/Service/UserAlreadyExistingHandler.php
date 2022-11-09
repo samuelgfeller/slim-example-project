@@ -5,8 +5,8 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
-use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserDeleterRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -43,7 +43,7 @@ class UserAlreadyExistingHandler
      */
     public function handleVerifiedExistingUser(UserData $existingUser): bool
     {
-        if ($existingUser->status === UserData::STATUS_SUSPENDED) {
+        if ($existingUser->status === UserStatus::STATUS_SUSPENDED) {
             // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             try {
                 $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
@@ -56,7 +56,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === UserData::STATUS_LOCKED) {
+        if ($existingUser->status === UserStatus::STATUS_LOCKED) {
             try {
                 $this->mailer->sendRegisterExistingLockedUser($existingUser);
 
@@ -69,7 +69,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === UserData::STATUS_ACTIVE) {
+        if ($existingUser->status === UserStatus::STATUS_ACTIVE) {
             try {
                 $this->mailer->sendRegisterExistingActiveUser($existingUser);
 

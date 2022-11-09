@@ -2,9 +2,9 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Domain\User\Data\UserData;
-use App\Test\Traits\AppTestTrait;
+use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -117,7 +117,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountUnverified(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_UNVERIFIED;
+        $userRow['status'] = UserStatus::STATUS_UNVERIFIED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 
@@ -184,7 +184,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountSuspended(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_SUSPENDED;
+        $userRow['status'] = UserStatus::STATUS_SUSPENDED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 
@@ -221,7 +221,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountLocked(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_LOCKED;
+        $userRow['status'] = UserStatus::STATUS_LOCKED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 

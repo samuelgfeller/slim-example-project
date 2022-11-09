@@ -4,6 +4,7 @@
 namespace App\Infrastructure\User;
 
 
+use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserUpdaterRepository
@@ -29,11 +30,11 @@ class UserUpdaterRepository
     /**
      * Change user status
      *
-     * @param string $status
+     * @param UserStatus $status
      * @param string $userId
      * @return bool
      */
-    public function changeUserStatus(string $status, string $userId): bool
+    public function changeUserStatus(UserStatus $status, string $userId): bool
     {
         $query = $this->queryFactory->newQuery()->update('user')->set(['status' => $status])->where(
             ['id' => $userId]

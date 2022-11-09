@@ -4,7 +4,7 @@ namespace App\Test\Integration\Authentication;
 
 
 use App\Domain\Authentication\Data\UserVerificationData;
-use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\RouteTestTrait;
@@ -38,7 +38,7 @@ class AccountUnlockActionTest extends TestCase
     {
         // Insert locked user
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_LOCKED;
+        $userRow['status'] = UserStatus::STATUS_LOCKED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -64,7 +64,7 @@ class AccountUnlockActionTest extends TestCase
         self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is active on user
-        $this->assertTableRowValue(UserData::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::STATUS_ACTIVE, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is set meaning user is logged-in
@@ -85,7 +85,7 @@ class AccountUnlockActionTest extends TestCase
     ): void {
         // Insert locked user
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserData::STATUS_LOCKED;
+        $userRow['status'] = UserStatus::STATUS_LOCKED;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -114,7 +114,7 @@ class AccountUnlockActionTest extends TestCase
             $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
         );
         // Assert that status is still locked on user
-        $this->assertTableRowValue(UserData::STATUS_LOCKED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::STATUS_LOCKED, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is null meaning user is NOT logged-in

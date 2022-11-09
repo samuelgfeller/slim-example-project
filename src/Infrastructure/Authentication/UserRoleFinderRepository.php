@@ -4,8 +4,7 @@
 namespace App\Infrastructure\Authentication;
 
 
-use App\Common\Hydrator;
-use App\Domain\Authorization\UserRoleData;
+use App\Domain\User\Data\UserRoleData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -66,4 +65,21 @@ class UserRoleFinderRepository
         return $userRoles;
     }
 
+    /**
+     * Return all user roles with as key the id and value the name
+     *
+     * @return array{id: string, name: string}
+     */
+    public function findAllUserRoles(): array
+    {
+        $query = $this->queryFactory->newQuery()->from('user_role');
+
+        $query->select(['id', 'name']);
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+        $userRoles = [];
+        foreach ($resultRows as $resultRow) {
+            $userRoles[(int)$resultRow['id']] = $resultRow['name'];
+        }
+        return $userRoles;
+    }
 }

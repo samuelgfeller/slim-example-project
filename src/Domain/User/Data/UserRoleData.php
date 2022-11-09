@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Authorization;
+namespace App\Domain\User\Data;
 
 final class UserRoleData
 {
