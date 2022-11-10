@@ -49,18 +49,24 @@ class UserRoleFinderRepository
 
 
     /**
-     * Get user role hierarchies mapped by name
+     * Get user role hierarchies mapped by name or id if param is true
+     *
+     * @param bool $mappedById if key of return array should be the role id or name
      *
      * @return array{role_name: int}
      */
-    public function getUserRolesHierarchies(): array
+    public function getUserRolesHierarchies(bool $mappedById = false): array
     {
         $query = $this->queryFactory->newQuery()->select(['id', 'name', 'hierarchy'])->from('user_role');
         $resultRows = $query->execute()->fetchAll('assoc');
 
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
-            $userRoles[$resultRow['name']] = $resultRow['hierarchy'];
+            if ($mappedById === false) {
+                $userRoles[$resultRow['name']] = $resultRow['hierarchy'];
+            }else{
+                $userRoles[$resultRow['id']] = $resultRow['hierarchy'];
+            }
         }
         return $userRoles;
     }

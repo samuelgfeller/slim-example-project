@@ -12,17 +12,13 @@
         border-spacing: 0;
     }
 
-    /*.responsive-table tr:not(:last-child) {*/
-    /*}*/
     .responsive-table tr:not(:last-child) td, .responsive-table th {
         border-bottom: 1px solid #c0c0c0;
-
     }
 
     .responsive-table td, .responsive-table th {
         padding: 12px 20px;
         text-align: left;
-        /*border: 1px solid black;*/
     }
 
     .responsive-table th {

@@ -6,6 +6,7 @@ namespace App\Infrastructure\User;
 
 use App\Common\Hydrator;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Data\UserResultData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserFinderRepository
@@ -26,14 +27,33 @@ class UserFinderRepository
      */
     public function findAllUsers(): array
     {
+        // Convert to list of objects
+        return $this->hydrator->hydrate($this->findAllUserRows(), UserData::class);
+    }
+
+    /**
+     * Return all users with as UserResultData instance
+     *
+     * @return UserResultData[]
+     */
+    public function findAllUsersForList(): array
+    {
+        return $this->hydrator->hydrate($this->findAllUserRows(), UserResultData::class);
+    }
+
+    /**
+     * Returns array of user rows
+     *
+     * @return array|false
+     */
+    public function findAllUserRows(): bool|array
+    {
         $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null]
         );
-        $usersRows = $query->execute()->fetchAll('assoc') ?: [];
-
-        // Convert to list of objects
-        return $this->hydrator->hydrate($usersRows, UserData::class);
+        return $query->execute()->fetchAll('assoc') ?: [];
     }
+
 
     /**
      * Return user with given id if it exists

@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\Validation\OutputEscapeService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -53,7 +52,7 @@ final class UserListAction
         $userRole = $this->userRoleFinder->getUserRoleById($loggedUserId);
 
         if ($userRole === 'admin') {
-            $allUsers = $this->userFinder->findAllUsers();
+            $allUsers = $this->userFinder->findAllUsersResultDataForList();
 
             // Output has to be escaped since PHP-View doesn't have a protection against XSS-attacks
 //            $allUsers = $this->outputEscapeService->escapeTwoDimensionalArray($allUsers);

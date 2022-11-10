@@ -10,7 +10,7 @@ use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Check if user are permitted to do actions
+ * Check if authenticated user is permitted to do actions
  * Roles: newcomer < advisor < managing_advisor < administrator
  */
 class ClientAuthorizationChecker
@@ -64,7 +64,7 @@ class ClientAuthorizationChecker
      * depending on what the user wants to update
      *
      * @param int $ownerId user_id linked to client
-     * @param bool $log log if forbidden expected false when function is called for privilege setting
+     * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
     public function isGrantedToUpdate(array $clientDataToUpdate, int $ownerId, bool $log = true): bool
@@ -144,7 +144,7 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to delete client
      *
      * @param int $ownerId
-     * @param bool $log log if forbidden expected false when function is called for privilege setting
+     * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
     public function isGrantedToDelete(int $ownerId, bool $log = true): bool
@@ -171,7 +171,7 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to read client
      *
      * @param int $ownerId
-     * @param bool $log log if forbidden expected false when function is called for privilege setting
+     * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
     public function isGrantedToRead(int $ownerId, bool $log = true): bool

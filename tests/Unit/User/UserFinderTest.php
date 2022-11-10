@@ -27,7 +27,7 @@ class UserFinderTest extends TestCase
         // which is being tested. So we can take the autowired class instance from the container directly.
         $service = $this->container->get(UserFinder::class);
 
-        self::assertEquals($users, $service->findAllUsers());
+        self::assertEquals($users, $service->findAllUsersResultDataForList());
     }
 
     /**

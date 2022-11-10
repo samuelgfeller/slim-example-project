@@ -43,12 +43,10 @@ final class UserListPageAction
         array $args
     ): ResponseInterface {
         // Retrieve users
-        $users = $this->userFinder->findAllUsers();
+        $users = $this->userFinder->findAllUsersResultDataForList();
         return $this->responder->render($response, 'user/user-list.html.php', [
             'users' => $users,
             'userStatuses' => UserStatus::cases(),
-            // 'userStatuses' => array_column(UserStatus::cases(), 'value'),
-            'userRoles' => $this->userRoleFinder->findAllUserRolesForDropdown(),
         ]);
     }
 }
