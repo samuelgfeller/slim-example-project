@@ -12,7 +12,8 @@ class UserRoleFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory
-    ) { }
+    ) {
+    }
 
     /**
      * Retrieve user role
@@ -24,14 +25,21 @@ class UserRoleFinderRepository
     public function getRoleIdFromUser(int $userId): int
     {
         $query = $this->queryFactory->newQuery()->select(['user_role_id'])->from('user')->where(
-            ['deleted_at IS' => null, 'id' => $userId]);
+            ['deleted_at IS' => null, 'id' => $userId]
+        );
         $roleId = $query->execute()->fetch('assoc')['user_role_id'];
-        if (!$roleId){
+        if (!$roleId) {
             throw new PersistenceRecordNotFoundException('user');
         }
         return $roleId;
     }
 
+    /**
+     * Get role data from user that has status active
+     *
+     * @param int $userId
+     * @return UserRoleData null if user is not active
+     */
     public function getUserRoleDataFromUser(int $userId): UserRoleData
     {
         $query = $this->queryFactory->newQuery()
@@ -64,7 +72,7 @@ class UserRoleFinderRepository
         foreach ($resultRows as $resultRow) {
             if ($mappedById === false) {
                 $userRoles[$resultRow['name']] = $resultRow['hierarchy'];
-            }else{
+            } else {
                 $userRoles[$resultRow['id']] = $resultRow['hierarchy'];
             }
         }

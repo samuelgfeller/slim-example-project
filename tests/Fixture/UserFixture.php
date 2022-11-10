@@ -23,7 +23,7 @@ class UserFixture
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1uLrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
             'user_role_id' => 1,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -37,7 +37,7 @@ class UserFixture
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1u2LrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
             'user_role_id' => 1,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -51,7 +51,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 2,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -65,7 +65,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 2,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -79,7 +79,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 2,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => '2021-01-01 00:00:02',
@@ -94,7 +94,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 3,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -108,7 +108,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 3,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -122,7 +122,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 3,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => '2021-01-01 00:00:02',
@@ -137,7 +137,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 4,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -151,7 +151,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 4,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,
@@ -166,7 +166,7 @@ class UserFixture
             // Password is 12345678
             'password_hash' => '$2y$10$G42IQACXblpLSoVez77qjeRBS./junh4X3.zdZeuAxJbKZGhfvymC',
             'user_role_id' => 4,
-            'status' => UserStatus::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => '2021-01-01 00:00:02',

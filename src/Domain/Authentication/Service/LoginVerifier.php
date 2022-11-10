@@ -54,7 +54,7 @@ class LoginVerifier
             // Verify if password matches and enter login request
             if (password_verify($user->password, $dbUser->passwordHash)) {
                 // If password correct and status active, log user in by
-                if ($dbUser->status === UserStatus::STATUS_ACTIVE) {
+                if ($dbUser->status === UserStatus::ACTIVE) {
                     // Insert login success request
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
                     // Return id (not sure if it's better to regenerate session here in service or in action)
@@ -65,21 +65,21 @@ class LoginVerifier
                 $unableToLoginException = new UnableToLoginStatusNotActiveException(
                     'Unable to login at the moment, please check your email inbox for a more detailed message.'
                 );
-                if ($dbUser->status === UserStatus::STATUS_UNVERIFIED) {
+                if ($dbUser->status === UserStatus::UNVERIFIED) {
                     // Inform user via email that account is unverified, and he should click on the link in his inbox
                     $this->loginNonActiveUserHandler->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
                 }
 
-                if ($dbUser->status === UserStatus::STATUS_SUSPENDED) {
+                if ($dbUser->status === UserStatus::SUSPENDED) {
                     // Inform user (only via mail) that he is suspended
                     $this->loginNonActiveUserHandler->handleSuspendedUserLoginAttempt($dbUser);
                     // Throw exception to display error message in form
                     throw $unableToLoginException;
                 }
 
-                if ($dbUser->status === UserStatus::STATUS_LOCKED) {
+                if ($dbUser->status === UserStatus::LOCKED) {
                     // login fail and inform user (only via mail) that he is locked and provide unlock token
                     $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
                     // Throw exception to display error message in form

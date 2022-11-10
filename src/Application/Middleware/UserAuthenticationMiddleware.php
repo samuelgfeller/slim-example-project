@@ -4,6 +4,8 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\Responder;
+use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,23 +20,28 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class UserAuthenticationMiddleware implements MiddlewareInterface
 {
-    private SessionInterface $session;
 
-    protected Responder $responder;
-
-    public function __construct(SessionInterface $session, Responder $responder)
-    {
-        $this->session = $session;
-        $this->responder = $responder;
+    public function __construct(
+        protected readonly SessionInterface $session,
+        protected readonly Responder $responder,
+        protected readonly UserFinder $userFinder,
+    ) {
     }
 
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        if ($this->session->get('user_id')) {
-            // User is logged in
-            return $handler->handle($request);
+        // Check if user is logged in
+        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
+            // Check that the user status is active
+            if ($this->userFinder->findUserById($loggedInUserId)->status === UserStatus::ACTIVE) {
+                return $handler->handle($request);
+            }
+            // Log user out if not active
+            $this->session->destroy();
+            $this->session->start();
+            $this->session->regenerateId();
         }
 
         $response = $this->responder->createResponse();

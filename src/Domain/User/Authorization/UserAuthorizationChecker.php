@@ -35,7 +35,9 @@ class UserAuthorizationChecker
     public function isGrantedToCreate(UserData $userData): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -52,6 +54,7 @@ class UserAuthorizationChecker
             }
             // There is no need to check if user want to create his own user as he can't be logged in if the user doesn't exist
         }
+
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to create user but isn\'t allowed.'
         );
@@ -73,8 +76,12 @@ class UserAuthorizationChecker
     {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
-            $userToUpdateRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser((int)$userIdToUpdate);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
+            $userToUpdateRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                (int)$userIdToUpdate
+            );
             /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
              * lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -127,6 +134,7 @@ class UserAuthorizationChecker
                 // Owner user (profile edit) is not allowed to change its user role or status
             }
         }
+
         // If data that the user wanted to update and the grantedUpdateKeys are equal by having the same keys -> granted
         foreach ($userDataToUpdate as $key => $value) {
             // If at least one array key doesn't exist in $grantedUpdateKeys it means that user is not permitted
@@ -153,8 +161,10 @@ class UserAuthorizationChecker
     public function isGrantedToDelete(int $userIdToDelete, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
-            $userToDeleteRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser((int)$userIdToDelete);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
+            $userToDeleteRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($userIdToDelete);
 
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -167,6 +177,7 @@ class UserAuthorizationChecker
                 return true;
             }
         }
+
         if ($log === true) {
             $this->logger->notice(
                 'User ' . $loggedInUserId . ' tried to delete user but isn\'t allowed.'
@@ -185,7 +196,9 @@ class UserAuthorizationChecker
     public function isGrantedToRead(int $userIdToRead, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -196,6 +209,7 @@ class UserAuthorizationChecker
                 return true;
             }
         }
+
         if ($log === true) {
             $this->logger->notice(
                 'User ' . $loggedInUserId . ' tried to read user but isn\'t allowed.'

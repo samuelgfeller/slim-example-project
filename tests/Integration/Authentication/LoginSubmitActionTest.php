@@ -117,7 +117,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountUnverified(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::STATUS_UNVERIFIED;
+        $userRow['status'] = UserStatus::UNVERIFIED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 
@@ -184,7 +184,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountSuspended(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::STATUS_SUSPENDED;
+        $userRow['status'] = UserStatus::SUSPENDED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 
@@ -221,7 +221,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction_accountLocked(array $userCredentials): void
     {
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::STATUS_LOCKED;
+        $userRow['status'] = UserStatus::LOCKED;
         $this->insertFixture('user', $userRow);
         $userId = $userRow['id'];
 

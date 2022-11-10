@@ -34,7 +34,9 @@ class ClientAuthorizationChecker
     public function isGrantedToCreate(ClientData $client): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -50,6 +52,7 @@ class ClientAuthorizationChecker
                 }
             }
         }
+
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to create client but isn\'t allowed.'
         );
@@ -71,7 +74,9 @@ class ClientAuthorizationChecker
     {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
              * (lower hierarchy number means higher privilege) */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -150,7 +155,9 @@ class ClientAuthorizationChecker
     public function isGrantedToDelete(int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -177,7 +184,9 @@ class ClientAuthorizationChecker
     public function isGrantedToRead(int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 

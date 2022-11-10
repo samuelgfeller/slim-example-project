@@ -39,7 +39,7 @@ class UserAuthorizationGetter
             // If the role is already attributed to user the value is added so that it's displayed in the template
             if ($id === $attributedUserRoleId ||
                 // Test each role if user is allowed to update
-                $this->userAuthorizationChecker->isGrantedToUpdate(['user_role_id' => $id], $userId)
+                $this->userAuthorizationChecker->isGrantedToUpdate(['user_role_id' => $id], $userId, false)
             ) {
                 $grantedUserRoles[$id] = $roleName;
             }

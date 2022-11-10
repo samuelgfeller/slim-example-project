@@ -19,8 +19,7 @@ final class RegisterTokenVerifier
         private VerificationTokenFinderRepository $verificationTokenFinderRepository,
         private VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
         private UserUpdaterRepository $userUpdaterRepository
-    )
-    {
+    ) {
     }
 
     /**
@@ -36,9 +35,11 @@ final class RegisterTokenVerifier
         $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
 
         // Check if user is already verified
-        if (UserStatus::STATUS_UNVERIFIED !== $userStatus) {
+        if (UserStatus::UNVERIFIED !== $userStatus) {
             // User is not unverified anymore, that means that user already clicked on the link
-            throw new UserAlreadyVerifiedException('User has not status "' . UserStatus::STATUS_UNVERIFIED . '"');
+            throw new UserAlreadyVerifiedException(
+                'User has not status "' . UserStatus::UNVERIFIED->value . '"'
+            );
         }
         // Check that verification has token in the database and token is not used
         if ($verification->token !== null && $verification->usedAt === null) {
@@ -46,7 +47,7 @@ final class RegisterTokenVerifier
             if ($verification->expiresAt > time() && true === password_verify($token, $verification->token)) {
                 // Change user status to active
                 $hasUpdated = $this->userUpdaterRepository->changeUserStatus(
-                    UserStatus::STATUS_ACTIVE,
+                    UserStatus::ACTIVE,
                     $verification->userId
                 );
                 if ($hasUpdated === true) {
@@ -55,7 +56,9 @@ final class RegisterTokenVerifier
                     return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
                 }
                 // If somehow the record could not be updated
-                throw new \DomainException('User status could not be set to "' . UserStatus::STATUS_ACTIVE . '"');
+                throw new \DomainException(
+                    'User status could not be set to "' . UserStatus::ACTIVE->value . '"'
+                );
             }
             // Same exception messages than AuthServiceUserVerificationTest.php
             throw new InvalidTokenException('Invalid or expired token.');

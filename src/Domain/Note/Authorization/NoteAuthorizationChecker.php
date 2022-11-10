@@ -35,7 +35,9 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes todo except if sensitive
@@ -61,7 +63,9 @@ class NoteAuthorizationChecker
     public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             if (($isMain === 0 && // newcomers may see create notes for any client
@@ -71,6 +75,7 @@ class NoteAuthorizationChecker
                 return true;
             }
         }
+
         if ($log === true) {
             $this->logger->notice(
                 'User ' . $loggedInUserId . ' tried to create note but isn\'t allowed'
@@ -95,7 +100,9 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -109,6 +116,7 @@ class NoteAuthorizationChecker
                 return true;
             }
         }
+
         // User does not have needed rights to access area or function
         if ($log === true) {
             $this->logger->notice(
@@ -134,7 +142,9 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -144,6 +154,7 @@ class NoteAuthorizationChecker
                 return true;
             }
         }
+
         // User does not have needed rights to access area or function
         if ($log === true) {
             $this->logger->notice(

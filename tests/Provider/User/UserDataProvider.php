@@ -137,7 +137,7 @@ class UserDataProvider
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                     'role' => 'admin',
-                    'status' => UserStatus::STATUS_ACTIVE,
+                    'status' => UserStatus::ACTIVE,
                 ]
             ]
         ];
@@ -161,7 +161,7 @@ class UserDataProvider
                     'password2' => '12345678',
                     'password_hash' => '$2y$10$gmKq.1.ENGGdDdpj7Lgq8et9eAR16QD9eCvlahnx3IWOm.JJ/VWFi',
                     'role' => 'admin',
-                    'status' => UserStatus::STATUS_ACTIVE,
+                    'status' => UserStatus::ACTIVE,
                 ])
             ]
         ];
@@ -192,7 +192,7 @@ class UserDataProvider
                     'email' => 'gates@email.com',
                     'password_hash' => password_hash('12345678', PASSWORD_DEFAULT),
                     'role' => 'admin',
-                    'status' => UserStatus::STATUS_ACTIVE,
+                    'status' => UserStatus::ACTIVE,
                 ])
             ]
         ];

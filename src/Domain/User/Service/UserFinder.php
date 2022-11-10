@@ -58,14 +58,14 @@ class UserFinder
     }
 
     /**
-     * @param string $id
+     * @param string|int $id
      * @param bool $withPasswordHash
      * @return UserData
      */
-    public function findUserById(string $id, bool $withPasswordHash = false): UserData
+    public function findUserById(string|int $id, bool $withPasswordHash = false): UserData
     {
         // Find user in database
-        $user = $this->userFinderRepository->findUserById($id);
+        $user = $this->userFinderRepository->findUserById((int)$id);
 
         // If the password hash is not explicitly needed remove it from object for view and other use cases
         if ($withPasswordHash === false) {

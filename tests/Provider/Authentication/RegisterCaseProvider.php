@@ -16,15 +16,15 @@ class RegisterCaseProvider
     {
         return [
             [
-                'existing_user_status' => UserStatus::STATUS_ACTIVE,
+                'existing_user_status' => UserStatus::ACTIVE,
                 'partial_email_body' => 'If this was you, then you can login with your credentials by navigating to the',
             ],
             [
-                'existing_user_status' => UserStatus::STATUS_LOCKED,
+                'existing_user_status' => UserStatus::LOCKED,
                 'partial_email_body' => 'If this was you, then we have the regret to inform you that your account is locked for security reasons',
             ],
             [
-                'existing_user_status' => UserStatus::STATUS_SUSPENDED,
+                'existing_user_status' => UserStatus::SUSPENDED,
                 'partial_email_body' => 'If this was you, then we have the regret to inform you that your account is suspended',
             ],
 

@@ -59,10 +59,10 @@ class UserFinderRepository
      * Return user with given id if it exists
      * otherwise null
      *
-     * @param string $id
+     * @param int $id
      * @return UserData
      */
-    public function findUserById(string $id): UserData
+    public function findUserById(int $id): UserData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
