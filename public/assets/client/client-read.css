@@ -6,34 +6,9 @@
         column-gap: 4vw;
     }
 
-    #full-header-edit-icon-container {
-        margin-bottom: 25px;
-    }
-
-    /*Div containing first or last name*/
-    .partial-header-edit-icon-div {
-        display: inline-block;
-        position: relative;
-        padding-right: 15px;
-        float: left; /* Prevent not hoverable whitespace between partial header divs*/
-    }
-
     .partial-personal-info-and-edit-icon-div {
         position: relative;
         padding-right: 13px;
-    }
-
-    .contenteditable-edit-icon, .contenteditable-save-icon {
-        display: none;
-        position: absolute;
-        width: 20px;
-        padding: 2px;
-        border-radius: 99px;
-        border: 1px solid #2e3e50;
-        background: #d8dee8;
-        right: -7px;
-        top: -3px;
-        z-index: 1;
     }
 
     #toggle-personal-info-edit-icons {
@@ -44,35 +19,14 @@
         display: none;
     }
 
-    .partial-header-edit-icon-div:hover .contenteditable-edit-icon,
-    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon, .always-displayed-icon {
+    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon {
         display: inline-block;
     }
 
-    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
-    have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
-    /* Display outline on h1 when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
-        outline: 3px solid #2e3e50;
-        border-radius: 10px;
-        background: #f1f1f1;
-    }
-
-    /* Display outline on span element */
-    .contenteditable-edit-icon:hover ~ span, #client-personal-info-flex-container span[contenteditable="true"] {
+    #client-personal-info-flex-container span[contenteditable="true"] {
         outline: 2px solid #2e3e50;
         border-radius: 5px;
         background: #f1f1f1;
-    }
-
-
-    #title-and-dropdown-flexbox h1 {
-        display: inline-block;
-        /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
-        margin-bottom: 0;
-        padding: 5px 5px 5px 3px;
-        overflow-wrap: anywhere;
-        white-space: break-spaces;
     }
 
     #main-note-div {

@@ -1,3 +1,65 @@
-.contenteditable-placeholder[contenteditable=true]:empty:before{
-    content: attr(data-placeholder);
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    #full-header-edit-icon-container {
+        margin-bottom: 25px;
+    }
+
+    #full-header-edit-icon-container h1 {
+        display: inline-block;
+        /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
+        margin-bottom: 0;
+        padding: 5px 5px 5px 3px;
+        overflow-wrap: anywhere;
+        white-space: break-spaces;
+    }
+
+    /*Div containing first or last name*/
+    .partial-header-edit-icon-div {
+        display: inline-block;
+        position: relative;
+        padding-right: 15px;
+        float: left; /* Prevent not hoverable whitespace between partial header divs*/
+    }
+
+    .contenteditable-edit-icon, .contenteditable-save-icon {
+        display: none;
+        position: absolute;
+        width: 20px;
+        padding: 2px;
+        border-radius: 99px;
+        border: 1px solid #2e3e50;
+        background: #d8dee8;
+        right: -7px;
+        top: -3px;
+        z-index: 1;
+    }
+
+    .partial-header-edit-icon-div:hover .contenteditable-edit-icon, .always-displayed-icon {
+        display: inline-block;
+    }
+
+    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
+        have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
+    /* Display outline on h1 when hover on edit icon and when contenteditable is true */
+    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
+        outline: 3px solid #2e3e50;
+        border-radius: 10px;
+        background: #f1f1f1;
+    }
+
+    /* Display outline on span element */
+    .contenteditable-edit-icon:hover ~ span {
+        outline: 2px solid #2e3e50;
+        border-radius: 5px;
+        background: #f1f1f1;
+    }
+
+    .contenteditable-placeholder[contenteditable=true]:empty:before {
+        content: attr(data-placeholder);
+    }
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+
 }

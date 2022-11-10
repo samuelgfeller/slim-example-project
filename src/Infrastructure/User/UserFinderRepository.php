@@ -12,7 +12,16 @@ use App\Infrastructure\Factory\QueryFactory;
 class UserFinderRepository
 {
     // Fields without password
-    private array $fields = ['id', 'first_name', 'surname', 'email','user_role_id','status', 'updated_at', 'created_at'];
+    private array $fields = [
+        'id',
+        'first_name',
+        'surname',
+        'email',
+        'user_role_id',
+        'status',
+        'updated_at',
+        'created_at'
+    ];
 
     public function __construct(
         private readonly QueryFactory $queryFactory,
@@ -60,9 +69,25 @@ class UserFinderRepository
      * otherwise null
      *
      * @param int $id
+     * @return array user row
+     */
+    public function findUserById(int $id): array
+    {
+        $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
+            ['deleted_at IS' => null, 'id' => $id]
+        );
+        // Empty array if not found
+        return $query->execute()->fetch('assoc') ?: [];
+    }
+
+    /**
+     * Return user with password hash if it exists
+     * otherwise null
+     *
+     * @param int $id
      * @return UserData
      */
-    public function findUserById(int $id): UserData
+    public function findUserByIdWithPasswordHash(int $id): UserData
     {
         $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
@@ -72,6 +97,7 @@ class UserFinderRepository
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
         return new UserData($userRows, true);
     }
+
 
     /**
      * Return user with given id if it exists

@@ -100,6 +100,10 @@ class UserAuthorizationChecker
                 // Managing advisor cannot change other managing advisors or admins but admins can change themselves and everyone else
 
                 // Things that managing advisor and owner user are allowed to change
+                if (array_key_exists('general_data', $userDataToUpdate)) {
+                    // General data is the "main" data like first name, last name and email
+                    $grantedUpdateKeys[] = 'general_data';
+                }
                 if (array_key_exists('first_name', $userDataToUpdate)) {
                     $grantedUpdateKeys[] = 'first_name';
                 }

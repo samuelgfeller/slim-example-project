@@ -94,10 +94,6 @@ a.currently-editable{
     text-decoration: none;
 }
 
-.cursor-pointer {
-    cursor: pointer;
-}
-
 .green-text{
     color: limegreen;
 }

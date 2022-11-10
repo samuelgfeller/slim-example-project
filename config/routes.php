@@ -87,10 +87,10 @@ return function (App $app) {
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->options('', PreflightAction::class); // Allow preflight requests
-        $group->get('', \App\Application\Actions\User\UserListAction::class)->setName('user-list');
+        $group->get('', \App\Application\Actions\User\UserListPageAction::class)->setName('user-list');
 
         $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
-        $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\Page\UserViewProfileAction::class);
+        $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class);
         $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\UserSubmitUpdateAction::class)->setName(
             'user-update-submit'
         );

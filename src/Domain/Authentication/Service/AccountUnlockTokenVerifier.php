@@ -7,18 +7,18 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 
 final class AccountUnlockTokenVerifier
 {
     public function __construct(
-        private UserFinderRepository $userFinderRepository,
-        private VerificationTokenFinderRepository $verificationTokenFinderRepository,
-        private VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
-        private UserUpdaterRepository $userUpdaterRepository
+        private readonly UserFinder $userFinder,
+        private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
+        private readonly VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
+        private readonly UserUpdaterRepository $userUpdaterRepository
     ) {
     }
 
@@ -33,7 +33,7 @@ final class AccountUnlockTokenVerifier
     {
 
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
-        $userStatus = $this->userFinderRepository->findUserById($verification->userId)->status;
+        $userStatus = $this->userFinder->findUserById($verification->userId)->status;
 
         // Check if user is locked at all
         if (UserStatus::LOCKED !== $userStatus) {

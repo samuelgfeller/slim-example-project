@@ -30,7 +30,7 @@ $this->addAttribute(
 $this->addAttribute(
     'jsModules',
     [
-        // 'assets/client/js/list/client-list-main.js',
+        'assets/user/list/js/user-list-main.js',
         // 'assets/client/js/create/client-create-main.js',
     ]
 );
@@ -55,7 +55,7 @@ $this->addAttribute(
         <tbody>
         <?php
         foreach ($users as $user) { ?>
-            <tr>
+            <tr data-user-id="<?= $user->id ?>">
                 <td><?= $user->firstName ?></td>
                 <td><?= $user->surname ?></td>
                 <td class="column-hidden-on-mobile"><?= $user->email ? '<a href="mailto:' . $user->email . '">' .

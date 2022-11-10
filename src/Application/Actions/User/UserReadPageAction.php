@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Application\Actions\Client\Ajax;
+namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientFinder;
 use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpUnauthorizedException;
@@ -12,17 +13,16 @@ use Slim\Exception\HttpUnauthorizedException;
 /**
  * Action.
  */
-final class ClientReadAction
+final class UserReadPageAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientFinder $clientFinder
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly ClientFinder $clientFinder,
+        private readonly UserFinder $userFinder,
     ) {
     }
 
@@ -35,16 +35,20 @@ final class ClientReadAction
      * @param array $args
      * @return ResponseInterface The response
      * @throws \JsonException
+     * @throws \Throwable
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
         try {
-            $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
-
-            // json_encode transforms object with public attributes to camelCase which matches Google recommendation
-            // https://stackoverflow.com/a/19287394/9013718
-            return $this->responder->respondWithJson($response, $clientAggregate);
-        } catch (ForbiddenException $forbiddenException){
+            // Retrieve user infos
+            return $this->responder->render($response, 'user/user-read.html.php', [
+                'user' => $this->userFinder->findUserReadResult((int)$args['user_id']),
+                'userStatuses' => UserStatus::cases(),
+            ]);
+        } catch (ForbiddenException $forbiddenException) {
             throw new HttpUnauthorizedException($request, $forbiddenException->getMessage());
         }
     }

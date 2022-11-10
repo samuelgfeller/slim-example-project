@@ -3,7 +3,6 @@
 namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRoleFinder;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
@@ -22,7 +21,6 @@ final class UserListPageAction
     public function __construct(
         private readonly Responder $responder,
         private readonly UserFinder $userFinder,
-        private readonly UserRoleFinder $userRoleFinder,
     ) {
     }
 

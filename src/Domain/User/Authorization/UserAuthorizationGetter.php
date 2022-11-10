@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Authorization;
 
+use App\Domain\Authorization\Privilege;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 
 /**
@@ -29,9 +30,10 @@ class UserAuthorizationGetter
      *
      * @param int $userId
      * @param int|null $attributedUserRoleId
-     * @return array Granted user roles. Should always contain at least already attributed user role
+     * @return array{userRoles: array, privilege: Privilege} Granted user roles and privilege. Granted roles always
+     * contain at least already attributed user role
      */
-    public function getAuthorizedUserRolesForUser(int $userId, ?int $attributedUserRoleId): array
+    public function getPrivilegeAndAuthorizedUserRolesForUser(int $userId, ?int $attributedUserRoleId): array
     {
         $allUserRoles = $this->userRoleFinderRepository->findAllUserRoles();
         $grantedUserRoles = [];
@@ -44,6 +46,30 @@ class UserAuthorizationGetter
                 $grantedUserRoles[$id] = $roleName;
             }
         }
-        return $grantedUserRoles;
+
+        // If there are more available roles than the attributed one, it means that user has privilege to update roles
+        if (count($grantedUserRoles) > 1) {
+            $privilege = Privilege::UPDATE;
+        } else {
+            $privilege = Privilege::READ;
+        }
+        return ['privilege' => $privilege, 'userRoles' => $grantedUserRoles];
     }
+
+    /**
+     * Checks if authenticated user is allowed to update or read given column
+     *
+     * @param string $column
+     * @param int $userIdToUpdate
+     * @return Privilege
+     */
+    public function getUpdatePrivilegeForUserColumn(string $column, int $userIdToUpdate): Privilege
+    {
+        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
+        if ($this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userIdToUpdate, false)) {
+            return Privilege::UPDATE;
+        }
+        return Privilege::NONE;
+    }
+
 }

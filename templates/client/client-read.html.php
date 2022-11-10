@@ -28,8 +28,9 @@ $this->addAttribute('css', [
 $this->addAttribute('js', []);
 // Js files that import things from other js files
 $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
+
+// Store client id on the page in <data> element for js to read it
 ?>
-<!-- Store client id on the page for js to read it -->
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
@@ -187,7 +188,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                         <?php
                     } ?>
                     <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                        $clientAggregate->location ?></span>
+                        html($clientAggregate->location) ?></span>
                 </div>
             </a>
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
@@ -203,7 +204,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                         <?php
                     } ?>
                     <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
-                        $clientAggregate->phone ?></span>
+                        html($clientAggregate->phone) ?></span>
                 </div>
             </a>
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
@@ -221,7 +222,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                     <?php
                     $emailParts = $clientAggregate->email ? explode('@', $clientAggregate->email) : ['', '']; ?>
                     <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
-                    ><?= $emailParts[0] ?><br>@<?= $emailParts[1] ?></span>
+                    ><?= html($emailParts[0]) ?><br>@<?= html($emailParts[1]) ?></span>
                 </div>
             </a>
         </div>

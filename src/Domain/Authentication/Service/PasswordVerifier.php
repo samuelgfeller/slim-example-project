@@ -28,7 +28,7 @@ class PasswordVerifier
     public function verifyPassword(string $oldPassword): bool
     {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $dbUser = $this->userFinderRepository->findUserById((int)$loggedInUserId);
+            $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash((int)$loggedInUserId);
             if (password_verify($oldPassword, $dbUser->passwordHash)) {
                 return true;
             }
