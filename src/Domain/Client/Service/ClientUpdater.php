@@ -67,6 +67,7 @@ class ClientUpdater
                     throw new NotAllowedException('Not allowed to change client column ' . $column);
                 }
             }
+            // If birthdate is set, change the format to suit database
             if (isset($updateData['birthdate'])) {
                 if ($updateData['birthdate'] === '') {
                     $updateData['birthdate'] = null;

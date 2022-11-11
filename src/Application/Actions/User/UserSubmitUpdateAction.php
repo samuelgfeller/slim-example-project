@@ -52,35 +52,31 @@ final class UserSubmitUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            // Id in url user_id defined in routes.php
-            $userIdToChange = (int)$args['user_id'];
-            $userValuesToChange = $request->getParsedBody();
-            try {
-                $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange, $loggedInUserId);
-            } catch (ValidationException $exception) {
-                return $this->responder->respondWithJsonOnValidationError(
-                    $exception->getValidationResult(),
-                    $response
-                );
-            } catch (ForbiddenException $fe){
-                return $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to edit others'],
-                    403
-                );
-            }
-
-            if ($updated) {
-                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
-            }
-            // If for example values didn't change
+        // Id in url user_id defined in routes.php
+        $userIdToChange = (int)$args['user_id'];
+        $userValuesToChange = $request->getParsedBody();
+        try {
+            $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
+        } catch (ValidationException $exception) {
+            return $this->responder->respondWithJsonOnValidationError(
+                $exception->getValidationResult(),
+                $response
+            );
+        } catch (ForbiddenException $fe) {
             return $this->responder->respondWithJson(
                 $response,
-                ['status' => 'warning', 'message' => 'User wasn\'t updated']
+                ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to edit others'],
+                403
             );
         }
 
-        return $response;
+        if ($updated) {
+            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+        }
+        // If for example values didn't change
+        return $this->responder->respondWithJson(
+            $response,
+            ['status' => 'warning', 'message' => 'User wasn\'t updated']
+        );
     }
 }

@@ -4,10 +4,10 @@
 namespace App\Domain\User\Service;
 
 
+use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\Data\UserData;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
@@ -16,9 +16,10 @@ final class UserUpdater
     private LoggerInterface $logger;
 
     public function __construct(
-        private UserValidator $userValidator,
-        private UserRoleFinderRepository $userRoleFinderRepository,
-        private UserUpdaterRepository $userUpdaterRepository,
+        private readonly UserValidator $userValidator,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserUpdaterRepository $userUpdaterRepository,
+        private readonly UserFinder $userFinder,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
@@ -31,37 +32,36 @@ final class UserUpdater
      *
      * @param int $userIdToChange user id on which the change is requested to be made
      * @param array $userValues values to change
-     * @param int $loggedInUserId
      * @return bool
      */
-    public function updateUser(int $userIdToChange, array $userValues, int $loggedInUserId): bool
+    public function updateUser(int $userIdToChange, array $userValues): bool
     {
-        $user = new UserData($userValues, false); // Create restricted data object
-        $this->userValidator->validateUserUpdate($userIdToChange, $user);
+        // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
+        $this->userValidator->validateUserUpdate($userIdToChange, $userValues);
 
-        $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
         // Check if it's admin or if it's its own user
-        if ($userRole === 'admin' || $userIdToChange === $loggedInUserId) {
+        if ($this->userAuthorizationChecker->isGrantedToUpdate($userValues, $userIdToChange)) {
             // User values to change (cannot use object as unset values would be "null" and remove values in db)
-            $validUpdateValues = [];
-            // Data to be changed is set here. It can easily be controlled which data this function is allowed to change here
-            // instead of removing the fields that are not allowed to be edited with this function (password, role etc.)
-            if ($user->firstName !== null) {
-                $validUpdateValues['first_name'] = $user->firstName;
+            $validUpdateData = [];
+            // Additional check (next to malformed body in action) to be sure that only columns that may be updated are sent to the database
+            foreach ($userValues as $column => $value) {
+                // Check that keys are one of the database columns that may be updated
+                if (in_array($column, [
+                    'first_name',
+                    'surname',
+                    'email',
+                ])) {
+                    $validUpdateData[$column] = $value;
+                } else {
+                    throw new NotAllowedException('Not allowed to change client column ' . $column);
+                }
             }
-            if ($user->surname !== null) {
-                $validUpdateValues['surname'] = $user->surname;
-            }
-
-            if ($user->email !== null) {
-                $validUpdateValues['email'] = $user->email;
-            }
-            return $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateValues);
+            return $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
         }
 
         // User does not have needed rights to access area or function
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update other user with id: ' . $userIdToChange
+            'User tried to update other user with id: ' . $userIdToChange
         );
         throw new ForbiddenException('Not allowed to change that user');
     }

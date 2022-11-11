@@ -4,8 +4,8 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Data\UserData;
-use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
+use App\Domain\Validation\Validator;
 
 /**
  * Class UserValidator
@@ -15,30 +15,31 @@ class UserValidator
 
     public function __construct(
         private readonly Validator $validator,
-    )
-    {
+    ) {
     }
 
     /**
      * Validate updating the user.
      *
      * @param int $userId
-     * @param UserData $user
+     * @param array $userValues values to change
      * @return ValidationResult
      */
-    public function validateUserUpdate(int $userId, UserData $user): ValidationResult
+    public function validateUserUpdate(int $userId, array $userValues): ValidationResult
     {
         $validationResult = new ValidationResult('There was a validation error when trying to update a user');
         // Check that user exists
         $this->validator->validateExistence($userId, 'user', $validationResult, true);
-        if ($user->firstName !== null) {
-            $this->validator->validateName($user->firstName, 'first_name', false, $validationResult);
+
+        // Using array_key_exists instead of isset as isset returns false if value is null and key exists
+        if (array_key_exists('first_name', $userValues)) {
+            $this->validator->validateName($userValues['first_name'], 'first_name', $validationResult, false);
         }
-        if ($user->surname !== null) {
-            $this->validator->validateName($user->surname, 'surname', false, $validationResult);
+        if (array_key_exists('surname', $userValues)) {
+            $this->validator->validateName($userValues['surname'], 'surname', $validationResult, false);
         }
-        if ($user->email !== null) {
-            $this->validator->validateEmail($user->email, false, $validationResult);
+        if (array_key_exists('email', $userValues)) {
+            $this->validator->validateEmail($userValues['email'], $validationResult, false);
         }
 
         // If the validation failed, throw the exception that will be caught in the Controller
