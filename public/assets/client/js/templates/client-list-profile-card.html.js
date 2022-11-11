@@ -1,4 +1,5 @@
 import {getAvatarPath, getDropdownAsHtmlOptions} from "./client-template-util.js";
+import {escapeHtml} from "../../../general/js/functions.js";
 
 /**
  * HTML code for client profile card
@@ -27,7 +28,7 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
             <img src=${getAvatarPath(sex)} alt="avatar">
     ${(() => { // Only display age if content not empty
         if (age !== null && age !== '') {
-            return `<span class="profile-card-age">${age}</span>`
+            return `<span class="profile-card-age">${escapeHtml(age)}</span>`
         }
         return '';
     })()}
@@ -40,7 +41,7 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
         if (location !== null && location !== '') {
             return `<div>
                         <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                        <span>${location}</span>
+                        <span>${escapeHtml(location)}</span>
                     </div>`
         }
         return '';
@@ -49,7 +50,7 @@ export function getClientProfileCardHtml(clientContainer, clientId, firstName, l
         if (phoneNumber !== null && phoneNumber !== '') {
             return `<div>
                         <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                        <span>${phoneNumber}</span>
+                        <span>${escapeHtml(phoneNumber)}</span>
                     </div>`
         }
         return '';

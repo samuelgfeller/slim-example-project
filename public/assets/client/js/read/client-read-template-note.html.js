@@ -1,8 +1,9 @@
+import {escapeHtml} from "../../../general/js/functions.js";
+
 export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, message) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes
 
-    // todo test xss html as message to see if needed to escape server side first
     return `<div id="note${noteId}-container" class="note-container">
                 <label for="note${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
@@ -14,7 +15,7 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
             }
             return '';
         })()}
-                    <span class="discrete-text note-right-side-label-span">${userFullName}</span>
+                    <span class="discrete-text note-right-side-label-span">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
@@ -23,7 +24,7 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
                               data-note-id="${noteId}"
                               minlength="4" maxlength="500" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
-                              name="message">${message}</textarea>
+                              name="message">${escapeHtml(message)}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">
                         <div class="checkmark draw"></div>
                     </div>
@@ -40,7 +41,8 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
  *  C - Create - May also read
  *  R - Read - May only read but do nothing else
  *  *
- * @param actualPrivilege
+ * @param {string} actualPrivilege
+ * @param {string} requiredPrivilege
  * @return {boolean}
  */
 function userHasPrivilegeTo(actualPrivilege, requiredPrivilege) {
