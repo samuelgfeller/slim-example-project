@@ -5,7 +5,7 @@
  * @param errorMessage
  * @param {null|string} domFieldId css id of dom field the fail is about in case fieldName is not unique
  * */
-export function displayValidationErrorMessage(fieldName, errorMessage, domFieldId) {
+export function displayValidationErrorMessage(fieldName, errorMessage, domFieldId = null) {
     let field;
     if (domFieldId !== null) {
         field = document.querySelector('#' + domFieldId);
@@ -16,7 +16,7 @@ export function displayValidationErrorMessage(fieldName, errorMessage, domFieldI
         // Contenteditable field
         field = document.querySelector(`[data-name="${fieldName}"]`);
     }
-    console.log(domFieldId, field);
+    // console.log(domFieldId, field);
     if (field !== null) {
         // If field is a checkbox, the error message placement is a bit different
         if (field.hasAttribute('type') && ['checkbox', 'radio'].includes(field.type)) {

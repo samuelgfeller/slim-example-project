@@ -21,8 +21,11 @@ $this->addAttribute('css', [
     'assets/general/css/contenteditable.css',
 ]);
 
-$this->addAttribute('jsModules', ['assets/user/read/user-read-main.js','assets/user/profile.js']);
+$this->addAttribute('jsModules', ['assets/user/read/user-read-main.js',]);
+
+// Store client id on the page in <data> element for js to read it
 ?>
+<data id="user-id" value="<?= $user->id ?>"></data>
 
 <div id="full-header-edit-icon-container">
         <div class="partial-header-edit-icon-div" data-field-element="h1">

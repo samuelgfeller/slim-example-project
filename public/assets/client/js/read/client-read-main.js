@@ -1,11 +1,9 @@
-import {
-    initNotesEventListeners, initAllDeleteBtnEventListeners
-} from "./client-read-text-area-event-listener-setup.js";
+import {initAllDeleteBtnEventListeners, initNotesEventListeners} from "./client-read-text-area-event-listener-setup.js";
 import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
-import {makeFieldValueEditable} from "./update/client-update-contenteditable.js";
+import {makeClientFieldEditable} from "./update/client-update-contenteditable.js";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js";
 
@@ -36,13 +34,13 @@ assignedUser?.addEventListener('change', saveClientReadDropdownChange);
 
 // Edit client main values event listeners
 // First and last name
-document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeFieldValueEditable);
-document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeFieldValueEditable);
+document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeClientFieldEditable);
+document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeClientFieldEditable);
 // Personal info
-document.querySelector('#edit-location-btn')?.addEventListener('click', makeFieldValueEditable);
-document.querySelector('#edit-phone-btn')?.addEventListener('click', makeFieldValueEditable);
-document.querySelector('#edit-email-btn')?.addEventListener('click', makeFieldValueEditable);
-document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeFieldValueEditable);
+document.querySelector('#edit-location-btn')?.addEventListener('click', makeClientFieldEditable);
+document.querySelector('#edit-phone-btn')?.addEventListener('click', makeClientFieldEditable);
+document.querySelector('#edit-email-btn')?.addEventListener('click', makeClientFieldEditable);
+document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
 
 // Toggle personal info edit icons
