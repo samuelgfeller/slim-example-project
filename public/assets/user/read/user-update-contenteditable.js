@@ -45,7 +45,7 @@ function validateContentEditableAndSaveUserValue() {
  */
 function saveUserValueAndDisableContentEditable(field) {
     // If submit unsuccessful the field focus should not get away
-    let userUpdateRequestPromise = submitUserUpdate(field.dataset.name, field.textContent.trim());
+    let userUpdateRequestPromise = submitUserUpdate({[field.dataset.name]: field.textContent.trim()});
     userUpdateRequestPromise.then(success => {
         if (success === true) {
             disableEditableField(field);

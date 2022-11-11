@@ -71,17 +71,20 @@
     /*Wide form input group with label and input being max half wide and wrapping */
     .wide-modal-form {
         display: grid;
-        gap: 20px 40px;
+        gap: 0px 40px;
         /*Source for this awesome grid-template-columns setting: https://stackoverflow.com/a/69154193/9013718 */
         grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));
     }
 
     .double-width-modal-form-input-group {
-        /* I would like the main note column to be twice the width of the other grid columns but don't know
+        /* I would like the client create main note column to be twice the width of the other grid columns but don't know
         how to implement it easily with the complex grid-template-columns setting */
     }
 
-    .wide-modal-form-input-group label:not(.form-radio-input) {
+    .modal-form-input-group{
+        margin-bottom: 20px;
+    }
+    .modal-form-input-group label:not(.form-radio-input) {
         padding: 6px 15px;
         display: inline-block; /*For label to take into account padding*/
         letter-spacing: 0.02em;
@@ -122,21 +125,20 @@
 
     .modal-form input[type=submit], .modal-submit-btn {
         /*padding: 6px 6px;*/
-        width: 30%;
+        width: fit-content;
         min-width: 160px;
         max-width: 250px;
         float: right;
-        margin-top: 20px;
         color: black;
         border-radius: 99px;
-        padding: 12px;
+        padding: 12px 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         background: rgba(255, 255, 255, 0.57);
         letter-spacing: 0.05em;
     }
 
     .modal-form input[type=submit]:hover:enabled, .modal-submit-btn:hover:enabled {
-        background-color: #efefef;
+        background-color: #b1b9c2;
         color: inherit;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
@@ -163,7 +165,7 @@
     }
 
     .wide-modal-form {
-        /*grid-template-columns: repeat(2, 1fr);*/
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -174,6 +176,12 @@
 }
 
 @media (min-width: 961px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box {
+        width: 50%;
+    }
+}
+@media (min-width: 1200px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
     #modal-box {
         width: 40%;

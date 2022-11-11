@@ -14,12 +14,12 @@ document.addEventListener('click', function (e) {
 /**
  * Create and show modal with given content
  *
- * @param header
- * @param body
- * @param footer
+ * @param {string} header
+ * @param {string} body
+ * @param {string} footer
  * @param {object} container HTML object
  */
-function createModal(header, body, footer, container) {
+export function createModal(header, body, footer, container) {
     // Insert parts into entire modal structure
         // '<div  id="modal-container">' +
     let htmlString = `<div id="modal">
@@ -32,6 +32,6 @@ function createModal(header, body, footer, container) {
     document.getElementsByTagName('main')[0].insertAdjacentHTML('beforebegin', htmlString);
 }
 
-function closeModal() {
+export function closeModal() {
     document.getElementById('modal').remove();
 }

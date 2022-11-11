@@ -23,7 +23,6 @@ $this->addAttribute('css', [
 $this->addAttribute(
     'js',
     [
-        'assets/general/js/modal.js',
         'assets/general/js/filter-chip.js',
     ]
 );

@@ -1,5 +1,5 @@
 // First name
-import {createAlertModal} from "../general/js/alert-modal.js";
+import {createAlertModal} from "../general/js/modal/alert-modal.js";
 import {handleFail} from "../general/js/requests/fail-handler.js";
 
 let firstNameEditIco = document.getElementById('edit-first-name-ico');

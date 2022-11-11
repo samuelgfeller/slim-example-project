@@ -17,13 +17,13 @@ $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
     'assets/general/css/form.css',
     'assets/general/css/modal/alert-modal.css',
-    'assets/general/css/loader/three-dots-loader.css',
+    'assets/general/css/modal/form-modal.css',
     // profile.css has to come last to overwrite other styles
     'assets/general/css/contenteditable.css',
     'assets/user/user.css',
 ]);
 
-$this->addAttribute('jsModules', ['assets/user/read/user-read-main.js',]);
+$this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',]);
 
 // Store client id on the page in <data> element for js to read it
 ?>
@@ -90,7 +90,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-main.js',]);
     </div>
 </div>
 
-<h3 class="user-field-value-label">E-Mail</h3>
+<h3 class="label-h3">E-Mail</h3>
 <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
     <?php
     if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -102,18 +102,16 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-main.js',]);
     <span spellcheck="false" data-name="email" data-maxlength="254"
     ><?= !empty($user->email) ? html($user->email) : '&nbsp;' ?></span>
 </div>
-<br><br>
-<div>
-    <a class="btn" id="change-password-btn" href="<?= $route->urlFor('change-password-page') ?>">Change password</a>
-</div>
-<div>
-    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>
-</div>
 
-<br>
+<div>
+<h3 class="label-h3">Password</h3>
+    <button class="btn" id="change-password-btn">Change password</button>
+</div>
+<!--<div>-->
+<!--    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>-->
+<!--</div>-->
 
-<p class="secondary-text"><i><b>Id:</b> <?= $user->id ?></i><br>
-    <i><b>Status:</b> <?= $user->status?->value ?></i><br>
-    <i><b>Role:</b> <?= $user->role ?></i><br>
-    <i><b>Created:</b> <?= date('d.m.Y H:i:s ', strtotime($user->createdAt)) ?></i><br>
-    <i><b>Updated:</b> <?= date('d.m.Y H:i:s', strtotime($user->updatedAt)) ?></i></p>
+<h3 class="label-h3">Metadata</h3>
+<p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
+    <b>Created:</b> <?= date('d. F Y • H:i:s ', strtotime($user->createdAt)) ?><br>
+    <b>Updated:</b> <?= date('d. F Y • H:i:s', strtotime($user->updatedAt)) ?></p>

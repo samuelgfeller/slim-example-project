@@ -31,7 +31,6 @@
     ];
     $layoutJs = [
         'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
-        'assets/general/js/general.js',
         'assets/general/js/navbar.js',
     ];
     $layoutJsModules = [
