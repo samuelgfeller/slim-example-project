@@ -65,7 +65,7 @@ $this->addAttribute(
                         <?= $user->statusPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>
                         >
                         <?php
-                        // Client status select options
+                        // User status select options
                         foreach ($userStatuses as $userStatus) {
                             $selected = $userStatus === $user->status ? 'selected' : '';
                             echo "<option value='$userStatus->value' $selected>" .
@@ -78,7 +78,6 @@ $this->addAttribute(
                         <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>
                     >
                         <?php
-                        // Client status select options
                         foreach ($user->availableUserRoles as $id => $userRole) {
                             $selected = $id === $user->user_role_id ? 'selected' : '';
                             echo "<option value='$id' $selected>" .

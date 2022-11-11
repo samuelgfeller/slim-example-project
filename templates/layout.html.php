@@ -83,7 +83,7 @@
                 <span class="nav-span">Profile</span>
             </a>
             <a href="<?= $route->urlFor('user-list-page') ?>"
-                <?= $currRouteName === 'user-list-page' ? 'class="is-active"' : '' ?>>
+                <?= in_array($currRouteName, ['user-list-page', 'user-read-page'])  ? 'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/users.svg" alt="Users">
                 <img src="assets/general/img/nav/users-filled.svg" alt="Users">
                 <span class="nav-span">Users</span>

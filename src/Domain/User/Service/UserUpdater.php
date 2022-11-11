@@ -19,7 +19,6 @@ final class UserUpdater
         private readonly UserValidator $userValidator,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserFinder $userFinder,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
@@ -50,6 +49,8 @@ final class UserUpdater
                     'first_name',
                     'surname',
                     'email',
+                    'status',
+                    'user_role_id',
                 ])) {
                     $validUpdateData[$column] = $value;
                 } else {

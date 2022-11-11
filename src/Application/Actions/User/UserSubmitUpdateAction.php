@@ -3,38 +3,29 @@
 namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
-use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserUpdater;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 final class UserSubmitUpdateAction
 {
-    private Responder $responder;
-
-    protected LoggerInterface $logger;
 
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param LoggerFactory $logger
      * @param UserUpdater $userUpdater
-     * @param SessionInterface $session
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
-        Responder $responder,
-        LoggerFactory $logger,
-        private UserUpdater $userUpdater,
-        private SessionInterface $session
+        private readonly Responder $responder,
+        private readonly UserUpdater $userUpdater,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
 
     ) {
-        $this->responder = $responder;
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-update');
     }
 
     /**
@@ -55,28 +46,39 @@ final class UserSubmitUpdateAction
         // Id in url user_id defined in routes.php
         $userIdToChange = (int)$args['user_id'];
         $userValuesToChange = $request->getParsedBody();
-        try {
-            $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
-        } catch (ValidationException $exception) {
-            return $this->responder->respondWithJsonOnValidationError(
-                $exception->getValidationResult(),
-                $response
-            );
-        } catch (ForbiddenException $fe) {
+        if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($userValuesToChange, [], [
+            'first_name',
+            'surname',
+            'email',
+            'status',
+            'user_role_id',
+        ])) {
+            try {
+                $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
+            } catch (ValidationException $exception) {
+                return $this->responder->respondWithJsonOnValidationError(
+                    $exception->getValidationResult(),
+                    $response
+                );
+            } catch (ForbiddenException $fe) {
+                return $this->responder->respondWithJson(
+                    $response,
+                    [
+                        'status' => 'error',
+                        'message' => 'You can only edit your user info or be an admin to edit others'
+                    ],
+                    403
+                );
+            }
+
+            if ($updated) {
+                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            }
+            // If for example values didn't change
             return $this->responder->respondWithJson(
                 $response,
-                ['status' => 'error', 'message' => 'You can only edit your user info or be an admin to edit others'],
-                403
+                ['status' => 'warning', 'message' => 'User wasn\'t updated']
             );
         }
-
-        if ($updated) {
-            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
-        }
-        // If for example values didn't change
-        return $this->responder->respondWithJson(
-            $response,
-            ['status' => 'warning', 'message' => 'User wasn\'t updated']
-        );
     }
 }

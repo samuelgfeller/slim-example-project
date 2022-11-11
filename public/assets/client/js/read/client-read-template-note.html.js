@@ -4,7 +4,7 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
 
     // todo test xss html as message to see if needed to escape server side first
     return `<div id="note${noteId}-container" class="note-container">
-                <label for="note${noteId}" class="discrete-label textarea-label">
+                <label for="note${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
                     ${// Following function is in paranthesis and called with () at the end to be interpreted 
         (() => {

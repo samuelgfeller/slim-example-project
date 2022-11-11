@@ -5,11 +5,11 @@ import {createFlashMessage} from "../../general/js/requests/flash-message.js";
 /**
  * Send user update request
  *
- * @param field
+ * @param fieldName
  * @param value
  * @return Promise true on success otherwise false
  */
-export function submitUserUpdate(field, value) {
+export function submitUserUpdate(fieldName, value) {
     return new Promise(function (resolve, reject) {
         // Make ajax call
         let xHttp = new XMLHttpRequest();
@@ -25,7 +25,7 @@ export function submitUserUpdate(field, value) {
                 else {
                     // Remove previous validation messages
                     removeValidationErrorMessages();
-                    createFlashMessage('success', field.replace('_', ' ') + ' was updated.');
+                    createFlashMessage('success', fieldName.replace(/_/g, ' ') + ' was updated.');
                     // resolve with object containing success and data
                     resolve(true);
                 }
@@ -38,7 +38,7 @@ export function submitUserUpdate(field, value) {
 
         // Data format: "fname=Henry&lname=Ford"
         // In square brackets to be evaluated
-        xHttp.send(JSON.stringify({[field]: value}));
+        xHttp.send(JSON.stringify({[fieldName]: value}));
 
     });
 }

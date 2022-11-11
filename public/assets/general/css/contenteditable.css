@@ -3,7 +3,6 @@
     #full-header-edit-icon-container {
         margin-bottom: 25px;
     }
-
     #full-header-edit-icon-container h1 {
         display: inline-block;
         /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
@@ -12,14 +11,23 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
+    /*Clear float*/
+    #full-header-edit-icon-container::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
 
-    /*Div containing first or last name*/
+    /*Div containing first or last name header*/
     .partial-header-edit-icon-div {
-        display: inline-block;
-        position: relative;
-        padding-right: 15px;
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
+    .contenteditable-field-container {
+        position: relative;
+        display: inline-block;
+        padding-right: 15px;
+    }
+
 
     .contenteditable-edit-icon, .contenteditable-save-icon {
         display: none;
@@ -34,7 +42,7 @@
         z-index: 1;
     }
 
-    .partial-header-edit-icon-div:hover .contenteditable-edit-icon, .always-displayed-icon {
+    .contenteditable-field-container:hover .contenteditable-edit-icon, .always-displayed-icon {
         display: inline-block;
     }
 
@@ -48,7 +56,7 @@
     }
 
     /* Display outline on span element */
-    .contenteditable-edit-icon:hover ~ span {
+    .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"]{
         outline: 2px solid #2e3e50;
         border-radius: 5px;
         background: #f1f1f1;

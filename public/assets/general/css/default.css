@@ -202,6 +202,21 @@ a.currently-editable{
     border: 1.5px solid #2e3e50;
     background: white;
 }
+.bigger-select {
+    border: 3px solid #2e3e50;
+    padding: 7px;
+    background: #f3f3f3;
+    color: #2e3e50;
+    font-weight: bold;
+    font-size: 16px;
+}
+.bigger-select-label {
+    display: block;
+    font-weight: bold;
+    color: rgba(46, 62, 80, 0.84);
+    font-size: 13px;
+    margin: 0 0 5px 7px;
+}
 
 /*Icon container with divs inside that contain the img and value span*/
 .default-icon-container div{

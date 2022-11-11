@@ -35,7 +35,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
 <div id="title-and-dropdown-flexbox">
     <div id="full-header-edit-icon-container">
-        <div class="partial-header-edit-icon-div" data-field-element="h1">
+        <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <!-- Img has to be before title because we are only able to style next sibling in css -->
@@ -47,7 +47,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                 !empty($clientAggregate->firstName) ? html($clientAggregate->firstName) : '&nbsp;' ?></h1>
         </div>
-        <div class="partial-header-edit-icon-div" data-field-element="h1">
+        <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
@@ -63,8 +63,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
     <div id="status-and-assigned-user-select-container">
         <!-- Status select options-->
         <div>
-            <label for="client-status" class="discrete-label">Status</label>
-            <select name="client_status_id" class="default-select"
+            <label for="client-status" class="bigger-select-label">Status</label>
+            <select name="client_status_id" class="default-select bigger-select"
                 <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
                     ? '' : 'disabled' ?>>
                 <?php
@@ -79,8 +79,8 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
 
         <!-- Assigned user select options-->
         <div>
-            <label for="assigned-user-select" class="discrete-label">Helper</label>
-            <select name="user_id" class="default-select" id="assigned-user-select"
+            <label for="assigned-user-select" class="bigger-select-label">Helper</label>
+            <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
                 <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                 <?php
                 // Linked user select options
@@ -127,7 +127,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-                <div class="partial-personal-info-and-edit-icon-div" data-field-element="span"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -151,7 +151,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             </div>
             <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
-                <div class="partial-personal-info-and-edit-icon-div" data-field-element="select"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -178,7 +178,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
                id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
                 <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
-                <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -194,7 +194,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
                 <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
-                <div class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -210,7 +210,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
                 <img src="assets/client/img/email-icon.svg" class="personal-info-icon" alt="email">
-                <div id="email-div" class="partial-personal-info-and-edit-icon-div" data-field-element="a-span"
+                <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>

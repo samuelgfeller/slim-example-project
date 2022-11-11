@@ -1,7 +1,9 @@
 import {basePath} from "../../../general/js/config.js";
 import {
-    addDeleteNoteBtnEventListener, addTextareaInputEventListener,
-    hideCheckmarkLoader, toggleTextareaReadOnlyAndAddDeleteBtnDisplay
+    addDeleteNoteBtnEventListener,
+    addTextareaInputEventListener,
+    hideCheckmarkLoader,
+    toggleTextareaReadOnlyAndAddDeleteBtnDisplay
 } from "./client-read-text-area-event-listener-setup.js";
 import {handleFail, removeValidationErrorMessages} from "../../../general/js/requests/fail-handler.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
@@ -33,7 +35,7 @@ export function addNewNoteTextarea() {
         // Insert after end of activity header and not container as header comes as first element
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note"
-                       class="discrete-label textarea-label">
+                       class="bigger-select-label textarea-label">
                        <span class="note-left-side-label-span"></span>
                        <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" data-note-id=""
                        style="display: none">

@@ -7,7 +7,6 @@
     }
 
     .partial-personal-info-and-edit-icon-div {
-        position: relative;
         padding-right: 13px;
     }
 
@@ -17,16 +16,6 @@
         background: none;
         border: none;
         display: none;
-    }
-
-    .partial-personal-info-and-edit-icon-div:hover .contenteditable-edit-icon {
-        display: inline-block;
-    }
-
-    #client-personal-info-flex-container span[contenteditable="true"] {
-        outline: 2px solid #2e3e50;
-        border-radius: 5px;
-        background: #f1f1f1;
     }
 
     #main-note-div {
@@ -54,10 +43,6 @@
         but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718 */
         margin-bottom: 30px; /* Same bottom margin than header */
     }
-
-    #status-and-assigned-user-select-container > div {
-    }
-
 
     #main-note-textarea-div {
         flex-grow: 100; /*Make it grow a lot more than the dropdown selects*/
@@ -91,21 +76,7 @@
     }
 
     #status-and-assigned-user-select-container select {
-        border: 3px solid #2e3e50;
-        padding: 7px;
-        background: #f3f3f3;
-        color: #2e3e50;
-        font-weight: bold;
-        font-size: 16px;
         min-width: 100%;
-    }
-
-    .discrete-label {
-        display: block;
-        font-weight: bold;
-        color: rgba(46, 62, 80, 0.84);
-        font-size: 13px;
-        margin: 0 0 5px 7px;
     }
 
     .textarea-label {
@@ -372,10 +343,6 @@
     #main-note-textarea-div {
         /*For the flex items to wrap*/
         min-width: 470px;
-    }
-
-    #status-and-assigned-user-select-container {
-        /*margin-top: 20px;*/
     }
 
     #client-personal-info-flex-container {

@@ -72,7 +72,7 @@ class UserFinder
     public function findUserReadResult(int $id): UserResultData
     {
         if ($this->userAuthorizationChecker->isGrantedToRead($id)) {
-            $userResultData = new UserResultData($this->userFinderRepository->findUserById($id));
+            $userResultData = new UserResultData($this->userFinderRepository->findUserById($id), true);
             // Status privilege
             $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
                 'status',
