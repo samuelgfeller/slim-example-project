@@ -1,45 +1,39 @@
 <?php
 
-namespace App\Test\Provider\Client;
+namespace App\Test\Provider\User;
 
 use App\Test\Fixture\FixtureTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class ClientUpdateCaseProvider
+class UserUpdateCaseProvider
 {
 
     use FixtureTrait;
 
     /**
-     * Client creation authorization
+     * User update authorization cases
      * Provides combination of different user roles with expected result.
-     * This tests the rules in ClientAuthorizationChecker.
      *
      * @return array[]
      */
-    public function provideUsersAndExpectedResultForClientUpdate(): array
+    public function provideUserPasswordChangeAuthorizationCases(): array
     {
+        // Password hash to verify old password - 12345678 is used in test function
+        $passwordHash = password_hash('12345678', PASSWORD_DEFAULT);
         // Set different user role attributes
-        $managingAdvisorRow = ['user_role_id' => 2];
-        $advisorRow = ['user_role_id' => 3];
-        $newcomerRow = ['user_role_id' => 4];
-
-        $basicClientDataChanges = [
-            'first_name' => 'NewFirstName',
-            'last_name' => 'NewLastName',
-            'birthdate' => '1999-10-22',
-            'location' => 'NewLocation',
-            'phone' => '011 111 11 11',
-            'email' => 'new.email@test.ch',
-            'sex' => 'O',
-        ];
+        $adminAttr = ['user_role_id' => 1, 'password_hash' => $passwordHash];
+        $managingAdvisorAttr = ['user_role_id' => 2, 'password_hash' => $passwordHash];
+        // If one attribute is different they are differentiated and 2 separated users are added to the db
+        $otherManagingAdvisorAttr = ['first_name' => 'Other', 'user_role_id' => 2, 'password_hash' => $passwordHash];
+        $advisorAttr = ['user_role_id' => 3, 'password_hash' => $passwordHash];
+        $newcomerAttr = ['user_role_id' => 4, 'password_hash' => $passwordHash];
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             'db_changed' => true,
             'json_response' => [
                 'status' => 'success',
-                'data' => ['age' => (new \DateTime())->diff(new \DateTime($basicClientDataChanges['birthdate']))->y],
+                'data' => null,
             ],
         ];
         $unauthorizedResult = [
@@ -47,58 +41,47 @@ class ClientUpdateCaseProvider
             'db_changed' => false,
             'json_response' => [
                 'status' => 'error',
-                'message' => 'Not allowed to update client.',
+                'message' => 'Not allowed to change password.',
             ]
         ];
 
 
         // To avoid testing each column separately for each user role, the most basic change is taken to test.
-        // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database first.
+        // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database first
         return [
             // * Newcomer
             // "owner" means from the perspective of the authenticated user
-            [ // ? Newcomer owner - data to be changed is the one with the least privilege needed - not allowed
-                'user_linked_to_client' => $newcomerRow,
-                'authenticated_user' => $newcomerRow,
-                'data_to_be_changed' => ['first_name' => 'value'],
-                'expected_result' => $unauthorizedResult
+            [ // ? Newcomer owner - allowed
+                'user_to_change' => $newcomerAttr,
+                'authenticated_user' => $newcomerAttr,
+                'expected_result' => $authorizedResult
             ],
+            // Higher privilege owner than newcomer must not be tested as authorization is hierarchical meaning if
+            // the lowest privilege is allowed to do action, higher will be able too.
             // * Advisor
-            [ // ? Advisor owner - data to be changed allowed
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $advisorRow,
-                'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
-                'expected_result' => $authorizedResult,
-            ],
-            [ // ? Advisor owner - data to be changed not allowed
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $advisorRow,
-                'data_to_be_changed' => ['user_id' => 'new'],
+            [ // ? Advisor not owner - user to change is newcomer - not allowed
+                'user_to_change' => $newcomerAttr,
+                'authenticated_user' => $advisorAttr,
                 'expected_result' => $unauthorizedResult,
             ],
-            [ // ? Advisor not owner - data to be changed allowed
-                'user_linked_to_client' => $managingAdvisorRow,
-                'authenticated_user' => $advisorRow,
-                'data_to_be_changed' => $basicClientDataChanges,
+            // * Managing advisor
+            [ // ? Managing advisor not owner - user to change is advisor - allowed
+                'user_to_change' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
                 'expected_result' => $authorizedResult,
             ],
-            [ // ? Advisor not owner - data to be changed not allowed
-                'user_linked_to_client' => $managingAdvisorRow,
-                'authenticated_user' => $advisorRow,
-                'data_to_be_changed' => ['client_status_id' => 'new'],
+            [ // ? Managing advisor not owner - user to change is other managing advisor - not allowed
+                'user_to_change' => $otherManagingAdvisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
                 'expected_result' => $unauthorizedResult,
+            ],
+            // * Admin
+            [ // ? Admin not owner - user to change is managing advisor - allowed
+                'user_to_change' => $managingAdvisorAttr,
+                'authenticated_user' => $adminAttr,
+                'expected_result' => $authorizedResult,
             ],
 
-            // * Managing advisor
-            [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $managingAdvisorRow,
-                'data_to_be_changed' => array_merge(
-                    $basicClientDataChanges,
-                    ['client_status_id' => 'new', 'user_id' => 'new']
-                ),
-                'expected_result' => $authorizedResult,
-            ],
         ];
     }
 

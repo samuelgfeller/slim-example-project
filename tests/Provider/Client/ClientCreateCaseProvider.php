@@ -3,7 +3,6 @@
 namespace App\Test\Provider\Client;
 
 use App\Test\Fixture\FixtureTrait;
-use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientCreateCaseProvider
@@ -82,7 +81,7 @@ class ClientCreateCaseProvider
             ]
         ];
         return [
-            // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+            // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - not allowed
                 'user_linked_to_client' => $newcomerAttributes,
                 'authenticated_user' => $newcomerAttributes,

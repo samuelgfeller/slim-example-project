@@ -2,14 +2,16 @@
 
 namespace App\Test\Integration\User;
 
-use App\Test\Traits\AppTestTrait;
+use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -26,45 +28,66 @@ class ChangePasswordSubmitActionTest extends TestCase
     use HttpTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use FixtureTrait;
+    use HttpJsonTestTrait;
 
     /**
-     * Request to change password
+     * Test user password change with different user roles
+     *
+     * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::provideUserPasswordChangeAuthorizationCases()
      */
-    public function testChangePassword(): void
-    {
-        $oldPassword = '12345678'; // See fixture
+    public function testChangePasswordSubmitAction_authorization(
+        array $userToUpdateAttr,
+        array $authenticatedUserAttr,
+        array $expectedResult
+    ): void {
+        // Insert authenticated user and user to be changed with given attributes containing the user role
+        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        if ($authenticatedUserAttr === $userToUpdateAttr) {
+            $userToUpdateRow = $authenticatedUserRow;
+        } else {
+            // If authenticated user and owner user is not the same, insert owner
+            $userToUpdateRow = $this->insertFixturesWithAttributes($userToUpdateAttr, UserFixture::class);
+        }
+
+        // Simulate logged-in user
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+
+        $oldPassword = '12345678';
         $newPassword = '123456789';
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
-        $userId = $userRow['id'];
-
-        // Simulate logged-in user with id 2
-        $this->container->get(SessionInterface::class)->set('user_id', $userId);
-
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('change-password-submit'), [
+        $request = $this->createFormRequest(
+            'PUT', // Request to change password
+            $this->urlFor('change-password-submit', ['user_id' => $userToUpdateRow['id']]),
+            [
                 'old_password' => $oldPassword,
                 'password' => $newPassword,
                 'password2' => $newPassword,
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
-        // Assert: 302 Redirect
-        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
+        // Assert status code
+        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
-        // Assert that password was changed correctly
-        $dbPasswordHash = $this->getTableRowById('user', $userId)['password_hash'];
-        // Assert that password_hash starts with the beginning of a BCRYPT hash
-        // Hash algo may change in the future, but it's not a big deal to update if tests fail
-        self::assertStringStartsWith(
-            '$2y$10$',
-            $dbPasswordHash,
-            'password_hash not starting with beginning of bcrypt hash'
-        );
-        // Verify that hash matches the given password
-        self::assertTrue(password_verify($newPassword, $dbPasswordHash));
+        // Assert that password was changed or not changed
+        $dbPasswordHash = $this->getTableRowById('user', $userToUpdateRow['id'])['password_hash'];
+        if ($expectedResult['db_changed'] === true) {
+            // Assert that password_hash starts with the beginning of a BCRYPT hash
+            // Hash algo may change in the future, but it's not a big deal to update if tests fail
+            self::assertStringStartsWith(
+                '$2y$10$',
+                $dbPasswordHash,
+                'password_hash not starting with beginning of bcrypt hash'
+            );
+            // Verify that hash matches the given password
+            self::assertTrue(password_verify($newPassword, $dbPasswordHash));
+        }else{
+            // Verify that hash matches the old password
+            self::assertTrue(password_verify($oldPassword, $dbPasswordHash));
+        }
+
+        $this->assertJsonData($expectedResult['json_response'], $response);
     }
 
     /**
@@ -81,12 +104,15 @@ class ChangePasswordSubmitActionTest extends TestCase
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('change-password-submit'), [
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('change-password-submit'),
+            [
                 'old_password' => $oldPassword,
                 'password' => '1', // too short
                 'password2' => '12', // too short and not similar
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
@@ -105,12 +131,15 @@ class ChangePasswordSubmitActionTest extends TestCase
     {
         // NOT simulate login and not necessary to insert fixture
 
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('change-password-submit'), [
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('change-password-submit'),
+            [
                 'old_password' => '12345678',
                 'password' => '123456789',
                 'password2' => '123456789',
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
@@ -148,8 +177,11 @@ class ChangePasswordSubmitActionTest extends TestCase
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
-        $malformedRequest = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('change-password-submit'), $malformedBody);
+        $malformedRequest = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('change-password-submit'),
+            $malformedBody
+        );
 
         // Bad Request (400) means that the client sent the request wrongly; it's a client error
         $this->expectException(HttpBadRequestException::class);

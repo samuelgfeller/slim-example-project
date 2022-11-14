@@ -2,15 +2,15 @@
 
 namespace App\Test\Integration\User;
 
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -73,7 +73,7 @@ class UserSubmitUpdateActionTest extends TestCase
     {
         $this->insertFixtures([UserFixture::class]);
 
-        // Simulate logged in user with id 1
+        // Simulate logged-in user with id 1
         $this->container->get(SessionInterface::class)->set('user_id', 1);
 
         $request = $this->createJsonRequest('PUT', // Request to change non-existent user with id 999
