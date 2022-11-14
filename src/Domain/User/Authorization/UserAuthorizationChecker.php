@@ -134,6 +134,19 @@ class UserAuthorizationChecker
                             $grantedUpdateKeys[] = 'user_role_id';
                         }
                     }
+
+                    // There is a special case with passwords where the user can change his own password, but he needs to
+                    // provide the old password. If password_without_verification is given as $userDataToUpdate it means
+                    // that the authenticated user can change the password without the old password.
+                    if (array_key_exists('password_without_verification', $userDataToUpdate) &&
+                        // If user want to change his own password, the old password is required regardless of role
+                        // so that nobody can change his password if the computer is left unattended and logged-in
+                        // https://security.stackexchange.com/a/24292 - to change other passwords it would be best if
+                        // the authenticated managing_advisor / admin password is asked instead of the old user password
+                        // but this is too much for this project.
+                        $loggedInUserId !== (int)$userIdToUpdate) {
+                        $grantedUpdateKeys[] = 'password_without_verification';
+                    }
                 }
                 // Owner user (profile edit) is not allowed to change its user role or status
             }

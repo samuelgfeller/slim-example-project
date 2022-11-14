@@ -90,6 +90,9 @@ class UserFinder
                 'general_data',
                 $id
             );
+            // Password change without verification of old password
+            $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
+            getUpdatePrivilegeForUserColumn('password_without_verification', $id);
 
             return $userResultData;
         }

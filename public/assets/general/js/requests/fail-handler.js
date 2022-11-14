@@ -42,7 +42,7 @@ export function handleFail(xhr, domFieldId = null) {
             for (const error of validationResponse.data.errors) {
                 displayValidationErrorMessage(error.field, error.message, domFieldId);
                 // Flash error message with details
-                errorMsg += error.message + '.<br>Field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ').toUpperCase()
+                errorMsg += error.message + '.<br>Field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ')
                     + '</b>".<br>';
             }
         } else {

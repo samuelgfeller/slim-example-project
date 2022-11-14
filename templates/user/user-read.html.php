@@ -104,8 +104,12 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
 </div>
 
 <div>
-<h3 class="label-h3">Password</h3>
-    <button class="btn" id="change-password-btn">Change password</button>
+    <h3 class="label-h3">Password</h3>
+    <button class="btn" id="change-password-btn"
+            data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
+                Privilege::UPDATE
+            ) ? 'false' : 'true' ?>">Change password
+    </button>
 </div>
 <!--<div>-->
 <!--    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>-->

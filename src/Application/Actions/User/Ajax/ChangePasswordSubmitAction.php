@@ -55,16 +55,15 @@ class ChangePasswordSubmitAction
         $flash = $this->session->getFlash();
 
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($parsedBody, [
-            'old_password',
             'password',
             'password2'
-        ])) {
+        ], ['old_password'])) {
             try {
                 $this->passwordChanger->changeUserPassword(
-                    $parsedBody['old_password'],
                     $parsedBody['password'],
                     $parsedBody['password2'],
-                    $userId
+                    $userId,
+                    $parsedBody['old_password'] ?? null,
                 );
 
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);

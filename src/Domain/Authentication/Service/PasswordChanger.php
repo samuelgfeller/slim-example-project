@@ -55,25 +55,34 @@ class PasswordChanger
     /**
      * Normal password change with old password
      *
-     * @param string $oldPassword
      * @param string $password1
      * @param string $password2
      * @param int $userId
+     * @param string|null $oldPassword
      * @return bool
      */
-    public function changeUserPassword(string $oldPassword, string $password1, string $password2, int $userId): bool
-    {
+    public function changeUserPassword(
+        string $password1,
+        string $password2,
+        int $userId,
+        ?string $oldPassword = null
+    ): bool {
         // Check if password strings are valid
         $this->userValidator->validatePasswords([$password1, $password2], true);
 
-        // Throws validation exception if not correct old password
-        $this->userValidator->validatePasswordCorrectness($oldPassword, 'old_password', $userId);
+        if (!$this->userAuthorizationChecker->isGrantedToUpdate(['password_without_verification' => 'value'],
+            $userId)) {
+            // Verify old password; throws validation exception if not correct old password
+            $this->userValidator->validatePasswordCorrectness($oldPassword, 'old_password', $userId);
+        }
 
         // Calls service function to change password
         $passwordUpdated = $this->updateUserPassword($password1, $userId);
 
-        // Clear all session data and regenerate session ID
-        $this->session->regenerateId();
+        // Clear all session data and regenerate session ID if changed user is logged in
+        if ((int)$this->session->get('user_id') === $userId) {
+            $this->session->regenerateId();
+        }
 
         return $passwordUpdated;
     }

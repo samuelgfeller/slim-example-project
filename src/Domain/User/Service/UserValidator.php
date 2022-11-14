@@ -152,18 +152,24 @@ class UserValidator
      * Previously in own service class passwordVerifier, but it's simpler
      * to display normal validation errors in the client form.
      *
-     * @param string $password
+     * @param null|string $password
      * @param string $field
      * @param int $userId
      * @return void
      */
-    public function validatePasswordCorrectness(string $password, string $field, int $userId): void
+    public function validatePasswordCorrectness(?string $password, string $field, int $userId): void
     {
         $validationResult = new ValidationResult('There is a validation error with the password.');
-        $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
-        // If password is not correct
-        if (!password_verify($password, $dbUser->passwordHash)) {
-            $validationResult->setError($field, 'Incorrect password');
+        // To be correct, the password must not be null
+        if ($password !== null) {
+            $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
+            // If password is not correct
+            if (!password_verify($password, $dbUser->passwordHash)) {
+                $validationResult->setError($field, 'Incorrect password');
+            }
+        }else{
+            $validationResult->setError($field, str_replace('_', ' ', ucfirst($field))
+                . ' required but not given');
         }
         $this->validator->throwOnError($validationResult);
     }
