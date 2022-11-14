@@ -2,7 +2,7 @@ import {basePath} from "../../../general/js/config.js";
 import {loadClients} from "../list/client-list-loading.js";
 import {handleFail} from "../../../general/js/requests/fail-handler.js";
 import {displayValidationErrorMessage} from "../../../general/js/validation/form-validation.js";
-import {createFlashMessage} from "../../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../../general/js/requests/flash-message.js";
 import {getFormData, toggleEnableDisableForm} from "../../../general/js/modal/modal-form.js";
 import {closeModal} from "../../../general/js/modal/modal.js";
 
@@ -43,7 +43,7 @@ export function submitCreateClient() {
             // Success
             else {
                 closeModal();
-                createFlashMessage('success', 'Client created successfully.');
+                displayFlashMessage('success', 'Client created successfully.');
                 loadClients();
             }
         }

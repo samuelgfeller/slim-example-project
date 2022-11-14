@@ -3,11 +3,9 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Exceptions\ForbiddenException;
-use App\Domain\Exceptions\UnauthorizedException;
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Service\UserValidator;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -15,49 +13,88 @@ use Psr\Log\LoggerInterface;
 class PasswordChanger
 {
     private LoggerInterface $logger;
-    
-public function __construct(
-    private UserRoleFinderRepository $userRoleFinderRepository,
-    private SessionInterface $session,
-    private UserUpdaterRepository $userUpdaterRepository,
-    private UserValidator $userValidator,
-    LoggerFactory $loggerFactory
-) {
-    $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('password-changer');
-}
+
+    public function __construct(
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly SessionInterface $session,
+        private readonly UserUpdaterRepository $userUpdaterRepository,
+        private readonly UserValidator $userValidator,
+        private readonly VerificationTokenVerifier $verificationTokenVerifier,
+        private readonly PasswordVerifier $passwordVerifier,
+        LoggerFactory $loggerFactory
+    ) {
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('password-changer');
+    }
 
     /**
-     * Change password for logged-in user (either from profile or forgotten via token)
+     * Reset forgotten password with token received by mail
+     *
      * @param string $password1
      * @param string $password2
-     * @param int|null $userId
+     * @param int $tokenId
+     * @param string $token
+     * @return bool
+     */
+    public function resetPasswordWithToken(string $password1, string $password2, int $tokenId, string $token): bool
+    {
+        // Validate passwords BEFORE token as token would be set to usedAt even if passwords are not valid
+        $this->userValidator->validatePasswords([$password1, $password2], true);
+        // If passwords are valid strings, verify token and set token as used
+        $userId = $this->verificationTokenVerifier->getUserIdIfTokenIsValid($tokenId, $token);
+
+        // Log user in - session needed to be authorized to change password
+        // Clear all session data and regenerate session ID
+        $this->session->regenerateId();
+        // Add user to session
+        $this->session->set('user_id', $userId);
+
+        // Call function to change password AFTER login as session is needed to pass userAuthorizationChecker
+        return $this->updateUserPassword($password1, $userId);
+    }
+
+    /**
+     * Normal password change with old password
+     *
+     * @param string $oldPassword
+     * @param string $password1
+     * @param string $password2
+     * @param int $userId
+     * @return bool
+     */
+    public function changeUserPassword(string $oldPassword, string $password1, string $password2, int $userId): bool
+    {
+        // Check if password strings are valid
+        $this->userValidator->validatePasswords([$password1, $password2], true);
+
+        // Throws validation exception if not correct old password
+        $this->userValidator->validatePasswordCorrectness($oldPassword, 'old_password', $userId);
+
+        // Calls service function to change password
+        $passwordUpdated = $this->updateUserPassword($password1, $userId);
+
+        // Clear all session data and regenerate session ID
+        $this->session->regenerateId();
+
+        return $passwordUpdated;
+    }
+
+    /**
+     * Change user password
+     *
+     * @param string $newPassword
+     * @param int $userId
      *
      * @return bool
-     * @throws ValidationException|ForbiddenException
      */
-    public function changeUserPassword(string $password1, string $password2, int $userId = null): bool
+    private function updateUserPassword(string $newPassword, int $userId): bool
     {
-        if(($loggedInUserId = $this->session->get('user_id')) !== null) {
-
-            // If password forgot, password validation is done before token verification as usedAt should stay blank
-            // But its needed here for a normal password change request so there is a double validation on password reset
-            $this->userValidator->validatePasswords([$password1, $password2], true);
-
-            // If no user id is provided, change logged-in user password
-            $userId = $userId ?? $loggedInUserId;
-
-            $userRole = $this->userRoleFinderRepository->getUserRoleById($loggedInUserId);
-            if ($userRole === 'admin' || $userId === $loggedInUserId) {
-                $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
-                return $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
-            }
-
-            // User does not have needed rights to access area or function
-            $this->logger->warning(
-                'User ' . $loggedInUserId . ' tried to change password of other user with id: ' . $userId
-            );
-            throw new ForbiddenException('Not allowed to change password.');
+        if ($this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)) {
+            $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            return $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
         }
-        throw new UnauthorizedException('Please login to change password.');
+
+        // User does not have needed rights to access area or function
+        $this->logger->warning('Failed attempt to change password of user id: ' . $userId);
+        throw new ForbiddenException('Not allowed to change password.');
     }
 }

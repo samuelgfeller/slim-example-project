@@ -5,40 +5,31 @@ namespace App\Domain\Authentication\Service;
 
 
 use App\Domain\Exceptions\InvalidCredentialsException;
-use App\Domain\Exceptions\UnauthorizedException;
 use App\Infrastructure\User\UserFinderRepository;
-use Odan\Session\SessionInterface;
 
 
 class PasswordVerifier
 {
 
     public function __construct(
-        private UserFinderRepository $userFinderRepository,
-        private SessionInterface $session,
+        private readonly UserFinderRepository $userFinderRepository,
     ) {
     }
 
     /**
      * Checks if given password is correct for the user
      * @param string $oldPassword
+     * @param int $userId
      * @return bool
-     * @throws InvalidCredentialsException|UnauthorizedException
      */
-    public function verifyPassword(string $oldPassword): bool
+    public function verifyPassword(string $oldPassword, int $userId): bool
     {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash((int)$loggedInUserId);
-            if (password_verify($oldPassword, $dbUser->passwordHash)) {
-                return true;
-            }
-            throw new InvalidCredentialsException(
-                $dbUser->email, 'Provided invalid password on password change request'
-            );
+        $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
+        if (password_verify($oldPassword, $dbUser->passwordHash)) {
+            return true;
         }
-        throw new UnauthorizedException(
-            'User trying to change password without being authenticated. This 
-        exception should not be able to exist, something is wrong with the UserAuthenticationMiddleware.'
+        throw new InvalidCredentialsException(
+            $dbUser->email, 'Incorrect old password.'
         );
     }
 }

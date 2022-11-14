@@ -1,6 +1,6 @@
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requests/fail-handler.js";
 import {basePath} from "../../general/js/config.js";
-import {createFlashMessage} from "../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
 import {getFormData, toggleEnableDisableForm} from "../../general/js/modal/modal-form.js";
 import {closeModal} from "../../general/js/modal/modal.js";
 
@@ -20,22 +20,29 @@ export function submitUserUpdate(formFieldsAndValues) {
                 if (xHttp.status !== 201 && xHttp.status !== 200) {
                     // Default fail handler
                     handleFail(xHttp);
+                    console.log(xHttp.responseText);
                     resolve(false);
                 }
                 // Success
                 else {
                     // Remove previous validation messages
                     removeValidationErrorMessages();
-                    for (const [fieldName, value] of formFieldsAndValues) {
-                        createFlashMessage('success', fieldName.replace(/_/g, ' ') + ' was updated.');
-                    }
+                    console.log(xHttp.responseText);
+                    // for (const [fieldName, value] of formFieldsAndValues) {
+                    //     createFlashMessage('success', fieldName.replace(/_/g, ' ') + ' was updated.');
+                    // }
                     // resolve with object containing success and data
                     resolve(true);
                 }
             }
         };
         let userId = document.getElementById('user-id').value;
-        xHttp.open('PUT', basePath + 'users' + '/' + userId, true);
+        let updateRoute = 'users';
+        // Password change request has an own action class as there are fields such as password2 and old password
+        if ('password' in formFieldsAndValues){
+            updateRoute = 'change-password';
+        }
+        xHttp.open('PUT', basePath + updateRoute + '/' + userId, true);
         xHttp.setRequestHeader("Content-type", "application/json");
         xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "users/" + userId);
 
@@ -67,6 +74,7 @@ export function submitChangePassword() {
     submitUserUpdate(formData).then(success => {
         if (success === true) {
             closeModal();
+            displayFlashMessage('success', 'Successfully changed password.');
         } else{
             // Re enable form if request is not successful
             toggleEnableDisableForm('change-password-modal-form');

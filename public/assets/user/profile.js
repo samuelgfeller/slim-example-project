@@ -167,7 +167,7 @@ function submitValueChange(submitBtnId, inputName) {
             else {
                 // Remove special chars for flash message (first_name -> first name)
                 let inputNameWithoutSpecialChar = inputName.replace(/[^a-zA-Z0-9 ]/g, ' ');
-                createFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
+                displayFlashMessage('success', 'Successfully changed ' + inputNameWithoutSpecialChar);
                 // Replace input field with value span
                 replaceInputWithValue(inputElement);
                 // Remove submit icon from DOM

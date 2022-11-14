@@ -1,5 +1,5 @@
 import {displayValidationErrorMessage} from "../validation/form-validation.js";
-import {createFlashMessage} from "./flash-message.js";
+import {displayFlashMessage} from "./flash-message.js";
 
 /**
  * If a request fails this function can be called which gives the user
@@ -9,7 +9,7 @@ import {createFlashMessage} from "./flash-message.js";
  * @param {null|string} domFieldId css id of dom field the fail is about
  */
 export function handleFail(xhr, domFieldId = null) {
-    console.log(domFieldId);
+    console.log(xhr);
    // Example: 404 Not Found
     let errorMsg = xhr.status + ' ' + xhr.statusText;
 
@@ -24,7 +24,7 @@ export function handleFail(xhr, domFieldId = null) {
     }
 
     if (xhr.status === 403) {
-        errorMsg += '<br>Forbidden. You do not have access to this area or function';
+        errorMsg += '<br>Forbidden. Not allowed to access this area or function.';
     }
 
     if (xhr.status === 500) {
@@ -42,7 +42,8 @@ export function handleFail(xhr, domFieldId = null) {
             for (const error of validationResponse.data.errors) {
                 displayValidationErrorMessage(error.field, error.message, domFieldId);
                 // Flash error message with details
-                errorMsg += error.message + ' for the field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ') + '</b>"<br>';
+                errorMsg += error.message + '.<br>Field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ').toUpperCase()
+                    + '</b>".<br>';
             }
         } else {
             // Default error message when server returns 422 but not json
@@ -51,7 +52,7 @@ export function handleFail(xhr, domFieldId = null) {
     }
 
 // Output error to user
-    createFlashMessage('error', errorMsg);
+    displayFlashMessage('error', errorMsg);
 }
 
 /**

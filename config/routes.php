@@ -74,7 +74,7 @@ return function (App $app) {
         'change-password-page'
     )->add(UserAuthenticationMiddleware::class);
     // Submit new password when authenticated (post and not put as form submit)
-    $app->post('/change-password', \App\Application\Actions\Authentication\ChangePasswordSubmitAction::class)->setName(
+    $app->put('/change-password/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class)->setName(
         'change-password-submit'
     )->add(UserAuthenticationMiddleware::class);
 
@@ -86,7 +86,7 @@ return function (App $app) {
         $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
         ->setName('user-read-page');
-        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\UserSubmitUpdateAction::class)->setName(
+        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)->setName(
             'user-update-submit'
         );
         $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)->setName(

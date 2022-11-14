@@ -1,6 +1,7 @@
 import {makeUserFieldEditable} from "./user-update-contenteditable.js";
 import {submitChangePassword, submitUserUpdate} from "../update/user-update-request.js";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js";
+import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
 
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);
@@ -9,11 +10,15 @@ document.querySelector('#edit-email-btn')?.addEventListener('click', makeUserFie
 // User dropdown change event listeners
 const statusSelect = document.querySelector('select[name="status"]:not([disabled])');
 statusSelect?.addEventListener('change', () => {
-    submitUserUpdate({[statusSelect.name]: statusSelect.value}).then();
+    submitUserUpdate({[statusSelect.name]: statusSelect.value}).then(success =>
+        success === true ? displayFlashMessage('success', 'Successfully changed password.') : null
+    );
 });
 const userRoleSelect = document.querySelector('select[name="user_role_id"]:not([disabled])');
 userRoleSelect?.addEventListener('change', () => {
-    submitUserUpdate({[userRoleSelect.name]: userRoleSelect.value}).then();
+    submitUserUpdate({[userRoleSelect.name]: userRoleSelect.value}).then( success =>
+        success === true ? displayFlashMessage('success', 'Successfully changed password.') : null
+    );
 });
 
 // Display all edit icons if touch screen

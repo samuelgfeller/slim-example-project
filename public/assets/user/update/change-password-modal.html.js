@@ -12,11 +12,11 @@ export function displayChangePasswordModal() {
             <input type="password" name="old_password" id="old-password-inp" minlength="3" required class="form-input">
         </div>
         <div class="modal-form-input-group">
-            <label for="last-name-input">New password</label>
+            <label for="password1-inp">New password</label>
             <input type="password" name="password" id="password1-inp" minlength="3" required class="form-input">
         </div>
         <div class="modal-form-input-group">
-            <label for="birthdate-input">Repeat new password</label>
+            <label for="password2-inp">Repeat new password</label>
             <input type="password" name="password2" id="password2-inp" minlength="3" required class="form-input">
         </div>
     </div>`;

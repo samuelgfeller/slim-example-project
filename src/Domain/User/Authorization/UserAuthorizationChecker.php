@@ -117,7 +117,7 @@ class UserAuthorizationChecker
                     $grantedUpdateKeys[] = 'password_hash';
                 }
 
-                // Things that only managing_advisor and higher privileged are allowed to do with users that are
+                // Things that only managing_advisor and higher privileged are allowed to do with users (and not if own profile)
                 // If user is managing advisor we know by the parent if-statement that the user to change has not higher
                 // role than advisor
                 if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {

@@ -6,6 +6,7 @@ use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Data\UserData;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
+use App\Infrastructure\User\UserFinderRepository;
 
 /**
  * Class UserValidator
@@ -15,6 +16,7 @@ class UserValidator
 
     public function __construct(
         private readonly Validator $validator,
+        private readonly UserFinderRepository $userFinderRepository,
     ) {
     }
 
@@ -106,10 +108,10 @@ class UserValidator
         $validationResult = new ValidationResult('There was a validation error when trying to login');
 
         // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
-        $this->validator->validateEmail($user->email, true, $validationResult);
+        $this->validator->validateEmail($user->email, $validationResult, true);
 
         // If the validation failed, throw the exception which will be caught in the Controller
-        $this->throwOnError($validationResult);
+        $this->validator->throwOnError($validationResult);
 
         return $validationResult;
     }
@@ -133,7 +135,7 @@ class UserValidator
             new ValidationResult('There was a validation with the passwords.');
 
         if ($passwords[0] !== $passwords[1]) {
-            $validationResult->setError('passwords', 'Passwords do not match');
+            $validationResult->setError('password2', 'Passwords do not match');
         }
 
         $this->validatePassword($passwords[0], $required, $validationResult);
@@ -143,6 +145,27 @@ class UserValidator
             // If the validation failed, throw the exception which will be caught in the Controller
             $this->validator->throwOnError($validationResult); // Thrown at the end so all errors are included
         }
+    }
+
+    /**
+     * Verifies if the given password is correct.
+     * Previously in own service class passwordVerifier, but it's simpler
+     * to display normal validation errors in the client form.
+     *
+     * @param string $password
+     * @param string $field
+     * @param int $userId
+     * @return void
+     */
+    public function validatePasswordCorrectness(string $password, string $field, int $userId): void
+    {
+        $validationResult = new ValidationResult('There is a validation error with the password.');
+        $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
+        // If password is not correct
+        if (!password_verify($password, $dbUser->passwordHash)) {
+            $validationResult->setError($field, 'Incorrect password');
+        }
+        $this->validator->throwOnError($validationResult);
     }
 
     /**

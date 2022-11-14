@@ -3,12 +3,11 @@
 namespace App\Application\Actions\Authentication;
 
 use App\Application\Responder\Responder;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Service\PasswordChanger;
-use App\Domain\Authentication\Service\VerificationTokenVerifier;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\Service\UserValidator;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -25,11 +24,10 @@ class PasswordResetSubmitAction
      * @param Responder $responder
      */
     public function __construct(
-        private Responder $responder,
-        private SessionInterface $session,
-        private VerificationTokenVerifier $verificationTokenChecker,
-        private PasswordChanger $passwordChanger,
-        private UserValidator $userValidator,
+        private readonly Responder $responder,
+        private readonly SessionInterface $session,
+        private readonly PasswordChanger $passwordChanger,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-service');
@@ -49,24 +47,17 @@ class PasswordResetSubmitAction
         $flash = $this->session->getFlash();
 
         // There may be other query params e.g. redirect
-        if (isset($parsedBody['id'], $parsedBody['token'], $parsedBody['password'], $parsedBody['password2'])) {
+        if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
+            $parsedBody,
+            ['id', 'token', 'password', 'password2'], ['redirect']
+        )) {
             try {
-                // Validate passwords BEFORE token as it would be set to usedAt even if passwords are not valid
-                $this->userValidator->validatePasswords([$parsedBody['password'], $parsedBody['password2']], true);
-
-                $userId = $this->verificationTokenChecker->getUserIdIfTokenIsValid(
+                $this->passwordChanger->resetPasswordWithToken(
+                    $parsedBody['password'],
+                    $parsedBody['password2'],
                     (int)$parsedBody['id'],
-                    $parsedBody['token'],
+                    $parsedBody['token']
                 );
-
-                // Log user in
-                // Clear all session data and regenerate session ID
-                $this->session->regenerateId();
-                // Add user to session
-                $this->session->set('user_id', $userId);
-
-                // Call function to change password AFTER login as it's used for normal password change too
-                $this->passwordChanger->changeUserPassword($parsedBody['password'], $parsedBody['password2']);
 
                 $flash->add('success', 'Successfully changed password. <b>You are now logged in.</b>');
 

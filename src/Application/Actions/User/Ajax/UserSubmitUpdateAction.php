@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Application\Actions\User;
+namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Service\UserUpdater;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -65,9 +66,9 @@ final class UserSubmitUpdateAction
                     $response,
                     [
                         'status' => 'error',
-                        'message' => 'You can only edit your user info or be an admin to edit others'
+                        'message' => 'Not allowed to edit data.'
                     ],
-                    403
+                    StatusCodeInterface::STATUS_FORBIDDEN
                 );
             }
 

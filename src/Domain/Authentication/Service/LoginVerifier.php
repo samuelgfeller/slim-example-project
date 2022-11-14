@@ -7,22 +7,30 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Security\Service\SecurityLoginChecker;
+use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class LoginVerifier
 {
 
+    private string $mainContactEmail;
+
     public function __construct(
-        private UserValidator $userValidator,
-        private SecurityLoginChecker $loginSecurityChecker,
-        private UserFinderRepository $userFinderRepository,
-        private RequestCreatorRepository $requestCreatorRepo,
-        private LoginNonActiveUserHandler $loginNonActiveUserHandler,
+        private readonly UserValidator $userValidator,
+        private readonly SecurityLoginChecker $loginSecurityChecker,
+        private readonly UserFinderRepository $userFinderRepository,
+        private readonly RequestCreatorRepository $requestCreatorRepo,
+        private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
+        readonly Settings $settings
     ) {
+        $this->mainContactEmail = $this->settings->get(
+            'public'
+        )['email']['main_contact_address'] ?? 'slim-example-project@samuel-gfeller.ch';
     }
 
     /**
@@ -65,28 +73,36 @@ class LoginVerifier
                 $unableToLoginException = new UnableToLoginStatusNotActiveException(
                     'Unable to login at the moment, please check your email inbox for a more detailed message.'
                 );
-                if ($dbUser->status === UserStatus::UNVERIFIED) {
-                    // Inform user via email that account is unverified, and he should click on the link in his inbox
-                    $this->loginNonActiveUserHandler->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
-                    // Throw exception to display error message in form
-                    throw $unableToLoginException;
+                try {
+                    if ($dbUser->status === UserStatus::UNVERIFIED) {
+                        // Inform user via email that account is unverified, and he should click on the link in his inbox
+                        $this->loginNonActiveUserHandler->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
+                        // Throw exception to display error message in form
+                        throw $unableToLoginException;
+                    }
+
+                    if ($dbUser->status === UserStatus::SUSPENDED) {
+                        // Inform user (only via mail) that he is suspended
+                        $this->loginNonActiveUserHandler->handleSuspendedUserLoginAttempt($dbUser);
+                        // Throw exception to display error message in form
+                        throw $unableToLoginException;
+                    }
+
+                    if ($dbUser->status === UserStatus::LOCKED) {
+                        // login fail and inform user (only via mail) that he is locked and provide unlock token
+                        $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
+                        // Throw exception to display error message in form
+                        throw $unableToLoginException;
+                    }
+                } catch (TransportException $transportException) {
+                    // Exception while sending email
+                    throw new UnableToLoginStatusNotActiveException(
+                        'Unable to login at the moment and there was an error when sending an email to you.' .
+                        "\n Please contact $this->mainContactEmail."
+                    );
                 }
 
-                if ($dbUser->status === UserStatus::SUSPENDED) {
-                    // Inform user (only via mail) that he is suspended
-                    $this->loginNonActiveUserHandler->handleSuspendedUserLoginAttempt($dbUser);
-                    // Throw exception to display error message in form
-                    throw $unableToLoginException;
-                }
-
-                if ($dbUser->status === UserStatus::LOCKED) {
-                    // login fail and inform user (only via mail) that he is locked and provide unlock token
-                    $this->loginNonActiveUserHandler->handleLockedUserLoginAttempt($dbUser, $queryParams);
-                    // Throw exception to display error message in form
-                    throw $unableToLoginException;
-                }
-
-                // todo invalid role in db. Send email to admin to inform that there is something wrong with the user
+                // todo invalid status in db. Send email to admin to inform that there is something wrong with the user
                 throw new \RuntimeException('Invalid status');
             }
         }

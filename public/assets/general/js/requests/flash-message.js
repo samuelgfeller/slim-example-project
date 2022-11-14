@@ -5,7 +5,7 @@
  * @param {string} typeName (success | error | warning | info)
  * @param {string} message flash message content
  */
-export function createFlashMessage(typeName, message) {
+export function displayFlashMessage(typeName, message) {
     // Wrapper
     let container = document.getElementById("flash-container");
     // If it isn't "undefined" and it isn't "null", then it exists.
