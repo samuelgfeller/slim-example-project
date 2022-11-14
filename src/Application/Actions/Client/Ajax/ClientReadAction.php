@@ -7,7 +7,7 @@ use App\Domain\Client\Service\ClientFinder;
 use App\Domain\Exceptions\ForbiddenException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpUnauthorizedException;
+use Slim\Exception\HttpForbiddenException;
 
 /**
  * Action.
@@ -45,7 +45,7 @@ final class ClientReadAction
             // https://stackoverflow.com/a/19287394/9013718
             return $this->responder->respondWithJson($response, $clientAggregate);
         } catch (ForbiddenException $forbiddenException){
-            throw new HttpUnauthorizedException($request, $forbiddenException->getMessage());
+            throw new HttpForbiddenException($request, $forbiddenException->getMessage());
         }
     }
 }

@@ -3,12 +3,14 @@
 namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
+use App\Domain\Exceptions\DomainRecordNotFoundException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpUnauthorizedException;
+use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * Action.
@@ -49,7 +51,9 @@ final class UserReadPageAction
                 'userStatuses' => UserStatus::cases(),
             ]);
         } catch (ForbiddenException $forbiddenException) {
-            throw new HttpUnauthorizedException($request, $forbiddenException->getMessage());
+            throw new HttpForbiddenException($request, $forbiddenException->getMessage());
+        } catch (DomainRecordNotFoundException $domainRecordNotFoundException){
+            throw new HttpNotFoundException($request, $domainRecordNotFoundException->getMessage());
         }
     }
 }

@@ -8,6 +8,7 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Service\NoteUpdater;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -80,7 +81,7 @@ final class NoteUpdateAction
                             'status' => 'error',
                             'message' => 'Not allowed to change note.'
                         ],
-                        403
+                        StatusCodeInterface::STATUS_FORBIDDEN
                     );
                 }
             }

@@ -6,6 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Client\Service\ClientDeleter;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -85,7 +86,7 @@ final class ClientDeleteAction
                 return $this->responder->respondWithJson(
                     $response,
                     ['status' => 'error', 'message' => 'Not allowed to delete client.'],
-                    403
+                    StatusCodeInterface::STATUS_FORBIDDEN
                 );
             }
         }

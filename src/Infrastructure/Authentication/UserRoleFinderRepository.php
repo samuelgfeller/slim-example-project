@@ -38,9 +38,9 @@ class UserRoleFinderRepository
      * Get role data from user that has status active
      *
      * @param int $userId
-     * @return UserRoleData null if user is not active
+     * @return UserRoleData|null null if user is not active
      */
-    public function getUserRoleDataFromUser(int $userId): UserRoleData
+    public function getUserRoleDataFromUser(int $userId): ?UserRoleData
     {
         $query = $this->queryFactory->newQuery()
             ->select(['user_role.id', 'user_role.name', 'user_role.hierarchy'])
@@ -48,11 +48,14 @@ class UserRoleFinderRepository
             ->leftJoin('user_role', ['user.user_role_id = user_role.id'])
             ->where(['user.deleted_at IS' => null, 'user.id' => $userId]);
         $roleResultRow = $query->execute()->fetch('assoc');
-        $userRoleData = new UserRoleData();
-        $userRoleData->id = $roleResultRow['id'];
-        $userRoleData->name = $roleResultRow['name'];
-        $userRoleData->hierarchy = $roleResultRow['hierarchy'];
-        return $userRoleData;
+        if ($roleResultRow !== false) {
+            $userRoleData = new UserRoleData();
+            $userRoleData->id = $roleResultRow['id'];
+            $userRoleData->name = $roleResultRow['name'];
+            $userRoleData->hierarchy = $roleResultRow['hierarchy'];
+            return $userRoleData;
+        }
+        return new UserRoleData();
     }
 
 

@@ -71,12 +71,15 @@ class PasswordChanger
         $this->userValidator->validatePasswords([$password1, $password2], true);
 
         if (!$this->userAuthorizationChecker->isGrantedToUpdate(['password_without_verification' => 'value'],
-            $userId)) {
+                $userId) &&
+            // Test password correctness only if user is allowed to change password hash as it's indicated to the user
+            $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
+        ) {
             // Verify old password; throws validation exception if not correct old password
             $this->userValidator->validatePasswordCorrectness($oldPassword, 'old_password', $userId);
         }
 
-        // Calls service function to change password
+        // Calls service function to check if authorized and change password
         $passwordUpdated = $this->updateUserPassword($password1, $userId);
 
         // Clear all session data and regenerate session ID if changed user is logged in
@@ -88,7 +91,7 @@ class PasswordChanger
     }
 
     /**
-     * Change user password
+     * Change user password if authorized
      *
      * @param string $newPassword
      * @param int $userId

@@ -5,8 +5,10 @@ namespace App\Application\Actions\User\Ajax;
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Service\PasswordChanger;
+use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -71,6 +73,13 @@ class ChangePasswordSubmitAction
                 return $this->responder->respondWithJsonOnValidationError(
                     $validationException->getValidationResult(),
                     $response,
+                );
+            } catch (ForbiddenException $forbiddenException){
+                // Not throwing HttpForbiddenException as it's a json request and response should be json too
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'error', 'message' => 'Not allowed to change password.'],
+                    StatusCodeInterface::STATUS_FORBIDDEN
                 );
             }
         }

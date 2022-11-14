@@ -9,6 +9,7 @@ use App\Domain\Note\Service\NoteCreator;
 use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\OutputEscapeService;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -81,7 +82,7 @@ final class NoteCreateAction
                             'status' => 'error',
                             'message' => 'Not allowed to create note.'
                         ],
-                        403
+                        StatusCodeInterface::STATUS_FORBIDDEN
                     );
                 }
 

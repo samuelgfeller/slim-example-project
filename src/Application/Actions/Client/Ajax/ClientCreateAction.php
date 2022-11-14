@@ -7,6 +7,7 @@ use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientCreator;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -79,7 +80,7 @@ final class ClientCreateAction
                             'status' => 'error',
                             'message' => 'Not allowed to create a client.'
                         ],
-                        403
+                        StatusCodeInterface::STATUS_FORBIDDEN
                     );
                 }
 

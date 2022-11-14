@@ -7,6 +7,7 @@ use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Service\NoteDeleter;
+use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -91,7 +92,7 @@ final class NoteDeleteAction
                 return $this->responder->respondWithJson(
                     $response,
                     ['status' => 'error', 'message' => 'You have to be note author to delete this note.'],
-                    403
+                    StatusCodeInterface::STATUS_FORBIDDEN
                 );
             }
         }

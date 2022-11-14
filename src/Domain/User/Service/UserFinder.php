@@ -4,6 +4,7 @@
 namespace App\Domain\User\Service;
 
 
+use App\Domain\Exceptions\DomainRecordNotFoundException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Authorization\UserAuthorizationGetter;
@@ -72,30 +73,36 @@ class UserFinder
     public function findUserReadResult(int $id): UserResultData
     {
         if ($this->userAuthorizationChecker->isGrantedToRead($id)) {
-            $userResultData = new UserResultData($this->userFinderRepository->findUserById($id), true);
-            // Status privilege
-            $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
-                'status',
-                $id
-            );
-            // Available user roles for dropdown and privilege
-            $privilegeAndAuthorizedRoles = $this->userAuthorizationGetter->getPrivilegeAndAuthorizedUserRolesForUser(
-                $userResultData->id,
-                $userResultData->user_role_id
-            );
-            $userResultData->userRolePrivilege = $privilegeAndAuthorizedRoles['privilege'];
-            $userResultData->availableUserRoles = $privilegeAndAuthorizedRoles['userRoles'];
-            // General data privilege like first name, email and so on
-            $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
-                'general_data',
-                $id
-            );
-            // Password change without verification of old password
-            $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
-            getUpdatePrivilegeForUserColumn('password_without_verification', $id);
+            $userRow = $this->userFinderRepository->findUserById($id);
+            if (!empty($userRow)) {
+                $userResultData = new UserResultData($userRow, true);
+                // Status privilege
+                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                    'status',
+                    $id
+                );
+                // Available user roles for dropdown and privilege
+                $privilegeAndAuthorizedRoles = $this->userAuthorizationGetter->getPrivilegeAndAuthorizedUserRolesForUser(
+                    $userResultData->id,
+                    $userResultData->user_role_id
+                );
+                $userResultData->userRolePrivilege = $privilegeAndAuthorizedRoles['privilege'];
+                $userResultData->availableUserRoles = $privilegeAndAuthorizedRoles['userRoles'];
+                // General data privilege like first name, email and so on
+                $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                    'general_data',
+                    $id
+                );
+                // Password change without verification of old password
+                $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
+                getUpdatePrivilegeForUserColumn('password_without_verification', $id);
 
-            return $userResultData;
+                return $userResultData;
+            }
+            // When user allowed to read, and it doesn't exist indicate that the resource was not found
+            throw new DomainRecordNotFoundException('User not found.');
         }
+        // Forbidden when not found and user is not allowed to read
         throw new ForbiddenException('Not allowed to read user.');
     }
 

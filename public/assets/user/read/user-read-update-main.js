@@ -30,7 +30,7 @@ if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
 }
 
 // Change password modal
-document.getElementById('change-password-btn').addEventListener('click', displayChangePasswordModal);
+document.getElementById('change-password-btn')?.addEventListener('click', displayChangePasswordModal);
 
 // Delegated event listener as element doesn't exist on page load
 // Submit form on submit button click

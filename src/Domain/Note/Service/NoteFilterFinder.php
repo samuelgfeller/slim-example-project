@@ -8,7 +8,6 @@ use App\Domain\Exceptions\UnauthorizedException;
 use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use Odan\Session\SessionInterface;
-use Slim\Exception\HttpUnauthorizedException;
 
 class NoteFilterFinder
 {
