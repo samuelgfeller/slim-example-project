@@ -29,7 +29,7 @@ class UserValidator
      */
     public function validateUserUpdate(int $userId, array $userValues): ValidationResult
     {
-        $validationResult = new ValidationResult('There was a validation error when trying to update a user');
+        $validationResult = new ValidationResult('There is a validation error when trying to update a user');
         // Check that user exists
         $this->validator->validateExistence($userId, 'user', $validationResult, true);
 
@@ -60,7 +60,7 @@ class UserValidator
     public function validateUserRegistration(UserData $user): ValidationResult
     {
         // Instantiate ValidationResult Object with default message
-        $validationResult = new ValidationResult('There was a validation error when trying to register');
+        $validationResult = new ValidationResult('There is a validation error when trying to register');
         // If user obj has null values that are validated, TypeError is thrown and that's correct as these are values
         // coming from the client and it needs to be checked earlier (in action) that they are set accordingly
         $this->validator->validateName($user->firstName, 'first_name', true, $validationResult);
@@ -84,7 +84,7 @@ class UserValidator
      */
     public function validateUserLogin(UserData $user): ValidationResult
     {
-        $validationResult = new ValidationResult('There was a validation error when trying to login');
+        $validationResult = new ValidationResult('There is a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
         $this->validator->validateEmail($user->email, $validationResult, true);
@@ -105,7 +105,7 @@ class UserValidator
      */
     public function validatePasswordResetEmail(UserData $user): ValidationResult
     {
-        $validationResult = new ValidationResult('There was a validation error when trying to login');
+        $validationResult = new ValidationResult('There is a validation error when trying to login');
 
         // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
         $this->validator->validateEmail($user->email, $validationResult, true);
@@ -132,7 +132,7 @@ class UserValidator
         $validationResultIsGiven = (bool)$validationResult;
         // Instantiate ValidationResult Object with default message if not already given
         $validationResult = $validationResult ??
-            new ValidationResult('There was a validation with the passwords.');
+            new ValidationResult('There is a validation error with the passwords.');
 
         if ($passwords[0] !== $passwords[1]) {
             $validationResult->setError('password2', 'Passwords do not match');

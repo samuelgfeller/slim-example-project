@@ -6,7 +6,6 @@ namespace App\Test\Provider\Note;
 
 use App\Domain\Authorization\Privilege;
 use App\Test\Fixture\FixtureTrait;
-use App\Test\Fixture\UserFixture;
 use Fig\Http\Message\StatusCodeInterface;
 
 class NoteCaseProvider
@@ -316,28 +315,36 @@ class NoteCaseProvider
     {
         return [
             [
-                [
+                // Empty body
+                'requestBody' => [],
+            ],
+            [
+                // Body "null" (because both can happen )
+                'requestBody' => null,
+            ],
+            [
+                'requestBody' => [
                     'message_wrong' => 'Message', // wrong message key name
                     'client_id' => 1,
                     'is_main' => 1,
                 ],
             ],
             [
-                [
+                'requestBody' => [
                     'message' => 'Message',
                     'client_id_wrong' => 1, // wrong client id
                     'is_main' => 1,
                 ],
             ],
             [
-                [
+                'requestBody' => [
                     'message' => 'Message',
                     'client_id' => 1,
                     'is_main_wrong' => 1, // wrong is_main
                 ],
             ],
             [
-                [ // One key too much
+                'requestBody' => [ // One key too much
                     'message' => 'Message',
                     'client_id' => 1,
                     'is_main' => 1,
@@ -345,7 +352,7 @@ class NoteCaseProvider
                 ],
             ],
             [
-                [ // Missing is_main
+                'requestBody' => [ // Missing is_main
                     'message' => 'Message',
                     'client_id' => 1,
                 ],

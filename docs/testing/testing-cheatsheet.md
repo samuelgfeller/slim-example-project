@@ -1176,7 +1176,7 @@ public function provideUsersForClientDelete(): array
 
 ## Test validation and assert errors example
 Form fields generally have specific criteria like a minimum length or specific format that are validated on the server.
-This hast to be tested.
+This has to be tested.
 ### Generate validation cases with a case provider
 To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
 For creation and modification the validity rules are the same so one provider can be used for both in this case.
@@ -1319,11 +1319,11 @@ This is the full test where a client is edited with invalid inputs given by the 
  * Test client values validation.
  *
  * @dataProvider \App\Test\Provider\Client\ClientCreateUpdateCaseProvider::invalidClientValuesAndExpectedResponseData()
- * @param $requestBody
- * @param $jsonResponse
+ * @param array $requestBody
+ * @param array $jsonResponse
  * @return void
  */
-public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
+public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
 {
     // Insert user that is allowed to change content
     $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
@@ -1366,28 +1366,36 @@ public function provideNoteMalformedRequestBodyForCreation(): array
 {
     return [
         [
-            [
+            // Empty body
+            'requestBody' => [],
+        ],
+        [
+            // Body "null" (because both can happen )
+            'requestBody' => null,
+        ],
+        [
+            'requestBody' => [
                 'message_wrong' => 'Message', // wrong message key name
                 'client_id' => 1,
                 'is_main' => 1,
             ],
         ],
         [
-            [
+            'requestBody' => [
                 'message' => 'Message',
                 'client_id_wrong' => 1, // wrong client id
                 'is_main' => 1,
             ],
         ],
         [
-            [
+            'requestBody' => [
                 'message' => 'Message',
                 'client_id' => 1,
                 'is_main_wrong' => 1, // wrong is_main
             ],
         ],
         [
-            [ // One key too much
+            'requestBody' => [ // One key too much
                 'message' => 'Message',
                 'client_id' => 1,
                 'is_main' => 1,
@@ -1395,7 +1403,7 @@ public function provideNoteMalformedRequestBodyForCreation(): array
             ],
         ],
         [
-            [ // Missing is_main
+            'requestBody' => [ // Missing is_main
                 'message' => 'Message',
                 'client_id' => 1,
             ],

@@ -88,11 +88,11 @@ class ChangePasswordSubmitAction
         // Prevent to log passwords
         $this->logger->error(
             'Password change request malformed. Array keys: ' . json_encode(
-                array_keys($parsedBody),
+                array_keys($parsedBody ?? []),
                 JSON_THROW_ON_ERROR
             )
         );
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
-        throw new HttpBadRequestException($request, 'Password change request malformed.');
+        throw new HttpBadRequestException($request, 'Request body malformed.');
     }
 }

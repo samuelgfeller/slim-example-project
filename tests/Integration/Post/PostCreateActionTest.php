@@ -4,15 +4,15 @@
 namespace App\Test\Integration\Post;
 
 
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 class PostCreateActionTest extends TestCase
@@ -69,12 +69,10 @@ class PostCreateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Post\PostCaseProvider::providePostCreateMalformedBody()
      *
+     * @param array $requestBodyArr
      * @return void
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function testPostCreateAction_malformedBody($requestBodyArr): void
+    public function testPostCreateAction_malformedBody(array $requestBodyArr): void
     {
         // Insert logged in user
         $userRow = (new UserFixture())->records[0];

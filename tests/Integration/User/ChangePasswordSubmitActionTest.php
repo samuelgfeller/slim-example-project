@@ -16,8 +16,8 @@ use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing password change from authenticated user
- *  - change password authenticated, correct old password
- *  - change password authenticated, invalid data -> 400 Bad request
+ *  - change password authenticated - authorization
+ *  - change password authenticated - invalid data -> 400 Bad request
  *  - change password not authenticated -> 302 to login page with correct redirect param
  *  - change password authenticated malformed request body -> HttpBadRequestException
  */
@@ -34,7 +34,7 @@ class ChangePasswordSubmitActionTest extends TestCase
     /**
      * Test user password change with different user roles
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::provideUserPasswordChangeAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::userPasswordChangeAuthorizationCases()
      */
     public function testChangePasswordSubmitAction_authorization(
         array $userToUpdateAttr,
@@ -73,7 +73,7 @@ class ChangePasswordSubmitActionTest extends TestCase
         // Assert that password was changed or not changed
         $dbPasswordHash = $this->getTableRowById('user', $userToUpdateRow['id'])['password_hash'];
         if ($expectedResult['db_changed'] === true) {
-            // Assert that password_hash starts with the beginning of a BCRYPT hash
+            // Assert that password_hash starts with the beginning of a BCRYPT hash.
             // Hash algo may change in the future, but it's not a big deal to update if tests fail
             self::assertStringStartsWith(
                 '$2y$10$',
@@ -82,7 +82,7 @@ class ChangePasswordSubmitActionTest extends TestCase
             );
             // Verify that hash matches the given password
             self::assertTrue(password_verify($newPassword, $dbPasswordHash));
-        }else{
+        } else {
             // Verify that hash matches the old password
             self::assertTrue(password_verify($oldPassword, $dbPasswordHash));
         }
@@ -91,103 +91,78 @@ class ChangePasswordSubmitActionTest extends TestCase
     }
 
     /**
-     * Test that backend validation fails when new passwords are invalid
+     * Test that user is redirected to login page if trying to access page unauthenticated
+     *
+     * @return void
      */
-    public function testChangePassword_invalidData(): void
+    public function testChangePasswordSubmitAction_unauthenticated(): void
     {
-        $oldPassword = '12345678'; // See fixture
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
-        $userId = $userRow['id'];
-
-        // Simulate logged-in user with id 2
-        $this->container->get(SessionInterface::class)->set('user_id', $userId);
-
-        $request = $this->createFormRequest(
-            'POST', // Request to change password
-            $this->urlFor('change-password-submit'),
-            [
-                'old_password' => $oldPassword,
-                'password' => '1', // too short
-                'password2' => '12', // too short and not similar
-            ]
-        );
-
+        // Request body doesn't have to be passed as missing session is caught in a middleware before the action
+        $request = $this->createJsonRequest('PUT', $this->urlFor('change-password-submit', ['user_id' => 1]));
+        // Create url where user should be redirected to after login
+        $redirectToUrlAfterLogin = $this->urlFor('user-read-page', ['user_id' => 1]);
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+        // Make request
         $response = $this->app->handle($request);
-
-        // Assert that response has error status 422
-        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-
-        // As form is directly rendered with validation errors it's not possible to test them as response is a stream
-        // There is a visual test in insomnia for this, but I couldn't manage to keep the login session
+        // Assert response HTTP status code: 401 Unauthorized
+        self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
+        // Build expected login url as UserAuthenticationMiddleware.php does
+        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+        // Assert that response contains correct login url
+        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 
     /**
-     * When user is not logged in, the code goes to the Action class which returns $response with code 401
-     * but then goes through UserAuthMiddleware.php which redirects to the login page (code 302).
+     * Test that backend validation fails when new passwords are invalid
+     *
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::invalidPasswordChangeCases()
+     * @param array $requestBody
+     * @param array $jsonResponse
+     * @return void
      */
-    public function testChangePassword_notLoggedIn(): void
+    public function testChangePasswordSubmitAction_invalid(array $requestBody, array $jsonResponse): void
     {
-        // NOT simulate login and not necessary to insert fixture
+        // Insert user that is allowed to change content
+        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class);
 
-        $request = $this->createFormRequest(
-            'POST', // Request to change password
-            $this->urlFor('change-password-submit'),
-            [
-                'old_password' => '12345678',
-                'password' => '123456789',
-                'password2' => '123456789',
-            ]
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('change-password-submit', ['user_id' => $userRow['id']]),
+            $requestBody
         );
-
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
-
-        // Assert: 302 Found meaning redirect (to login page)
-        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-
-        // Test that redirect link after login is correct
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor('change-password-page')]);
-        $actualUrl = $response->getHeaderLine('Location');
-        self::assertSame($expectedLoginUrl, $actualUrl);
+        // Assert 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        // database should be unchanged
+        $this->assertTableRowEquals($userRow, 'user', $userRow['id']);
+        $this->assertJsonData($jsonResponse, $response);
     }
-
 
     /**
      * Empty or malformed request body is when parameters are not set or have
-     * the wrong name ("key").
+     * the wrong name ('key').
      *
-     * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user because that means that
-     * there is an error with the client sending the request that has to be fixed.
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::malformedPasswordChangeRequestCases()
      *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::malformedPasswordChangeRequestBodyProvider()
-     *
-     * @param array|null $malformedBody null for the case that request body is null
-     * @param string $message
+     * @param array|null $malformedRequestBody null for the case that request body is null
      */
-    public function testChangePassword_malformedBody(null|array $malformedBody, string $message): void
+    public function testChangePasswordSubmitAction_malformedBody(null|array $malformedRequestBody): void
     {
-        $oldPassword = '12345678'; // See fixture
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
-        $userId = $userRow['id'];
-
-        // Simulate logged-in user with id 2
-        $this->container->get(SessionInterface::class)->set('user_id', $userId);
-
-        $malformedRequest = $this->createFormRequest(
-            'POST', // Request to change password
-            $this->urlFor('change-password-submit'),
-            $malformedBody
+        // Action class should directly return error so only logged-in user has to be inserted
+        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('change-password-submit', ['user_id' => $userRow['id']]),
+            $malformedRequestBody
         );
-
         // Bad Request (400) means that the client sent the request wrongly; it's a client error
         $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage($message);
-
+        $this->expectExceptionMessage('Request body malformed.');
         // Handle request after defining expected exceptions
-        $this->app->handle($malformedRequest);
+        $this->app->handle($request);
     }
 }

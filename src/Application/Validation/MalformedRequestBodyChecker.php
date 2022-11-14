@@ -20,7 +20,7 @@ class MalformedRequestBodyChecker
     {
         // Init $amount to be the amount of the required keys meaning
         $amount = count($requiredKeys);
-        foreach ($parsedBody as $key => $item) {
+        foreach ($parsedBody ?? [] as $key => $item) {
             // isset cannot be used in this context as it returns false if the key exists but is null, and we don't want
             // to test required fields here, just that the request body syntax is right
             if (in_array($key, $requiredKeys, true)) {
@@ -35,6 +35,6 @@ class MalformedRequestBodyChecker
             }
         }
         // Check that all required keys are set plus the additional ones if there were some
-        return count($parsedBody) === $amount;
+        return count($parsedBody ?? []) === $amount;
     }
 }

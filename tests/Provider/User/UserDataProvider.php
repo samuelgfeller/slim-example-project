@@ -426,49 +426,39 @@ class UserDataProvider
     }
 
     /**
-     * Provide malformed bodies for password change submit request as well as
-     * according error messages
-     * @return array[]
-     */
-    public function malformedPasswordChangeRequestBodyProvider(): array
-    {
-        return [
-            [
-                // Empty body
-                'body' => [],
-                'message' => 'Password change request malformed.',
-            ],
-            [
-                // Body "null" (because both can happen )
-                'body' => null,
-                'message' => 'Password change request malformed.',
-            ],
-            [
-                // Leaving out 'old_password'
-                'body' => [
-                    'password' => '',
-                    'password2' => '',
+         * Provide malformed bodies for password change submit request as well as
+         * according error messages
+         *
+         * @return array[]
+         */
+        public function malformedPasswordChangeRequestCases(): array
+        {
+            return [
+                [
+                    // Empty body
+                    'requestBody' => [],
                 ],
-                'message' => 'Password change request malformed.',
-            ],
-            [
-                // Leaving out 'password'
-                'body' => [
-                    'old_password' => '',
-                    'password2' => '',
+                [
+                    // Body "null" (because both can happen )
+                    'requestBody' => null,
                 ],
-                'message' => 'Password change request malformed.',
-            ],
-            [
-                // Leaving out 'password2'
-                'body' => [
-                    'old_password' => '',
-                    'password' => '',
+                // Missing 'old_password' currently not tested as it's not required when privileged user tries to modify other user
+                [
+                    // Missing  'password'
+                    'requestBody' => [
+                        'old_password' => '',
+                        'password2' => '',
+                    ],
                 ],
-                'message' => 'Password change request malformed.',
-            ],
-        ];
-    }
+                [
+                    // Missing 'password2'
+                    'requestBody' => [
+                        'old_password' => '',
+                        'password' => '',
+                    ],
+                ],
+            ];
+        }
 
     /**
      * Provide malformed request bodies for password reset submit request as well as

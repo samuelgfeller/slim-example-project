@@ -7,17 +7,15 @@ namespace App\Test\Integration\Client;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -115,11 +113,11 @@ class ClientUpdateActionTest extends TestCase
      * Test client values validation.
      *
      * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::invalidClientUpdateValuesAndExpectedResponseData()
-     * @param $requestBody
-     * @param $jsonResponse
+     * @param array $requestBody
+     * @param array $jsonResponse
      * @return void
      */
-    public function testClientSubmitUpdateAction_invalid($requestBody, $jsonResponse): void
+    public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];

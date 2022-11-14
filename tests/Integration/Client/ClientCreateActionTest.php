@@ -6,16 +6,16 @@ namespace App\Test\Integration\Client;
 
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\FixtureTrait;
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -115,9 +115,11 @@ class ClientCreateActionTest extends TestCase
      * Test client creation values validation.
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::invalidClientCreationValuesAndExpectedResponseData()
+     * @param array $requestBody
+     * @param array $jsonResponse
      * @return void
      */
-    public function testClientSubmitCreateAction_invalid($requestBody, $jsonResponse): void
+    public function testClientSubmitCreateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
@@ -175,9 +177,10 @@ class ClientCreateActionTest extends TestCase
      * Test client creation with malformed request body
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::malformedRequestBody()
+     * @param array $requestBody
      * @return void
      */
-    public function testClientSubmitCreateAction_malformedRequest($requestBody): void
+    public function testClientSubmitCreateAction_malformedRequest(array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
