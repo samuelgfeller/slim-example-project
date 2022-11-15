@@ -39,6 +39,8 @@ final class UserCreateSubmitAction
                 'first_name',
                 'surname',
                 'email',
+                'status',
+                'user_role_id',
                 'password',
                 'password2',
             ], ['g-recaptcha-response'])) {

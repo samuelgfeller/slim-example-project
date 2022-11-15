@@ -15,7 +15,7 @@ export function requestDropdownOptions(moduleRoute) {
                 if (xHttp.status !== 200) {
                     // Default fail handler
                     handleFail(xHttp);
-                    reject();
+                    // reject() only needed if promise is caught with .catch()
                 }
                 // Success
                 else {

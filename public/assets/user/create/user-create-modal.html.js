@@ -9,21 +9,21 @@ import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
 export function displayUserCreateModal() {
     let header = '<h2>Create user</h2>';
     let body = `<div>
-<form action="javascript:void(0);" class="wide-modal-form" id="create-client-modal-form">
+<form action="javascript:void(0);" class="wide-modal-form" id="create-user-modal-form">
         <div class="modal-form-input-group">
             <label for="first-name-input">First name</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
-            minlength="2" maxlength="100">
+            minlength="2" maxlength="100" required>
         </div>
         <div class="modal-form-input-group">
             <label for="last-name-input">Last name</label>
             <input type="text" name="surname" id="last-name-input" placeholder="Zimmer" class="form-input" 
-            minlength="2" maxlength="100">
+            minlength="2" maxlength="100" required>
         </div>
         <div class="modal-form-input-group">
             <label for="email-input">E-Mail</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
-            maxlength="254">
+            maxlength="254" required>
         </div>
         <div class="modal-form-input-group">
             <label for="password1-inp">New password</label>
@@ -35,13 +35,13 @@ export function displayUserCreateModal() {
         </div>
         <div class="modal-form-input-group">
             <label for="user-status-select">Status</label>
-            <select name="status" class="form-select" id="user-status-select">
+            <select name="status" class="form-select" id="user-status-select" required>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
         <div class="modal-form-input-group">
             <label for="user-role-select">User role</label>
-            <select name="user_role_id" id="user-role-select" class="form-select">
+            <select name="user_role_id" id="user-role-select" class="form-select" required>
             <!-- Dropdown options loaded afterwards -->
             </select>
         </div>

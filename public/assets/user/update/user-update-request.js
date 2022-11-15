@@ -22,6 +22,7 @@ export function submitUserUpdate(formFieldsAndValues) {
                     handleFail(xHttp);
                     console.log(xHttp.responseText);
                     resolve(false);
+                    // reject() only needed if promise is caught with .catch()
                 }
                 // Success
                 else {

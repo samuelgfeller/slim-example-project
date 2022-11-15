@@ -22,12 +22,12 @@ return function (App $app) {
 
 
     // Authentication - pages and Ajax submit
-    $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(
-        'register-page'
-    );
-    $app->post('/register', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
-        'register-submit'
-    );
+    // $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(
+    //     'register-page'
+    // );
+    // $app->post('/register', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
+    //     'register-submit'
+    // );
 
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName('login-submit');
@@ -90,6 +90,10 @@ return function (App $app) {
             '/dropdown-options',
             \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class
         )->setName('user-list-dropdown');
+
+        $group->post('', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
+           'user-submit-create'
+       );
 
         $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
