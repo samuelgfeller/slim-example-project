@@ -5,7 +5,7 @@ namespace App\Test\Provider\Note;
 
 
 use App\Domain\Authorization\Privilege;
-use App\Test\Fixture\FixtureTrait;
+use App\Test\Traits\FixtureTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class NoteCaseProvider

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Test\Fixture;
+namespace App\Test\Traits;
 
 
 use Selective\TestTrait\Traits\DatabaseTestTrait;

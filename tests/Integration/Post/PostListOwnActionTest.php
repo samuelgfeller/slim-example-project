@@ -3,10 +3,10 @@
 namespace App\Test\Integration\Post;
 
 use App\Domain\Post\Data\UserNoteData;
-use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\FixtureTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

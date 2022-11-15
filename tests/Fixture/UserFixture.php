@@ -4,6 +4,7 @@ namespace App\Test\Fixture;
 
 /**
  * User values that can be inserted into the database
+ * * All user roles are inserted automatically for each test (in AppTestTrait)
  */
 class UserFixture
 {

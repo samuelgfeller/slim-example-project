@@ -5,10 +5,8 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Service\NoteValidator;
-use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
+use App\Domain\Validation\Validator;
 
 /**
  * Client user input validator
@@ -109,7 +107,7 @@ class ClientValidator
     // Validate functions for each field
 
     /**
-     * Validate client location input
+     * Validate client user id dropdown
      *
      * @param $value
      * @param ValidationResult $validationResult
@@ -128,7 +126,7 @@ class ClientValidator
     }
 
     /**
-     * Validate client location input
+     * Validate client status dropdown
      *
      * @param mixed $value
      * @param ValidationResult $validationResult
@@ -188,7 +186,7 @@ class ClientValidator
     }
 
     /**
-     * Validate client sex input
+     * Validate client sex options
      *
      * @param $value
      * @param ValidationResult $validationResult
@@ -208,7 +206,7 @@ class ClientValidator
     }
 
     /**
-     * Validate client phone input
+     * Validate client message input
      *
      * @param $value
      * @param ValidationResult $validationResult

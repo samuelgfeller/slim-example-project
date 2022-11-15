@@ -11,13 +11,13 @@ document.querySelector('#edit-email-btn')?.addEventListener('click', makeUserFie
 const statusSelect = document.querySelector('select[name="status"]:not([disabled])');
 statusSelect?.addEventListener('change', () => {
     submitUserUpdate({[statusSelect.name]: statusSelect.value}).then(success =>
-        success === true ? displayFlashMessage('success', 'Successfully changed password.') : null
+        success === true ? displayFlashMessage('success', 'Successfully changed status.') : null
     );
 });
 const userRoleSelect = document.querySelector('select[name="user_role_id"]:not([disabled])');
 userRoleSelect?.addEventListener('change', () => {
     submitUserUpdate({[userRoleSelect.name]: userRoleSelect.value}).then( success =>
-        success === true ? displayFlashMessage('success', 'Successfully changed password.') : null
+        success === true ? displayFlashMessage('success', 'Successfully changed role.') : null
     );
 });
 

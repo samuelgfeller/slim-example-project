@@ -31,7 +31,7 @@ This is a big question I have no answer to yet. For me the following useful test
     Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page
 * Ajax resource creation / modification / deletion
   * Authenticated creation / modification / deletion submission
-    * User rights: creation / modification / deletion submit with each different user role as authenticated user
+    * Authorization (privilege): creation / modification / deletion submit with each different user role as authenticated user
       1. Each role as resource owner (main resource owner for creation) - *e.g. role "newcomer" and owner, "advisor" and owner etc.*
       2. Each role NOT as owner - *e.g. role "newcomer" and not owner, "advisor" and not owner etc.*
          * Not every role is needed as roles work in a hierarchical way. It doesn't have to be tested further than the lowest 
@@ -347,21 +347,21 @@ are allowed to edit others' notes.
 public function provideUserAttributesAndExpectedResultForNoteList(): array
 {
     // Get users with the different roles
-    $managingAdvisorRow = ['user_role_id' => 2];
-    $advisorRow = ['user_role_id' => 3];
-    $newcomerRow = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => 2];
+    $advisorAttr = ['user_role_id' => 3];
+    $newcomerAttr = ['user_role_id' => 4];
     return [
         [// ? newcomer not owner of note
-            'note_owner' => $advisorRow,
-            'authenticated_user' => $newcomerRow,
+            'note_owner' => $advisorAttr,
+            'authenticated_user' => $newcomerAttr,
             'expected_result' => [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                 'privilege' => Privilege::CREATE
             ],
         ],
         [// ? newcomer owner of note
-            'note_owner' => $newcomerRow,
-            'authenticated_user' => $newcomerRow,
+            'note_owner' => $newcomerAttr,
+            'authenticated_user' => $newcomerAttr,
             'expected_result' => [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                 'privilege' => Privilege::DELETE
@@ -369,8 +369,8 @@ public function provideUserAttributesAndExpectedResultForNoteList(): array
         ],
         // Advisor owner would be the same as newcomer
         [// ? managing advisor not owner of note
-            'note_owner' => $advisorRow,
-            'authenticated_user' => $managingAdvisorRow,
+            'note_owner' => $advisorAttr,
+            'authenticated_user' => $managingAdvisorAttr,
             'expected_result' => [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                 // Full privilege, so it must not be tested further
@@ -407,9 +407,9 @@ privileges and expected results.
 public function provideUserAttributesAndExpectedResultForNoteCUD(): array
 {
     // Set different user role attributes
-    $managingAdvisorAttributes = ['user_role_id' => 2];
-    $advisorAttributes = ['user_role_id' => 3];
-    $newcomerAttributes = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => 2];
+    $advisorAttr = ['user_role_id' => 3];
+    $newcomerAttr = ['user_role_id' => 4];
     $authorizedResult = [
         // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
         // https://stackoverflow.com/a/2342589/9013718
@@ -437,8 +437,8 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
     return [
         [ // ? newcomer not owner
             // User to whom the note (or client for creation) is linked
-            'owner_user' => $advisorAttributes,
-            'authenticated_user' => $newcomerAttributes,
+            'owner_user' => $advisorAttr,
+            'authenticated_user' => $newcomerAttr,
             'expected_result' => [
                 // Allowed to create note on client where user is not owner
                 'creation' => $authorizedCreateResult,
@@ -454,8 +454,8 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
         ],
         [ // ? newcomer owner
             // User to whom the note (or client for creation) is linked
-            'owner_user' => $newcomerAttributes,
-            'authenticated_user' => $newcomerAttributes,
+            'owner_user' => $newcomerAttr,
+            'authenticated_user' => $newcomerAttr,
             'expected_result' => [
                 'creation' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
@@ -473,8 +473,8 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
         ],
         [ // ? advisor owner
             // User to whom the note (or client for creation) is linked
-            'owner_user' => $advisorAttributes,
-            'authenticated_user' => $advisorAttributes,
+            'owner_user' => $advisorAttr,
+            'authenticated_user' => $advisorAttr,
             'expected_result' => [
                 'creation' => [ // Allowed to create note on client where user is not owner
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
@@ -491,8 +491,8 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
         ],
         [ // ? advisor not owner
             // User to whom the note (or client for creation) is linked
-            'owner_user' => $managingAdvisorAttributes,
-            'authenticated_user' => $advisorAttributes,
+            'owner_user' => $managingAdvisorAttr,
+            'authenticated_user' => $advisorAttr,
             'expected_result' => [
                 'creation' => $authorizedCreateResult,
                 'modification' => [
@@ -507,8 +507,8 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
         ],
         [ // ? managing advisor not owner
             // User to whom the note (or client for creation) is linked
-            'owner_user' => $advisorAttributes,
-            'authenticated_user' => $managingAdvisorAttributes,
+            'owner_user' => $advisorAttr,
+            'authenticated_user' => $managingAdvisorAttr,
             'expected_result' => [
                 'creation' => $authorizedCreateResult,
                 'modification' => [
@@ -861,9 +861,9 @@ public function testClientSubmitCreateAction_authorization(
 public function provideUsersAndExpectedResultForClientCreation(): array
 {
     // Get users with different roles
-    $managingAdvisorAttributes = ['user_role_id' => 2];
-    $advisorAttributes = ['user_role_id' => 3];
-    $newcomerAttributes = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => 2];
+    $advisorAttr = ['user_role_id' => 3];
+    $newcomerAttr = ['user_role_id' => 4];
     $authorizedResult = [
         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
         'db_entry_created' => true,
@@ -881,25 +881,25 @@ public function provideUsersAndExpectedResultForClientCreation(): array
         ]
     ];
     return [
-        // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+        // "owner" means from the perspective of the authenticated user
         [ // ? Newcomer owner - not allowed
-            'user_linked_to_client' => $newcomerAttributes,
-            'authenticated_user' => $newcomerAttributes,
+            'user_linked_to_client' => $newcomerAttr,
+            'authenticated_user' => $newcomerAttr,
             'expected_result' => $unauthorizedResult
         ],
         [ // ? Advisor owner - allowed
-            'user_linked_to_client' => $advisorAttributes,
-            'authenticated_user' => $advisorAttributes,
+            'user_linked_to_client' => $advisorAttr,
+            'authenticated_user' => $advisorAttr,
             'expected_result' => $authorizedResult,
         ],
         [ // ? Advisor not owner - not allowed
-            'user_linked_to_client' => $newcomerAttributes,
-            'authenticated_user' => $advisorAttributes,
+            'user_linked_to_client' => $newcomerAttr,
+            'authenticated_user' => $advisorAttr,
             'expected_result' => $unauthorizedResult,
         ],
         [ // ? Managing not owner - allowed
-            'user_linked_to_client' => $advisorAttributes,
-            'authenticated_user' => $managingAdvisorAttributes,
+            'user_linked_to_client' => $advisorAttr,
+            'authenticated_user' => $managingAdvisorAttr,
             'expected_result' => $authorizedResult,
         ],
     ];
@@ -987,9 +987,9 @@ public function testClientSubmitUpdateAction_authenticated(
 public function provideUsersAndExpectedResultForClientUpdate(): array
 {
     // Set different user role attributes
-    $managingAdvisorRow = ['user_role_id' => 2];
-    $advisorRow = ['user_role_id' => 3];
-    $newcomerRow = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => 2];
+    $advisorAttr = ['user_role_id' => 3];
+    $newcomerAttr = ['user_role_id' => 4];
     $authorizedResult = [
         StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
         'db_changed' => true,
@@ -1019,42 +1019,42 @@ public function provideUsersAndExpectedResultForClientUpdate(): array
     // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database
     return [
         // * Newcomer
-        // User role and when "owner" is mentioned, it is always from the perspective of the authenticated user
+        // "owner" means from the perspective of the authenticated user
         [ // ? Newcomer owner - data to be changed is the one with the least privilege needed - not allowed
-            'user_linked_to_client' => $newcomerRow,
-            'authenticated_user' => $newcomerRow,
+            'user_linked_to_client' => $newcomerAttr,
+            'authenticated_user' => $newcomerAttr,
             'data_to_be_changed' => ['first_name' => 'value'],
             'expected_result' => $unauthorizedResult
         ],
         // * Advisor
         [ // ? Advisor owner - data to be changed allowed
-            'user_linked_to_client' => $advisorRow,
-            'authenticated_user' => $advisorRow,
+            'user_linked_to_client' => $advisorAttr,
+            'authenticated_user' => $advisorAttr,
             'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
             'expected_result' => $authorizedResult,
         ],
         [ // ? Advisor owner - data to be changed not allowed
-            'user_linked_to_client' => $advisorRow,
-            'authenticated_user' => $advisorRow,
+            'user_linked_to_client' => $advisorAttr,
+            'authenticated_user' => $advisorAttr,
             'data_to_be_changed' => ['user_id' => 'new'],
             'expected_result' => $unauthorizedResult,
         ],
         [ // ? Advisor not owner - data to be changed allowed
-            'user_linked_to_client' => $managingAdvisorRow,
-            'authenticated_user' => $advisorRow,
+            'user_linked_to_client' => $managingAdvisorAttr,
+            'authenticated_user' => $advisorAttr,
             'data_to_be_changed' => $basicClientDataChanges,
             'expected_result' => $authorizedResult,
         ],
         [ // ? Advisor not owner - data to be changed not allowed
-            'user_linked_to_client' => $managingAdvisorRow,
-            'authenticated_user' => $advisorRow,
+            'user_linked_to_client' => $managingAdvisorAttr,
+            'authenticated_user' => $advisorAttr,
             'data_to_be_changed' => ['client_status_id' => 'new'],
             'expected_result' => $unauthorizedResult,
         ],
         // * Managing advisor
         [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
-            'user_linked_to_client' => $advisorRow,
-            'authenticated_user' => $managingAdvisorRow,
+            'user_linked_to_client' => $advisorAttr,
+            'authenticated_user' => $managingAdvisorAttr,
             'data_to_be_changed' => array_merge(
                 $basicClientDataChanges,
                 ['client_status_id' => 'new', 'user_id' => 'new']
@@ -1129,9 +1129,9 @@ public function testClientSubmitDeleteAction_authenticated(
 public function provideUsersForClientDelete(): array
     {
         // Get users with different roles
-        $managingAdvisorAttributes = ['user_role_id' => 2];
-        $advisorAttributes = ['user_role_id' => 3];
-        $newcomerAttributes = ['user_role_id' => 4];
+        $managingAdvisorAttr = ['user_role_id' => 2];
+        $advisorAttr = ['user_role_id' => 3];
+        $newcomerAttr = ['user_role_id' => 4];
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             'db_changed' => true,
@@ -1153,20 +1153,20 @@ public function provideUsersForClientDelete(): array
             // * Newcomer
             [ // ? Newcomer owner - not allowed
                 // Technically this test case is not relevant as higher hierarchy role is also not allowed to perform action  
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $newcomerAttributes,
+                'user_linked_to_client' => $newcomerAttr,
+                'authenticated_user' => $newcomerAttr,
                 'expected_result' => $unauthorizedResult
             ],
             // * Advisor
             [ // ? Advisor owner - not allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $advisorAttr,
                 'expected_result' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor not owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
                 'expected_result' => $authorizedResult,
             ],
         ];

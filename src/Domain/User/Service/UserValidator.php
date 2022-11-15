@@ -4,6 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 use App\Infrastructure\User\UserFinderRepository;
@@ -42,6 +43,12 @@ class UserValidator
         }
         if (array_key_exists('email', $userValues)) {
             $this->validator->validateEmail($userValues['email'], $validationResult, false);
+        }
+        if (array_key_exists('status', $userValues)) {
+            $this->validateUserStatus($userValues['status'], $validationResult, false);
+        }
+        if (array_key_exists('user_role_id', $userValues)) {
+            $this->validateUserRoleId($userValues['user_role_id'], $validationResult, false);
         }
 
         // If the validation failed, throw the exception that will be caught in the Controller
@@ -198,110 +205,50 @@ class UserValidator
         }
     }
 
-    protected function validateUserExistence($userId, ValidationResult $validationResult): void
-    {
-        $exists = $this->userExistenceCheckerRepository->rowExists($userId);
-        if (!$exists) {
-            $validationResult->setMessage('User not found');
-            $validationResult->setError('user', 'User not existing');
-
-            $this->logger->debug('Check for user (id: ' . $userId . ') that didn\'t exist in validation');
+    /**
+     * Validate user role select
+     *
+     * @param mixed $value
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
+    protected function validateUserRoleId(
+        mixed $value,
+        ValidationResult $validationResult,
+        bool $required = false
+    ): void {
+        if (null !== $value && '' !== $value) {
+            $this->validator->validateNumeric($value, 'user_role_id', $validationResult, $required);
+            $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required);
+        } elseif (true === $required) {
+            // If it is null or empty string and required
+            $validationResult->setError('user_role_id', 'User role is required but not given');
         }
     }
 
+     /**
+     * Validate user status dropdown
+     *
+     * @param mixed $value
+     * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
+     */
+    protected function validateUserStatus(
+        mixed $value,
+        ValidationResult $validationResult,
+        bool $required = false
+    ): void {
+        if (null !== $value && '' !== $value) {
+            // Check if given user status is one of the enum cases
+            if(!in_array($value, array_column(UserStatus::cases(), 'value'), true)){
+                $validationResult->setError('status', 'Status not existing');
+            }
+        } elseif (true === $required) {
+            // If it is null or empty string and required
+            $validationResult->setError('client_status_id', 'client_status_id is required but not given');
+        }
+    }
 
-
-    // unused from björn original
-
-//    /**
-//     * Validate loading the user.
-//     *
-//     * @param string $userId
-//     * @return ValidationResult
-//     */
-//    public function validateGet(string $userId): ValidationResult
-//    {
-//        $validationResult = new ValidationResult('User does not exist');
-//        $this->validateUserExistence($userId, $validationResult);
-//
-//        return $validationResult;
-//    }
-//
-//
-//    /**
-//     * Validate deletion.
-//     *
-//     * @param string $userId
-//     * @param string $executorId
-//     * @return ValidationResult
-//     */
-//    public function validateDeletion(string $userId, string $executorId): ValidationResult
-//    {
-//        $validationResult = new ValidationResult('Something went wrong');
-//        $this->validateUserExistence($userId, $validationResult);
-//
-//        return $validationResult;
-//    }
-
-//    /**
-//     * Validate username.
-//     *
-//     * @param string $username
-//     * @param ValidationResult $validationResult
-//     */
-//    private function validateUsername(string $username, ValidationResult $validationResult)
-//    {
-//        $this->validateLengthMax($username, 'username', $validationResult, 80);
-//        $this->validateLengthMin($username, 'username', $validationResult, 3);
-//        if ($validationResult->fails()) {
-//            return;
-//        }
-//        if ($this->userRepository->existsUserByUsername($username)) {
-//            $validationResult->setError('username', __('Username already taken'));
-//        }
-//        if (preg_match('/((^|, )(admin|user|nicola|bjoern|björn|penis|69|420))+$/', $username)) {
-//            $validationResult->setError('username', __('OOOOH you filthy one...'));
-//        }
-//    }
-//
-//    /**
-//     * Validate the old password
-//     *
-//     * @param string $userId
-//     * @param string $oldPassword
-//     * @param ValidationResult $validationResult
-//     * @return void
-//     */
-//    private function validateOldPassword(string $userId, string $oldPassword, ValidationResult $validationResult)
-//    {
-//        $correctPassword = $this->userRepository->checkPassword($userId, $oldPassword);
-//        if (!$correctPassword) {
-//            $validationResult->setError('passwordOld', __('Does not match the old password'));
-//        }
-//    }
-//
-//
-//    /**
-//     * Validate firstname.
-//     *
-//     * @param string $firstName
-//     * @param ValidationResult $validationResult
-//     */
-//    private function validateFirstname(string $firstName, ValidationResult $validationResult)
-//    {
-//        $this->validateLengthMax($firstName, 'firstname', $validationResult, 80);
-//        $this->validateLengthMin($firstName, 'firstname', $validationResult, 3);
-//    }
-//
-//    /**
-//     * Validate lastname.
-//     *
-//     * @param string $lastName
-//     * @param ValidationResult $validationResult
-//     */
-//    private function validateLastname(string $lastName, ValidationResult $validationResult)
-//    {
-//        $this->validateLengthMax($lastName, 'lastname', $validationResult, 80);
-//        $this->validateLengthMin($lastName, 'lastname', $validationResult, 3);
-//    }
 }

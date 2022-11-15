@@ -204,10 +204,13 @@
     }
 
     .err-msg {
-        padding: 10px 0 0 15px;
+        padding-top: 10px;
         display: block;
         color: #9f0009;
         font-size: 15px;
+    }
+    form .err-msg{
+        padding-left: 15px;
     }
 
     #form-general-error-msg {

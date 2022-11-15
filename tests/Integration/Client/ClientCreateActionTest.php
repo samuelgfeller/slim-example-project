@@ -5,10 +5,10 @@ namespace App\Test\Integration\Client;
 
 
 use App\Test\Fixture\ClientStatusFixture;
-use App\Test\Fixture\FixtureTrait;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
+use App\Test\Traits\FixtureTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

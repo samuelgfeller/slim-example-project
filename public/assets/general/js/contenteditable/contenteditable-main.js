@@ -45,7 +45,7 @@ export function makeFieldEditable(field) {
     });
 }
 
-export function disableEditableField(field){
+export function disableEditableField(field) {
     let fieldContainer = field.parentNode;
 
     // If empty submit value successfully submitted, and it doesn't have data-hide-if-empty="true",
@@ -57,7 +57,7 @@ export function disableEditableField(field){
     fieldContainer.querySelector('.contenteditable-edit-icon').style.display = null; // Default display
     // I don't know why but the focusout event is triggered multiple times when clicking on the edit icon again
     let saveIcon = fieldContainer.querySelector('.contenteditable-save-icon');
-    saveIcon.style.background = 'red';
+
     // Only remove it if it exists to prevent error in case field was unchanged and save icon not displayed
     saveIcon?.remove();
 }

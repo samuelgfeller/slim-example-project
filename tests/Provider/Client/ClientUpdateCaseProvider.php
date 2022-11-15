@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Client;
 
-use App\Test\Fixture\FixtureTrait;
+use App\Test\Traits\FixtureTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientUpdateCaseProvider

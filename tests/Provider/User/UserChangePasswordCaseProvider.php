@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\User;
 
-use App\Test\Fixture\FixtureTrait;
+use App\Test\Traits\FixtureTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserChangePasswordCaseProvider
@@ -154,7 +154,8 @@ class UserChangePasswordCaseProvider
                 // Body "null" (because both can happen )
                 'requestBody' => null,
             ],
-            // Missing 'old_password' currently not tested as it's not required when privileged user tries to modify other user
+            // Missing 'old_password' currently not tested as it's not required when privileged user tries to
+            // modify other user
             [
                 // Missing  'password'
                 'requestBody' => [

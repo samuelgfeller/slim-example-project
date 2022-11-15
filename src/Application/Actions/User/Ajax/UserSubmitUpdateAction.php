@@ -6,13 +6,17 @@ use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
+use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserUpdater;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
 
 final class UserSubmitUpdateAction
 {
+    private LoggerInterface $logger;
 
     /**
      * The constructor.
@@ -25,8 +29,10 @@ final class UserSubmitUpdateAction
         private readonly Responder $responder,
         private readonly UserUpdater $userUpdater,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
+        LoggerFactory $loggerFactory
 
     ) {
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-update-action');
     }
 
     /**
@@ -66,7 +72,7 @@ final class UserSubmitUpdateAction
                     $response,
                     [
                         'status' => 'error',
-                        'message' => 'Not allowed to edit data.'
+                        'message' => 'Not allowed to update user.'
                     ],
                     StatusCodeInterface::STATUS_FORBIDDEN
                 );
@@ -81,5 +87,15 @@ final class UserSubmitUpdateAction
                 ['status' => 'warning', 'message' => 'User wasn\'t updated']
             );
         }
+
+        // Prevent to log passwords
+        $this->logger->error(
+            'Password change request malformed. Array keys: ' . json_encode(
+                array_keys($userValuesToChange ?? []),
+                JSON_THROW_ON_ERROR
+            )
+        );
+        // Caught in error handler which displays error page because if POST request body is empty frontend has error
+        throw new HttpBadRequestException($request, 'Request body malformed.');
     }
 }
