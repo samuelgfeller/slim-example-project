@@ -26,6 +26,6 @@ class UserRoleFinder
 
     public function findAllUserRolesForDropdown(): array
     {
-        return $this->userRoleFinderRepository->findAllUserRoles();
+        return $this->userRoleFinderRepository->findAllUserRolesForDropdown();
     }
 }

@@ -38,7 +38,7 @@ class AccountUnlockActionTest extends TestCase
     {
         // Insert locked user
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::LOCKED;
+        $userRow['status'] = UserStatus::Locked;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -64,7 +64,7 @@ class AccountUnlockActionTest extends TestCase
         self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is active on user
-        $this->assertTableRowValue(UserStatus::ACTIVE, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Active, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is set meaning user is logged-in
@@ -85,7 +85,7 @@ class AccountUnlockActionTest extends TestCase
     ): void {
         // Insert locked user
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::LOCKED;
+        $userRow['status'] = UserStatus::Locked;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -114,7 +114,7 @@ class AccountUnlockActionTest extends TestCase
             $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
         );
         // Assert that status is still locked on user
-        $this->assertTableRowValue(UserStatus::LOCKED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Locked, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is null meaning user is NOT logged-in

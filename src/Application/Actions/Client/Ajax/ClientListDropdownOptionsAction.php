@@ -4,14 +4,12 @@ namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\Client\Service\ClientUtilFinder;
-use App\Domain\Exceptions\UnauthorizedException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ClientUtilGetDropdownOptionsAction
+class ClientListDropdownOptionsAction
 {
     /**
      * The constructor.
@@ -41,7 +39,6 @@ class ClientUtilGetDropdownOptionsAction
         array $args
     ): ResponseInterface {
         try {
-            // Retrieve posts with given filter values (or none)
             $dropdownOptions = $this->clientUtilFinder->findClientDropdownValues();
         } catch (InvalidClientFilterException $invalidClientFilterException) {
             return $this->responder->respondWithJson(

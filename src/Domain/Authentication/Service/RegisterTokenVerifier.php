@@ -35,10 +35,10 @@ final class RegisterTokenVerifier
         $userStatus = $this->userFinder->findUserById($verification->userId)->status;
 
         // Check if user is already verified
-        if (UserStatus::UNVERIFIED !== $userStatus) {
+        if (UserStatus::Unverified !== $userStatus) {
             // User is not unverified anymore, that means that user already clicked on the link
             throw new UserAlreadyVerifiedException(
-                'User has not status "' . UserStatus::UNVERIFIED->value . '"'
+                'User has not status "' . UserStatus::Unverified->value . '"'
             );
         }
         // Check that verification has token in the database and token is not used
@@ -47,7 +47,7 @@ final class RegisterTokenVerifier
             if ($verification->expiresAt > time() && true === password_verify($token, $verification->token)) {
                 // Change user status to active
                 $hasUpdated = $this->userUpdaterRepository->changeUserStatus(
-                    UserStatus::ACTIVE,
+                    UserStatus::Active,
                     $verification->userId
                 );
                 if ($hasUpdated === true) {
@@ -57,7 +57,7 @@ final class RegisterTokenVerifier
                 }
                 // If somehow the record could not be updated
                 throw new \DomainException(
-                    'User status could not be set to "' . UserStatus::ACTIVE->value . '"'
+                    'User status could not be set to "' . UserStatus::Active->value . '"'
                 );
             }
             // Same exception messages than AuthServiceUserVerificationTest.php

@@ -23,15 +23,14 @@ $this->addAttribute('css', [
 $this->addAttribute(
     'js',
     [
-        'assets/general/js/modal.js',
     ]
 );
 // Js files that import things from other js files
 $this->addAttribute(
     'jsModules',
     [
-        'assets/user/list/js/user-list-main.js',
-        // 'assets/client/js/create/client-create-main.js',
+        'assets/user/list/user-list-main.js',
+        'assets/user/create/user-create-main.js',
     ]
 );
 
@@ -80,8 +79,7 @@ $this->addAttribute(
                         <?php
                         foreach ($user->availableUserRoles as $id => $userRole) {
                             $selected = $id === $user->user_role_id ? 'selected' : '';
-                            echo "<option value='$id' $selected>" .
-                                ucfirst(str_replace('_', ' ', $userRole)) . "</option>";
+                            echo "<option value='$id' $selected>" . $userRole . "</option>";
                         }
                         ?>
                     </select></td>

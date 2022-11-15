@@ -2,6 +2,8 @@
 
 namespace App\Domain\Client\Data;
 
+use App\Domain\General\Enum\SexOption;
+
 /**
  * All status, sex and users for dropdowns
  */
@@ -10,16 +12,15 @@ class ClientDropdownValuesData
     // [int:id => string:name]
     public ?array $statuses;
     public ?array $users;
-    public ?array $sexes = ['M' => 'Male', 'F' => 'Female', 'O' => 'Other'];
+    public ?array $sexes;
 
     public function __construct(
         ?array $statuses = null,
         ?array $users = null,
-        // ?array $sexes = null,
     )
     {
         $this->statuses = $statuses;
         $this->users = $users;
-        // $this->sexes = $sexes;
+        $this->sexes = SexOption::array();
     }
 }

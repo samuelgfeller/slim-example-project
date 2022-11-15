@@ -1,4 +1,8 @@
 import {createModal} from "../../../general/js/modal/modal.js";
+import {requestDropdownOptions} from "../../../general/js/modal/dropdown-request.js";
+import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-util.js";
+import {getRadioButtonsAsHtml} from "./client-template-util.js";
+import {displayFlashMessage} from "../../../general/js/requests/flash-message.js";
 
 /**
  * Create and display modal box to create a new client
@@ -66,4 +70,29 @@ export function displayClientCreateModal() {
     document.getElementById('client-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
     let container = document.getElementById('create-client-div');
     createModal(header, body, footer, container);
+
+    // Load dropdown options into client create modal
+    requestDropdownOptions('clients').then((dropdownOptions) => {
+        addClientDropdownOptionsToCreateModal(dropdownOptions);
+    });
+}
+
+/**
+ * Render loaded dropdown options and radio buttons to create modal form
+ *
+ * @param dropdownOptions
+ */
+function addClientDropdownOptionsToCreateModal(dropdownOptions) {
+    if (dropdownOptions.hasOwnProperty('users') && dropdownOptions.hasOwnProperty('statuses')
+        && dropdownOptions.hasOwnProperty('sexes')
+    ) {
+        let assignedUserOptions = getDropdownAsHtmlOptions(dropdownOptions.users);
+        document.getElementById('assigned-user-select').insertAdjacentHTML("beforeend", assignedUserOptions);
+        let clientStatusDropdown = getDropdownAsHtmlOptions(dropdownOptions.statuses);
+        document.getElementById('client-status-select').insertAdjacentHTML('beforeend', clientStatusDropdown);
+        let clientSexRadioButtons = getRadioButtonsAsHtml(dropdownOptions.sexes, 'sex');
+        document.getElementById('client-sex-input-group-div').insertAdjacentHTML('beforeend', clientSexRadioButtons);
+    } else {
+        displayFlashMessage('error', 'Something went wrong while loading dropdown options.')
+    }
 }

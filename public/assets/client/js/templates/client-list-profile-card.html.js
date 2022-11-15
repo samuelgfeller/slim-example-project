@@ -1,5 +1,6 @@
-import {getAvatarPath, getDropdownAsHtmlOptions} from "./client-template-util.js";
+import {getAvatarPath} from "./client-template-util.js";
 import {escapeHtml} from "../../../general/js/functions.js";
+import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-util.js";
 
 /**
  * HTML code for client profile card

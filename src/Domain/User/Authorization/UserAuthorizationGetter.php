@@ -35,7 +35,7 @@ class UserAuthorizationGetter
      */
     public function getPrivilegeAndAuthorizedUserRolesForUser(int $userId, ?int $attributedUserRoleId): array
     {
-        $allUserRoles = $this->userRoleFinderRepository->findAllUserRoles();
+        $allUserRoles = $this->userRoleFinderRepository->findAllUserRolesForDropdown();
         $grantedUserRoles = [];
         foreach ($allUserRoles as $id => $roleName) {
             // If the role is already attributed to user the value is added so that it's displayed in the template

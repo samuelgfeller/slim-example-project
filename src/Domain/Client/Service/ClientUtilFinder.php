@@ -26,7 +26,7 @@ class ClientUtilFinder
     public function findClientDropdownValues(): ClientDropdownValuesData
     {
         return new ClientDropdownValuesData(
-            $this->clientStatusFinderRepository->findAllStatusesForDropdown(),
+            $this->clientStatusFinderRepository->findAllClientStatusesForDropdown(),
             $this->userNameAbbreviator->abbreviateUserNamesForDropdown($this->userFinderRepository->findAllUsers()),
         );
     }

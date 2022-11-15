@@ -11,7 +11,7 @@ return function (App $app) {
     // Home page
 //    $app->redirect('/', 'hello', 301)->setName('home-page');
     $app->get('/hello[/{name}]', \App\Application\Actions\Hello\HelloAction::class)->setName('hello');
-    $app->post('/hello', function ($request, $response){
+    $app->post('/hello', function ($request, $response) {
         // var_dump($request->getParsedBody(), $request->getQueryParams());
         return $response;
     })->setName('hello-test-post');
@@ -74,7 +74,10 @@ return function (App $app) {
         'change-password-page'
     )->add(UserAuthenticationMiddleware::class);
     // Submit new password when authenticated (post and not put as form submit)
-    $app->put('/change-password/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class)->setName(
+    $app->put(
+        '/change-password/{user_id:[0-9]+}',
+        \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class
+    )->setName(
         'change-password-submit'
     )->add(UserAuthenticationMiddleware::class);
 
@@ -83,9 +86,14 @@ return function (App $app) {
         $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('', \App\Application\Actions\User\UserListPageAction::class)->setName('user-list');
 
+        $group->get(
+            '/dropdown-options',
+            \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class
+        )->setName('user-list-dropdown');
+
         $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
-        ->setName('user-read-page');
+            ->setName('user-read-page');
         $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)->setName(
             'user-update-submit'
         );
@@ -111,8 +119,8 @@ return function (App $app) {
         // Client create and update form are rendered by the client and need to have the dropdown options
         $group->get(
             '/dropdown-options',
-            \App\Application\Actions\Client\Ajax\ClientUtilGetDropdownOptionsAction::class
-        )->setName('client-list');
+            \App\Application\Actions\Client\Ajax\ClientListDropdownOptionsAction::class
+        )->setName('client-list-dropdown');
         /* For api response action:
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
          https://stackoverflow.com/a/19287394/9013718 */

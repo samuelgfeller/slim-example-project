@@ -1,4 +1,4 @@
-import {basePath} from "../../../general/js/config.js";
+import {basePath} from "../../general/js/config.js";
 
 let userTableRows = document.querySelectorAll('tbody tr');
 for (let tr of userTableRows){

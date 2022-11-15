@@ -28,7 +28,7 @@ export function displayChangePasswordModal() {
     <input type="password" name="password2" id="password2-inp" minlength="3" required class="form-input">
     </div>
     </div>`;
-    let footer = `<button type="button" id="change-password-submit-btn" class="btn modal-submit-btn">Change password
+    let footer = `<button type="button" id="change-password-submit-btn" class="submit-btn modal-submit-btn">Change password
     </button></form>
     <div class="clearfix">
     </div>`

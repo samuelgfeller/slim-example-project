@@ -67,7 +67,7 @@ class UserCreator
         $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
 
         // Set default status and role
-        $user->status = $user->status ?? UserStatus::UNVERIFIED;
+        $user->status = $user->status ?? UserStatus::Unverified;
         $user->user_role_id = $user->user_role_id ??
             $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
 

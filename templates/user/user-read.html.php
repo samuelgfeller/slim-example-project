@@ -82,8 +82,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <?php
             foreach ($user->availableUserRoles as $id => $userRole) {
                 $selected = $id === $user->user_role_id ? 'selected' : '';
-                echo "<option value='$id' $selected>" .
-                    ucfirst(str_replace('_', ' ', $userRole)) . "</option>";
+                echo "<option value='$id' $selected>" . $userRole . "</option>";
             }
             ?>
         </select>

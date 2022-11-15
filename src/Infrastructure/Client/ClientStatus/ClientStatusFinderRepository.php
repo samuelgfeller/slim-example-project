@@ -18,7 +18,7 @@ class ClientStatusFinderRepository
      *
      * @return array{id: string, name: string}
      */
-    public function findAllStatusesForDropdown(): array
+    public function findAllClientStatusesForDropdown(): array
     {
         $query = $this->queryFactory->newQuery()->from('client_status');
 

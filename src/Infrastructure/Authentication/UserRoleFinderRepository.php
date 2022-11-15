@@ -87,7 +87,7 @@ class UserRoleFinderRepository
      *
      * @return array{id: string, name: string}
      */
-    public function findAllUserRoles(): array
+    public function findAllUserRolesForDropdown(): array
     {
         $query = $this->queryFactory->newQuery()->from('user_role');
 
@@ -95,7 +95,7 @@ class UserRoleFinderRepository
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
-            $userRoles[(int)$resultRow['id']] = $resultRow['name'];
+            $userRoles[(int)$resultRow['id']] = ucfirst(str_replace('_', ' ', $resultRow['name']));
         }
         return $userRoles;
     }

@@ -2,12 +2,19 @@
 
 namespace App\Domain\User\Enum;
 
+use App\Domain\Utility\Trait\EnumToArray;
+
+/**
+ * User authentication status
+ */
 enum UserStatus: string
 {
-    // User authentication status
-    case UNVERIFIED = 'unverified'; // Default after registration
-    case ACTIVE = 'active'; // Verified via token received in email
-    case LOCKED = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
-    case SUSPENDED = 'suspended'; // User suspended, account holder not allowed to login even via email
+    use EnumToArray;
+
+    // First letter uppercase and rest lowercase as names are used as labels in html form
+    case Unverified = 'unverified'; // Default after registration
+    case Active = 'active'; // Verified via token received in email
+    case Locked = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
+    case Suspended = 'suspended'; // User suspended, account holder not allowed to login even via email
 
 }

@@ -43,7 +43,7 @@ class UserAlreadyExistingHandler
      */
     public function handleVerifiedExistingUser(UserData $existingUser): bool
     {
-        if ($existingUser->status === UserStatus::SUSPENDED) {
+        if ($existingUser->status === UserStatus::Suspended) {
             try {
                 $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
             } catch (TransportException $e) {
@@ -55,7 +55,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === UserStatus::LOCKED) {
+        if ($existingUser->status === UserStatus::Locked) {
             try {
                 $this->mailer->sendRegisterExistingLockedUser($existingUser);
             } catch (TransportException $e) {
@@ -67,7 +67,7 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        if ($existingUser->status === UserStatus::ACTIVE) {
+        if ($existingUser->status === UserStatus::Active) {
             try {
                 $this->mailer->sendRegisterExistingActiveUser($existingUser);
 

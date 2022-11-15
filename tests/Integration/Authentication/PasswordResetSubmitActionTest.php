@@ -89,7 +89,7 @@ class PasswordResetSubmitActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::UNVERIFIED;
+        $userRow['status'] = UserStatus::Unverified;
         $this->insertFixture('user', $userRow);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -121,7 +121,7 @@ class PasswordResetSubmitActionTest extends TestCase
         );
 
         // Assert that password was not changed to the new one
-        $this->assertTableRowValue(UserStatus::UNVERIFIED, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Unverified, 'user', $userRow['id'], 'status');
 
         // Assert that user is not logged in
         self::assertNull($this->container->get(SessionInterface::class)->get('user_id'));

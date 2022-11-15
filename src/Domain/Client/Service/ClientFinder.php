@@ -7,7 +7,6 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Authorization\ClientAuthorizationGetter;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\ForbiddenException;
@@ -56,7 +55,7 @@ class ClientFinder
         $clientResultCollection->clients = $this->clientFinderRepository->findClientsWithResultAggregate(
             $queryBuilderWhereArray
         );
-        $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllStatusesForDropdown();
+        $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesForDropdown();
         $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
             $this->userFinderRepository->findAllUsers()
         );

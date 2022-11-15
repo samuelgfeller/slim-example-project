@@ -49,11 +49,11 @@ class RegisterTokenVerifierTest extends TestCase
         // Return active user (empty user, only status is populated)
         $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be already active for exception to be thrown
-            new UserData(['status' => UserStatus::ACTIVE])
+            new UserData(['status' => UserStatus::Active])
         );
 
         $this->expectException(UserAlreadyVerifiedException::class);
-        $this->expectExceptionMessage('User has not status "' . UserStatus::UNVERIFIED . '"');
+        $this->expectExceptionMessage('User has not status "' . UserStatus::Unverified . '"');
 
         // Call function under test
         $this->container->get(RegisterTokenVerifier::class)->getUserIdIfRegisterTokenIsValid(

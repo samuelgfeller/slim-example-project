@@ -35,7 +35,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
         // Check if user is logged in
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             // Check that the user status is active
-            if ($this->userFinder->findUserById($loggedInUserId)->status === UserStatus::ACTIVE) {
+            if ($this->userFinder->findUserById($loggedInUserId)->status === UserStatus::Active) {
                 return $handler->handle($request);
             }
             // Log user out if not active
