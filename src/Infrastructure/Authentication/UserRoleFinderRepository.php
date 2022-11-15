@@ -99,4 +99,18 @@ class UserRoleFinderRepository
         }
         return $userRoles;
     }
+
+    /**
+     * Find the id of a user role with the given name
+     *
+     * @param string $roleName
+     */
+    public function findUserRoleIdByName(string $roleName): ?int
+    {
+        $query = $this->queryFactory->newQuery()->from('user_role');
+
+        $query->select(['id'])->where(['name' => $roleName]);
+        $resultRow = $query->execute()->fetch('assoc') ?: [];
+        return (int)$resultRow['id'] ?? null;
+    }
 }

@@ -64,19 +64,21 @@ class UserValidator
      * @return ValidationResult
      * @throws ValidationException
      */
-    public function validateUserRegistration(UserData $user): ValidationResult
+    public function validateUserCreation(UserData $user): ValidationResult
     {
         // Instantiate ValidationResult Object with default message
         $validationResult = new ValidationResult('There is a validation error when trying to register');
-        // If user obj has null values that are validated, TypeError is thrown and that's correct as these are values
-        // coming from the client and it needs to be checked earlier (in action) that they are set accordingly
-        $this->validator->validateName($user->firstName, 'first_name', true, $validationResult);
-        $this->validator->validateName($user->surname, 'surname', true, $validationResult);
-        $this->validator->validateEmail($user->email, true, $validationResult);
+
+        if ($this->validator->resourceExistenceCheckerRepository->rowExists(['email' => $user->email], 'user')){
+            $validationResult->setError('email', 'User with this email already exists');
+        }
+        $this->validator->validateName($user->firstName, 'first_name', $validationResult, true);
+        $this->validator->validateName($user->surname, 'surname', $validationResult, true);
+        $this->validator->validateEmail($user->email, $validationResult, true);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
-        // If the validation failed, throw the exception which will be caught in the Controller
-        $this->validator->throwOnError($validationResult); // Thrown at the end so all errors are included
+        // If the validation failed, throw the exception which will be caught in the Action
+        $this->validator->throwOnError($validationResult);
 
         return $validationResult;
     }
@@ -220,7 +222,8 @@ class UserValidator
     ): void {
         if (null !== $value && '' !== $value) {
             $this->validator->validateNumeric($value, 'user_role_id', $validationResult, $required);
-            $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required);
+            // Excluding soft delete false as user_role has no deleted_at
+            $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required, false);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('user_role_id', 'User role is required but not given');

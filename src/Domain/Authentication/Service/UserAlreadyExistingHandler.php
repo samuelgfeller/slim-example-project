@@ -44,13 +44,12 @@ class UserAlreadyExistingHandler
     public function handleVerifiedExistingUser(UserData $existingUser): bool
     {
         if ($existingUser->status === UserStatus::SUSPENDED) {
-            // Todo inform user (only via mail) that he is suspended and isn't allowed to create a new account
             try {
                 $this->mailer->sendRegisterExistingSuspendedUser($existingUser);
             } catch (TransportException $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
-            } catch (\Throwable $e) { // For phpRenderer ->fetch()
+            } catch (\Throwable $e) { // For phpRenderer ->fetch() while parsing email template
                 $this->logger->error($e->getMessage());
             }
             return false;
@@ -59,7 +58,6 @@ class UserAlreadyExistingHandler
         if ($existingUser->status === UserStatus::LOCKED) {
             try {
                 $this->mailer->sendRegisterExistingLockedUser($existingUser);
-
             } catch (TransportException $e) {
                 // We try to hide if an email already exists or not so if email fails, nothing is done
                 $this->logger->error($e->getMessage());
@@ -82,7 +80,6 @@ class UserAlreadyExistingHandler
             return false;
         }
 
-        // todo invalid role in db. Send email to admin to inform that there is something wrong with the user
         throw new \RuntimeException('Invalid role');
     }
 }

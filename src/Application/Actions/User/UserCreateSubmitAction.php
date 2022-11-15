@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Application\Actions\Authentication;
+namespace App\Application\Actions\User;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Service\UserRegisterer;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\User\Service\UserCreator;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -14,56 +15,49 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class RegisterSubmitAction
+final class UserCreateSubmitAction
 {
     protected LoggerInterface $logger;
 
     public function __construct(
         LoggerFactory $logger,
         protected Responder $responder,
-        protected UserRegisterer $userRegisterer,
-        private SessionInterface $session
+        protected UserCreator $userRegisterer,
+        private readonly SessionInterface $session,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-register');
+        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-create-action');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         $flash = $this->session->getFlash();
-        $userData = $request->getParsedBody();
+        $userValues = $request->getParsedBody();
 
-        if (null !== $userData && [] !== $userData) {
-            // ? If a html form name changes, these changes have to be done in the data class constructor
-            // ? (and the array keys in the "if" condition below) too since these names will be the keys of the ArrayReader
-            // Check that request body syntax is formatted right (one more when captcha)
-            $requiredAreSet = isset(
-                $userData['first_name'], $userData['surname'], $userData['email'], $userData['password'], $userData['password2']
-            );
-            if (
-                ($requiredAreSet && count($userData) === 5) ||
-                ($requiredAreSet && (count($userData) === 6 && isset($userData['g-recaptcha-response'])))
-            ) {
+        if (null !== $userValues && [] !== $userValues) {
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($userValues, [
+                'first_name',
+                'surname',
+                'email',
+                'password',
+                'password2',
+            ], ['g-recaptcha-response'])) {
                 // Populate $captcha var if reCAPTCHA response is given
-                $captcha = $userData['g-recaptcha-response'] ?? null;
+                $captcha = $userValues['g-recaptcha-response'] ?? null;
 
                 try {
                     // Throws exception if there is error and returns false if user already exists
-                    $insertId = $this->userRegisterer->registerUser($userData, $captcha, $request->getQueryParams());
+                    $insertId = $this->userRegisterer->createUser($userValues, $captcha, $request->getQueryParams());
                     // Say email has been sent even when user exists as it should be kept secret
                     $flash->add('success', 'Email has been sent.');
-                    $flash->add(
-                        'warning',
+                    $flash->add('warning',
                         'Your account is not active yet. <br>
 Please click on the link in the email to finnish the registration.'
                     );
                 } catch (ValidationException $validationException) {
-                    return $this->responder->renderOnValidationError(
-                        $response, 'authentication/register.html.php', $validationException, $request->getQueryParams(),
-                        [
-                            'firstName' => $userData['first_name'],
-                            'surname' => $userData['surname'],
-                            'email' => $userData['email']
-                        ]
+                    return $this->responder->respondWithJsonOnValidationError(
+                        $validationException->getValidationResult(),
+                        $response
                     );
                 } catch (TransportExceptionInterface $e) {
                     $flash->add('error', 'Email error. Please try again. ' . "<br> Message: " . $e->getMessage());
@@ -88,17 +82,17 @@ Please click on the link in the email to finnish the registration.'
                         $se,
                         $request->getQueryParams(),
                         [
-                            'firstName' => $userData['first_name'],
-                            'surname' => $userData['surname'],
-                            'email' => $userData['email']
+                            'firstName' => $userValues['first_name'],
+                            'surname' => $userValues['surname'],
+                            'email' => $userValues['email']
                         ],
                     );
                 }
 
                 if ($insertId !== false) {
-                    $this->logger->info('User "' . $userData['email'] . '" created');
+                    $this->logger->info('User "' . $userValues['email'] . '" created');
                 } else {
-                    $this->logger->info('Account creation tried with existing email: "' . $userData['email'] . '"');
+                    $this->logger->info('Account creation tried with existing email: "' . $userValues['email'] . '"');
                 }
                 // Redirect for new user and if email already exists is the same
 //                return $response;
@@ -106,8 +100,8 @@ Please click on the link in the email to finnish the registration.'
             }
             $flash->add('error', 'Malformed request body syntax');
             // Prevent to log passwords; if keys not set unset() will not trigger notice or warning
-            unset($userData['password'], $userData['password2']);
-            $this->logger->error('POST request body malformed: ' . json_encode($userData));
+            unset($userValues['password'], $userValues['password2']);
+            $this->logger->error('POST request body malformed: ' . json_encode($userValues));
             // Caught in error handler which displays error page because if POST request body is empty frontend has error
             // Error message same as in tests/Provider/UserProvider->malformedRequestBodyProvider()
             throw new HttpBadRequestException($request, 'Request body malformed.');

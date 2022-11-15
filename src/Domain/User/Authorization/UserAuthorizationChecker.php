@@ -41,14 +41,18 @@ class UserAuthorizationChecker
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-            // Newcomer is not allowed to do anything
-            // Only user editing his own profile or managing advisor may change users
+            // Newcomer and advisor are not allowed to do anything from other users - only user edit his own profile
+            // Managing advisor may change users
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
-                // Managing advisors can do everything with users except the role
+                // Managing advisors can do everything with users except setting a role higher than advisor
                 if ($userData->user_role_id !== null &&
                     // The user role can't be set higher than advisor
-                    $userRoleHierarchiesById[$userData->user_role_id] >= $userRoleHierarchies[UserRole::ADVISOR->value]) {
+                    $userRoleHierarchiesById[$userData->user_role_id] >= $userRoleHierarchies[UserRole::ADVISOR->value]
+                ) {
+                    return true;
+                }
+                if ($userData->user_role_id === null) {
                     return true;
                 }
             }

@@ -25,7 +25,7 @@ return function (App $app) {
     $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(
         'register-page'
     );
-    $app->post('/register', \App\Application\Actions\Authentication\RegisterSubmitAction::class)->setName(
+    $app->post('/register', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
         'register-submit'
     );
 

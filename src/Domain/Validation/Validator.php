@@ -21,10 +21,10 @@ final class Validator
      * be instantiated otherwise
      *
      * @param LoggerFactory $logger
-     * @param ResourceExistenceCheckerRepository $userExistenceCheckerRepository
+     * @param ResourceExistenceCheckerRepository $resourceExistenceCheckerRepository
      */
     public function __construct(
-        private readonly ResourceExistenceCheckerRepository $userExistenceCheckerRepository,
+        public readonly ResourceExistenceCheckerRepository $resourceExistenceCheckerRepository,
         LoggerFactory $logger,
     ) {
         // Not LoggerFactory since the instance is created in child class. AppValidation is never instantiated
@@ -200,9 +200,10 @@ final class Validator
         string $table,
         ValidationResult $validationResult,
         bool $required = false,
+        bool $excludingSoftDelete = true
     ): void {
         if (null !== $rowId && $rowId !== 0) {
-            $exists = $this->userExistenceCheckerRepository->rowExists($rowId, $table);
+            $exists = $this->resourceExistenceCheckerRepository->rowExists(['id' => $rowId], $table, $excludingSoftDelete);
             if (!$exists) {
                 $validationResult->setError($table, ucfirst(str_replace('_', ' ', $table)) .
                     ' not existing');
