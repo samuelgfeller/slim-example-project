@@ -23,7 +23,7 @@ document.addEventListener('click', e => {
             return;
         }
         // Submit modal form and execute promise "then()" only if available (nothing is returned on validation error)
-        submitModalForm('create-client-modal-form', 'clients')?.then(() => {
+        submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
             displayFlashMessage('success', 'Client created successfully.');
             loadClients();
         })

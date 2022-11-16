@@ -1,7 +1,8 @@
 import {makeUserFieldEditable} from "./user-update-contenteditable.js";
-import {submitChangePassword, submitUserUpdate} from "../update/user-update-request.js";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js";
 import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
+import {submitModalForm} from "../../general/js/modal/modal-submit-request.js";
+import {submitUserUpdate} from "../update/user-update-request.js";
 
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);
@@ -36,6 +37,10 @@ document.getElementById('change-password-btn')?.addEventListener('click', displa
 // Submit form on submit button click
 document.addEventListener('click', e => {
     if (e.target && e.target.id === 'change-password-submit-btn') {
-        submitChangePassword();
+        let userId = document.getElementById('user-id').value;
+        submitModalForm('change-password-modal-form', `change-password/${userId}`, 'PUT', `users/${userId}`)
+            .then(() => {
+                displayFlashMessage('success', 'Successfully changed password.');
+            });
     }
 });

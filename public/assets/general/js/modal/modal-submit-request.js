@@ -4,13 +4,16 @@ import {closeModal} from "./modal.js";
 import {basePath} from "../config.js";
 
 /**
- * Check form validity, disable form and submit modal form
+ * Check form validity, disable form, submit modal form and close it on success
  *
  * @param {string} modalFormId
- * @param {string} route POST module route like "users" or "clients"
+ * @param {string} moduleRoute POST module route like "users" or "clients"
+ * @param {string} httpMethod POST or PUT
+ @param {string|null} redirectUrlIfUnauthenticated url after base path. If redirect route is the same as the
+ * location where the user was before submitting the modal form, it's not needed. Example: "users/1"
  * @return void|Promise
  */
-export function submitModalForm(modalFormId, route) {
+export function submitModalForm(modalFormId, moduleRoute, httpMethod, redirectUrlIfUnauthenticated = null) {
     // Check if form content is valid (frontend validation)
     let modalForm = document.getElementById(modalFormId);
     if (modalForm.checkValidity() === false) {
@@ -46,9 +49,11 @@ export function submitModalForm(modalFormId, route) {
             }
         };
 
-        xHttp.open('POST', basePath + route, true);
+        xHttp.open(httpMethod, basePath + moduleRoute, true);
         xHttp.setRequestHeader("Content-type", "application/json");
-
+        if (redirectUrlIfUnauthenticated !== null) {
+            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + redirectUrlIfUnauthenticated);
+        }
         // Data format: "fname=Henry&lname=Ford"
         xHttp.send(JSON.stringify(formData));
     });

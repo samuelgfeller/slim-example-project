@@ -1,8 +1,5 @@
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requests/fail-handler.js";
 import {basePath} from "../../general/js/config.js";
-import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
-import {getFormData, toggleEnableDisableForm} from "../../general/js/modal/modal-form.js";
-import {closeModal} from "../../general/js/modal/modal.js";
 
 /**
  * Send user update request
@@ -40,7 +37,7 @@ export function submitUserUpdate(formFieldsAndValues) {
         let userId = document.getElementById('user-id').value;
         let updateRoute = 'users';
         // Password change request has an own action class as there are fields such as password2 and old password
-        if ('password' in formFieldsAndValues){
+        if ('password' in formFieldsAndValues) {
             updateRoute = 'change-password';
         }
         xHttp.open('PUT', basePath + updateRoute + '/' + userId, true);
@@ -53,34 +50,3 @@ export function submitUserUpdate(formFieldsAndValues) {
 
     });
 }
-
-
-/**
- * Send client creation to server
- */
-export function submitChangePassword() {
-    // Check if form content is valid (frontend validation)
-    let modalForm = document.getElementById('change-password-modal-form');
-    if (modalForm.checkValidity() === false) {
-        // If not valid, report to user and return void
-        modalForm.reportValidity();
-        return;
-    }
-
-    // Serialize form data before disabling form elements
-    let formData = getFormData(modalForm);
-    // Disable form to indicate that the request is made AFTER getting form data as FormData doesn't consider disabled fields
-    toggleEnableDisableForm('change-password-modal-form');
-
-    submitUserUpdate(formData).then(success => {
-        if (success === true) {
-            closeModal();
-            displayFlashMessage('success', 'Successfully changed password.');
-        } else{
-            // Re enable form if request is not successful
-            toggleEnableDisableForm('change-password-modal-form');
-        }
-    });
-
-}
-
