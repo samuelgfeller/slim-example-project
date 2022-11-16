@@ -1,6 +1,5 @@
 <?php
 
-use App\Application\Actions\PreflightAction;
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
 use Slim\App;
@@ -83,7 +82,7 @@ return function (App $app) {
 
 
     $app->group('/users', function (RouteCollectorProxy $group) {
-        $group->options('', PreflightAction::class); // Allow preflight requests
+        // $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('', \App\Application\Actions\User\UserListPageAction::class)->setName('user-list');
 
         $group->get(
@@ -91,19 +90,15 @@ return function (App $app) {
             \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class
         )->setName('user-list-dropdown');
 
-        $group->post('', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
-           'user-submit-create'
-       );
-
-        $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
+        $group->post('', \App\Application\Actions\User\UserCreateSubmitAction::class)
+            ->setName('user-create-submit');
+        // $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
             ->setName('user-read-page');
-        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)->setName(
-            'user-update-submit'
-        );
-        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)->setName(
-            'user-delete-submit'
-        );
+        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)
+            ->setName('user-update-submit');
+        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)
+            ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
     $app->get('/users/list', \App\Application\Actions\User\UserListPageAction::class)->setName(
         'user-list-page'

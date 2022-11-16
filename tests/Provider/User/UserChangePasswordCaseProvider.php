@@ -56,7 +56,7 @@ class UserChangePasswordCaseProvider
                 'authenticated_user' => $newcomerAttr,
                 'expected_result' => $authorizedResult
             ],
-            // Higher privilege owner than newcomer must not be tested as authorization is hierarchical meaning if
+            // Higher privilege than newcomer must not be tested as authorization is hierarchical meaning if
             // the lowest privilege is allowed to do action, higher will be able too.
             // * Advisor
             [ // ? Advisor not owner - user to change is newcomer - not allowed

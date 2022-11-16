@@ -11,7 +11,7 @@ class MalformedRequestBodyChecker
     /**
      * Validate that parsed body array contains the given keys
      *
-     * @param array|null $parsedBody
+     * @param array|null $parsedBody null if parsed body is empty
      * @param array $requiredKeys
      * @param array $optionalKeys
      * @return bool

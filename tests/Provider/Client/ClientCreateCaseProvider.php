@@ -77,7 +77,7 @@ class ClientCreateCaseProvider
             'db_entry_created' => false,
             'json_response' => [
                 'status' => 'error',
-                'message' => 'Not allowed to create a client.',
+                'message' => 'Not allowed to create client.',
             ]
         ];
         return [

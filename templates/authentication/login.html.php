@@ -50,10 +50,6 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
 
         <input type="submit" class="submit-btn" id="submitBtnLogin" value="Login">
     </form>
-    <span class="discrete-link">
-    <br>Not registered?
-    <a href="<?= $route->urlFor('register-page', [], $queryParams ?? []) ?>">Register</a>
-    </span>
 </div>
 
 

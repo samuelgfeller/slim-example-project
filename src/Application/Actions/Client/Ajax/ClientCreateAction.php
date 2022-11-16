@@ -78,7 +78,7 @@ final class ClientCreateAction
                         $response,
                         [
                             'status' => 'error',
-                            'message' => 'Not allowed to create a client.'
+                            'message' => 'Not allowed to create client.'
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );
