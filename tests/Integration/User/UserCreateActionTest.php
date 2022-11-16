@@ -146,30 +146,27 @@ class UserCreateActionTest extends TestCase
     }
 
     /**
-     * Empty or malformed request body is when parameters
-     * are not set or have the wrong name ("key").
-     * Example: Server needs the argument "email" to process
-     * the request but "email" is not present in the body or
-     * misspelled.
-     * Good: "email: valid_or_invalid@data.com"
-     * Bad: "emal: valid_or_invalid@data.com"
+     * Test request with malformed body
      *
      * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user because that means that
+     * is thrown and an error page is displayed to the user and that means that
      * there is an error with the client sending the request that has to be fixed.
+     *
+     * @dataProvider \App\Test\Provider\User\UserCreateCaseProvider::malformedRequestBodyCases()
+     *
+     * @param null|array $requestBody request body may be null
+     * @return void
      */
-    public function testUserSubmitCreate_malformedBody(): void
+    public function testUserSubmitCreate_malformedBody(?array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
         // Simulate logged-in user with same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('user-update-submit', ['user_id' => $userRow['id']]),
-            // The update request can format the request body pretty freely as long as it doesn't contain a non-allowed key
-            // so to test only one invalid key is enough
-            ['non_existing_key' => 'value']
+            'POST',
+            $this->urlFor('user-create-submit'),
+            $requestBody
         );
         // Bad Request (400) means that the client sent the request wrongly; it's a client error
         $this->expectException(HttpBadRequestException::class);

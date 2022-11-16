@@ -168,4 +168,45 @@ class UserCreateCaseProvider
 
         ];
     }
+
+    /**
+     * Provide cases of malformed request body
+     *
+     * @return array[]
+     */
+    public function malformedRequestBodyCases(): array
+    {
+        return [
+            [
+                'empty_body' => [],
+            ],
+            [
+                'null_body' => null,
+            ],
+            [
+                // If any of the list except is missing it's a bad request
+                'missing_first_name' => [
+                    // Missing first name
+                    'surname' => 'value',
+                    'email' => 'value',
+                    'status' => 'value',
+                    'user_role_id' => 'value',
+                    'password' => 'value',
+                    'password2' => 'value',
+                ],
+            ],
+            [
+                'key_too_much' => [
+                    'first_name' => 'value',
+                    'surname' => 'value',
+                    'email' => 'value',
+                    'status' => 'value',
+                    'user_role_id' => 'value',
+                    'password' => 'value',
+                    'password2' => 'value',
+                    'other_random_key' => 'value',
+                ],
+            ]
+        ];
+    }
 }
