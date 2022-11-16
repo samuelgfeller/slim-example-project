@@ -67,14 +67,16 @@ class UserValidator
     public function validateUserCreation(UserData $user): ValidationResult
     {
         // Instantiate ValidationResult Object with default message
-        $validationResult = new ValidationResult('There is a validation error when trying to register');
+        $validationResult = new ValidationResult('There is a validation error when trying to register a user');
 
-        if ($this->validator->resourceExistenceCheckerRepository->rowExists(['email' => $user->email], 'user')){
+        if ($this->validator->resourceExistenceCheckerRepository->rowExists(['email' => $user->email], 'user')) {
             $validationResult->setError('email', 'User with this email already exists');
         }
         $this->validator->validateName($user->firstName, 'first_name', $validationResult, true);
         $this->validator->validateName($user->surname, 'surname', $validationResult, true);
         $this->validator->validateEmail($user->email, $validationResult, true);
+        $this->validateUserStatus($user->status, $validationResult, true);
+        $this->validateUserRoleId($user->user_role_id, $validationResult, true);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Action
@@ -176,9 +178,12 @@ class UserValidator
             if (!password_verify($password, $dbUser->passwordHash)) {
                 $validationResult->setError($field, 'Incorrect password');
             }
-        }else{
-            $validationResult->setError($field, str_replace('_', ' ', ucfirst($field))
-                . ' required but not given');
+        } else {
+            $validationResult->setError(
+                $field,
+                str_replace('_', ' ', ucfirst($field))
+                . ' required but not given'
+            );
         }
         $this->validator->throwOnError($validationResult);
     }
@@ -230,7 +235,7 @@ class UserValidator
         }
     }
 
-     /**
+    /**
      * Validate user status dropdown
      *
      * @param mixed $value
@@ -239,18 +244,21 @@ class UserValidator
      * @return void
      */
     protected function validateUserStatus(
-        mixed $value,
+        UserStatus|string|null $value,
         ValidationResult $validationResult,
         bool $required = false
     ): void {
         if (null !== $value && '' !== $value) {
+            if ($value instanceof UserStatus){
+                $value = $value->value;
+            }
             // Check if given user status is one of the enum cases
-            if(!in_array($value, array_column(UserStatus::cases(), 'value'), true)){
+            if (!in_array($value, UserStatus::values(), true)) {
                 $validationResult->setError('status', 'Status not existing');
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('client_status_id', 'client_status_id is required but not given');
+            $validationResult->setError('status', 'Status required but not given');
         }
     }
 

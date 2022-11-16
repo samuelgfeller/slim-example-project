@@ -6,7 +6,7 @@ use App\Domain\Post\Data\UserNoteData;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -29,7 +29,7 @@ class PostListActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * Test that list all page is 200 OK both logged in or not

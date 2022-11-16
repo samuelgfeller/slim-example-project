@@ -2,12 +2,12 @@
 
 namespace App\Test\Provider\Client;
 
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientDeleteCaseProvider
 {
-    use FixtureTrait;
+    use FixtureTestTrait;
     /**
      * @return array[]
      */

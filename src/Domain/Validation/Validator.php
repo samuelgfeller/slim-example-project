@@ -203,15 +203,23 @@ final class Validator
         bool $excludingSoftDelete = true
     ): void {
         if (null !== $rowId && $rowId !== 0) {
-            $exists = $this->resourceExistenceCheckerRepository->rowExists(['id' => $rowId], $table, $excludingSoftDelete);
+            $exists = $this->resourceExistenceCheckerRepository->rowExists(['id' => $rowId],
+                $table,
+                $excludingSoftDelete);
             if (!$exists) {
-                $validationResult->setError($table, ucfirst(str_replace('_', ' ', $table)) .
-                    ' not existing');
+                $validationResult->setError(
+                    $table,
+                    ucfirst(str_replace('_', ' ', $table)) .
+                    ' not existing'
+                );
 
                 $this->logger->debug("Checked for $table id $rowId but it didn\'t exist in validation");
             }
         } elseif (true === $required) {
-            $validationResult->setError($table . '_id', $table . '_id required but not given');
+            $validationResult->setError(
+                $table . '_id',
+                ucfirst(str_replace('_', ' ', $table)) . ' required but not given'
+            );
         }
     }
 

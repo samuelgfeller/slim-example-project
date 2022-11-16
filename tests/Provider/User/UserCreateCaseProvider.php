@@ -3,13 +3,14 @@
 namespace App\Test\Provider\User;
 
 use App\Domain\User\Enum\UserRole;
-use App\Test\Traits\FixtureTrait;
+use App\Domain\User\Enum\UserStatus;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserCreateCaseProvider
 {
 
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * @return array[]
@@ -70,14 +71,14 @@ class UserCreateCaseProvider
 
 
     /**
-     * Returns combinations of invalid data to trigger validation exception
-     * for modification.
+     * Returns combinations of invalid data to trigger validation exception.
      *
      * @return array
      */
-    public function invalidUserUpdateCases(): array
+    public function invalidUserCreateCases(): array
     {
-        // The goal is to include as many values as possible that should trigger validation errors in each iteration
+        /** Same values as @see UserUpdateCaseProvider::invalidUserUpdateCases() but with password and password2 */
+        // Including as many values as possible that trigger validation errors in each case
         return [
             [
                 'request_body' => [
@@ -87,18 +88,25 @@ class UserCreateCaseProvider
                     'email' => 'new.email@tes$t.ch',
                     'status' => 'non-existing',
                     'user_role_id' => 99,
+                    'password' => '12',
+                    'password2' => '1',
                 ],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error when trying to update a user',
+                        'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Minimum length is 2'],
                             ['field' => 'surname', 'message' => 'Minimum length is 2'],
                             ['field' => 'email', 'message' => 'Invalid email address'],
-                            ['field' => 'status', 'message' => 'Status not existing'],
+                            // Technically the better error would be that the status is not existing but an UserData object
+                            // instance is created that puts "null" if status is not existing before being passed to the validator
+                            ['field' => 'status', 'message' => 'Status required but not given'],
                             ['field' => 'user_role', 'message' => 'User role not existing'],
+                            ['field' => 'password2', 'message' => 'Passwords do not match'],
+                            ['field' => 'password', 'message' => 'Minimum length is 3'],
+                            ['field' => 'password2', 'message' => 'Minimum length is 3'],
                         ]
                     ]
                 ]
@@ -109,12 +117,17 @@ class UserCreateCaseProvider
                     'first_name' => str_repeat('i', 101),
                     'surname' => str_repeat('i', 101),
                     'email' => 'new.email.@test.ch',
+                    // Valid required values to test the above
+                    'status' => UserStatus::Active->value,
+                    'user_role_id' => 1,
+                    'password' => '12345678',
+                    'password2' => '12345678',
                 ],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error when trying to update a user',
+                        'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Maximum length is 100'],
                             ['field' => 'surname', 'message' => 'Maximum length is 100'],
@@ -123,6 +136,36 @@ class UserCreateCaseProvider
                     ]
                 ]
             ],
+            [
+                // Required values not given
+                'request_body' => [
+                    'first_name' => '',
+                    'surname' => '',
+                    'email' => '',
+                    // Valid required values to test the above
+                    'status' => '',
+                    'user_role_id' => '',
+                    'password' => '',
+                    'password2' => '',
+                ],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'message' => 'There is a validation error when trying to register a user',
+                        'errors' => [
+                            ['field' => 'first_name', 'message' => 'Name required but not given'],
+                            ['field' => 'surname', 'message' => 'Name required but not given'],
+                            ['field' => 'email', 'message' => 'Email required but not given'],
+                            ['field' => 'status', 'message' => 'Status required but not given'],
+                            ['field' => 'user_role_id', 'message' => 'User role required but not given'],
+                            ['field' => 'password', 'message' => 'Password required but not given'],
+                            ['field' => 'password2', 'message' => 'Password required but not given'],
+                        ]
+                    ]
+                ]
+            ],
+
         ];
     }
 }

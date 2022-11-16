@@ -2,13 +2,13 @@
 
 namespace App\Test\Provider\Client;
 
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientUpdateCaseProvider
 {
 
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * Client creation authorization
@@ -111,7 +111,7 @@ class ClientUpdateCaseProvider
      */
     public function invalidClientUpdateValuesAndExpectedResponseData(): array
     {
-        // The goal is to include as many values as possible that should trigger validation errors in each iteration
+        // Including as many values as possible that trigger validation errors in each case
         return [
             [
                 // Most values too short

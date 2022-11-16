@@ -2,13 +2,13 @@
 
 namespace App\Test\Provider\Client;
 
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientCreateCaseProvider
 {
 
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * Provide malformed request body for client creation
@@ -114,7 +114,7 @@ class ClientCreateCaseProvider
      */
     public function invalidClientCreationValuesAndExpectedResponseData(): array
     {
-        // The goal is to include as many values as possible that should trigger validation errors in each iteration
+        // Including as many values as possible that trigger validation errors in each case
         return [
             [
                 // Most values too short

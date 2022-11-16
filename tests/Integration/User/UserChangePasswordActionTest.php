@@ -4,7 +4,7 @@ namespace App\Test\Integration\User;
 
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -28,7 +28,7 @@ class UserChangePasswordActionTest extends TestCase
     use HttpTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
     use HttpJsonTestTrait;
 
     /**

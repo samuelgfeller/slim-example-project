@@ -8,7 +8,7 @@ use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +32,7 @@ class NoteListActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
 
 
     /**

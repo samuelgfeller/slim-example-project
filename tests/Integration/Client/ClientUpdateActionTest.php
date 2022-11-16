@@ -8,7 +8,7 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -35,7 +35,7 @@ class ClientUpdateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * Test client values update when authenticated with different user roles.

@@ -6,7 +6,7 @@ use App\Domain\Post\Data\UserNoteData;
 use App\Test\Fixture\PostFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -28,7 +28,7 @@ class PostListOwnActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * Test if own posts page returns 200 when logged in

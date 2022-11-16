@@ -2,13 +2,13 @@
 
 namespace App\Test\Provider\User;
 
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserChangePasswordCaseProvider
 {
 
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * User update authorization cases
@@ -94,7 +94,7 @@ class UserChangePasswordCaseProvider
      */
     public function invalidPasswordChangeCases(): array
     {
-        // The goal is to include as many values as possible that should trigger validation errors in each iteration
+        // Including as many values as possible that trigger validation errors in each case
         return [
             [
                 // Values too short

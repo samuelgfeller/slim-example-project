@@ -5,12 +5,12 @@ namespace App\Test\Provider\Note;
 
 
 use App\Domain\Authorization\Privilege;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class NoteCaseProvider
 {
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * One note at a time is tested for clarity and simplicity.

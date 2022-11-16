@@ -6,8 +6,9 @@ use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -29,7 +30,8 @@ class UserCreateActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
-    use FixtureTrait;
+    use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * User create authorization test with different user roles
@@ -48,7 +50,7 @@ class UserCreateActionTest extends TestCase
     ): void {
         $userRoleFinder = $this->container->get(UserRoleFinderRepository::class);
         // If user role is provided and is instance of UserRole, replace array key with the actual id
-        if ($authenticatedUserAttr['user_role_id'] ?? '' instanceof UserRole){
+        if ($authenticatedUserAttr['user_role_id'] ?? '' instanceof UserRole) {
             $authenticatedUserAttr['user_role_id'] = $userRoleFinder->findUserRoleIdByName(
                 $authenticatedUserAttr['user_role_id']->value
             );
@@ -98,9 +100,9 @@ class UserCreateActionTest extends TestCase
     public function testUserSubmitCreate_unauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
-        $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => 1]));
+        $request = $this->createJsonRequest('POST', $this->urlFor('user-create-submit'));
         // Create url where user should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('user-read-page', ['user_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('user-list-page');
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
         // Make request
         $response = $this->app->handle($request);
@@ -115,19 +117,22 @@ class UserCreateActionTest extends TestCase
     /**
      * Test user submit invalid update data
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::invalidUserUpdateCases()
+     * @dataProvider \App\Test\Provider\User\UserCreateCaseProvider::invalidUserCreateCases()
      *
      * @param array $requestBody
      * @param array $jsonResponse
      */
     public function testUserSubmitCreate_invalid(array $requestBody, array $jsonResponse): void
     {
-        // Insert user that is allowed to change content (owner)
-        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class);
+        // Insert user that is allowed to create user without any authorization limitation (admin)
+        $userRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
+            UserFixture::class
+        );
 
         $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('user-update-submit', ['user_id' => $userRow['id']]),
+            'POST',
+            $this->urlFor('user-create-submit'),
             $requestBody
         );
         // Simulate logged-in user with logged-in user id
@@ -135,8 +140,8 @@ class UserCreateActionTest extends TestCase
         $response = $this->app->handle($request);
         // Assert 200 OK
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-        // database must be unchanged
-        $this->assertTableRowEquals($userRow, 'user', $userRow['id']);
+        // Database must be unchanged - only 1 rows (authenticated user) expected in user table
+        $this->assertTableRowCount(1, 'user');
         $this->assertJsonData($jsonResponse, $response);
     }
 

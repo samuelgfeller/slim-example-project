@@ -2,13 +2,13 @@
 
 namespace App\Test\Provider\User;
 
-use App\Test\Traits\FixtureTrait;
+use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserUpdateCaseProvider
 {
 
-    use FixtureTrait;
+    use FixtureTestTrait;
 
     /**
      * @return array[]
@@ -115,7 +115,7 @@ class UserUpdateCaseProvider
      */
     public function invalidUserUpdateCases(): array
     {
-        // The goal is to include as many values as possible that should trigger validation errors in each iteration
+        // Including as many values as possible that trigger validation errors in each case
         return [
             [
                 'request_body' => [

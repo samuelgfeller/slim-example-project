@@ -9,7 +9,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 /**
  * Util. trait to better deal with fixtures in tests
  */
-trait FixtureTrait
+trait FixtureTestTrait
 {
     use DatabaseTestTrait;
 
