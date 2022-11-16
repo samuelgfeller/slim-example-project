@@ -26,9 +26,10 @@ class UserNameAbbreviator
             $buildLastName = static function (string $lastName, string $lastNameToCheck, int $i = 1) use (&$buildLastName
             ): string {
                 // When $i (amount of letters) of last name to abbreviate is the same as the full name,
-                // there is no short form and the function must end as it would cause infinite recursion .
-                // Checks if short form ($i letters from the beginning of surname) is contained in name
+                // there is no short form and the function must end as it would cause infinite recursion.
+                // Checks if short form ($i letters from the beginning of surname) is contained in name to check
                 if (strlen($lastName) > $i && str_contains($lastNameToCheck, substr($lastName, 0, $i))) {
+                    // Increase number of letters that should be used of the last name as it exists in the name to check
                     $i++;
                     $shortName = $buildLastName($lastNameToCheck, $lastName, $i);
                 } else {

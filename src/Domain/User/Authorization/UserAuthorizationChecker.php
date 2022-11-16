@@ -4,6 +4,7 @@ namespace App\Domain\User\Authorization;
 
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
@@ -47,21 +48,60 @@ class UserAuthorizationChecker
                 $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
                 // Managing advisors can do everything with users except setting a role higher than advisor
                 if ($userData->user_role_id !== null &&
-                    // The user role can't be set higher than advisor
-                    $userRoleHierarchiesById[$userData->user_role_id] >= $userRoleHierarchies[UserRole::ADVISOR->value]
+                    $this->userRoleIsGranted($userData->user_role_id, $authenticatedUserRoleData, $userRoleHierarchies)
+                    === true
                 ) {
                     return true;
                 }
+
                 if ($userData->user_role_id === null) {
                     return true;
                 }
             }
-            // There is no need to check if user want to create his own user as he can't be logged in if the user doesn't exist
         }
+        // There is no need to check if user want to create his own user as he can't be logged in if the user doesn't exist
 
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to create user but isn\'t allowed.'
         );
+        return false;
+    }
+
+    /**
+     * Check if authenticated user is allowed to assign given user role
+     *
+     * @param int $userRoleId
+     * @param UserRoleData|null $authenticatedUserRoleData optional so that it can be calld outside of this class
+     * @param array|null $userRoleHierarchies optional so that it can be calld outside of this class
+     * @return bool
+     */
+    public function userRoleIsGranted(
+        int $userRoleId,
+        ?UserRoleData $authenticatedUserRoleData = null,
+        ?array $userRoleHierarchies = null,
+    ): bool {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+            // Values passed as arguments if called inside this class
+            if ($authenticatedUserRoleData === null) {
+                $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            }
+            if ($userRoleHierarchies === null) {
+                /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+                $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            }
+
+            $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
+
+            // Role higher (lower hierarchy number) than managing advisor may assign any role
+            if ($authenticatedUserRoleData->hierarchy < $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
+                return true;
+            }
+            // Managing advisor can only attribute roles with lower or equal privilege than advisor
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value] &&
+                $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value]) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -76,8 +116,12 @@ class UserAuthorizationChecker
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToUpdate(array $userDataToUpdate, string|int $userIdToUpdate, bool $log = true): bool
-    {
+    public
+    function isGrantedToUpdate(
+        array $userDataToUpdate,
+        string|int $userIdToUpdate,
+        bool $log = true
+    ): bool {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -89,7 +133,6 @@ class UserAuthorizationChecker
             /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
              * lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
-            $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
 
             // Roles: newcomer < advisor < managing_advisor < administrator
             // If logged-in hierarchy value is smaller or equal managing advisor
@@ -128,15 +171,13 @@ class UserAuthorizationChecker
                     if (array_key_exists('status', $userDataToUpdate)) {
                         $grantedUpdateKeys[] = 'status';
                     }
-                    if (array_key_exists('user_role_id', $userDataToUpdate)) {
-                        // If authenticated user is admin it means that any user role is permitted
-                        if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value]) {
-                            $grantedUpdateKeys[] = 'user_role_id';
-                        } // Managing advisor can only attribute roles with lower or equal privilege than advisor
-                        elseif ($userRoleHierarchiesById[$userDataToUpdate['user_role_id']] >=
-                            $userRoleHierarchies[UserRole::ADVISOR->value]) {
-                            $grantedUpdateKeys[] = 'user_role_id';
-                        }
+                    // Check that authenticated user is granted to attribute role
+                    if (array_key_exists('user_role_id', $userDataToUpdate) && $this->userRoleIsGranted(
+                            $userDataToUpdate['user_role_id'],
+                            $authenticatedUserRoleData,
+                            $userRoleHierarchies
+                        ) === true) {
+                        $grantedUpdateKeys[] = 'user_role_id';
                     }
 
                     // There is a special case with passwords where the user can change his own password, but he needs to
@@ -179,8 +220,11 @@ class UserAuthorizationChecker
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToDelete(int $userIdToDelete, bool $log = true): bool
-    {
+    public
+    function isGrantedToDelete(
+        int $userIdToDelete,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
@@ -214,8 +258,11 @@ class UserAuthorizationChecker
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToRead(int $userIdToRead, bool $log = true): bool
-    {
+    public
+    function isGrantedToRead(
+        int $userIdToRead,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId

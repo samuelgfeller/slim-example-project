@@ -2,15 +2,14 @@
 
 namespace App\Domain\User\Service;
 
+use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Enum\UserStatus;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 
 class UserUtilFinder
 {
     public function __construct(
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-    )
-    {
+        private readonly UserAuthorizationGetter $userAuthorizationGetter,
+    ) {
     }
 
     /**
@@ -21,9 +20,8 @@ class UserUtilFinder
     public function findUserDropdownValues(): array
     {
         return [
-            'userRoles' => $this->userRoleFinderRepository->findAllUserRolesForDropdown(),
+            'userRoles' => $this->userAuthorizationGetter->getAuthorizedUserRoles(),
             'statuses' => UserStatus::array()
         ];
     }
-
 }

@@ -21,6 +21,23 @@ class UserAuthorizationGetter
     /**
      * Returns authorized user roles for given user
      *
+     * @param array $grantedUserRoles
+     *
+     * @return Privilege
+     */
+    public function getUserRoleAttributionPrivilege(array $grantedUserRoles): Privilege
+    {
+        // If there are more available roles than the attributed one, it means that user has privilege to update roles
+        if (count($grantedUserRoles) > 1) {
+            return Privilege::UPDATE;
+        }
+        return Privilege::READ;
+    }
+
+    /**
+     * Returns all roles that authenticated user is allowed to choose when
+     * creating a new user.
+     *
      * Note: this is not performant at all as for each user all user roles changes
      * have to be tested and isGrantedToUpdate makes 4 sql requests each time meaning
      * that for 10 users and 4 roles and 4 requests in the function there will be
@@ -28,32 +45,24 @@ class UserAuthorizationGetter
      * to start. It is like this for simplicity as there will not be a lot of users
      * anyway and the user list action is quite rare and limited to some users.
      *
-     * @param int $userId
      * @param int|null $attributedUserRoleId
-     * @return array{userRoles: array, privilege: Privilege} Granted user roles and privilege. Granted roles always
-     * contain at least already attributed user role
+     * @return array
      */
-    public function getPrivilegeAndAuthorizedUserRolesForUser(int $userId, ?int $attributedUserRoleId): array
+    public function getAuthorizedUserRoles(?int $attributedUserRoleId = null): array
     {
         $allUserRoles = $this->userRoleFinderRepository->findAllUserRolesForDropdown();
-        $grantedUserRoles = [];
-        foreach ($allUserRoles as $id => $roleName) {
-            // If the role is already attributed to user the value is added so that it's displayed in the template
-            if ($id === $attributedUserRoleId ||
-                // Test each role if user is allowed to update
-                $this->userAuthorizationChecker->isGrantedToUpdate(['user_role_id' => $id], $userId, false)
+        // Available user roles for dropdown and privilege
+        $grantedCreateUserRoles = [];
+        foreach ($allUserRoles as $roleId => $roleName) {
+            // If the role is already attributed to user the value is added so that it's displayed in the dropdown
+            if (($attributedUserRoleId !== null && $roleId === $attributedUserRoleId)
+                // Check if user role is granted
+                || $this->userAuthorizationChecker->userRoleIsGranted($roleId) === true
             ) {
-                $grantedUserRoles[$id] = $roleName;
+                $grantedCreateUserRoles[$roleId] = $roleName;
             }
         }
-
-        // If there are more available roles than the attributed one, it means that user has privilege to update roles
-        if (count($grantedUserRoles) > 1) {
-            $privilege = Privilege::UPDATE;
-        } else {
-            $privilege = Privilege::READ;
-        }
-        return ['privilege' => $privilege, 'userRoles' => $grantedUserRoles];
+        return $grantedCreateUserRoles;
     }
 
     /**

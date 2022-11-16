@@ -32,12 +32,12 @@ class UserFinder
             // Check if authenticated user is allowed to read user
             if ($this->userAuthorizationChecker->isGrantedToRead($userResultData->id)) {
                 // Authorization limits which entries are in the user role dropdown
-                $privilegeAndAuthorizedRoles = $this->userAuthorizationGetter->getPrivilegeAndAuthorizedUserRolesForUser(
-                    $userResultData->id,
+                $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
                     $userResultData->user_role_id
                 );
-                $userResultData->availableUserRoles = $privilegeAndAuthorizedRoles['userRoles'];
-                $userResultData->userRolePrivilege = $privilegeAndAuthorizedRoles['privilege'];
+                $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
+                    $userResultData->availableUserRoles
+                );
 
                 // Check if user is allowed to change status
                 $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
@@ -82,12 +82,13 @@ class UserFinder
                     $id
                 );
                 // Available user roles for dropdown and privilege
-                $privilegeAndAuthorizedRoles = $this->userAuthorizationGetter->getPrivilegeAndAuthorizedUserRolesForUser(
-                    $userResultData->id,
+                $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
                     $userResultData->user_role_id
                 );
-                $userResultData->userRolePrivilege = $privilegeAndAuthorizedRoles['privilege'];
-                $userResultData->availableUserRoles = $privilegeAndAuthorizedRoles['userRoles'];
+                $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
+                    $userResultData->availableUserRoles
+                );
+
                 // General data privilege like first name, email and so on
                 $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
                     'general_data',
