@@ -2,6 +2,7 @@
 
 namespace App\Test\Provider\Client;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
@@ -20,9 +21,9 @@ class ClientUpdateCaseProvider
     public function provideUsersAndExpectedResultForClientUpdate(): array
     {
         // Set different user role attributes
-        $managingAdvisorRow = ['user_role_id' => 2];
-        $advisorRow = ['user_role_id' => 3];
-        $newcomerRow = ['user_role_id' => 4];
+        $managingAdvisorRow = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorRow = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerRow = ['user_role_id' => UserRole::NEWCOMER];
 
         $basicClientDataChanges = [
             'first_name' => 'NewFirstName',
@@ -134,7 +135,7 @@ class ClientUpdateCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'client_status',
-                                'message' => 'Client_status not existing',
+                                'message' => 'Client status not existing',
                             ],
                             1 => [
                                 'field' => 'user',
@@ -195,7 +196,7 @@ class ClientUpdateCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'client_status',
-                                'message' => 'Client_status not existing',
+                                'message' => 'Client status not existing',
                             ],
                             1 => [
                                 'field' => 'user',

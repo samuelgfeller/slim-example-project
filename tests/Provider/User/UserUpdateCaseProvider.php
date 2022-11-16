@@ -2,6 +2,7 @@
 
 namespace App\Test\Provider\User;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
@@ -16,10 +17,10 @@ class UserUpdateCaseProvider
     public function userUpdateAuthorizationCases(): array
     {
         // Set different user role attributes
-        $managingAdvisorAttr = ['user_role_id' => 2];
-        $otherManagingAdvisorAttr = ['user_role_id' => 2, 'first_name' => 'George'];
-        $advisorAttr = ['user_role_id' => 3];
-        $newcomerAttr = ['user_role_id' => 4];
+        $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $otherManagingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'George'];
+        $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
@@ -65,7 +66,7 @@ class UserUpdateCaseProvider
             [ // ? Advisor owner - user role change - not allowed even to newcomer
                 'user_to_change' => $advisorAttr,
                 'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => ['user_role_id' => 1],
+                'data_to_be_changed' => ['user_role_id' => UserRole::ADMIN],
                 'expected_result' => $unauthorizedResult,
             ],
             [ // ? Advisor not owner - basic data - not allowed
@@ -80,14 +81,14 @@ class UserUpdateCaseProvider
                 'authenticated_user' => $managingAdvisorAttr,
                 'data_to_be_changed' => array_merge(
                     $basicDataChanges,
-                    ['user_role_id' => 3, 'status' => 'active']
+                    ['user_role_id' => UserRole::ADVISOR, 'status' => 'active']
                 ),
                 'expected_result' => $authorizedResult,
             ],
             [ // ? Managing advisor not owner - user to change is advisor (to user role managing advisor) - not allowed
                 'user_to_change' => $advisorAttr,
                 'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => ['user_role_id' => 2],
+                'data_to_be_changed' => ['user_role_id' => UserRole::MANAGING_ADVISOR],
                 'expected_result' => $unauthorizedResult,
             ],
             [ // ? Managing advisor not owner - user to change is managing advisor - not allowed even basic data
@@ -99,7 +100,7 @@ class UserUpdateCaseProvider
             [ // ? Managing advisor owner - own role to admin - not allowed
                 'user_to_change' => $managingAdvisorAttr,
                 'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => ['user_role_id' => 1],
+                'data_to_be_changed' => ['user_role_id' => UserRole::ADMIN],
                 'expected_result' => $unauthorizedResult,
             ],
 

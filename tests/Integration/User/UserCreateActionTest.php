@@ -48,15 +48,12 @@ class UserCreateActionTest extends TestCase
         UserRole $newUserRole,
         array $expectedResult
     ): void {
-        $userRoleFinder = $this->container->get(UserRoleFinderRepository::class);
-        // If user role is provided and is instance of UserRole, replace array key with the actual id
-        if ($authenticatedUserAttr['user_role_id'] ?? '' instanceof UserRole) {
-            $authenticatedUserAttr['user_role_id'] = $userRoleFinder->findUserRoleIdByName(
-                $authenticatedUserAttr['user_role_id']->value
-            );
-        }
+        $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
 
         $requestData = [
             'first_name' => 'Danny',
@@ -65,7 +62,7 @@ class UserCreateActionTest extends TestCase
             'password' => '12345678',
             'password2' => '12345678',
             'status' => 'unverified',
-            'user_role_id' => $userRoleFinder->findUserRoleIdByName($newUserRole->value)
+            'user_role_id' => $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value)
         ];
 
         $request = $this->createJsonRequest(

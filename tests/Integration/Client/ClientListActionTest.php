@@ -5,12 +5,14 @@ namespace App\Test\Integration\Client;
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -41,6 +43,7 @@ class ClientListActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
 
     /**
@@ -51,7 +54,10 @@ class ClientListActionTest extends TestCase
     public function testClientListPageAction_authenticated(): void
     {
         // Insert logged-in user with lowest privilege
-        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 4], UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
+            UserFixture::class
+        );
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
         // Simulate logged-in user with logged-in user id
@@ -112,7 +118,7 @@ class ClientListActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // If user_id is 'session' replace it with the authenticated user id
-        if (isset($rowFilter['user_id']) && $rowFilter['user_id'] === 'session'){
+        if (isset($rowFilter['user_id']) && $rowFilter['user_id'] === 'session') {
             $rowFilter['user_id'] = $loggedInUserId;
         }
         // Filter fixture records with given row filter params

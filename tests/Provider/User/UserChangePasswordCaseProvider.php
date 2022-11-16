@@ -2,6 +2,7 @@
 
 namespace App\Test\Provider\User;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
@@ -21,12 +22,17 @@ class UserChangePasswordCaseProvider
         // Password hash to verify old password - 12345678 is used in test function
         $passwordHash = password_hash('12345678', PASSWORD_DEFAULT);
         // Set different user role attributes
-        $adminAttr = ['user_role_id' => 1, 'password_hash' => $passwordHash];
-        $managingAdvisorAttr = ['user_role_id' => 2, 'password_hash' => $passwordHash];
+        $adminAttr = ['user_role_id' => UserRole::ADMIN, 'password_hash' => $passwordHash];
+        $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR, 'password_hash' => $passwordHash];
         // If one attribute is different they are differentiated and 2 separated users are added to the db
-        $otherManagingAdvisorAttr = ['first_name' => 'Other', 'user_role_id' => 2, 'password_hash' => $passwordHash];
-        $advisorAttr = ['user_role_id' => 3, 'password_hash' => $passwordHash];
-        $newcomerAttr = ['user_role_id' => 4, 'password_hash' => $passwordHash];
+        $otherManagingAdvisorAttr = [
+            'first_name' => 'Other',
+            'user_role_id' => UserRole::MANAGING_ADVISOR,
+            'password_hash' => $passwordHash
+        ];
+
+        $advisorAttr = ['user_role_id' => UserRole::ADVISOR, 'password_hash' => $passwordHash];
+        $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER, 'password_hash' => $passwordHash];
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,

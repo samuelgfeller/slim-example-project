@@ -2,11 +2,13 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -34,6 +36,7 @@ class NoteCreateActionTest extends TestCase
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Returns the given $dateTime in the default note format
@@ -64,12 +67,18 @@ class NoteCreateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userLinkedToNoteAttr),
+                UserFixture::class
+            );
         }
 
         // Insert needed client status fixture
@@ -154,7 +163,10 @@ class NoteCreateActionTest extends TestCase
         array $expectedResponseData
     ): void {
         // Insert user that is authorized to create
-        $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+        $clientOwnerId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
+            UserFixture::class
+        )['id'];
         // Insert linked status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client row
@@ -195,10 +207,10 @@ class NoteCreateActionTest extends TestCase
      * combinations of malformed request body.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteMalformedRequestBodyForCreation()
-     * @param array $malformedRequestBody
+     * @param null|array $malformedRequestBody
      * @return void
      */
-    public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
+    public function testNoteSubmitCreateAction_malformedRequest(?array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

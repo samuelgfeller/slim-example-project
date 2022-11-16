@@ -4,10 +4,12 @@
 namespace App\Test\Integration\Client;
 
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -36,6 +38,7 @@ class ClientUpdateActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Test client values update when authenticated with different user roles.
@@ -55,12 +58,18 @@ class ClientUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userLinkedToClientAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
-        }else{
+        } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userLinkedToClientAttr),
+                UserFixture::class
+            );
         }
 
         // Insert client status
@@ -120,7 +129,10 @@ class ClientUpdateActionTest extends TestCase
     public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
-        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
+            UserFixture::class
+        )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
@@ -180,7 +192,10 @@ class ClientUpdateActionTest extends TestCase
     public function testClientSubmitUpdateAction_unchangedContent(): void
     {
         // Insert user that is allowed to change content
-        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
+            UserFixture::class
+        )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
@@ -202,7 +217,8 @@ class ClientUpdateActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that response contains warning
-        $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.', 'data' => null], $response);
+        $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.', 'data' => null],
+            $response);
 
         $this->assertTableRowEquals(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
     }

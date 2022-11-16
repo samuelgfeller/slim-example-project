@@ -2,6 +2,7 @@
 
 namespace App\Test\Provider\Client;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
@@ -14,9 +15,9 @@ class ClientDeleteCaseProvider
     public function provideUsersForClientDelete(): array
         {
             // Get users with different roles
-            $managingAdvisorAttributes = ['user_role_id' => 2];
-            $advisorAttributes = ['user_role_id' => 3];
-            $newcomerAttributes = ['user_role_id' => 4];
+            $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+            $advisorAttributes = ['user_role_id' => UserRole::ADVISOR];
+            $newcomerAttributes = ['user_role_id' => UserRole::NEWCOMER];
 
             $authorizedResult = [
                 StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,

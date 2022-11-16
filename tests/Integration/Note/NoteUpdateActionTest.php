@@ -2,11 +2,13 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -36,6 +38,7 @@ class NoteUpdateActionTest extends TestCase
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Test note modification on client-read page while being authenticated
@@ -53,12 +56,18 @@ class NoteUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
             $userLinkedToNoteRow = $authenticatedUserRow;
-        }else{
+        } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
+            $userLinkedToNoteRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userLinkedToNoteAttr),
+                UserFixture::class
+            );
         }
 
         // Insert linked status
@@ -168,7 +177,10 @@ class NoteUpdateActionTest extends TestCase
     public function testNoteSubmitUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Insert authorized user
-        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
+            UserFixture::class
+        )['id'];
         // Insert linked status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client row

@@ -2,8 +2,10 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -26,6 +28,7 @@ class UserUpdateActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * User update process with valid data
@@ -45,13 +48,21 @@ class UserUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userToChangeAttr) {
             $userToChangeRow = $authenticatedUserRow;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userToChangeRow = $this->insertFixturesWithAttributes($userToChangeAttr, UserFixture::class);
+            $userToChangeRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userToChangeAttr),
+                UserFixture::class
+            );
         }
+        // Add user role id to $requestData as it could contain a user role enum
+        $requestData = $this->addUserRoleId($requestData);
 
         $request = $this->createJsonRequest(
             'PUT',
@@ -108,8 +119,11 @@ class UserUpdateActionTest extends TestCase
      */
     public function testUserSubmitUpdate_invalid(array $requestBody, array $jsonResponse): void
     {
-        // Insert user that is allowed to change content (owner)
-        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class);
+        // Insert user that is allowed to change content (advisor owner)
+        $userRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
+            UserFixture::class
+        );
 
         $request = $this->createJsonRequest(
             'PUT',

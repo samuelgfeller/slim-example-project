@@ -8,6 +8,7 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -31,6 +32,7 @@ class ClientDeleteActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Test delete client submit with different authenticated user roles.
@@ -48,12 +50,18 @@ class ClientDeleteActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userLinkedToClientAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userLinkedToClientAttr),
+                UserFixture::class
+            );
         }
 
         // Insert client status

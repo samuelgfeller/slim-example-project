@@ -5,6 +5,7 @@ namespace App\Test\Provider\Note;
 
 
 use App\Domain\Authorization\Privilege;
+use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
@@ -20,9 +21,9 @@ class NoteCaseProvider
     public function provideUserAttributesAndExpectedResultForNoteList(): array
     {
         // Set different user role attributes
-        $managingAdvisorRow = ['user_role_id' => 2];
-        $advisorRow = ['user_role_id' => 3];
-        $newcomerRow = ['user_role_id' => 4];
+        $managingAdvisorRow = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorRow = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerRow = ['user_role_id' => UserRole::NEWCOMER];
 
         return [
             [// ? newcomer not owner of note
@@ -74,9 +75,9 @@ class NoteCaseProvider
     public function provideUserAttributesAndExpectedResultForNoteCUD(): array
     {
         // Set different user role attributes
-        $managingAdvisorAttributes = ['user_role_id' => 2];
-        $advisorAttributes = ['user_role_id' => 3];
-        $newcomerAttributes = ['user_role_id' => 4];
+        $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttributes = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerAttributes = ['user_role_id' => UserRole::NEWCOMER];
 
         $authorizedResult = [
             // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"

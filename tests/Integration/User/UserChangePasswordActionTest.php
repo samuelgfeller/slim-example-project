@@ -2,8 +2,10 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -30,6 +32,7 @@ class UserChangePasswordActionTest extends TestCase
     use DatabaseTestTrait;
     use FixtureTestTrait;
     use HttpJsonTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Test user password change with different user roles
@@ -42,12 +45,18 @@ class UserChangePasswordActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user to be changed with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userToUpdateAttr) {
             $userToUpdateRow = $authenticatedUserRow;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userToUpdateRow = $this->insertFixturesWithAttributes($userToUpdateAttr, UserFixture::class);
+            $userToUpdateRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userToUpdateAttr),
+                UserFixture::class
+            );
         }
 
         // Simulate logged-in user
@@ -124,7 +133,10 @@ class UserChangePasswordActionTest extends TestCase
     public function testChangePasswordSubmitAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
-        $userRow = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
+            UserFixture::class
+        );
 
         $request = $this->createJsonRequest(
             'PUT',

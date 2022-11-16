@@ -4,9 +4,11 @@
 namespace App\Test\Integration\Client;
 
 
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
@@ -34,6 +36,7 @@ class ClientCreateActionTest extends TestCase
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Client creation with valid data
@@ -51,12 +54,18 @@ class ClientCreateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
+        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttr),
+            UserFixture::class
+        );
         if ($authenticatedUserAttr === $userLinkedToClientAttr) {
             $userLinkedToClientRow = $authenticatedUserRow;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
+            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
+                $this->addUserRoleId($userLinkedToClientAttr),
+                UserFixture::class
+            );
         }
 
         // Client status is not authorization relevant for client creation
@@ -122,7 +131,10 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
+            UserFixture::class
+        )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // To test note message validation when submitted in client creation form the client values have to be valid
         if ($requestBody['user_id'] === 'valid' && $requestBody['client_status_id'] === 'valid') {
