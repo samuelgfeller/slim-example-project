@@ -1,0 +1,37 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    #user-wrapper {
+        width: 100%;
+        display: flex;
+        /* Make items shrink if different height on same row */
+        align-items: flex-start;
+        gap: 30px 40px;
+        flex-wrap: wrap;
+        padding: 0 1em;
+        margin-top: 30px;
+    }
+    .user-card{
+        background: whitesmoke;
+        border-radius: 30px;
+    }
+
+    /* Make divs inside flexbox also flexbox to align text with icon*/
+    .card-icon-and-span-div {
+        display: flex;
+        align-items: center;
+        margin-top: 5px; /* space here for when wrapping */
+    }
+
+    /* Name of the location */
+    .card-icon-and-span-div img {
+        margin-right: 10px;
+        height: 20px;
+    }
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+    #user-wrapper {
+        padding: 0 10px;
+    }
+}

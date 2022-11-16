@@ -83,7 +83,10 @@ return function (App $app) {
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         // $group->options('', PreflightAction::class); // Allow preflight requests
-        $group->get('', \App\Application\Actions\User\UserListPageAction::class)->setName('user-list');
+        $group->get('/list', \App\Application\Actions\User\UserListPageAction::class)
+            ->setName('user-list-page');
+        $group->get('', \App\Application\Actions\User\Ajax\UserListAction::class)
+            ->setName('user-list');
 
         $group->get(
             '/dropdown-options',
@@ -100,9 +103,7 @@ return function (App $app) {
         $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)
             ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
-    $app->get('/users/list', \App\Application\Actions\User\UserListPageAction::class)->setName(
-        'user-list-page'
-    )->add(UserAuthenticationMiddleware::class);
+
     $app->get('/profile', \App\Application\Actions\User\Page\UserViewProfileAction::class)->setName(
         'profile-page'
     )->add(

@@ -21,7 +21,7 @@ class UserUtilFinder
     {
         return [
             'userRoles' => $this->userAuthorizationGetter->getAuthorizedUserRoles(),
-            'statuses' => UserStatus::array()
+            'statuses' => UserStatus::toArray()
         ];
     }
 }

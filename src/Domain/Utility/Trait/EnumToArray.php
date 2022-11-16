@@ -18,7 +18,7 @@ trait EnumToArray
         return array_column(self::cases(), 'value');
     }
 
-    public static function array(): array
+    public static function toArray(): array
     {
         return array_combine(self::values(), self::names());
     }

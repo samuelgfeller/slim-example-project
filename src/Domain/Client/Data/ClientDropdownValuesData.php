@@ -21,6 +21,6 @@ class ClientDropdownValuesData
     {
         $this->statuses = $statuses;
         $this->users = $users;
-        $this->sexes = SexOption::array();
+        $this->sexes = SexOption::toArray();
     }
 }
