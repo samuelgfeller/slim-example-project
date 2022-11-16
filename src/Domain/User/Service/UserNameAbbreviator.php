@@ -3,7 +3,6 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Data\UserData;
-use App\Infrastructure\User\UserFinderRepository;
 
 class UserNameAbbreviator
 {
@@ -24,14 +23,16 @@ class UserNameAbbreviator
         $abbreviatedLastName = '';
         foreach ($usersToCheck as $userToCheck) {
             // Check given lastname against all other lastnames that have the same firstname
-            $buildLastName = function (string $lastName, string $lastNameToCheck, int $i = 1) use (&$buildLastName
+            $buildLastName = static function (string $lastName, string $lastNameToCheck, int $i = 1) use (&$buildLastName
             ): string {
-                //checks if short form of surname is contained in name
-                if (str_contains($lastNameToCheck, substr($lastName, 0, $i))) {
+                // When $i (amount of letters) of last name to abbreviate is the same as the full name,
+                // there is no short form and the function must end as it would cause infinite recursion .
+                // Checks if short form ($i letters from the beginning of surname) is contained in name
+                if (strlen($lastName) > $i && str_contains($lastNameToCheck, substr($lastName, 0, $i))) {
                     $i++;
                     $shortName = $buildLastName($lastNameToCheck, $lastName, $i);
                 } else {
-                    // Return first $i first letters of lastname
+                    // Return first $i letters of lastname
                     $shortName = substr($lastName, 0, $i);
                 }
                 return $shortName;
@@ -72,9 +73,9 @@ class UserNameAbbreviator
         foreach ($groupedUsers as $firstName => $usersWithIdenticalFirstName) {
             // If there is only one entry it means that it's a unique first name
             if (count($usersWithIdenticalFirstName) === 1) {
-                // reset() gives the first value of the array
+                // reset() returns the first value of the array
                 $userWithUniqueFirstName = reset($usersWithIdenticalFirstName);
-                $outputNames[(int)$userWithUniqueFirstName->id] = $userWithUniqueFirstName->firstName;
+                $outputNames[$userWithUniqueFirstName->id] = $userWithUniqueFirstName->firstName;
                 continue;
             }
 
