@@ -1,5 +1,5 @@
 import {getFormData, toggleEnableDisableForm} from "./modal-form.js";
-import {handleFail} from "../requests/fail-handler.js";
+import {handleFail} from "../requestUtil/fail-handler.js";
 import {closeModal} from "./modal.js";
 import {basePath} from "../config.js";
 

@@ -1,6 +1,6 @@
 import {displayUserCreateModal} from "./user-create-modal.html.js";
 import {submitModalForm} from "../../general/js/modal/modal-submit-request.js";
-import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js";
 
 document.querySelector('#create-user-btn').addEventListener('click', displayUserCreateModal);
 

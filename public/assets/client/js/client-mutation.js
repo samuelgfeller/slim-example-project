@@ -1,5 +1,5 @@
 import {loadClients} from "./list/client-list-loading.js";
-import {handleFail} from "../../general/js/requests/fail-handler.js";
+import {handleFail} from "../../general/js/requestUtil/fail-handler.js";
 
 /**
  * After the click on the edit icon of a client, a modal box is opened

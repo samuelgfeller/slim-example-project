@@ -1,14 +1,11 @@
-import {displayUserCardLoadingPlaceholder} from "./user-list-card-loading-placeholder.js";
 import {basePath} from "../../general/js/config.js";
-import {handleFail} from "../../general/js/requests/fail-handler.js";
+import {handleFail} from "../../general/js/requestUtil/fail-handler.js";
 import {getUserCardHtml} from "./user-list-card.html.js";
 
 /**
- *  Load clients into DOM
+ *  Load elements into DOM
  */
 export function loadUsers() {
-    displayUserCardLoadingPlaceholder();
-
     return new Promise(function (resolve, reject) {
         let xHttp = new XMLHttpRequest();
         xHttp.onreadystatechange = function () {
@@ -36,7 +33,7 @@ export function loadUsers() {
 
 
 /**
- * Add client to page
+ * Add elements to page
  *
  * @param {object[]} userResultDataArray
  * @param {object} statuses

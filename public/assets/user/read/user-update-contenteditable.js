@@ -1,4 +1,4 @@
-import {removeValidationErrorMessages} from "../../general/js/requests/fail-handler.js";
+import {removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,

@@ -77,10 +77,15 @@ h3{
     font-size: 1.5em;
 }
 
+a{
+    text-decoration: none;
+}
 a:hover:not(a.currently-editable) {
     /*text-shadow: 0 0 1px black;*/
-    font-weight: bold;
-    text-decoration: none;
+    /*font-weight: bold;*/
+    /*text-decoration: none;*/
+    text-decoration: underline;
+    /*font-weight: 500;*//*The issue with making text bold is that it expands the container the link is in*/
 }
 a.currently-editable{
     cursor: default;

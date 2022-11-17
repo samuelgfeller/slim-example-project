@@ -2,7 +2,7 @@ import {createModal} from "../../../general/js/modal/modal.js";
 import {requestDropdownOptions} from "../../../general/js/modal/dropdown-request.js";
 import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-util.js";
 import {getRadioButtonsAsHtml} from "./client-template-util.js";
-import {displayFlashMessage} from "../../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../../general/js/requestUtil/flash-message.js";
 
 /**
  * Create and display modal box to create a new client
@@ -69,7 +69,7 @@ export function displayClientCreateModal() {
     </div>`;
     document.getElementById('client-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
     let container = document.getElementById('create-client-div');
-    createModal(header, body, footer, container);
+    createModal(header, body, footer, container, true);
 
     // Load dropdown options into client create modal
     requestDropdownOptions('clients').then((dropdownOptions) => {

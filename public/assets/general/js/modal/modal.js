@@ -6,7 +6,7 @@ document.addEventListener('click', function (e) {
         closeModal();
     }
     // Hide modal when anywhere in the window is clicked except the modal area itself
-    if (e.target && e.target === document.getElementById('modal')){
+    if (e.target && e.target === document.getElementById('modal')) {
         closeModal();
     }
 })
@@ -18,12 +18,13 @@ document.addEventListener('click', function (e) {
  * @param {string} body
  * @param {string} footer
  * @param {object} container HTML object
+ * @param {boolean} wideModal when modal contains two rows it is wider especially when shrinking screen
  */
-export function createModal(header, body, footer, container) {
+export function createModal(header, body, footer, container, wideModal = false) {
     // Insert parts into entire modal structure
-        // '<div  id="modal-container">' +
+    // '<div  id="modal-container">' +
     let htmlString = `<div id="modal">
-<div id="modal-box">
+<div id="modal-box" class="${wideModal === true ? 'wide-modal' : ''}">
 <div id="modal-header"><span id="close-modal">&times;</span>${header}</div>
 <div id="modal-body">${body}</div>
 <div id="modal-footer">${footer}</div>

@@ -7,31 +7,56 @@
         align-items: flex-start;
         gap: 30px 40px;
         flex-wrap: wrap;
-        padding: 0 1em;
+        padding: 0 10px;
         margin-top: 30px;
     }
     .user-card{
-        background: whitesmoke;
+        background: #ececec;
         border-radius: 30px;
+        padding: 0 20px 20px 20px;
+        box-shadow: 0 4px 8px 0 rgb(0 0 0 / 10%), 0 6px 20px 0 rgb(0 0 0 / 10%);
+        width: 100%;
+    }
+    .user-card:hover, .user-card:focus {
+        /*transform: perspective(1500px) rotateX(7deg);*/
+        transform: translateY(-5px);
+        transition: all 0.2s;
+        box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+    .user-card h3{
+        font-size: 25px;
+        margin-bottom: 20px;
     }
 
-    /* Make divs inside flexbox also flexbox to align text with icon*/
+    /* Personal info email address - Make divs inside flexbox also flexbox to align text with icon*/
     .card-icon-and-span-div {
         display: flex;
         align-items: center;
-        margin-top: 5px; /* space here for when wrapping */
+        margin-top: 10px; /* space here for when wrapping */
+        margin-bottom: 10px;
+        overflow-wrap: anywhere;
+        white-space: break-spaces;
     }
-
-    /* Name of the location */
+    /* Icon */
     .card-icon-and-span-div img {
         margin-right: 10px;
         height: 20px;
+    }
+    .user-card-dropdown-flexbox{
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-evenly;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
     }
 }
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
-    #user-wrapper {
-        padding: 0 10px;
+    .user-card {
+        width: auto;
+        padding: 0 25px 25px 25px;
     }
 }

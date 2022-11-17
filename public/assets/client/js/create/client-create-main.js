@@ -1,6 +1,6 @@
 import {displayClientCreateModal} from "../templates/client-create-modal.html.js";
 import {submitModalForm} from "../../../general/js/modal/modal-submit-request.js";
-import {displayFlashMessage} from "../../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../../general/js/requestUtil/flash-message.js";
 import {loadClients} from "../list/client-list-loading.js";
 import {displayValidationErrorMessage} from "../../../general/js/validation/form-validation.js";
 

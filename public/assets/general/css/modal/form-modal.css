@@ -23,12 +23,12 @@
         padding: 2px 18px 30px 18px;
         border-radius: 33px;
         /*border: 2px solid black;*/
-        min-width: 300px;
         width: 95%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border: 1px solid rgba(255, 255, 255, 0.3);
         animation-name: fade-in-modal;
         animation-duration: 0.4s;
+        max-width: 900px;
         /*backdrop-filter: blur(20px);*/
     }
 
@@ -164,6 +164,9 @@
         width: 80%;
         padding: 2px 30px 30px 30px;
     }
+    #modal-box.wide-modal {
+        width: 95%;
+    }
 
     .wide-modal-form {
         grid-template-columns: repeat(2, 1fr);
@@ -171,21 +174,45 @@
 }
 
 @media (min-width: 700px) {
-    #modal-box {
+    #modal-box:not(.wide-modal) {
         width: 60%;
+    }
+}
+
+@media (min-width: 900px) {
+    #modal-box.wide-modal {
+        /*min-width: 500px;*/
+        width: 80%;
     }
 }
 
 @media (min-width: 961px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
-    #modal-box {
+    #modal-box:not(.wide-modal) {
         width: 50%;
     }
 }
 @media (min-width: 1200px) {
     /* tablet, landscape iPad, lo-res laptops ands desktops */
-    #modal-box {
+    #modal-box:not(.wide-modal) {
         width: 40%;
+    }
+    #modal-box.wide-modal {
+        width: 70%;
+    }
+}
+
+@media (min-width: 1500px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box.wide-modal {
+        width: 60%;
+    }
+}
+
+@media (min-width: 1700px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    #modal-box.wide-modal {
+        width: 50%;
     }
 }
 

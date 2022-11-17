@@ -15,18 +15,16 @@ export function getUserCardHtml(container, user, statuses) {
         <h3>${user.firstName !== null ? user.firstName : ''} ${user.surname !== null ? user.surname : ''}</h3>
         <div class="card-icon-and-span-div">
             <img src="assets/general/img/personal-data-icons/email-icon.svg" class="card-icon" alt="email">
-            <span>${escapeHtml(user.email)}</span>
-         </div>
-            <div>
-                <select name="status" class="default-select">
-                ${getDropdownAsHtmlOptions(statuses, user.statusId)}
-                </select>
-            </div>
-            <div>
-                <select name="user_role_id" class="default-select">
-                ${getDropdownAsHtmlOptions(user.availableUserRoles, user.userRoleId)}
-                </select>
-            </div>
+            <a href="mailto:${escapeHtml(user.email)}">${escapeHtml(user.email)}</a>
+        </div>
+        <div class="user-card-dropdown-flexbox">
+            <select name="status" class="default-select">
+            ${getDropdownAsHtmlOptions(statuses, user.statusId)}
+            </select>
+            <select name="user_role_id" class="default-select">
+            ${getDropdownAsHtmlOptions(user.availableUserRoles, user.userRoleId)}
+            </select>
+        </div>
            
     </div>
 </div>`;

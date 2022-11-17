@@ -6,7 +6,7 @@
  */
 import {basePath} from "../../../general/js/config.js";
 import {hideCheckmarkLoader} from "./client-read-text-area-event-listener-setup.js";
-import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {handleFail} from "../../../general/js/requestUtil/fail-handler.js";
 
 /**
  * Make delete request to db

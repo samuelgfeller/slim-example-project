@@ -209,7 +209,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             </a>
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
-                <img src="../../public/assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
                 <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
@@ -234,7 +234,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
             <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
             <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
-            <img src="../../public/assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+            <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
         </div>
     </div>
 </div>

@@ -1,7 +1,9 @@
 import {getClientProfileCardHtml} from "../templates/client-list-profile-card.html.js";
-import {displayClientProfileCardLoadingPlaceholder, removeClientCardContentPlaceholder} from "./client-list-loading-placeholder.js";
-import {basePath} from "../../../general/js/config.js";
-import {handleFail} from "../../../general/js/requests/fail-handler.js";
+import {
+    displayClientProfileCardLoadingPlaceholder,
+    removeClientCardContentPlaceholder
+} from "./client-list-loading-placeholder.js";
+import {loadData} from "../../../general/js/request/load-data.js";
 
 /**
  *  Load clients into DOM
@@ -12,37 +14,11 @@ export function loadClients() {
     let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
     let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';
 
-    let xHttp = new XMLHttpRequest();
-    xHttp.onreadystatechange = function () {
-        if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // Fail
-            if (xHttp.status !== 200) {
-                // Default fail handler
-                handleFail(xHttp);
-            }
-            // If status code 401 user is not logged in
-            if (xHttp.status === 401) {
-                removeClientCardContentPlaceholder();
-                document.getElementById('client-wrapper').insertAdjacentHTML('afterend',
-                    '<p>Please <a href="' + JSON.parse(xHttp.responseText).loginUrl +
-                    '">login</a> to access clients assigned to you.</p>');
-            }
-            // Success
-            else {
-                let response = JSON.parse(xHttp.responseText);
-                removeClientCardContentPlaceholder();
-                addClientsToDom(response.clients, response.users, response.statuses);
-            }
-        }
-    };
-
-    // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-    xHttp.open('GET', basePath + 'clients' + queryParams, true);
-    xHttp.setRequestHeader("Content-type", "application/json");
-
-    xHttp.send();
+    loadData('clients', queryParams).then(jsonResponse => {
+        removeClientCardContentPlaceholder();
+        addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
+    });
 }
-
 
 /**
  * Add client to page

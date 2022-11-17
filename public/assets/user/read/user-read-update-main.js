@@ -1,6 +1,6 @@
 import {makeUserFieldEditable} from "./user-update-contenteditable.js";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js";
-import {displayFlashMessage} from "../../general/js/requests/flash-message.js";
+import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js";
 import {submitModalForm} from "../../general/js/modal/modal-submit-request.js";
 import {submitUserUpdate} from "../update/user-update-request.js";
 

@@ -4,7 +4,7 @@ import {
     hideCheckmarkLoader,
     userIsTypingOnNoteId
 } from "./client-read-text-area-event-listener-setup.js";
-import {handleFail, removeValidationErrorMessages} from "../../../general/js/requests/fail-handler.js";
+import {handleFail, removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js";
 
 let noteSaveHideCheckMarkTimeout = [];
 

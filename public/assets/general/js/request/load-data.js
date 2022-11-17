@@ -1,12 +1,14 @@
-import {basePath} from "../config.js";
 import {handleFail} from "../requestUtil/fail-handler.js";
+import {basePath} from "../config.js";
 
 /**
- * @param {string} moduleRoute name of the module for the route preceding "/dropdown-options"
+ * Sends a GET request
  *
- * @return {object}
+ * @param {string} route without basepath and trailing slash
+ * @param {string} queryParams question mark has to be included
+ * @return {Promise<JSON>}
  */
-export function requestDropdownOptions(moduleRoute) {
+export function loadData(route, queryParams = '') {
     return new Promise(function (resolve, reject) {
         let xHttp = new XMLHttpRequest();
         xHttp.onreadystatechange = function () {
@@ -15,18 +17,17 @@ export function requestDropdownOptions(moduleRoute) {
                 if (xHttp.status !== 200) {
                     // Default fail handler
                     handleFail(xHttp);
-                    // reject() only needed if promise is caught with .catch()
                 }
                 // Success
                 else {
-                    let response = JSON.parse(xHttp.responseText);
-                    resolve(response);
+                    // Resolve with json response
+                    resolve(JSON.parse(xHttp.responseText));
                 }
             }
         };
 
         // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-        xHttp.open('GET', basePath + moduleRoute + '/dropdown-options', true);
+        xHttp.open('GET', basePath + route + queryParams, true);
         xHttp.setRequestHeader("Content-type", "application/json");
 
         xHttp.send();

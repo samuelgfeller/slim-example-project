@@ -1,4 +1,4 @@
-import {handleFail, removeValidationErrorMessages} from "../../general/js/requests/fail-handler.js";
+import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js";
 import {basePath} from "../../general/js/config.js";
 
 /**
