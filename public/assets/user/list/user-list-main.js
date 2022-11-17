@@ -1,7 +1,10 @@
 import {addUsersToDom} from "./user-list-card-dom-appending.js";
 import {displayUserCardLoadingPlaceholder, removeUserCardContentPlaceholder} from "./user-list-content-placeholder.js";
 import {loadData} from "../../general/js/request/load-data.js";
-import {openLinkOnHtmlElement} from "../../general/js/eventHandler/open-link-on-html-element.js";
+import {
+    disableMouseWheelClickScrolling,
+    openLinkOnHtmlElement
+} from "../../general/js/eventHandler/open-link-on-html-element.js";
 import {triggerClickOnHtmlElementEnterKeypress} from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
 
@@ -17,8 +20,9 @@ loadData('users').then(jsonResponse => {
     for (const card of userCards) {
         // Click on user card
         card.addEventListener('click', openUserReadPageOnCardClick);
-        // Middle mouse wheel click - NOTE: it doesn't work when the page is scrollable https://stackoverflow.com/q/69075405/9013718
+        // Middle mouse wheel click
         card.addEventListener('auxclick', openUserReadPageOnCardClick);
+        card.addEventListener('mousedown', disableMouseWheelClickScrolling);
         // Enter or space bar key press
         card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
 
@@ -38,7 +42,6 @@ loadData('users').then(jsonResponse => {
  * @param event
  */
 function openUserReadPageOnCardClick(event) {
-    console.log('asdf')
     // "this" is the card
     openLinkOnHtmlElement(event, this, `users/${this.dataset.userId}`);
 }

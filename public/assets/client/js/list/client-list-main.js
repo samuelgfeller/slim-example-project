@@ -1,5 +1,8 @@
 import {addClientsToDom, loadClients} from "./client-list-loading.js";
-import {openLinkOnHtmlElement} from "../../../general/js/eventHandler/open-link-on-html-element.js";
+import {
+    disableMouseWheelClickScrolling,
+    openLinkOnHtmlElement
+} from "../../../general/js/eventHandler/open-link-on-html-element.js";
 import {removeClientCardContentPlaceholder} from "./client-list-content-placeholder.js";
 import {
     triggerClickOnHtmlElementEnterKeypress
@@ -19,8 +22,9 @@ loadClients().then(jsonResponse => {
     for (const card of cards) {
         // Click on user card
         card.addEventListener('click', openClientReadPageOnCardClick);
-        // Middle mouse wheel click - NOTE: it doesn't work when the page is scrollable https://stackoverflow.com/q/69075405/9013718
+        // Middle mouse wheel click
         card.addEventListener('auxclick', openClientReadPageOnCardClick);
+        card.addEventListener('mousedown', disableMouseWheelClickScrolling);
         // Enter or space bar key press
         card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
 
@@ -40,7 +44,6 @@ loadClients().then(jsonResponse => {
  * @param event
  */
 function openClientReadPageOnCardClick(event) {
-    console.log('wtf');
     // "this" is the card
     openLinkOnHtmlElement(event, this, `clients/${this.dataset.clientId}`);
 }

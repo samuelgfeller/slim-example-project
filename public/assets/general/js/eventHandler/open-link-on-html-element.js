@@ -26,3 +26,17 @@ export function openLinkOnHtmlElement(event, htmlElement, route) {
         }
     }
 }
+
+/**
+ * The mouse wheel click event (auxclick and event.button === 1)
+ * does not work when the page is scrollable.
+ * Scroll has to be disabled first.
+ * Source: https://stackoverflow.com/a/69076122/9013718
+ *
+ * @param event
+ */
+export function disableMouseWheelClickScrolling(event){
+    if (event.which === 2) {
+      event.preventDefault();
+    }
+}
