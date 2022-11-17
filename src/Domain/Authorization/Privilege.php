@@ -4,6 +4,8 @@ namespace App\Domain\Authorization;
 
 enum Privilege: string
 {
+    // ? Instead of the function hasPrivilege() privilege loaded via Ajax by the client checks if the letter is contained
+    // in the name. For instance if update privilege is required, the client will check if privilege contains "U".
     // No rights
     case NONE = 'NONE';
     // Allowed to read all entries

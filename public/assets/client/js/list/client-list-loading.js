@@ -39,9 +39,7 @@ function addClientsToDom(clients, allUsers, allStatuses) {
     // Loop over clients and add to DOM
     for (const client of clients) {
         // Client card HTML
-        let clientProfileCardHtml = getClientProfileCardHtml(clientContainer, client.id, client.firstName, client.lastName,
-            client.age, client.sex, client.location, client.phone, client.userId, client.clientStatusId, allUsers,
-            allStatuses);
+        let clientProfileCardHtml = getClientProfileCardHtml(client, allUsers, allStatuses);
 
         // Add to DOM
         clientContainer.insertAdjacentHTML('beforeend', clientProfileCardHtml);

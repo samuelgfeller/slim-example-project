@@ -50,7 +50,7 @@ export function addUsersToDom(userResultDataArray, statuses) {
     // Loop over users and add to DOM
     for (const userResult of userResultDataArray) {
         // Client card HTML
-        let cardHtml = getUserCardHtml(container, userResult, statuses);
+        let cardHtml = getUserCardHtml(userResult, statuses);
 
         // Add to DOM
         container.insertAdjacentHTML('beforeend', cardHtml);

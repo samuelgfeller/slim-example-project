@@ -52,9 +52,11 @@ class ClientFinder
         }
 
         $clientResultCollection = new ClientResultDataCollection();
-        $clientResultCollection->clients = $this->clientFinderRepository->findClientsWithResultAggregate(
+        // Retrieve clients
+        $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate(
             $queryBuilderWhereArray
         );
+
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesForDropdown();
         $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
             $this->userFinderRepository->findAllUsers()
@@ -63,6 +65,31 @@ class ClientFinder
         // Add permissions on what logged-in user is allowed to do with object
 //        $this->clientUserRightSetter->defineUserRightsOnClients($allClientResults);
         return $clientResultCollection;
+    }
+
+    /**
+     * Finds and adds user_id change and client_status_id change privilege
+     * to found clientResultAggregate filtered by the given $whereArray
+     *
+     * @param array $whereArray cake query builder where array -> ['table.field' => 'value']
+     * @return ClientResultAggregateData[]
+     */
+    private function findClientsWhereWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
+    {
+        $clientResultsWithAggregates = $this->clientFinderRepository->findClientsWithResultAggregate($whereArray);
+        // Add assigned user and client status privilege to each clientResultAggregate
+        foreach ($clientResultsWithAggregates as $client) {
+            $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
+                'user_id',
+                $client->userId
+            );
+            //  Set client status privilege
+            $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
+                'client_status_id',
+                $client->userId
+            );
+        }
+        return $clientResultsWithAggregates;
     }
 
     /**

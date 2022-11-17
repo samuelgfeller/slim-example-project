@@ -23,19 +23,7 @@ function initClientListEventDelegationActions(e) {
         } else {
             window.location = linkToOpenClient;
         }
-        // console.log('redirect to ' + card.dataset.clientId);
     }
-
-    // Open edit client modal after edit button click in client box
-    // if (e.target && e.target.className.includes('card-edit-icon')) {
-    //     let clientId = e.target.dataset.id;
-    //     updateClientModal(clientId);
-    // }
-    // // Submit edit client
-    // if (e.target && e.target.id === 'submit-btn-update-client') {
-    //     let clientId = e.target.dataset.id;
-    //     submitUpdateClient(clientId);
-    // }
     // // Submit delete client
     // if (e.target && e.target.className.includes('card-del-icon')) {
     //     let clientId = e.target.dataset.id;

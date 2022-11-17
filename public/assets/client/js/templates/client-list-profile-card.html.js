@@ -5,60 +5,51 @@ import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-ut
 /**
  * HTML code for client profile card
  *
- * @param clientContainer
- * @param clientId
- * @param firstName
- * @param lastName
- * @param age
- * @param sex
- * @param location
- * @param phoneNumber
- * @param assignedUserId
- * @param statusId
+ * @param {object} client
  * @param allUsers
  * @param allStatuses
- * @return {string}
+ * @return {string} html card
  */
-export function getClientProfileCardHtml(clientContainer, clientId, firstName, lastName, age, sex, location, phoneNumber, assignedUserId,
-                                         statusId, allUsers, allStatuses) {
-
-    return `<div class="client-profile-card" tabindex="0" data-client-id="${clientId}">
+export function getClientProfileCardHtml(client, allUsers, allStatuses) {
+    return `<div class="client-profile-card" tabindex="0" data-client-id="${client.id}">
     <div class="profile-card-header">
         <!-- other div needed to attach bubble to img -->
         <div class="profile-card-avatar">
-            <img src=${getAvatarPath(sex)} alt="avatar">
+            <img src=${getAvatarPath(client.sex)} alt="avatar">
     ${// Display age if content not empty
-        age !== null && age !== '' ? `<span class="profile-card-age">${escapeHtml(age)}</span>` : ''
+        client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
     }
         </div>
     </div>
     <div class="profile-card-content">
-        <h3>${firstName !== null ? firstName : ''} ${lastName !== null ? lastName : ''}</h3>
+        <h3>${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
         <div class="profile-card-infos-flexbox">
     ${// Display location icon and content if not empty 
-        location !== null && location !== '' ?
+        client.location !== null && client.location !== '' ?
             `<div>
                  <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                 <span>${escapeHtml(location)}</span>
+                 <span>${escapeHtml(client.location)}</span>
              </div>` : ''
     }
     ${// Display location icon and content if not empty 
-        phoneNumber !== null && phoneNumber !== '' ?
+        client.phone !== null && client.phone !== '' ?
             `<div>
                  <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                 <span>${escapeHtml(phoneNumber)}</span>
+                 <span>${escapeHtml(client.phone)}</span>
              </div>` : ''
     }
         </div>
         <div class="profile-card-assignee-and-status">
             <div>
-                <select name="assigned-user" class="default-select">
-                ${getDropdownAsHtmlOptions(allUsers, assignedUserId)}
+                <select name="assigned-user" class="default-select" 
+                        ${client.assignedUserPrivilege.includes('U') ? '' : 'disabled'}>
+                    ${getDropdownAsHtmlOptions(allUsers, client.userId)}
                 </select>
             </div>
             <div>
-                <select name="status" class="default-select">
-                ${getDropdownAsHtmlOptions(allStatuses, statusId)}
+                <select name="status" class="default-select"
+                        ${client.clientStatusPrivilege.includes('U') ? '' : 'disabled'}>
+                    ${getDropdownAsHtmlOptions(allStatuses, client.clientStatusId)}
                 </select>
             </div>
         </div>

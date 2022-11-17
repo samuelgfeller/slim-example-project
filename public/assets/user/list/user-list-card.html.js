@@ -5,11 +5,10 @@ import {escapeHtml} from "../../general/js/functions.js";
  * HTML code for client profile card
  *
  * @return {string}
- * @param {HTMLElement} container
- * @param {Object} user userResultData object
+ * @param {Object} user userResultData.php object
  * @param {Object} statuses user statuses (no restriction if privileged unlike user role so passed globally)
  */
-export function getUserCardHtml(container, user, statuses) {
+export function getUserCardHtml(user, statuses) {
     return `<div class="user-card" tabindex="0" data-user-id="${user.id}">
     <div class="card-content">
         <h3>${user.firstName !== null ? user.firstName : ''} ${user.surname !== null ? user.surname : ''}</h3>
@@ -18,11 +17,13 @@ export function getUserCardHtml(container, user, statuses) {
             <a href="mailto:${escapeHtml(user.email)}">${escapeHtml(user.email)}</a>
         </div>
         <div class="user-card-dropdown-flexbox">
-            <select name="status" class="default-select">
-            ${getDropdownAsHtmlOptions(statuses, user.statusId)}
+            <select name="status" class="default-select" 
+                    ${user.userRolePrivilege.includes('U') ? '' : 'disabled'}>
+                ${getDropdownAsHtmlOptions(statuses, user.statusId)}
             </select>
-            <select name="user_role_id" class="default-select">
-            ${getDropdownAsHtmlOptions(user.availableUserRoles, user.userRoleId)}
+            <select name="user_role_id" class="default-select" 
+                    ${user.userRolePrivilege.includes('U') ? '' : 'disabled'}>
+                ${getDropdownAsHtmlOptions(user.availableUserRoles, user.userRoleId)}
             </select>
         </div>
            

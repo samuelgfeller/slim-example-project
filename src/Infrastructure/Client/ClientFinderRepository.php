@@ -60,7 +60,7 @@ class ClientFinderRepository
      * Side note: difference between Association, aggregation / composition and inheritance
      * https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/
      *
-     * @return ClientData[]
+     * @return ClientResultAggregateData[]
      */
     public function findClientsWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
