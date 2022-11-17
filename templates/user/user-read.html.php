@@ -81,7 +81,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
             <?php
             foreach ($user->availableUserRoles as $id => $userRole) {
-                $selected = $id === $user->user_role_id ? 'selected' : '';
+                $selected = $id === $user->userRoleId ? 'selected' : '';
                 echo "<option value='$id' $selected>" . $userRole . "</option>";
             }
             ?>

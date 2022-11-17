@@ -18,7 +18,6 @@ $this->addAttribute('css', [
     'assets/general/css/modal/form-modal.css',
     'assets/client/client-list.css',
     'assets/client/client-list-loading-placeholder.css',
-    'assets/client/client-create-modal.css',
 ]);
 $this->addAttribute(
     'js',

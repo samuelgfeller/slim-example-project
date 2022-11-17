@@ -1,11 +1,11 @@
 import {initAllDeleteBtnEventListeners, initNotesEventListeners} from "./client-read-text-area-event-listener-setup.js";
 import {addNewNoteTextarea} from "./client-read-create-note.js";
-import {saveClientReadDropdownChange} from "./client-read-save-dropdown-change.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
 import {initAutoResizingTextareas} from "../../../general/js/default.js";
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js";
+import {submitFieldChangeWithFlash} from "../../../general/js/request/submit-field-change-with-flash.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -27,10 +27,10 @@ loadAvailablePersonalInfoIconsDiv();
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
 
 // Dropdown client status and assigned user change event listener
-const clientStatus = document.querySelector('select[name="client_status_id"]:not([disabled])');
-clientStatus?.addEventListener('change', saveClientReadDropdownChange);
-const assignedUser = document.querySelector('select[name="user_id"]:not([disabled])');
-assignedUser?.addEventListener('change', saveClientReadDropdownChange);
+document.querySelector('select[name="client_status_id"]:not([disabled])')
+    ?.addEventListener('change', submitClientDropdownChange);
+document.querySelector('select[name="user_id"]:not([disabled])')
+    ?.addEventListener('change', submitClientDropdownChange);
 
 // Edit client main values event listeners
 // First and last name
@@ -52,12 +52,24 @@ personalInfoEditIconsToggle.addEventListener('click', () => {
         editIcon.classList.toggle('always-displayed-icon');
     }
 })
+
 // Display toggle if screen is touch device https://stackoverflow.com/a/13470899/9013718
 if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
     personalInfoEditIconsToggle.style.display = 'inline-block';
     // Increase right padding to not overlap edit icons
     personalInfoContainer.style.paddingRight = '20px';
-}else{
+} else {
     personalInfoEditIconsToggle.style.display = 'none';
     personalInfoContainer.style.paddingRight = null;
+}
+
+/**
+ * Client select change event handler
+ */
+function submitClientDropdownChange() {
+    // "this" is the select element
+    let clientId = document.getElementById('client-id').value;
+
+    // Submit field change with flash message indicating that change was successful
+    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, `clients/${clientId}`);
 }

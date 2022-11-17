@@ -47,14 +47,14 @@ class UserAuthorizationChecker
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
                 // Managing advisors can do everything with users except setting a role higher than advisor
-                if ($userData->user_role_id !== null &&
-                    $this->userRoleIsGranted($userData->user_role_id, $authenticatedUserRoleData, $userRoleHierarchies)
+                if ($userData->userRoleId !== null &&
+                    $this->userRoleIsGranted($userData->userRoleId, $authenticatedUserRoleData, $userRoleHierarchies)
                     === true
                 ) {
                     return true;
                 }
 
-                if ($userData->user_role_id === null) {
+                if ($userData->userRoleId === null) {
                     return true;
                 }
             }

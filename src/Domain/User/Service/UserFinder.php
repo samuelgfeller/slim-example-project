@@ -33,7 +33,7 @@ class UserFinder
             if ($this->userAuthorizationChecker->isGrantedToRead($userResultData->id)) {
                 // Authorization limits which entries are in the user role dropdown
                 $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
-                    $userResultData->user_role_id
+                    $userResultData->userRoleId
                 );
                 $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
                     $userResultData->availableUserRoles
@@ -83,7 +83,7 @@ class UserFinder
                 );
                 // Available user roles for dropdown and privilege
                 $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
-                    $userResultData->user_role_id
+                    $userResultData->userRoleId
                 );
                 $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
                     $userResultData->availableUserRoles

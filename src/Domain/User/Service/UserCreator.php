@@ -68,7 +68,7 @@ class UserCreator
 
         // Set default status and role
         $user->status = $user->status ?? UserStatus::Unverified;
-        $user->user_role_id = $user->user_role_id ??
+        $user->userRoleId = $user->userRoleId ??
             $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
 
         // Check if authenticated user is authorized to create user with the given data

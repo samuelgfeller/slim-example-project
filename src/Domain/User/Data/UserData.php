@@ -23,7 +23,7 @@ class UserData
     public ?string $password2;
     public ?string $passwordHash;
     public ?UserStatus $status = null;
-    public ?int $user_role_id = null;
+    public ?int $userRoleId = null;
     public ?string $createdAt;
     public ?string $updatedAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added to authorization and service
@@ -51,7 +51,7 @@ class UserData
         // Making sure that role and status aren't filled with malicious data
         if ($notRestricted === true){
             $this->status = $arrayReader->findAsEnum('status', UserStatus::class);
-            $this->user_role_id = $arrayReader->findAsInt('user_role_id');
+            $this->userRoleId = $arrayReader->findAsInt('user_role_id');
         }
     }
 
@@ -80,7 +80,7 @@ class UserData
             'surname' => $this->surname,
             'email' => $this->email,
             'password_hash' => $this->passwordHash,
-            'user_role_id' => $this->user_role_id,
+            'user_role_id' => $this->userRoleId,
             'status' => $this->status->value,
         ];
     }

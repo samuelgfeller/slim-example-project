@@ -76,7 +76,7 @@ class UserValidator
         $this->validator->validateName($user->surname, 'surname', $validationResult, true);
         $this->validator->validateEmail($user->email, $validationResult, true);
         $this->validateUserStatus($user->status, $validationResult, true);
-        $this->validateUserRoleId($user->user_role_id, $validationResult, true);
+        $this->validateUserRoleId($user->userRoleId, $validationResult, true);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
         // If the validation failed, throw the exception which will be caught in the Action

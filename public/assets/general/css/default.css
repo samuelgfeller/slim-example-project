@@ -80,7 +80,7 @@ h3{
 a{
     text-decoration: none;
 }
-a:hover:not(a.currently-editable) {
+a:hover:not(a.currently-editable):not(#nav-container a) {
     /*text-shadow: 0 0 1px black;*/
     /*font-weight: bold;*/
     /*text-decoration: none;*/

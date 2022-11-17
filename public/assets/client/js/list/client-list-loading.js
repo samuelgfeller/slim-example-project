@@ -1,12 +1,10 @@
 import {getClientProfileCardHtml} from "../templates/client-list-profile-card.html.js";
-import {
-    displayClientProfileCardLoadingPlaceholder,
-    removeClientCardContentPlaceholder
-} from "./client-list-loading-placeholder.js";
+import {displayClientProfileCardLoadingPlaceholder} from "./client-list-content-placeholder.js";
 import {loadData} from "../../../general/js/request/load-data.js";
 
 /**
  *  Load clients into DOM
+ *  @return {Promise} load clients ajax promise
  */
 export function loadClients() {
     displayClientProfileCardLoadingPlaceholder();
@@ -14,10 +12,7 @@ export function loadClients() {
     let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
     let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';
 
-    loadData('clients', queryParams).then(jsonResponse => {
-        removeClientCardContentPlaceholder();
-        addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
-    });
+    return loadData('clients', queryParams);
 }
 
 /**
@@ -27,7 +22,7 @@ export function loadClients() {
  * @param allUsers
  * @param allStatuses
  */
-function addClientsToDom(clients, allUsers, allStatuses) {
+export function addClientsToDom(clients, allUsers, allStatuses) {
     let clientContainer = document.getElementById('client-wrapper');
 
     // If no results, tell user so
@@ -35,13 +30,11 @@ function addClientsToDom(clients, allUsers, allStatuses) {
         clientContainer.insertAdjacentHTML('afterend', '<p>No clients were found.</p>')
     }
 
-
     // Loop over clients and add to DOM
     for (const client of clients) {
         // Client card HTML
         let clientProfileCardHtml = getClientProfileCardHtml(client, allUsers, allStatuses);
-
-        // Add to DOM
+        // // Add to DOM
         clientContainer.insertAdjacentHTML('beforeend', clientProfileCardHtml);
     }
 }

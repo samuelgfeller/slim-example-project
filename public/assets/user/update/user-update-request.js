@@ -17,7 +17,6 @@ export function submitUserUpdate(formFieldsAndValues) {
                 if (xHttp.status !== 201 && xHttp.status !== 200) {
                     // Default fail handler
                     handleFail(xHttp);
-                    console.log(xHttp.responseText);
                     resolve(false);
                     // reject() only needed if promise is caught with .catch()
                 }
@@ -34,13 +33,7 @@ export function submitUserUpdate(formFieldsAndValues) {
                 }
             }
         };
-        let userId = document.getElementById('user-id').value;
-        let updateRoute = 'users';
-        // Password change request has an own action class as there are fields such as password2 and old password
-        if ('password' in formFieldsAndValues) {
-            updateRoute = 'change-password';
-        }
-        xHttp.open('PUT', basePath + updateRoute + '/' + userId, true);
+        xHttp.open('PUT', basePath + 'users/' + userId, true);
         xHttp.setRequestHeader("Content-type", "application/json");
         xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "users/" + userId);
 

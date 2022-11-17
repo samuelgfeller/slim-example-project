@@ -13,47 +13,47 @@ import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-ut
 export function getClientProfileCardHtml(client, allUsers, allStatuses) {
     return `<div class="client-profile-card" tabindex="0" data-client-id="${client.id}">
     <div class="profile-card-header">
-        <!-- other div needed to attach bubble to img -->
-        <div class="profile-card-avatar">
-            <img src=${getAvatarPath(client.sex)} alt="avatar">
-    ${// Display age if content not empty
-        client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
-    }
-        </div>
-    </div>
-    <div class="profile-card-content">
-        <h3>${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
-        <div class="profile-card-infos-flexbox">
-    ${// Display location icon and content if not empty 
-        client.location !== null && client.location !== '' ?
-            `<div>
-                 <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
-                 <span>${escapeHtml(client.location)}</span>
-             </div>` : ''
-    }
-    ${// Display location icon and content if not empty 
-        client.phone !== null && client.phone !== '' ?
-            `<div>
-                 <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
-                 <span>${escapeHtml(client.phone)}</span>
-             </div>` : ''
-    }
-        </div>
-        <div class="profile-card-assignee-and-status">
-            <div>
-                <select name="assigned-user" class="default-select" 
-                        ${client.assignedUserPrivilege.includes('U') ? '' : 'disabled'}>
-                    ${getDropdownAsHtmlOptions(allUsers, client.userId)}
-                </select>
-            </div>
-            <div>
-                <select name="status" class="default-select"
-                        ${client.clientStatusPrivilege.includes('U') ? '' : 'disabled'}>
-                    ${getDropdownAsHtmlOptions(allStatuses, client.clientStatusId)}
-                </select>
+            <!-- other div needed to attach bubble to img -->
+            <div class="profile-card-avatar">
+                <img src=${getAvatarPath(client.sex)} alt="avatar">
+        ${// Display age if content not empty
+            client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
+        }
             </div>
         </div>
-    </div>
+        <div class="profile-card-content">
+            <h3>${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
+            <div class="profile-card-infos-flexbox">
+        ${// Display location icon and content if not empty 
+            client.location !== null && client.location !== '' ?
+                `<div>
+                     <img src="assets/client/img/location_pin_icon.svg" class="profile-card-content-icon" alt="location">
+                     <span>${escapeHtml(client.location)}</span>
+                 </div>` : ''
+        }
+        ${// Display location icon and content if not empty 
+            client.phone !== null && client.phone !== '' ?
+                `<div>
+                     <img src="assets/client/img/phone.svg" class="profile-card-content-icon" alt="phone">
+                     <span>${escapeHtml(client.phone)}</span>
+                 </div>` : ''
+        }
+            </div>
+            <div class="profile-card-assignee-and-status">
+                <div>
+                    <select name="user_id" class="default-select" 
+                            ${client.assignedUserPrivilege.includes('U') ? '' : 'disabled'}>
+                        ${getDropdownAsHtmlOptions(allUsers, client.userId)}
+                    </select>
+                </div>
+                <div>
+                    <select name="client_status_id" class="default-select"
+                            ${client.clientStatusPrivilege.includes('U') ? '' : 'disabled'}>
+                        ${getDropdownAsHtmlOptions(allStatuses, client.clientStatusId)}
+                    </select>
+                </div>
+            </div>
+        </div>
 </div>`;
 }
 

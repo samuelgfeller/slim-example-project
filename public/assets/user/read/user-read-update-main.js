@@ -2,25 +2,29 @@ import {makeUserFieldEditable} from "./user-update-contenteditable.js";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js";
 import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js";
 import {submitModalForm} from "../../general/js/modal/modal-submit-request.js";
-import {submitUserUpdate} from "../update/user-update-request.js";
+import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
 
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeUserFieldEditable);
 
-// User dropdown change event listeners
-const statusSelect = document.querySelector('select[name="status"]:not([disabled])');
-statusSelect?.addEventListener('change', () => {
-    submitUserUpdate({[statusSelect.name]: statusSelect.value}).then(success =>
-        success === true ? displayFlashMessage('success', 'Successfully changed status.') : null
-    );
-});
-const userRoleSelect = document.querySelector('select[name="user_role_id"]:not([disabled])');
-userRoleSelect?.addEventListener('change', () => {
-    submitUserUpdate({[userRoleSelect.name]: userRoleSelect.value}).then( success =>
-        success === true ? displayFlashMessage('success', 'Successfully changed role.') : null
-    );
-});
+// User status dropdown change
+document.querySelector('select[name="status"]:not([disabled])')
+    ?.addEventListener('change', submitUserDropdownChange);
+// User role dropdown change
+document.querySelector('select[name="user_role_id"]:not([disabled])')
+    ?.addEventListener('change', submitUserDropdownChange);
+
+
+/**
+ * User select change event handler
+ */
+function submitUserDropdownChange() {
+    // "this" is the select element
+    let userId = document.getElementById('user-id').value;
+    // Submit field change with flash message indicating that change was successful
+    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, `users/${userId}`);
+}
 
 // Display all edit icons if touch screen
 if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
