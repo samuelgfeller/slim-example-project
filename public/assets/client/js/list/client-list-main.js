@@ -9,11 +9,7 @@ import {
 } from "../../../general/js/eventHandler/trigger-click-on-enter-keypress.js";
 import {submitFieldChangeWithFlash} from "../../../general/js/request/submit-field-change-with-flash.js";
 
-document.addEventListener('auxclick', () => {
-    console.log('okay');
-});
-//
-// // Load clients at page startup
+// Load clients at page startup
 loadClients().then(jsonResponse => {
     removeClientCardContentPlaceholder();
     addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);

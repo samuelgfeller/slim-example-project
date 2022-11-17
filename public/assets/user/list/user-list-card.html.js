@@ -33,52 +33,27 @@ export function getUserCardHtml(user, statuses) {
 
 export function getUserCardLoadingPlaceholderHtml() {
     return `<div class="user-card-loading-placeholder">
-        <div class="user-card-loading-placeholder-header">
-            <div class="user-card-avatar-age-loading-placeholder">
-                <div class="user-card-avatar-loading-placeholder">
-                    <!-- Avatar-->
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
-                </div>
-                <!-- Age -->
-                <div class="user-card-age-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="user-card-loading-placeholder-body">
             <!-- CSS Grid -->
             <div class="user-card-name-loading-placeholder">
                 <div class="moving-loading-placeholder-part-wrapper">
                     <div class="moving-loading-placeholder-part"></div>
                 </div>
             </div>
-            <div class="user-card-loading-placeholder-infos-container">
-                <div class="user-card-location-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
+            <div class="user-card-email-container">
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
                 </div>
-                <div class="user-card-phone-nr-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
-                </div>
-                <div class="user-card-assignee-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
-                </div>
-                <div class="user-card-status-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
-                    </div>
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
                 </div>
             </div>
-        </div>
+            <div class="user-card-dropdown-container">
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
+                </div>
+                <div class="moving-loading-placeholder-part-wrapper">
+                    <div class="moving-loading-placeholder-part"></div>
+                </div>
+            </div>
     </div>`;
 }

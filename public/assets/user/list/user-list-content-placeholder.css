@@ -1,107 +1,63 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     /*Client profile card*/
-    .client-profile-card-loading-placeholder {
-        height: 266px;
-        width: 100%;
-        min-width: 232px;
-        padding: 20px;
+    .user-card-loading-placeholder {
+        height: 185px;
+        width: 100%; /* Width for non-mobile set below */
+        padding: 25px;
         border-radius: 30px;
         /* Change card to look good for preloading */
         background: #f8f8f8;
     }
 
-    .client-profile-card-loading-placeholder-header {
-        height: 115px;
-    }
-
-    /*Avatar and age container*/
-    .client-profile-card-avatar-age-loading-placeholder {
-        margin: auto;
-        width: 100px;
-        height: 100px;
-        position: relative;
-    }
-
-    .client-profile-card-avatar-loading-placeholder {
-        width: 100%;
-        height: 100%;
-        border-radius: 99px;
-        overflow: hidden;
-    }
-
-    .client-profile-card-age-loading-placeholder {
-        width: 35px;
-        height: 35px;
-        right: -20px;
-        top: 5px;
-        position: absolute;
-        border-radius: 99px;
-        overflow: hidden;
-        z-index: 11;
-    }
-
-    .client-profile-card-loading-placeholder-body {
-        height: 94px;
-        margin-bottom: 16px;
-    }
-
     /*Name*/
-    .client-profile-card-name-loading-placeholder {
-        width: 75%;
-        margin: auto;
-        height: 27px;
+    .user-card-name-loading-placeholder {
+        width: min(80%, 210px);
+        /*margin: auto;*/
+        margin-top: 6px;
+        height: 33px;
     }
 
-    .client-profile-card-loading-placeholder-infos-container {
+    .user-card-email-container {
         display: grid;
-        grid-template-columns: 37% 55%;
+        grid-template-columns: 25px min(70%, 200px);
         grid-template-rows: auto;
-        justify-content: space-between;
+        gap: 13px;
+        height: 25px;
+        /*justify-content: space-between;*/
         /*justify-items: end;*/
+        margin: 25px 0 20px 0;
     }
 
-    /*Location*/
-    .client-profile-card-location-loading-placeholder {
-        height: 25px;
-        margin-top: 15px;
-    }
-
-    /*Phone nr*/
-    .client-profile-card-phone-nr-loading-placeholder {
-        height: 25px;
-        margin-top: 15px;
-    }
-
-    /*Assignee select*/
-    .client-profile-card-assignee-loading-placeholder {
+    .user-card-dropdown-container {
+        display: grid;
+        grid-template-columns: repeat(2, min(45%, 140px)); /* Equals: min(45%, 140px) min(45%, 140px)*/
+        grid-template-rows: auto;
+        justify-content: space-evenly;
+        /*justify-items: end;*/
         height: 30px;
-        margin-top: 11px;
-        border-radius: 99px;
-        overflow: hidden;
+        gap: 10%;
     }
-
-    /*Status select*/
-    .client-profile-card-status-loading-placeholder {
-        height: 30px;
-        margin-top: 11px;
+    /* Add border radius to immediate div children */
+    .user-card-dropdown-container > div {
         border-radius: 99px;
-        overflow: hidden;
     }
 }
 /* After very small phones (iPhone 4) for medium phones to big phones to bigger */
 @media (min-width: 337px) {
-    .client-profile-card-loading-placeholder-infos-container {
-        grid-template-columns: 33% 49%;
+    .user-card-dropdown-container {
+        /* This would be the correct width but to prevent overflow on smaller devices it is only fix after here */
+        /* Could probably be improved with minmax but I couldn't do it quickly minmax(45%, 140px) minmax(45%, 140px) */
+        /*grid-template-columns: 140px 140px;*/
     }
 }
 
 @media (min-width: 641px) {
-    .client-profile-card-loading-placeholder-infos-container {
-        grid-template-columns: 90px 120px;
+    .user-card-dropdown-container {
+        justify-content: space-between;
     }
-    .client-profile-card-loading-placeholder {
-        width: 280px;
+    .user-card-loading-placeholder {
+        width: 314px;
     }
 }
 

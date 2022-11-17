@@ -14,6 +14,8 @@ $this->addAttribute('css', [
     'assets/general/css/form.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/modal/form-modal.css',
+    'assets/general/css/content-placeholder.css',
+    'assets/user/list/user-list-content-placeholder.css',
     'assets/user/list/user-list.css',
     // post.css has to come last to overwrite other styles
 ]);
