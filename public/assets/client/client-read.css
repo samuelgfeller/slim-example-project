@@ -153,8 +153,8 @@
         box-shadow: none;
     }
 
-    #activity-header h2 {
-        /*Reduce bottom margin of h2 as .vertical-center has already a 25px margin to replace h1 margin*/
+    #client-activity-textarea-container .vertical-center {
+        /*Reduce bottom margin as .vertical-center has default 25px margin for h1 but its too much for h2*/
         margin-bottom: 10px;
     }
 
@@ -194,7 +194,7 @@
     }
 
     #client-personal-info-flex-container strong {
-        /*Break validation error msg */
+        /*Validation error msg line break */
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
@@ -203,6 +203,8 @@
         line-height: 25px;
         padding: 5px;
         display: inline-block;
+        white-space: break-spaces;
+        word-break: break-all; /*To wrap when editing span*/
     }
 
     #client-personal-info-flex-container select {
@@ -238,12 +240,16 @@
 
     #client-personal-info-flex-container a {
         text-decoration: none;
+        /*Overflow wrap anywhere here, white-space: break-spaces; on the span makes the line break when too long
+        and word-break: break-all; on the span makes it break even when editing*/
+        overflow-wrap: anywhere;
     }
 
     #client-personal-info-flex-container a:hover:not(a.currently-editable) {
         box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
         background: rgba(0, 0, 0, 0.05);
-        font-weight: normal;
+        /*font-weight: bold;*/
+        text-decoration: none !important;
     }
 
     #add-client-personal-info-div {

@@ -127,7 +127,9 @@ a.currently-editable{
 /* Button */
 .btn{
     /*background-color: var(--layout-main-button-color);*/
-    background-color: #e1ecf9;
+    /*background-color: #e1ecf9; light blueish*/
+
+    background: rgb(234, 234, 234);
     color: #000000;
     padding: 10px 20px;
 
@@ -145,12 +147,15 @@ a.currently-editable{
 .btn:hover{
     /* Example: alert modal box cancel button or change password in profile */
     /*background: var(--layout-main-button-hover-color);*/
-    background: #a2bad7;
+    /*background: #a2bad7;*/
     box-shadow: 0 0 10px #c0c0c0;
     font-weight: normal !important; /* For when <a> to behave as button */
+    background-color: rgb(203 203 203);
+
 }
 .btn:focus{
-    background: #7d97b5;
+    /*background: #7d97b5;*/
+    background-color: rgb(183, 183, 183);
 }
 .btn:disabled{
     background: whitesmoke;

@@ -18,8 +18,8 @@ export function getUserCardHtml(user, statuses) {
         </div>
         <div class="user-card-dropdown-flexbox">
             <select name="status" class="default-select" 
-                    ${user.userRolePrivilege.includes('U') ? '' : 'disabled'}>
-                ${getDropdownAsHtmlOptions(statuses, user.statusId)}
+                    ${user.statusPrivilege.includes('U') ? '' : 'disabled'}>
+                ${getDropdownAsHtmlOptions(statuses, user.status)}
             </select>
             <select name="user_role_id" class="default-select" 
                     ${user.userRolePrivilege.includes('U') ? '' : 'disabled'}>

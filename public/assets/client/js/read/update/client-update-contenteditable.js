@@ -41,6 +41,7 @@ export function makeClientFieldEditable() {
 
     // Save btn event listener is not needed as by clicking on the button the focus goes out of the edited field
     field.addEventListener('focusout', validateContentEditableAndSaveClientValue);
+    // Add event listener on email in
 }
 
 /**
@@ -83,6 +84,7 @@ function saveClientValueAndDisableContentEditable(field) {
             } else {
                 // Remove event listener that prevented the link (parent of span) from opening
                 if (fieldContainer.dataset.fieldElement === 'a-span') {
+                    // Search upwards the closest span
                     let a = fieldContainer.closest('a');
                     a.classList.remove('currently-editable');
                     a.removeEventListener('click', preventLinkOpening);
@@ -90,15 +92,25 @@ function saveClientValueAndDisableContentEditable(field) {
 
                 // Disable contenteditable on field and remove save icon
                 disableEditableField(field);
-
-                if (field.dataset.name === 'birthdate') {
-                    // If birthdate field and not empty, add span with age
-                    field.insertAdjacentHTML('beforeend', `<span id="age-sub-span">&nbsp; •&nbsp; ${successData.data.age}</span>`);
-                }
                 // Hide icon if it existed in the available personal info icon container
                 if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
                     removeIconFromAvailableDiv(availableIcon);
                 }
+
+                // Do actions after specific field changes. At this point its certain that values are not empty
+                // Add age to birthdate if
+                if (field.dataset.name === 'birthdate') {
+                    // If birthdate field and not empty, add span with age
+                    field.insertAdjacentHTML('beforeend', `<span id="age-sub-span">&nbsp; •&nbsp; ${successData.data.age}</span>`);
+                }
+                // Add email to link when field changed
+                if (field.dataset.name === 'email') {
+                    field.closest('a').href = `mailto:${submitValue}`;
+                }
+                // Add phone number to link when field changed
+                if (field.dataset.name === 'phone') {
+                      field.closest('a').href = `tel:${submitValue}`;
+                  }
             }
         } else {
             // If request not successful,
