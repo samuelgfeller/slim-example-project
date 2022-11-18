@@ -1,10 +1,10 @@
-import {basePath} from "../../../general/js/config.js";
+import {basePath} from "../../general/js/config.js";
 import {getNoteHtml} from "./client-read-template-note.html.js";
 import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
 } from "./client-read-note-loading-placeholder.js";
-import {handleFail} from "../../../general/js/requestUtil/fail-handler.js";
+import {handleFail} from "../../general/js/requestUtil/fail-handler.js";
 
 /**
  * Loading notes into dom

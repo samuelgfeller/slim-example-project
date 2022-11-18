@@ -23,11 +23,11 @@ $this->addAttribute('css', [
     'assets/general/css/content-placeholder.css',
     'assets/general/css/contenteditable.css',
     // page specific css has to come last to overwrite other styles
-    'assets/client/client-read.css'
+    'assets/client/read/client-read.css'
 ]);
 $this->addAttribute('js', []);
 // Js files that import things from other js files
-$this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
+$this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
 // Store client id on the page in <data> element for js to read it
 ?>
@@ -150,7 +150,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
                 </div>
             </div>
             <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
-                <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
@@ -177,7 +177,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             </div>
             <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
                id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
-                <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
+                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon" alt="location">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
@@ -193,7 +193,7 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             </a>
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
-                <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
+                <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
@@ -231,9 +231,9 @@ $this->addAttribute('jsModules', ['assets/client/js/read/client-read-main.js']);
             <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
             <!-- alt has to be the same as the field name -->
             <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-            <img src="assets/general/img/gender-icon.svg" class="personal-info-icon" alt="sex">
-            <img src="assets/client/img/location_pin_icon.svg" class="personal-info-icon" alt="location">
-            <img src="assets/client/img/phone.svg" class="personal-info-icon" alt="phone">
+            <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+            <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon" alt="location">
+            <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
             <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
         </div>
     </div>

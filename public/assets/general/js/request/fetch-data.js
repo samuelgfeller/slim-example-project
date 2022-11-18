@@ -8,7 +8,7 @@ import {basePath} from "../config.js";
  * @param {string} queryParams question mark has to be included
  * @return {Promise<JSON>}
  */
-export function loadData(route, queryParams = '') {
+export function fetchData(route, queryParams = '') {
     return new Promise(function (resolve, reject) {
         let xHttp = new XMLHttpRequest();
         xHttp.onreadystatechange = function () {

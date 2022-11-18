@@ -1,11 +1,11 @@
 import {submitClientUpdate} from "./client-update-request.js";
-import {removeValidationErrorMessages} from "../../../../general/js/requestUtil/fail-handler.js";
+import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js";
 import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
-} from "../../../../general/js/contenteditable/contenteditable-main.js";
+} from "../../../general/js/contenteditable/contenteditable-main.js";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */

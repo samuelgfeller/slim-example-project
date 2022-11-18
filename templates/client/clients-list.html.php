@@ -16,8 +16,8 @@ $this->addAttribute('css', [
     'assets/general/css/content-placeholder.css',
     'assets/general/css/plus-button.css',
     'assets/general/css/modal/form-modal.css',
-    'assets/client/client-list.css',
-    'assets/client/client-list-loading-placeholder.css',
+    'assets/client/list/client-list.css',
+    'assets/client/list/client-list-loading-placeholder.css',
 ]);
 $this->addAttribute(
     'js',
@@ -29,8 +29,8 @@ $this->addAttribute(
 $this->addAttribute(
     'jsModules',
     [
-        'assets/client/js/list/client-list-main.js',
-        'assets/client/js/create/client-create-main.js',
+        'assets/client/list/client-list-main.js',
+        'assets/client/create/client-create-main.js',
     ]
 );
 

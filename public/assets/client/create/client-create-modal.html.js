@@ -1,8 +1,7 @@
-import {createModal} from "../../../general/js/modal/modal.js";
-import {requestDropdownOptions} from "../../../general/js/modal/dropdown-request.js";
-import {getDropdownAsHtmlOptions} from "../../../general/js/template/template-util.js";
-import {getRadioButtonsAsHtml} from "./client-template-util.js";
-import {displayFlashMessage} from "../../../general/js/requestUtil/flash-message.js";
+import {createModal} from "../../general/js/modal/modal.js";
+import {requestDropdownOptions} from "../../general/js/modal/dropdown-request.js";
+import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/js/template/template-util.js";
+import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js";
 
 /**
  * Create and display modal box to create a new client

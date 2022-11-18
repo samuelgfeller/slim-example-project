@@ -1,4 +1,4 @@
-import {loadClients} from "./list/client-list-loading.js";
+import {fetchClients} from "../list/client-list-loading.js";
 
 /**
  * Submit client deletion
@@ -23,7 +23,7 @@ function submitDeleteClient(clientId) {
                 // Default fail handler
                 handleFail(xHttp);
                 // Reload clients on fail as issue may be resolved with refresh
-                loadClients();
+                fetchClients();
             }
             // Success
             else {

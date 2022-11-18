@@ -1,5 +1,5 @@
-import {handleFail, removeValidationErrorMessages} from "../../../../general/js/requestUtil/fail-handler.js";
-import {basePath} from "../../../../general/js/config.js";
+import {handleFail, removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js";
+import {basePath} from "../../../general/js/config.js";
 
 /**
  * Send client update request

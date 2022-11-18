@@ -1,11 +1,11 @@
 import {initAllDeleteBtnEventListeners, initNotesEventListeners} from "./client-read-text-area-event-listener-setup.js";
 import {addNewNoteTextarea} from "./client-read-create-note.js";
 import {loadClientNotes} from "./client-read-note-loading.js";
-import {initAutoResizingTextareas} from "../../../general/js/default.js";
+import {initAutoResizingTextareas} from "../../general/js/default.js";
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js";
-import {submitFieldChangeWithFlash} from "../../../general/js/request/submit-field-change-with-flash.js";
+import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed

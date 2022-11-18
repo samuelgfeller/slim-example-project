@@ -1,4 +1,4 @@
-import {escapeHtml} from "../../../general/js/functions.js";
+import {escapeHtml} from "../../general/js/functions.js";
 
 export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, message) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED

@@ -1,8 +1,5 @@
 import {submitClientUpdate} from "./client-update-request.js";
-import {
-    addIconToAvailableDiv,
-    removeIconFromAvailableDiv
-} from "../client-read-personal-info.js";
+import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js";
 
 export function makeFieldSelectValueEditable() {
     let editIcon = this;

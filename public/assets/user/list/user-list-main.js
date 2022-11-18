@@ -1,6 +1,6 @@
 import {addUsersToDom} from "./user-list-card-dom-appending.js";
 import {displayUserCardLoadingPlaceholder, removeUserCardContentPlaceholder} from "./user-list-content-placeholder.js";
-import {loadData} from "../../general/js/request/load-data.js";
+import {fetchData} from "../../general/js/request/fetch-data.js";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
@@ -12,7 +12,7 @@ import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-
 displayUserCardLoadingPlaceholder();
 
 // Load clients at page startup
-loadData('users').then(jsonResponse => {
+fetchData('users').then(jsonResponse => {
     removeUserCardContentPlaceholder();
     addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses);
     // Add event listeners to cards
