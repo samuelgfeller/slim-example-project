@@ -1,15 +1,17 @@
 import {basePath} from "../config.js?v=0.1";
-import {handleFail} from "../requestUtil/fail-handler.js?v=0.1";
+import {handleFail, removeValidationErrorMessages} from "../requestUtil/fail-handler.js?v=0.1";
 
 
 /**
- * Send PUT update request
+ * Send PUT update request.
+ * Fail handled by handleFail() method which supports forms
+ * On success validation errors are removed and response content returned
  *
  * @param {object} formFieldsAndValues {field: value} e.g. {[input.name]: input.value}
  * @param {string} route after base path
  * @param {null|string} redirectUrlIfUnauthenticated route after base path
  *
- * @return Promise true on success otherwise false
+ * @return Promise with as content server response as JSON
  */
 export function submitUpdate(formFieldsAndValues, route, redirectUrlIfUnauthenticated = null) {
     return new Promise(function (resolve, reject) {
@@ -22,9 +24,11 @@ export function submitUpdate(formFieldsAndValues, route, redirectUrlIfUnauthenti
                     // Default fail handler
                     handleFail(xHttp);
                     // reject() only needed if promise is caught with .catch()
+                    reject(JSON.parse(xHttp.responseText));
                 }
                 // Success
                 else {
+                    removeValidationErrorMessages();
                     resolve(JSON.parse(xHttp.responseText));
                 }
             }

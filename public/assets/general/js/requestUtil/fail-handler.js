@@ -9,7 +9,6 @@ import {displayFlashMessage} from "./flash-message.js?v=0.1";
  * @param {null|string} domFieldId css id of dom field the fail is about
  */
 export function handleFail(xhr, domFieldId = null) {
-    console.log(xhr);
    // Example: 404 Not Found
     let errorMsg = xhr.status + ' ' + xhr.statusText;
 
