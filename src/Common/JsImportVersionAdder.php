@@ -27,17 +27,23 @@ class JsImportVersionAdder
      * This is far from an ideal solution as all files are reloaded on the client,
      * but it is good enough for now especially if function is called only on
      * actual not too frequent changes or on development.
+     * Performance wise, this function takes 10 and 20ms when content is unchanged
+     * and between 30 and 50ms when content is replaced
      *
      * @return void
      */
     public function addVersionToJsImports(): void
     {
+        // $start = hrtime(true);
         if (is_dir($this->assetsPath)) {
-            $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->assetsPath, FilesystemIterator::SKIP_DOTS)            );
+            $rii = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this->assetsPath, FilesystemIterator::SKIP_DOTS)
+            );
 
             foreach ($rii as $file) {
                 if (pathinfo($file->getPathname())['extension'] === 'js') {
                     $content = file_get_contents($file->getPathname());
+                    $originalContent = $content;
                     // Matches lines that have 'import ' then any string then ' from ' and single or double quote opening then
                     // any string (path) then '.js' and optionally numeric v GET param '?v=234' and '";' at the end with single or double quotes
                     preg_match_all('/import (.*?) from ("|\')(.*?)\.js(\?v=\d*)?("|\');/', $content, $matches);
@@ -64,10 +70,14 @@ class JsImportVersionAdder
                         // Replace in file content
                         $content = str_replace($oldFullImport, $newFullImport, $content);
                     }
-                    // Replace file contents with modified one
-                    file_put_contents($file->getPathname(), $content);
+                    // Replace file contents with modified one if there are changes
+                    if ($originalContent !== $content) {
+                        file_put_contents($file->getPathname(), $content);
+                    }
                 }
             }
         }
+        // Divided by a million gets ms and a billion (+9) seconds
+        // var_dump('Time used: ' . (hrtime(true) - $start) / 1e+6 . ' ms');
     }
 }
