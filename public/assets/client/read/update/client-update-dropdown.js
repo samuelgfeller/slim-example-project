@@ -1,6 +1,9 @@
-import {submitClientUpdate} from "./client-update-request.js?v=0.1";
 import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js?v=0.1";
+import {submitUpdate} from "../../../general/js/request/submit-update-data.js?v=0.1";
 
+/**
+ * Make personal info field editable by adding a dropdown
+ */
 export function makeFieldSelectValueEditable() {
     let editIcon = this;
     let fieldContainer = this.parentNode;
@@ -11,20 +14,25 @@ export function makeFieldSelectValueEditable() {
     // Focus select to catch focusout if click outside
     select.focus();
     select?.addEventListener('change', () => {
+        // Done here and not after successful request to indicate to user that change was taken into account
         removeSelectAndShowSpan(editIcon, select, span);
-        submitClientUpdate(select.name, select.value).then(successData => {
-            if (successData.success === false) {
-                // Re enable editable select on error
-                showEditableSelect(editIcon, select, span);
-            } else {
-                let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
-                // If success is true and select value was empty string, remove dropdown from client personal infos
-                if ((select.value === '' || select.value === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
-                    addIconToAvailableDiv(availableIcon, fieldContainer.parentNode);
-                }else if(fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
-                    removeIconFromAvailableDiv(availableIcon);
-                }
+
+        let clientId = document.getElementById('client-id').value;
+        submitUpdate(
+            {[select.name]: select.value},
+            `clients/${clientId}`,
+            `clients/${clientId}`,
+        ).then(responseJson => {
+            let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
+            // If success is true and select value was empty string, remove dropdown from client personal infos
+            if ((select.value === '' || select.value === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
+                addIconToAvailableDiv(availableIcon, fieldContainer.parentNode);
+            } else if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
+                removeIconFromAvailableDiv(availableIcon);
             }
+        }).catch(responseJson => {
+            // Re enable editable select on error
+            showEditableSelect(editIcon, select, span);
         });
     });
 

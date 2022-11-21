@@ -1,4 +1,3 @@
-import {submitClientUpdate} from "./client-update-request.js?v=0.1";
 import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js?v=0.1";
 import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js?v=0.1";
 import {
@@ -6,6 +5,7 @@ import {
     disableEditableField,
     makeFieldEditable
 } from "../../../general/js/contenteditable/contenteditable-main.js";
+import {submitUpdate} from "../../../general/js/request/submit-update-data.js?v=0.1";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */
@@ -70,52 +70,57 @@ function validateContentEditableAndSaveClientValue() {
 function saveClientValueAndDisableContentEditable(field) {
     let fieldContainer = field.parentNode;
     let submitValue = field.textContent.trim();
-    // If submit unsuccessful the field focus should not get away
-    let clientUpdateRequestPromise = submitClientUpdate(field.dataset.name, submitValue);
-    clientUpdateRequestPromise.then(successData => {
-        if (successData.success === true) {
-            // Reset min width of personal info container
-            document.querySelector('#client-personal-info-flex-container').style.minWidth = null;
-            let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + field.dataset.name + '"]');
-            // If success true and submit value was empty string, remove it from client personal infos box but not if header
-            if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
-                // Select dropdown container hidden in client-update-dropdown.js
-                addIconToAvailableDiv(availableIcon, fieldContainer.parentNode)
-            } else {
-                // Remove event listener that prevented the link (parent of span) from opening
-                if (fieldContainer.dataset.fieldElement === 'a-span') {
-                    // Search upwards the closest span
-                    let a = fieldContainer.closest('a');
-                    a.classList.remove('currently-editable');
-                    a.removeEventListener('click', preventLinkOpening);
-                }
 
-                // Disable contenteditable on field and remove save icon
-                disableEditableField(field);
-                // Hide icon if it existed in the available personal info icon container
-                if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
-                    removeIconFromAvailableDiv(availableIcon);
-                }
-
-                // Do actions after specific field changes. At this point its certain that values are not empty
-                // Add age to birthdate if
-                if (field.dataset.name === 'birthdate') {
-                    // If birthdate field and not empty, add span with age
-                    field.insertAdjacentHTML('beforeend', `<span id="age-sub-span">&nbsp; •&nbsp; ${successData.data.age}</span>`);
-                }
-                // Add email to link when field changed
-                if (field.dataset.name === 'email') {
-                    field.closest('a').href = `mailto:${submitValue}`;
-                }
-                // Add phone number to link when field changed
-                if (field.dataset.name === 'phone') {
-                      field.closest('a').href = `tel:${submitValue}`;
-                  }
-            }
+    let clientId = document.getElementById('client-id').value;
+    submitUpdate(
+        {[field.dataset.name]: submitValue},
+        `clients/${clientId}`,
+        `clients/${clientId}`
+    ).then(responseJson => {
+        // Reset min width of personal info container
+        document.querySelector('#client-personal-info-flex-container').style.minWidth = null;
+        let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + field.dataset.name + '"]');
+        // If success true and submit value was empty string, remove it from client personal infos box but not if header
+        if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
+            // Select dropdown container hidden in client-update-dropdown.js
+            addIconToAvailableDiv(availableIcon, fieldContainer.parentNode)
         } else {
-            // If request not successful,
-            field.contentEditable = 'true';
-            field.focus();
+            // Remove event listener that prevented the link (parent of span) from opening
+            if (fieldContainer.dataset.fieldElement === 'a-span') {
+                // Search upwards the closest span
+                let a = fieldContainer.closest('a');
+                a.classList.remove('currently-editable');
+                a.removeEventListener('click', preventLinkOpening);
+            }
+
+            // Disable contenteditable on field and remove save icon
+            disableEditableField(field);
+            // Hide icon if it existed in the available personal info icon container
+            if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
+                removeIconFromAvailableDiv(availableIcon);
+            }
+
+            // Do actions after specific field changes. At this point its certain that values are not empty
+            // Add age to birthdate if
+            if (field.dataset.name === 'birthdate') {
+                // If birthdate field and not empty, add span with age
+                field.insertAdjacentHTML(
+                    'beforeend',
+                    `<span id="age-sub-span">&nbsp; •&nbsp; ${responseJson.data.age}</span>`
+                );
+            }
+            // Add email to link when field changed
+            if (field.dataset.name === 'email') {
+                field.closest('a').href = `mailto:${submitValue}`;
+            }
+            // Add phone number to link when field changed
+            if (field.dataset.name === 'phone') {
+                field.closest('a').href = `tel:${submitValue}`;
+            }
         }
+    }).catch(responseJson => {
+        // If request not successful, keep field editable
+        field.contentEditable = 'true';
+        field.focus();
     });
 }
