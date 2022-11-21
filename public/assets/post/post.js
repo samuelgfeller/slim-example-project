@@ -3,7 +3,7 @@
 // const basePath = document.getElementsByTagName('base')[0].getAttribute('href');
 
 // Load posts on
-import {handleFail} from "../general/js/requestUtil/fail-handler.js";
+import {handleFail} from "../general/js/requestUtil/fail-handler.js?v=0.1";
 
 loadPosts();
 

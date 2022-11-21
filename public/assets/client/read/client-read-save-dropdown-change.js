@@ -1,5 +1,5 @@
-import {basePath} from "../../general/js/config.js";
-import {handleFail} from "../../general/js/requestUtil/fail-handler.js";
+import {basePath} from "../../general/js/config.js?v=0.1";
+import {handleFail} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 
 export function saveClientReadDropdownChange() {
     // Make ajax call

@@ -1,4 +1,4 @@
-import {showFlashMessages} from "./requestUtil/flash-message.js";
+import {showFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
 
 window.addEventListener("load", function (event) {
     /** Class with no animation on page load */

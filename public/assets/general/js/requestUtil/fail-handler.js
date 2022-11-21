@@ -1,5 +1,5 @@
-import {displayValidationErrorMessage} from "../validation/form-validation.js";
-import {displayFlashMessage} from "./flash-message.js";
+import {displayValidationErrorMessage} from "../validation/form-validation.js?v=0.1";
+import {displayFlashMessage} from "./flash-message.js?v=0.1";
 
 /**
  * If a request fails this function can be called which gives the user

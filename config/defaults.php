@@ -15,6 +15,12 @@ $settings = [];
 // Bool if env is dev. Used in phpRenderer when rendering resources to break cache always for mobile
 $settings['dev'] = false;
 
+$settings['deployment'] = [
+    // null or string. When null, all query param versions from js imports are removed
+    'version' => '0.1',
+    'assetsPath' => __DIR__ . '/../public/assets',
+];
+
 // Error handler
 $settings['error'] = [
     // Should be set to false in production

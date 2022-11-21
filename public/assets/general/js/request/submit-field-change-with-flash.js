@@ -1,7 +1,7 @@
 // In square brackets to be evaluated
-import {submitUpdate} from "./submit-update-data.js";
-import {displayFlashMessage} from "../requestUtil/flash-message.js";
-import {removeSpecialChars} from "../functions.js";
+import {submitUpdate} from "./submit-update-data.js?v=0.1";
+import {displayFlashMessage} from "../requestUtil/flash-message.js?v=0.1";
+import {removeSpecialChars} from "../functions.js?v=0.1";
 
 /**
  *

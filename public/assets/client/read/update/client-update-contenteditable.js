@@ -1,6 +1,6 @@
-import {submitClientUpdate} from "./client-update-request.js";
-import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js";
-import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js";
+import {submitClientUpdate} from "./client-update-request.js?v=0.1";
+import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js?v=0.1";
+import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js?v=0.1";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,

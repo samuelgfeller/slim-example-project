@@ -1,4 +1,4 @@
-import {getClientNoteLoadingPlaceholderHtml} from "./client-read-template-note.html.js";
+import {getClientNoteLoadingPlaceholderHtml} from "./client-read-template-note.html.js?v=0.1";
 
 /**
  * Display client note content placeholders

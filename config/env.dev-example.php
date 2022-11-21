@@ -23,6 +23,10 @@ ini_set('display_errors', $settings['dev'] ? '1' : '0');
 // Error handler. More controlled than ini
 $settings['error']['display_error_details'] = $settings['dev'];
 
+// null or string. When null, all query param versions from js imports are removed
+$settings['deployment']['version'] = '0.1';
+$settings['deployment']['assetsPath'] = __DIR__ . '/../public/assets';
+
 // Database
 $settings['db']['host'] = 'localhost';
 $settings['db']['database'] = 'slim_example_project';

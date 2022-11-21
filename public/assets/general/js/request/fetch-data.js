@@ -1,5 +1,5 @@
-import {handleFail} from "../requestUtil/fail-handler.js";
-import {basePath} from "../config.js";
+import {handleFail} from "../requestUtil/fail-handler.js?v=0.1";
+import {basePath} from "../config.js?v=0.1";
 
 /**
  * Sends a GET request

@@ -1,8 +1,8 @@
-import {makeUserFieldEditable} from "./user-update-contenteditable.js";
-import {displayChangePasswordModal} from "../update/change-password-modal.html.js";
-import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js";
-import {submitModalForm} from "../../general/js/modal/modal-submit-request.js";
-import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
+import {makeUserFieldEditable} from "./user-update-contenteditable.js?v=0.1";
+import {displayChangePasswordModal} from "../update/change-password-modal.html.js?v=0.1";
+import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
+import {submitModalForm} from "../../general/js/modal/modal-submit-request.js?v=0.1";
+import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);

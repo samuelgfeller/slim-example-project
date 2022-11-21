@@ -1,10 +1,10 @@
-import {removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js";
+import {removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
 } from "../../general/js/contenteditable/contenteditable-main.js";
-import {submitUserUpdate} from "../update/user-update-request.js";
+import {submitUserUpdate} from "../update/user-update-request.js?v=0.1";
 
 /**
  * Make text value as editable and attach event listeners

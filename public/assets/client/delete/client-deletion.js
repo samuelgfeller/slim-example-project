@@ -1,4 +1,4 @@
-import {fetchClients} from "../list/client-list-loading.js";
+import {fetchClients} from "../list/client-list-loading.js?v=0.1";
 
 /**
  * Submit client deletion

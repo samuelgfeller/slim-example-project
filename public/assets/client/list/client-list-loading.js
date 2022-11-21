@@ -1,15 +1,17 @@
-import {getClientProfileCardHtml} from "./client-list-profile-card.html.js";
+import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.1";
 import {
     displayClientProfileCardLoadingPlaceholder,
     removeClientCardContentPlaceholder
 } from "./client-list-content-placeholder.js";
-import {fetchData} from "../../general/js/request/fetch-data.js";
+import {fetchData} from "../../general/js/request/fetch-data.js?v=0.1";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
 } from "../../general/js/eventHandler/open-link-on-html-element.js";
-import {triggerClickOnHtmlElementEnterKeypress} from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js";
-import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
+import {
+    triggerClickOnHtmlElementEnterKeypress
+} from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js?v=0.1";
+import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
 
 export function fetchAndLoadClients(){

@@ -1,4 +1,4 @@
-import {createModal} from "../../general/js/modal/modal.js";
+import {createModal} from "../../general/js/modal/modal.js?v=0.1";
 
 /**
  * Create and display modal box to change password

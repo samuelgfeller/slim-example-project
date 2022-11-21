@@ -1,11 +1,14 @@
-import {initAllDeleteBtnEventListeners, initNotesEventListeners} from "./client-read-text-area-event-listener-setup.js";
-import {addNewNoteTextarea} from "./client-read-create-note.js";
-import {loadClientNotes} from "./client-read-note-loading.js";
-import {initAutoResizingTextareas} from "../../general/js/default.js";
-import {makeClientFieldEditable} from "./update/client-update-contenteditable.js";
-import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js";
-import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js";
-import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js";
+import {
+    initAllDeleteBtnEventListeners,
+    initNotesEventListeners
+} from "./client-read-text-area-event-listener-setup.js?v=0.1";
+import {addNewNoteTextarea} from "./client-read-create-note.js?v=0.1";
+import {loadClientNotes} from "./client-read-note-loading.js?v=0.1";
+import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
+import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.1";
+import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.1";
+import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.1";
+import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed

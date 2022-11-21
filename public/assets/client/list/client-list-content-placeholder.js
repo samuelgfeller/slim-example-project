@@ -1,4 +1,4 @@
-import {getClientProfileCardLoadingPlaceholderHtml} from "./client-list-profile-card.html.js";
+import {getClientProfileCardLoadingPlaceholderHtml} from "./client-list-profile-card.html.js?v=0.1";
 
 /**
  * Display client content placeholders

@@ -5,6 +5,7 @@ use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
 use Cake\Database\Connection;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
@@ -14,11 +15,11 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mailer\EventListener\EnvelopeListener;
 use Symfony\Component\Mailer\EventListener\MessageListener;
 use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
@@ -26,7 +27,6 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return [
     'settings' => function () {
@@ -110,10 +110,8 @@ return [
         $settings = $container->get('settings');
         $rendererSettings = $settings['renderer'];
 
-        // As a second constructor value, global variables can be added
-        return new PhpRenderer(
-            $rendererSettings['path'], ['title' => 'Slim Example Project', 'dev' => $settings['dev']],
-        );
+        /** Global attributes are set in @see PhpViewExtensionMiddleware */
+        return new PhpRenderer($rendererSettings['path']);
     },
 
     // Sessions
