@@ -3,6 +3,7 @@
 namespace App\Domain\User\Data;
 
 use App\Common\ArrayReader;
+use App\Common\DateTimeImmutable;
 use App\Domain\User\Enum\UserStatus;
 
 /**
@@ -24,8 +25,8 @@ class UserData
     public ?string $passwordHash;
     public ?UserStatus $status = null;
     public ?int $userRoleId = null;
-    public ?string $createdAt;
-    public ?string $updatedAt;
+    public ?DateTimeImmutable $updatedAt;
+    public ?DateTimeImmutable $createdAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added to authorization and service
 
     /**
@@ -45,8 +46,8 @@ class UserData
         $this->password = $arrayReader->findAsString('password');
         $this->password2 = $arrayReader->findAsString('password2');
         $this->passwordHash = $arrayReader->findAsString('password_hash');
-        $this->createdAt = $arrayReader->findAsString('created_at');
-        $this->updatedAt = $arrayReader->findAsString('updated_at');
+        $this->updatedAt = $arrayReader->findAsDateTimeImmutable('updated_at');
+        $this->createdAt = $arrayReader->findAsDateTimeImmutable('created_at');
 
         // Making sure that role and status aren't filled with malicious data
         if ($notRestricted === true){

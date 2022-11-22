@@ -21,9 +21,9 @@ class ClientUpdateCaseProvider
     public function provideUsersAndExpectedResultForClientUpdate(): array
     {
         // Set different user role attributes
-        $managingAdvisorRow = ['user_role_id' => UserRole::MANAGING_ADVISOR];
-        $advisorRow = ['user_role_id' => UserRole::ADVISOR];
-        $newcomerRow = ['user_role_id' => UserRole::NEWCOMER];
+        $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
 
         $basicClientDataChanges = [
             'first_name' => 'NewFirstName',
@@ -59,41 +59,41 @@ class ClientUpdateCaseProvider
             // * Newcomer
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - data to be changed is the one with the least privilege needed - not allowed
-                'user_linked_to_client' => $newcomerRow,
-                'authenticated_user' => $newcomerRow,
+                'user_linked_to_client' => $newcomerAttr,
+                'authenticated_user' => $newcomerAttr,
                 'data_to_be_changed' => ['first_name' => 'value'],
                 'expected_result' => $unauthorizedResult
             ],
             // * Advisor
             [ // ? Advisor owner - data to be changed allowed
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $advisorRow,
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $advisorAttr,
                 'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
                 'expected_result' => $authorizedResult,
             ],
             [ // ? Advisor owner - data to be changed not allowed
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $advisorRow,
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $advisorAttr,
                 'data_to_be_changed' => ['user_id' => 'new'],
                 'expected_result' => $unauthorizedResult,
             ],
             [ // ? Advisor not owner - data to be changed allowed
-                'user_linked_to_client' => $managingAdvisorRow,
-                'authenticated_user' => $advisorRow,
+                'user_linked_to_client' => $managingAdvisorAttr,
+                'authenticated_user' => $advisorAttr,
                 'data_to_be_changed' => $basicClientDataChanges,
                 'expected_result' => $authorizedResult,
             ],
             [ // ? Advisor not owner - data to be changed not allowed
-                'user_linked_to_client' => $managingAdvisorRow,
-                'authenticated_user' => $advisorRow,
+                'user_linked_to_client' => $managingAdvisorAttr,
+                'authenticated_user' => $advisorAttr,
                 'data_to_be_changed' => ['client_status_id' => 'new'],
                 'expected_result' => $unauthorizedResult,
             ],
 
             // * Managing advisor
             [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
-                'user_linked_to_client' => $advisorRow,
-                'authenticated_user' => $managingAdvisorRow,
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
                 'data_to_be_changed' => array_merge(
                     $basicClientDataChanges,
                     ['client_status_id' => 'new', 'user_id' => 'new']

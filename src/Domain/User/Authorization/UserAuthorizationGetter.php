@@ -57,7 +57,7 @@ class UserAuthorizationGetter
             // If the role is already attributed to user the value is added so that it's displayed in the dropdown
             if (($attributedUserRoleId !== null && $roleId === $attributedUserRoleId)
                 // Check if user role is granted
-                || $this->userAuthorizationChecker->userRoleIsGranted($roleId) === true
+                || $this->userAuthorizationChecker->userRoleIsGranted($roleId, $attributedUserRoleId) === true
             ) {
                 $grantedCreateUserRoles[$roleId] = $roleName;
             }
@@ -78,7 +78,7 @@ class UserAuthorizationGetter
         if ($this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userIdToUpdate, false)) {
             return Privilege::UPDATE;
         }
-        return Privilege::NONE;
+        return Privilege::READ;
     }
 
 }

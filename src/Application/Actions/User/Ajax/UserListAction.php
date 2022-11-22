@@ -3,7 +3,6 @@
 namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientFilterFinder;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
@@ -18,7 +17,7 @@ final class UserListAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientFilterFinder $clientFilterFinder
+     * @param UserFinder $userFinder
      */
     public function __construct(
         private readonly Responder $responder,

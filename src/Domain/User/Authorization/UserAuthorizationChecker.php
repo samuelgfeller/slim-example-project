@@ -45,10 +45,14 @@ class UserAuthorizationChecker
             // Newcomer and advisor are not allowed to do anything from other users - only user edit his own profile
             // Managing advisor may change users
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
-                $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
                 // Managing advisors can do everything with users except setting a role higher than advisor
                 if ($userData->userRoleId !== null &&
-                    $this->userRoleIsGranted($userData->userRoleId, $authenticatedUserRoleData, $userRoleHierarchies)
+                    $this->userRoleIsGranted(
+                        $userData->userRoleId,
+                        null,
+                        $authenticatedUserRoleData,
+                        $userRoleHierarchies
+                    )
                     === true
                 ) {
                     return true;
@@ -71,12 +75,14 @@ class UserAuthorizationChecker
      * Check if authenticated user is allowed to assign given user role
      *
      * @param int $userRoleId
-     * @param UserRoleData|null $authenticatedUserRoleData optional so that it can be calld outside of this class
-     * @param array|null $userRoleHierarchies optional so that it can be calld outside of this class
+     * @param null|int $userRoleIdOfUserToMutate whenever possible user role of user to be changed has to be provided
+     * @param UserRoleData|null $authenticatedUserRoleData optional so that it can be called outside this class
+     * @param array|null $userRoleHierarchies optional so that it can be called outside this class
      * @return bool
      */
     public function userRoleIsGranted(
         int $userRoleId,
+        ?int $userRoleIdOfUserToMutate,
         ?UserRoleData $authenticatedUserRoleData = null,
         ?array $userRoleHierarchies = null,
     ): bool {
@@ -96,9 +102,15 @@ class UserAuthorizationChecker
             if ($authenticatedUserRoleData->hierarchy < $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 return true;
             }
-            // Managing advisor can only attribute roles with lower or equal privilege than advisor
-            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value] &&
-                $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value]) {
+
+            if ( // Managing advisor can only attribute roles with lower or equal privilege than advisor
+                $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value] &&
+                $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value] &&
+                // And managing advisor may only change advisors or newcomers
+                ($userRoleIdOfUserToMutate === null ||
+                    $userRoleHierarchiesById[$userRoleIdOfUserToMutate] >=
+                    $userRoleHierarchies[UserRole::ADVISOR->value])
+            ) {
                 return true;
             }
         }
@@ -174,6 +186,7 @@ class UserAuthorizationChecker
                     // Check that authenticated user is granted to attribute role
                     if (array_key_exists('user_role_id', $userDataToUpdate) && $this->userRoleIsGranted(
                             $userDataToUpdate['user_role_id'],
+                            $userToUpdateRoleData->id,
                             $authenticatedUserRoleData,
                             $userRoleHierarchies
                         ) === true) {

@@ -92,7 +92,7 @@ class UserUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUpdateUser_unauthenticated(): void
+    public function testUserSubmitUpdate_unauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => 1]));
@@ -153,7 +153,7 @@ class UserUpdateActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      */
-    public function testUpdateUser_malformedBody(): void
+    public function testUserSubmitUpdate_malformedBody(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

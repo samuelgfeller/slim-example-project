@@ -17,4 +17,5 @@ enum UserStatus: string
     case Locked = 'locked'; // Locked for security reasons, may be reactivated by account holder via email
     case Suspended = 'suspended'; // User suspended, account holder not allowed to login even via email
 
+    // UserStatus::toArray() returns array for dropdown
 }

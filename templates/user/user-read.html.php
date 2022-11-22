@@ -120,5 +120,5 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
 
 <h3 class="label-h3">Metadata</h3>
 <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
-    <b>Created:</b> <?= date('d. F Y • H:i:s ', strtotime($user->createdAt)) ?><br>
-    <b>Updated:</b> <?= date('d. F Y • H:i:s', strtotime($user->updatedAt)) ?></p>
+    <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
+    <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?></p>

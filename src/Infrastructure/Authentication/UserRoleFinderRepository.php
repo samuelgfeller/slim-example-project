@@ -5,6 +5,7 @@ namespace App\Infrastructure\Authentication;
 
 
 use App\Domain\User\Data\UserRoleData;
+use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -95,7 +96,7 @@ class UserRoleFinderRepository
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
-            $userRoles[(int)$resultRow['id']] = ucfirst(str_replace('_', ' ', $resultRow['name']));
+            $userRoles[(int)$resultRow['id']] = UserRole::from($resultRow['name'])->roleNameForDropdown();
         }
         return $userRoles;
     }

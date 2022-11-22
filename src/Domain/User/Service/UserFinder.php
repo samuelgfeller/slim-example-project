@@ -44,6 +44,9 @@ class UserFinder
                     'status',
                     $userResultData->id
                 );
+                // General data privilege like first name, email and so on no needed for list
+                // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                //     'general_data', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
             }
