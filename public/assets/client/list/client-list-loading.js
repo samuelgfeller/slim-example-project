@@ -2,12 +2,12 @@ import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.1
 import {
     displayClientProfileCardLoadingPlaceholder,
     removeClientCardContentPlaceholder
-} from "./client-list-content-placeholder.js";
+} from "./client-list-content-placeholder.js?v=0.1";
 import {fetchData} from "../../general/js/request/fetch-data.js?v=0.1";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
-} from "../../general/js/eventHandler/open-link-on-html-element.js";
+} from "../../general/js/eventHandler/open-link-on-html-element.js?v=0.1";
 import {
     triggerClickOnHtmlElementEnterKeypress
 } from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js?v=0.1";

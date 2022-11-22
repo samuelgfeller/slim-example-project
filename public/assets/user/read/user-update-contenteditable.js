@@ -3,7 +3,7 @@ import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
-} from "../../general/js/contenteditable/contenteditable-main.js";
+} from "../../general/js/contenteditable/contenteditable-main.js?v=0.1";
 import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
 
 /**

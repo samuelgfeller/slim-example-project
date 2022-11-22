@@ -3,7 +3,7 @@ import {
     changeUserIsTyping,
     hideCheckmarkLoader,
     userIsTypingOnNoteId
-} from "./client-read-text-area-event-listener-setup.js";
+} from "./client-read-text-area-event-listener-setup.js?v=0.1";
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 
 let noteSaveHideCheckMarkTimeout = [];

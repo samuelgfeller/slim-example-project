@@ -3,7 +3,7 @@ import {getNoteHtml} from "./client-read-template-note.html.js?v=0.1";
 import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
-} from "./client-read-note-loading-placeholder.js";
+} from "./client-read-note-loading-placeholder.js?v=0.1";
 import {handleFail} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 
 /**
