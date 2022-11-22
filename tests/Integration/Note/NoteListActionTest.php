@@ -45,30 +45,18 @@ class NoteListActionTest extends TestCase
      * Different privileges of notes depending on authenticated user and
      * note owner are tested with the provider.
      *
-     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
-     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code and privilege
      * @return void
      */
     public function testNoteListAction(
-        array $userLinkedToNoteAttr,
-        array $authenticatedUserAttr,
+        array $userLinkedToNoteRow,
+        array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-            $userLinkedToNoteRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToNoteRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userLinkedToNoteAttr),
-                UserFixture::class
-            );
-        }
+        $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
 
         // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
         // because note read rights change (e.g. that newcomers may not see the notes from everyone), the

@@ -35,32 +35,21 @@ class UserUpdateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::userUpdateAuthorizationCases()
      *
-     * @param array $userToChangeAttr user to change attributes containing the user_role_id
-     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $userToChangeRow user to change attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
     public function testUserSubmitUpdate_authorization(
-        array $userToChangeAttr,
-        array $authenticatedUserAttr,
+        array $userToChangeRow,
+        array $authenticatedUserRow,
         array $requestData,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userToChangeAttr) {
-            $userToChangeRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userToChangeRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userToChangeAttr),
-                UserFixture::class
-            );
-        }
+        $this->insertUserFixturesWithAttributes($userToChangeRow, $authenticatedUserRow);
+
         // Add user role id to $requestData as it could contain a user role enum
         $requestData = $this->addUserRoleId($requestData);
 

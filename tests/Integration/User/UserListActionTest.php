@@ -30,8 +30,8 @@ class UserListActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\User\UserListCaseProvider::userListAuthorizationCases()
      *
-     * @param array $userData user attributes containing the user_role_id
-     * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
+     * @param array $userRow user attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array{
      *        string: StatusCodeInterface,
      *        own: array{
@@ -47,15 +47,15 @@ class UserListActionTest extends TestCase
      * @return void
      */
     public function testUserList_authorization(
-        array $userData,
-        array $authenticatedUserData,
+        array $userRow,
+        array $authenticatedUserRow,
         array $expectedResult,
     ): void {
-        // Changing user attributes to user data
-        $this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
+        // Change user attributes to user data
+        $this->insertUserFixturesWithAttributes($userRow, $authenticatedUserRow);
 
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         // Make request
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));
         $response = $this->app->handle($request);
@@ -71,14 +71,14 @@ class UserListActionTest extends TestCase
         // Add response array of authenticated user to expected userResultDataArray
         $expectedResponseArray['userResultDataArray'][] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
-            'firstName' => $authenticatedUserData['first_name'],
-            'surname' => $authenticatedUserData['surname'],
-            'email' => $authenticatedUserData['email'],
-            'id' => $authenticatedUserData['id'],
-            'status' => $authenticatedUserData['status'],
-            'updatedAt' => $authenticatedUserData['updated_at'],
-            'createdAt' => $authenticatedUserData['created_at'],
-            'userRoleId' => $authenticatedUserData['user_role_id'],
+            'firstName' => $authenticatedUserRow['first_name'],
+            'surname' => $authenticatedUserRow['surname'],
+            'email' => $authenticatedUserRow['email'],
+            'id' => $authenticatedUserRow['id'],
+            'status' => $authenticatedUserRow['status'],
+            'updatedAt' => $authenticatedUserRow['updated_at'],
+            'createdAt' => $authenticatedUserRow['created_at'],
+            'userRoleId' => $authenticatedUserRow['user_role_id'],
             'statusPrivilege' => $expectedResult['own']['statusPrivilege']->value,
             'userRolePrivilege' => $expectedResult['own']['userRolePrivilege']->value,
             'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['own']['availableUserRoles']),
@@ -87,14 +87,14 @@ class UserListActionTest extends TestCase
         // Add response array of other user if it is set
         if ($expectedResult['other'] !== false) {
             $expectedResponseArray['userResultDataArray'][] = [
-                'firstName' => $userData['first_name'],
-                'surname' => $userData['surname'],
-                'email' => $userData['email'],
-                'id' => $userData['id'],
-                'status' => $userData['status'],
-                'updatedAt' => $userData['updated_at'],
-                'createdAt' => $userData['created_at'],
-                'userRoleId' => $userData['user_role_id'],
+                'firstName' => $userRow['first_name'],
+                'surname' => $userRow['surname'],
+                'email' => $userRow['email'],
+                'id' => $userRow['id'],
+                'status' => $userRow['status'],
+                'updatedAt' => $userRow['updated_at'],
+                'createdAt' => $userRow['created_at'],
+                'userRoleId' => $userRow['user_role_id'],
                 'statusPrivilege' => $expectedResult['other']['statusPrivilege']->value,
                 'userRolePrivilege' => $expectedResult['other']['userRolePrivilege']->value,
                 'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['other']['availableUserRoles']),

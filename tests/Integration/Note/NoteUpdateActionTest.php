@@ -45,30 +45,18 @@ class NoteUpdateActionTest extends TestCase
      * with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
-     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
-     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
     public function testNoteSubmitUpdateAction(
-        array $userLinkedToNoteAttr,
-        array $authenticatedUserAttr,
+        array $userLinkedToNoteRow,
+        array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-            $userLinkedToNoteRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToNoteRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userLinkedToNoteAttr),
-                UserFixture::class
-            );
-        }
+        $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
 
         // Insert linked status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];

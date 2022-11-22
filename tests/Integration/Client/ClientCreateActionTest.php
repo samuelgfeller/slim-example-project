@@ -43,30 +43,18 @@ class ClientCreateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::provideUsersAndExpectedResultForClientCreation()
      *
-     * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
-     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
     public function testClientSubmitCreateAction_authorization(
-        array $userLinkedToClientAttr,
-        array $authenticatedUserAttr,
+        array $userLinkedToClientRow,
+        array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userLinkedToClientAttr) {
-            $userLinkedToClientRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userLinkedToClientAttr),
-                UserFixture::class
-            );
-        }
+        $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Client status is not authorization relevant for client creation
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];

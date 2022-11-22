@@ -40,24 +40,12 @@ class UserChangePasswordActionTest extends TestCase
      * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::userPasswordChangeAuthorizationCases()
      */
     public function testChangePasswordSubmitAction_authorization(
-        array $userToUpdateAttr,
-        array $authenticatedUserAttr,
+        array $userToUpdateRow,
+        array $authenticatedUserRow,
         array $expectedResult
     ): void {
-        // Insert authenticated user and user to be changed with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userToUpdateAttr) {
-            $userToUpdateRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userToUpdateRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userToUpdateAttr),
-                UserFixture::class
-            );
-        }
+        // Insert authenticated user and user linked to resource with given attributes containing the user role
+        $this->insertUserFixturesWithAttributes($userToUpdateRow, $authenticatedUserRow);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);

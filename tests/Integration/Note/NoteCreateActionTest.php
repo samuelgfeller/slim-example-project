@@ -56,30 +56,18 @@ class NoteCreateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
      *
-     * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
-     * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+     * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
     public function testNoteSubmitCreateAction(
-        array $userLinkedToNoteAttr,
-        array $authenticatedUserAttr,
+        array $userLinkedToClientRow,
+        array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
-        );
-        if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-            $userLinkedToClientRow = $authenticatedUserRow;
-        } else {
-            // If authenticated user and owner user is not the same, insert owner
-            $userLinkedToClientRow = $this->insertFixturesWithAttributes(
-                $this->addUserRoleId($userLinkedToNoteAttr),
-                UserFixture::class
-            );
-        }
+        $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert needed client status fixture
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];

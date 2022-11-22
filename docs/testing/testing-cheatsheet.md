@@ -1,61 +1,75 @@
 # Testing cheatsheet
 
-## Start testing 
-I strongly recommend (also to my future self) to write a bullet point list of exactly what should be tested for each page 
-and approximate values of what is expected for each point. This is the only way to have a global overview and not forget 
+## Start testing
+
+I strongly recommend (also to my future self) to write a bullet point list of exactly what should be tested for each
+page
+and approximate values of what is expected for each point. This is the only way to have a global overview and not forget
 cases. Also, it adds a lot of clarity and provides precious documentation when having to refactor things.  
-It can be quite hard to think about everything in advance though so instead of putting a lot of effort in trying to 
-think of all possible cases, I would write down the ones that come to mind and then while implementing more cases 
+It can be quite hard to think about everything in advance though so instead of putting a lot of effort in trying to
+think of all possible cases, I would write down the ones that come to mind and then while implementing more cases
 will come to mind naturally and the list can be extended.
 
 ### What to test
+
 This is a big question I have no answer to yet. For me the following useful tests come to mind:
+
 * Page actions
-  * Authenticated page load
-    * With user role with the "lowest" rights but as owner  
-    Expected: authenticated user should be able to see the page, so status code 200
-    * Ideally with every different user role where logged-in user is not the owner   
-    Expected result may depend on each role. Often multiple roles have the same "result". If every role can see the
-    same thing I would not write different test cases
-  * Unauthenticated page load
-    Expected: redirect to login page with correct query parameters to redirect back to previous page
+    * Authenticated page load
+        * With user role with the "lowest" rights but as owner  
+          Expected: authenticated user should be able to see the page, so status code 200
+        * Ideally with every different user role where logged-in user is not the owner   
+          Expected result may depend on each role. Often multiple roles have the same "result". If every role can see
+          the
+          same thing I would not write different test cases
+    * Unauthenticated page load
+      Expected: redirect to login page with correct query parameters to redirect back to previous page
 * Ajax resource loading (sub resource loaded via Ajax like notes loaded on the client read page)
-  * Authenticated load
-    * *Sub resource data load is most often covered by the authenticated page load test so not necessary.*
-    * Load sub resource with different roles may be interesting if items returned in response body differ 
-    depending on the role of the logged-in user (asserting `$privilege` for instance)
-      * Load with every different type of user role. Ideally and if well maintained, only the roles where there are 
-        relevant changes to be tested [example](#provider-for-note-list-action-test)
-    * Test that deleted resource is NOT in response
-  * Unauthenticated load  
-    Expected: Correct status code (401) and login url in response body with correct query parameters that include url to the previous page
+    * Authenticated load
+        * *Sub resource data load is most often covered by the authenticated page load test so not necessary.*
+        * Load sub resource with different roles may be interesting if items returned in response body differ
+          depending on the role of the logged-in user (asserting `$privilege` for instance)
+            * Load with every different type of user role. Ideally and if well maintained, only the roles where there
+              are
+              relevant changes to be tested [example](#provider-for-note-list-action-test)
+        * Test that deleted resource is NOT in response
+    * Unauthenticated load  
+      Expected: Correct status code (401) and login url in response body with correct query parameters that include url
+      to the previous page
 * Ajax resource creation / modification / deletion
-  * Authenticated creation / modification / deletion submission
-    * Authorization (privilege): creation / modification / deletion submit with each different user role as authenticated user
-      1. Each role as resource owner (main resource owner for creation) - *e.g. role "newcomer" and owner, "advisor" and owner etc.*
-      2. Each role NOT as owner - *e.g. role "newcomer" and not owner, "advisor" and not owner etc.*
-         * Not every role is needed as roles work in a hierarchical way. It doesn't have to be tested further than the lowest 
-         privilege that is allowed to perform action when not owner. *e.g. "admin" can do at least everything "managing_advisor" can do*
-      3. Any other user role that has a different expected behaviour and is relevant to test
-    * Validation: as authorized user but invalid form submission (does not apply for deletion)
-      1. With every different kind of possible validation error for each field 
-      2. 400 malformed body requests where keys are missing or wrongly named  
-  * Unauthenticated creation submission
-    Expected: Correct status code (401 Unauthorized) and login url in response body with correct query parameters that 
-    include url to the previous page
+    * Authenticated creation / modification / deletion submission
+        * Authorization (privilege): creation / modification / deletion submit with each different user role as
+          authenticated user
+            1. Each role as resource owner (main resource owner for creation) - *e.g. role "newcomer" and owner, "
+               advisor" and owner etc.*
+            2. Each role NOT as owner - *e.g. role "newcomer" and not owner, "advisor" and not owner etc.*
+                * Not every role is needed as roles work in a hierarchical way. It doesn't have to be tested further
+                  than the lowest
+                  privilege that is allowed to perform action when not owner. *e.g. "admin" can do at least everything "
+                  managing_advisor" can do*
+            3. Any other user role that has a different expected behaviour and is relevant to test
+        * Validation: as authorized user but invalid form submission (does not apply for deletion)
+            1. With every different kind of possible validation error for each field
+            2. 400 malformed body requests where keys are missing or wrongly named
+    * Unauthenticated creation submission
+      Expected: Correct status code (401 Unauthorized) and login url in response body with correct query parameters that
+      include url to the previous page
 
 ## Page actions
+
 Integration testing page actions is quite limited if the server renders the template serverside as the request body
-only contains the rendered page as string, and we don't have access to the variables.   
+only contains the rendered page as string, and we don't have access to the variables.
 
 What we can test however is that the page loads with an expected status code and that if the user is not logged-in,
-he is redirected to the login page. 
+he is redirected to the login page.
 
 ### Authenticated page action test
+
 The needed [test traits](https://github.com/selective-php/test-traits) can be added right after the test class opening
-brackets. More on it and the whole testing setup can be found in 
+brackets. More on it and the whole testing setup can be found in
 [testing.md](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing.md)
 this is intended to be a cheatsheet in a working environment. Fixture use is explained below.
+
 ```php
 use AppTestTrait; // Custom
 use HttpTestTrait;
@@ -83,7 +97,9 @@ public function testClientReadPageAction_authenticated(): void
 ```
 
 ### Non-authenticated page action test
-This test is also useful to test if the automatic redirect in the `UserAuthenticationMiddleware` is correct. 
+
+This test is also useful to test if the automatic redirect in the `UserAuthenticationMiddleware` is correct.
+
 ```php
 public function testClientReadPageAction_unauthenticated(): void
 {
@@ -100,37 +116,46 @@ public function testClientReadPageAction_unauthenticated(): void
 ```
 
 ## JSON requests
-Now with JSON requests we can test a lot more things. I like to render the templates minimally on the server and 
+
+Now with JSON requests we can test a lot more things. I like to render the templates minimally on the server and
 prefer to load linked contents via an Ajax JSON request. This allows for a faster page load and with good content
 placeholders it's nice for the users as well.
 
 ### Fixtures utility
-At first, the needed test data has to be inserted into the database. This is made by the awesome `DatabaseTestTrait.php`.  
+
+At first, the needed test data has to be inserted into the database. This is made by the awesome `DatabaseTestTrait.php`
+.  
 To be able to test more agilely with fixtures, I created the `FixtureTrait.php`:
+
 ```php
 use FixtureTrait;
 ```
-The main advantage is being in control of the fixtures in the test function. The `$records` values of the `Fixture` 
-are not relevant (it just has to be valid and the first `deleted_at` must be `null`). The needed records 
-are "shaped" in the test function meaning the relevant attributes are all set during the test. This means that we don't
-depend on the `$records` containing right ids or values which would be a nightmare to maintain if 
-change are made to the fixture records. Using one pool for a lot of different functions goes against 
-[single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle). 
 
+The main advantage is being in control of the fixtures in the test function. The `$records` values of the `Fixture`
+are not relevant (it just has to be valid and the first `deleted_at` must be `null`). The needed records
+are "shaped" in the test function meaning the relevant attributes are all set during the test. This means that we don't
+depend on the `$records` containing right ids or values which would be a nightmare to maintain if
+change are made to the fixture records. Using one pool for a lot of different functions goes against
+[single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle).
 
 #### `insertFixturesWithAttributes()`
-Parameters are 
-* `$attributes` where an associative array is expected with as key the column and value the value 
-we want to attribute to this column. 
+
+Parameters are
+
+* `$attributes` where an associative array is expected with as key the column and value the value
+  we want to attribute to this column.
 * `$fixtureClass` where the class string of a fixture is expected such as `UserFixture::class`.
 * `$amount` optional amount of rows you want to generate. Default 1.
 
 Return value is an associative array of the inserted row including the id.
 
 #### Usage example
-To insert only the records that matching specific criteria, the function `insertFixturesWithAttributes` could be used like follows:
+
+To insert only the records that matching specific criteria, the function `insertFixturesWithAttributes` can be used
+like follows:
+
 ```php
-$clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+$clientOwnerId = $this->insertFixturesWithAttributes(['first_name' => 'Josh'], UserFixture::class)['id'];
 // Insert linked status
 $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
 // Insert client row
@@ -146,17 +171,21 @@ $noteRow = $this->insertFixturesWithAttributes(
 ```
 
 ## Create request
+
 For a json request and assertions later, the `HttpJsonTestTrait.php` is used.
 Request is created as follows:
+
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
 ```
+
 Very important note here, query params can be added directly in the `urlFor()` method, like
-`$this->createJsonRequest('GET', $this->urlFor('note-list', [], ['client_id' => 1]))` but 
+`$this->createJsonRequest('GET', $this->urlFor('note-list', [], ['client_id' => 1]))` but
 **[that won't work](https://github.com/Nyholm/psr7/issues/181) if `nyholm/psr7`
 is used in the project.** So we have to explicitly use `->withQueryParams(['client_id' => 1])` like shown above.
 
 ### Simulate session, execute request and assert status code
+
 ```php
 // Simulate logged-in user
 $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
@@ -167,9 +196,14 @@ self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 ```
 
 ## Assert JSON response
+
 The database has to be asserted before the response content if it contains values from the database.
+
 ### Assert database
-To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`.
+
+To be able to use extended select functions, `use DatabaseExtensionTestTrait;` has to be added after `DatabaseTestTrait`
+.
+
 ```php
 // Assert database 
 // Find freshly inserted note
@@ -177,9 +211,12 @@ $noteDbRow = $this->findLastInsertedTableRow('note');
 // Assert the row column values
 $this->assertTableRowEquals(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
 ```
-`$this->assertTableRow` strictly asserts database with given array. If the order of keys does not matter, 
+
+`$this->assertTableRow` strictly asserts database with given array. If the order of keys does not matter,
 I'd use `assertTableRowEquals` to prevent false positive test failures.
+
 ### Assert response body
+
 ```php
 // Assert response
 $this->assertJsonData([
@@ -193,42 +230,55 @@ $this->assertJsonData([
 ```
 
 ### Test and assert CRUD requests
-Examples of whole CRUD test functions with different user roles: 
+
+Examples of whole CRUD test functions with different user roles:
 **[Test and assert CRUD requests examples](#test-and-assert-CRUD-requests-examples)**
 
 ### Test validation and assert errors
+
 Form fields generally have specific criteria like a minimum length or specific format that are validated.
 
-Test function, provider and assertions: **[Test validation and assert errors example](#test-validation-and-assert-errors-example)**.
+Test function, provider and
+assertions: **[Test validation and assert errors example](#test-validation-and-assert-errors-example)**.
 
 ### Test and assert malformed request body
+
 When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys)
 the server should respond with 400 Bad Request.
 
-Test function, provider and assertions: 
-**[Malformed request body provider and test function example](#malformed-request-body-provider-and-test-function-example)**.
+Test function, provider and assertions:
+**[Malformed request body provider and test function example](#malformed-request-body-provider-and-test-function-example)**
+.
 
 ## Test and assert JSON response when unauthenticated
-When protected Ajax request is sent to the server and user is not logged-in, the client should redirect the user to 
-the login form. The redirect action [cannot be initiated by the server](https://github.com/odan/slim4-tutorial/issues/44), 
+
+When protected Ajax request is sent to the server and user is not logged-in, the client should redirect the user to
+the login form. The redirect
+action [cannot be initiated by the server](https://github.com/odan/slim4-tutorial/issues/44),
 so it has to be done by the client.
 This is the simplified code inside the default Ajax handleFail() method:
+
 ```js
 // Not logged in, redirect to login url
 if (xhr.status === 401) {
     window.location.href = JSON.parse(xhr.responseText).loginUrl;
 }
 ```
-Not only should the client be redirected to the login page, but also redirected back to the where he/she was before having
-to log in again. To make this possible, the server has to respond with the full login url with redirect back query params.   
-This is done by the `AuthenticationMiddleware` with the help of one of two custom HTTP headers 
+
+Not only should the client be redirected to the login page, but also redirected back to the where he/she was before
+having
+to log in again. To make this possible, the server has to respond with the full login url with redirect back query
+params.   
+This is done by the `AuthenticationMiddleware` with the help of one of two custom HTTP headers
 `Redirect-to-url-if-unauthorized` or `Redirect-to-route-name-if-unauthorized`.
 
 #### Assert response with `Redirect-to-url-if-unauthorized`
+
 ```js
 // Content-type has to be json
 xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
 ```
+
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
     ->withQueryParams(['client_id' => 1]);
@@ -244,6 +294,7 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUr
 // Assert that response contains correct login url
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
+
 <details>
   <summary><h4>Assert response with <code>Redirect-to-route-name-if-unauthorized</code></h4></summary>
 
@@ -262,18 +313,40 @@ $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor
 // Assert that response contains correct login url
 $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 ```
+
 </details>
 
-Asserting unauthenticated response without custom header is basically the same as 
+Asserting unauthenticated response without custom header is basically the same as
 [non-authenticated page action test](#non-authenticated-page-action-test).
 
 ## Test and assert CRUD requests examples
+
+### Authorization test trait
+
+User roles are stored in the database and have unique ids. When working in the code though, we use the `UserRole`
+Enum as this provides clear cases so that the id doesn't have to be hardcoded.  
+`AuthorizationTestTrait` makes it easy to provide user attributes with the Enum cases as user role like
+`['user_role_id' => UserRole::ADMIN]`. In the test function this user role id attribute can be replaced with
+the actual correct id with the function `$this->addUserRoleId($userAttr)`.  
+Most of the time 2 users have to be inserted, one which is the resource owner and the other the authenticated user.
+Both can be inserted with the Enum case as `user_role_id` with the following function:
+
+```php
+// Change user attributes to user data
+$this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
+```
+
+For prettier code parameters references meaning the function can change the provided arguments values which it does.
+Expected are user attributes in an array like in the example above and those attributes are replaced with the
+inserted user data.
+
 ### Data loading
 
 <details>
   <summary><h4>List action test example with privilege assertion but without filter</h4></summary>
 
 #### Test note list action
+
 ```php
 /**
  * Tests notes that are loaded with ajax on client read page.
@@ -288,22 +361,20 @@ Asserting unauthenticated response without custom header is basically the same a
  * @return void
  */
 public function testNoteListAction(
-    array $userLinkedToNoteAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToNoteRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-        $userLinkedToNoteRow = $authenticatedUserRow;
-    }else{
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
+    
     // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
     // because note read rights change (e.g. that newcomers may not see the notes from everyone), the
     // client owner id has to be added to the provider
-    $clientOwnerId = $this->insertFixturesWithAttributes(['user_role_id' => 3], UserFixture::class)['id'];
+    $clientOwnerId = $this->insertFixturesWithAttributes(
+        $this->addUserRoleId(['user_role_id' => 3]), 
+        UserFixture::class
+    )['id'];
     // Insert linked status
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert client row
@@ -339,17 +410,20 @@ public function testNoteListAction(
     $this->assertJsonData($expectedResponseArray, $response);
 }
 ```
+
 #### Provider for note list action test
-All different relevant combinations of user roles are provided in the following data provider. There are not 
-so much cases because newcomer and advisor owner may only change their own posts and managing_advisor and higher 
+
+All different relevant combinations of user roles are provided in the following data provider. There are not
+so much cases because newcomer and advisor owner may only change their own posts and managing_advisor and higher
 are allowed to edit others' notes.
+
 ```php
 public function provideUserAttributesAndExpectedResultForNoteList(): array
 {
     // Get users with the different roles
-    $managingAdvisorAttr = ['user_role_id' => 2];
-    $advisorAttr = ['user_role_id' => 3];
-    $newcomerAttr = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+    $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+    $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
     return [
         [// ? newcomer not owner of note
             'note_owner' => $advisorAttr,
@@ -393,23 +467,26 @@ Client list test action
 
 </details>
 
-### Basic data mutation (create, update and delete actions) with one provider 
-To test the behaviour of all relevant different user roles a data provider is used that returns the relevant user attributes 
-for the logged-in user, resource owner and expected result so that the same test function can be used for all roles.  
+### Basic data mutation (create, update and delete actions) with one provider
 
-Examples below are on the notes and they have a little added complexity as they can be a "main note" that changes the 
-privileges and expected results.  
+To test the behaviour of all relevant different user roles a data provider is used that returns the relevant user
+attributes
+for the logged-in user, resource owner and expected result so that the same test function can be used for all roles.
+
+Examples below are on the notes and they have a little added complexity as they can be a "main note" that changes the
+privileges and expected results.
 <details>
   <summary><h4>NoteCaseProvider for create update and delete</h4></summary>
 
 `tests/Provider/Note/NoteCaseProvider.php`
+
 ```php
 public function provideUserAttributesAndExpectedResultForNoteCUD(): array
 {
     // Set different user role attributes
-    $managingAdvisorAttr = ['user_role_id' => 2];
-    $advisorAttr = ['user_role_id' => 3];
-    $newcomerAttr = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+    $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+    $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
     $authorizedResult = [
         // For a DELETE, PUT request: HTTP 200, HTTP 204 should imply "resource updated successfully"
         // https://stackoverflow.com/a/2342589/9013718
@@ -524,12 +601,14 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
     ];
 }
 ```
+
 </details>
 
 <details>
   <summary><h4>Note create action test</h4></summary>
 
 `tests/Integration/Note/NoteCreateActionTest.php`
+
 ```php
 /**
  * Test main note and normal note update on client-read page while being authenticated
@@ -537,24 +616,19 @@ public function provideUserAttributesAndExpectedResultForNoteCUD(): array
  *
  * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
  * 
- * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToClientRow note owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
  * @return void
  */
 public function testNoteSubmitCreateAction(
-    array $userLinkedToNoteAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToClientRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-        $userLinkedToClientRow = $authenticatedUserRow;
-    } else {
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
+
     // Insert needed client status fixture
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert one client linked to this user
@@ -596,36 +670,33 @@ public function testNoteSubmitCreateAction(
     $this->assertJsonData($expectedResponseJson, $response);
 }
 ```
+
 </details>
 
 <details>
   <summary><h4>Note update action test</h4></summary>
 
 `tests/Integration/Note/NoteUpdateActionTest.php`
+
 ```php
 /**
  * Test note modification on client-read page while being authenticated
  * with different user roles.
  *
  * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
- * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
  * @return void
  */
 public function testNoteSubmitUpdateAction(
-    array $userLinkedToNoteAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToNoteRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-        $userLinkedToNoteRow = $authenticatedUserRow;
-    }else{
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
+
     // Insert linked status
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert one client linked to this user
@@ -688,36 +759,33 @@ public function testNoteSubmitUpdateAction(
     $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
 }
 ```
+
 </details>
 
 <details>
   <summary><h4>Note delete action test</h4></summary>
 
 `tests/Integration/Note/NoteDeleteActionTest.php`
+
 ```php
 /**
  * Test normal and main note deletion on client-read page
  * while being authenticated with different user roles.
  *
  * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
- * @param array $userLinkedToNoteAttr note owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
  * @return void
  */
 public function testNoteSubmitDeleteAction(
-    array $userLinkedToNoteAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToNoteRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToNoteAttr) {
-        $userLinkedToNoteRow = $authenticatedUserRow;
-    }else{
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToNoteRow = $this->insertFixturesWithAttributes($userLinkedToNoteAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
+        
     // Insert linked status
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert one client linked to this user
@@ -782,41 +850,38 @@ public function testNoteSubmitDeleteAction(
     $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
 }
 ```
+
 </details>
 
-
 ### Data mutation with individual provider
-For more complex cases where each test function has different relevant test parameters and privileges between 
+
+For more complex cases where each test function has different relevant test parameters and privileges between
 create, read, update or delete actions and which column is targeted.
 
 <details>
   <summary><h4>Client create action test and provider</h4></summary>
 
 `tests/Integration/Client/ClientCreateActionTest.php`
+
 ```php
 /**
  * Client creation with valid data
  *
  * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::provideUsersAndExpectedResultForClientCreation()
  *
- * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
  * @return void
  */
 public function testClientSubmitCreateAction_authorization(
-    array $userLinkedToClientAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToClientRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
-        $userLinkedToClientRow = $authenticatedUserRow;
-    }else{
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
+    
     // Client status is not authorization relevant for client creation
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     $clientCreationValues = [
@@ -857,13 +922,14 @@ public function testClientSubmitCreateAction_authorization(
 ```
 
 `tests/Provider/Client/ClientCreateCaseProvider.php`
+
 ```php
 public function provideUsersAndExpectedResultForClientCreation(): array
 {
     // Get users with different roles
-    $managingAdvisorAttr = ['user_role_id' => 2];
-    $advisorAttr = ['user_role_id' => 3];
-    $newcomerAttr = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+    $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+    $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
     $authorizedResult = [
         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
         'db_entry_created' => true,
@@ -915,32 +981,28 @@ As there are different authorization rules for some columns, the data to be chan
 provider.
 
 `tests/Integration/Client/ClientUpdateActionTest.php`
+
 ```php
 /**
  * Test client values update when authenticated with different user roles.
  *
  * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate
  *
- * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $requestData array of data for the request body
  * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
  * @return void
  */
 public function testClientSubmitUpdateAction_authenticated(
-    array $userLinkedToClientAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToClientRow,
+    array $authenticatedUserRow,
     array $requestData,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
-        $userLinkedToClientRow = $authenticatedUserRow;
-    }else{
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class)
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
+    
     // Insert client status
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert client that will be used for this test
@@ -983,13 +1045,14 @@ public function testClientSubmitUpdateAction_authenticated(
 ```
 
 `tests/Provider/Client/ClientUpdateCaseProvider.php`
+
 ```php
 public function provideUsersAndExpectedResultForClientUpdate(): array
 {
     // Set different user role attributes
-    $managingAdvisorAttr = ['user_role_id' => 2];
-    $advisorAttr = ['user_role_id' => 3];
-    $newcomerAttr = ['user_role_id' => 4];
+    $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+    $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+    $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
     $authorizedResult = [
         StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
         'db_changed' => true,
@@ -1064,36 +1127,32 @@ public function provideUsersAndExpectedResultForClientUpdate(): array
     ];
 }
 ```
+
 </details>
 
 <details>
   <summary><h4>Client delete action test and provider</h4></summary>
 
 `tests/Integration/Client/ClientDeleteActionTest.php`
+
 ```php
 /**
  * Test delete client submit with different authenticated user roles.
  *
  * @dataProvider \App\Test\Provider\Client\ClientDeleteCaseProvider::provideUsersForClientDelete()
  *
- * @param array $userLinkedToClientAttr client owner attributes containing the user_role_id
- * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
+ * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+ * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
  * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
  * @return void
  */
 public function testClientSubmitDeleteAction_authenticated(
-    array $userLinkedToClientAttr,
-    array $authenticatedUserAttr,
+    array $userLinkedToClientRow,
+    array $authenticatedUserRow,
     array $expectedResult
 ): void {
     // Insert authenticated user and user linked to resource with given attributes containing the user role
-    $authenticatedUserRow = $this->insertFixturesWithAttributes($authenticatedUserAttr, UserFixture::class);
-    if ($authenticatedUserAttr === $userLinkedToClientAttr) {
-        $userLinkedToClientRow = $authenticatedUserRow;
-    } else {
-        // If authenticated user and owner user is not the same, insert owner
-        $userLinkedToClientRow = $this->insertFixturesWithAttributes($userLinkedToClientAttr, UserFixture::class);
-    }
+    $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
     // Insert client status
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert client linked to given user
@@ -1101,6 +1160,7 @@ public function testClientSubmitDeleteAction_authenticated(
         ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
         ClientFixture::class
     );
+    
     // Simulate logged-in user
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     $request = $this->createJsonRequest(
@@ -1125,13 +1185,14 @@ public function testClientSubmitDeleteAction_authenticated(
 ```
 
 `tests/Provider/Client/ClientDeleteCaseProvider.php`
+
 ```php
 public function provideUsersForClientDelete(): array
     {
         // Get users with different roles
-        $managingAdvisorAttr = ['user_role_id' => 2];
-        $advisorAttr = ['user_role_id' => 3];
-        $newcomerAttr = ['user_role_id' => 4];
+        $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             'db_changed' => true,
@@ -1172,12 +1233,16 @@ public function provideUsersForClientDelete(): array
         ];
     }
 ```
+
 </details>
 
 ## Test validation and assert errors example
+
 Form fields generally have specific criteria like a minimum length or specific format that are validated on the server.
 This has to be tested.
+
 ### Generate validation cases with a case provider
+
 To be able to test different invalid inputs in one test, the different cases are provided via data provider.  
 For creation and modification the validity rules are the same so one provider can be used for both in this case.
 But if the fields have disparities it may very well be necessary to use a provider for each action.
@@ -1309,6 +1374,7 @@ public function invalidClientValuesAndExpectedResponseData(): array
 </details>
 
 ### Test validation on resource modification
+
 This is the full test where a client is edited with invalid inputs given by the data provider above.
 
 <details>
@@ -1326,7 +1392,10 @@ This is the full test where a client is edited with invalid inputs given by the 
 public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
 {
     // Insert user that is allowed to change content
-    $userId = $this->insertFixturesWithAttributes(['user_role_id' => 2], UserFixture::class)['id'];
+    $userId = $this->insertFixturesWithAttributes(
+        $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]), 
+        UserFixture::class
+    )['id'];
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Insert client that will be used for this test
     $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
@@ -1350,10 +1419,11 @@ public function testClientSubmitUpdateAction_invalid(array $requestBody, array $
 </details>
 
 ## Test and assert malformed request body example
+
 When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys)
 the server should respond with 400 Bad Request.
 
-The different combination of malformed request body are provided via data provider. It doesn't have to be 
+The different combination of malformed request body are provided via data provider. It doesn't have to be
 so extensive though, I don't know if I will implement it so thoroughly for each module but that would cover most cases.
 
 ### Malformed request body provider and test function example
@@ -1411,6 +1481,7 @@ public function provideNoteMalformedRequestBodyForCreation(): array
     ];
 }
 ```
+
 </details>
 
 <details>
@@ -1443,6 +1514,7 @@ public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequ
     $this->app->handle($request);
 }
 ```
+
 </details>
 
 -----
