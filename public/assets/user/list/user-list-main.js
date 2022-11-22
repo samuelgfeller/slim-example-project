@@ -17,7 +17,7 @@ import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-
 displayUserCardLoadingPlaceholder();
 
 // Load clients at page startup
-fetchData('users').then(jsonResponse => {
+fetchData('users', 'users/list').then(jsonResponse => {
     removeUserCardContentPlaceholder();
     addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses);
     // Add event listeners to cards

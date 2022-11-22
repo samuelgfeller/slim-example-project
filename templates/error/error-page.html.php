@@ -22,6 +22,10 @@ $this->addAttribute('css', ['assets/error/error.css']); ?>
             $title = 'Nothing but clouds here.';
             $message = 'Try to navigate with the menu or if you did, <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
             break;
+        case 403:
+            $title = 'Access forbidden.';
+            $message = 'You are not allowed to access this page. Please contact an administrator.';
+            break;
         case 400:
             $title = 'The request is invalid';
             $message = 'There is something wrong with the request. <br>Please try again and 

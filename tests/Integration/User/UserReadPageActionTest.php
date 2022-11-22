@@ -1,13 +1,9 @@
 <?php
 
+namespace App\Test\Integration\User;
 
-namespace App\Test\Integration\Client;
-
-
-use App\Test\Fixture\ClientFixture;
-use App\Test\Fixture\ClientStatusFixture;
-use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -15,13 +11,9 @@ use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpForbiddenException;
 
-/**
- * Test cases for client read page load
- *  - Authenticated
- *  - Unauthenticated
- */
-class ClientReadPageActionTest extends TestCase
+class UserReadPageActionTest extends TestCase
 {
 
     use AppTestTrait;
@@ -29,29 +21,39 @@ class ClientReadPageActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
+    use AuthorizationTestTrait;
 
     /**
      * Normal page action while being authenticated
      *
+     * @dataProvider \App\Test\Provider\User\UserReadCaseProvider::userReadAuthorizationCases()
+     * @param array $userData user attributes containing the user_role_id
+     * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
+     * @param array{string: StatusCodeInterface} $expectedResult
      * @return void
      */
-    public function testClientReadPageAction_authenticated(): void
-    {
-        // Insert linked and authenticated user
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
-        // Insert linked client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
-        // Add needed database values to correctly display the page
-        $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class);
+    public function testClientReadPageAction_authorization(
+        array $userData,
+        array $authenticatedUserData,
+        array $expectedResult,
+    ): void {
+        // Insert tested and authenticated user
+        $this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
 
-        $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+
+        $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => $userData['id']]));
+
+        // When forbidden, exception is thrown and caught by the error handler which displays the error page
+        if ($expectedResult[StatusCodeInterface::class] === StatusCodeInterface::STATUS_FORBIDDEN) {
+            $this->expectException(HttpForbiddenException::class);
+        }
 
         $response = $this->app->handle($request);
-        // Assert 200 OK
-        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Assert 200 OK - code only reaches here if no exception is thrown
+        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
     }
 
     /**

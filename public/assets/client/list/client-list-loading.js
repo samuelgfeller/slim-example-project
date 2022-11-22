@@ -50,7 +50,7 @@ function fetchClients() {
     let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
     let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';
 
-    return fetchData('clients', queryParams);
+    return fetchData('clients' + queryParams, 'clients/list');
 }
 
 /**
