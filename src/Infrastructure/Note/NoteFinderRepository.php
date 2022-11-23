@@ -164,6 +164,7 @@ class NoteFinderRepository
             [
                 'note_id' => 'note.id',
                 'note_message' => 'note.message',
+                'note_hidden' => 'note.hidden',
                 'note_updated_at' => 'note.updated_at',
                 'note_created_at' => 'note.created_at',
                 'user_id' => 'user.id',

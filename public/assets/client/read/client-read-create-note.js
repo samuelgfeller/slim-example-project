@@ -4,7 +4,7 @@ import {
     addHideNoteBtnEventListener,
     addTextareaInputEventListener,
     hideCheckmarkLoader,
-    toggleTextareaReadOnlyAndAddDeleteBtnDisplay
+    toggleReadOnlyAndBtnAboveNote
 } from "./client-read-note-event-listener-setup.js?v=0.1";
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
@@ -170,7 +170,7 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     textarea.parentNode.querySelector('.circle-loader').dataset.noteId = noteId;
 
     // Add the read only event listener
-    toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
+    toggleReadOnlyAndBtnAboveNote(textarea);
 
     noteCreationHideCheckMarkTimeout['noteId'] = noteId;
     // Remove checkmark after x sec

@@ -26,18 +26,18 @@ class NoteCreator
     /**
      * Note creation logic
      *
-     * @param array $noteData
+     * @param array $noteValues
      *
      * @return int insert id
      */
-    public function createNote(array $noteData): int
+    public function createNote(array $noteValues): int
     {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $note = new NoteData($noteData);
+            $note = new NoteData($noteValues);
             $note->userId = $loggedInUserId;
             $this->noteValidator->validateNoteCreation($note);
 
-            if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteData['is_main'])) {
+            if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
                 return $this->noteCreatorRepository->insertNote($note->toArray());
             }
         }

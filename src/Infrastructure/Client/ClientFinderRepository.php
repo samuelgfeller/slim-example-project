@@ -47,6 +47,7 @@ class ClientFinderRepository
             // Only necessary note fields
             'main_note_id' => 'note.id',
             'note_message' => 'note.message',
+            'note_hidden' => 'note.hidden',
             'note_user_id' => 'note.user_id',
             'note_updated_at' => 'note.updated_at'
         ]);

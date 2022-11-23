@@ -8,11 +8,13 @@ use App\Domain\Authorization\Privilege;
 
 /**
  * Note with user info
+ * todo evaluate if not better as extended class from UserData
  */
 class NoteWithUserData
 {
     public ?int $noteId;
     public ?string $noteMessage;
+    public ?int $noteHidden;
     public ?string $noteCreatedAt;
     public ?string $noteUpdatedAt;
     public ?int $userId;
@@ -31,6 +33,7 @@ class NoteWithUserData
         $this->noteId = $arrayReader->findAsInt('note_id');
         $this->userId = $arrayReader->findAsInt('user_id');
         $this->noteMessage = $arrayReader->findAsString('note_message');
+        $this->noteHidden = $arrayReader->findAsInt('note_hidden');
         $this->noteCreatedAt = $arrayReader->findAsString('note_created_at');
         $this->noteUpdatedAt = $arrayReader->findAsString('note_updated_at');
         $this->userFullName = $arrayReader->findAsString('user_full_name');

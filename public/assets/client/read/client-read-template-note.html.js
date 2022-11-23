@@ -1,14 +1,23 @@
 import {escapeHtml} from "../../general/js/functions.js?v=0.1";
 
-export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, message) {
+export function getNoteHtml(note) {
+    // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
+    const {noteId, noteCreatedAt, privilege, noteHidden, userFullName, noteMessage, } = note;
+
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
 
-    return `<div id="note${noteId}-container" class="note-container">
+    return `<div id="note${noteId}-container" 
+              class="note-container ${noteHidden === 1 || noteHidden === '1' ? 'hidden-note' : ''}">
                 <label for="note${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
-                    ${userHasPrivilegeTo(privilege, 'D') ?
-                        `<img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg" >` : ''}
+                    ${userHasPrivilegeTo(privilege, 'U') ?
+                        noteHidden === 1 || noteHidden === '1' ? // Show active eye icon if hidden 
+                            `<img class="btn-above-note hide-note-btn" alt="hide" style="display: inline-block"
+                                    src="assets/general/img/eye-icon-active.svg">`  : // Else the non-active one
+                             `<img class="btn-above-note hide-note-btn" alt="hide" 
+                                  src="assets/general/img/eye-icon.svg">`
+                    : ''}
                     ${userHasPrivilegeTo(privilege, 'D') ?
                     `<img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg">` : ''}
 
@@ -21,7 +30,7 @@ export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, mess
                               data-note-id="${noteId}"
                               minlength="4" maxlength="500" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
-                              name="message">${escapeHtml(message)}</textarea>
+                              name="message">${escapeHtml(noteMessage)}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">
                         <div class="checkmark draw"></div>
                     </div>

@@ -52,6 +52,7 @@ class ClientResultAggregateData extends ClientData
         $this->mainNoteData = new NoteData([
             'id' => $clientResultData['main_note_id'] ?? null,
             'message' => $clientResultData['note_message'] ?? null,
+            'hidden' => $clientResultData['note_hidden'] ?? null,
             'user_id' => $clientResultData['note_user_id'] ?? null,
             'updated_at' => $clientResultData['note_updated_at'] ?? null,
         ]);

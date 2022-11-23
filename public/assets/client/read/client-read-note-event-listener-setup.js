@@ -2,6 +2,7 @@ import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-
 import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.1";
 import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.1";
 import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
+import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is
@@ -26,7 +27,7 @@ export function initNotesEventListeners() {
     initAllButtonsAboveNotesEventListeners();
     for (let textarea of clientReadTextareas) {
         // Called when new note is created as well
-        toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
+        toggleReadOnlyAndBtnAboveNote(textarea);
 
         // On init, add read-only attribute to each textarea with js so that if user clicks on a textarea before
         // full page load, he can continue to write
@@ -68,7 +69,7 @@ export function addTextareaInputEventListener(textarea) {
         clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            console.log(textarea.checkValidity());
+            // console.log(textarea.checkValidity());
             if (textarea.checkValidity() !== false) {
                 if (noteId === 'new-note') {
                     insertNewNoteToDb(textarea);
@@ -85,7 +86,7 @@ export function addTextareaInputEventListener(textarea) {
     });
 }
 
-export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
+export function toggleReadOnlyAndBtnAboveNote(textarea) {
     // Del btn and removing readonly only matters if textarea can be edited
     // console.log(textarea.dataset.editable === '1');
     if (textarea.dataset.editable === '1') {
@@ -173,18 +174,39 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
 export function addHideNoteBtnEventListener(btn) {
     btn.addEventListener('click', () => {
         const noteContainer = btn.closest('.note-container');
+        const noteId = btn.closest('label').dataset.noteId;
+        let newHiddenValue = 0;
         // Toggle hidden note
-        if (noteContainer.classList.contains('hidden-note')) {
-            noteContainer.classList.remove('hidden-note');
-            btn.style.display = null;
-            btn.src = 'assets/general/img/eye-icon.svg';
-        } else {
-            btn.style.display = 'inline-block';
-            noteContainer.classList.add('hidden-note');
-            btn.src = 'assets/general/img/eye-icon-active.svg';
+        const toggleEyeIcon = () => {
+            if (noteContainer.classList.contains('hidden-note')) {
+                newHiddenValue = 0;
+                // If note was already hidden, it has to be changed to 0
+                noteContainer.classList.remove('hidden-note');
+                // Only reset display if not focus on textarea
+                if (document.activeElement !== noteContainer.querySelector('textarea')) {
+                    btn.style.display = null;
+                }
+                btn.src = 'assets/general/img/eye-icon.svg';
+            } else {
+                // If note not already hidden, it has to be changed to 1
+                newHiddenValue = 1;
+                btn.style.display = 'inline-block';
+                noteContainer.classList.add('hidden-note');
+                btn.src = 'assets/general/img/eye-icon-active.svg';
+            }
         }
+        // Toggle eye icon as soon as user clicks even before request
+        toggleEyeIcon();
+        // Submit update to server
+        submitUpdate(
+            {hidden: newHiddenValue}, `notes/${noteId}`, `notes/${noteId}`
+        ).then(r => {}).catch(r => {
+            // Revert eye to how it was before on failure
+            toggleEyeIcon();
+        });
     });
 }
+
 
 
 export function hideCheckmarkLoader(checkmarkLoader, origin) {

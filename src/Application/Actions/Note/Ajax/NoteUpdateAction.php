@@ -56,7 +56,9 @@ final class NoteUpdateAction
             $noteIdToChange = (int)$args['note_id'];
             $noteValues = $request->getParsedBody();
             // Check that request body syntax is formatted right (if changed, )
-            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($noteValues, ['message', 'is_main'])) {
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
+                $noteValues, [], ['message', 'is_main', 'hidden']
+            )) {
                 try {
                     $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
 

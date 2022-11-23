@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Note\Service\NoteCreator;
@@ -38,8 +39,8 @@ final class NoteCreateAction
         private readonly NoteCreator $noteCreator,
         private readonly SessionInterface $session,
         private readonly UserFinder $userFinder,
-        protected readonly NoteFinder $noteFinder,
-
+        private readonly NoteFinder $noteFinder,
+        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
         $this->responder = $responder;
     }
@@ -60,15 +61,15 @@ final class NoteCreateAction
         array $args
     ): ResponseInterface {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $noteData = $request->getParsedBody();
+            $noteValues = $request->getParsedBody();
 
-            // If a html form name changes, these changes have to be done in the data class constructor
-            // Check that request body syntax is formatted right (if changed, )
-            if (null !== $noteData && [] !== $noteData
-                && isset($noteData['message'], $noteData['client_id'], $noteData['is_main'])
-                && count($noteData) === 3) {
+            // Check that request body syntax is formatted right
+            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
+                $noteValues,
+                ['message', 'client_id', 'is_main',]
+            )) {
                 try {
-                    $insertId = $this->noteCreator->createNote($noteData, $loggedInUserId);
+                    $insertId = $this->noteCreator->createNote($noteValues);
                     $noteDataFromDb = $this->noteFinder->findNote($insertId);
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(

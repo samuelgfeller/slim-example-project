@@ -31,20 +31,29 @@ class NoteUpdater
     {
         // Init object for validation
         $note = new NoteData($noteValues);
+
+        // Find note in db
+        $noteFromDb = $this->noteFinder->findNote($noteId);
+        // Add is_main to note object before validation as there is a difference
+        $note->isMain = $noteFromDb->isMain;
+
         // Validate object
         $this->noteValidator->validateNoteUpdate($note);
 
-        // Find note in db to compare its ownership
-        $noteFromDb = $this->noteFinder->findNote($noteId);
-
         if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain, $noteFromDb->userId)) {
-            // The only thing that a user can change on a note is its message
+            // Change message
             if (null !== $note->message) {
                 // $updateData in own array instead of object::toArray() to be sure that only the message can be updated
                 $updateData['message'] = $note->message;
                 return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             }
-            // Nothing was updated as message was empty
+            // Change if is hidden
+            if (null !== $note->hidden) {
+                $updateData['hidden'] = $note->hidden;
+                return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
+            }
+
+            // Nothing was updated
             return false;
         }
 

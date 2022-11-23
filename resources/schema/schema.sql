@@ -114,6 +114,25 @@ CREATE TABLE `note`
     ENGINE = InnoDB
 ;
 
+create table note
+(
+    id         int unsigned auto_increment primary key,
+    user_id    int unsigned                           not null,
+    client_id  int unsigned                           not null,
+    message    varchar(500)                           null,
+    is_main    tinyint(1) default 0                   not null comment 'Bool if it''s the client''s main note',
+    hidden     tinyint                                null,
+    updated_at datetime   default current_timestamp() not null on update current_timestamp(),
+    created_at datetime   default current_timestamp() not null,
+    deleted_at datetime                               null,
+    constraint FK__user
+        foreign key (user_id) references user (id),
+    constraint FK_note_client
+        foreign key (client_id) references client (id)
+)
+    charset = utf8;
+
+
 
 create table client_list_filter
 (

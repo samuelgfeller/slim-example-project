@@ -14,6 +14,7 @@ class NoteData
     public ?int $clientId;
     public ?string $message;
     public ?int $isMain; // int 1 or 0
+    public ?int $hidden; // int 1 or 0
     public ?string $createdAt;
     public ?string $updatedAt;
     public ?string $deletedAt;
@@ -35,7 +36,8 @@ class NoteData
         $this->userId = $arrayReader->findAsInt('user_id');
         $this->clientId = $arrayReader->findAsInt('client_id');
         $this->message = $arrayReader->findAsString('message');
-        $this->isMain = $arrayReader->findAsInt('is_main'); // Not sure if int or bool is better in this situation
+        $this->isMain = $arrayReader->findAsInt('is_main');
+        $this->hidden = $arrayReader->findAsInt('hidden');
         $this->createdAt = $arrayReader->findAsString('created_at');
         $this->updatedAt = $arrayReader->findAsString('updated_at');
         $this->deletedAt = $arrayReader->findAsString('deleted_at');
@@ -63,10 +65,11 @@ class NoteData
         }
 
 
-        // Message is nullable and null is a valid value so it has to be included todo detect null values and add IS for cakequery builder IS NULL
+        // Message is nullable and null is a valid value so it has to be included
+        // todo detect null values and add IS for cakequery builder IS NULL
         $note['message'] = $this->message;
-
         $note['is_main'] = $this->isMain;
+        $note['hidden'] = $this->hidden;
 
         return $note;
     }

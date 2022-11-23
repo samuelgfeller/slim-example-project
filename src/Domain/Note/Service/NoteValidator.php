@@ -5,8 +5,8 @@ namespace App\Domain\Note\Service;
 use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Validation\Validator;
 use App\Domain\Validation\ValidationResult;
+use App\Domain\Validation\Validator;
 use App\Infrastructure\Note\NoteValidatorRepository;
 use Psr\Log\LoggerInterface;
 
@@ -74,6 +74,10 @@ class NoteValidator
             }else{
                 $this->validateNoteMessage($note->message, $validationResult, false);
             }
+        }
+        if (null !== $note->hidden) {
+            // Has to be either 0 or 1
+            $this->validator->validateNumeric($note->hidden, 'hidden', $validationResult);
         }
 
         $this->validator->throwOnError($validationResult);

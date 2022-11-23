@@ -71,7 +71,7 @@ function addNotesToDom(notes) {
     // Loop over notes and add to DOM
     for (const note of notes) {
         // Client card HTML
-        let noteHtml = getNoteHtml(note.noteId, note.noteCreatedAt, note.privilege, note.userFullName, note.noteMessage);
+        let noteHtml = getNoteHtml(note);
 
         // Add to DOM
         noteContainer.insertAdjacentHTML('beforeend', noteHtml);
