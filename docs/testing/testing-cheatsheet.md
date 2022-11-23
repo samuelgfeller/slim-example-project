@@ -333,7 +333,7 @@ Both can be inserted with the Enum case as `user_role_id` with the following fun
 
 ```php
 // Change user attributes to user data
-$this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
+$this->insertUserFixturesWithAttributes($userRow, $authenticatedUserRow);
 ```
 
 For prettier code parameters references meaning the function can change the provided arguments values which it does.

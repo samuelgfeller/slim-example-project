@@ -7,6 +7,7 @@ use App\Domain\Exceptions\DomainRecordNotFoundException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpForbiddenException;
@@ -25,6 +26,7 @@ final class UserReadPageAction
     public function __construct(
         private readonly Responder $responder,
         private readonly UserFinder $userFinder,
+        private readonly SessionInterface $session,
     ) {
     }
 
@@ -44,10 +46,11 @@ final class UserReadPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
+        $userId = (int)($args['user_id'] ?? $this->session->get('user_id'));
         try {
             // Retrieve user infos
             return $this->responder->render($response, 'user/user-read.html.php', [
-                'user' => $this->userFinder->findUserReadResult((int)$args['user_id']),
+                'user' => $this->userFinder->findUserReadResult($userId),
                 'userStatuses' => UserStatus::cases(),
             ]);
         } catch (ForbiddenException $forbiddenException) {

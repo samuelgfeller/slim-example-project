@@ -5,6 +5,7 @@ namespace App\Application\Middleware;
 
 use App\Common\JsImportVersionAdder;
 use App\Domain\Settings;
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,7 +26,8 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         private readonly PhpRenderer $phpRenderer,
         private readonly SessionInterface $session,
         private readonly JsImportVersionAdder $jsImportVersionAdder,
-        Settings $settings
+        Settings $settings,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
     ) {
         $this->publicSettings = $settings->get('public');
         $this->devSetting = $settings->get('dev');
@@ -47,6 +49,10 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
+            // Check if granted to read user that is different from the logged in one (+1)
+            'userListAuthorization' => $this->userAuthorizationChecker->isGrantedToRead(
+                ($this->session->get('user_id') ?? 1) + 1
+            ),
         ]);
 
         // Add version number to js imports

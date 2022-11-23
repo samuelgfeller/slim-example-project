@@ -104,11 +104,8 @@ return function (App $app) {
             ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
-    $app->get('/profile', \App\Application\Actions\User\Page\UserViewProfileAction::class)->setName(
-        'profile-page'
-    )->add(
-        UserAuthenticationMiddleware::class
-    );
+    $app->get('/profile', \App\Application\Actions\User\UserReadPageAction::class)
+        ->setName('profile-page')->add(UserAuthenticationMiddleware::class);
 
     // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
     $app->group('/clients', function (RouteCollectorProxy $group) {

@@ -7,6 +7,7 @@
  * @var string $currRouteName current route name
  * @var \Psr\Http\Message\UriInterface $uri
  * @var string $title
+ * @var bool $userListAuthorization if user is allowed to read other users
  */
 
 ?>
@@ -75,23 +76,24 @@
                 <img src="assets/general/img/nav/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
             </a>
-            <a href="<?= $route->urlFor('profile-page') ?>"
-                <?= in_array($currRouteName, ['profile-page', 'change-password-page']) ? 'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Profile">
-                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
-                <span class="nav-span">Profile</span>
-            </a>
-            <a href="<?= $route->urlFor('user-list-page') ?>"
-                <?= in_array($currRouteName, ['user-list-page', 'user-read-page'])  ? 'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/users.svg" alt="Users">
-                <img src="assets/general/img/nav/users-filled.svg" alt="Users">
-                <span class="nav-span">Users</span>
-            </a>
-            <!--           <a href="<?
-            /*= $route->urlFor('register-page') */ ?>" <?
-            /*= $uri->getPath() === $route->urlFor(
-                            'register-page'
-                        ) ? 'class="is-active"' : '' */ ?>>Register</a>-->
+            <?php
+            if ($userListAuthorization === true) { ?>
+                <a href="<?= $route->urlFor('user-list-page') ?>"
+                    <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
+                    <img src="assets/general/img/nav/users.svg" alt="Users">
+                    <img src="assets/general/img/nav/users-filled.svg" alt="Users">
+                    <span class="nav-span">Users</span>
+                </a>
+            <?php
+            } else { ?>
+                <a href="<?= $route->urlFor('profile-page') ?>"
+                    <?= $currRouteName === 'profile-page' ? 'class="is-active"' : '' ?>>
+                    <img src="assets/general/img/nav/user-icon.svg" alt="Profile">
+                    <img src="assets/general/img/nav/user-icon-filled.svg" alt="Profile">
+                    <span class="nav-span">Profile</span>
+                </a>
+            <?php
+            } ?>
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/general/img/nav/logout.svg" alt="Logout">

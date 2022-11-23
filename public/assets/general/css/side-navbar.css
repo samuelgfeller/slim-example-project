@@ -106,7 +106,7 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
-
+        cursor: pointer;
     }
 
     #nav-burger-icon {
@@ -116,8 +116,6 @@
         display: block;
         transform: rotate(0deg);
         transition: .5s ease-in-out;
-        cursor: pointer;
-
     }
 
     #nav-burger-icon span {
