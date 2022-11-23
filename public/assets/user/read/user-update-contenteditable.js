@@ -43,17 +43,17 @@ function validateContentEditableAndSaveUserValue() {
  * Make field non-editable and submit user update request
  */
 function saveUserValueAndDisableContentEditable(field) {
+    disableEditableField(field);
     let userId = document.getElementById('user-id').value;
     submitUpdate(
         {[field.dataset.name]: field.textContent.trim()},
         `users/${userId}`,
         `users/${userId}`
     ).then(responseJson => {
-        disableEditableField(field);
+        // Field disabled before save request and re enabled on error
     }).catch(responseJson => {
         // If request not successful, keep field editable and focus it
-        field.contentEditable = 'true';
-        field.focus();
+        makeFieldEditable(field);
     });
 }
 

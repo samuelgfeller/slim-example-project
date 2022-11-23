@@ -68,6 +68,9 @@ function validateContentEditableAndSaveClientValue() {
  * makes client update request
  */
 function saveClientValueAndDisableContentEditable(field) {
+    // Disable contenteditable on field and remove save icon
+    disableEditableField(field);
+
     let fieldContainer = field.parentNode;
     let submitValue = field.textContent.trim();
 
@@ -93,8 +96,6 @@ function saveClientValueAndDisableContentEditable(field) {
                 a.removeEventListener('click', preventLinkOpening);
             }
 
-            // Disable contenteditable on field and remove save icon
-            disableEditableField(field);
             // Hide icon if it existed in the available personal info icon container
             if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
                 removeIconFromAvailableDiv(availableIcon);
@@ -119,8 +120,7 @@ function saveClientValueAndDisableContentEditable(field) {
             }
         }
     }).catch(responseJson => {
-        // If request not successful, keep field editable
-        field.contentEditable = 'true';
-        field.focus();
+        // If request not successful, make field editable again
+        makeClientFieldEditable.call(field);
     });
 }

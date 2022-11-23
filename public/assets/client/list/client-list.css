@@ -102,7 +102,7 @@
         padding-top: 18px;
         text-align: center;
         margin-top: 0; /* To prevent gap between divs */
-        margin-bottom: 5px;
+        margin-bottom: 7px;
     }
 
     /* Two different flex boxes make the second one containing the dropdowns below the phone and location info */
@@ -111,13 +111,14 @@
         flex-flow: row wrap;
         justify-content: space-around; /* align flex box items so that there is equal space left right and center for mobile*/
         column-gap: 15px;
+        margin-bottom: 5px;
     }
 
     /* Make divs inside flexbox also flexbox to align text with icon*/
     .profile-card-infos-flexbox div {
         display: flex;
         align-items: center;
-        margin-top: 5px; /* space here for when wrapping */
+        margin-top: 10px; /* space here for when wrapping */
     }
 
     /* Name of the location */
