@@ -3,8 +3,6 @@
 namespace App\Domain\Note\Authorization;
 
 use App\Domain\Authorization\Privilege;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use Odan\Session\SessionInterface;
 
 /**
  * The client should know when to display edit and delete icons
@@ -13,8 +11,6 @@ use Odan\Session\SessionInterface;
 class NoteAuthorizationGetter
 {
     public function __construct(
-        private readonly SessionInterface $session,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
     ) {
     }
@@ -47,21 +43,22 @@ class NoteAuthorizationGetter
      * Get note user rights
      *
      * @param int $noteOwnerId
+     * @param int|null $clientOwnerId
      * @return Privilege
      */
-    public function getNotePrivilege(int $noteOwnerId): Privilege
+    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->noteAuthorizationChecker->isGrantedToDelete($noteOwnerId, null, false)) {
+        if ($this->noteAuthorizationChecker->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
             return Privilege::DELETE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate(0, $noteOwnerId, null, false)) {
+        if ($this->noteAuthorizationChecker->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::UPDATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToCreate(0, null, false)) {
+        if ($this->noteAuthorizationChecker->isGrantedToCreate(0, $clientOwnerId, false)) {
             return Privilege::CREATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, null, false)) {
+        if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::READ;
         }
         return Privilege::NONE;

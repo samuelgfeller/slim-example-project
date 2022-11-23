@@ -2,7 +2,7 @@ import {escapeHtml} from "../../general/js/functions.js?v=0.1";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
-    const {noteId, noteCreatedAt, privilege, noteHidden, userFullName, noteMessage, } = note;
+    const {noteId, noteCreatedAt, privilege, noteHidden, userFullName, noteMessage,} = note;
 
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
@@ -11,22 +11,23 @@ export function getNoteHtml(note) {
               class="note-container ${noteHidden === 1 || noteHidden === '1' ? 'hidden-note' : ''}">
                 <label for="note${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
-                    ${userHasPrivilegeTo(privilege, 'U') ?
-                        noteHidden === 1 || noteHidden === '1' ? // Show active eye icon if hidden 
-                            `<img class="btn-above-note hide-note-btn" alt="hide" style="display: inline-block"
-                                    src="assets/general/img/eye-icon-active.svg">`  : // Else the non-active one
-                             `<img class="btn-above-note hide-note-btn" alt="hide" 
-                                  src="assets/general/img/eye-icon.svg">`
-                    : ''}
-                    ${userHasPrivilegeTo(privilege, 'D') ?
-                    `<img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg">` : ''}
-
+                    ${/*Show active eye icon if hidden*/ noteHidden === 1 || noteHidden === '1' ? `<img 
+                        class="btn-above-note hide-note-btn ${userHasPrivilegeTo(privilege, 'U') ? `` : `
+                            not-clickable` /*Add not clickable class when not allowed to update*/}" alt="hide" 
+                        style="display: inline-block" src="assets/general/img/eye-icon-active.svg"
+                        >` : /* Else the non-active one if allowed*/ userHasPrivilegeTo(privilege, 'U') ? `
+                        <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg">` : ''}
+                    ${/*Show delete button */ userHasPrivilegeTo(privilege, 'D') ? `<img 
+                        class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg">` : ''}
                     <span class="discrete-text note-right-side-label-span">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
+                   ${userHasPrivilegeTo(privilege, 'R') ? '' : `<div class="hidden-textarea-overlay"></div>`}
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
-                    <textarea class="auto-resize-textarea" id="note${noteId}"
+                    <textarea class="auto-resize-textarea ${userHasPrivilegeTo(privilege, 'R') ? `
+                                ` : `hidden-note-message` /* class to blur note text if not allowed to read*/}" 
+                              id="note${noteId}"
                               data-note-id="${noteId}"
                               minlength="4" maxlength="500" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"

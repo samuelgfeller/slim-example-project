@@ -136,7 +136,10 @@ class ClientFinder
             );
 
             if ($includingNotes === true) {
-                $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain($clientId);
+                $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain(
+                    $clientId,
+                    $clientResultAggregate->userId
+                );
             } else {
                 $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
             }

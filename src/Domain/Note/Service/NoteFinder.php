@@ -4,9 +4,12 @@
 namespace App\Domain\Note\Service;
 
 
+use App\Domain\Authorization\Privilege;
+use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
+use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Note\NoteFinderRepository;
 
 class NoteFinder
@@ -14,22 +17,60 @@ class NoteFinder
     public function __construct(
         private readonly NoteFinderRepository $noteFinderRepository,
         private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
+        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly ClientFinderRepository $clientFinderRepository,
     ) {
     }
 
     /**
      * Populate $privilege attribute of given NoteWithUserData array
      *
-     * @param NoteWithUserData[] $notes
+     * @param array{NoteWithUserData} $notes
+     * @param int|null $clientOwnerId if client owner id not provided, client id should be passed in next parameter
+     * @param int|null $clientId
      *
      * @return void In PHP, an object variable doesn't contain the object itself as value. It only contains an object
      * identifier meaning the reference is passed and changes are made on the original reference that can be used further
      * https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
      */
-    private function setNotePrivilege(array $notes): void
-    {
+    private function setNotePrivilegeAndRemoveMessageOfHidden(
+        array $notes,
+        ?int $clientOwnerId = null,
+        ?int $clientId = null
+    ): void {
+        $randomText = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
+        duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit 
+        amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt 
+        ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+
+        // Get client owner id if not given
+        if ($clientOwnerId === null && $clientId !== null) {
+            $clientOwnerId = $this->clientFinderRepository->findClientById($clientId)->userId;
+        }
+
         foreach ($notes as $userNote) {
-            $userNote->privilege = $this->noteAuthorizationGetter->getNotePrivilege($userNote->userId);
+            $userNote->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
+                $userNote->userId,
+                $clientOwnerId,
+            );
+            // Own check has to be done here as getNotePrivilege may return privilege CREATE (CR) which is usually
+            // higher than read but not when note is hidden and as we are dealing with sensitive infos this is relevant.
+            if (!$this->noteAuthorizationChecker->isGrantedToRead(
+                0,
+                $userNote->userId,
+                $clientOwnerId,
+                $userNote->noteHidden,
+                false
+            )) {
+                // If not allowed to read, change message of note to lorem ipsum
+                $userNote->noteMessage = substr($randomText, 0, strlen($userNote->noteMessage));
+                // Remove line breaks and extra spaces from string
+                $userNote->noteMessage = preg_replace('/\s\s+/', ' ', $userNote->noteMessage);
+                // Change privilege to none
+                $userNote->privilege = Privilege::NONE;
+            }
         }
     }
 
@@ -54,7 +95,7 @@ class NoteFinder
     {
         $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
         $this->changeDateFormat($allNotes);
-        $this->setNotePrivilege($allNotes);
+        $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
         return $allNotes;
     }
 
@@ -71,7 +112,7 @@ class NoteFinder
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
-        $this->setNotePrivilege($allNotes);
+        $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
         return $allNotes;
     }
 

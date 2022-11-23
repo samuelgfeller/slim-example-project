@@ -94,9 +94,6 @@ export function toggleReadOnlyAndBtnAboveNote(textarea) {
         let buttonsAboveNote = [];
         if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
             buttonsAboveNote = document.querySelectorAll(`label[data-note-id="${textarea.dataset.noteId}"] .btn-above-note`);
-            // let label =
-            // buttonsAboveNote.push(label.querySelector('.delete-note-btn'));
-            // buttonsAboveNote.push(label.querySelector('.hide-note-btn'));
         }
 
         const showHideButtonsAboveNote = (hide = false) => {
@@ -137,7 +134,7 @@ export function initAllButtonsAboveNotesEventListeners() {
         // In separate function as this one is called once on page load and then the one blow on note creation too
         addDeleteNoteBtnEventListener(deleteNoteBtn);
     }
-    const hideNoteButtons = document.querySelectorAll('.hide-note-btn');
+    const hideNoteButtons = document.querySelectorAll('.hide-note-btn:not(.not-clickable)');
     for (const hideNoteBtn of hideNoteButtons) {
         addHideNoteBtnEventListener(hideNoteBtn);
     }

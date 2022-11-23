@@ -26,12 +26,15 @@ class NoteAuthorizationChecker
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
      * @param int|null $clientOwnerId client owner might become relevant
+     * @param int|null $hidden when note message is hidden
+     * @param bool $log
      * @return bool
      */
     public function isGrantedToRead(
         int $isMain = 0,
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
+        ?int $hidden = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -40,8 +43,14 @@ class NoteAuthorizationChecker
             );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
-            // newcomers may see all notes and main notes todo except if sensitive
-            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) {
+            // newcomers may see all notes and main notes
+            if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) &&
+                (in_array($hidden, [null, 0], true) || // When hidden is not null or 0, user has to be advisor to read note
+                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value] ||
+                    // If authenticated user is client owner or note owner -> granted to read hidden notes
+                    $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
+                )
+            ) {
                 return true;
             }
         }

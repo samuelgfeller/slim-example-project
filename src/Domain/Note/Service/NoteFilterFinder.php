@@ -50,7 +50,7 @@ class NoteFilterFinder
             // To display own notes, the client sends the filter user=session
             if (is_numeric($params['client_id'])) {
                 // User is already logged in as UserAuthenticationMiddleware is present for the note group
-                return $this->noteFinder->findAllNotesFromClientExceptMain((int)$params['client_id'], true);
+                return $this->noteFinder->findAllNotesFromClientExceptMain((int)$params['client_id']);
             }
             // Exception message tested in NoteFilterProvider.php
             throw new InvalidNoteFilterException('client_id has to be numeric.');

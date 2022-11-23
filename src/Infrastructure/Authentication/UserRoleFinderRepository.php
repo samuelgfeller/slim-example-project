@@ -39,9 +39,9 @@ class UserRoleFinderRepository
      * Get role data from user that has status active
      *
      * @param int $userId
-     * @return UserRoleData|null null if user is not active
+     * @return UserRoleData empty object if user is not active
      */
-    public function getUserRoleDataFromUser(int $userId): ?UserRoleData
+    public function getUserRoleDataFromUser(int $userId): UserRoleData
     {
         $query = $this->queryFactory->newQuery()
             ->select(['user_role.id', 'user_role.name', 'user_role.hierarchy'])
