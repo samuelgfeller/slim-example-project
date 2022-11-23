@@ -23,7 +23,7 @@ export function initNotesEventListeners() {
     let clientReadTextareas = document.querySelectorAll(
         '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
     );
-
+    initAllButtonsAboveNotesEventListeners();
     for (let textarea of clientReadTextareas) {
         // Called when new note is created as well
         toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea);
@@ -33,7 +33,6 @@ export function initNotesEventListeners() {
         if (document.activeElement !== textarea) {
             textarea.setAttribute('readonly', 'readonly');
         }
-
 
         // In own function to be able to be called individually for new note to prevent that they have duplicate event listeners
         // Which happened when I called initActivityTextareasEventListeners after adding new textarea and update request was fired twice
@@ -91,52 +90,69 @@ export function toggleTextareaReadOnlyAndAddDeleteBtnDisplay(textarea) {
     // console.log(textarea.dataset.editable === '1');
     if (textarea.dataset.editable === '1') {
         // Get delete btn with note label to show it on textarea focus
-        let delBtn = null;
+        let buttonsAboveNote = [];
         if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
-            delBtn = document.querySelector('.delete-note-btn[data-note-id="' + textarea.dataset.noteId + '"]');
+            buttonsAboveNote = document.querySelectorAll(`label[data-note-id="${textarea.dataset.noteId}"] .btn-above-note`);
+            // let label =
+            // buttonsAboveNote.push(label.querySelector('.delete-note-btn'));
+            // buttonsAboveNote.push(label.querySelector('.hide-note-btn'));
+        }
+
+        const showHideButtonsAboveNote = (hide = false) => {
+            // Show buttons above note on focus independent of hover state
+            for (const btn of buttonsAboveNote) {
+                if (hide === true && // If hide button, only hide if note container not hidden
+                    (!btn.classList.contains('hide-note-btn') ||
+                        !btn.closest('.note-container').classList.contains('hidden-note'))
+                ) {
+                    btn.style.display = null;
+                } else {
+                    btn.style.display = 'inline-block';
+                }
+            }
         }
 
         textarea.addEventListener('focus', function (e) {
             this.removeAttribute('readonly');
-            // let delBtn = findDOMDelBtnWithTextarea(textarea);
-            if (delBtn !== null) {
-                delBtn.style.display = 'inline-block';
-            }
+            showHideButtonsAboveNote();
         });
         textarea.addEventListener('focusout', function (e) {
             this.setAttribute('readonly', 'readonly');
-            // let delBtn = findDOMDelBtnWithTextarea(textarea);
-            if (delBtn !== null) {
-                // Remove display property from element to make it show on hover (default css behaviour)
-                delBtn.style.display = null;
-            }
+            // Remove display property from element to make it show on hover (default css behaviour)
+            showHideButtonsAboveNote(true)
         });
 
-        // Display if already focus as the focus event listener is not triggered when new note is created as there is already focus before
+        // Display if already focus as the focus event listener is not triggered when new note is created; there is already focus before
         if (document.activeElement === textarea) {
-            if (delBtn !== null) {
-                delBtn.style.display = 'inline-block';
-            }
+            showHideButtonsAboveNote();
         }
     }
 }
 
-export function initAllDeleteBtnEventListeners() {
-    let deleteNoteButtons = document.querySelectorAll('.delete-note-btn');
+
+export function initAllButtonsAboveNotesEventListeners() {
+    const deleteNoteButtons = document.querySelectorAll('.delete-note-btn');
     for (const deleteNoteBtn of deleteNoteButtons) {
-        // In separate function as this one is called once on page load and then the single one on each creation
+        // In separate function as this one is called once on page load and then the one blow on note creation too
         addDeleteNoteBtnEventListener(deleteNoteBtn);
     }
+    const hideNoteButtons = document.querySelectorAll('.hide-note-btn');
+    for (const hideNoteBtn of hideNoteButtons) {
+        addHideNoteBtnEventListener(hideNoteBtn);
+    }
+
 }
 
 /**
  * Adds event listener to del btn to open modal box and delete note on confirmation
+ * In own function as event listener has to be initialized once on notes load
+ * and then also on note creation.
  *
  * @param deleteNoteBtn
  */
 export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     deleteNoteBtn.addEventListener('click', () => {
-        let noteId = deleteNoteBtn.dataset.noteId;
+        let noteId = deleteNoteBtn.closest('label').dataset.noteId;
         let title = 'Are you sure that you want to delete this note?';
         let info = 'Once the note is deleted, it can only be recovered by a database administrator.';
         createAlertModal(title, '', () => {
@@ -146,6 +162,30 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
         });
     });
 }
+
+/**
+ * Adds event listener to hide btn
+ * In own function as event listener has to be initialized once on notes load
+ * and then also on note creation.
+ *
+ * @param btn
+ */
+export function addHideNoteBtnEventListener(btn) {
+    btn.addEventListener('click', () => {
+        const noteContainer = btn.closest('.note-container');
+        // Toggle hidden note
+        if (noteContainer.classList.contains('hidden-note')) {
+            noteContainer.classList.remove('hidden-note');
+            btn.style.display = null;
+            btn.src = 'assets/general/img/eye-icon.svg';
+        } else {
+            btn.style.display = 'inline-block';
+            noteContainer.classList.add('hidden-note');
+            btn.src = 'assets/general/img/eye-icon-active.svg';
+        }
+    });
+}
+
 
 export function hideCheckmarkLoader(checkmarkLoader, origin) {
     // console.log(origin);

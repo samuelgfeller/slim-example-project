@@ -1,10 +1,11 @@
 import {basePath} from "../../general/js/config.js?v=0.1";
 import {
     addDeleteNoteBtnEventListener,
+    addHideNoteBtnEventListener,
     addTextareaInputEventListener,
     hideCheckmarkLoader,
     toggleTextareaReadOnlyAndAddDeleteBtnDisplay
-} from "./client-read-text-area-event-listener-setup.js?v=0.1";
+} from "./client-read-note-event-listener-setup.js?v=0.1";
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
 import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
 
@@ -34,10 +35,11 @@ export function addNewNoteTextarea() {
     if (existingNewNoteBubble === null) {
         // Insert after end of activity header and not container as header comes as first element
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
-                <label for="new-note"
-                       class="bigger-select-label textarea-label">
+                <label for="new-note" class="bigger-select-label textarea-label" data-note-id="">
                        <span class="note-left-side-label-span"></span>
-                       <img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" data-note-id=""
+                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg"
+                       style="display: none">
+                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" 
                        style="display: none">
                        <span
                             class="discrete-text note-right-side-label-span"></span></label>
@@ -68,9 +70,9 @@ export function addNewNoteTextarea() {
     }
 }
 
-function removeNewNoteTextareaIfEmpty(){
+function removeNewNoteTextareaIfEmpty() {
     // "this" is the textarea
-    if (this.value === ''){
+    if (this.value === '') {
         this.remove();
     }
 }
@@ -146,18 +148,23 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     textarea.dataset.noteId = noteId;
     // If noteContainer is null it means that it's the main textarea which doesn't have a label
     if (noteContainer !== null) {
-    // There are 2 parents before the label is a child
+        // There are 2 parents before the label is a child
         let label = noteContainer.querySelector('label.textarea-label');
         label.setAttribute('for', textarea.id);
         label.querySelector('.note-left-side-label-span').innerHTML = responseData.createdDateFormatted;
-        let delBtn = label.querySelector('.delete-note-btn');
-        delBtn.dataset.noteId = noteId;
-        delBtn.style.display = null;
+        label.dataset.noteId = noteId;
+        // Show buttons above note (default css behaviour)
+        const buttonsAboveNote = label.querySelectorAll(`.btn-above-note`);
+        for (const btn of buttonsAboveNote) {
+            btn.style.display = null;
+        }
+        // Add note author
         label.querySelector('.note-right-side-label-span').innerHTML = responseData.userFullName;
         // Add container id
         noteContainer.id = 'note' + noteId + '-container';
         // Make delete button work
-        addDeleteNoteBtnEventListener(document.querySelector('.delete-note-btn[data-note-id="' + noteId + '"]'));
+        addDeleteNoteBtnEventListener(label.querySelector(`.delete-note-btn`));
+        addHideNoteBtnEventListener(label.querySelector(`.hide-note-btn`));
     }
     // Add note id to loader
     textarea.parentNode.querySelector('.circle-loader').dataset.noteId = noteId;

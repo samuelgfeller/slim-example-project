@@ -2,19 +2,16 @@ import {escapeHtml} from "../../general/js/functions.js?v=0.1";
 
 export function getNoteHtml(noteId, noteCreatedAt, privilege, userFullName, message) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
-    // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes
+    // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
 
     return `<div id="note${noteId}-container" class="note-container">
-                <label for="note${noteId}" class="bigger-select-label textarea-label">
+                <label for="note${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
-                    ${// Following function is in paranthesis and called with () at the end to be interpreted 
-        (() => {
-            if (userHasPrivilegeTo(privilege, 'D')) {
-                return `<img class="delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg"
-                                                                          data-note-id="${noteId}">`;
-            }
-            return '';
-        })()}
+                    ${userHasPrivilegeTo(privilege, 'D') ?
+                        `<img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg" >` : ''}
+                    ${userHasPrivilegeTo(privilege, 'D') ?
+                    `<img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg">` : ''}
+
                     <span class="discrete-text note-right-side-label-span">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->

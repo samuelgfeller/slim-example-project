@@ -85,7 +85,7 @@
         font-weight: normal;
     }
 
-    .delete-note-btn {
+    .btn-above-note {
         width: 13px;
         vertical-align: middle;
         margin-left: 10px;
@@ -93,8 +93,11 @@
         display: none;
     }
 
-    .note-container:hover .delete-note-btn {
+    .note-container:hover .btn-above-note {
         display: inline-block;
+    }
+    .hide-note-btn{
+        width: 14px; /* 13 is too small for the eye icon */
     }
 
     .note-right-side-label-span {

@@ -1,7 +1,4 @@
-import {
-    initAllDeleteBtnEventListeners,
-    initNotesEventListeners
-} from "./client-read-text-area-event-listener-setup.js?v=0.1";
+import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.1";
 import {addNewNoteTextarea} from "./client-read-create-note.js?v=0.1";
 import {loadClientNotes} from "./client-read-note-loading.js?v=0.1";
 import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
@@ -15,11 +12,11 @@ loadClientNotes(() => {
     initNotesEventListeners();
     // Add note delete btn event listeners
     // The reason it is not in initNotesEventListeners() is that event listener were set up twice and alert modal
-    // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllDeleteBtnEventListeners
+    // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllButtonsAboveNotesEventListeners
     // AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
-    initAllDeleteBtnEventListeners();
+    // initAllButtonsAboveNotesEventListeners();
 
-    // Manually init autoResizingTextareas to include the new ones as it's only done during page load and not afterwards
+    // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
     initAutoResizingTextareas();
 });
 
