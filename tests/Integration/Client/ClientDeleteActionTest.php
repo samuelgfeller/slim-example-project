@@ -43,7 +43,7 @@ class ClientDeleteActionTest extends TestCase
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
-    public function testClientSubmitDeleteAction_authenticated(
+    public function testClientSubmitDeleteAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult

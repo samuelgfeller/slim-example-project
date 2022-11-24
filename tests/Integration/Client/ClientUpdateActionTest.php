@@ -51,7 +51,7 @@ class ClientUpdateActionTest extends TestCase
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      * @return void
      */
-    public function testClientSubmitUpdateAction_authenticated(
+    public function testClientSubmitUpdateAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $requestData,

@@ -50,7 +50,7 @@ class NoteUpdateActionTest extends TestCase
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
-    public function testNoteSubmitUpdateAction(
+    public function testNoteSubmitUpdateAction_authorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -72,9 +72,9 @@ class NoteUpdateActionTest extends TestCase
             NoteFixture::class
         );
 
-        // Insert normal note attached to client and given "owner" user
+        // Insert normal non-hidden note attached to client and given "owner" user
         $normalNoteRow = $this->insertFixturesWithAttributes(
-            ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
+            ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
             NoteFixture::class
         );
 
@@ -110,7 +110,8 @@ class NoteUpdateActionTest extends TestCase
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
-            ['message' => $newNoteMessage, 'is_main' => 0]
+            // Change the two values that may be changed
+            ['message' => $newNoteMessage, 'hidden' => 1]
         );
         // Make request
         $normalNoteResponse = $this->app->handle($normalNoteRequest);
@@ -121,10 +122,12 @@ class NoteUpdateActionTest extends TestCase
 
         // If db is expected to change assert the new message
         if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
-            $this->assertTableRow(['message' => $newNoteMessage], 'note', $normalNoteRow['id']);
+            $this->assertTableRow(['message' => $newNoteMessage, 'hidden' => 1], 'note', $normalNoteRow['id']);
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
-            $this->assertTableRow(['message' => $normalNoteRow['message']], 'note', $normalNoteRow['id']);
+            $this->assertTableRow(['message' => $normalNoteRow['message'], 'hidden' => 0],
+                'note',
+                $normalNoteRow['id']);
         }
 
         $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);

@@ -41,20 +41,18 @@ class NoteUpdater
         $this->noteValidator->validateNoteUpdate($note);
 
         if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain, $noteFromDb->userId)) {
+            $updateData = [];
             // Change message
             if (null !== $note->message) {
                 // $updateData in own array instead of object::toArray() to be sure that only the message can be updated
                 $updateData['message'] = $note->message;
-                return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             }
             // Change if is hidden
             if (null !== $note->hidden) {
                 $updateData['hidden'] = $note->hidden;
-                return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             }
 
-            // Nothing was updated
-            return false;
+            return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
         }
 
         throw new ForbiddenException('Not allowed to change note.');

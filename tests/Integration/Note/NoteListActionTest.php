@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\Authorization\Privilege;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -40,6 +41,7 @@ class NoteListActionTest extends TestCase
 
     /**
      * Tests notes that are loaded with ajax on client read page.
+     * One note at a time is tested for the sake of simplicity.
      *
      * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteList()
      * Different privileges of notes depending on authenticated user and
@@ -47,12 +49,14 @@ class NoteListActionTest extends TestCase
      *
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
-     * @param array $expectedResult HTTP status code and privilege
+     * @param int|null $noteHidden 1 or 0 or null if tested note is hidden
+     * @param array{privilege: Privilege} $expectedResult privilege
      * @return void
      */
-    public function testNoteListAction(
+    public function testNoteListAction_authorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
+        ?int $noteHidden,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
@@ -76,7 +80,12 @@ class NoteListActionTest extends TestCase
 
         // Insert linked note. Only one per test to simplify assertions with different privileges
         $noteData = $this->insertFixturesWithAttributes(
-            ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $userLinkedToNoteRow['id']],
+            [
+                'is_main' => 0,
+                'client_id' => $clientRow['id'],
+                'user_id' => $userLinkedToNoteRow['id'],
+                'hidden' => $noteHidden
+            ],
             NoteFixture::class
         );
 
@@ -87,12 +96,23 @@ class NoteListActionTest extends TestCase
         $response = $this->app->handle($request);
 
         // Assert status code
-        self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // If user has not privilege to read note, the message is replaced by lorem ipsum
+        $loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit 
+amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt 
+ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 
         $expectedResponseArray[] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
             'noteId' => $noteData['id'],
-            'noteMessage' => $noteData['message'],
+            // Note message either plain text or replaced with lorem ipsum if not allowed to read
+            'noteMessage' => $expectedResult['privilege'] === Privilege::NONE ?
+                substr($loremIpsum, 0, mb_strlen($noteData['message'])) : $noteData['message'],
+            'noteHidden' => $noteHidden,
             // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
             'noteCreatedAt' => (new \DateTime($noteData['created_at']))->format('d. F Y • H:i'),
             'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),

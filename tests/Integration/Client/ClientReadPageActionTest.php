@@ -35,7 +35,7 @@ class ClientReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_authenticated(): void
+    public function testClientReadPageAction_authorization(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];

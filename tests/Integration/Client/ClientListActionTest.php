@@ -51,9 +51,9 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageAction_authenticated(): void
+    public function testClientListPageAction_authorization(): void
     {
-        // Insert logged-in user with lowest privilege
+        // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
             UserFixture::class

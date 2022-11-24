@@ -40,7 +40,7 @@ class NoteAuthorizationGetter
 
 
     /**
-     * Get note user rights
+     * Get privilege of a specific note (delete, update, read)
      *
      * @param int $noteOwnerId
      * @param int|null $clientOwnerId
@@ -55,22 +55,9 @@ class NoteAuthorizationGetter
         if ($this->noteAuthorizationChecker->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::UPDATE;
         }
-        // Hidden note may only be seen by advisors but notes can be created by newcomers
-        $isGrantedToCreate = $this->noteAuthorizationChecker->isGrantedToCreate(0, $clientOwnerId, false);
-        $isGrantedToRead = $this->noteAuthorizationChecker->isGrantedToRead(
-            0,
-            $noteOwnerId,
-            $clientOwnerId,
-            $hidden,
-            false
-        );
-        if ($isGrantedToCreate && $isGrantedToRead) {
-            return Privilege::CREATE;
-        }
-        if ($isGrantedToCreate && !$isGrantedToRead) {
-            return Privilege::ONLY_CREATE;
-        }
-        if (!$isGrantedToCreate && $isGrantedToRead) {
+        // Create must NOT be included here as it's irrelevant on specific notes and has an impact on "READ" privilege as
+        // read is lower than create in the hierarchy.
+        if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
             return Privilege::READ;
         }
         return Privilege::NONE;

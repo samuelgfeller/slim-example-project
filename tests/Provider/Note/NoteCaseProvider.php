@@ -26,28 +26,43 @@ class NoteCaseProvider
         $newcomerRow = ['user_role_id' => UserRole::NEWCOMER];
 
         return [
-            [// ? newcomer not owner of note
+            [// ? newcomer not owner of note - note NOT hidden - allowed to read
                 'note_owner' => $advisorRow,
                 'authenticated_user' => $newcomerRow,
+                'note_hidden' => null,
                 'expected_result' => [
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                    'privilege' => Privilege::CREATE,
+                    'privilege' => Privilege::READ,
                 ],
             ],
-            [// ? newcomer owner of note
+            [// ? newcomer not owner of note - note hidden - not allowed to read
+                'note_owner' => $advisorRow,
+                'authenticated_user' => $newcomerRow,
+                'note_hidden' => 1,
+                'expected_result' => [
+                    'privilege' => Privilege::NONE,
+                ],
+            ],
+            [// ? newcomer owner of note - note hidden - allowed to delete
                 'note_owner' => $newcomerRow,
                 'authenticated_user' => $newcomerRow,
+                'note_hidden' => 1,
                 'expected_result' => [
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'privilege' => Privilege::DELETE
                 ],
             ],
-            // Advisor owner would be the same as newcomer
-            [// ? managing advisor not owner of note
+            [// ? advisor not owner of note - note hidden - allowed to read
+                'note_owner' => $managingAdvisorRow,
+                'authenticated_user' => $advisorRow,
+                'note_hidden' => 1,
+                'expected_result' => [
+                    'privilege' => Privilege::READ
+                ],
+            ],
+            [// ? managing advisor not owner of note - note hidden - allowed to do everything
                 'note_owner' => $advisorRow,
                 'authenticated_user' => $managingAdvisorRow,
+                'note_hidden' => 1,
                 'expected_result' => [
-                    StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     // Full privilege, so it must not be tested further
                     'privilege' => Privilege::DELETE
                 ],

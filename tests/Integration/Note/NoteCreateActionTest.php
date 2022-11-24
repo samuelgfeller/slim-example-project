@@ -61,7 +61,7 @@ class NoteCreateActionTest extends TestCase
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      * @return void
      */
-    public function testNoteSubmitCreateAction(
+    public function testNoteSubmitCreateAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
