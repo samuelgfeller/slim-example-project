@@ -12,6 +12,8 @@ enum Privilege: string
     case READ = 'R';
     // Allowed to read and create all entries
     case CREATE = 'CR';
+    // Allowed only to create (needed when user cannot see hidden note but may create one)
+    case ONLY_CREATE = 'C';
     // Allowed to read, create and update all entries
     case UPDATE = 'CRU';
     // Allowed to read, create, update and delete all entries
@@ -22,16 +24,18 @@ enum Privilege: string
     /**
      * Check if granted to perform action with given needed rights.
      * Not sure though if it's smart to implement a hierarchical system
-     * for CRUD operations or if a collection or permissions would be better.
+     * for CRUD operations or if a collection of privileges would be better.
      *
      * @param Privilege $requiredPrivilege
      * @return bool
      */
     public function hasPrivilege(Privilege $requiredPrivilege): bool
     {
-        return match ($requiredPrivilege){
+        return match ($requiredPrivilege) {
+            // Privilege READ is true if $this is either READ, CREATE, UPDATE or DELETE
             self::READ => in_array($this, [self::READ, self::CREATE, self::UPDATE, self::DELETE], true),
-            self::CREATE => in_array($this, [self::CREATE, self::UPDATE, self::DELETE], true),
+            self::CREATE => in_array($this, [self::CREATE, self::ONLY_CREATE, self::UPDATE, self::DELETE], true),
+            self::ONLY_CREATE => in_array($this, [self::CREATE, self::ONLY_CREATE], true), // should not be used
             self::UPDATE => in_array($this, [self::UPDATE, self::DELETE], true),
             self::DELETE => $this === self::DELETE,
             self::NONE => true,

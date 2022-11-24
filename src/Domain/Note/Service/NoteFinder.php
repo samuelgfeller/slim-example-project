@@ -51,25 +51,18 @@ class NoteFinder
         }
 
         foreach ($notes as $userNote) {
+            // Privilege only create possible if user may not see the note but may create one
             $userNote->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
                 $userNote->userId,
                 $clientOwnerId,
-            );
-            // Own check has to be done here as getNotePrivilege may return privilege CREATE (CR) which is usually
-            // higher than read but not when note is hidden and as we are dealing with sensitive infos this is relevant.
-            if (!$this->noteAuthorizationChecker->isGrantedToRead(
-                0,
-                $userNote->userId,
-                $clientOwnerId,
                 $userNote->noteHidden,
-                false
-            )) {
-                // If not allowed to read, change message of note to lorem ipsum
+            );
+            // If not allowed to read
+            if (!$userNote->privilege->hasPrivilege(Privilege::READ)) {
+                // Change message of note to lorem ipsum
                 $userNote->noteMessage = substr($randomText, 0, strlen($userNote->noteMessage));
                 // Remove line breaks and extra spaces from string
                 $userNote->noteMessage = preg_replace('/\s\s+/', ' ', $userNote->noteMessage);
-                // Change privilege to none
-                $userNote->privilege = Privilege::NONE;
             }
         }
     }

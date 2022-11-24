@@ -46,7 +46,7 @@ class NoteAuthorizationGetter
      * @param int|null $clientOwnerId
      * @return Privilege
      */
-    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null): Privilege
+    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->noteAuthorizationChecker->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
@@ -55,10 +55,22 @@ class NoteAuthorizationGetter
         if ($this->noteAuthorizationChecker->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::UPDATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToCreate(0, $clientOwnerId, false)) {
+        // Hidden note may only be seen by advisors but notes can be created by newcomers
+        $isGrantedToCreate = $this->noteAuthorizationChecker->isGrantedToCreate(0, $clientOwnerId, false);
+        $isGrantedToRead = $this->noteAuthorizationChecker->isGrantedToRead(
+            0,
+            $noteOwnerId,
+            $clientOwnerId,
+            $hidden,
+            false
+        );
+        if ($isGrantedToCreate && $isGrantedToRead) {
             return Privilege::CREATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, false)) {
+        if ($isGrantedToCreate && !$isGrantedToRead) {
+            return Privilege::ONLY_CREATE;
+        }
+        if (!$isGrantedToCreate && $isGrantedToRead) {
             return Privilege::READ;
         }
         return Privilege::NONE;
