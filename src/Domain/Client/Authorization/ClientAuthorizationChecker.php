@@ -5,6 +5,7 @@ namespace App\Domain\Client\Authorization;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -28,10 +29,11 @@ class ClientAuthorizationChecker
     /**
      * Check if authenticated user is allowed to create client
      *
-     * @param ClientData $client
+     * @param ClientData|null $client null if check before actual client creation
+     *  request otherwise it has to be provided
      * @return bool
      */
-    public function isGrantedToCreate(ClientData $client): bool
+    public function isGrantedToCreate(?ClientData $client = null): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -42,11 +44,12 @@ class ClientAuthorizationChecker
 
             // Newcomer is not allowed to do anything
             // If hierarchy number is greater or equals newcomer it means that user is not allowed
-            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['advisor']) {
-                // Advisor may create clients but can't assign them to someone other than himself - managing advisor can
-                // Link user to someone else is the only restriction
-                if ($client->userId === $loggedInUserId ||
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
+                // Advisor may create clients but can't assign them to someone other than himself
+                // If $client is null (not provided), advisor is authorized (used to display create btn for instance)
+                if ($client === null || $client->userId === $loggedInUserId ||
+                    // managing advisor can link user to someone else
+                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                     // If at least advisor and client user id is authenticated user, or it's a managing_advisor -> granted
                     return true;
                 }

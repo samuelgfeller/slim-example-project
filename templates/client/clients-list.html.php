@@ -2,7 +2,10 @@
 /**
  * @var $this \Slim\Views\PhpRenderer Rendering engine
  * @var $clientListFilters array client list filters
+ * @var $clientCreatePrivilege Privilege create or none
  */
+
+use App\Domain\Authorization\Privilege;
 
 $this->setLayout('layout.html.php');
 
@@ -37,7 +40,11 @@ $this->addAttribute(
 ?>
 <div class="vertical-center">
     <h1>Clients</h1>
-    <div class="plus-btn" id="create-client-btn"></div>
+    <?php
+    if ($clientCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
+        <div class="plus-btn" id="create-client-btn"></div>
+        <?php
+    } ?>
 </div>
 
 <div id="active-filter-chips-div">

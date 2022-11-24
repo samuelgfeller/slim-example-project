@@ -3,6 +3,8 @@
 namespace App\Application\Actions\Client;
 
 use App\Application\Responder\Responder;
+use App\Domain\Authorization\Privilege;
+use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\ClientListFilter\ClientListFilterSetter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +21,8 @@ final class ClientListPageAction
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly ClientListFilterSetter $clientListFilterSetter
+        private readonly ClientListFilterSetter $clientListFilterSetter,
+        private readonly ClientAuthorizationChecker $clientAuthorizationChecker
     ) {
     }
 
@@ -43,6 +46,10 @@ final class ClientListPageAction
         // Retrieving available filters
         $clientListFilters = $this->clientListFilterSetter->findClientListFilters();
         $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);
+        $this->responder->addPhpViewAttribute(
+            'clientCreatePrivilege',
+            $this->clientAuthorizationChecker->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
+        );
         return $this->responder->render($response, 'client/clients-list.html.php');
     }
 }
