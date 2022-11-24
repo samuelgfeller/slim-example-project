@@ -127,7 +127,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="span"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -151,7 +152,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             </div>
             <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
-                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="select"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -177,8 +179,10 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             </div>
             <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
                id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
-                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon" alt="location">
-                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
+                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon"
+                     alt="location">
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -194,7 +198,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
-                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -210,7 +215,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
                 <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
-                <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container" data-field-element="a-span"
+                <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -226,15 +232,19 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 </div>
             </a>
         </div>
-
-        <div id="add-client-personal-info-div">
-            <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
-            <!-- alt has to be the same as the field name -->
-            <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-            <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
-            <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon" alt="location">
-            <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
-            <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
-        </div>
+        <?php
+        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            <div id="add-client-personal-info-div">
+                <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
+                <!-- alt has to be the same as the field name -->
+                <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
+                <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon"
+                     alt="location">
+                <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
+                <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+            </div>
+            <?php
+        } ?>
     </div>
 </div>

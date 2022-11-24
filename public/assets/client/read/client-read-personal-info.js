@@ -1,12 +1,12 @@
-// Add new personal info
-let availablePersonalInfoIconsDiv = document.querySelector('#add-client-personal-info-div');
 let existingValuesContainer = document.querySelector('#client-personal-info-flex-container');
 // Icons that have a value set
 let existingIcons = existingValuesContainer.querySelectorAll('.personal-info-icon');
+// Add new personal info - div does not exist in dom if user has not rights
+let availablePersonalInfoIconsDiv = document.querySelector('#add-client-personal-info-div');
 // Icons that don't have a value for the client
-let availableIcons = availablePersonalInfoIconsDiv.querySelectorAll('.personal-info-icon');
-let availableIconsAmount = availableIcons.length;
-let initialNewIconWidth = availablePersonalInfoIconsDiv.offsetWidth;
+let availableIcons = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon');
+let availableIconsAmount = availableIcons?.length;
+let initialNewIconWidth = availablePersonalInfoIconsDiv?.offsetWidth;
 
 export function addIconToAvailableDiv(availableIcon, containerToHide = null){
     if (containerToHide !== null) {
@@ -28,28 +28,30 @@ export function removeIconFromAvailableDiv(availableIcon){
  * calculate hover styling
  */
 export function loadAvailablePersonalInfoIconsDiv() {
-    // Make map of only alt attributes if parent has not display none
-    let existingIconsMap = new Map(Array.from(existingIcons).map(obj => obj.parentNode.style.display !== 'none' ? [obj.alt, obj.alt] : []));
-    // Convert map into array containing only strings of the alt attribute (with keys would be `([key, value]) =>({key, value})`)
-    let existingIconsFiltered = Array.from(existingIconsMap, ([value]) => (value));
+    if (availableIcons !== undefined) {
+        // Make map of only alt attributes if parent has not display none
+        let existingIconsMap = new Map(Array.from(existingIcons).map(obj => obj.parentNode.style.display !== 'none' ? [obj.alt, obj.alt] : []));
+        // Convert map into array containing only strings of the alt attribute (with keys would be `([key, value]) =>({key, value})`)
+        let existingIconsFiltered = Array.from(existingIconsMap, ([value]) => (value));
 
-    // Reset available icons amount in case this function is called after page load
-    availableIconsAmount = availableIcons.length;
-    for (let availableIcon of availableIcons) {
-        // Hide icon from new list if it exists already
-        if (existingIconsFiltered.includes(availableIcon.alt)) {
-            availableIcon.style.display = 'none';
-            availableIconsAmount -= 1;
+        // Reset available icons amount in case this function is called after page load
+        availableIconsAmount = availableIcons.length;
+        for (let availableIcon of availableIcons) {
+            // Hide icon from new list if it exists already
+            if (existingIconsFiltered.includes(availableIcon.alt)) {
+                availableIcon.style.display = 'none';
+                availableIconsAmount -= 1;
+            }
+            // Add event listener to each available icon
+            availableIcon.addEventListener('click', addPersonalInfoIconToExisting);
         }
-        // Add event listener to each available icon
-        availableIcon.addEventListener('click', addPersonalInfoIconToExisting);
-    }
-    if (availableIconsAmount === 0){
-        availablePersonalInfoIconsDiv.style.display = 'none';
-    }else {
-        availablePersonalInfoIconsDiv.style.display = null;
-        // Open the div with the correct width on hover
-        calculateAvailablePersonalInfoIconsDivMaxWidth();
+        if (availableIconsAmount === 0) {
+            availablePersonalInfoIconsDiv.style.display = 'none';
+        } else {
+            availablePersonalInfoIconsDiv.style.display = null;
+            // Open the div with the correct width on hover
+            calculateAvailablePersonalInfoIconsDivMaxWidth();
+        }
     }
 }
 
