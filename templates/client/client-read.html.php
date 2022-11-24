@@ -115,7 +115,11 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="client-activity-textarea-container" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
         <div class="vertical-center" id="activity-header">
             <h2>Aktivität</h2>
-            <div class="plus-btn" id="create-note-btn"></div>
+            <?php
+            if ($clientAggregate->noteCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
+                <div class="plus-btn" id="create-note-btn"></div>
+                <?php
+            } ?>
         </div>
         <!--  Notes are populated here via ajax  -->
     </div>

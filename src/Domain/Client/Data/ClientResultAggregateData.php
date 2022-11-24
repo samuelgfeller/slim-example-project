@@ -30,6 +30,7 @@ class ClientResultAggregateData extends ClientData
     public ?Privilege $mainDataPrivilege = null;
     public ?Privilege $clientStatusPrivilege = null;
     public ?Privilege $assignedUserPrivilege = null;
+    public ?Privilege $noteCreatePrivilege = null;
 
     /**
      * Client Data constructor.

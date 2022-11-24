@@ -4,12 +4,14 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Authorization\ClientAuthorizationGetter;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserNameAbbreviator;
@@ -27,7 +29,8 @@ class ClientFinder
         private readonly NoteFinder $noteFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly ClientAuthorizationGetter $clientAuthorizationGetter,
-        private readonly NoteAuthorizationGetter $noteAuthorizationGetter
+        private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
+        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
     ) {
     }
 
@@ -134,6 +137,12 @@ class ClientFinder
                 'client_status_id',
                 $clientResultAggregate->userId
             );
+            //  Set create note privilege
+            $clientResultAggregate->noteCreatePrivilege = $this->noteAuthorizationChecker->isGrantedToCreate(
+                0,
+                $clientResultAggregate->userId,
+                false
+            ) ? Privilege::CREATE : Privilege::NONE;
 
             if ($includingNotes === true) {
                 $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain(
