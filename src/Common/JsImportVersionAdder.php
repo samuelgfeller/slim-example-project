@@ -45,8 +45,8 @@ class JsImportVersionAdder
                     $content = file_get_contents($file->getPathname());
                     $originalContent = $content;
                     // Matches lines that have 'import ' then any string then ' from ' and single or double quote opening then
-                    // any string (path) then '.js' and optionally numeric v GET param '?v=234' and '";' at the end with single or double quotes
-                    preg_match_all('/import (.|\n|\r|\t)*? from ("|\')(.*?)\.js(\?v=\d*)?("|\');/', $content, $matches);
+                    // any string (path) then '.js' and optionally v GET param '?v=234' and '";' at the end with single or double quotes
+                    preg_match_all('/import (.|\n|\r|\t)*? from ("|\')(.*?)\.js(\?v=.*?)?("|\');/', $content, $matches);
                     // $matches is an array that contains all matches. In this case, the content is the following:
                     // Key [0] is the entire matching string including the search
                     // Key [1] first variable unknown string after the 'import ' word (e.g. '{requestDropdownOptions}', '{createModal}')

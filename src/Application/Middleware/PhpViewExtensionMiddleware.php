@@ -31,7 +31,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
     ) {
         $this->publicSettings = $settings->get('public');
         $this->devSetting = $settings->get('dev');
-        $this->appVersion = $settings->get('version');
+        $this->appVersion = $settings->get('deployment')['version'];
     }
 
     public function process(
