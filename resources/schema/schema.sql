@@ -93,33 +93,12 @@ CREATE TABLE `client`
     ENGINE = InnoDB
 ;
 
-
-CREATE TABLE `note`
-(
-    `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`    INT(11) UNSIGNED NOT NULL,
-    `client_id`  INT(11) UNSIGNED NOT NULL,
-    `message`    VARCHAR(500)     NULL     DEFAULT NULL COLLATE 'utf8_general_ci',
-    `is_main`    TINYINT(1)       NOT NULL DEFAULT '0' COMMENT 'Bool if it\'s the client\'s main note',
-    `updated_at` DATETIME         NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-    `created_at` DATETIME         NOT NULL DEFAULT current_timestamp(),
-    `deleted_at` DATETIME         NULL     DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `FK__user` (`user_id`),
-    INDEX `FK_note_client` (`client_id`),
-    CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-    CONSTRAINT `FK_note_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-    COLLATE = 'utf8mb4_unicode_ci'
-    ENGINE = InnoDB
-;
-
 create table note
 (
     id         int unsigned auto_increment primary key,
     user_id    int unsigned                           not null,
     client_id  int unsigned                           not null,
-    message    varchar(500)                           null,
+    message    varchar(1000)                          null,
     is_main    tinyint(1) default 0                   not null comment 'Bool if it''s the client''s main note',
     hidden     tinyint                                null,
     updated_at datetime   default current_timestamp() not null on update current_timestamp(),

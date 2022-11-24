@@ -243,7 +243,7 @@ class ClientCreateCaseProvider
                     'sex' => 'F',
                     'user_id' => 'valid', // 'valid' replaced by authenticated user id in test function
                     'client_status_id' => 'valid', // 'valid' replaced by inserted client status id in test function
-                    'message' => str_repeat('i', 501), // invalid
+                    'message' => str_repeat('i', 1001), // invalid
                 ],
                 'json_response' => [
                     'status' => 'error',
@@ -253,7 +253,7 @@ class ClientCreateCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'message',
-                                'message' => 'Maximum length is 500',
+                                'message' => 'Maximum length is 1000',
                             ],
                         ],
                     ],

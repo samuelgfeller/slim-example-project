@@ -29,7 +29,7 @@ export function getNoteHtml(note) {
                                 ` : `hidden-note-message` /* class to blur note text if not allowed to read*/}" 
                               id="note${noteId}"
                               data-note-id="${noteId}"
-                              minlength="4" maxlength="500" required
+                              minlength="4" maxlength="1000" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
                               name="message">${escapeHtml(noteMessage)}</textarea>
                     <div class="circle-loader client-read" data-note-id="${noteId}">

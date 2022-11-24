@@ -85,7 +85,7 @@ final class Validator
         ValidationResult $validationResult,
         int $length = 255
     ): void {
-        if (strlen(trim((string)$value)) > $length) {
+        if (mb_strlen(trim((string)$value)) > $length) {
             $validationResult->setError($fieldName, sprintf('Maximum length is %s', $length));
         }
     }

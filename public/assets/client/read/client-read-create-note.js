@@ -47,7 +47,7 @@ export function addNewNoteTextarea() {
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea" id="new-note"
-                              data-note-id="new-note" minlength="4" maxlength="500"
+                              data-note-id="new-note" minlength="4" maxlength="1000"
                               name="message"></textarea>
                     <div class="circle-loader client-read" data-note-id="">
                         <div class="checkmark draw"></div>

@@ -102,7 +102,7 @@ class NoteValidator
     ): void {
         // Not test if empty string as user could submit note with empty string which has to be checked
         if (null !== $noteMsg) {
-            $this->validator->validateLengthMax($noteMsg, 'message', $validationResult, 500);
+            $this->validator->validateLengthMax($noteMsg, 'message', $validationResult, 1000);
             $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
         } elseif (true === $required) {
             // If it is null or empty string and required

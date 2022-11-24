@@ -97,7 +97,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 <div id="main-note-div">
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-textarea"
-                  minlength="0" maxlength="500"
+                  minlength="0" maxlength="1000"
                   data-editable="<?= $clientAggregate->mainNoteData
                       ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"

@@ -31,7 +31,7 @@ class NoteCaseProvider
                 'authenticated_user' => $newcomerRow,
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-                    'privilege' => Privilege::CREATE
+                    'privilege' => Privilege::CREATE,
                 ],
             ],
             [// ? newcomer owner of note
@@ -241,7 +241,7 @@ class NoteCaseProvider
             ],
             [
                 // Too long
-                'request_body' => ['message' => str_repeat('i', 501), 'is_main' => 0, 'client_id' => 1],
+                'request_body' => ['message' => str_repeat('i', 1001), 'is_main' => 0, 'client_id' => 1],
                 'existing_main_note' => false,
                 'json_response' => [
                     'status' => 'error',
@@ -251,7 +251,7 @@ class NoteCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'message',
-                                'message' => 'Maximum length is 500',
+                                'message' => 'Maximum length is 1000',
                             ]
                         ]
                     ]
@@ -287,7 +287,7 @@ class NoteCaseProvider
                 ]
             ],
             [
-                'message_too_long' => str_repeat('i', 501),
+                'message_too_long' => str_repeat('i', 1001),
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
@@ -296,7 +296,7 @@ class NoteCaseProvider
                         'errors' => [
                             0 => [
                                 'field' => 'message',
-                                'message' => 'Maximum length is 500',
+                                'message' => 'Maximum length is 1000',
                             ]
                         ]
                     ]
