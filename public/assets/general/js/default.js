@@ -1,4 +1,4 @@
-import {showFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
+import {displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
 
 window.addEventListener("load", function (event) {
     /** Class with no animation on page load */
@@ -16,7 +16,7 @@ window.addEventListener("load", function (event) {
     document.documentElement.style.setProperty('--vh', vh + 'px');
 
     /** Flash messages */
-    showFlashMessages();
+    displayServerSideFlashMessages();
 
     /** Throttle time countdown */
     let timeSpans = document.getElementsByClassName('throttle-time-span');

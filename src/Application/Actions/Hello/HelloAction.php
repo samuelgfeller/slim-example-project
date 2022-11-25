@@ -12,19 +12,16 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class HelloAction
 {
-    /**
-     * @var Responder
-     */
-    private Responder $responder;
 
     /**
      * The constructor.
-     *
-     * @param Responder $responder The responder
+     * @param Responder $responder
+     * @param SessionInterface $session
      */
-    public function __construct(Responder $responder, private SessionInterface $session)
-    {
-        $this->responder = $responder;
+    public function __construct(
+        private readonly Responder $responder,
+        private readonly SessionInterface $session
+    ) {
     }
 
     /**

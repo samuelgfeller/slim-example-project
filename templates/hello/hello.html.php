@@ -13,10 +13,7 @@
 </ul>
 -->
 <h1>Hello <?php html($name ?? 'fellow guest!') ?>!</h1>
-<p>On the right side is the flash preview.</p>
-<br><br><br>
-
-
+<p></p>
 
 
 

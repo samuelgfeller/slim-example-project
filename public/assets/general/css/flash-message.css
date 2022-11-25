@@ -1,159 +1,339 @@
-#flash-container {
-    right: 50px;
-    position: fixed;
-    z-index: 101; /* On top of content placeholder and #modal */
-}
-.flash {
-    width: 340px;
-    min-height: 70px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
-    /*background: white;*/
-    display: flex;
-    margin: 25px 0 10px 0px;
-    transform: translateX(130%);
-    opacity: 0;
-    overflow: hidden; /* Prevent color from overflowing rounded border */
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    #flash-container {
+        position: fixed;
+        width: 100%;
+        display: flex;
+        justify-items: center;
+        z-index: 101; /* On top of content placeholder and #modal */
+        flex-flow: column wrap;
+    }
 
-    /* Revert default styling of <dialog> */
-    position: relative;
-    border: none;
-    padding: 0;
-    align-items: center;
-
-}
-
-.flash-close-btn {
-    position: absolute;
-    display: none;
-    /*top: -10px; !* Large font size and time symbol pretty small it has to be pushed upwards*!*/
-    right: 10px;
-    height: 20px;
-    font-size: 30px;
-    font-weight: 300;
-    color: #6e6e6e;
-    cursor: pointer;
-    align-self: flex-start;
-}
-.flash:hover .flash-close-btn{
-    display: block;
-}
-
-/* Color / icon part of flash */
-.flash-fig { /* Flex item */
-    position: relative;
-    width: 60px;
-    height: 60px;
-    margin: 10px;
-    z-index: 11;
-    flex-shrink: 0;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.flash-fig img {
-    height: 30px; /* More relevant than width to have all images with the same size */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    filter: drop-shadow(5px 5px 7px rgba(0, 0, 0, 0.25));
-}
-
-.flash-fig img.open {
-    /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css */
-    display: block;
-}
-
-.flash.success {
-    background: #bee8c2;
-}
-.flash.error {
-    background: #fabfb5;
-}
-.flash.info {
-    background: #bde4ee;
-}
-.flash.warning {
-    background: #f8d9af;
-}
-.flash.success .flash-fig {
-    background: #43c566;
-}
-.flash.error .flash-fig {
-    background: #e65e45;
-}
-.flash.info .flash-fig {
-    background: #45bdd4;
-}
-.flash.warning .flash-fig {
-    background: #eaa030;
-}
-
-
-
-/* Text part of flash */
-.flash-message { /* Flex item */
-    flex-grow: 1;
-}
-.flash-message h3 {
-    margin: 10px 10px 6px 10px;
-    font-size: 1rem;
-}
-.flash.success h3, .flash.error h3, .flash.info h3, .flash.warning h3{
-    /* Only remove title for those defined with CSS below */
-    text-indent:-9999px; /* Change h3 text in css https://stackoverflow.com/a/26889106/9013718 */
-}
-.flash.success h3:before, .flash.error h3:before, .flash.info h3:before, .flash.warning h3:before{
-    text-indent:0;
-    float:left;
-}
-.flash.success h3:before{
-    content: 'YAY! Success!';
-    color: #28a548;
-}
-.flash.error h3:before{
-    content: 'OOPS! Error...';
-    color: #ae4931;
-}
-.flash.info h3:before{
-    content: 'Information.';
-    color: #008fa2;
-}
-.flash.warning h3:before{
-    content: 'Caution!';
-    color: #bc6500;
-}
-
-.flash-message p {
-    margin: 3px 10px 10px 10px;
-    font-size: 0.9rem;
-    width: 200px;
-}
-
-.slide-in {
-    animation: slide-in 0.9s forwards;
-}
-
-.slide-out {
-    animation: slide-out 0.9s forwards;
-}
-
-@keyframes slide-in {
-    100% {
-        transform: translateX(0%);
+    /*Flash dialog (flash message container)*/
+    .flash {
+        max-width: 90%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        top: 30px;
+        margin-top: 15px;
         opacity: 1;
+        overflow: hidden; /* Prevent color from overflowing rounded border */
+        white-space: nowrap;
+        align-items: center;
+        display: none; /*Flash should only be displayed if it has class .flash-slide-in*/
+
+        /* Revert default styling of <dialog> */
+        position: relative;
+        border: none;
+        padding: 0 15px 0 0;
+    }
+
+    .flash-slide-in {
+        display: flex;
+        /*Slide flash in from the top and add opacity for 0.3s, then after 0.3 delay expand flash message during 0.7s*/
+        animation: mobile-flash-slide-in-from-top 0.3s ease-in-out, mobile-flash-expand 0.7s 0.3s forwards ease-in-out;
+    }
+
+    .flash-slide-out {
+        display: flex;
+        /*Collapse flash message for 0.7s and after 0.7s delay, slide flash out to the top and remove opacity for 0.3s */
+        animation: mobile-flash-collapse 0.7s forwards ease-in-out, mobile-flash-slide-out-to-top 0.3s 0.7s forwards ease-in-out;
+    }
+
+    @keyframes mobile-flash-slide-in-from-top {
+        0% {
+            top: 10px;
+            max-width: 33px;
+            opacity: 0;
+        }
+        /*Icon goes downwards from top and begins to open up after here (0.6s if total 2s) */
+        100% {
+            /*Keep small max width until the icon came from the top*/
+            max-width: 33px;
+            opacity: 1;
+        }
+    }
+    @keyframes mobile-flash-expand {
+        0% {
+            max-width: 33px;
+        }
+        80% {
+            white-space: nowrap;
+        }
+        /*Start to wrap right before ending*/
+        100% {
+            white-space: break-spaces;
+            /*Takes initial max-width value which is 90%*/
+        }
+    }
+
+    @keyframes mobile-flash-collapse {
+        0% {
+            white-space: break-spaces;
+        }
+        40% {
+            white-space: nowrap;
+        }
+        100% {
+            max-width: 33px;
+        }
+    }
+    @keyframes mobile-flash-slide-out-to-top {
+        100% {
+            top: 10px;
+            opacity: 0;
+        }
+    }
+
+    /* Color / icon part of flash */
+    .flash-fig { /* Flex item */
+        position: relative;
+        /*Width and margin will grow / shrink opposed to each other*/
+        /*The width has to make up for the margin; width has to grow that much larger than margin increases to keep
+        the same overall height.*/
+        width: 33px;
+        height: 33px;
+        margin: 0px;
+        padding: 0;
+        z-index: 11;
+        flex-shrink: 0;
+        border-radius: 99px;
+        cursor: pointer;
+    }
+
+    .flash-slide-in .flash-fig {
+        /*Has to stop exactly when flash is fully expanded but the issue is we can't know when its fully expanded as
+        the content may vary so if the content is short, it is expanded quickly but it still takes up all the time
+        for max-width to be at the maximum possible. That makes that the icons' margin grows too slowly
+        (still increasing after the flash is fully expanded). Solution is to shorten this animation so that the
+        margin is at the desired value before it is expanded to the technical max*/
+        animation: flash-fig-add-margin 0.4s forwards ease-in-out; /*Flash expand takes 0.7s*/
+        animation-delay: 0.3s; /*Animation has to start when flash begins to open up after icon came from the top*/
+    }
+
+    .flash-slide-out .flash-fig {
+        /*As there is a delay before the start, the styles of the animation start are here*/
+        width: 28px;
+        height: 28px;
+        margin: 5px;
+        /*Here we have to make up for the same width difference between the maximum possible width (which is the animation
+         duration) and the actual width which is often shorter, so there is a slight "pause" before it starts to shrink*/
+        animation: flash-fig-remove-margin 0.4s forwards ease-in-out;
+        animation-delay: 0.3s; /*Animation has to start when flash begins to open up after icon came from the top*/
+        /* Slide out animation total should not smaller than flash-message.js slideOutAnimationTime variable */
+    }
+
+    @keyframes flash-fig-add-margin {
+        /*Start of the animation is when flash starts to open up*/
+        100% {
+            width: 28px;
+            height: 28px;
+            margin: 5px;
+        }
+    }
+    @keyframes flash-fig-remove-margin {
+        /*Start of the animation is when flash starts to open up*/
+        100% {
+            width: 33px;
+            height: 33px;
+            margin: 0px;
+        }
+    }
+
+    .flash-fig img {
+        height: 15px; /* More relevant than width to have all images with the same size */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.2));
+    }
+
+    .flash-fig img.open {
+        /* Sadly I cannot set the image url with the `content:` tag because its impossible set basepath for css */
+        display: block;
+    }
+
+    .flash-message p {
+        /*Right margin replaced by padding on the entire flash to have a space during opening animation*/
+        margin: 9px 0 9px 4px;
+        font-size: 0.9rem;
+        /*width: 200px;*/
+        /*display: block;*/
+    }
+
+    .flash-close-btn {
+        position: absolute;
+        display: none;
+        /*top: -10px; !* Large font size and time symbol retty small it has to be pushed upwards*!*/
+        right: 10px;
+        height: 20px;
+        font-size: 30px;
+        font-weight: 300;
+        color: #6e6e6e;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+
+    .flash.success {
+        background: #bee8c2;
+    }
+
+    .flash.error {
+        background: #fabfb5;
+    }
+
+    .flash.info {
+        background: #bde4ee;
+    }
+
+    .flash.warning {
+        background: #f8d9af;
+    }
+
+    .flash.success .flash-fig {
+        background: #43c566;
+    }
+
+    .flash.error .flash-fig {
+        background: #e65e45;
+    }
+
+    .flash.info .flash-fig {
+        background: #45bdd4;
+    }
+
+    .flash.warning .flash-fig {
+        background: #eaa030;
+    }
+
+    /* Text part of flash */
+    .flash-message { /* Flex item */
+        flex-grow: 1;
+    }
+
+    .flash h3 {
+        display: none;
+    }
+
+    .flash.success h3, .flash.error h3, .flash.info h3, .flash.warning h3 {
+        /* Only remove title for those defined with CSS below */
+        text-indent: -9999px; /* Change h3 text in css https://stackoverflow.com/a/26889106/9013718 */
+    }
+
+    .flash.success h3:before, .flash.error h3:before, .flash.info h3:before, .flash.warning h3:before {
+        text-indent: 0;
+        float: left;
+    }
+
+    .flash.success h3:before {
+        content: 'YAY! Success!';
+        color: #28a548;
+    }
+
+    .flash.error h3:before {
+        content: 'OOPS! Error...';
+        color: #ae4931;
+    }
+
+    .flash.info h3:before {
+        content: 'Information.';
+        color: #008fa2;
+    }
+
+    .flash.warning h3:before {
+        content: 'Caution!';
+        color: #bc6500;
     }
 }
 
-@keyframes slide-out {
-    0% {
-        transform: translateX(0%);
-        opacity: 1;
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width: 641px) {
+    #flash-container {
+        left: initial;
+        right: 50px;
+        top: 30px;
+        transform: initial;
+        width: auto;
     }
-    100% {
+
+    .flash {
+        width: 340px;
+        max-width: initial;
+        min-height: 70px;
+        border-radius: 20px;
+        margin: 15px 0 10px 0px;
         transform: translateX(130%);
-        opacity: 0;
+        white-space: break-spaces;
+    }
+
+    .flash-slide-in {
+        animation: slide-in-flash-from-the-right 0.9s forwards;
+    }
+
+    .flash-slide-out {
+        animation: slide-out-flash-to-the-right 0.9s forwards;
+        /* Slide out animation total should not smaller than flash-message.js slideOutAnimationTime variable */
+    }
+
+    @keyframes slide-in-flash-from-the-right {
+        100% {
+            transform: translateX(0%);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slide-out-flash-to-the-right {
+        0% {
+            transform: translateX(0%);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(130%);
+            opacity: 0;
+        }
+    }
+    /*Display close btn on hover*/
+    .flash:hover .flash-close-btn {
+        display: block;
+    }
+
+    .flash-fig { /* Flex item */
+        position: relative;
+        width: 60px;
+        height: 60px;
+        margin: 10px;
+        border-radius: 10px;
+        animation: none;
+    }
+
+    /*Reset mobile slide in and out animations and styles*/
+    .flash-slide-in .flash-fig {
+        animation: none;
+    }
+
+    .flash-slide-out .flash-fig {
+        /*Keep the same style when sliding out*/
+        width: 60px;
+        height: 60px;
+        margin: 10px;
+        animation: none;
+    }
+
+    .flash-fig img {
+        height: 30px; /* More relevant than width to have all images with the same size */
+        filter: drop-shadow(5px 5px 7px rgba(0, 0, 0, 0.25));
+    }
+
+    .flash-message h3 {
+        margin: 10px 10px 6px 10px;
+        font-size: 1rem;
+        display: inline-block;
+    }
+
+    .flash-message p {
+        margin: 3px 10px 10px 10px;
     }
 }
+

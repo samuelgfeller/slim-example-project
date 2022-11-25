@@ -1,3 +1,11 @@
+// For how long should the flash message be visible in ms
+const flashMessageTimeBeforeSlideOut = 4000;
+// Time for the slide out animation (mobile slide out time is 1s)
+const mobileSlideOutAnimationTime = 1000;
+// Delay in ms that flash message has to wait before being displayed on load
+let displayFlashMessageDelay = 0;
+let flashMessageIdCounter = 0;
+
 /**
  * Create and display flash message from the client side
  * Display server side flash: flash-messages.html.php
@@ -10,112 +18,103 @@ export function displayFlashMessage(typeName, message) {
     let container = document.getElementById("flash-container");
     // If it isn't "undefined" and it isn't "null", then it exists.
     if (typeof (container) === 'undefined' || container === null) {
-        // console.log(wrapper === null);
-        container = document.createElement('aside');
-        container.id = 'flash-container';
-        document.appendChild(container);
+        document.querySelector('#wrapper').insertAdjacentHTML('afterbegin',
+            `<aside id="flash-container"></aside>`);
+        container = document.querySelector('#flash-container');
     }
 
-    // First child: dialog
-    let dialog = document.createElement("dialog");
-    dialog.className = 'flash ' + typeName;
-    // Append dialog
-    container.appendChild(dialog);
-
-    // Second child: figure
-    let figure = document.createElement('figure');
-    figure.className = 'flash-fig';
-    // Append figure to dialog
-    dialog.appendChild(figure);
-
-    // Third child: img
-    let icon = document.createElement('img');
-    icon.className = 'open';
-    switch (typeName) {
-        case 'success':
-            // icon.className = typeName;
-            icon.src = 'assets/general/img/flash-checkmark.svg';
-            icon.alt = 'success';
-            break;
-        case 'warning':
-            icon.src = 'assets/general/img/flash-warning.svg';
-            icon.alt = 'success';
-            break;
-        case 'info':
-            icon.src = 'assets/general/img/flash-info.svg';
-            icon.alt = 'success';
-            break;
-        case 'error':
-            icon.src = 'assets/general/img/flash-error.svg';
-            icon.alt = 'error';
-            break;
+    const getFlashIconPath = () => {
+        switch (typeName) {
+            case 'success':
+                // icon.className = typeName;
+                return 'assets/general/img/flash-checkmark.svg';
+            case 'warning':
+                return 'assets/general/img/flash-warning.svg';
+            case 'info':
+                return 'assets/general/img/flash-info.svg';
+            case 'error':
+                return 'assets/general/img/flash-error.svg';
+        }
     }
-    figure.appendChild(icon);
+    // Add flash message html with unique id
+    flashMessageIdCounter += 1; /*Always one more than previous*/
+    const flashMessageId = `flash-${flashMessageIdCounter}`;
+    container.insertAdjacentHTML('beforeend',
+        `<dialog class="flash ${typeName}" id="${flashMessageId}">
+                <figure class="flash-fig">
+                    <img class="open" src="${getFlashIconPath()}" alt="${typeName}">
+                </figure>
+                <div class="flash-message"><h3>Flash message</h3><p>${message /*this line has to be on one line*/}</p></div>
+                <span class="flash-close-btn">&times;</span>                
+            </dialog>`);
 
-    // First dialog child: flash message content
-    let flashMessageDiv = document.createElement('div');
-    flashMessageDiv.className = 'flash-message';
-    dialog.appendChild(flashMessageDiv);
-
-    // First flash message content child: header
-    let flashMessageHeader = document.createElement('h3');
-    flashMessageHeader.textContent = 'Hey'; // Replaced by css
-    flashMessageDiv.appendChild(flashMessageHeader);
-
-    // Second flash message content child: message content
-    let flashMessageContent = document.createElement('p');
-    flashMessageContent.innerHTML = message;
-    flashMessageDiv.appendChild(flashMessageContent);
-
-    // Second dialog child: close flash button
-    let closeBtn = document.createElement('span');
-    closeBtn.className = 'flash-close-btn';
-    closeBtn.innerHTML = "&times";
-    dialog.appendChild(closeBtn);
-
-    // Make it visible to the user
-    showFlashMessages();
+    const flash = document.getElementById(flashMessageId);
+    showFlashMessage(flash);
 }
 
 /**
- * Display flash messages to user
- *
- * In own function to be run client side after loading
+ * Server side flash messages are loaded into the DOM, but they need to
+ * be displayed with the animation and potential delays when multiple
  */
-export function showFlashMessages() {
-    let flashes = document.getElementsByClassName("flash");
-    Array.from(flashes).forEach(function (flash, index) {
-        if (index === 0) {
-            // Add first without timeout
-            flash.className += ' slide-in'
-        } else {
-            setTimeout(function () {
-                flash.className += ' slide-in'
-            }, index * 1000); // https://stackoverflow.com/a/45500721/9013718 (second snippet)
-        }
-        let closeBtn = flash.querySelector('.flash-close-btn');
-        closeBtn.addEventListener('click', function () {
-            slideFlashOut(flash);
-        });
-        let flashFig = flash.querySelector('.flash-fig');
-        flashFig.addEventListener('click', function () {
-            slideFlashOut(flash);
-        });
+export function displayServerSideFlashMessages(){
+    const flashMessages = document.querySelectorAll('.flash');
+    for (const flashMessage of flashMessages){
+        showFlashMessage(flashMessage);
+    }
+}
 
-        setTimeout(slideFlashOut, (index * 1000) + 8000, flash);
+/**
+ * Add flash message event listeners and slide flash in
+ *
+ * @param flash
+ */
+export function showFlashMessage(flash){
+    flash.querySelector('.flash-close-btn').addEventListener('click', slideFlashOut);
+    flash.querySelector('.flash-fig').addEventListener('click', slideFlashOut);
+
+    slideInFlashMessage(flash).then(() => {
+        setTimeout(() => {
+            slideFlashOut.call(flash);
+        }, flashMessageTimeBeforeSlideOut);
     });
 }
 
 /**
- * Remove flash message after a few seconds of display
+ * Add slide in class with after a potential delay
  *
  * @param flash
+ * @return {Promise<unknown>}
  */
-function slideFlashOut(flash) {
-    flash.className = flash.className.replace('slide-in', "slide-out");
-    // Hide a bit later so that page content can go to its place again
-    setTimeout(function () {
-        flash.style.display = 'none';
+function slideInFlashMessage(flash) {
+    const slideInTimeoutPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            flash.classList.add('flash-slide-in');
+            resolve();
+        }, displayFlashMessageDelay); // https://stackoverflow.com/a/45500721/9013718 (second snippet)
+    });
+
+    // Add time before slide out to display delay
+    if (window.matchMedia('(min-width: 641px)').matches) {
+        // On desktop multiple flash messages can be shown so delay is shorter
+        displayFlashMessageDelay += 1000;
+    } else {
+        // Only one notification at a time should be displayed for mobile so the full display time
+        // plus each mobileSlideOutAnimationTime is taken
+        displayFlashMessageDelay += flashMessageTimeBeforeSlideOut + mobileSlideOutAnimationTime;
+    }
+    return slideInTimeoutPromise;
+}
+
+/**
+ * Slide flash message out of DOM
+ * "this" has to be a child of .flash or the object itself
+ */
+export function slideFlashOut() {
+    // "this" is a flash child (close button / figure or element itself)
+    const flash = this.closest('.flash');
+    flash.className = flash.className.replace('flash-slide-in', "flash-slide-out");
+    // Remove flash from dom as it's not needed anymore after slide out animation is done
+    setTimeout(() => {
         flash.remove();
-    }, 800); // .slide-out animation is 0.9s
+    }, mobileSlideOutAnimationTime);
 }

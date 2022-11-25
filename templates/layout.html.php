@@ -58,9 +58,10 @@
 <!-- Wrapper should englobe entire body content as its height is 100vh -->
 <div id="wrapper">
     <header>
-        <!-- Application name -->
+        <!-- Application { name -->
         <span>Slim Example Project</span>
     </header>
+    <?= $this->fetch('layout/flash-messages.html.php') ?>
     <aside id="nav-container">
         <nav>
             <a href="<?= $route->urlFor('home-page') ?>"
@@ -111,7 +112,6 @@
         </div>
     </aside>
     <main>
-        <?= $this->fetch('layout/flash-messages.html.php') ?>
         <?= $content ?>
         <?= $this->fetch('layout/request-throttle.html.php') ?>
     </main>
