@@ -1,4 +1,9 @@
-import {displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
+import {displayFlashMessage, displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
+
+displayFlashMessage('success', 'This is a success flash message.');
+// displayFlashMessage('info', 'This is an info flash message.');
+// displayFlashMessage('warning', 'This is a warning flash message.');
+// displayFlashMessage('error', 'This is an error flash message.');
 
 window.addEventListener("load", function (event) {
     /** Class with no animation on page load */
