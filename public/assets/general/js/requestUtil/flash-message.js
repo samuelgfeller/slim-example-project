@@ -42,8 +42,8 @@ export function displayFlashMessage(typeName, message) {
     // Same HTML than flash-messages.html.php
     container.insertAdjacentHTML('beforeend',
         `<dialog class="flash ${typeName}" id="${flashMessageId}">
-                <figure class="flash-fig">
-                    <img class="open" src="${getFlashIconPath()}" alt="${typeName}">
+                <figure class="flash-fig" >
+                    <img class="open" draggable="false" src="${getFlashIconPath()}" alt="${typeName}">
                 </figure>
                 <div class="flash-message"><h3>Flash message</h3><p>${message /*this line has to be on one line*/}</p></div>
                 <span class="flash-close-btn">&times;</span>                
@@ -64,84 +64,6 @@ export function displayServerSideFlashMessages() {
     }
 }
 
-let movedDistanceX;
-let touchstartX = 0;
-let touchstartY = 0;
-let touchendX = 0;
-let touchendY = 0;
-let startTime = 0;
-let endTime = 0;
-
-/**
- *
- * @param flash
- */
-function moveFlashOutOnItsOwn(flash) {
-    const timeMs = ((endTime - startTime));
-    const timeS = timeMs / 1000;
-    if (touchendX < touchstartX) {
-        console.log('swiped left ' + (touchstartX - touchendX) + 'px in ' + timeS + 's moved distance: ' + movedDistanceX);
-    }
-    if (touchendX > touchstartX) {
-        console.log('swiped right ' + (touchendX - touchstartX) + 'px in ' + timeS + 's moved distance: ' + movedDistanceX);
-    }
-    if (touchendY < touchstartY) {
-        console.log('swiped up ' + (touchstartY - touchendY) + 'px in ' + timeS + 's');
-    }
-    if (touchendY > touchstartY) {
-        console.log('swiped down ' + (touchendY - touchstartY) + 'px in ' + timeS + 's');
-    }
-
-    // Slide flash out automatically only if horizontal moved distance is greater than 30px
-    if (Math.abs(movedDistanceX) > 30 && !window.matchMedia('(min-width: 641px)').matches || movedDistanceX > 0) {
-        let distanceToMoveOut = movedDistanceX;
-        let moveFlashOut = setInterval(() => {
-                // Stop if left value is below -600 or above 600 as it's certain that the flash is outside of viewport
-                if ((distanceToMoveOut < -600) || distanceToMoveOut > 600) {
-                    clearInterval(moveFlashOut);
-                    slideFlashOut.call(flash);
-                }
-                // If negative number, one has to be subtracted, otherwise one added
-                distanceToMoveOut < 0 ? distanceToMoveOut-- : distanceToMoveOut++;
-                // Continue slide out movement automatically at twice the speed of user drag (twice the pixels moved in
-                // the same amount of time)
-                flash.style.left = (distanceToMoveOut) * 2 + 'px';
-            }, // Interval is the time the user dragged the flash message divided my the amount of pixels
-            // This is the ratio of moved pixels per ms
-            timeMs / movedDistanceX);
-    }
-}
-
-let initX = null;
-let initY = null;
-let movedDistanceY;
-
-/**
- * Touch event handler; moves flash with user touch input
- * @param e
- */
-function moveFlashWithTouch(e) {
-    if (initX === null || initY === null) {
-        initX = e.touches[0].screenX;
-        initY = e.touches[0].screenY;
-    } else {
-        movedDistanceX = e.touches[0].screenX - initX;
-        movedDistanceY = e.touches[0].screenY - initY;
-        // Only move flash if mobile or to the left if desktop
-        if (!window.matchMedia('(min-width: 641px)').matches || movedDistanceX > 0) {
-            // If swipe to the top (negative Y moved distance) more than 20px and not swiped left or right of more than 20
-            if (movedDistanceY < -20 && Math.abs(movedDistanceX) < 20) {
-                // "this" is the flash
-                slideFlashOut.call(this);
-            }
-            // Move flash with finger only after moved more than 20px to avoid moving it when swiping it upwards
-            if (Math.abs(movedDistanceX) > 20) {
-                this.style.left = (movedDistanceX) + 'px';
-            }
-        }
-    }
-}
-
 /**
  * Add flash message event listeners and slide flash in
  *
@@ -151,27 +73,30 @@ export function showFlashMessage(flash) {
     flash.querySelector('.flash-close-btn').addEventListener('click', slideFlashOut);
     flash.querySelector('.flash-fig').addEventListener('click', slideFlashOut);
 
-    flash.addEventListener('touchmove', moveFlashWithTouch);
+    flash.addEventListener('touchmove', dragFlashOnMouseMove);
+    flash.addEventListener('mousedown', (e) => {
+        // Not if target is p as user may want to select the text
+        if (e.target.tagName !== 'P') {
+            flash.addEventListener('mousemove', dragFlashOnMouseMove);
+        }
+    });
+    // Mouseup event on document as user may click on flash and then move cursor out, lift the button and come back on it
+    document.addEventListener('mouseup', () => {
+        flash.removeEventListener('mousemove', dragFlashOnMouseMove);
+        moveFlashOutOnItsOwn.call(flash);
+    });
+
     flash.addEventListener('touchstart', e => {
-        // Prevent scroll on mobile
+        // Prevent scroll especially on mobile
         e.preventDefault();
         e.stopPropagation();
-        touchstartX = e.changedTouches[0].screenX;
-        touchstartY = e.changedTouches[0].screenY;
-        startTime = window.performance.now();
     })
-
-    flash.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        touchendY = e.changedTouches[0].screenY;
-        endTime = window.performance.now();
-        moveFlashOutOnItsOwn(flash);
-    })
+    flash.addEventListener('touchend', moveFlashOutOnItsOwn);
 
     // Slide flash message in and then out after the given time
     slideInFlashMessage(flash).then(() => {
         setTimeout(() => {
-            slideFlashOut.call(flash);
+            // slideFlashOut.call(flash);
         }, flashMessageTimeBeforeSlideOut);
     });
 }
@@ -214,4 +139,89 @@ export function slideFlashOut() {
     setTimeout(() => {
         flash.remove();
     }, mobileSlideOutAnimationTime);
+}
+
+
+// Variables used for the function dragFlashOnMouseMove
+let initX = null;
+let initY = null;
+let movedDistanceX;
+let movedDistanceY;
+let isMobile;
+
+/**
+ * Touch event handler; moves flash with user touch input
+ * @param e
+ */
+function dragFlashOnMouseMove(e) {
+    console.log('drag flash');
+    let currX, currY;
+    if (e.clientX) {
+        currX = e.clientX; // If they exist then use Mouse input
+        currY = e.clientY;
+    } else {
+        currX = e.touches[0].clientX; // Otherwise use touch input
+        currY = e.touches[0].clientY;
+    }
+    if (initX === null || initY === null) {
+        initX = currX;
+        initY = currY;
+    } else {
+        movedDistanceX = currX - initX;
+        movedDistanceY = currY - initY;
+        // console.log('x ' + Math.abs(movedDistanceX), 'y ' + movedDistanceY)
+        isMobile = !window.matchMedia('(min-width: 641px)').matches;
+        // Only move flash if mobile or to the left if desktop
+        if (isMobile || movedDistanceX > 0) {
+            // If swipe to the top (negative Y moved distance) more than 20px and not swiped left or right of more than 20
+            if (movedDistanceY < -20 && Math.abs(movedDistanceX) < 40) {
+                // "this" is the flash
+                slideFlashOut.call(this);
+            }
+            // Move flash with finger only after moved more than 20px to avoid moving it when swiping it upwards
+            if (Math.abs(movedDistanceX) > 20) {
+                this.style.left = (movedDistanceX) + 'px';
+            }
+        }
+    }
+}
+
+let startTime = 0;
+let endTime = 0;
+let isCurrentlyMovingOut = false;
+
+/**
+ * Continue user flash sliding movement without touch
+ * "this" is the flash element
+ */
+function moveFlashOutOnItsOwn() {
+    const timeMs = ((endTime - startTime));
+
+    let distanceToMoveOut = movedDistanceX;
+
+    // Slide flash out automatically only if horizontal moved distance is greater than 30px
+    if (Math.abs(movedDistanceX) > 20 && // And is mobile or swipe is to the right (and not left)
+        (isMobile || movedDistanceX > 0) && // And not already moving out
+        isCurrentlyMovingOut === false
+    ) {
+        isCurrentlyMovingOut = true;
+        let moveFlashOutInterval = setInterval(() => {
+                // Stop if left value is below -600 or above 600 as it's certain that the flash is outside of viewport
+                if ((distanceToMoveOut < -600) || distanceToMoveOut > 600) {
+                    clearInterval(moveFlashOutInterval);
+                    console.log(distanceToMoveOut);
+                    console.log(moveFlashOutInterval);
+                    // Directly remove flash from dom. Slide out animation not needed
+                    this.remove();
+                    isCurrentlyMovingOut = false;
+                }
+                // If negative number, one has to be subtracted, otherwise one added
+                distanceToMoveOut < 0 ? distanceToMoveOut-- : distanceToMoveOut++;
+                // Continue slide out movement automatically at twice the speed of user drag (twice the pixels moved in
+                // the same amount of time)
+                this.style.left = (distanceToMoveOut) * 2 + 'px';
+            }, // Interval is the time the user dragged the flash message divided my the amount of pixels
+            // This is the ratio of moved pixels per ms
+            timeMs / movedDistanceX);
+    }
 }

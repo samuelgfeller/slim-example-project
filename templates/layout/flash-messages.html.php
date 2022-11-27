@@ -10,16 +10,16 @@
     foreach ($flash->all() as $key => $flashCategory) {
         foreach ($flashCategory as $msg) { ?>
             <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
-                <figure class="flash-fig">
+                <figure class="flash-fig" draggable="false">
                     <?php
                     // Sadly I cannot use the `content:` tag because its impossible set basepath for css ?>
-                    <img class="<?= $key === "success" ? "open" : '' ?>" src="assets/general/img/flash-checkmark.svg"
-                         alt="success">
-                    <img class="<?= $key === "error" ? "open" : '' ?>" src="assets/general/img/flash-error.svg"
-                         alt="error">
-                    <img class="<?= $key === "info" ? "open" : '' ?>" src="assets/general/img/flash-info.svg"
-                         alt="info">
-                    <img class="<?= $key === "warning" ? "open" : '' ?>"
+                    <img class="<?= $key === "success" ? "open" : '' ?>" draggable="false"
+                         src="assets/general/img/flash-checkmark.svg" alt="success">
+                    <img class="<?= $key === "error" ? "open" : '' ?>" draggable="false"
+                         src="assets/general/img/flash-error.svg" alt="error">
+                    <img class="<?= $key === "info" ? "open" : '' ?>" draggable="false"
+                         src="assets/general/img/flash-info.svg" alt="info">
+                    <img class="<?= $key === "warning" ? "open" : '' ?>" draggable="false"
                          src="assets/general/img/flash-warning.svg" alt="warning">
                 </figure>
                 <!-- Elements in flash-message div have to be stuck together, all spaces are interpreted literally and
