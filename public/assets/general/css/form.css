@@ -20,7 +20,7 @@
         position: relative;
         font-size: 17px;
         max-width: 625px;
-        padding: 25px 15px;
+        padding: 20px 15px;
     }
 
     /*Animated form input group*/
@@ -222,7 +222,7 @@
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
     .page-form-container {
         width: 90%;
-        padding: 35px 25px;
+        padding: 25px 25px;
     }
 }
 

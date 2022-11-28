@@ -1,0 +1,42 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        /*background: #2e3e50;*/
+        background: linear-gradient(to bottom right, #33ccff 0%, #ff99cc 90%);;
+        /*background: linear-gradient(to top right, #2e3e50 20%, #ffffff 100%);*/
+        /*background: linear-gradient(to top, #2e3e50 0%, #ffffff 100%);;*/
+    }
+
+    h2 {
+        margin-top: -80px;
+        color: #2e3e50;
+        font-size: 2.3em;
+        letter-spacing: 3px;
+    }
+
+    .page-form-container {
+        background: rgba(255, 255, 255, 0.4);
+        max-width: 500px;
+    }
+
+    input, input:hover, input:focus {
+        background-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    input[type="submit"]:not([disabled]):hover {
+        background-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    #form-general-error-msg {
+        border-radius: 15px;
+        color: #951212;
+        /*box-shadow: 0px 3px 15px rgba(1, 1, 1, 0.15);*/
+        background: rgba(255, 255, 255, 0.5);
+        border-bottom: 3px solid #951212;
+    }
+
+}
