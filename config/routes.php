@@ -80,7 +80,6 @@ return function (App $app) {
         'change-password-submit'
     )->add(UserAuthenticationMiddleware::class);
 
-
     $app->group('/users', function (RouteCollectorProxy $group) {
         // $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('/list', \App\Application\Actions\User\UserListPageAction::class)
@@ -95,7 +94,7 @@ return function (App $app) {
 
         $group->post('', \App\Application\Actions\User\UserCreateSubmitAction::class)
             ->setName('user-create-submit');
-        // $group->options('/{user_id:[0-9]+}', PreflightAction::class); // Allow preflight requests
+        // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
             ->setName('user-read-page');
         $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)
@@ -109,6 +108,7 @@ return function (App $app) {
 
     // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
     $app->group('/clients', function (RouteCollectorProxy $group) {
+        // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
         $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\ClientReadPageAction::class)
             ->setName('client-read-page');
 

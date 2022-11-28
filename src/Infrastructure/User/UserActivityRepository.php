@@ -4,6 +4,8 @@
 namespace App\Infrastructure\User;
 
 
+use App\Common\Hydrator;
+use App\Domain\User\Data\UserActivityData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserActivityRepository
@@ -22,6 +24,7 @@ class UserActivityRepository
 
     public function __construct(
         private readonly QueryFactory $queryFactory,
+        private readonly Hydrator $hydrator,
     ) {
     }
 
@@ -29,16 +32,16 @@ class UserActivityRepository
      * Return user with given id if it exists
      * otherwise null
      *
-     * @param int $id
-     * @return array user row
+     * @param int $userId
+     * @return UserActivityData[]
      */
-    public function findUserById(int $id): array
+    public function findUserActivities(int $userId): array
     {
-        $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
-            ['deleted_at IS' => null, 'id' => $id]
+        $query = $this->queryFactory->newQuery()->select('*')->from('user_activity')->where(
+            ['user_id' => $userId]
         );
-        // Empty array if not found
-        return $query->execute()->fetch('assoc') ?: [];
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+        return $this->hydrator->hydrate($resultRows, UserActivityData::class);
     }
 
 

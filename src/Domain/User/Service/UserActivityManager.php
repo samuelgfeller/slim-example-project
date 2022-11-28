@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Service;
 
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivityAction;
 use App\Infrastructure\User\UserActivityRepository;
@@ -12,6 +13,7 @@ class UserActivityManager
     public function __construct(
         private readonly UserActivityRepository $userActivityRepository,
         private readonly SessionInterface $session,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
     ) {
     }
 
@@ -51,5 +53,18 @@ class UserActivityManager
     public function deleteUserActivity(int $activityId): bool
     {
         return $this->userActivityRepository->deleteUserActivity($activityId);
+    }
+
+    /**
+     * Find user activity entries for the user read page
+     * @param int $userId
+     * @return UserActivityData[]
+     */
+    public function findUserActivityReport(int $userId): array
+    {
+        if ($this->userAuthorizationChecker->isGrantedToReadUserActivity($userId)) {
+            return $this->userActivityRepository->findUserActivities($userId);
+        }
+        return [];
     }
 }

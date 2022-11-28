@@ -6,6 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Exceptions\DomainRecordNotFoundException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -27,6 +28,7 @@ final class UserReadPageAction
         private readonly Responder $responder,
         private readonly UserFinder $userFinder,
         private readonly SessionInterface $session,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -52,6 +54,7 @@ final class UserReadPageAction
             return $this->responder->render($response, 'user/user-read.html.php', [
                 'user' => $this->userFinder->findUserReadResult($userId),
                 'userStatuses' => UserStatus::cases(),
+                'userActivities' => $this->userActivityManager->findUserActivityReport($userId),
             ]);
         } catch (ForbiddenException $forbiddenException) {
             throw new HttpForbiddenException($request, $forbiddenException->getMessage());

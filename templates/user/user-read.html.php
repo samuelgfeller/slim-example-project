@@ -4,6 +4,7 @@
  * @var $this \Slim\Views\PhpRenderer Rendering engine
  * @var $user \App\Domain\User\Data\UserResultData user
  * @var $userStatuses \App\Domain\User\Enum\UserStatus[] all user statuses
+ * @var $userActivities \App\Domain\User\Data\UserActivityData[] all user activities
  */
 
 use App\Domain\Authorization\Privilege;
@@ -55,70 +56,101 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
     </div>
 </div>
 
+<div id="user-page-content-flexbox">
+    <div id="user-profile-content">
+        <div id="user-dropdown-container">
+            <!-- Status select options-->
+            <div>
+                <label for="user-status" class="bigger-select-label">Status</label>
+                <select name="status" class="default-select bigger-select" id="user-status"
+                    <?= $user->statusPrivilege->hasPrivilege(Privilege::UPDATE)
+                        ? '' : 'disabled' ?>>
+                    <?php
+                    // User status select options
+                    foreach ($userStatuses as $userStatus) {
+                        $selected = $userStatus === $user->status ? 'selected' : '';
+                        echo "<option value='$userStatus->value' $selected>" .
+                            ucfirst($userStatus->value) . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
-<div id="user-dropdown-container">
-    <!-- Status select options-->
-    <div>
-        <label for="user-status" class="bigger-select-label">Status</label>
-        <select name="status" class="default-select bigger-select" id="user-status"
-            <?= $user->statusPrivilege->hasPrivilege(Privilege::UPDATE)
-                ? '' : 'disabled' ?>>
+            <!-- Assigned user select options-->
+            <div>
+                <label for="user-role-select" class="bigger-select-label">User role</label>
+                <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
+                    <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
+                    <?php
+                    foreach ($user->availableUserRoles as $id => $userRole) {
+                        $selected = $id === $user->userRoleId ? 'selected' : '';
+                        echo "<option value='$id' $selected>" . $userRole . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <h3 class="label-h3">E-Mail</h3>
+        <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
-            // User status select options
-            foreach ($userStatuses as $userStatus) {
-                $selected = $userStatus === $user->status ? 'selected' : '';
-                echo "<option value='$userStatus->value' $selected>" .
-                    ucfirst($userStatus->value) . "</option>";
+            if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                     alt="Edit"
+                     id="edit-email-btn">
+                <?php
+            } ?>
+            <span spellcheck="false" data-name="email" data-maxlength="254"
+            ><?= !empty($user->email) ? html($user->email) : '&nbsp;' ?></span>
+        </div>
+
+        <div>
+            <?php
+            if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                <h3 class="label-h3">Password</h3>
+                <button class="btn" id="change-password-btn"
+                        data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
+                            Privilege::UPDATE
+                        ) ? 'false' : 'true' ?>">Change password
+                </button>
+                <?php
+            } ?>
+        </div>
+        <!--<div>-->
+        <!--    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>-->
+        <!--</div>-->
+
+        <h3 class="label-h3">Metadata</h3>
+        <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
+            <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
+            <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?></p>
+    </div>
+    <div id="user-activity-container">
+        <div id="user-activity-header">
+            <h2>User activity report</h2>
+        </div>
+        <div id="user-activity-content">
+            <?php
+            foreach ($userActivities as $userActivity) {
+                $activitySentence = $userActivity->datetime->format('d. F Y • H:i:s') . "<br>"
+                    . ucfirst($userActivity->action->value);
+
+                // To generate read url correctly, the route name HAS to be in the following format: "[table_name]-read-page"
+                // and the url argument has to be called "[table-name]-id"
+                try {
+                    $readUrl = $route->urlFor(
+                        "$userActivity->table-read-page",
+                        [$userActivity->table . '_id' => $userActivity->row_id]
+                    );
+                    $readLink = "<a href='$readUrl'>$userActivity->table $userActivity->row_id</a>";
+                } catch (RuntimeException|InvalidArgumentException $exception) {
+                    $readLink = $userActivity->table . ' ' . $userActivity->row_id;
+                }
+
+                $activitySentence .= " $readLink";
+                echo $activitySentence . "<br><br>";
             }
             ?>
-        </select>
-    </div>
-
-    <!-- Assigned user select options-->
-    <div>
-        <label for="user-role-select" class="bigger-select-label">User role</label>
-        <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
-            <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
-            <?php
-            foreach ($user->availableUserRoles as $id => $userRole) {
-                $selected = $id === $user->userRoleId ? 'selected' : '';
-                echo "<option value='$id' $selected>" . $userRole . "</option>";
-            }
-            ?>
-        </select>
+        </div>
     </div>
 </div>
-
-<h3 class="label-h3">E-Mail</h3>
-<div class="contenteditable-field-container user-field-value-container" data-field-element="span">
-    <?php
-    if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-        <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
-             alt="Edit"
-             id="edit-email-btn">
-        <?php
-    } ?>
-    <span spellcheck="false" data-name="email" data-maxlength="254"
-    ><?= !empty($user->email) ? html($user->email) : '&nbsp;' ?></span>
-</div>
-
-<div>
-    <?php
-    if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-        <h3 class="label-h3">Password</h3>
-        <button class="btn" id="change-password-btn"
-                data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
-                    Privilege::UPDATE
-                ) ? 'false' : 'true' ?>">Change password
-        </button>
-        <?php
-    } ?>
-</div>
-<!--<div>-->
-<!--    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>-->
-<!--</div>-->
-
-<h3 class="label-h3">Metadata</h3>
-<p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
-    <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
-    <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?></p>

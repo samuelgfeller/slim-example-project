@@ -1,5 +1,13 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
+    #user-page-content-flexbox{
+        display: flex;
+        /*grid-template-columns: repeat(2, 1fr);*/
+        flex-wrap: wrap;
+        gap: 60px;
+    }
+
+    /* --- User profile values --- */
     .user-field-value-container {
         padding-top: 8px;
         padding-bottom: 8px;
@@ -32,10 +40,30 @@
         display: inline-block;
         /*margin-right: 40px;*/
     }
+
+    /* --- User activity report --- */
+    #user-activity-container{
+        /*border: 2px solid #2e3e50;*/
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
+    }
+    #user-activity-header{
+
+    }
+    #user-activity-header h2{
+        margin: 0;
+        padding: 20px 30px;
+        border-radius: 30px;
+        color: #2e3e50;
+        background: rgba(46, 62, 80, 0.15);
+    }
+    #user-activity-content{
+        padding: 30px;
+    }
 }
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
     #user-dropdown-container {
         width: auto;
+        flex-wrap: nowrap;
     }
 }

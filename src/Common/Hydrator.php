@@ -18,7 +18,6 @@ final class Hydrator
      */
     public function hydrate(array $rows, string $class): array
     {
-        /** @var T[] $result */
         $result = [];
 
         foreach ($rows as $row) {

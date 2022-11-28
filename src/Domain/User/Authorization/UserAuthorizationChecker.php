@@ -298,4 +298,43 @@ class UserAuthorizationChecker
         }
         return false;
     }
+
+    /**
+     * Check if authenticated user is allowed to read user activity
+     *
+     * @param int $userIdToRead
+     * @param bool $log log if forbidden
+     * @return bool
+     */
+    public
+    function isGrantedToReadUserActivity(
+        int $userIdToRead,
+        bool $log = true
+    ): bool {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                $loggedInUserId
+            );
+            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+
+            $userToReadRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($userIdToRead);
+
+            // Only managing advisor are allowed to see users activity but only if target user role is not higher than advisor
+            if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
+                && $userToReadRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
+                // or user wants to view his own activity
+                || $loggedInUserId === $userIdToRead) {
+                return true;
+            }
+        }
+
+        if ($log === true) {
+            $this->logger->notice(
+                "User $loggedInUserId tried to read activity of user $userIdToRead but isn't allowed."
+            );
+        }
+        return false;
+    }
+
 }
