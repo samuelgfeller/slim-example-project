@@ -24,7 +24,7 @@ final class UserCreateSubmitAction
     public function __construct(
         LoggerFactory $logger,
         protected Responder $responder,
-        protected UserCreator $userRegisterer,
+        protected UserCreator $userCreator,
         private readonly SessionInterface $session,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
@@ -50,7 +50,7 @@ final class UserCreateSubmitAction
 
             try {
                 // Throws exception if there is error and returns false if user already exists
-                $insertId = $this->userRegisterer->createUser($userValues, $captcha, $request->getQueryParams());
+                $insertId = $this->userCreator->createUser($userValues, $captcha, $request->getQueryParams());
                 // Say email has been sent even when user exists as it should be kept secret
                 $flash->add('success', 'Email has been sent.');
                 $flash->add(

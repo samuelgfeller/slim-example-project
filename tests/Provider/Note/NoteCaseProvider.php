@@ -286,7 +286,7 @@ class NoteCaseProvider
     {
         return [
             [
-                'message_too_short' => 'Me',
+                'message_too_short' => 'M',
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',

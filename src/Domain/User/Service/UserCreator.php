@@ -13,8 +13,8 @@ use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
-use App\Infrastructure\Authentication\UserRegistererRepository;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Infrastructure\User\UserCreatorRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserCreator
@@ -23,7 +23,7 @@ class UserCreator
         private UserValidator $userValidator,
         private SecurityEmailChecker $emailSecurityChecker,
         private UserAuthorizationChecker $userAuthorizationChecker,
-        private UserRegistererRepository $userRegistererRepository,
+        private UserCreatorRepository $userCreatorRepository,
         private UserAlreadyExistingHandler $userAlreadyExistingHandler,
         private VerificationTokenCreator $verificationTokenCreator,
         private RegistrationMailer $registrationMailer,
@@ -74,7 +74,7 @@ class UserCreator
         // Check if authenticated user is authorized to create user with the given data
         if ($this->userAuthorizationChecker->isGrantedToCreate($user)) {
             // Insert new user into database
-            $user->id = $this->userRegistererRepository->insertUser($user);
+            $user->id = $this->userCreatorRepository->insertUser($user);
             // Create and insert token
             $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
             // Send token to user. Mailer errors caught in action

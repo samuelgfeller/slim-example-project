@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Infrastructure\Authentication;
+namespace App\Infrastructure\User;
 
 
 use App\Domain\User\Data\UserData;
 use App\Infrastructure\Factory\QueryFactory;
 
-class UserRegistererRepository
+class UserCreatorRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

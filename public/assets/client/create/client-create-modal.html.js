@@ -29,7 +29,7 @@ export function displayClientCreateModal() {
             <input type="text" placeholder="Basel" id="location-input" name="location" minlength="2" 
             maxlength="100">
         </div>
-        <div class="form-input-group double-width-modal-form-input-group">
+        <div class="form-input-group double-width-form-input-group">
             <label for="create-message-textarea" class="form-label">Main note</label>
             <!-- Name has to be "message" as it's the name used in note validation -->
             <textarea rows="4" cols="50" name="message" id="create-message-textarea"

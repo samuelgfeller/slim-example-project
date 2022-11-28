@@ -182,7 +182,7 @@ class NoteUpdateActionTest extends TestCase
 
         // Insert note linked to client and user
         $noteData = $this->insertFixturesWithAttributes(
-            ['client_id' => $clientRow['id'], 'user_id' => $userId],
+            ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
             NoteFixture::class
         );
 
@@ -191,7 +191,7 @@ class NoteUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
-            ['message' => $invalidMessage, 'is_main' => 0]
+            ['message' => $invalidMessage]
         );
         $response = $this->app->handle($request);
 
