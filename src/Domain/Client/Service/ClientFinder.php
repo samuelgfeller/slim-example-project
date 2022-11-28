@@ -14,6 +14,8 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Service\NoteFinder;
+use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
@@ -31,6 +33,7 @@ class ClientFinder
         private readonly ClientAuthorizationGetter $clientAuthorizationGetter,
         private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -152,6 +155,7 @@ class ClientFinder
             } else {
                 $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
             }
+            $this->userActivityManager->addUserActivity(UserActivityAction::READ, 'client', $clientId);
             return $clientResultAggregate;
         }
         throw new ForbiddenException('Not allowed to read client.');

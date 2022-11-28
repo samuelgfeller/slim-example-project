@@ -8,6 +8,8 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteCreatorRepository;
 use Odan\Session\SessionInterface;
 
@@ -19,6 +21,7 @@ class NoteCreator
         private readonly NoteCreatorRepository $noteCreatorRepository,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
         private readonly SessionInterface $session,
+        private readonly UserActivityManager $userActivityManager,
         LoggerFactory $logger
     ) {
     }
@@ -38,7 +41,15 @@ class NoteCreator
             $this->noteValidator->validateNoteCreation($note);
 
             if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
-                return $this->noteCreatorRepository->insertNote($note->toArray());
+                $noteId = $this->noteCreatorRepository->insertNote($note->toArray());
+                if (!empty($noteId)) {
+                    $this->userActivityManager->addUserActivity(
+                        UserActivityAction::CREATED,
+                        'note',
+                        $noteId,
+                        $noteValues
+                    );
+                }
             }
         }
         throw new ForbiddenException('Not allowed to create note.');

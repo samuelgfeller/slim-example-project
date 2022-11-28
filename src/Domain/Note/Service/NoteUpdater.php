@@ -7,6 +7,8 @@ namespace App\Domain\Note\Service;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteUpdaterRepository;
 
 class NoteUpdater
@@ -17,6 +19,7 @@ class NoteUpdater
         private readonly NoteUpdaterRepository $noteUpdaterRepository,
         private readonly NoteFinder $noteFinder,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -52,7 +55,10 @@ class NoteUpdater
                 $updateData['hidden'] = $note->hidden;
             }
 
-            return $this->noteUpdaterRepository->updateNote($updateData, $noteId);
+            $updated = $this->noteUpdaterRepository->updateNote($updateData, $noteId);
+            if ($updated) {
+                $this->userActivityManager->addUserActivity(UserActivityAction::UPDATED, 'note', $noteId, $updateData);
+            }
         }
 
         throw new ForbiddenException('Not allowed to change note.');

@@ -4,7 +4,6 @@
 namespace App\Infrastructure\User;
 
 
-use App\Domain\User\Data\UserData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserCreatorRepository
@@ -16,12 +15,11 @@ class UserCreatorRepository
     /**
      * Insert user in database
      *
-     * @param UserData $user
+     * @param array $userData
      * @return int lastInsertId
      */
-    public function insertUser(UserData $user): int
+    public function insertUser(array $userData): int
     {
-        $userRows = $user->toArrayForDatabase();
-        return (int)$this->queryFactory->newInsert($userRows)->into('user')->execute()->lastInsertId();
+        return (int)$this->queryFactory->newInsert($userData)->into('user')->execute()->lastInsertId();
     }
 }

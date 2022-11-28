@@ -10,6 +10,7 @@ use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Data\UserResultData;
+use App\Domain\User\Enum\UserActivityAction;
 use App\Infrastructure\User\UserFinderRepository;
 
 class UserFinder
@@ -18,6 +19,7 @@ class UserFinder
         private readonly UserFinderRepository $userFinderRepository,
         private readonly UserAuthorizationGetter $userAuthorizationGetter,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -101,6 +103,7 @@ class UserFinder
                 $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
                 getUpdatePrivilegeForUserColumn('password_without_verification', $id);
 
+                $this->userActivityManager->addUserActivity(UserActivityAction::READ, 'user', $id);
                 return $userResultData;
             }
             // When user allowed to read, and it doesn't exist indicate that the resource was not found

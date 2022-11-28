@@ -28,7 +28,7 @@ class UserActivityManager
         UserActivityAction $userActivityAction,
         string $table,
         int $rowId,
-        array $data
+        array $data = null
     ): int {
         $userActivity = new UserActivityData();
         $userActivity->ip_address = $_SERVER['REMOTE_ADDR'];

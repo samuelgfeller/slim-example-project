@@ -8,7 +8,8 @@ use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
+use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Client\ClientUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
@@ -18,12 +19,11 @@ class ClientUpdater
 
     public function __construct(
         private readonly ClientUpdaterRepository $clientUpdaterRepository,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
         LoggerFactory $logger,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-
+        private readonly UserActivityManager $userActivityManager,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('post-service');
     }
@@ -78,9 +78,17 @@ class ClientUpdater
                     $responseData['age'] = (new \DateTime())->diff($birthdate)->y;
                 }
             }
-
+            $updated = $this->clientUpdaterRepository->updateClient($updateData, $clientId);
+            if ($updated) {
+                $this->userActivityManager->addUserActivity(
+                    UserActivityAction::UPDATED,
+                    'client',
+                    $clientId,
+                    $updateData
+                );
+            }
             return [
-                'updated' => $this->clientUpdaterRepository->updateClient($updateData, $clientId),
+                'updated' => $updated,
                 'data' => $responseData,
             ];
         }

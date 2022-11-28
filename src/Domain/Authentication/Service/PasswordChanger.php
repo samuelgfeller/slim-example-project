@@ -5,6 +5,8 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Odan\Session\SessionInterface;
@@ -20,7 +22,7 @@ class PasswordChanger
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
         private readonly VerificationTokenVerifier $verificationTokenVerifier,
-        private readonly PasswordVerifier $passwordVerifier,
+        private readonly UserActivityManager $userActivityManager,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('password-changer');
@@ -102,7 +104,15 @@ class PasswordChanger
     {
         if ($this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)) {
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-            return $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
+            $updated = $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
+            if ($updated) {
+                $this->userActivityManager->addUserActivity(
+                    UserActivityAction::UPDATED,
+                    'user',
+                    $userId,
+                    ['password_hash' => '******']
+                );
+            }
         }
 
         // User does not have needed rights to access area or function

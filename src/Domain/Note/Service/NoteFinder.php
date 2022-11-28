@@ -5,7 +5,6 @@ namespace App\Domain\Note\Service;
 
 
 use App\Domain\Authorization\Privilege;
-use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteWithUserData;
@@ -17,7 +16,6 @@ class NoteFinder
     public function __construct(
         private readonly NoteFinderRepository $noteFinderRepository,
         private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
         private readonly ClientFinderRepository $clientFinderRepository,
     ) {
     }

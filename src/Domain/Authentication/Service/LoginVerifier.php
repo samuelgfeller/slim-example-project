@@ -9,7 +9,9 @@ use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Security\RequestCreatorRepository;
 use App\Infrastructure\User\UserFinderRepository;
@@ -26,6 +28,7 @@ class LoginVerifier
         private readonly UserFinderRepository $userFinderRepository,
         private readonly RequestCreatorRepository $requestCreatorRepo,
         private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
+        private readonly UserActivityManager $userActivityManager,
         readonly Settings $settings
     ) {
         $this->mainContactEmail = $this->settings->get(
@@ -65,6 +68,8 @@ class LoginVerifier
                 if ($dbUser->status === UserStatus::Active) {
                     // Insert login success request
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
+                    $this->userActivityManager->addUserActivity(UserActivityAction::READ, 'user', $dbUser->id, ['login']
+                    );
                     // Return id (not sure if it's better to regenerate session here in service or in action)
                     return $dbUser->id;
                 }

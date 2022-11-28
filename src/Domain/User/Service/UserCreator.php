@@ -5,12 +5,12 @@ namespace App\Domain\User\Service;
 
 
 use App\Domain\Authentication\Service\RegistrationMailer;
-use App\Domain\Authentication\Service\UserAlreadyExistingHandler;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
@@ -20,14 +20,14 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class UserCreator
 {
     public function __construct(
-        private UserValidator $userValidator,
-        private SecurityEmailChecker $emailSecurityChecker,
-        private UserAuthorizationChecker $userAuthorizationChecker,
-        private UserCreatorRepository $userCreatorRepository,
-        private UserAlreadyExistingHandler $userAlreadyExistingHandler,
-        private VerificationTokenCreator $verificationTokenCreator,
-        private RegistrationMailer $registrationMailer,
+        private readonly UserValidator $userValidator,
+        private readonly SecurityEmailChecker $emailSecurityChecker,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserCreatorRepository $userCreatorRepository,
+        private readonly VerificationTokenCreator $verificationTokenCreator,
+        private readonly RegistrationMailer $registrationMailer,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -74,7 +74,10 @@ class UserCreator
         // Check if authenticated user is authorized to create user with the given data
         if ($this->userAuthorizationChecker->isGrantedToCreate($user)) {
             // Insert new user into database
-            $user->id = $this->userCreatorRepository->insertUser($user);
+            $userRow = $user->toArrayForDatabase();
+            $user->id = $this->userCreatorRepository->insertUser($userRow);
+            $this->userActivityManager->addUserActivity(UserActivityAction::CREATED, 'user', $user->id, $userRow);
+
             // Create and insert token
             $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
             // Send token to user. Mailer errors caught in action

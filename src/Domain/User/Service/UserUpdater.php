@@ -8,6 +8,7 @@ use App\Domain\Client\Exception\NotAllowedException;
 use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Enum\UserActivityAction;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
@@ -19,6 +20,7 @@ final class UserUpdater
         private readonly UserValidator $userValidator,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,
+        private readonly UserActivityManager $userActivityManager,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
@@ -57,7 +59,16 @@ final class UserUpdater
                     throw new NotAllowedException('Not allowed to change client column ' . $column);
                 }
             }
-            return $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
+            $updated = $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
+            if ($updated) {
+                $this->userActivityManager->addUserActivity(
+                    UserActivityAction::UPDATED,
+                    'user',
+                    $userIdToChange,
+                    $validUpdateData
+                );
+            }
+            return $updated;
         }
 
         // User does not have needed rights to access area or function
