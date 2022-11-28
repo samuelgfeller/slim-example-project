@@ -33,7 +33,7 @@ class RequestFinderRepository
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
                 'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
             ]
-        )->from('request_track')->where(
+        )->from('user_request')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
@@ -68,7 +68,7 @@ class RequestFinderRepository
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
                 'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
             ]
-        )->from('request_track')->where(
+        )->from('user_request')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
@@ -92,7 +92,7 @@ class RequestFinderRepository
     public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): RequestData
     {
         $query = $this->queryFactory->newQuery();
-        $query->select('*')->from('request_track')->where(
+        $query->select('*')->from('user_request')->where(
             [
                 'is_login IS NOT' => null,
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
@@ -112,7 +112,7 @@ class RequestFinderRepository
     public function findLatestEmailRequestFromUserOrIp(string $email, string $ip): RequestData
     {
         $query = $this->queryFactory->newQuery();
-        $query->select('*')->from('request_track')->where(
+        $query->select('*')->from('user_request')->where(
             [
                 'sent_email' => 1,
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
@@ -137,7 +137,7 @@ class RequestFinderRepository
                 'login_total' => $query->func()->count(1),
                 'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
             ]
-        )->from('request_track')->where(
+        )->from('user_request')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL 1 MONTH)')
             ]
@@ -158,7 +158,7 @@ class RequestFinderRepository
             [
                 'sent_email_amount' => $query->func()->sum('sent_email')
             ]
-        )->from('request_track')->where(
+        )->from('user_request')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)')
             ]

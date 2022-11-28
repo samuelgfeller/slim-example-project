@@ -5,10 +5,10 @@ namespace App\Test\Fixture;
 /**
  * This fixture inserts valid requests
  */
-class RequestTrackFixture
+class UserRequestFixture
 {
     // Table name
-    public string $table = 'request_track';
+    public string $table = 'user_request';
 
     // Database records in 2d array
     public array $records = [

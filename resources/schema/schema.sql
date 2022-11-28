@@ -40,7 +40,7 @@ CREATE TABLE `user_verification`
 ;
 
 -- Requests that should be limited like failed logins, password recovery, registration etc. for security
-CREATE TABLE `request_track`
+CREATE TABLE `user_request`
 (
     `id`         INT(11) UNSIGNED           NOT NULL AUTO_INCREMENT,
     `email`      VARCHAR(254)               NOT NULL COLLATE utf8mb4_unicode_ci, -- cannot use user_id as it's not known for failed logins
@@ -48,8 +48,8 @@ CREATE TABLE `request_track`
     `sent_email` TINYINT UNSIGNED           NOT NULL DEFAULT 0,
     `is_login`   ENUM ('success','failure') NULL     DEFAULT NULL COLLATE utf8mb4_unicode_ci,
     `created_at` DATETIME                   NULL     DEFAULT current_timestamp(),
-    INDEX `request_track_idx_created_at` (`created_at`),
-    INDEX `request_track_idx_is_login` (`is_login`),
+    INDEX `user_request_idx_created_at` (`created_at`),
+    INDEX `user_request_idx_is_login` (`is_login`),
     PRIMARY KEY (`id`)
 ) COLLATE = utf8mb4_unicode_ci
   ENGINE = InnoDB

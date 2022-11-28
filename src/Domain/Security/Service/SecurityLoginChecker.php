@@ -77,7 +77,7 @@ class SecurityLoginChecker
      */
     private function performLoginCheck(RequestStatsData $ipStats, RequestStatsData $userStats, string $email): void
     {
-        // Reverse order to compare fails longest delay first and then go down from there
+        // Reverse order to compare fails the longest delay first and then go down from there
         krsort($this->securitySettings['login_throttle']);
         // Fails on specific user or coming from specific IP
         foreach ($this->securitySettings['login_throttle'] as $requestLimit => $delay) {

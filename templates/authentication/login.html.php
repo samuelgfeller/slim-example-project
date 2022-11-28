@@ -61,9 +61,9 @@
         <!-- ===== Email ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
-            <label>Email</label>
+            <label for="email-input">Email</label>
             <input type="email" name="email"
-                   maxlength="254"
+                   maxlength="254" id="email-input"
                    required value="<?= $preloadValues['email'] ?? '' ?>">
             <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
         </div>
@@ -71,8 +71,8 @@
         <!-- ===== PASSWORD ===== -->
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
-            <label>Password</label>
-            <input type="password" id="loginPasswordInp" name="password" minlength="3" required>
+            <label for="password-input">Password</label>
+            <input type="password" id="password-input" name="password" minlength="3" required>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
             <a class="discrete-link content-below-input"
                href="<?= $route->urlFor('password-forgotten-page') ?>">Password forgotten</a>

@@ -4,21 +4,21 @@ namespace App\Test\Provider\Security;
 
 use App\Domain\Security\Data\RequestStatsData;
 
-class RequestTrackCaseProvider
+class UserRequestCaseProvider
 {
     // Placed on top to easily change.
-    // ! This should be the same than the config values $settings['security']['login_throttle']
+    // ! This should be the same as the config values $settings['security']['login_throttle']
     // ? Example values as I can't take the values from settings because I can't access container in provider
     // (Error: Typed property $container must not be accessed before initialization)
-    // Change provider return values too if different than 3
+    // Change provider return values too if different from 3
     private array $userLoginThrottle = [4 => 10, 9 => 120, 12 => 'captcha'];
 
     // Only request limit, not delay
-    // ! This should be the same than the config values $settings['security']['user_email_throttle']
-    // Change provider return values too if different than 3
+    // ! This should be the same as the config values $settings['security']['user_email_throttle']
+    // Change provider return values too if different from 3
     private array $userEmailRequestThrottle = [5 => 2, 10 => 4, 20 => 'captcha'];
 
-    // ! This should be the same than the config values $settings['security']['global_daily_email_threshold']
+    // ! This should be the same as the config values $settings['security']['global_daily_email_threshold']
     private int $globalDailyEmailThreshold = 300;
     // ! And  $settings['security']['global_monthly_email_threshold']
     private int $globalMonthlyEmailThreshold = 1000;

@@ -73,7 +73,7 @@ class SecurityEmailChecker
      */
     private function performEmailRequestsCheck(RequestStatsData $ipStats, RequestStatsData $userStats): void
     {
-        // Reverse order to compare fails longest delay first and then go down from there
+        // Reverse order to compare fails the longest delay first and then go down from there
         krsort($this->securitySettings['user_email_throttle']);
         // Fails on specific user or coming from specific IP
         foreach ($this->securitySettings['user_email_throttle'] as $requestLimit => $delay) {

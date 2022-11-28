@@ -109,6 +109,9 @@ class LoginVerifier
         // Password not correct or user not existing - insert login request for ip
         $this->requestCreatorRepo->insertLoginRequest($user->email, $_SERVER['REMOTE_ADDR'], false);
 
+        // Perform second login request check to display the correct error message to the user if throttle is in place
+        $this->loginSecurityChecker->performLoginSecurityCheck($user->email, $captcha);
+
         // Throw InvalidCred exception if user doesn't exist or wrong password
         // Vague exception on purpose for security
         throw new InvalidCredentialsException($user->email);

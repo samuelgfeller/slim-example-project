@@ -46,7 +46,7 @@ class SecurityException extends \RuntimeException
                 (is_numeric($this->remainingDelay) ? 'wait <span class="throttle-time-span">' . $this->remainingDelay . '</span>s'
                     : 'fill out the captcha') .
                 ' and try again.',
-            self::GLOBAL_LOGIN, self::GLOBAL_EMAIL => 'It\'s not your fault! The site is under a too high request load'.
+            self::GLOBAL_LOGIN, self::GLOBAL_EMAIL => 'The site is under a too high request load '.
                 'therefore a general throttling is in place. Please fill out the captcha and try again.',
             default => 'Please wait or fill out the captcha and repeat the action.',
         };

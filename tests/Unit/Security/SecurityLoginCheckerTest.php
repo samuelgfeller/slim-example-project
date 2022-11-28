@@ -5,7 +5,6 @@ namespace App\Test\Unit\Security;
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
-use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Infrastructure\Security\RequestFinderRepository;
 use App\Test\Traits\AppTestTrait;
@@ -38,7 +37,7 @@ class SecurityLoginCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\Security\RequestTrackCaseProvider::userLoginProvider()
+     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::userLoginProvider()
      *
      * @param int|string $delay
      * @param RequestStatsData $ipRequestStats

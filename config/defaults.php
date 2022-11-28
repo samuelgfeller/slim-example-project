@@ -35,14 +35,14 @@ $settings['error'] = [
 $settings['security'] = [
     /**
      * Protection against rapid fire and distributed brute force attacks
-     * If changed, RequestTrackFixture has to be updated accordingly
+     * If changed, UserRequestFixture has to be updated accordingly
      */
     // Seconds in the past relevant for global, user and ip request throttle
     // If 3600, the requests in the past hour will be evaluated and compared to the set thresholds below
     'timespan' => 3600,
 
     // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest
-    // ! When changed, update RequestTrackProvider and RequestTrackFixture as well
+    /** When changed, update @see UserRequestProvider and @see UserRequestFixture as well */
     // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
     // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
     // login request, the next check will be at the beginning of the 5th

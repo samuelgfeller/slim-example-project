@@ -23,7 +23,7 @@ class RequestPreponerRepository
     public function preponeLastRequest(int $seconds): bool
     {
         $query = $this->queryFactory->newQuery();
-        $query->update('request_track')->set(
+        $query->update('user_request')->set(
             [
                 'created_at' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)')
             ]

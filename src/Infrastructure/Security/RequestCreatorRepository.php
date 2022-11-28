@@ -23,7 +23,7 @@ class RequestCreatorRepository
     {
         $query = $this->queryFactory->newQuery();
 
-        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
+        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('user_request')->values(
             [
                 'email' => $email,
                 'ip_address' => $query->newExpr("INET_ATON(:ip)"),
@@ -44,7 +44,7 @@ class RequestCreatorRepository
     public function insertLoginRequest(string $email, string $ip, bool $success): string
     {
         $query = $this->queryFactory->newQuery();
-        $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('request_track')->values(
+        $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('user_request')->values(
             [
                 'email' => $email,
                 'ip_address' => $query->newExpr("INET_ATON(:ip)"),
