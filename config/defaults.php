@@ -31,32 +31,6 @@ $settings['error'] = [
     'log_error_details' => true,
 ];
 
-// Secret values are overwritten in env.php
-$settings['db'] = [
-    'host' => 'localhost',
-    'database' => 'slim_example_project',
-    'username' => 'root',
-    'password' => '',
-    'driver' => \Cake\Database\Driver\Mysql::class,
-    'encoding' => 'utf8mb4',
-    'collation' => 'utf8mb4_unicode_ci',
-    // Enable identifier quoting
-    'quoteIdentifiers' => true,
-    // Disable query logging
-    'log' => false,
-    // PDO options
-    'flags' => [
-        // Turn off persistent connections
-        PDO::ATTR_PERSISTENT => false,
-        // Enable exceptions
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        // Emulate prepared statements
-        PDO::ATTR_EMULATE_PREPARES => true,
-        // Set default fetch mode to array
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]
-];
-
 // Security
 $settings['security'] = [
     /**
@@ -81,6 +55,32 @@ $settings['security'] = [
     'global_daily_email_threshold' => 300, // optional
     // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
     'global_monthly_email_threshold' => 1000, // optional
+];
+
+// Secret values are overwritten in env.php
+$settings['db'] = [
+    'host' => 'localhost',
+    'database' => 'slim_example_project',
+    'username' => 'root',
+    'password' => '',
+    'driver' => \Cake\Database\Driver\Mysql::class,
+    'encoding' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    // Enable identifier quoting
+    'quoteIdentifiers' => true,
+    // Disable query logging
+    'log' => false,
+    // PDO options
+    'flags' => [
+        // Turn off persistent connections
+        PDO::ATTR_PERSISTENT => false,
+        // Enable exceptions
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        // Emulate prepared statements
+        PDO::ATTR_EMULATE_PREPARES => true,
+        // Set default fetch mode to array
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]
 ];
 
 // Template renderer settings

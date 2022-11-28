@@ -18,7 +18,7 @@ export function displayFlashMessage(typeName, message) {
     let container = document.getElementById("flash-container");
     // If it isn't "undefined" and it isn't "null", then it exists.
     if (typeof (container) === 'undefined' || container === null) {
-        document.querySelector('#wrapper').insertAdjacentHTML('afterbegin',
+        document.querySelector('body').insertAdjacentHTML('afterbegin',
             `<aside id="flash-container"></aside>`);
         container = document.querySelector('#flash-container');
     }
@@ -96,7 +96,7 @@ export function showFlashMessage(flash) {
     // Slide flash message in and then out after the given time
     slideInFlashMessage(flash).then(() => {
         setTimeout(() => {
-            // slideFlashOut.call(flash);
+            slideFlashOut.call(flash);
         }, flashMessageTimeBeforeSlideOut);
     });
 }
@@ -154,7 +154,6 @@ let isMobile;
  * @param e
  */
 function dragFlashOnMouseMove(e) {
-    console.log('drag flash');
     let currX, currY;
     if (e.clientX) {
         currX = e.clientX; // If they exist then use Mouse input
@@ -209,8 +208,6 @@ function moveFlashOutOnItsOwn() {
                 // Stop if left value is below -600 or above 600 as it's certain that the flash is outside of viewport
                 if ((distanceToMoveOut < -600) || distanceToMoveOut > 600) {
                     clearInterval(moveFlashOutInterval);
-                    console.log(distanceToMoveOut);
-                    console.log(moveFlashOutInterval);
                     // Directly remove flash from dom. Slide out animation not needed
                     this.remove();
                     isCurrentlyMovingOut = false;

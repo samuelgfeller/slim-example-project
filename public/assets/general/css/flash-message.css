@@ -215,6 +215,7 @@
 
     .flash h3 {
         display: none;
+        width: 100%;
     }
 
     .flash.success h3, .flash.error h3, .flash.info h3, .flash.warning h3 {

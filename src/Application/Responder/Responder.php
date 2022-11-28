@@ -160,7 +160,7 @@ final class Responder
         array $queryParams = [],
         array $preloadValues = null,
     ): ?ResponseInterface {
-        $this->phpRenderer->addAttribute('formErrorMessage', $validationException->getMessage());
+        // $this->phpRenderer->addAttribute('formErrorMessage', $validationException->getMessage());
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
 
         // Add the validation errors to phpRender attributes
@@ -220,6 +220,7 @@ final class Responder
         array $queryParams = [],
         array $preloadValues = null,
     ): ResponseInterface {
+        $this->phpRenderer->addAttribute('throttleDelay', $securityException->getRemainingDelay());
         $this->phpRenderer->addAttribute('formErrorMessage', $securityException->getPublicMessage());
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
         $this->phpRenderer->addAttribute('formError', true);

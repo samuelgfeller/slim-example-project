@@ -1,6 +1,6 @@
-import {displayFlashMessage, displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
+import {displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
 
-displayFlashMessage('success', 'This is a success flash message.');
+// displayFlashMessage('success', 'This is a success flash message.');
 // displayFlashMessage('info', 'This is an info flash message.');
 // displayFlashMessage('warning', 'This is a warning flash message.');
 // displayFlashMessage('error', 'This is an error flash message.');
@@ -14,8 +14,8 @@ window.addEventListener("load", function (event) {
     });
 
     /** Page height - mobile*/
-        // vh without scrollbar on mobile https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-        // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    // vh without scrollbar on mobile https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+    // First we get the viewport height, and we multiply it by 1% to get a value for a vh unit
     let vh = window.innerHeight * 0.01;
     // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', vh + 'px');

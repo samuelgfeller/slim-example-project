@@ -80,73 +80,6 @@
         /* I would like the client create main note column to be twice the width of the other grid columns but don't know
         how to implement it easily with the complex grid-template-columns setting */
     }
-
-    .modal-form-input-group{
-        margin-bottom: 20px;
-    }
-    .modal-form-input-group label:not(.form-radio-input) {
-        padding: 6px 15px;
-        display: inline-block; /*For label to take into account padding*/
-        letter-spacing: 0.02em;
-    }
-
-
-    /* Overwrite form.css style to match better modal */
-    .form-input {
-        background-color: rgba(255, 255, 255, 0.7);
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
-    }
-
-    .form-input:hover {
-        /* Keep the same box shadow on hover */
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
-        background-color: rgb(255, 255, 255);
-    }
-    .form-input:focus{
-        background-color: rgb(255, 255, 255);
-    }
-
-    .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled {
-        background-color: rgb(238 238 238);
-        color: grey;
-    }
-
-    .form-select {
-        border: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        font-size: 15px;
-        width: 100%;
-        display: block;
-        padding: 10px 15px;
-        border-radius: 60px;
-        color: black;
-        letter-spacing: 0.01em;
-    }
-
-    .modal-form input[type=submit], .modal-submit-btn {
-        /*padding: 6px 6px;*/
-        width: fit-content;
-        min-width: 160px;
-        max-width: 250px;
-        float: right;
-        color: black;
-        border-radius: 99px;
-        padding: 12px 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        background: rgba(255, 255, 255, 0.57);
-        letter-spacing: 0.05em;
-    }
-
-    .modal-form input[type=submit]:hover:enabled, .modal-submit-btn:hover:enabled {
-        /*background-color: #e1ecf9;*/
-        background-color: rgb(203 203 203);
-        color: inherit;
-        /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
-    }
-    .modal-form input[type=submit]:focus:enabled, .modal-submit-btn:focus:enabled {
-        background-color: rgb(183, 183, 183);
-    }
-
 }
 
 @media (min-width: 641px) {
@@ -172,7 +105,7 @@
     }
 
     .wide-modal-form {
-        grid-template-columns: repeat(2, 1fr);
+        /*grid-template-columns: repeat(2, 1fr);*/
     }
 }
 

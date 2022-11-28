@@ -63,7 +63,7 @@ a {
 
 h2, h1, h3{
     color: black;
-    text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);
+    /*text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);*/
     font-family: SF-Pro Display, Helvetica, sans-serif;
     font-weight: bold;
 }
@@ -178,14 +178,17 @@ a.currently-editable{
 
 .discrete-link{
     text-decoration: none;
-    font-style: italic;
+    /*font-style: italic;*/
     color: var(--layout-lighter-text-color);
-    font-size: 0.9em;
+    letter-spacing: 0.05px;
+    font-size: 14px;
     margin-top: 10px;
-    display: block;
+    display: inline-block;
 }
 .discrete-link:hover{
-    /*color: #777777;*/
+    color: #000000;
+    /*font-weight: 500;*/
+    text-decoration: none !important;
 }
 .secondary-text{
     color: var(--layout-lighter-text-color);
@@ -202,6 +205,8 @@ a.currently-editable{
 }
 #recaptcha > div:first-of-type{
     margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 50px;
 }
 
 .error-panel {
@@ -209,7 +214,7 @@ a.currently-editable{
     padding: 12px 20px;
     border-radius: 15px;
     background: rgb(255, 189, 177);
-    border-bottom: 4px solid #b25353;
+    border-bottom: 3px solid #b25353;
 }
 
 .default-select {
