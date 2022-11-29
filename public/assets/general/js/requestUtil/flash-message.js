@@ -74,16 +74,25 @@ export function showFlashMessage(flash) {
     flash.querySelector('.flash-fig').addEventListener('click', slideFlashOut);
 
     flash.addEventListener('touchmove', dragFlashOnMouseMove);
+    // As mouse up event is on document it is triggered on every mouse up calling moveFlashOutOnItsOwn
+    // The variable mouseDownOnFlash indicates that there was previously a mouse down on the flash message
+    let mouseDownOnFlash = false;
     flash.addEventListener('mousedown', (e) => {
         // Not if target is p as user may want to select the text
         if (e.target.tagName !== 'P') {
             flash.addEventListener('mousemove', dragFlashOnMouseMove);
+            mouseDownOnFlash = true;
         }
     });
     // Mouseup event on document as user may click on flash and then move cursor out, lift the button and come back on it
     document.addEventListener('mouseup', () => {
-        flash.removeEventListener('mousemove', dragFlashOnMouseMove);
-        moveFlashOutOnItsOwn.call(flash);
+        // Only call event handler if there was previously a mouse click on the flash message
+        if (mouseDownOnFlash) {
+            flash.removeEventListener('mousemove', dragFlashOnMouseMove);
+            moveFlashOutOnItsOwn.call(flash);
+            // Reset mouse down on flash bool
+            mouseDownOnFlash = false;
+        }
     });
 
     flash.addEventListener('touchstart', e => {
@@ -197,20 +206,20 @@ function moveFlashOutOnItsOwn() {
     const timeMs = ((endTime - startTime));
 
     let distanceToMoveOut = movedDistanceX;
-
+    console.log(isCurrentlyMovingOut)
     // Slide flash out automatically only if horizontal moved distance is greater than 30px
     if (Math.abs(movedDistanceX) > 20 && // And is mobile or swipe is to the right (and not left)
-        (isMobile || movedDistanceX > 0) && // And not already moving out
-        isCurrentlyMovingOut === false
+        (isMobile || movedDistanceX > 0) // And not already moving out
+        && isCurrentlyMovingOut === false
     ) {
         isCurrentlyMovingOut = true;
         let moveFlashOutInterval = setInterval(() => {
                 // Stop if left value is below -600 or above 600 as it's certain that the flash is outside of viewport
                 if ((distanceToMoveOut < -600) || distanceToMoveOut > 600) {
                     clearInterval(moveFlashOutInterval);
+                    isCurrentlyMovingOut = false;
                     // Directly remove flash from dom. Slide out animation not needed
                     this.remove();
-                    isCurrentlyMovingOut = false;
                 }
                 // If negative number, one has to be subtracted, otherwise one added
                 distanceToMoveOut < 0 ? distanceToMoveOut-- : distanceToMoveOut++;
