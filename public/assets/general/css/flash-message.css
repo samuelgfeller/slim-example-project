@@ -44,12 +44,14 @@
         0% {
             top: 10px;
             max-width: 33px;
+            max-height: 33px;
             opacity: 0;
         }
         /*Icon goes downwards from top and begins to open up after here (0.6s if total 2s) */
         100% {
             /*Keep small max width until the icon came from the top*/
             max-width: 33px;
+            max-height: 33px;
             opacity: 1;
         }
     }
@@ -76,6 +78,7 @@
         }
         100% {
             max-width: 33px;
+            max-height: 33px;
         }
     }
     @keyframes mobile-flash-slide-out-to-top {

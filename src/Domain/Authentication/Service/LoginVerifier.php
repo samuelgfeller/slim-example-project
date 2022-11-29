@@ -68,7 +68,12 @@ class LoginVerifier
                 if ($dbUser->status === UserStatus::Active) {
                     // Insert login success request
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
-                    $this->userActivityManager->addUserActivity(UserActivityAction::READ, 'user', $dbUser->id, ['login']
+                    $this->userActivityManager->addUserActivity(
+                        UserActivityAction::READ,
+                        'user',
+                        $dbUser->id,
+                        ['login'],
+                        $dbUser->id
                     );
                     // Return id (not sure if it's better to regenerate session here in service or in action)
                     return $dbUser->id;

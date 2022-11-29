@@ -18,16 +18,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
     <?php
-    // Define assets that should be included
-    $this->addAttribute('css', ['assets/general/css/form.css']);
-    // $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js']);
-
     // fetch() includes another template into the current template
     // Include template which contains HTML to include assets
     echo $this->fetch(
         'layout/assets.html.php', // Merge layout assets and from sub templates
         [
             'stylesheets' => [
+                'assets/general/css/flash-message.css',
                 'assets/general/css/form.css',
                 'assets/general/css/layout.css',
                 'assets/general/css/general.css',
@@ -45,9 +42,9 @@
 
 </head>
 <body>
+<?= $this->fetch('layout/flash-messages.html.php') ?>
 
 <h2>Slim Example Project</h2>
-
 
 <!-- If error flash array is not empty, error class is added to div -->
 <div class="page-form-container <?= isset($formError) ? ' invalid-form' : '' ?>" id="login-form-container">
@@ -84,6 +81,5 @@
     </form>
     <?= $this->fetch('layout/request-throttle.html.php') ?>
 </div>
-
 </body>
 </html>
