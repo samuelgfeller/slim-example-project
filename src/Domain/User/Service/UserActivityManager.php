@@ -23,19 +23,21 @@ class UserActivityManager
      * @param UserActivityAction $userActivityAction
      * @param string $table
      * @param int $rowId
-     * @param array $data
+     * @param array|null $data
+     * @param null|int $userId in case there is no session like on login
      * @return int
      */
     public function addUserActivity(
         UserActivityAction $userActivityAction,
         string $table,
         int $rowId,
-        array $data = null
+        array $data = null,
+        ?int $userId = null,
     ): int {
         $userActivity = new UserActivityData();
         $userActivity->ip_address = $_SERVER['REMOTE_ADDR'];
-        $userActivity->user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $userActivity->user_id = $this->session->get('user_id');
+        $userActivity->user_agent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+        $userActivity->user_id = $this->session->get('user_id') ?? $userId ?? 0;
         $userActivity->action = $userActivityAction;
         $userActivity->table = $table;
         $userActivity->row_id = $rowId;

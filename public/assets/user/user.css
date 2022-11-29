@@ -1,10 +1,10 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    #user-page-content-flexbox{
+    #user-page-content-flexbox {
         display: flex;
-        /*grid-template-columns: repeat(2, 1fr);*/
+        justify-content: space-between;
         flex-wrap: wrap;
-        gap: 60px;
+        column-gap: 60px;
     }
 
     /* --- User profile values --- */
@@ -17,7 +17,8 @@
     .user-field-value-container span {
         padding: 5px 0px;
     }
-    .user-field-value-container span[contenteditable="true"]{
+
+    .user-field-value-container span[contenteditable="true"] {
         padding: 5px;
     }
 
@@ -42,28 +43,74 @@
     }
 
     /* --- User activity report --- */
-    #user-activity-container{
-        /*border: 2px solid #2e3e50;*/
+    #user-activity-container {
+        border: 8px solid #e0e2e5;
+        border-radius: 30px;
         /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
-    }
-    #user-activity-header{
+        max-width: 100%;
+        /*width: fit-content;*/
+        height: auto;
+        /*Display horizontally in the middle of remaining space*/
+        margin-top: 40px;
+        margin-bottom: 40px;
 
     }
-    #user-activity-header h2{
-        margin: 0;
-        padding: 20px 30px;
-        border-radius: 30px;
+
+    #user-activity-container a {
+        background: #ebecef;
+        padding: 2px;
+        border-radius: 5px;
         color: #2e3e50;
-        background: rgba(46, 62, 80, 0.15);
     }
-    #user-activity-content{
-        padding: 30px;
+
+    #user-activity-container a:hover {
+        /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
+         of the :not() selectors */
+        text-decoration: none !important;
+        background: #d0d2de;
+    }
+
+    #user-activity-header h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 12px 30px 20px 30px;
+        color: #2e3e50;
+        background: #e0e2e5;
+        font-size: 1.7em;
+    }
+
+    #user-activity-content {
+        padding: 20px 30px;
+        height: auto;
+    }
+
+    #user-activity-content h3 {
+        font-size: 1.4em;
+        margin-top: 15px;
+        margin-bottom: 5px;
     }
 }
+
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
     #user-dropdown-container {
         width: auto;
         flex-wrap: nowrap;
+    }
+
+    #user-activity-container {
+        /*min-width: 500px;*/
+        margin-right: 40px;
+    }
+}
+
+@media (min-width: 1200px) {
+    /*Container queries would be exactly what I'd need here to add the following style only when container is not wrapped.
+    But it's not supported widely enough yet unfortunately https://caniuse.com/css-container-queries */
+    #user-activity-content {
+        /*Enable scroll*/
+        overflow-y: auto;
+        max-height: 70vh;
+        max-width: 50vw;
     }
 }

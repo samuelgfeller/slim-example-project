@@ -2,26 +2,31 @@
     font-family: Comfortaa;
     src: url(../fonts/Comfortaa.ttf);
 }
+
 @font-face {
     font-family: SF-Pro-Text;
     src: url(../fonts/SF-Pro/SF-Pro-Text-Regular.otf);
     font-weight: normal;
 }
+
 @font-face {
     font-family: SF-Pro-Text;
     src: url(../fonts/SF-Pro/SF-Pro-Text-Bold.otf);
     font-weight: bold;
 }
+
 @font-face {
     font-family: SF-Pro-Text;
     src: url(../fonts/SF-Pro/SF-Pro-Text-Medium.otf);
     font-weight: 500;
 }
+
 @font-face {
     font-family: SF-Pro-Text;
     src: url(../fonts/SF-Pro/SF-Pro-Text-Thin.otf);
     font-weight: 300;
 }
+
 @font-face {
     font-family: SF-Pro Display;
     src: url(../fonts/SF-Pro/SF-Pro-Display-Bold.otf);
@@ -39,6 +44,7 @@ body, html {
     padding: 0;
     overflow-x: hidden; /* Needed for flash messages sliding in */
 }
+
 #wrapper {
     /* --vh set in default.js
     https://css-tricks.com/the-trick-to-viewport-units-on-mobile
@@ -61,25 +67,29 @@ a {
     color: black;
 }
 
-h2, h1, h3{
+h2, h1, h3 {
     color: black;
     /*text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);*/
     font-family: SF-Pro Display, Helvetica, sans-serif;
     font-weight: bold;
 }
-h1{
+
+h1 {
     font-size: 3em;
 }
-h2{
+
+h2 {
     font-size: 2em;
 }
-h3{
+
+h3 {
     font-size: 1.5em;
 }
 
-a{
+a {
     text-decoration: none;
 }
+
 a:hover:not(a.currently-editable):not(#nav-container a) {
     /*text-shadow: 0 0 1px black;*/
     /*font-weight: bold;*/
@@ -87,19 +97,21 @@ a:hover:not(a.currently-editable):not(#nav-container a) {
     text-decoration: underline;
     /*font-weight: 500;*//*The issue with making text bold is that it expands the container the link is in*/
 }
-a.currently-editable{
+
+a.currently-editable {
     cursor: default;
 }
-[contenteditable="true"]{
+
+[contenteditable="true"] {
     cursor: text;
 }
 
-.no-style-a, .no-style-a:hover{
+.no-style-a, .no-style-a:hover {
     font-weight: normal;
     text-decoration: none;
 }
 
-.green-text{
+.green-text {
     color: limegreen;
 }
 
@@ -114,18 +126,18 @@ a.currently-editable{
     display: table;
 }
 
-.no-animation-on-page-load{
+.no-animation-on-page-load {
     transition: none !important;
 }
 
 /*Center title and plus button next to it*/
-.vertical-center{
+.vertical-center {
     display: flex;
     align-items: center;
 }
 
 /* Button */
-.btn{
+.btn {
     /*background-color: var(--layout-main-button-color);*/
     /*background-color: #e1ecf9; light blueish*/
 
@@ -144,7 +156,8 @@ a.currently-editable{
     text-decoration: none; /* For when <a> is used as button */
     display: inline-block; /* For when <a> is used as button */
 }
-.btn:hover{
+
+.btn:hover {
     /* Example: alert modal box cancel button or change password in profile */
     /*background: var(--layout-main-button-hover-color);*/
     /*background: #a2bad7;*/
@@ -153,57 +166,65 @@ a.currently-editable{
     background-color: rgb(203 203 203);
 
 }
-.btn:focus{
+
+.btn:focus {
     /*background: #7d97b5;*/
     background-color: rgb(183, 183, 183);
 }
-.btn:disabled{
+
+.btn:disabled {
     background: whitesmoke;
     color: grey;
     cursor: default;
 }
 
-.btn-red{
+.btn-red {
     /*background: #ff8d81;*/
     /*border: 1px solid #b2180e;*/
 }
+
 .btn-red:hover {
     background-color: #ff9b9b;
     /*border: 2px solid tomato;*/
     /*background: initial;*/
 }
+
 .btn-red:focus {
     background: #ec6969;
 }
 
-.discrete-link{
+.discrete-link {
     text-decoration: none;
     /*font-style: italic;*/
     color: var(--layout-lighter-text-color);
-    letter-spacing: 0.05px;
     font-size: 14px;
     margin-top: 10px;
     display: inline-block;
 }
-.discrete-link:hover{
+
+.discrete-link:hover {
     color: #000000;
     /*font-weight: 500;*/
     text-decoration: none !important;
 }
-.secondary-text{
+
+.secondary-text {
     color: var(--layout-lighter-text-color);
 }
+
 .layout-color-text {
     color: var(--layout-lighter-text-color);
 }
-.display-newlines{
+
+.display-newlines {
     white-space: pre-line;
 }
 
-#recaptcha{
+#recaptcha {
     display: none;
 }
-#recaptcha > div:first-of-type{
+
+#recaptcha > div:first-of-type {
     margin-top: 15px;
     margin-bottom: 15px;
     border-radius: 50px;
@@ -223,6 +244,7 @@ a.currently-editable{
     border: 1.5px solid #2e3e50;
     background: white;
 }
+
 .bigger-select {
     border: 3px solid #2e3e50;
     padding: 7px;
@@ -231,6 +253,7 @@ a.currently-editable{
     font-weight: bold;
     font-size: 16px;
 }
+
 .bigger-select-label {
     display: block;
     font-weight: bold;
@@ -240,7 +263,7 @@ a.currently-editable{
 }
 
 /*Icon container with divs inside that contain the img and value span*/
-.default-icon-container div{
+.default-icon-container div {
     display: flex;
     align-items: center;
     justify-items: flex-start;
@@ -248,24 +271,28 @@ a.currently-editable{
     margin-top: 5px; /* space here for when wrapping */
     height: 100%;
 }
-.default-icon-container div img, .default-icon  {
+
+.default-icon-container div img, .default-icon {
     height: 20px;
 }
 
 /*disable resize on auto-resize-textareas*/
-.auto-resize-textarea{
+.auto-resize-textarea {
     resize: none;
 }
 
 .relative {
     position: relative;
 }
-.main-color-text{
+
+.main-color-text {
     color: #2e3e50;
 }
-.main-color-discrete-text{
+
+.main-color-discrete-text {
     color: #576381;
 }
+
 .discrete-text {
     color: #5e5e5e;
 }
@@ -273,6 +300,22 @@ a.currently-editable{
 @media (min-width: 961px) {
     #wrapper {
         height: 100vh;
+    }
+    /*Scrollbar*/
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        border-radius: 20px;
+        background: #dcdcdc;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #a1a1a1;
+        border-radius: 20px;
     }
 }
 

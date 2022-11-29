@@ -7,7 +7,7 @@ import {
     toggleReadOnlyAndBtnAboveNote
 } from "./client-read-note-event-listener-setup.js?v=0.1";
 import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
-import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
+import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
 
 let noteCreationHideCheckMarkTimeout = [];
 
@@ -144,7 +144,7 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     circleLoader.querySelector('.checkmark').style.display = 'block';
 
     let noteId = responseData.noteId;
-    textarea.id = 'note' + noteId;
+    textarea.id = 'note-' + noteId;
     textarea.dataset.noteId = noteId;
     // If noteContainer is null it means that it's the main textarea which doesn't have a label
     if (noteContainer !== null) {
@@ -161,7 +161,7 @@ function populateNewNoteDomAttributes(textarea, responseData) {
         // Add note author
         label.querySelector('.note-right-side-label-span').innerHTML = responseData.userFullName;
         // Add container id
-        noteContainer.id = 'note' + noteId + '-container';
+        noteContainer.id = 'note-' + noteId + '-container';
         // Make delete button work
         addDeleteNoteBtnEventListener(label.querySelector(`.delete-note-btn`));
         addHideNoteBtnEventListener(label.querySelector(`.hide-note-btn`));

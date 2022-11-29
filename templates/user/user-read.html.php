@@ -30,34 +30,37 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
 ?>
 <data id="user-id" value="<?= $user->id ?>"></data>
 
-<div id="full-header-edit-icon-container">
-    <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
-        <?php
-        if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-            <!-- Img has to be before title because we are only able to style next sibling in css -->
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
-                 alt="Edit"
-                 id="edit-first-name-btn">
-            <?php
-        } ?>
-        <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-            !empty($user->firstName) ? html($user->firstName) : '&nbsp;' ?></h1>
-    </div>
-    <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
-        <?php
-        if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-            <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
-                 alt="Edit"
-                 id="edit-last-name-btn">
-            <?php
-        } ?>
-        <h1 data-name="surname" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-            !empty($user->surname) ? html($user->surname) : '&nbsp;' ?></h1>
-    </div>
-</div>
-
 <div id="user-page-content-flexbox">
     <div id="user-profile-content">
+        <div id="full-header-edit-icon-container">
+            <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
+                <?php
+                if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    <!-- Img has to be before title because we are only able to style next sibling in css -->
+                    <img src="assets/general/img/material-edit-icon.svg"
+                         class="contenteditable-edit-icon cursor-pointer"
+                         alt="Edit"
+                         id="edit-first-name-btn">
+                    <?php
+                } ?>
+                <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                    !empty($user->firstName) ? html($user->firstName) : '&nbsp;' ?></h1>
+            </div>
+            <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
+                <?php
+                if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    <img src="assets/general/img/material-edit-icon.svg"
+                         class="contenteditable-edit-icon cursor-pointer"
+                         alt="Edit"
+                         id="edit-last-name-btn">
+                    <?php
+                } ?>
+                <h1 data-name="surname" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                    !empty($user->surname) ? html($user->surname) : '&nbsp;' ?></h1>
+            </div>
+        </div>
+
+
         <div id="user-dropdown-container">
             <!-- Status select options-->
             <div>
@@ -125,32 +128,55 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
             <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?></p>
     </div>
-    <div id="user-activity-container">
-        <div id="user-activity-header">
-            <h2>User activity report</h2>
-        </div>
-        <div id="user-activity-content">
-            <?php
-            foreach ($userActivities as $userActivity) {
-                $activitySentence = $userActivity->datetime->format('d. F Y • H:i:s') . "<br>"
-                    . ucfirst($userActivity->action->value);
-
-                // To generate read url correctly, the route name HAS to be in the following format: "[table_name]-read-page"
-                // and the url argument has to be called "[table-name]-id"
-                try {
-                    $readUrl = $route->urlFor(
-                        "$userActivity->table-read-page",
-                        [$userActivity->table . '_id' => $userActivity->row_id]
-                    );
-                    $readLink = "<a href='$readUrl'>$userActivity->table $userActivity->row_id</a>";
-                } catch (RuntimeException|InvalidArgumentException $exception) {
-                    $readLink = $userActivity->table . ' ' . $userActivity->row_id;
+    <?php
+    if ($userActivities !== []) { ?>
+        <div id="user-activity-container">
+            <div id="user-activity-header">
+                <h2>User activity</h2>
+            </div>
+            <div id="user-activity-content">
+                <?php
+                $userActivities = array_reverse($userActivities);
+                $groupedActivitiesByDate = [];
+                foreach ($userActivities as $userActivity) {
+                    $groupedActivitiesByDate[$userActivity->datetime->format('d. F Y')][] = $userActivity;
                 }
+                foreach ($groupedActivitiesByDate as $dateString => $userActivities) {
+                    echo "<h3 class='collapsible-button'>$dateString</h3><section class='collapsible-content'>";
+                    foreach ($userActivities as $userActivity) {
+                        // Build entries string
+                        $activityString = $userActivity->datetime->format('H:i') . ": " .
+                            ucfirst($userActivity->action->value);
 
-                $activitySentence .= " $readLink";
-                echo $activitySentence . "<br><br>";
-            }
-            ?>
+                        // Generate read url. The route name HAS to be in the following format: "[table_name]-read-page"
+                        // and the url argument has to be called "[table-name]-id"
+                        try {
+                            $readUrl = $route->urlFor(
+                                "$userActivity->table-read-page",
+                                [$userActivity->table . '_id' => $userActivity->row_id]
+                            );
+                            $readLink = "<a href='$readUrl' target='_blank'>$userActivity->table $userActivity->row_id</a>";
+                        } catch (RuntimeException|InvalidArgumentException $exception) {
+                            $readLink = $userActivity->table . ' ' . $userActivity->row_id;
+                        }
+                        // Generate data string
+                        $dataString = '';
+                        foreach ($userActivity->data ?? [] as $column => $value) {
+                            if ($value !== null && !is_array($value)) {
+                                $column = is_numeric($column) ? '' : "<span style='font-weight: 500'>$column</span>:";
+                                $dataString .= "<br> $column $value";
+                            }
+                        }
+
+                        // Output everything
+                        echo "<p><b>$activityString $readLink</b> $dataString</p>";
+                    }
+                    // close p tag
+                    echo '</section>';
+                }
+                ?>
+            </div>
         </div>
-    </div>
+        <?php
+    } ?>
 </div>

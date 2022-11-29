@@ -155,7 +155,7 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
         let info = 'Once the note is deleted, it can only be recovered by a database administrator.';
         createAlertModal(title, '', () => {
             deleteNoteRequestToDb(noteId, document.getElementById(
-                'note' + noteId + '-container'
+                'note-' + noteId + '-container'
             ));
         });
     });

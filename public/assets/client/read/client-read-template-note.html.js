@@ -7,9 +7,9 @@ export function getNoteHtml(note) {
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
 
-    return `<div id="note${noteId}-container" 
+    return `<div id="note-${noteId}-container" 
               class="note-container ${noteHidden === 1 || noteHidden === '1' ? 'hidden-note' : ''}">
-                <label for="note${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
+                <label for="note-${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
                     <span class="note-left-side-label-span">${noteCreatedAt}</span>
                     ${/*Show active eye icon if hidden*/ noteHidden === 1 || noteHidden === '1' ? `<img 
                         class="btn-above-note hide-note-btn ${userHasPrivilegeTo(privilege, 'U') ? `` : `
@@ -27,7 +27,7 @@ export function getNoteHtml(note) {
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea ${userHasPrivilegeTo(privilege, 'R') ? `
                                 ` : `hidden-note-message` /* class to blur note text if not allowed to read*/}" 
-                              id="note${noteId}"
+                              id="note-${noteId}"
                               data-note-id="${noteId}"
                               minlength="4" maxlength="1000" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"

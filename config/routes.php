@@ -144,11 +144,9 @@ return function (App $app) {
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
         $group->get('', \App\Application\Actions\Note\Ajax\NoteListAction::class)->setName('note-list');
-
-        // $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteReadAction::class)->setName(
-        //     'note-read'
-        // );
-        // Note requests where user DOES need to be authenticated
+        $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\NoteReadAction::class)->setName(
+            'note-read-page'
+        );
         $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
             'note-submit-creation'
         );

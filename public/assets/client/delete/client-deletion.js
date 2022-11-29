@@ -28,7 +28,7 @@ function submitDeleteClient(clientId) {
             // Success
             else {
                 // Remove client card after successful deletion
-                document.getElementById('client' + clientId).remove();
+                document.getElementById('client-' + clientId).remove();
             }
 
             // After request is done, reset loader size no matter if success or failure
@@ -61,5 +61,5 @@ function showClientDeleteLoader(clientId) {
     // Hide delete icon
     document.querySelector('.card-del-icon[data-id="' + clientId + '"]').style.display = 'none';
     // Lower client box opacity to reinforce feeling that something is happening
-    document.getElementById('client' + clientId).style.opacity = '0.6';
+    document.getElementById('client-' + clientId).style.opacity = '0.6';
 }

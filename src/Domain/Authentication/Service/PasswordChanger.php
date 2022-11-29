@@ -113,6 +113,7 @@ class PasswordChanger
                     ['password_hash' => '******']
                 );
             }
+            return $updated;
         }
 
         // User does not have needed rights to access area or function

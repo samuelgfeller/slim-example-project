@@ -50,6 +50,7 @@ class NoteCreator
                         $noteValues
                     );
                 }
+                return $noteId;
             }
         }
         throw new ForbiddenException('Not allowed to create note.');

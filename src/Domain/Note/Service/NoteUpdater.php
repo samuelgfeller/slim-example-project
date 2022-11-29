@@ -59,6 +59,7 @@ class NoteUpdater
             if ($updated) {
                 $this->userActivityManager->addUserActivity(UserActivityAction::UPDATED, 'note', $noteId, $updateData);
             }
+            return $updated;
         }
 
         throw new ForbiddenException('Not allowed to change note.');

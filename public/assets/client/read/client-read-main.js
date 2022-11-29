@@ -1,11 +1,12 @@
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.1";
 import {addNewNoteTextarea} from "./client-read-create-note.js?v=0.1";
 import {loadClientNotes} from "./client-read-note-loading.js?v=0.1";
-import {initAutoResizingTextareas} from "../../general/js/default.js?v=0.1";
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.1";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.1";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.1";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
+import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
+import {scrollToAnchor} from "../../general/js/page/scroll-to-anchor.js?v=0.1";
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -18,6 +19,7 @@ loadClientNotes(() => {
 
     // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
     initAutoResizingTextareas();
+    scrollToAnchor();
 });
 
 loadAvailablePersonalInfoIconsDiv();

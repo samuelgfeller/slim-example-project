@@ -41,7 +41,12 @@ class NoteDeleter
         if ($this->noteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)) {
             $deleted = $this->noteDeleterRepository->deleteNote($noteId);
             if ($deleted) {
-                $this->userActivityManager->addUserActivity(UserActivityAction::DELETED, 'note', $noteId);
+                $this->userActivityManager->addUserActivity(
+                    UserActivityAction::DELETED,
+                    'note',
+                    $noteId,
+                    ['message' => $noteFromDb->message]
+                );
             }
             return $deleted;
         }

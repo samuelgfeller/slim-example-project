@@ -55,6 +55,23 @@ CREATE TABLE `user_request`
   ENGINE = InnoDB
 ;
 
+create table user_activity
+(
+    id         int unsigned auto_increment
+        primary key,
+    user_id    int unsigned                                   not null,
+    action     enum ('created', 'updated', 'deleted', 'read') not null,
+    `table`    varchar(100)                                   null,
+    row_id     int                                            null,
+    data       text                                           null,
+    datetime   datetime default current_timestamp()           not null,
+    ip_address varchar(50)                                    null,
+    user_agent varchar(255)                                   null,
+    constraint user_activity_user_null_fk
+        foreign key (user_id) references user (id)
+);
+
+
 CREATE TABLE `client_status`
 (
     `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
