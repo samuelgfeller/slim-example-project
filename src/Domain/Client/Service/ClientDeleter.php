@@ -9,6 +9,7 @@ use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Client\ClientDeleterRepository;
+use App\Infrastructure\Note\NoteDeleterRepository;
 
 class ClientDeleter
 {
@@ -17,6 +18,7 @@ class ClientDeleter
         private readonly ClientFinder $clientFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly UserActivityManager $userActivityManager,
+        private readonly NoteDeleterRepository $noteDeleterRepository,
     ) {
     }
 
@@ -33,6 +35,7 @@ class ClientDeleter
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
         if ($this->clientAuthorizationChecker->isGrantedToDelete($clientFromDb->userId)) {
+            $this->noteDeleterRepository->deleteNotesFromClient($clientId);
             $deleted = $this->clientDeleterRepository->deleteClient($clientId);
             if ($deleted) {
                 $this->userActivityManager->addUserActivity(UserActivityAction::DELETED, 'client', $clientId);

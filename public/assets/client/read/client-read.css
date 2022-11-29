@@ -305,7 +305,7 @@
         cursor: crosshair;
     }
 
-    #add-client-personal-info-div img#toggle-personal-info-icons {
+    #add-client-personal-info-div img#toggle-personal-info-icons, #add-client-personal-info-div img#delete-client-btn {
         cursor: pointer;
     }
 
@@ -370,7 +370,7 @@
     }
 
     #client-personal-info-flex-container {
-        min-width: 220px;
+        min-width: 255px;
     }
 }
 

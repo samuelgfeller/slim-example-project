@@ -4,8 +4,9 @@ let existingIcons = existingValuesContainer.querySelectorAll('.personal-info-ico
 // Add new personal info - div does not exist in dom if user has not rights
 let availablePersonalInfoIconsDiv = document.querySelector('#add-client-personal-info-div');
 // Icons that don't have a value for the client
-let availableIcons = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon');
-let availableIconsAmount = availableIcons?.length;
+let availableIconsIncludingTrashBin = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon');
+let availableIcons = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon:not(#delete-client-btn)');
+let availableIconsAmount = availableIconsIncludingTrashBin?.length;
 let initialNewIconWidth = availablePersonalInfoIconsDiv?.offsetWidth;
 
 export function addIconToAvailableDiv(availableIcon, containerToHide = null){
@@ -35,7 +36,7 @@ export function loadAvailablePersonalInfoIconsDiv() {
         let existingIconsFiltered = Array.from(existingIconsMap, ([value]) => (value));
 
         // Reset available icons amount in case this function is called after page load
-        availableIconsAmount = availableIcons.length;
+        availableIconsAmount = availableIconsIncludingTrashBin.length;
         for (let availableIcon of availableIcons) {
             // Hide icon from new list if it exists already
             if (existingIconsFiltered.includes(availableIcon.alt)) {
@@ -50,7 +51,7 @@ export function loadAvailablePersonalInfoIconsDiv() {
         } else {
             availablePersonalInfoIconsDiv.style.display = null;
             // Open the div with the correct width on hover
-            calculateAvailablePersonalInfoIconsDivMaxWidth();
+            openCloseAvailablePersonalIconsEventSetup();
         }
     }
 }
@@ -66,15 +67,17 @@ function addPersonalInfoIconToExisting() {
 }
 
 /**
+ * Open and close available personal info icons
+ *
  * Browsers unfortunately don't support transition on auto width or height elements so the new max width has to be
  * calculated in js to have an absolute value for the transition to work
  * https://github.com/w3c/csswg-drafts/issues/626
  * https://css-tricks.com/using-css-transitions-auto-dimensions/
  */
-function calculateAvailablePersonalInfoIconsDivMaxWidth() {
+function openCloseAvailablePersonalIconsEventSetup() {
     // Re calculate max with of available container
     initialNewIconWidth = availablePersonalInfoIconsDiv.offsetWidth;
-
+    // Calculate available personal info icons div max width
     availablePersonalInfoIconsDiv.addEventListener('mouseover', openAvailableIconsDiv);
     availablePersonalInfoIconsDiv.addEventListener('mouseout', closeAvailableIconsDiv);
 }

@@ -84,14 +84,14 @@ class ClientFinder
         $clientResultsWithAggregates = $this->clientFinderRepository->findClientsWithResultAggregate($whereArray);
         // Add assigned user and client status privilege to each clientResultAggregate
         foreach ($clientResultsWithAggregates as $client) {
-            $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
-                'user_id',
-                $client->userId
+            $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $client->userId,
+                'user_id'
             );
             //  Set client status privilege
-            $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
+            $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $client->userId,
                 'client_status_id',
-                $client->userId
             );
         }
         return $clientResultsWithAggregates;
@@ -118,10 +118,13 @@ class ClientFinder
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
-        if ($this->clientAuthorizationChecker->isGrantedToRead($clientResultAggregate->userId)) {
+        if ($clientResultAggregate->id &&
+            $this->clientAuthorizationChecker->isGrantedToRead($clientResultAggregate->userId)
+        ) {
             // Set client mutation privilege
-            $clientResultAggregate->mainDataPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientMainData(
-                $clientResultAggregate->userId
+            $clientResultAggregate->mainDataPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $clientResultAggregate->userId,
+                'main_data'
             );
             // Set main note privilege
             $clientResultAggregate->mainNoteData->privilege = $this->noteAuthorizationGetter->getMainNotePrivilege(
@@ -130,14 +133,14 @@ class ClientFinder
             );
 
             // Set assigned user privilege
-            $clientResultAggregate->assignedUserPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
+            $clientResultAggregate->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $clientResultAggregate->userId,
                 'user_id',
-                $clientResultAggregate->userId
             );
             //  Set client status privilege
-            $clientResultAggregate->clientStatusPrivilege = $this->clientAuthorizationGetter->getUpdatePrivilegeForClientColumn(
+            $clientResultAggregate->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $clientResultAggregate->userId,
                 'client_status_id',
-                $clientResultAggregate->userId
             );
             //  Set create note privilege
             $clientResultAggregate->noteCreatePrivilege = $this->noteAuthorizationChecker->isGrantedToCreate(
@@ -148,14 +151,17 @@ class ClientFinder
 
             if ($includingNotes === true) {
                 $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain(
-                    $clientId,
-                    $clientResultAggregate->userId
+                    $clientId
                 );
             } else {
                 $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
             }
             return $clientResultAggregate;
         }
+        // The reasons this exception is thrown when tried to access soft deleted clients:
+        // they are supposed to be deleted so only maybe a very high privileged role should have access, and it should
+        // clearly be marked as deleted in the GUI as well. Also, a non-authorized user that is trying to access a client
+        // should not be able to distinguish which clients exist and which not so for both cases the not allowed exception
         throw new ForbiddenException('Not allowed to read client.');
     }
 

@@ -16,34 +16,24 @@ class ClientAuthorizationGetter
     }
 
     /**
-     * Checks if authenticated user is allowed to update or read given column
-     *
-     * @param string $column
-     * @param int $clientOwnerId
-     * @return Privilege
-     */
-    public function getUpdatePrivilegeForClientColumn(string $column, int $clientOwnerId): Privilege
-    {
-        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
-         if ($this->clientAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)) {
-             return Privilege::UPDATE;
-         }
-         return Privilege::NONE;
-    }
-
-    /**
-     * Returns what authenticated user is allowed to do with client main data
+     * Checks if authenticated user is allowed to delete, update or read given column
      *
      * @param int $clientOwnerId
+     * @param string|null $column
      * @return Privilege
      */
-    public function getUpdatePrivilegeForClientMainData(int $clientOwnerId): Privilege
+    public function getMutationPrivilegeForClientColumn(int $clientOwnerId, string $column = null): Privilege
     {
-        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
-         if ($this->clientAuthorizationChecker->isGrantedToUpdate(['main_data' => 'value'], $clientOwnerId, false)) {
-             return Privilege::UPDATE;
-         }
-         return Privilege::NONE;
+        // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
+        if ($this->clientAuthorizationChecker->isGrantedToDelete($clientOwnerId, false)) {
+            return Privilege::DELETE;
+        }
+        // Value does not matter as keys are relevant
+        if ($column !== null &&
+            $this->clientAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
+        ) {
+            return Privilege::UPDATE;
+        }
+        return Privilege::NONE;
     }
-
 }

@@ -16,9 +16,18 @@ function preventLinkOpening(e) {
  * Make text value as editable and attach event listeners
  */
 export function makeClientFieldEditable() {
+    let personalInfoContainer = document.querySelector('#client-personal-info-flex-container');
     let fieldContainer = this.parentNode;
     let fieldElement = fieldContainer.dataset.fieldElement;
     let field = this.parentNode.querySelector(fieldElement);
+
+    // Show personal info container if hidden because it was previously empty
+    if (personalInfoContainer.style.opacity) {
+        personalInfoContainer.style.opacity = null;
+    }
+
+    // Lock min-width for the container to not shrink during editing
+    personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
 
     // Field element is usually the field element but there are special cases like when the parent is <a> and content span
     if (fieldElement === 'a-span') {
@@ -29,9 +38,7 @@ export function makeClientFieldEditable() {
         // Add event listener that prevents the link opening in direct function call as anonymous functions can't be removed
         a.addEventListener('click', preventLinkOpening);
     }
-    // Lock min-width for the container to not shrink during editing
-    let personalInfoContainer = document.querySelector('#client-personal-info-flex-container');
-    personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
+
     // Remove age addition from birthdate span to edit the date
     if (field.dataset.name === 'birthdate') {
         field.querySelector('#age-sub-span')?.remove();

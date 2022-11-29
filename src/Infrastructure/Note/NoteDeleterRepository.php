@@ -26,14 +26,14 @@ class NoteDeleterRepository
     }
 
     /**
-     * Delete post that are linked to user
+     * Delete notes that are linked to client
      *
-     * @param int $userId
+     * @param int $clientId
      * @return bool
      */
-    public function deleteNotesFromUser(int $userId): bool
+    public function deleteNotesFromClient(int $clientId): bool
     {
-        $query = $this->queryFactory->newDelete('post')->where(['user_id' => $userId]);
+        $query = $this->queryFactory->newDelete('note')->where(['client_id' => $clientId]);
         return $query->execute()->rowCount() > 0;
     }
 }

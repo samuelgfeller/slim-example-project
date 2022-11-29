@@ -111,7 +111,6 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 </div>
 
 <div id="client-activity-personal-info-container">
-
     <div id="client-activity-textarea-container" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
         <div class="vertical-center" id="activity-header">
             <h2>Aktivität</h2>
@@ -124,7 +123,9 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <!--  Notes are populated here via ajax  -->
     </div>
     <div id="client-personal-info-container">
-        <div id="client-personal-info-flex-container">
+        <div id="client-personal-info-flex-container" style="<?= $clientAggregate->birthdate || $clientAggregate->sex ||
+        $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
+            <!-- Toggle edit icons on mobile -->
             <img src="assets/general/img/material-edit-icon.svg"
                  class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                  id="toggle-personal-info-edit-icons">
@@ -240,6 +241,11 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
             <div id="add-client-personal-info-div">
                 <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
+                <!-- Delete trash icon stays always there -->
+                <?= $clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::DELETE) ?
+                    '<img src="assets/general/img/action/trash-icon.svg" class="personal-info-icon" id="delete-client-btn"
+                     alt="delete">' : '' ?>
+
                 <!-- alt has to be the same as the field name -->
                 <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
                 <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">

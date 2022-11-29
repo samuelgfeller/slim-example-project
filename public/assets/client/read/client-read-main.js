@@ -7,6 +7,10 @@ import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
 import {scrollToAnchor} from "../../general/js/page/scroll-to-anchor.js?v=0.1";
+import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
+import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
+
+const clientId = document.getElementById('client-id').value;
 
 loadClientNotes(() => {
     // Script loaded with defer so waiting for DOMContentLoaded is not needed
@@ -44,6 +48,15 @@ document.querySelector('#edit-phone-btn')?.addEventListener('click', makeClientF
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
+// Delete button
+document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
+    let title = 'Are you sure that you want to delete this client?';
+    createAlertModal(title, '', () => {
+        submitDelete(`clients/${clientId}`, true).then(() => {
+            location.href = `clients/list`;
+        });
+    });
+});
 
 // Toggle personal info edit icons
 let personalInfoEditIconsToggle = document.querySelector('#toggle-personal-info-edit-icons');
@@ -70,8 +83,6 @@ if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
  */
 function submitClientDropdownChange() {
     // "this" is the select element
-    let clientId = document.getElementById('client-id').value;
-
     // Submit field change with flash message indicating that change was successful
     submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, `clients/${clientId}`);
 }
