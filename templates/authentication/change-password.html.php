@@ -35,10 +35,10 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
             <label for="old-password-inp">Old password</label>
         </div>
         <!--   Password 1    -->
-        <div id="password1-inp-group" class="form-input-group <?= //If there is an error on a specific field, echo error class
+        <div id="password1-input-group" class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
-            <input type="password" name="password" id="password1-inp" minlength="3" required>
-            <label for="password1-inp">New password</label>
+            <input type="password" name="password" id="password1-input" minlength="3" required>
+            <label for="password1-input">New password</label>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
         </div>
 
@@ -46,8 +46,8 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         <div class="form-input-group <?= //If there is an error on a specific field, echo error class
         ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
         ($passwordsErr = get_field_error(($validation ?? []), 'passwords')) ? ' input-group-error' : '' ?>">
-            <input type="password" name="password2" id="password2-inp" minlength="3" required>
-            <label for="password2-inp">Repeat new password</label>
+            <input type="password" name="password2" id="password2-input" minlength="3" required>
+            <label for="password2-input">Repeat new password</label>
             <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
             <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
         </div>

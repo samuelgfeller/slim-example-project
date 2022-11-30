@@ -1,21 +1,28 @@
 // Init vars
 import {handleFail} from "../general/js/requestUtil/fail-handler.js?v=0.1";
 
-let password1Inp = document.getElementById('password1-inp')
-let password2Inp = document.getElementById('password2-inp');
+let password1Inp, password2Inp;
 
-// Check if passwords are the same
-password1Inp.addEventListener('keyup', checkIfPasswordsMatch);
-password2Inp.addEventListener('keyup', checkIfPasswordsMatch);
+export function addPasswordCheckEventListeners(){
+    password1Inp = document.getElementById('password1-input');
+    password2Inp = document.getElementById('password2-input');
 
-// Check if password is known to be breached
-password1Inp.addEventListener('keyup', checkIfPasswordIsBreached);
+    // Check if passwords are the same
+    password1Inp.addEventListener('keyup', checkIfPasswordsMatch);
+    password2Inp.addEventListener('keyup', checkIfPasswordsMatch);
+
+    // Check if password is known to be breached
+    password1Inp.addEventListener('keyup', checkIfPasswordIsBreached);
+}
 
 /**
  * Check if password 1 and password 2 are identical
  */
 function checkIfPasswordsMatch() {
     let submitBtn = document.querySelector('input[type="submit"]');
+    if(submitBtn === null){
+        submitBtn = document.querySelector('.submit-btn');
+    }
     // Set button to disabled if passwords don't match or if field is empty
     submitBtn.disabled = password1Inp.value !== password2Inp.value || password1Inp.value === '';
 }
@@ -78,7 +85,7 @@ function makeHIBPRequest(passwordHash) {
  */
 function showWarning() {
     if (null === document.getElementById('pwned-password-warning')) {
-        const password1InputGroup = document.getElementById('password1-inp-group');
+        const password1InputGroup = document.getElementById('password1-input-group');
         password1InputGroup.insertAdjacentHTML('beforeend', '<span class="input-warning content-below-input" ' +
             'id="pwned-password-warning">This password is known to have been leaked and is unsafe to use</span>');
     }

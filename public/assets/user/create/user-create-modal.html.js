@@ -2,6 +2,7 @@ import {createModal} from "../../general/js/modal/modal.js?v=0.1";
 import {requestDropdownOptions} from "../../general/js/modal/dropdown-request.js?v=0.1";
 import {getDropdownAsHtmlOptions} from "../../general/js/template/template-util.js?v=0.1";
 import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
+import {addPasswordCheckEventListeners} from "../../authentication/password-strength-checker.js?v=0.1";
 
 /**
  * Create and display modal box to create a new client
@@ -25,13 +26,13 @@ export function displayUserCreateModal() {
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required>
         </div>
-        <div class="form-input-group">
-            <label for="password1-inp">New password</label>
-            <input type="password" name="password" id="password1-inp" minlength="3" required class="form-input">
+        <div class="form-input-group" id="password1-input-group">
+            <label for="password1-input">New password</label>
+            <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-group">
-            <label for="password2-inp">Repeat new password</label>
-            <input type="password" name="password2" id="password2-inp" minlength="3" required class="form-input">
+            <label for="password2-input">Repeat new password</label>
+            <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-group">
             <label for="user-status-select">Status</label>
@@ -53,11 +54,12 @@ export function displayUserCreateModal() {
     document.querySelector('body').insertAdjacentHTML('afterbegin', '<div id="create-user-div"></div>');
     let container = document.getElementById('create-user-div');
     createModal(header, body, footer, container, true);
-
     // Load dropdown options into client create modal
     requestDropdownOptions('users').then((dropdownOptions) => {
         addUserDropdownOptionsToCreateModal(dropdownOptions);
     });
+    // Display password as unsafe if breached and disable submit btn if passwords don't match
+    addPasswordCheckEventListeners();
 }
 
 /**

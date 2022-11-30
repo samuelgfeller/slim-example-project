@@ -75,15 +75,27 @@ class UserAuthorizationGetter
      */
     public function getMutationPrivilegeForUserColumn(int $userId, ?string $column = null): Privilege
     {
-        // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->userAuthorizationChecker->isGrantedToDelete($userId, false)) {
+        // Usually I'd check first against the highest privilege and if allowed, directly return otherwise continue down the chain
+        // But some authorizations are limited per column, so when a column is provided, the update privilege is checked first
+
+        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
+        $updatePrivilege = Privilege::NONE;
+        if ($column !== null &&
+            $this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userId, false)
+        ) {
+            $updatePrivilege = Privilege::UPDATE;
+        }
+        // If update privilege is set or there was no column, check for delete
+        if (($updatePrivilege === Privilege::UPDATE || $column === null)
+            && $this->userAuthorizationChecker->isGrantedToDelete($userId, false)
+        ) {
             return Privilege::DELETE;
         }
-        // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
-        if ($column !== null &&
-            $this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userId, false)) {
-            return Privilege::UPDATE;
+        // If delete privilege wasn't returned and the authenticated is allowed to update, return update privilege
+        if ($updatePrivilege === Privilege::UPDATE) {
+            return $updatePrivilege;
         }
+
         if ($this->userAuthorizationChecker->isGrantedToRead($userId, false)) {
             return Privilege::READ;
         }
