@@ -40,9 +40,9 @@ class UserFinder
                 );
 
                 // Check if user is allowed to change status
-                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                    $userResultData->id,
                     'status',
-                    $userResultData->id
                 );
                 // General data privilege like first name, email and so on no needed for list
                 // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
@@ -80,9 +80,9 @@ class UserFinder
             if (!empty($userRow)) {
                 $userResultData = new UserResultData($userRow, true);
                 // Status privilege
-                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                    $id,
                     'status',
-                    $id
                 );
                 // Available user roles for dropdown and privilege
                 $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
@@ -93,13 +93,13 @@ class UserFinder
                 );
 
                 // General data privilege like first name, email and so on
-                $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+                $userResultData->generalPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                    $id,
                     'general_data',
-                    $id
                 );
                 // Password change without verification of old password
                 $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
-                getUpdatePrivilegeForUserColumn('password_without_verification', $id);
+                getMutationPrivilegeForUserColumn($id, 'password_without_verification');
 
                 return $userResultData;
             }

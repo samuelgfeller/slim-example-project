@@ -92,14 +92,14 @@ return function (App $app) {
             \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class
         )->setName('user-list-dropdown');
 
-        $group->post('', \App\Application\Actions\User\UserCreateSubmitAction::class)
+        $group->post('', \App\Application\Actions\User\Ajax\UserSubmitCreateAction::class)
             ->setName('user-create-submit');
         // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\UserReadPageAction::class)
             ->setName('user-read-page');
         $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)
             ->setName('user-update-submit');
-        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\UserDeleteAction::class)
+        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitDeleteAction::class)
             ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 

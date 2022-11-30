@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\User;
+namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class UserCreateSubmitAction
+final class UserSubmitCreateAction
 {
     protected LoggerInterface $logger;
 

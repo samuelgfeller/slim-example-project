@@ -48,11 +48,13 @@ final class UserReadPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $userId = (int)($args['user_id'] ?? $this->session->get('user_id'));
+        $authenticatedUserId = $this->session->get('user_id');
+        $userId = (int)($args['user_id'] ?? $authenticatedUserId);
         try {
             // Retrieve user infos
             return $this->responder->render($response, 'user/user-read.html.php', [
                 'user' => $this->userFinder->findUserReadResult($userId),
+                'isOwnProfile' => $userId === $authenticatedUserId,
                 'userStatuses' => UserStatus::cases(),
                 'userActivities' => $this->userActivityManager->findUserActivityReport($userId),
             ]);

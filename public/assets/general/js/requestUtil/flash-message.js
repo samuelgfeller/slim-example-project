@@ -206,7 +206,6 @@ function moveFlashOutOnItsOwn() {
     const timeMs = ((endTime - startTime));
 
     let distanceToMoveOut = movedDistanceX;
-    console.log(isCurrentlyMovingOut)
     // Slide flash out automatically only if horizontal moved distance is greater than 30px
     if (Math.abs(movedDistanceX) > 20 && // And is mobile or swipe is to the right (and not left)
         (isMobile || movedDistanceX > 0) // And not already moving out

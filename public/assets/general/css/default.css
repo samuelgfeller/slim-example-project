@@ -154,7 +154,7 @@ a.currently-editable {
     font-size: 100%;
     box-shadow: 2px 3px 11px #ccc;
     text-decoration: none; /* For when <a> is used as button */
-    display: inline-block; /* For when <a> is used as button */
+    display: inline-block; /* For when <a> is used as button and when icon is used */
 }
 
 .btn:hover {
@@ -191,6 +191,11 @@ a.currently-editable {
 
 .btn-red:focus {
     background: #ec6969;
+}
+.icon-btn {
+    width: 18px;
+    float: left;
+    margin-right: 0.5em;
 }
 
 .discrete-link {

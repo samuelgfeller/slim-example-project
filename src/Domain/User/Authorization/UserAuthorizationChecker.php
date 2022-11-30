@@ -247,9 +247,10 @@ class UserAuthorizationChecker
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-            // Only managing_advisor and higher are allowed to delete user and only if the user is advisor or lower
+            // Only managing_advisor and higher are allowed to delete user and only if the user is advisor or lower or their own
             if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
-                    && $userToDeleteRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
+                    && ($userToDeleteRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value]
+                    || $userIdToDelete === $loggedInUserId))
                 // or authenticated user is admin
                 || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value]) {
                 return true;

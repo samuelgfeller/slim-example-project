@@ -3,7 +3,12 @@ import {displayChangePasswordModal} from "../update/change-password-modal.html.j
 import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
 import {submitModalForm} from "../../general/js/modal/modal-submit-request.js?v=0.1";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
+import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
+import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
 
+const userId = document.getElementById('user-id').value;
+
+// Null safe operator as edit icon doesn't exist if not privileged
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeUserFieldEditable);
@@ -15,13 +20,31 @@ document.querySelector('select[name="status"]:not([disabled])')
 document.querySelector('select[name="user_role_id"]:not([disabled])')
     ?.addEventListener('change', submitUserDropdownChange);
 
+// Delete button with null safe as it doesn't exist when not privileged
+const userBtn = document.querySelector('#delete-user-btn');
+userBtn?.addEventListener('click', () => {
+    let title = 'Are you sure that you want to delete this user?';
+    let info = '';
+    if(userBtn.dataset.isOwnProfile === '1'){
+        title = 'Are you sure that you want to delete your profile?';
+        info = 'You will be logged out and not be able to log in again.'
+    }
+    createAlertModal(title, info, () => {
+        submitDelete(`users/${userId}`, true).then(() => {
+            if(userBtn.dataset.isOwnProfile === '1'){
+                location.href = `login`;
+            }else {
+                location.href = `users/list`;
+            }
+        });
+    });
+});
 
 /**
  * User select change event handler
  */
 function submitUserDropdownChange() {
     // "this" is the select element
-    let userId = document.getElementById('user-id').value;
     // Submit field change with flash message indicating that change was successful
     submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, `users/${userId}`);
 }

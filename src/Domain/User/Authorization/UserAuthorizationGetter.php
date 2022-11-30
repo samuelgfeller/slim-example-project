@@ -67,18 +67,27 @@ class UserAuthorizationGetter
 
     /**
      * Checks if authenticated user is allowed to update or read given column
+     * or delete user
      *
-     * @param string $column
-     * @param int $userIdToUpdate
+     * @param int $userId
+     * @param string|null $column
      * @return Privilege
      */
-    public function getUpdatePrivilegeForUserColumn(string $column, int $userIdToUpdate): Privilege
+    public function getMutationPrivilegeForUserColumn(int $userId, ?string $column = null): Privilege
     {
+        // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
+        if ($this->userAuthorizationChecker->isGrantedToDelete($userId, false)) {
+            return Privilege::DELETE;
+        }
         // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
-        if ($this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userIdToUpdate, false)) {
+        if ($column !== null &&
+            $this->userAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userId, false)) {
             return Privilege::UPDATE;
         }
-        return Privilege::READ;
+        if ($this->userAuthorizationChecker->isGrantedToRead($userId, false)) {
+            return Privilege::READ;
+        }
+        return Privilege::NONE;
     }
 
 }

@@ -59,7 +59,7 @@ final class LoginSubmitAction
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $request->getQueryParams()['redirect']);
                 }
-                return $this->responder->redirectToRouteName($response, 'hello');
+                return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (ValidationException $ve) {
                 return $this->responder->renderOnValidationError(
                     $response,

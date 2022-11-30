@@ -5,6 +5,7 @@
  * @var $user \App\Domain\User\Data\UserResultData user
  * @var $userStatuses \App\Domain\User\Enum\UserStatus[] all user statuses
  * @var $userActivities \App\Domain\User\Data\UserActivityData[] all user activities
+ * @var $isOwnProfile bool if authenticated user is viewing his own profile
  */
 
 use App\Domain\Authorization\Privilege;
@@ -119,14 +120,20 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                 <?php
             } ?>
         </div>
-        <!--<div>-->
-        <!--    <button type="button" class="btn btn-red" id="delete-account-btn">Delete account</button>-->
-        <!--</div>-->
 
         <h3 class="label-h3">Metadata</h3>
         <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
             <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
-            <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?></p>
+            <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?>
+        </p>
+        <?php
+        if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
+            <button class="btn" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
+                <img class="icon-btn" src="assets/general/img/action/trash-icon.svg" alt="">
+                Delete <?= $isOwnProfile ? 'profile' : 'user' ?>
+            </button>
+            <?php
+        } ?>
     </div>
     <?php
     if ($userActivities !== []) { ?>
