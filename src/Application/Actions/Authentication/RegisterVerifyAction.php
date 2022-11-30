@@ -12,7 +12,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpForbiddenException;
 
 final class RegisterVerifyAction
 {
@@ -20,9 +19,9 @@ final class RegisterVerifyAction
 
     public function __construct(
         LoggerFactory $logger,
-        protected Responder $responder,
-        private SessionInterface $session,
-        private RegisterTokenVerifier $registerTokenVerifier
+        private readonly Responder $responder,
+        private readonly SessionInterface $session,
+        private readonly RegisterTokenVerifier $registerTokenVerifier
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-verify-register');
     }
@@ -41,7 +40,7 @@ final class RegisterVerifyAction
 
                 $flash->add(
                     'success',
-                    'Congratulations! <br> Your account has been  verified! <br>' . '<b>You are now logged in.</b>'
+                    'Congratulations!<br>Your account has been  verified! <br>' . '<b>You are now logged in.</b>'
                 );
                 // Log user in
                 // Clear all session data and regenerate session ID
@@ -50,16 +49,15 @@ final class RegisterVerifyAction
                 $this->session->set('user_id', $userId);
 
                 if (isset($queryParams['redirect'])) {
-                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
-                $flash->add('error', '<b>Invalid or expired link. <br>Please register again.</b>');
+                $flash->add('error', 'Invalid or expired link. Please login in to receive a new mail.');
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
-                // Redirect to register page with redirect query param if set
-                return $this->responder->redirectToRouteName($response, 'register-page', [], $newQueryParam);
+                // Redirect to login page with redirect query param if set
+                return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
                 // Check if already logged in
                 if ($this->session->get('user_id') === null) {
@@ -72,7 +70,6 @@ final class RegisterVerifyAction
                 $flash->add('info', 'You are now logged in.');
 
                 if (isset($queryParams['redirect'])) {
-                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
                 return $this->responder->redirectToRouteName($response, 'home-page');

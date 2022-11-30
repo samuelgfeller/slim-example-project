@@ -51,19 +51,6 @@ class UserCreator
         // Verify that user (concerned email) or ip address doesn't spam email sending
         $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
 
-        // Check if user with same email already exists
-        // $existingUser = $this->userFinderRepository->findUserByEmail($user->email);
-        // if ($existingUser->email !== null) {
-        //     // If unverified and registered again, old user should be deleted and replaced with new input and verification
-        //     // Reason: User could have lost the email or someone else tried to register under someone else's name before
-        //     if ($existingUser->status === UserStatus::UNVERIFIED) {
-        //         // Only delete the user and token but not return as function should continue normally and insert new user
-        //         $this->userAlreadyExistingHandler->handleUnverifiedExistingUser($existingUser);
-        //     }else {
-        //         return $this->userAlreadyExistingHandler->handleVerifiedExistingUser($existingUser);
-        //     }
-        // }
-
         $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
 
         // Set default status and role

@@ -1,6 +1,6 @@
 // For how long should the flash message be visible in ms
-const flashMessageTimeBeforeSlideOut = 4000;
-// Time for the slide out animation (mobile slide out time is 1s)
+const flashMessageTimeBeforeSlideOut = 6000;
+// Time for the slide out CSS animation (mobile slide out time is 1s)
 const mobileSlideOutAnimationTime = 1000;
 // Delay in ms that flash message has to wait before being displayed on load
 let displayFlashMessageDelay = 0;
@@ -127,7 +127,7 @@ function slideInFlashMessage(flash) {
     // Add time before slide out to display delay
     if (window.matchMedia('(min-width: 641px)').matches) {
         // On desktop multiple flash messages can be shown so delay is shorter
-        displayFlashMessageDelay += 1000;
+        displayFlashMessageDelay += 2000;
     } else {
         // Only one notification at a time should be displayed for mobile so the full display time
         // plus each mobileSlideOutAnimationTime is taken

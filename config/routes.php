@@ -20,14 +20,6 @@ return function (App $app) {
     $app->get('/test', \App\Application\Actions\Hello\PhpDevTestAction::class)->setName('test');
 
 
-    // Authentication - pages and Ajax submit
-    // $app->get('/register', \App\Application\Actions\Authentication\Page\RegisterAction::class)->setName(
-    //     'register-page'
-    // );
-    // $app->post('/register', \App\Application\Actions\User\UserCreateSubmitAction::class)->setName(
-    //     'register-submit'
-    // );
-
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\LoginSubmitAction::class)->setName('login-submit');
     $app->get('/logout', \App\Application\Actions\Authentication\LogoutAction::class)->setName('logout')->add(
@@ -38,10 +30,6 @@ return function (App $app) {
     $app->get('/register-verification', \App\Application\Actions\Authentication\RegisterVerifyAction::class)->setName(
         'register-verification'
     );
-    $app->get(
-        '/register-check-email',
-        \App\Application\Actions\Authentication\Page\RegisterCheckEmailAction::class
-    )->setName('register-check-email-page');
 
     $app->get('/unlock-account', \App\Application\Actions\Authentication\AccountUnlockAction::class)->setName(
         'account-unlock-verification'

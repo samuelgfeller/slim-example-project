@@ -16,12 +16,6 @@ $this->addAttribute('css', ['assets/general/css/form.css']);
 $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'assets/auth/password-strength-checker.js']);
 ?>
 
-
-<script>
-
-</script>
-
-
 <h2>Register</h2>
 <div class="form-background">
     <div class="form-container<?= isset($formError) ? ' invalid-input' : '' ?>" id="register-form-container">

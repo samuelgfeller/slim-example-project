@@ -36,7 +36,7 @@ class UserUpdaterRepository
      */
     public function changeUserStatus(UserStatus $status, string $userId): bool
     {
-        $query = $this->queryFactory->newQuery()->update('user')->set(['status' => $status])->where(
+        $query = $this->queryFactory->newQuery()->update('user')->set(['status' => $status->value])->where(
             ['id' => $userId]
         );
         return $query->execute()->rowCount() > 0;

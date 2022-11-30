@@ -12,7 +12,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpForbiddenException;
 
 final class AccountUnlockAction
 {
@@ -20,9 +19,9 @@ final class AccountUnlockAction
 
     public function __construct(
         LoggerFactory $logger,
-        protected Responder $responder,
-        private SessionInterface $session,
-        private AccountUnlockTokenVerifier $accountUnlockTokenVerifier
+        private readonly Responder $responder,
+        private readonly SessionInterface $session,
+        private readonly AccountUnlockTokenVerifier $accountUnlockTokenVerifier
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-unlock-account');
     }
@@ -48,12 +47,11 @@ final class AccountUnlockAction
                 if (isset($queryParams['redirect'])) {
                     $flash->add(
                         'success',
-                        'Congratulations! <br> Your account has been unlocked! <br>' . '<b>You are now logged in.</b>'
+                        'Congratulations! <br>Your account has been unlocked! <br>' . '<b>You are now logged in.</b>'
                     );
-                    $flash->add('info', 'You have been redirected to the site you previously tried to access.');
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
-                return $this->responder->render($response, 'authentication/login-account-unlocked.html.php');
+                return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add(
                     'error',

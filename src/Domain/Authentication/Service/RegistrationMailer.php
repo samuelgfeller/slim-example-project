@@ -52,7 +52,7 @@ class RegistrationMailer
     public function sendRegisterVerificationToken(UserData $user, array $queryParams): void
     {
         // Send verification mail
-        $this->email->subject('One more step to register')
+        $this->email->subject('Account created')
         ->html(
             $this->mailer->getContentFromTemplate(
                 'authentication/email/register.email.php',

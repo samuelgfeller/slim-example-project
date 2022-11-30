@@ -106,7 +106,7 @@ class NoteValidator
             $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('message', 'Message is required but not given');
+            $validationResult->setError('message', 'Message is required.');
         }
     }
 

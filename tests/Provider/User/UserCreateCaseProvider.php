@@ -102,7 +102,7 @@ class UserCreateCaseProvider
                             ['field' => 'email', 'message' => 'Invalid email address'],
                             // Technically the better error would be that the status is not existing but an UserData object
                             // instance is created that puts "null" if status is not existing before being passed to the validator
-                            ['field' => 'status', 'message' => 'Status required but not given'],
+                            ['field' => 'status', 'message' => 'Status required'],
                             ['field' => 'user_role', 'message' => 'User role not existing'],
                             ['field' => 'password2', 'message' => 'Passwords do not match'],
                             ['field' => 'password', 'message' => 'Minimum length is 3'],
@@ -154,13 +154,13 @@ class UserCreateCaseProvider
                     'data' => [
                         'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
-                            ['field' => 'first_name', 'message' => 'Name required but not given'],
-                            ['field' => 'surname', 'message' => 'Name required but not given'],
-                            ['field' => 'email', 'message' => 'Email required but not given'],
-                            ['field' => 'status', 'message' => 'Status required but not given'],
-                            ['field' => 'user_role_id', 'message' => 'User role required but not given'],
-                            ['field' => 'password', 'message' => 'Password required but not given'],
-                            ['field' => 'password2', 'message' => 'Password required but not given'],
+                            ['field' => 'first_name', 'message' => 'Name required'],
+                            ['field' => 'surname', 'message' => 'Name required'],
+                            ['field' => 'email', 'message' => 'Email required'],
+                            ['field' => 'status', 'message' => 'Status required'],
+                            ['field' => 'user_role_id', 'message' => 'User role required'],
+                            ['field' => 'password', 'message' => 'Password required'],
+                            ['field' => 'password2', 'message' => 'Password required'],
                         ]
                     ]
                 ]

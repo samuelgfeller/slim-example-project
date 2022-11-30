@@ -42,7 +42,12 @@ class UserValidator
             $this->validator->validateName($userValues['surname'], 'surname', $validationResult, false);
         }
         if (array_key_exists('email', $userValues)) {
-            $this->validator->validateEmail($userValues['email'], $validationResult, false);
+            if ($this->validator->resourceExistenceCheckerRepository->rowExists(
+                ['email' => $userValues['email'], 'id !=' => $userId], 'user'
+            )) {
+                $validationResult->setError('email', 'User with this email already exists');
+            }
+            $this->validator->validateEmail($userValues['email'], $validationResult, true);
         }
         if (array_key_exists('status', $userValues)) {
             $this->validateUserStatus($userValues['status'], $validationResult, false);
@@ -182,7 +187,7 @@ class UserValidator
             $validationResult->setError(
                 $field,
                 str_replace('_', ' ', ucfirst($field))
-                . ' required but not given'
+                . ' required'
             );
         }
         $this->validator->throwOnError($validationResult);
@@ -207,8 +212,8 @@ class UserValidator
         if (null !== $password && '' !== $password) {
             $this->validator->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
-            // If password is required but not given
-            $validationResult->setError($fieldName, 'Password required but not given');
+            // If password is required
+            $validationResult->setError($fieldName, 'Password required');
         }
     }
 
@@ -231,7 +236,7 @@ class UserValidator
             $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required, false);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('user_role_id', 'User role is required but not given');
+            $validationResult->setError('user_role_id', 'User role is required');
         }
     }
 
@@ -258,7 +263,7 @@ class UserValidator
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('status', 'Status required but not given');
+            $validationResult->setError('status', 'Status required');
         }
     }
 

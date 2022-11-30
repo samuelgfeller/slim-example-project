@@ -13,33 +13,40 @@ import {
 } from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js?v=0.1";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
-// Display content placeholder
-displayUserCardLoadingPlaceholder();
+// Load users at page startup
+loadUserList();
 
-// Load clients at page startup
-fetchData('users', 'users/list').then(jsonResponse => {
-    removeUserCardContentPlaceholder();
-    addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses);
-    // Add event listeners to cards
-    let userCards = document.querySelectorAll('.user-card');
-    for (const card of userCards) {
-        // Click on user card
-        card.addEventListener('click', openUserReadPageOnCardClick);
-        // Middle mouse wheel click
-        card.addEventListener('auxclick', openUserReadPageOnCardClick);
-        card.addEventListener('mousedown', disableMouseWheelClickScrolling);
-        // Enter or space bar key press
-        card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
+/**
+ * Load user list into DOM
+ */
+export function loadUserList() {
+    // Display content placeholder
+    displayUserCardLoadingPlaceholder();
+    // Fetch users
+    fetchData('users', 'users/list').then(jsonResponse => {
+        removeUserCardContentPlaceholder();
+        addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses);
+        // Add event listeners to cards
+        let userCards = document.querySelectorAll('.user-card');
+        for (const card of userCards) {
+            // Click on user card
+            card.addEventListener('click', openUserReadPageOnCardClick);
+            // Middle mouse wheel click
+            card.addEventListener('auxclick', openUserReadPageOnCardClick);
+            card.addEventListener('mousedown', disableMouseWheelClickScrolling);
+            // Enter or space bar key press
+            card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
 
-        // Status select change
-        // "this" context only passed to event handling function if it's not an anonymous
-        card.querySelector('select[name="status"]:not([disabled])')
-            ?.addEventListener('change', submitUserCardDropdownChange);
-        // User role select change
-        card.querySelector('select[name="user_role_id"]:not([disabled])')
-            ?.addEventListener('change', submitUserCardDropdownChange);
-    }
-});
+            // Status select change
+            // "this" context only passed to event handling function if it's not an anonymous
+            card.querySelector('select[name="status"]:not([disabled])')
+                ?.addEventListener('change', submitUserCardDropdownChange);
+            // User role select change
+            card.querySelector('select[name="user_role_id"]:not([disabled])')
+                ?.addEventListener('change', submitUserCardDropdownChange);
+        }
+    });
+}
 
 /**
  * Click on user card event handler

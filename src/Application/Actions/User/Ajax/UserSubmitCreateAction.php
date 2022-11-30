@@ -51,13 +51,6 @@ final class UserSubmitCreateAction
             try {
                 // Throws exception if there is error and returns false if user already exists
                 $insertId = $this->userCreator->createUser($userValues, $captcha, $request->getQueryParams());
-                // Say email has been sent even when user exists as it should be kept secret
-                $flash->add('success', 'Email has been sent.');
-                $flash->add(
-                    'warning',
-                    'Your account is not active yet. <br>
-Please click on the link in the email to finnish the registration.'
-                );
 
                 if ($insertId !== false) {
                     $this->logger->info('User "' . $userValues['email'] . '" created');

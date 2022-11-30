@@ -121,7 +121,7 @@ class ClientValidator
             $this->validator->validateExistence((int)$value, 'user', $validationResult, $required);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('user_id', 'user_id is required but not given');
+            $validationResult->setError('user_id', 'user_id is required');
         }
     }
 
@@ -143,7 +143,7 @@ class ClientValidator
             $this->validator->validateExistence((int)$value, 'client_status', $validationResult, $required);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('client_status_id', 'client_status_id is required but not given');
+            $validationResult->setError('client_status_id', 'client_status_id is required');
         }
     }
 
@@ -162,7 +162,7 @@ class ClientValidator
             $this->validator->validateLengthMin($location, 'location', $validationResult, 2);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('location', 'Location is required but not given');
+            $validationResult->setError('location', 'Location is required');
         }
     }
 
@@ -181,7 +181,7 @@ class ClientValidator
             $this->validator->validateLengthMin($value, 'phone', $validationResult, 3);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('phone', 'Phone is required but not given');
+            $validationResult->setError('phone', 'Phone is required');
         }
     }
 
@@ -201,7 +201,7 @@ class ClientValidator
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('sex', 'Sex is required but not given');
+            $validationResult->setError('sex', 'Sex is required');
         }
     }
 
@@ -220,7 +220,7 @@ class ClientValidator
             $this->validator->validateLengthMin($value, 'client_message', $validationResult, 3);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('phone', 'Phone is required but not given');
+            $validationResult->setError('phone', 'Phone is required');
         }
     }
 

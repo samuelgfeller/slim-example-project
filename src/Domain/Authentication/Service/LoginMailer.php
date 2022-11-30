@@ -96,7 +96,4 @@ class LoginMailer
         // Send email
         $this->mailer->send($this->email);
     }
-
-
-
 }

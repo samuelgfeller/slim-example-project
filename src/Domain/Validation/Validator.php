@@ -110,7 +110,7 @@ final class Validator
             $this->validateLengthMin($name, $fieldName, $validationResult, 2);
         } // elseif only executed if previous "if" is falsy
         elseif (true === $required) {
-            $validationResult->setError($fieldName, 'Name required but not given');
+            $validationResult->setError($fieldName, 'Name required');
         }
     }
 
@@ -135,7 +135,7 @@ final class Validator
             }
         } elseif (true === $required && (null === $email || '' === $email)) {
             // If it is null or empty string and required
-            $validationResult->setError('email', 'Email required but not given');
+            $validationResult->setError('email', 'Email required');
         }
     }
 
@@ -182,7 +182,7 @@ final class Validator
             // }
         } elseif (true === $required) {
             // If it is null and required
-            $validationResult->setError('birthdate', 'Birthdate required but not given');
+            $validationResult->setError('birthdate', 'Birthdate required');
         }
     }
 
@@ -218,7 +218,7 @@ final class Validator
         } elseif (true === $required) {
             $validationResult->setError(
                 $table . '_id',
-                ucfirst(str_replace('_', ' ', $table)) . ' required but not given'
+                ucfirst(str_replace('_', ' ', $table)) . ' required'
             );
         }
     }
@@ -245,7 +245,7 @@ final class Validator
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError($fieldName, 'Field is required but not given');
+            $validationResult->setError($fieldName, 'Field is required');
         }
     }
 
