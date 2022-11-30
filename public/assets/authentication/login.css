@@ -38,6 +38,56 @@
         background: rgba(255, 255, 255, 0.5);
         border-bottom: 3px solid #951212;
     }
+
+    /* I don't know why but max-height 0 on password input group removes the top margin of this button */
+    /* Therefore the margin is removed on the login btn and added below the input */
+    #email-input {
+        margin-bottom: 10px;
+    }
+
+    #discrete-login-btn {
+        max-height: 0;
+        overflow: hidden;
+        display: inline-block;
+        margin-top: 0; /*Removed because added after input */
+        transition: max-height 0.3s ease-out;
+        /*Float left on the button is to prevent a jump when button display none is removed so that it doesn't affect
+        the position of the password input div*/
+        float: left;
+    }
+
+    #password-input-div {
+        transition: max-height 0.3s ease-out;
+        /*Float left and width 100% are because previous element has also float left and password input div would
+        not be below discrete login btn but on the right side of it. If both have float left its fine.*/
+        float: left;
+        width: 100%;
+    }
+
+    #password-input-div.input-div-collapsed {
+        max-height: 0;
+        overflow: hidden;
+        bottom: 0;
+    }
+
+    #password-input-div.input-div-expanded {
+        animation: openPasswordInputDiv 0.3s ease-out;
+    }
+
+
+    @keyframes openPasswordInputDiv {
+        0% {
+            max-height: 0;
+            overflow: hidden;
+        }
+        99% {
+            overflow: hidden;
+        }
+        /*Value here doesn't matter much */
+        100% {
+            max-height: 120px;
+        }
+    }
 }
 
 @media (min-width: 641px) {

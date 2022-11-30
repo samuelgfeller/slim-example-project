@@ -70,8 +70,8 @@ final class PasswordForgottenEmailSubmitAction
                     ['email' => $userData['email']]
                 );
             }
-            $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>. 
-            Please check your inbox and the spam folder if needed.');
+            $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>.<br>' .
+            'Please check your inbox and the spam folder if needed.');
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
 

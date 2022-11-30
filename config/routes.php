@@ -35,18 +35,10 @@ return function (App $app) {
         'account-unlock-verification'
     );
 
-    $app->get(
-        '/password-forgotten',
-        \App\Application\Actions\Authentication\Page\PasswordForgottenAction::class
-    )->setName(
-        'password-forgotten-page'
-    );
-    $app->post(
+    $app->post(// Url password-forgotten hardcoded in login-main.js
         '/password-forgotten',
         \App\Application\Actions\Authentication\PasswordForgottenEmailSubmitAction::class
-    )->setName(
-        'password-forgotten-email-submit'
-    );
+    )->setName('password-forgotten-email-submit');
     // Set new password page when forgotten
     $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetAction::class)->setName(
         'password-reset-page'

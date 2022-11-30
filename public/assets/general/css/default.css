@@ -198,7 +198,7 @@ a.currently-editable {
     margin-right: 0.5em;
 }
 
-.discrete-link {
+.discrete-text {
     text-decoration: none;
     /*font-style: italic;*/
     color: var(--layout-lighter-text-color);
@@ -207,7 +207,7 @@ a.currently-editable {
     display: inline-block;
 }
 
-.discrete-link:hover {
+.discrete-text:hover {
     color: #000000;
     /*font-weight: 500;*/
     text-decoration: none !important;

@@ -21,7 +21,7 @@
     // fetch() includes another template into the current template
     // Include template which contains HTML to include assets
     echo $this->fetch(
-        'layout/assets.html.php', // Merge layout assets and from sub templates
+        'layout/assets.html.php',
         [
             'stylesheets' => [
                 'assets/general/css/flash-message.css',
@@ -31,9 +31,8 @@
                 'assets/general/css/default.css',
                 'assets/authentication/login.css'
             ],
-            // 'scripts' => array_merge($layoutJs, $js ?? []),
             // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => ['assets/general/js/default.js'],
+            'jsModules' => ['assets/general/js/default.js', 'assets/authentication/login-main.js'],
         ]
     );
     ?>
@@ -63,20 +62,21 @@
                    maxlength="254" id="email-input"
                    required value="<?= $preloadValues['email'] ?? '' ?>">
             <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
+            <span class="discrete-text content-below-input cursor-pointer" id="discrete-login-btn">Login</span>
         </div>
 
         <!-- ===== PASSWORD ===== -->
-        <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+        <div id="password-input-div" class="form-input-group<?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
             <label for="password-input">Password</label>
             <input type="password" id="password-input" name="password" minlength="3" required>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
-            <a class="discrete-link content-below-input"
-               href="<?= $route->urlFor('password-forgotten-page') ?>">Password forgotten</a>
+            <span class="discrete-text content-below-input cursor-pointer"
+                  id="password-forgotten-btn">Password forgotten</span>
         </div>
+        <div class="clearfix"></div>
         <!-- reCaptcha -->
         <div class="g-recaptcha" id="recaptcha" data-sitekey="6LcctKoaAAAAAAcqzzgz-19OULxNxtwNPPS35DOU"></div>
-
         <input type="submit" class="submit-btn" id="submitBtnLogin" value="Login">
     </form>
     <?= $this->fetch('layout/request-throttle.html.php') ?>

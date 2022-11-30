@@ -86,7 +86,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
 
 
         </form>
-        <span class="discrete-link">
+        <span class="discrete-text">
         <br>Do you already have an account?
         <a href="<?= $route->urlFor('login-page', [], $queryParams ?? []) ?>">Login</a>
         </span>
