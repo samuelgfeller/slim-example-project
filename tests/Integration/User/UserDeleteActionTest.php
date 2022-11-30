@@ -4,8 +4,10 @@
 namespace App\Test\Integration\User;
 
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -28,6 +30,7 @@ class UserDeleteActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -67,9 +70,21 @@ class UserDeleteActionTest extends TestCase
         if ($expectedResult['db_changed'] === true) {
             // Assert that deleted_at is NOT null
             self::assertNotNull($this->getTableRowById('user', $userToDeleteRow['id'], ['deleted_at']));
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::DELETED->value,
+                    'table' => 'user',
+                    'row_id' => $userToDeleteRow['id'],
+                    'data' => null
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // If db is not expected to change deleted at has to be null
             $this->assertTableRow(['deleted_at' => null], 'user', $userToDeleteRow['id']);
+            $this->assertTableRowCount(0, 'user_activity');
         }
 
         // Assert response json content

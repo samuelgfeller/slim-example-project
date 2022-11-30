@@ -4,12 +4,14 @@
 namespace App\Test\Integration\Client;
 
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -37,6 +39,7 @@ class ClientUpdateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -98,9 +101,21 @@ class ClientUpdateActionTest extends TestCase
             // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
             // Check that data in request body was changed
             $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::UPDATED->value,
+                    'table' => 'client',
+                    'row_id' => $clientRow['id'],
+                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // If db is not expected to change, data should remain the same as when it was inserted from the fixture
             $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
+            $this->assertTableRowCount(0, 'user_activity');
         }
 
         $this->assertJsonData($expectedResult['json_response'], $response);

@@ -65,7 +65,7 @@ final class ClientCreateAction
                 'birthdate',
                 'email',
             ], // Html radio buttons and checkboxes are not sent over by the client if they are not set hence optional
-                ['sex'])) {
+                ['sex', 'client_message'])) {
                 try {
                     $insertId = $this->clientCreator->createClient($clientValues);
                 } catch (ValidationException $exception) {

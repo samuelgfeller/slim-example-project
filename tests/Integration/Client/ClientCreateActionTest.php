@@ -4,6 +4,7 @@
 namespace App\Test\Integration\Client;
 
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
@@ -67,6 +68,7 @@ class ClientCreateActionTest extends TestCase
             'phone' => '+41 77 222 22 22',
             'email' => 'new-user@email.com',
             'sex' => 'M',
+            'client_message' => null,
             'user_id' => $userLinkedToClientRow['id'],
             'client_status_id' => $clientStatusId,
             'message' => 'Test main note.',
@@ -99,10 +101,40 @@ class ClientCreateActionTest extends TestCase
             // self::assertSame($clientCreationValues, array_intersect_key($clientDbRow, $clientCreationValues));
 
             // Test that main note was created
-            $this->assertTableRowEquals($noteValues, 'note', $this->findLastInsertedTableRow('note')['id']);
+            $noteId = $this->findLastInsertedTableRow('note')['id'];
+            $this->assertTableRowEquals($noteValues, 'note', $noteId);
+
+            // Assert user activity
+            // Add client_message to creation values as they are inserted in user_activity
+            $this->assertTableRowEquals(
+                [
+                    'action' => UserActivityAction::CREATED->value,
+                    'table' => 'client',
+                    'row_id' => $clientDbRow['id'],
+                    'data' => json_encode($clientCreationValues, JSON_THROW_ON_ERROR)
+                ],
+                'user_activity',
+                (int)$this->findTableRowsByColumn('user_activity', 'table', 'client')[0]['id']
+            );
+            // Note user activity entry
+            // Add other note values
+            $noteValues['client_id'] = $clientDbRow['id'];
+            $noteValues['user_id'] = $userLinkedToClientRow['id'];
+            $noteValues['is_main'] = 1;
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::CREATED->value,
+                    'table' => 'note',
+                    'row_id' => $noteId,
+                    'data' => json_encode($noteValues, JSON_THROW_ON_ERROR)
+                ],
+                'user_activity',
+                (int)$this->findTableRowsByColumn('user_activity', 'table', 'note')[0]['id']
+            );
         } else {
             // 0 rows expected in client table
             $this->assertTableRowCount(0, 'client');
+            $this->assertTableRowCount(0, 'user_activity');
         }
 
         $this->assertJsonData($expectedResult['json_response'], $response);

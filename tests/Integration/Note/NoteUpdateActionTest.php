@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -123,6 +124,17 @@ class NoteUpdateActionTest extends TestCase
         // If db is expected to change assert the new message
         if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
             $this->assertTableRow(['message' => $newNoteMessage, 'hidden' => 1], 'note', $normalNoteRow['id']);
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::UPDATED->value,
+                    'table' => 'note',
+                    'row_id' => $normalNoteRow['id'],
+                    'data' => json_encode(['message' => $newNoteMessage, 'hidden' => 1], JSON_THROW_ON_ERROR),
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
             $this->assertTableRow(['message' => $normalNoteRow['message'], 'hidden' => 0],

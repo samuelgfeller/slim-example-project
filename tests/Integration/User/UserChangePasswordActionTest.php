@@ -2,10 +2,12 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -30,6 +32,7 @@ class UserChangePasswordActionTest extends TestCase
     use HttpTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use HttpJsonTestTrait;
     use AuthorizationTestTrait;
@@ -79,9 +82,22 @@ class UserChangePasswordActionTest extends TestCase
             );
             // Verify that hash matches the given password
             self::assertTrue(password_verify($newPassword, $dbPasswordHash));
+
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::UPDATED->value,
+                    'table' => 'user',
+                    'row_id' => $userToUpdateRow['id'],
+                    'data' => json_encode(['password_hash' => '******'], JSON_THROW_ON_ERROR)
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // Verify that hash matches the old password
             self::assertTrue(password_verify($oldPassword, $dbPasswordHash));
+            $this->assertTableRowCount(0, 'user_activity');
         }
 
         $this->assertJsonData($expectedResult['json_response'], $response);

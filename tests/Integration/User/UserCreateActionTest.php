@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
@@ -61,8 +62,8 @@ class UserCreateActionTest extends TestCase
             'email' => 'daniel.riccardo@notmclaren.com',
             'password' => '12345678',
             'password2' => '12345678',
+            'user_role_id' => $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value),
             'status' => 'unverified',
-            'user_role_id' => $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value)
         ];
 
         $request = $this->createJsonRequest(
@@ -81,9 +82,22 @@ class UserCreateActionTest extends TestCase
             // Request data can be taken to assert database as keys correspond to database columns after removing passwords
             unset($requestData['password'], $requestData['password2']);
             $this->assertTableRowEquals($requestData, 'user', $userDbRow['id']);
+
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::CREATED->value,
+                    'table' => 'user',
+                    'row_id' => $userDbRow['id'],
+                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // Only 1 rows (authenticated user) expected in user table
             $this->assertTableRowCount(1, 'user');
+            $this->assertTableRowCount(0, 'user_activity');
         }
         $this->assertJsonData($expectedResult['json_response'], $response);
     }

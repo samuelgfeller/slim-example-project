@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -102,6 +103,21 @@ class NoteCreateActionTest extends TestCase
         $noteDbRow = $this->findLastInsertedTableRow('note');
         // Assert the row column values
         $this->assertTableRow(['message' => $noteMessage, 'is_main' => 0], 'note', (int)$noteDbRow['id']);
+        // Assert that user activity is inserted
+        $this->assertTableRow(
+            [
+                'action' => UserActivityAction::CREATED->value,
+                'table' => 'note',
+                'row_id' => $noteDbRow['id'],
+                'data' => json_encode([
+                    'message' => $noteMessage,
+                    'client_id' => $clientRow['id'],
+                    'is_main' => 0
+                ], JSON_THROW_ON_ERROR),
+            ],
+            'user_activity',
+            (int)$this->findLastInsertedTableRow('user_activity')['id']
+        );
 
         // Assert response
         $expectedResponseJson = [

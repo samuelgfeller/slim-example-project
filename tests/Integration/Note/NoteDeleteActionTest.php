@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
+use App\Domain\User\Enum\UserActivityAction;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
@@ -120,9 +121,21 @@ class NoteDeleteActionTest extends TestCase
         if ($expectedResult['deletion']['normal_note']['db_changed'] === true) {
             // Test that deleted at is not null
             self::assertNotNull($noteDeletedAtValue);
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivityAction::CREATED->value,
+                    'table' => 'note',
+                    'row_id' => $normalNoteData['id'],
+                    'data' => null
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
             self::assertNull($noteDeletedAtValue);
+            $this->assertTableRowCount(0, 'user_activity');
         }
 
         $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
