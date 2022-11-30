@@ -122,11 +122,11 @@ return function (App $app) {
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
          https://stackoverflow.com/a/19287394/9013718 */
         $group->post('', \App\Application\Actions\Client\Ajax\ClientCreateAction::class)
-            ->setName('client-submit-create');
+            ->setName('client-create-submit');
         $group->put('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientUpdateAction::class)
-            ->setName('client-submit-update');
+            ->setName('client-update-submit');
         $group->delete('/{client_id:[0-9]+}', \App\Application\Actions\Client\Ajax\ClientDeleteAction::class)
-            ->setName('client-submit-delete');
+            ->setName('client-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
     // Page actions routes outside /posts as they are needed by Ajax after page load

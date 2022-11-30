@@ -82,7 +82,7 @@ class ClientUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-submit-update', ['client_id' => $clientRow['id']]),
+            $this->urlFor('client-update-submit', ['client_id' => $clientRow['id']]),
             $requestData
         );
 
@@ -128,7 +128,7 @@ class ClientUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-submit-update', ['client_id' => 1]),
+            $this->urlFor('client-update-submit', ['client_id' => 1]),
             $requestBody
         );
 
@@ -155,7 +155,7 @@ class ClientUpdateActionTest extends TestCase
     public function testClientSubmitUpdateAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-submit-update', ['client_id' => 1]);
+        $requestRoute = $this->urlFor('client-update-submit', ['client_id' => 1]);
         // Request body not important as it shouldn't be taken into account when unauthenticated
         $request = $this->createJsonRequest('PUT', $requestRoute, ['user_id' => 2]);
         // Create url where client should be redirected to after login
@@ -194,7 +194,7 @@ class ClientUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-submit-update', ['client_id' => 1]),
+            $this->urlFor('client-update-submit', ['client_id' => 1]),
             // Submitted first name is EXACTLY THE SAME as what's already in the database
             ['first_name' => $clientRow['first_name']]
         );
@@ -226,7 +226,7 @@ class ClientUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-submit-update', ['client_id' => 1]),
+            $this->urlFor('client-update-submit', ['client_id' => 1]),
             // The update request can format the request body pretty freely as long as it doesn't contain a non-allowed key
             // so to test only one invalid key is enough
             ['non_existing_key' => 'value']

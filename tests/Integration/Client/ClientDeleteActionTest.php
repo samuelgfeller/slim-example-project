@@ -40,7 +40,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
-     * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     * @param array $expectedResult HTTP status code, bool if db is supposed to change and json_response
      * @return void
      */
     public function testClientSubmitDeleteAction_authorization(
@@ -65,7 +65,7 @@ class ClientDeleteActionTest extends TestCase
         $request = $this->createJsonRequest(
             'DELETE',
             // Post delete route with id like /posts/1
-            $this->urlFor('client-submit-delete', ['client_id' => $clientRow['id']]),
+            $this->urlFor('client-delete-submit', ['client_id' => $clientRow['id']]),
         );
 
         $response = $this->app->handle($request);
@@ -78,7 +78,7 @@ class ClientDeleteActionTest extends TestCase
             // Assert that deleted_at is NOT null
             self::assertNotNull($this->getTableRowById('client', $clientRow['id'], ['deleted_at']));
         } else {
-            // If db is not expected to change, data should remain the same as when it was inserted from the fixture
+            // If db is not expected to change deleted at has to be null
             $this->assertTableRow(['deleted_at' => null], 'client', $clientRow['id']);
         }
 
@@ -98,7 +98,7 @@ class ClientDeleteActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('client-submit-delete', ['client_id' => 1]),
+            $this->urlFor('client-delete-submit', ['client_id' => 1]),
         );
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url

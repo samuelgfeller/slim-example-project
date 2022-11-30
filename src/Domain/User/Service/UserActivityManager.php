@@ -54,7 +54,7 @@ class UserActivityManager
      */
     public function deleteUserActivity(int $activityId): bool
     {
-        return $this->userActivityRepository->deleteUserActivity($activityId);
+        return $this->userActivityRepository->hardDeleteUserActivity($activityId);
     }
 
     /**

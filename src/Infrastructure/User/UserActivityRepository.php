@@ -61,9 +61,9 @@ class UserActivityRepository
      * @param int $activityId
      * @return bool if deletion was successful
      */
-    public function deleteUserActivity(int $activityId): bool
+    public function hardDeleteUserActivity(int $activityId): bool
     {
-        $query = $this->queryFactory->newDelete('user_activity')->where(['id' => $activityId]);
+        $query = $this->queryFactory->newQuery()->delete('user_activity')->where(['id' => $activityId]);
         return $query->execute()->rowCount() > 0;
     }
 }

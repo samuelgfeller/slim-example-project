@@ -77,7 +77,7 @@ class ClientCreateActionTest extends TestCase
         // Make request
         $request = $this->createJsonRequest(
             'POST',
-            $this->urlFor('client-submit-create'),
+            $this->urlFor('client-create-submit'),
             $clientCreationValues
         );
         $response = $this->app->handle($request);
@@ -135,7 +135,7 @@ class ClientCreateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'POST',
-            $this->urlFor('client-submit-create'),
+            $this->urlFor('client-create-submit'),
             $requestBody
         );
 
@@ -158,7 +158,7 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateAction_unauthenticated(): void
     {
         // Create request (no body needed as it shouldn't be interpreted anyway)
-        $request = $this->createJsonRequest('POST', $this->urlFor('client-submit-create'), []);
+        $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
         $redirectAfterLoginRouteName = 'client-list-page';
         $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
@@ -190,7 +190,7 @@ class ClientCreateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'POST',
-            $this->urlFor('client-submit-create'),
+            $this->urlFor('client-create-submit'),
             $requestBody
         );
 

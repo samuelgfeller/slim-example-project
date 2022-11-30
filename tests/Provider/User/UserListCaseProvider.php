@@ -44,12 +44,12 @@ class UserListCaseProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::READ,
                         'availableUserRoles' => [UserRole::MANAGING_ADVISOR,],
                     ],
                     'other' => [
-                        'statusPrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::UPDATE,
                         'availableUserRoles' => [UserRole::ADVISOR, UserRole::NEWCOMER],
                     ],
@@ -61,7 +61,7 @@ class UserListCaseProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::READ,
                         'availableUserRoles' => [UserRole::MANAGING_ADVISOR],
                     ],
@@ -78,7 +78,7 @@ class UserListCaseProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::UPDATE,
                         'availableUserRoles' => [
                             UserRole::ADMIN,
@@ -88,7 +88,7 @@ class UserListCaseProvider
                         ],
                     ],
                     'other' => [
-                        'statusPrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::UPDATE,
                         'availableUserRoles' => [
                             UserRole::ADMIN,
