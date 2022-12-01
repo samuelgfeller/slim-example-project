@@ -3,7 +3,6 @@
 namespace App\Domain\Validation;
 
 use App\Common\DateTimeImmutable;
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 use Psr\Log\LoggerInterface;

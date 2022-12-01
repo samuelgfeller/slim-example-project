@@ -4,13 +4,13 @@
 namespace App\Domain\User\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authentication\Service\RegistrationMailer;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserData;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
@@ -65,7 +65,7 @@ class UserCreator
             $user->id = $this->userCreatorRepository->insertUser($userRow);
             // remove passwords from user row before they are inserted into activity (also id because not relevant)
             unset($userRow['password'], $userRow['password2'], $userRow['password_hash'], $userRow['id']);
-            $this->userActivityManager->addUserActivity(UserActivityAction::CREATED, 'user', $user->id, $userRow);
+            $this->userActivityManager->addUserActivity(UserActivity::CREATED, 'user', $user->id, $userRow);
 
             // Create and insert token
             $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);

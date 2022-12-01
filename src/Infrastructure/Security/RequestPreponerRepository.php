@@ -9,7 +9,7 @@ use App\Infrastructure\Factory\QueryFactory;
 class RequestPreponerRepository
 {
 
-    public function __construct(private QueryFactory $queryFactory)
+    public function __construct(private readonly QueryFactory $queryFactory)
     {
     }
 

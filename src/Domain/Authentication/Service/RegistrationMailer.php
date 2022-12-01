@@ -30,7 +30,7 @@ class RegistrationMailer
      * @param Settings $settings
      */
     public function __construct(
-        private Mailer $mailer,
+        private readonly Mailer $mailer,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
@@ -55,75 +55,11 @@ class RegistrationMailer
         $this->email->subject('Account created')
         ->html(
             $this->mailer->getContentFromTemplate(
-                'authentication/email/register.email.php',
+                'authentication/email/new-account.email.php',
                 ['user' => $user, 'queryParams' => $queryParams]
             )
         )->to(new Address($user->email, $user->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }
-
-    /**
-     * Send email to the already existing user with status "suspended" when someone tries to register with the
-     * same email address.
-     *
-     * @param UserData $existingUser
-     * @throws TransportExceptionInterface
-     */
-    public function sendRegisterExistingActiveUser(UserData $existingUser): void
-    {
-        // Send info mail to email address holder
-        // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->email->subject('Did you try to create an account?')->html(
-            $this->mailer->getContentFromTemplate(
-                'authentication/email/register-on-existing-active.email.php',
-                ['user' => $existingUser]
-            )
-        )->to(new Address($existingUser->email, $existingUser->getFullName()));
-        // Send email
-        $this->mailer->send($this->email);
-    }
-
-    /**
-     * Send email to the already existing user with status "suspended" when someone tries to register with the
-     * same email address.
-     *
-     * @param UserData $existingUser
-     * @throws TransportExceptionInterface
-     */
-    public function sendRegisterExistingSuspendedUser(UserData $existingUser): void
-    {
-        // Send info mail to email address holder
-        // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->email->subject('Did you try to create an account?')->html(
-            $this->mailer->getContentFromTemplate(
-                'authentication/email/register-on-existing-suspended.email.php',
-                ['user' => $existingUser]
-            )
-        )->to(new Address($existingUser->email, $existingUser->getFullName()));
-        // Send email
-        $this->mailer->send($this->email);
-    }
-
-    /**
-     * Send email to the already existing user with status "locked" when someone tries to register with the
-     * same email address.
-     *
-     * @param UserData $existingUser
-     * @throws TransportExceptionInterface
-     */
-    public function sendRegisterExistingLockedUser(UserData $existingUser): void
-    {
-        // Send info mail to email address holder
-        // Subject asserted in testRegisterUser_alreadyExistingActiveUser
-        $this->email->subject('Did you try to create an account?')
-        ->html($this->mailer->getContentFromTemplate(
-            'authentication/email/register-on-existing-locked.email.php',
-            ['user' => $existingUser]
-        ))->to(new Address($existingUser->email, $existingUser->getFullName()));
-        // Send email
-        $this->mailer->send($this->email);
-    }
-
-
 }

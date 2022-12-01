@@ -2,10 +2,10 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\User\UserUpdaterRepository;
@@ -107,7 +107,7 @@ class PasswordChanger
             $updated = $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
             if ($updated) {
                 $this->userActivityManager->addUserActivity(
-                    UserActivityAction::UPDATED,
+                    UserActivity::UPDATED,
                     'user',
                     $userId,
                     ['password_hash' => '******']

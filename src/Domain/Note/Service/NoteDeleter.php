@@ -4,10 +4,10 @@
 namespace App\Domain\Note\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Exception\NotAllowedException;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteDeleterRepository;
 
@@ -42,7 +42,7 @@ class NoteDeleter
             $deleted = $this->noteDeleterRepository->deleteNote($noteId);
             if ($deleted) {
                 $this->userActivityManager->addUserActivity(
-                    UserActivityAction::DELETED,
+                    UserActivity::DELETED,
                     'note',
                     $noteId,
                     ['message' => $noteFromDb->message]

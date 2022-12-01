@@ -13,12 +13,12 @@ class UserFixture
 
     // Database records in 2d array
     public array $records = [
-        // First user should not be deleted
+        // First user MUST not be deleted
         [
             'id' => 1,
-            'first_name' => 'Admin',
-            'surname' => 'Example',
-            'email' => 'admin@example.com',
+            'first_name' => 'Example',
+            'surname' => 'User',
+            'email' => 'user@example.com',
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1uLrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
             'user_role_id' => 1,
@@ -32,8 +32,8 @@ class UserFixture
         [
             'id' => 2,
             'first_name' => 'Second',
-            'surname' => 'Admin',
-            'email' => 'admin2@example.com',
+            'surname' => 'User',
+            'email' => 'user2@example.com',
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1u2LrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',
             'user_role_id' => 1,

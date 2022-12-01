@@ -6,10 +6,11 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Infrastructure\User\UserUpdaterRepository;
 
 final class RegisterTokenVerifier
@@ -17,8 +18,9 @@ final class RegisterTokenVerifier
     public function __construct(
         private readonly UserFinder $userFinder,
         private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
-        private readonly VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
-        private readonly UserUpdaterRepository $userUpdaterRepository
+        private readonly VerificationTokenUpdater $verificationTokenUpdater,
+        private readonly UserUpdaterRepository $userUpdaterRepository,
+        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -52,8 +54,16 @@ final class RegisterTokenVerifier
                 );
                 if ($hasUpdated === true) {
                     // Mark token as being used only after making sure that user is active
-                    $this->verificationTokenUpdaterRepository->setVerificationEntryToUsed($verificationId);
-                    return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
+                    $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId);
+                    $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
+                    // Add user activity entry
+                    $this->userActivityManager->addUserActivity(
+                        UserActivity::UPDATED,
+                        'user',
+                        $userId,
+                        ['status' => UserStatus::Active->value]
+                    );
+                    return $userId;
                 }
                 // If somehow the record could not be updated
                 throw new \DomainException(

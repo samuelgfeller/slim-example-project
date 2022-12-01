@@ -7,7 +7,8 @@
  * @var null|array $validation validation errors and messages (may be undefined, MUST USE NULL COALESCING)
  * @var string $basePath
  */
-
+// Remove layout if there was a default
+$this->setLayout('');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,5 +82,6 @@
     </form>
     <?= $this->fetch('layout/request-throttle.html.php') ?>
 </div>
+
 </body>
 </html>

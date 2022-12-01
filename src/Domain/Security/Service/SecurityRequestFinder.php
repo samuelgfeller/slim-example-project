@@ -19,8 +19,8 @@ class SecurityRequestFinder
     private array $securitySettings;
 
     public function __construct(
-        private RequestFinderRepository $requestStatsFinderRepository,
-        private RequestFinderRepository $requestFinderRepository,
+        private readonly RequestFinderRepository $requestStatsFinderRepository,
+        private readonly RequestFinderRepository $requestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');

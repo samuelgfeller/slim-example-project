@@ -14,8 +14,8 @@ class NoteFinderRepository
 {
 
     public function __construct(
-        private QueryFactory $queryFactory,
-        private Hydrator $hydrator
+        private readonly QueryFactory $queryFactory,
+        private readonly Hydrator $hydrator
     ) {
     }
 

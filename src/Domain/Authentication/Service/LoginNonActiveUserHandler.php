@@ -16,8 +16,8 @@ class LoginNonActiveUserHandler
     private LoggerInterface $logger;
 
     public function __construct(
-        private VerificationTokenCreator $verificationTokenCreator,
-        private LoginMailer $loginMailer,
+        private readonly VerificationTokenCreator $verificationTokenCreator,
+        private readonly LoginMailer $loginMailer,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login-non-active-status');

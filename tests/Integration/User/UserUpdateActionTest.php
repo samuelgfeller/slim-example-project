@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\User;
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
@@ -75,7 +75,7 @@ class UserUpdateActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::UPDATED->value,
+                    'action' => UserActivity::UPDATED->value,
                     'table' => 'user',
                     'row_id' => $userToChangeRow['id'],
                     'data' => json_encode($requestData, JSON_THROW_ON_ERROR)

@@ -4,7 +4,7 @@
 namespace App\Test\Integration\User;
 
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
@@ -73,7 +73,7 @@ class UserDeleteActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::DELETED->value,
+                    'action' => UserActivity::DELETED->value,
                     'table' => 'user',
                     'row_id' => $userToDeleteRow['id'],
                     'data' => null

@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
@@ -124,7 +124,7 @@ class NoteDeleteActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::CREATED->value,
+                    'action' => UserActivity::CREATED->value,
                     'table' => 'note',
                     'row_id' => $normalNoteData['id'],
                     'data' => null

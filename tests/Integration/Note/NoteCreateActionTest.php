@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Note;
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -106,7 +106,7 @@ class NoteCreateActionTest extends TestCase
         // Assert that user activity is inserted
         $this->assertTableRow(
             [
-                'action' => UserActivityAction::CREATED->value,
+                'action' => UserActivity::CREATED->value,
                 'table' => 'note',
                 'row_id' => $noteDbRow['id'],
                 'data' => json_encode([

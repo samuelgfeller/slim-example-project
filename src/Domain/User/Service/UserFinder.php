@@ -4,8 +4,8 @@
 namespace App\Domain\User\Service;
 
 
-use App\Domain\Exceptions\DomainRecordNotFoundException;
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
+use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Data\UserData;

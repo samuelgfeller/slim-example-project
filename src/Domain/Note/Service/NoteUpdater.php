@@ -4,10 +4,10 @@
 namespace App\Domain\Note\Service;
 
 
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteUpdaterRepository;
 
@@ -57,7 +57,7 @@ class NoteUpdater
 
             $updated = $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             if ($updated) {
-                $this->userActivityManager->addUserActivity(UserActivityAction::UPDATED, 'note', $noteId, $updateData);
+                $this->userActivityManager->addUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
             }
             return $updated;
         }

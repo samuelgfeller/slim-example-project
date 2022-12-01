@@ -6,13 +6,12 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 
 final class VerificationTokenVerifier
 {
     public function __construct(
-        private VerificationTokenFinderRepository $verificationTokenFinderRepository,
-        private VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
+        private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
+        private readonly VerificationTokenUpdater $verificationTokenUpdater,
     ) {
     }
 
@@ -37,7 +36,7 @@ final class VerificationTokenVerifier
             true === password_verify($token, $verification->token)
         ) {
             // Mark token as being used
-            $this->verificationTokenUpdaterRepository->setVerificationEntryToUsed($verificationId);
+            $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId);
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\User;
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
@@ -86,7 +86,7 @@ class UserCreateActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::CREATED->value,
+                    'action' => UserActivity::CREATED->value,
                     'table' => 'user',
                     'row_id' => $userDbRow['id'],
                     'data' => json_encode($requestData, JSON_THROW_ON_ERROR),

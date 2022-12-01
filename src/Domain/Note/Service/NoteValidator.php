@@ -2,9 +2,9 @@
 
 namespace App\Domain\Note\Service;
 
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 use App\Infrastructure\Note\NoteValidatorRepository;

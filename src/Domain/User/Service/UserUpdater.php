@@ -4,11 +4,11 @@
 namespace App\Domain\User\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Exception\NotAllowedException;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
@@ -62,7 +62,7 @@ final class UserUpdater
             $updated = $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
             if ($updated) {
                 $this->userActivityManager->addUserActivity(
-                    UserActivityAction::UPDATED,
+                    UserActivity::UPDATED,
                     'user',
                     $userIdToChange,
                     $validUpdateData

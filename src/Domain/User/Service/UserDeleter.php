@@ -4,10 +4,10 @@
 namespace App\Domain\User\Service;
 
 
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Infrastructure\User\UserDeleterRepository;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -45,7 +45,7 @@ class UserDeleter
         if ($this->userAuthorizationChecker->isGrantedToDelete($userIdToDelete)) {
             $isDeleted = $this->userDeleterRepository->deleteUserById($userIdToDelete);
             if ($isDeleted) {
-                $this->userActivityManager->addUserActivity(UserActivityAction::DELETED, 'user', $userIdToDelete);
+                $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);
             }
             return $isDeleted;
         }

@@ -4,17 +4,16 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Authorization\ClientAuthorizationGetter;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Client\Data\ClientResultDataCollection;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Service\NoteFinder;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
@@ -32,7 +31,6 @@ class ClientFinder
         private readonly ClientAuthorizationGetter $clientAuthorizationGetter,
         private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 

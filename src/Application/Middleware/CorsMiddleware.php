@@ -4,7 +4,6 @@
 namespace App\Application\Middleware;
 
 use App\Application\Exceptions\CorsMiddlewareException;
-use Exception;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,17 +18,11 @@ use Throwable;
 final class CorsMiddleware implements MiddlewareInterface
 {
     /**
-     * @var ResponseFactoryInterface
-     */
-    private ResponseFactoryInterface $responseFactory;
-
-    /**
      * @param ResponseFactoryInterface $responseFactory The response factory
      */
     public function __construct(
-        ResponseFactoryInterface $responseFactory
+        private readonly ResponseFactoryInterface $responseFactory
     ) {
-        $this->responseFactory = $responseFactory;
     }
 
     /**

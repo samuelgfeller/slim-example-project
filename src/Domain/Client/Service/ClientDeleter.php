@@ -4,9 +4,9 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
-use App\Domain\Exceptions\ForbiddenException;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Client\ClientDeleterRepository;
 use App\Infrastructure\Note\NoteDeleterRepository;
@@ -38,7 +38,7 @@ class ClientDeleter
             $this->noteDeleterRepository->deleteNotesFromClient($clientId);
             $deleted = $this->clientDeleterRepository->deleteClient($clientId);
             if ($deleted) {
-                $this->userActivityManager->addUserActivity(UserActivityAction::DELETED, 'client', $clientId);
+                $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'client', $clientId);
             }
             return $deleted;
         }

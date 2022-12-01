@@ -2,8 +2,8 @@
 
 namespace App\Application\Responder;
 
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,13 +17,6 @@ use function http_build_query;
  */
 final class Responder
 {
-
-    private RouteParserInterface $routeParser;
-
-    private ResponseFactoryInterface $responseFactory;
-
-    private PhpRenderer $phpRenderer;
-
     /**
      * The constructor.
      *
@@ -32,13 +25,10 @@ final class Responder
      * @param PhpRenderer $phpRenderer slimphp/PHP-View renderer
      */
     public function __construct(
-        RouteParserInterface $routeParser,
-        ResponseFactoryInterface $responseFactory,
-        PhpRenderer $phpRenderer
+        private readonly RouteParserInterface $routeParser,
+        private readonly ResponseFactoryInterface $responseFactory,
+        private readonly PhpRenderer $phpRenderer
     ) {
-        $this->routeParser = $routeParser;
-        $this->responseFactory = $responseFactory;
-        $this->phpRenderer = $phpRenderer;
     }
 
     /**

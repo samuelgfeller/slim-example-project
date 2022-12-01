@@ -4,10 +4,10 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use App\Domain\Exceptions\UnauthorizedException;
 use Odan\Session\SessionInterface;
 
 class ClientFilterFinder

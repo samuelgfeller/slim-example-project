@@ -9,7 +9,7 @@ class NoteCreatorRepository
 
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory
     )
     {
     }

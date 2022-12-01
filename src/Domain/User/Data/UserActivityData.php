@@ -2,13 +2,13 @@
 
 namespace App\Domain\User\Data;
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 
 class UserActivityData
 {
     public ?int $id;
     public ?int $user_id;
-    public ?UserActivityAction $action;
+    public ?UserActivity $action;
     public ?string $table;
     public ?int $row_id;
     public ?array $data;
@@ -24,7 +24,7 @@ class UserActivityData
         $this->id = $userActivityValues['id'] ?? null;
         $this->user_id = $userActivityValues['user_id'] ?? null;
         $this->action = $userActivityValues['action'] ?? null ?
-            UserActivityAction::tryFrom($userActivityValues['action']) : null;
+            UserActivity::tryFrom($userActivityValues['action']) : null;
         $this->table = $userActivityValues['table'] ?? null;
         $this->row_id = $userActivityValues['row_id'] ?? null;
         $this->data = $userActivityValues['data'] ?? null ?

@@ -15,9 +15,9 @@ class SecurityEmailChecker
     private ?string $email;
 
     public function __construct(
-        private SecurityCaptchaVerifier $captchaVerifier,
-        private SecurityRequestFinder $requestFinder,
-        private RequestFinderRepository $requestFinderRepository,
+        private readonly SecurityCaptchaVerifier $captchaVerifier,
+        private readonly SecurityRequestFinder $requestFinder,
+        private readonly RequestFinderRepository $requestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');

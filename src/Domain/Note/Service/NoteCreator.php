@@ -4,11 +4,11 @@
 namespace App\Domain\Note\Service;
 
 
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteCreatorRepository;
 use Odan\Session\SessionInterface;
@@ -44,7 +44,7 @@ class NoteCreator
                 $noteId = $this->noteCreatorRepository->insertNote($note->toArray());
                 if (!empty($noteId)) {
                     $this->userActivityManager->addUserActivity(
-                        UserActivityAction::CREATED,
+                        UserActivity::CREATED,
                         'note',
                         $noteId,
                         $noteValues

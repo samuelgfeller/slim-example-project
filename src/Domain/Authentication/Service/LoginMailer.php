@@ -23,7 +23,7 @@ class LoginMailer
      * @param Settings $settings
      */
     public function __construct(
-        private Mailer $mailer,
+        private readonly Mailer $mailer,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];

@@ -2,13 +2,13 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Domain\Exceptions\DomainRecordNotFoundException;
-use App\Domain\Exceptions\ValidationException;
+use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Mailer;
+use App\Domain\Validation\ValidationException;
 use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -24,15 +24,19 @@ class PasswordRecoveryEmailSender
      * LoginMailer constructor.
      *
      * @param Mailer $mailer email sender and helper
+     * @param UserValidator $userValidator
+     * @param UserFinderRepository $userFinderRepository
+     * @param VerificationTokenCreator $verificationTokenCreator
      * @param Settings $settings
+     * @param SecurityEmailChecker $securityEmailChecker
      */
     public function __construct(
-        private Mailer $mailer,
-        private UserValidator $userValidator,
-        private UserFinderRepository $userFinderRepository,
-        private VerificationTokenCreator $verificationTokenCreator,
+        private readonly Mailer $mailer,
+        private readonly UserValidator $userValidator,
+        private readonly UserFinderRepository $userFinderRepository,
+        private readonly VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
-        private SecurityEmailChecker $securityEmailChecker,
+        private readonly SecurityEmailChecker $securityEmailChecker,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object
@@ -71,6 +75,7 @@ class PasswordRecoveryEmailSender
                 )->to(new Address($dbUser->email, $dbUser->getFullName()));
             // Send email
             $this->mailer->send($this->email);
+            // User activity entry is done when user verification token is created
             return;
         }
 

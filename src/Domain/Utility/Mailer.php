@@ -24,9 +24,9 @@ class Mailer
      * @param RequestCreatorRepository $requestCreatorRepository
      */
     public function __construct(
-        private MailerInterface $mailer,
-        private PhpRenderer $phpRenderer,
-        private RequestCreatorRepository $requestCreatorRepository
+        private readonly MailerInterface $mailer,
+        private readonly PhpRenderer $phpRenderer,
+        private readonly RequestCreatorRepository $requestCreatorRepository
     ) {
     }
 

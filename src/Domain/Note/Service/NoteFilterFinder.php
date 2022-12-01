@@ -4,7 +4,7 @@
 namespace App\Domain\Note\Service;
 
 
-use App\Domain\Exceptions\UnauthorizedException;
+use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Note\Data\NoteWithUserData;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use Odan\Session\SessionInterface;
@@ -12,8 +12,8 @@ use Odan\Session\SessionInterface;
 class NoteFilterFinder
 {
     public function __construct(
-        private NoteFinder $noteFinder,
-        private SessionInterface $session,
+        private readonly NoteFinder $noteFinder,
+        private readonly SessionInterface $session,
     ) {
     }
 

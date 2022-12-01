@@ -3,8 +3,8 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Service\ClientDeleter;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -17,10 +17,6 @@ use Psr\Log\LoggerInterface;
  */
 final class ClientDeleteAction
 {
-    /**
-     * @var Responder
-     */
-    private Responder $responder;
     protected LoggerInterface $logger;
 
 
@@ -33,13 +29,12 @@ final class ClientDeleteAction
      * @param LoggerFactory $logger
      */
     public function __construct(
-        Responder $responder,
+        private readonly Responder $responder,
         private readonly ClientDeleter $clientDeleter,
         private readonly SessionInterface $session,
         LoggerFactory $logger
 
     ) {
-        $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('client-delete');
     }
 

@@ -4,7 +4,7 @@
 namespace App\Test\Integration\Client;
 
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Traits\AppTestTrait;
@@ -83,7 +83,7 @@ class ClientDeleteActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::DELETED->value,
+                    'action' => UserActivity::DELETED->value,
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
                     'data' => null

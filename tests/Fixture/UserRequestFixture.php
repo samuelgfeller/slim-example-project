@@ -12,8 +12,6 @@ class UserRequestFixture
 
     // Database records in 2d array
     public array $records = [
-        // 2 old admin requests (1 with email), 1 old user request (with email) +
-        // 2 recent admin requests (1 with email), 1 recent user request (with email)
         [
             'id' => 1,
             'email' => 'admin@example.com',

@@ -19,11 +19,6 @@ $this->addAttribute('css', [
     'assets/user/list/user-list.css',
     // post.css has to come last to overwrite other styles
 ]);
-$this->addAttribute(
-    'js',
-    [
-    ]
-);
 // Js files that import things from other js files
 $this->addAttribute(
     'jsModules',

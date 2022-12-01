@@ -4,7 +4,7 @@
 namespace App\Test\Integration\Client;
 
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -104,7 +104,7 @@ class ClientUpdateActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::UPDATED->value,
+                    'action' => UserActivity::UPDATED->value,
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
                     'data' => json_encode($requestData, JSON_THROW_ON_ERROR),

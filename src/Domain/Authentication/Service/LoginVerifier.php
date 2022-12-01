@@ -4,12 +4,12 @@
 namespace App\Domain\Authentication\Service;
 
 
+use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
-use App\Domain\Exceptions\InvalidCredentialsException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
@@ -69,7 +69,7 @@ class LoginVerifier
                     // Insert login success request
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
                     $this->userActivityManager->addUserActivity(
-                        UserActivityAction::READ,
+                        UserActivity::READ,
                         'user',
                         $dbUser->id,
                         ['login'],

@@ -10,16 +10,13 @@ use Cake\Database\Query;
  */
 final class QueryFactory
 {
-    private Connection $connection;
-
     /**
      * The constructor.
      *
      * @param Connection $connection The database connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     /**

@@ -4,13 +4,13 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Exceptions\ForbiddenException;
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Note\Service\NoteCreator;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
+use App\Domain\Validation\ValidationException;
 use App\Infrastructure\Client\ClientCreatorRepository;
 use App\Infrastructure\Client\ClientDeleterRepository;
 
@@ -44,7 +44,7 @@ class ClientCreator
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Insert user activity
             $clientInsertActivityId = $this->userActivityManager->addUserActivity(
-                UserActivityAction::CREATED,
+                UserActivity::CREATED,
                 'client',
                 $clientId,
                 $client->toArrayForDatabase()
@@ -61,7 +61,7 @@ class ClientCreator
                     ];
                     $mainNoteId = $this->noteCreator->createNote($mainNoteValues);
                     $this->userActivityManager->addUserActivity(
-                        UserActivityAction::CREATED,
+                        UserActivity::CREATED,
                         'note',
                         $mainNoteId,
                         $mainNoteValues

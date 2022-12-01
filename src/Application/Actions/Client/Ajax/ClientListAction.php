@@ -3,9 +3,9 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientFilterFinder;
-use App\Domain\Exceptions\UnauthorizedException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,7 +22,7 @@ final class ClientListAction
      * @param ClientFilterFinder $clientFilterFinder
      */
     public function __construct(
-        private Responder $responder,
+        private readonly Responder $responder,
         private readonly ClientFilterFinder $clientFilterFinder,
     ) {
     }

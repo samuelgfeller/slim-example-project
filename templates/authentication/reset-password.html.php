@@ -11,6 +11,9 @@
  * @var string $id verification id
  * @var string $basePath
  */
+
+// Remove layout if there was a default
+$this->setLayout('');
 ?>
 
 <!DOCTYPE html>
@@ -84,12 +87,12 @@
 
         <input type="hidden" name="token" value="<?= $token ?? null ?>">
         <input type="hidden" name="id" value="<?= $id ?? null ?>">
-            <a href="login" class="discrete-text content-below-input cursor-pointer">Login</a>
+        <a href="login" class="discrete-text content-below-input cursor-pointer">Login</a>
         <input type="submit" id="password-reset-submit-btn" class="submit-btn" value="Set new password">
     </form>
-
+    <?= $this->fetch('layout/request-throttle.html.php') ?>
 </div>
 
-<?php
-// Throttle error message in request-throttle.html.php ?>
+</body>
+</html>
 

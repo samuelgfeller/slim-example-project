@@ -3,8 +3,8 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Service\ClientFinder;
-use App\Domain\Exceptions\ForbiddenException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpForbiddenException;

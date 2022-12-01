@@ -4,7 +4,7 @@
 namespace App\Test\Integration\Client;
 
 
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
@@ -108,7 +108,7 @@ class ClientCreateActionTest extends TestCase
             // Add client_message to creation values as they are inserted in user_activity
             $this->assertTableRowEquals(
                 [
-                    'action' => UserActivityAction::CREATED->value,
+                    'action' => UserActivity::CREATED->value,
                     'table' => 'client',
                     'row_id' => $clientDbRow['id'],
                     'data' => json_encode($clientCreationValues, JSON_THROW_ON_ERROR)
@@ -123,7 +123,7 @@ class ClientCreateActionTest extends TestCase
             $noteValues['is_main'] = 1;
             $this->assertTableRow(
                 [
-                    'action' => UserActivityAction::CREATED->value,
+                    'action' => UserActivity::CREATED->value,
                     'table' => 'note',
                     'row_id' => $noteId,
                     'data' => json_encode($noteValues, JSON_THROW_ON_ERROR)

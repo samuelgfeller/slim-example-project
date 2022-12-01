@@ -3,7 +3,7 @@
 namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Exceptions\ForbiddenException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\User\Service\UserDeleter;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

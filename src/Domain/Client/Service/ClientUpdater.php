@@ -4,11 +4,11 @@
 namespace App\Domain\Client\Service;
 
 
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Exception\NotAllowedException;
-use App\Domain\Exceptions\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Client\ClientUpdaterRepository;
 use Psr\Log\LoggerInterface;
@@ -81,7 +81,7 @@ class ClientUpdater
             $updated = $this->clientUpdaterRepository->updateClient($updateData, $clientId);
             if ($updated) {
                 $this->userActivityManager->addUserActivity(
-                    UserActivityAction::UPDATED,
+                    UserActivity::UPDATED,
                     'client',
                     $clientId,
                     $updateData

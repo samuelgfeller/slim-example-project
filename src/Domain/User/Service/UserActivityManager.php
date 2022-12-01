@@ -4,7 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserActivityData;
-use App\Domain\User\Enum\UserActivityAction;
+use App\Domain\User\Enum\UserActivity;
 use App\Infrastructure\User\UserActivityRepository;
 use Odan\Session\SessionInterface;
 
@@ -20,7 +20,7 @@ class UserActivityManager
     /**
      * Insert new user activity
      *
-     * @param UserActivityAction $userActivityAction
+     * @param UserActivity $userActivityAction
      * @param string $table
      * @param int $rowId
      * @param array|null $data
@@ -28,7 +28,7 @@ class UserActivityManager
      * @return int
      */
     public function addUserActivity(
-        UserActivityAction $userActivityAction,
+        UserActivity $userActivityAction,
         string $table,
         int $rowId,
         array $data = null,

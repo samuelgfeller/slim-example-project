@@ -3,8 +3,8 @@
 namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 

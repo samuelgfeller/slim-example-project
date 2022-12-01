@@ -4,11 +4,11 @@ namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
-use App\Domain\Exceptions\ForbiddenException;
-use App\Domain\Exceptions\ValidationException;
+use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserCreator;
+use App\Domain\Validation\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;

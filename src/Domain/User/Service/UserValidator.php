@@ -2,9 +2,9 @@
 
 namespace App\Domain\User\Service;
 
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 use App\Infrastructure\User\UserFinderRepository;
