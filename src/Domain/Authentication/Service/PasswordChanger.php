@@ -78,7 +78,7 @@ class PasswordChanger
             $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
             // Verify old password; throws validation exception if not correct old password
-            $this->userValidator->validatePasswordCorrectness($oldPassword, 'old_password', $userId);
+            $this->userValidator->checkIfPasswordIsCorrect($oldPassword, 'old_password', $userId);
         }
 
         // Calls service function to check if authorized and change password

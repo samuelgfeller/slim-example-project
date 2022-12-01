@@ -76,7 +76,7 @@
         grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));
     }
 
-    .double-width-form-input-group {
+    .double-width-form-input-div {
         /* I would like the client create main note column to be twice the width of the other grid columns but don't know
         how to implement it easily with the complex grid-template-columns setting */
     }

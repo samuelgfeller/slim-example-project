@@ -78,7 +78,7 @@ class PasswordResetSubmitAction
                     'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
                 );
                 // Render password
-                return $this->responder->render($response, 'authentication/password-forgotten.html.php');
+                return $this->responder->render($response, 'authentication/login.html.php');
             } catch (ValidationException $validationException) {
                 $flash->add('error', $validationException->getMessage());
                 // Add token and id to php view attribute like PasswordResetAction does

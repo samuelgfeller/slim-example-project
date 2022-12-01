@@ -1,18 +1,23 @@
 // Init vars
 import {handleFail} from "../general/js/requestUtil/fail-handler.js?v=0.1";
 
-let password1Inp, password2Inp;
+let password1Input, password2Inp;
 
-export function addPasswordCheckEventListeners(){
-    password1Inp = document.getElementById('password1-input');
+/**
+ * Add password strength check to form
+ * Requirements: Password inputs MUST have the ids "password1-input" and "password2-input"
+ * Warning message is placed after password input 1
+ */
+export function addPasswordStrengthCheck(){
+    password1Input = document.getElementById('password1-input');
     password2Inp = document.getElementById('password2-input');
 
     // Check if passwords are the same
-    password1Inp.addEventListener('keyup', checkIfPasswordsMatch);
+    password1Input.addEventListener('keyup', checkIfPasswordsMatch);
     password2Inp.addEventListener('keyup', checkIfPasswordsMatch);
 
     // Check if password is known to be breached
-    password1Inp.addEventListener('keyup', checkIfPasswordIsBreached);
+    password1Input.addEventListener('keyup', checkIfPasswordIsBreached);
 }
 
 /**
@@ -24,7 +29,7 @@ function checkIfPasswordsMatch() {
         submitBtn = document.querySelector('.submit-btn');
     }
     // Set button to disabled if passwords don't match or if field is empty
-    submitBtn.disabled = password1Inp.value !== password2Inp.value || password1Inp.value === '';
+    submitBtn.disabled = password1Input.value !== password2Inp.value || password1Input.value === '';
 }
 
 /**
@@ -33,7 +38,7 @@ function checkIfPasswordsMatch() {
 function checkIfPasswordIsBreached() {
     // Create hash and make Ajax request to HIBP api and display warning if needed
     // getHash makes SHA-1 hash and returns promise
-    getHash(password1Inp.value)
+    getHash(password1Input.value)
         // makeHIBPRequest is called with as parameter the return value of getHash() promise which is the password hash
         .then(makeHIBPRequest)
         // showWarning and removeWarning are the functions executed by makeHIBPRequest promise resolve() and reject()
@@ -85,8 +90,7 @@ function makeHIBPRequest(passwordHash) {
  */
 function showWarning() {
     if (null === document.getElementById('pwned-password-warning')) {
-        const password1InputGroup = document.getElementById('password1-input-group');
-        password1InputGroup.insertAdjacentHTML('beforeend', '<span class="input-warning content-below-input" ' +
+        password1Input.insertAdjacentHTML('afterend', '<span class="input-warning content-below-input" ' +
             'id="pwned-password-warning">This password is known to have been leaked and is unsafe to use</span>');
     }
 }

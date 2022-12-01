@@ -130,11 +130,13 @@ class SecurityLoginChecker
         // Cast all array values from string (what cake query builder returns) to int
         $loginAmountStats = array_map('intval', $this->requestFinderRepository->getGlobalLoginAmountStats());
 
-        // Calc integer allowed failure amount from given percentage and total login
+        // Calc allowed failure amount which is the given login_failure_percentage of the total login
         $failureThreshold = floor(
             $loginAmountStats['login_total'] / 100 * $this->securitySettings['login_failure_percentage']
         );
-        // Actual failure amount have to be LESS than allowed    failures amount (tested this way)
+        // Actual failure amount have to be LESS than allowed failures amount (tested this way)
+        // If there are not enough requests to be representative, the failureThreshold is increased to 20 meaning
+        // at least 20 failed login attempts are allowed no matter the percentage.
         if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';

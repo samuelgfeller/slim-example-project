@@ -29,7 +29,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
             } ?>
 
             <!--   First name     -->
-            <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+            <div class="form-input-div <?= //If there is an error on a specific field, echo error class
             ($firstNameErr = get_field_error(($validation ?? []), 'first_name')) ? ' input-group-error' : '' ?>">
                 <input type="text" name="first_name"
                        maxlength="100" minlength="3" required value="<?= $preloadValues['firstName'] ?? '' ?>">
@@ -39,7 +39,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
             </div>
 
             <!--   Surname     -->
-            <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+            <div class="form-input-div <?= //If there is an error on a specific field, echo error class
             ($surnameErr = get_field_error(($validation ?? []), 'surname')) ? ' input-group-error' : '' ?>">
                 <input type="text" name="surname"
                        maxlength="100" minlength="3" required value="<?= $preloadValues['surname'] ?? '' ?>">
@@ -48,7 +48,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
             </div>
 
             <!--    Email    -->
-            <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+            <div class="form-input-div <?= //If there is an error on a specific field, echo error class
             ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
                 <input type="email" name="email"
                        maxlength="254"
@@ -58,7 +58,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
             </div>
 
             <!--   Password 1    -->
-            <div id="password1-input-group" class="form-input-group <?= ($passwordErr = get_field_error(
+            <div id="password1-input-div" class="form-input-div <?= ($passwordErr = get_field_error(
                 ($validation ?? []),
                 'password'
             )) ? ' input-group-error' : '' ?>">
@@ -68,7 +68,7 @@ $this->addAttribute('js', ['assets/general/js/form-input-name-replacer.js', 'ass
             </div>
 
             <!--   Password 2     -->
-            <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+            <div class="form-input-div <?= //If there is an error on a specific field, echo error class
             ($password2Err = get_field_error(($validation ?? []), 'password2')) ? ' input-group-error' : '' ?>">
                 <input type="password" name="password2" id="password2-input" minlength="3" required>
                 <label>Repeat password</label>

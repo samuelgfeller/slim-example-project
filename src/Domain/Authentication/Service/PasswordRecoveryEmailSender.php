@@ -47,7 +47,7 @@ class PasswordRecoveryEmailSender
      * When user requests a new password for email
      *
      * @param array $userData
-     * @throws ValidationException
+     * @throws ValidationException|\Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendPasswordRecoveryEmail(array $userData, string|null $captcha = null): void
     {

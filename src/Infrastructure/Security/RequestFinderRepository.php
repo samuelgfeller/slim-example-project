@@ -122,7 +122,7 @@ class RequestFinderRepository
     }
 
     /**
-     * Returns global login amount stats of all time
+     * Returns global login amount stats of last day
      *
      * @return array{
      *     login_total: array,

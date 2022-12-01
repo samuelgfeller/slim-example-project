@@ -1,5 +1,5 @@
 import {createModal} from "../../general/js/modal/modal.js?v=0.1";
-import {addPasswordCheckEventListeners} from "../../authentication/password-strength-checker.js?v=0.1";
+import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.1";
 
 /**
  * Create and display modal box to change password
@@ -14,17 +14,17 @@ export function displayChangePasswordModal() {
 <form action="javascript:void(0);" class="one-row-modal-form" id="change-password-modal-form">
     ${// Ask for old password if requested
         oldPasswordRequested !== 'false' ?
-            `<div class="form-input-group">
+            `<div class="form-input-div">
                     <label for="old-password-inp">Old password</label>
                     <input type="password" name="old_password" id="old-password-inp" minlength="3" required 
                     class="form-input">
                 </div>` : ''
     }
-    <div class="form-input-group" id="password1-input-group">
+    <div class="form-input-div" id="password1-input-div">
     <label for="password1-input">New password</label>
     <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
     </div>
-    <div class="form-input-group">
+    <div class="form-input-div">
     <label for="password2-input">Repeat new password</label>
     <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
     </div>
@@ -37,5 +37,5 @@ export function displayChangePasswordModal() {
     document.querySelector('body').insertAdjacentHTML('afterbegin', '<div id="modal-form"></div>');
     let container = document.getElementById('modal-form');
     createModal(header, body, footer, container);
-    addPasswordCheckEventListeners();
+    addPasswordStrengthCheck();
 }

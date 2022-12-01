@@ -2,7 +2,7 @@ import {createModal} from "../../general/js/modal/modal.js?v=0.1";
 import {requestDropdownOptions} from "../../general/js/modal/dropdown-request.js?v=0.1";
 import {getDropdownAsHtmlOptions} from "../../general/js/template/template-util.js?v=0.1";
 import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
-import {addPasswordCheckEventListeners} from "../../authentication/password-strength-checker.js?v=0.1";
+import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.1";
 
 /**
  * Create and display modal box to create a new client
@@ -11,36 +11,36 @@ export function displayUserCreateModal() {
     let header = '<h2>Create user</h2>';
     let body = `<div>
 <form action="javascript:void(0);" class="wide-modal-form" id="create-user-modal-form">
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="first-name-input">First name</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="last-name-input">Last name</label>
             <input type="text" name="surname" id="last-name-input" placeholder="Zimmer" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="email-input">E-Mail</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required>
         </div>
-        <div class="form-input-group" id="password1-input-group">
+        <div class="form-input-div" id="password1-input-div">
             <label for="password1-input">New password</label>
             <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
         </div>
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="password2-input">Repeat new password</label>
             <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
         </div>
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="user-status-select">Status</label>
             <select name="status" class="form-select" id="user-status-select" required>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
-        <div class="form-input-group">
+        <div class="form-input-div">
             <label for="user-role-select">User role</label>
             <select name="user_role_id" id="user-role-select" class="form-select" required>
             <!-- Dropdown options loaded afterwards -->
@@ -59,7 +59,7 @@ export function displayUserCreateModal() {
         addUserDropdownOptionsToCreateModal(dropdownOptions);
     });
     // Display password as unsafe if breached and disable submit btn if passwords don't match
-    addPasswordCheckEventListeners();
+    addPasswordStrengthCheck();
 }
 
 /**

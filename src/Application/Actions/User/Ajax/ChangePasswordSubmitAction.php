@@ -84,7 +84,7 @@ class ChangePasswordSubmitAction
             }
         }
 
-        $flash->add('error', 'There is something wrong with the request body.');
+        $flash->add('error', 'There is something wrong with the application.');
         // Prevent to log passwords
         $this->logger->error(
             'Password change request malformed. Array keys: ' . json_encode(

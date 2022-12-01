@@ -7,7 +7,7 @@
  * More details and source: https://stackoverflow.com/q/71913460/9013718
  */
 
-const inputGroups = document.querySelectorAll('.form-input-group');
+const inputGroups = document.querySelectorAll('.form-input-div');
 
 // removed because the 'transitionend' animation isn't picked up on the firefox browser and thus the names are never added again
 // inputGroups.forEach(inputGroup => {

@@ -37,7 +37,7 @@
     );
     ?>
 
-    <title>Slim Example Project</title>
+    <title>Login - Slim Example Project</title>
 
 </head>
 <body>
@@ -55,7 +55,7 @@
             '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
-        <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+        <div class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
             <label for="email-input">Email</label>
             <input type="email" name="email"
@@ -66,7 +66,7 @@
         </div>
 
         <!-- ===== PASSWORD ===== -->
-        <div id="password-input-div" class="form-input-group<?= //If there is an error on a specific field, echo error class
+        <div id="password-input-div" class="form-input-div<?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
             <label for="password-input">Password</label>
             <input type="password" id="password-input" name="password" minlength="3" required>

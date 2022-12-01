@@ -29,13 +29,13 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
             '</strong>' : '' ?>
 
         <!--   Old password    -->
-        <div class="form-input-group <?= //If old password is wrong, the variable is set by the server, otherwise undefined
+        <div class="form-input-div <?= //If old password is wrong, the variable is set by the server, otherwise undefined
         $oldPasswordErr ?? false ? ' input-group-error' : '' ?>">
             <input type="password" name="old_password" id="old-password-inp" minlength="3" required>
             <label for="old-password-inp">Old password</label>
         </div>
         <!--   Password 1    -->
-        <div id="password1-input-group" class="form-input-group <?= //If there is an error on a specific field, echo error class
+        <div id="password1-input-div" class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
             <input type="password" name="password" id="password1-input" minlength="3" required>
             <label for="password1-input">New password</label>
@@ -43,7 +43,7 @@ $this->addAttribute('css', ['assets/general/css/form.css']); ?>
         </div>
 
         <!--   Password 2     -->
-        <div class="form-input-group <?= //If there is an error on a specific field, echo error class
+        <div class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
         ($passwordsErr = get_field_error(($validation ?? []), 'passwords')) ? ' input-group-error' : '' ?>">
             <input type="password" name="password2" id="password2-input" minlength="3" required>

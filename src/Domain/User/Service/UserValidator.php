@@ -173,7 +173,7 @@ class UserValidator
      * @param int $userId
      * @return void
      */
-    public function validatePasswordCorrectness(?string $password, string $field, int $userId): void
+    public function checkIfPasswordIsCorrect(?string $password, string $field, int $userId): void
     {
         $validationResult = new ValidationResult('There is a validation error with the password.');
         // To be correct, the password must not be null

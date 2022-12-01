@@ -24,28 +24,28 @@
     }
 
     /*Animated form input group*/
-    .form-input-group {
+    .form-input-div {
         position: relative;
         /*padding: 10px 0;*/
         margin-bottom: 20px;
     }
 
-    .form-input-group:first-of-type {
+    .form-input-div:first-of-type {
         padding-top: 0;
     }
 
-    .form-input-group:last-of-type {
+    .form-input-div:last-of-type {
         padding-bottom: 0;
     }
 
-    .form-input-group label:not(.form-radio-input) {
+    .form-input-div label:not(.form-radio-input) {
         padding: 6px 15px;
         display: inline-block; /*For label to take into account padding*/
         letter-spacing: 0.02em;
     }
 
     /*Radio button styling https://moderncss.dev/pure-css-custom-styled-radio-buttons/ */
-    .form-input-group label.form-radio-input, .form-radio-input {
+    .form-input-div label.form-radio-input, .form-radio-input {
         display: grid;
         grid-template-columns: 1em auto;
         gap: 0.5em;
@@ -85,8 +85,8 @@
 
     }
 
-    .form-input-group input:not(input[type="radio"]), .form-input:not(input[type="radio"]),
-    .form-input-group textarea, textarea.form-input, .form-input-group select, select.form-input {
+    .form-input-div input:not(input[type="radio"]), .form-input:not(input[type="radio"]),
+    .form-input-div textarea, textarea.form-input, .form-input-div select, select.form-input {
         background-color: rgba(255, 255, 255, 0.7);
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
         border: none;
@@ -103,26 +103,26 @@
         z-index: 1;
     }
 
-    .form-input-group input:not(input[type="radio"]):hover, .form-input:not(input[type="radio"]):hover,
-    .form-input-group textarea:hover, textarea.form-input:hover, .form-input-group select:hover, select.form-input:hover {
+    .form-input-div input:not(input[type="radio"]):hover, .form-input:not(input[type="radio"]):hover,
+    .form-input-div textarea:hover, textarea.form-input:hover, .form-input-div select:hover, select.form-input:hover {
         /* Keep the same box shadow on hover */
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
         background-color: rgb(255, 255, 255);
     }
 
-    .form-input-group input:not(input[type="radio"]):focus, .form-input:not(input[type="radio"]):focus {
+    .form-input-div input:not(input[type="radio"]):focus, .form-input:not(input[type="radio"]):focus {
         background-color: rgb(255, 255, 255);
         outline: none;
         border-bottom: none;
     }
 
     .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled,
-    .form-input-group input:disabled, .form-input-group select:disabled, .form-input-group input[type="radio"]:disabled {
+    .form-input-div input:disabled, .form-input-div select:disabled, .form-input-div input[type="radio"]:disabled {
         background-color: rgb(238 238 238);
         color: grey;
     }
 
-    .form-input-group select, .form-select {
+    .form-input-div select, .form-select {
         border: none;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         font-size: 15px;
@@ -134,12 +134,12 @@
         letter-spacing: 0.01em;
     }
 
-    .form-input-group textarea, textarea.form-input {
+    .form-input-div textarea, textarea.form-input {
         border-radius: 20px;
         padding: 15px;
     }
 
-    .form-input-group input[type=submit], .submit-btn {
+    .form-input-div input[type=submit], .submit-btn {
         /*padding: 6px 6px;*/
         width: fit-content;
         min-width: 160px;

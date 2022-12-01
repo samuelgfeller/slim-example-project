@@ -39,17 +39,10 @@
         border-bottom: 3px solid #951212;
     }
 
-    /* I don't know why but max-height 0 on password input group removes the top margin of this button */
-    /* Therefore the margin is removed on the login btn and added below the input */
-    #email-input {
-        margin-bottom: 10px;
-    }
-
     #discrete-login-btn {
         max-height: 0;
         overflow: hidden;
         display: inline-block;
-        margin-top: 0; /*Removed because added after input */
         transition: max-height 0.3s ease-out;
         /*Float left on the button is to prevent a jump when button display none is removed so that it doesn't affect
         the position of the password input div*/

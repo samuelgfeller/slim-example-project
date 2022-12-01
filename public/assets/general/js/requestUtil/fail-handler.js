@@ -30,7 +30,8 @@ export function handleFail(xhr, domFieldId = null) {
         errorMsg += '<br>Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
     }
 
-// If validation error ignore the default message and create specific one
+    // If validation error ignore the default message and create specific one
+    let noFlashMessage = false;
     if (xhr.status === 422) {
         if (xhr.getResponseHeader('Content-type') === 'application/json') {
             errorMsg = '';
@@ -44,14 +45,17 @@ export function handleFail(xhr, domFieldId = null) {
                 errorMsg += error.message + '.<br>Field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ')
                     + '</b>".<br>';
             }
+            noFlashMessage = true;
         } else {
             // Default error message when server returns 422 but not json
             errorMsg = 'Validation error. Something could not have been validate on the server.';
         }
     }
 
-// Output error to user
-    displayFlashMessage('error', errorMsg);
+    // Output error to user
+    if (noFlashMessage === false) {
+        displayFlashMessage('error', errorMsg);
+    }
 }
 
 /**
