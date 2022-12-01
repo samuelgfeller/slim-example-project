@@ -4,11 +4,12 @@ namespace App\Test\Integration\Authentication;
 
 use App\Domain\Security\Exception\SecurityException;
 use App\Infrastructure\Security\RequestPreponerRepository;
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\FixtureTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
-use App\Test\Traits\RouteTestTrait;
 
 /**
  * In this class actions that are processed by the `SecurityService` are tested
@@ -17,6 +18,7 @@ class SecurityActionTest extends TestCase
 {
     use AppTestTrait;
     use DatabaseTestTrait;
+    use FixtureTestTrait;
     use RouteTestTrait;
 
     /**
@@ -34,7 +36,8 @@ class SecurityActionTest extends TestCase
         // ratio too low as there is a minimal hard limit for the global check to fail
 
         // Insert user for the test of successful login abuse (provided via dataProvider)
-        $this->insertFixtures([UserFixture::class]);
+        $user = $this->insertFixturesWithAttributes([], UserFixture::class);
+
 
         $throttleArr = $this->container->get('settings')['security']['login_throttle'];
 

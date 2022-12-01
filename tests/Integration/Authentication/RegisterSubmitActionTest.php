@@ -2,14 +2,14 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Test\Traits\AppTestTrait;
 use App\Test\Fixture\UserFixture;
+use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
+use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
@@ -127,7 +127,7 @@ class RegisterSubmitActionTest extends TestCase
      * For further tests, breakpoint can be set inside the register function
      * Fixture dependency:
      *      UserFixture: first fixture (user) has to be "Admin Example" with email "admin@example.com"
-     * @dataProvider \App\Test\Provider\Authentication\RegisterCaseProvider::provideExistingUserStatusAndEmail()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationCaseProvider::provideExistingUserStatusAndEmail()
      * @param string $existingUserStatus
      * @param string $partialEmailBody
      */

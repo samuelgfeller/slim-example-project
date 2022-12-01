@@ -60,7 +60,8 @@ class VerificationTokenCreator
             UserActivity::CREATED,
             'user_verification',
             $tokenId,
-            $userVerificationRow
+            $userVerificationRow,
+            $user->id,
         );
 
         return $queryParams;

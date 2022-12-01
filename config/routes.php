@@ -9,7 +9,7 @@ use Slim\Routing\RouteCollectorProxy;
 return function (App $app) {
     // Home page
    $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
-    $app->get('/[{name}]', \App\Application\Actions\Home\HomePageAction::class)->setName('home-page')->add(
+    $app->get('/', \App\Application\Actions\Home\HomePageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
     // Testing

@@ -37,7 +37,7 @@ class UserActivityManager
         $userActivity = new UserActivityData();
         $userActivity->ip_address = $_SERVER['REMOTE_ADDR'];
         $userActivity->user_agent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        $userActivity->user_id = $this->session->get('user_id') ?? $userId ?? 0;
+        $userActivity->user_id = $this->session->get('user_id') ?? $userId;
         $userActivity->action = $userActivityAction;
         $userActivity->table = $table;
         $userActivity->row_id = $rowId;
