@@ -33,21 +33,27 @@ $settings['error'] = [
 
 // Security
 $settings['security'] = [
-    /**
-     * Protection against rapid fire and distributed brute force attacks
-     * If changed, UserRequestFixture has to be updated accordingly
-     */
+    // Bool if login requests should be throttled
+    'throttle_login' => true,
+    // Bool if email requests should be throttled
+    'throttle_user_email' => true,
+
+    /** Protection against rapid fire and distributed brute force attacks
+     * If changed, UserRequestFixture has to be updated accordingly */
     // Seconds in the past relevant for global, user and ip request throttle
     // If 3600, the requests in the past hour will be evaluated and compared to the set thresholds below
     'timespan' => 3600,
-
     // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest
-    /** When changed, update @see UserRequestProvider and @see UserRequestFixture as well */
+    /** When changed, update @see UserRequestCaseProvider */
     // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
     // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
     // login request, the next check will be at the beginning of the 5th
-    'login_throttle' => [4 => 10, 9 => 120, 12 => 'captcha'],
-    'user_email_throttle' => [5 => 2, 10 => 4, 20 => 'captcha'],
+    'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],
+    'user_email_throttle_rule' => [5 => 2, 10 => 4, 20 => 'captcha'],
+    // If login successes should be throttled the same way failures ars (if login_throttle is [4 => 10, 9 => 120, ...]
+    // it means that after the 4th login success, each following success requests (in the given timespan) have to be in
+    // a 10s interval. After 9 it's 120s and so on)
+    'throttle_login_success' => true, // bool
 
     // Percentage of login requests that may be failures (threshold)
     'login_failure_percentage' => 20,

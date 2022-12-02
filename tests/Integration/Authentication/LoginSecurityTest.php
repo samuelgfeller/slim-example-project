@@ -14,7 +14,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 /**
  * In this class actions that are processed by the `SecurityService` are tested
  */
-class SecurityActionTest extends TestCase
+class LoginSecurityTest extends TestCase
 {
     use AppTestTrait;
     use DatabaseTestTrait;
@@ -39,7 +39,7 @@ class SecurityActionTest extends TestCase
         $user = $this->insertFixturesWithAttributes([], UserFixture::class);
 
 
-        $throttleArr = $this->container->get('settings')['security']['login_throttle'];
+        $throttleArr = $this->container->get('settings')['security']['login_throttle_rule'];
 
         // Failed request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginFormValues);

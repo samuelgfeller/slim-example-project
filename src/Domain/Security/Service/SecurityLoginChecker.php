@@ -7,7 +7,7 @@ namespace App\Domain\Security\Service;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
-use App\Infrastructure\Security\RequestFinderRepository;
+use App\Infrastructure\Security\LoginRequestFinderRepository;
 
 class SecurityLoginChecker
 {
@@ -15,8 +15,8 @@ class SecurityLoginChecker
 
     public function __construct(
         private readonly SecurityCaptchaVerifier $captchaVerifier,
-        private readonly SecurityRequestFinder $requestFinder,
-        private readonly RequestFinderRepository $requestFinderRepository,
+        private readonly LoginRequestFinder $loginRequestFinder,
+        private readonly LoginRequestFinderRepository $loginRequestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');
@@ -44,21 +44,23 @@ class SecurityLoginChecker
      */
     public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null): void
     {
-        // reCAPTCHA verification
-        $validCaptcha = false;
-        if ($reCaptchaResponse !== null) {
-            $validCaptcha = $this->captchaVerifier->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_LOGIN);
-        }
-        // If captcha is valid the other security checks don't have to be made
-        if ($validCaptcha !== true) {
-            // Most strict. Very low limit on failed requests for specific email or coming from an ip
-            $this->performLoginCheck(
-                $this->requestFinder->retrieveIpStats(),
-                $this->requestFinder->retrieveUserStats($email),
-                $email
-            );
-            // Global login check
-            $this->performGlobalLoginCheck();
+        if ($this->securitySettings['throttle_login'] === true) {
+            // reCAPTCHA verification
+            $validCaptcha = false;
+            if ($reCaptchaResponse !== null) {
+                $validCaptcha = $this->captchaVerifier->verifyReCaptcha(
+                    $reCaptchaResponse,
+                    SecurityException::USER_LOGIN
+                );
+            }
+            // If captcha is valid the other security checks don't have to be made
+            if ($validCaptcha !== true) {
+                // Most strict. Very low limit on failed requests for specific email or coming from an ip
+                $stats = $this->loginRequestFinder->findLoginStats($email);
+                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email);
+                // Global login check
+                $this->performGlobalLoginCheck();
+            }
         }
     }
 
@@ -67,7 +69,7 @@ class SecurityLoginChecker
      *
      * Global threshold is calculated with a ratio from unsuccessful logins to total logins.
      * In order for bots not to increase the total login requests and thus manipulating the global threshold,
-     * the same limit on failed login attempts per user is used also for successful logins.
+     * the same limit of failed login attempts per user is used also in place for successful logins.
      * If the user has 4 unsuccessful login attempts before throttling, he has also 4 successful login requests in
      * given timespan before experiencing the same throttling.
      *
@@ -77,22 +79,23 @@ class SecurityLoginChecker
      */
     private function performLoginCheck(RequestStatsData $ipStats, RequestStatsData $userStats, string $email): void
     {
+        $throttleSuccess = $this->securitySettings['throttle_login_success'];
         // Reverse order to compare fails the longest delay first and then go down from there
-        krsort($this->securitySettings['login_throttle']);
+        krsort($this->securitySettings['login_throttle_rule']);
         // Fails on specific user or coming from specific IP
-        foreach ($this->securitySettings['login_throttle'] as $requestLimit => $delay) {
+        foreach ($this->securitySettings['login_throttle_rule'] as $requestLimit => $delay) {
             // Check that there aren't more login successes or failures than tolerated
             if (
                 ($ipStats->loginFailures >= $requestLimit && $ipStats->loginFailures !== 0) ||
-                ($ipStats->loginSuccesses >= $requestLimit && $ipStats->loginSuccesses !== 0) ||
+                ($throttleSuccess && $ipStats->loginSuccesses >= $requestLimit && $ipStats->loginSuccesses !== 0) ||
                 ($userStats->loginFailures >= $requestLimit && $userStats->loginFailures !== 0) ||
-                ($userStats->loginSuccesses >= $requestLimit && $userStats->loginSuccesses !== 0)
+                ($throttleSuccess && $userStats->loginSuccesses >= $requestLimit && $userStats->loginSuccesses !== 0)
             ) {
                 // If truthy means: too many ip fails OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user
 
-                // Retrieve latest email sent for specific email or coming from ip
-                $latestLoginRequest = $this->requestFinder->findLatestLoginRequestFromUserOrIp($email);
+                // Retrieve the latest email sent for specific email or coming from ip
+                $latestLoginRequest = $this->loginRequestFinder->findLatestLoginRequestFromEmailOrIp($email);
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
@@ -110,8 +113,8 @@ class SecurityLoginChecker
                 }
             }
         }
-        // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
-        ksort($this->securitySettings['login_throttle']);
+        // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle_rule']
+        ksort($this->securitySettings['login_throttle_rule']);
     }
 
     /**
@@ -128,7 +131,7 @@ class SecurityLoginChecker
     private function performGlobalLoginCheck(): void
     {
         // Cast all array values from string (what cake query builder returns) to int
-        $loginAmountStats = array_map('intval', $this->requestFinderRepository->getGlobalLoginAmountStats());
+        $loginAmountStats = array_map('intval', $this->loginRequestFinderRepository->getGlobalLoginAmountStats());
 
         // Calc allowed failure amount which is the given login_failure_percentage of the total login
         $failureThreshold = floor(
@@ -136,7 +139,8 @@ class SecurityLoginChecker
         );
         // Actual failure amount have to be LESS than allowed failures amount (tested this way)
         // If there are not enough requests to be representative, the failureThreshold is increased to 20 meaning
-        // at least 20 failed login attempts are allowed no matter the percentage.
+        // at least 20 failed login attempts are allowed no matter the percentage
+        // If percentage is 10, throttle begins at 200 login requests
         if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';

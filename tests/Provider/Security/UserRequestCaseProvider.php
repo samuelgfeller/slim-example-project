@@ -7,14 +7,14 @@ use App\Domain\Security\Data\RequestStatsData;
 class UserRequestCaseProvider
 {
     // Placed on top to easily change.
-    // ! This should be the same as the config values $settings['security']['login_throttle']
+    // ! This should be the same as the config values $settings['security']['login_throttle_rule']
     // ? Example values as I can't take the values from settings because I can't access container in provider
     // (Error: Typed property $container must not be accessed before initialization)
     // Change provider return values too if different from 3
     private array $userLoginThrottle = [4 => 10, 9 => 120, 12 => 'captcha'];
 
     // Only request limit, not delay
-    // ! This should be the same as the config values $settings['security']['user_email_throttle']
+    // ! This should be the same as the config values $settings['security']['user_email_throttle_rule']
     // Change provider return values too if different from 3
     private array $userEmailRequestThrottle = [5 => 2, 10 => 4, 20 => 'captcha'];
 

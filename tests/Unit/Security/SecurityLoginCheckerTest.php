@@ -6,7 +6,7 @@ use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Infrastructure\Security\RequestFinderRepository;
+use App\Infrastructure\Security\EmailRequestFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -48,7 +48,7 @@ class SecurityLoginCheckerTest extends TestCase
         RequestStatsData $ipRequestStats,
         RequestStatsData $userRequestStats
     ): void {
-        $requestFinderRepository = $this->mock(RequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
         $requestFinderRepository->method('getGlobalLoginAmountStats')->willReturn(
@@ -101,7 +101,7 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheck_global(): void
     {
-        $requestFinderRepository = $this->mock(RequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here

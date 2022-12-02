@@ -24,7 +24,7 @@ use Selective\TestTrait\Traits\MailerTestTrait;
  *  - login request on suspended account (401 Unverified + email with info)
  *  - login request on locked account (401 Unverified + email with unlock token)
  *
- * Login tests involving request throttle are done in @see SecurityActionTest
+ * Login tests involving request throttle are done in @see LoginSecurityTest
  */
 class LoginSubmitActionTest extends TestCase
 {

@@ -7,17 +7,16 @@ namespace App\Domain\Security\Service;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
-use App\Infrastructure\Security\RequestFinderRepository;
+use App\Infrastructure\Security\EmailRequestFinderRepository;
 
 class SecurityEmailChecker
 {
     private array $securitySettings;
-    private ?string $email;
 
     public function __construct(
         private readonly SecurityCaptchaVerifier $captchaVerifier,
-        private readonly SecurityRequestFinder $requestFinder,
-        private readonly RequestFinderRepository $requestFinderRepository,
+        private readonly EmailRequestFinder $emailRequestFinder,
+        private readonly EmailRequestFinderRepository $requestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');
@@ -45,21 +44,23 @@ class SecurityEmailChecker
      */
     public function performEmailAbuseCheck(string $email, string|null $reCaptchaResponse = null): void
     {
-        $validCaptcha = false;
-        // reCAPTCHA verification
-        if ($reCaptchaResponse !== null) {
-            $validCaptcha = $this->captchaVerifier->verifyReCaptcha($reCaptchaResponse, SecurityException::USER_EMAIL);
-        }
-        // If captcha is valid the other security checks don't have to be made
-        if ($validCaptcha !== true) {
-            $this->email = $email;
-            // Email checks (register, password recovery, other with email)
-            $this->performEmailRequestsCheck(
-                $this->requestFinder->retrieveIpStats(),
-                $this->requestFinder->retrieveUserStats($email)
-            );
-            // Global email check
-            $this->performGlobalEmailCheck();
+        if ($this->securitySettings['throttle_user_email'] === true) {
+            $validCaptcha = false;
+            // reCAPTCHA verification
+            if ($reCaptchaResponse !== null) {
+                $validCaptcha = $this->captchaVerifier->verifyReCaptcha(
+                    $reCaptchaResponse,
+                    SecurityException::USER_EMAIL
+                );
+            }
+            // If captcha is valid the other security checks don't have to be made
+            if ($validCaptcha !== true) {
+                $stats = $this->emailRequestFinder->findEmailStats($email);
+                // Email checks (register, password recovery, other with email)
+                $this->performEmailRequestsCheck($stats['ip_stats'], $stats['email_stats'], $email);
+                // Global email check
+                $this->performGlobalEmailCheck();
+            }
         }
     }
 
@@ -71,18 +72,21 @@ class SecurityEmailChecker
      * @param RequestStatsData $userStats email request summary by concerning email / coming for same user
      * @throws SecurityException
      */
-    private function performEmailRequestsCheck(RequestStatsData $ipStats, RequestStatsData $userStats): void
-    {
+    private function performEmailRequestsCheck(
+        RequestStatsData $ipStats,
+        RequestStatsData $userStats,
+        string $email
+    ): void {
         // Reverse order to compare fails the longest delay first and then go down from there
-        krsort($this->securitySettings['user_email_throttle']);
+        krsort($this->securitySettings['user_email_throttle_rule']);
         // Fails on specific user or coming from specific IP
-        foreach ($this->securitySettings['user_email_throttle'] as $requestLimit => $delay) {
+        foreach ($this->securitySettings['user_email_throttle_rule'] as $requestLimit => $delay) {
             // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
             if (
                 $ipStats->sentEmails >= $requestLimit || $userStats->sentEmails >= $requestLimit
             ) {
                 // Retrieve latest email sent for specific email or coming from ip
-                $latestEmailRequestFromUser = $this->requestFinder->findLatestEmailRequestFromUserOrIp($this->email);
+                $latestEmailRequestFromUser = $this->emailRequestFinder->findLatestEmailRequestFromUserOrIp($email);
 
                 $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
@@ -99,8 +103,8 @@ class SecurityEmailChecker
                 }
             }
         }
-        // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle']
-        ksort($this->securitySettings['login_throttle']);
+        // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle_rule']
+        ksort($this->securitySettings['login_throttle_rule']);
     }
 
     /**
@@ -111,7 +115,7 @@ class SecurityEmailChecker
         // Order of calls on getGlobalSentEmailAmount() matters in test. First daily and then monthly should be called
 
         // Check emails for daily threshold
-        if (!empty($this->securitySettings['global_daily_email_threshold'])) {
+        if (isset($this->securitySettings['global_daily_email_threshold'])) {
             $sentEmailAmountInLastDay = $this->requestFinderRepository->getGlobalSentEmailAmount(1);
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastDay >= $this->securitySettings['global_daily_email_threshold']) {
@@ -121,7 +125,7 @@ class SecurityEmailChecker
         }
 
         // Check emails for monthly threshold
-        if (!empty($this->securitySettings['global_monthly_email_threshold'])) {
+        if (isset($this->securitySettings['global_monthly_email_threshold'])) {
             $sentEmailAmountInLastMonth = $this->requestFinderRepository->getGlobalSentEmailAmount(30);
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastMonth >= $this->securitySettings['global_monthly_email_threshold']) {
