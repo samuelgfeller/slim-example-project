@@ -67,10 +67,12 @@ class UserCreator
             unset($userRow['password'], $userRow['password2'], $userRow['password_hash'], $userRow['id']);
             $this->userActivityManager->addUserActivity(UserActivity::CREATED, 'user', $user->id, $userRow);
 
-            // Create and insert token
-            $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
-            // Send token to user. Mailer errors caught in action
-            $this->registrationMailer->sendRegisterVerificationToken($user, $queryParams);
+            // Create and insert token if unverified
+            if ($user->status === UserStatus::Unverified) {
+                $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
+                // Send token to user. Mailer errors caught in action
+                $this->registrationMailer->sendRegisterVerificationToken($user, $queryParams);
+            }
 
             return $user->id;
         }

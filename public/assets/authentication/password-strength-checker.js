@@ -116,7 +116,7 @@ function removeWarning() {
  */
 function getHash(str, algo = "SHA-1") {
     let strBuf = new TextEncoder().encode(str);
-    // digest returns a promise
+    // crypto.subtle only works for HTTPS sites digest returns a promise
     return crypto.subtle.digest(algo, strBuf)
         // .then is executed only after initial promise is done (resolved) and accepts two parameters
         // first is the success callback function and second the error callback function

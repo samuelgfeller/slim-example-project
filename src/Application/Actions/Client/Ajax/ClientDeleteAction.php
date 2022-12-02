@@ -60,7 +60,11 @@ final class ClientDeleteAction
                 // Delete client logic
                 $deleted = $this->clientDeleter->deleteClient($clientId);
 
+                $flash = $this->session->getFlash();
+
                 if ($deleted) {
+                    // Add flash here as user gets redirected to client list after deletion
+                    $flash->add('success', 'Successfully deleted client.');
                     return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }
 
@@ -68,7 +72,6 @@ final class ClientDeleteAction
                     $response,
                     ['status' => 'warning', 'message' => 'Client not deleted.']
                 );
-                $flash = $this->session->getFlash();
                 // If not deleted, inform user
                 $flash->add('warning', 'The client was not deleted');
                 return $response->withAddedHeader('Warning', 'The client was not deleted');

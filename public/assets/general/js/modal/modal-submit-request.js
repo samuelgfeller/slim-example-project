@@ -44,7 +44,7 @@ export function submitModalForm(modalFormId, moduleRoute, httpMethod, redirectUr
                 // Success
                 else {
                     closeModal();
-                    resolve();
+                    resolve(JSON.parse(xHttp.responseText));
                 }
             }
         };

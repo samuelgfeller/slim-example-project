@@ -36,10 +36,10 @@ class UserValidator
 
         // Using array_key_exists instead of isset as isset returns false if value is null and key exists
         if (array_key_exists('first_name', $userValues)) {
-            $this->validator->validateName($userValues['first_name'], 'first_name', $validationResult, false);
+            $this->validator->validateName($userValues['first_name'], 'first_name', $validationResult, true);
         }
         if (array_key_exists('surname', $userValues)) {
-            $this->validator->validateName($userValues['surname'], 'surname', $validationResult, false);
+            $this->validator->validateName($userValues['surname'], 'surname', $validationResult, true);
         }
         if (array_key_exists('email', $userValues)) {
             if ($this->validator->resourceExistenceCheckerRepository->rowExists(
@@ -50,10 +50,10 @@ class UserValidator
             $this->validator->validateEmail($userValues['email'], $validationResult, true);
         }
         if (array_key_exists('status', $userValues)) {
-            $this->validateUserStatus($userValues['status'], $validationResult, false);
+            $this->validateUserStatus($userValues['status'], $validationResult, true);
         }
         if (array_key_exists('user_role_id', $userValues)) {
-            $this->validateUserRoleId($userValues['user_role_id'], $validationResult, false);
+            $this->validateUserRoleId($userValues['user_role_id'], $validationResult, true);
         }
 
         // If the validation failed, throw the exception that will be caught in the Controller

@@ -65,8 +65,12 @@ final class UserSubmitCreateAction
                     $response
                 );
             } catch (TransportExceptionInterface $e) {
-                $flash->add('error', 'Email error. Please try again. ' . "<br> Message: " . $e->getMessage());
+                // Flash message has to be added in the frontend as form is submitted via Ajax
                 $this->logger->error('Mailer exception: ' . $e->getMessage());
+                return $this->responder->respondWithJson(
+                    $response,
+                    ['status' => 'error', 'message' => 'Email error. Please contact an administrator.']
+                );
                 $response = $response->withStatus(500);
                 $this->responder->addPhpViewAttribute('formError', true);
                 return $this->responder->render(

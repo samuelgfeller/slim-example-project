@@ -11,8 +11,12 @@ document.addEventListener('click', e => {
     if (e.target && e.target.id === 'user-create-submit-btn') {
 
         // Submit modal form and execute promise "then()" only if available (nothing is returned on validation error)
-        submitModalForm('create-user-modal-form', 'users', 'POST')?.then(() => {
-            displayFlashMessage('success', 'User created successfully.');
+        submitModalForm('create-user-modal-form', 'users', 'POST')?.then((response) => {
+            if (response.status === 'error'){
+                displayFlashMessage('error', response.message);
+            }else {
+                displayFlashMessage('success', 'User created successfully.');
+            }
             loadUserList();
         })
     }
