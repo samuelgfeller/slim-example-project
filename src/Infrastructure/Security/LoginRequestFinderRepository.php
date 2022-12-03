@@ -83,7 +83,8 @@ class LoginRequestFinderRepository
                 'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
                 // output: WHERE ((`is_login`) IS NOT NULL AND (`email` = :c0 OR `ip_address` = (INET_ATON(:ip))))
             ]
-        )->bind(':ip', $ip, 'string')->orderDesc('created_at')->limit(1);
+            // Order desc id instead of created at for testing as last request is preponed to simulate waiting
+        )->bind(':ip', $ip, 'string')->orderDesc('id')->limit(1);
         return new RequestData($query->execute()->fetch('assoc') ?: []);
     }
 

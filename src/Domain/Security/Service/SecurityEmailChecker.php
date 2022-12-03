@@ -5,6 +5,7 @@ namespace App\Domain\Security\Service;
 
 
 use App\Domain\Security\Data\RequestStatsData;
+use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
 use App\Infrastructure\Security\EmailRequestFinderRepository;
@@ -50,7 +51,7 @@ class SecurityEmailChecker
             if ($reCaptchaResponse !== null) {
                 $validCaptcha = $this->captchaVerifier->verifyReCaptcha(
                     $reCaptchaResponse,
-                    SecurityException::USER_EMAIL
+                    SecurityType::USER_EMAIL
                 );
             }
             // If captcha is valid the other security checks don't have to be made
@@ -96,10 +97,10 @@ class SecurityEmailChecker
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if (time() < ($timeForNextRequest = $delay + $latest)) {
                         $remainingDelay = $timeForNextRequest - time();
-                        throw new SecurityException($remainingDelay, SecurityException::USER_EMAIL, $errMsg);
+                        throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
-                    throw new SecurityException($delay, SecurityException::USER_EMAIL, $errMsg);
+                    throw new SecurityException($delay, SecurityType::USER_EMAIL, $errMsg);
                 }
             }
         }
@@ -120,7 +121,7 @@ class SecurityEmailChecker
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastDay >= $this->securitySettings['global_daily_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending daily reached site-wide.';
-                throw new SecurityException('captcha', SecurityException::GLOBAL_EMAIL, $msg);
+                throw new SecurityException('captcha', SecurityType::GLOBAL_EMAIL, $msg);
             }
         }
 
@@ -130,7 +131,7 @@ class SecurityEmailChecker
             // If sent emails exceed or equal the given threshold
             if ($sentEmailAmountInLastMonth >= $this->securitySettings['global_monthly_email_threshold']) {
                 $msg = 'Maximum amount of unrestricted email sending monthly reached site-wide.';
-                throw new SecurityException('captcha', SecurityException::GLOBAL_EMAIL, $msg);
+                throw new SecurityException('captcha', SecurityType::GLOBAL_EMAIL, $msg);
             }
         }
     }

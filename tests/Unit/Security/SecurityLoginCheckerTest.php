@@ -4,6 +4,7 @@ namespace App\Test\Unit\Security;
 
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
+use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Infrastructure\Security\EmailRequestFinderRepository;
@@ -84,7 +85,7 @@ class SecurityLoginCheckerTest extends TestCase
         try {
             $securityService->performLoginSecurityCheck('email.does@not-matter.com');
         } catch (SecurityException $se) {
-            self::assertSame(SecurityException::USER_LOGIN, $se->getType());
+            self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
             $delayMessage = 'Remaining delay not matching. ' .
                 'May be because mock created_at time and assertion were done in different seconds so please try again';
             self::assertSame($delay, $se->getRemainingDelay(), $delayMessage);
@@ -134,7 +135,7 @@ class SecurityLoginCheckerTest extends TestCase
         try {
             $securityService->performLoginSecurityCheck('email.does@not-matter.com');
         } catch (SecurityException $se) {
-            self::assertSame(SecurityException::GLOBAL_LOGIN, $se->getType());
+            self::assertSame(SecurityType::GLOBAL_LOGIN, $se->getSecurityType());
             self::assertSame('captcha', $se->getRemainingDelay());
             // Throw because it's expected to verify that exception is thrown
             throw $se;

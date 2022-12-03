@@ -48,7 +48,7 @@ $settings['security'] = [
     // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
     // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
     // login request, the next check will be at the beginning of the 5th
-    'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],
+    'login_throttle_rule' => [4 => 60, 9 => 120, 12 => 'captcha'],
     'user_email_throttle_rule' => [5 => 2, 10 => 4, 20 => 'captcha'],
     // If login successes should be throttled the same way failures ars (if login_throttle is [4 => 10, 9 => 120, ...]
     // it means that after the 4th login success, each following success requests (in the given timespan) have to be in

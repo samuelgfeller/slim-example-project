@@ -5,6 +5,7 @@ namespace App\Domain\Security\Service;
 
 
 use App\Domain\Security\Data\RequestStatsData;
+use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
 use App\Infrastructure\Security\LoginRequestFinderRepository;
@@ -50,7 +51,7 @@ class SecurityLoginChecker
             if ($reCaptchaResponse !== null) {
                 $validCaptcha = $this->captchaVerifier->verifyReCaptcha(
                     $reCaptchaResponse,
-                    SecurityException::USER_LOGIN
+                    SecurityType::USER_LOGIN
                 );
             }
             // If captcha is valid the other security checks don't have to be made
@@ -96,20 +97,29 @@ class SecurityLoginChecker
 
                 // Retrieve the latest email sent for specific email or coming from ip
                 $latestLoginRequest = $this->loginRequestFinder->findLatestLoginRequestFromEmailOrIp($email);
+                // created_at in seconds
+                $latest = (int)date('U', strtotime($latestLoginRequest->createdAt));
+
+                if (true) {
+                    // Debug
+                    echo 'Actual time: ' . date('H:i:s') . "\n" .
+                        'Latest login time (id: ' . $latestLoginRequest->id . '): ' . date('H:i:s', $latest) . "\n" .
+                        'Delay: ' . $delay . "\n" .
+                        (is_numeric($delay) ? 'Time for next login: ' . date('H:i:s', $delay + $latest) . "\n" : '') .
+                        "---- \n";
+                }
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
-                    // created_at in seconds
-                    $latest = (int)date('U', strtotime($latestLoginRequest->createdAt));
-
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if (($time = time()) < ($timeForNextLogin = $delay + $latest)) {
                         $remainingDelay = $timeForNextLogin - $time;
-                        throw new SecurityException($remainingDelay, SecurityException::USER_LOGIN, $errMsg);
+                        throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
+                    $errMsg .=' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay
-                    throw new SecurityException($delay, SecurityException::USER_LOGIN, $errMsg);
+                    throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }
             }
         }
@@ -144,7 +154,7 @@ class SecurityLoginChecker
         if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';
-            throw new SecurityException('captcha', SecurityException::GLOBAL_LOGIN, $msg);
+            throw new SecurityException('captcha', SecurityType::GLOBAL_LOGIN, $msg);
         }
     }
 }

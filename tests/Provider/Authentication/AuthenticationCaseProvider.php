@@ -4,6 +4,7 @@ namespace App\Test\Provider\Authentication;
 
 
 use App\Domain\User\Enum\UserStatus;
+use Fig\Http\Message\StatusCodeInterface;
 
 class AuthenticationCaseProvider
 {
@@ -51,7 +52,26 @@ class AuthenticationCaseProvider
                 'status' => UserStatus::Suspended,
                 'partial_email_body' => 'If you just tried to log in, please take note that your account is suspended.',
             ],
+        ];
+    }
 
+    /**
+     * Provide status and partial email content for login test user that is not active
+     * In provider mainly to reset datbase between correct and incorrect requests
+     *
+     * @return array
+     */
+    public function authenticationSecurityCases(): array
+    {
+        return [
+            [
+                'correct_credentials' => true,
+                'status_code' => StatusCodeInterface::STATUS_FOUND,
+            ],
+            [
+                'correct_credentials' => false,
+                'status_code' => StatusCodeInterface::STATUS_UNAUTHORIZED,
+            ],
         ];
     }
 

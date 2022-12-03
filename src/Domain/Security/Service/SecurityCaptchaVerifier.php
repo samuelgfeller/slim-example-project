@@ -4,6 +4,7 @@
 namespace App\Domain\Security\Service;
 
 
+use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
 
@@ -21,11 +22,11 @@ class SecurityCaptchaVerifier
      * Ask google API if reCAPTCHA user response is correct or not
      *
      * @param string $reCaptchaResponse
-     * @param string $exceptionType Exception type (email, login, global)
+     * @param SecurityType $exceptionType Exception type (email, login, global)
      * @return bool true when correct otherwise SecurityException
      * @throws SecurityException
      */
-    public function verifyReCaptcha(string $reCaptchaResponse, string $exceptionType): bool
+    public function verifyReCaptcha(string $reCaptchaResponse, SecurityType $exceptionType): bool
     {
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' .
             urlencode($this->googleSettings['recaptcha']) . '&response=' . urlencode($reCaptchaResponse);

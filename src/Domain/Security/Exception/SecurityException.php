@@ -2,22 +2,16 @@
 
 namespace App\Domain\Security\Exception;
 
+use App\Domain\Security\Enum\SecurityType;
+
 /**
- * Class ValidationException.
+ * Security throttle exception
  */
 class SecurityException extends \RuntimeException
 {
-
-    public const GLOBAL_LOGIN = 'global_login';
-    public const GLOBAL_EMAIL = 'global_email';
-    public const GLOBAL_REQUESTS = 'global_requests';
-    public const USER_LOGIN = 'user_login'; // User or IP fail
-    public const USER_EMAIL = 'user_email';
-    public const USER_REQUESTS = 'user_requests';
-
     public function __construct(
-        private int|string $remainingDelay,
-        private string $type,
+        private readonly int|string $remainingDelay,
+        private readonly SecurityType $securityType,
         string $message = 'Security check failed.'
     ) {
         parent::__construct($message);
@@ -31,22 +25,22 @@ class SecurityException extends \RuntimeException
         return $this->remainingDelay;
     }
 
-    /**
-     * @return string
-     */
-    public function getType(): string
+
+    public function getSecurityType(): SecurityType
     {
-        return $this->type;
+        return $this->securityType;
     }
 
     public function getPublicMessage(): string
     {
-        return match ($this->getType()) {
-            self::USER_LOGIN, self::USER_EMAIL  => 'It looks like you are doing this too much. <br> Please '.
-                (is_numeric($this->remainingDelay) ? 'wait <span class="throttle-time-span">' . $this->remainingDelay . '</span>s'
+        return match ($this->getSecurityType()) {
+            SecurityType::USER_LOGIN, SecurityType::USER_EMAIL => 'It looks like you are doing this too much. <br> Please ' .
+                (is_numeric(
+                    $this->remainingDelay
+                ) ? 'wait <span class="throttle-time-span">' . $this->remainingDelay . '</span>s'
                     : 'fill out the captcha') .
                 ' and try again.',
-            self::GLOBAL_LOGIN, self::GLOBAL_EMAIL => 'The site is under a too high request load '.
+            SecurityType::GLOBAL_LOGIN, SecurityType::GLOBAL_EMAIL => 'The site is under a too high request load ' .
                 'therefore a general throttling is in place. Please fill out the captcha and try again.',
             default => 'Please wait or fill out the captcha and repeat the action.',
         };

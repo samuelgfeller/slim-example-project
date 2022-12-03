@@ -2,13 +2,17 @@
 
 namespace App\Test\Integration\Authentication;
 
+use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Infrastructure\Security\RequestPreponerRepository;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
+use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
@@ -26,120 +30,183 @@ class LoginSecurityTest extends TestCase
      * If login request amount exceeds threshold, the user has to wait a certain delay
      * This is still far below a global test
      *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::correctAndWrongCredentialsProvider()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationCaseProvider::authenticationSecurityCases()
      *
-     * @param array $loginFormValues One dataset with wrong credentials and one with correct ones
+     * @param bool $credentialsAreCorrect
+     * @param int $statusCode
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testTooManyLoginAttempts(array $loginFormValues): void
-    {
-        // Fixture not needed to insert successful login requests to make sure that request doesn't fail because global
-        // ratio too low as there is a minimal hard limit for the global check to fail
+    public function testTooManyLoginAttempts(
+        bool $credentialsAreCorrect,
+        int $statusCode
+    ): void {
+        // If more than x percentage of global login requests are wrong, there is an exception but that won't happen
+        // while testing as there is a minimal hard limit on allowed failed login requests
 
-        // Insert user for the test of successful login abuse (provided via dataProvider)
-        $user = $this->insertFixturesWithAttributes([], UserFixture::class);
 
+        $password = '12345678';
+        $email = 'user@exmple.com';
+        // Insert user fixture
+        $user = $this->insertFixturesWithAttributes([
+            'email' => $email,
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT)
+        ], UserFixture::class);
+        // Login request body
+        $correctLoginRequestBody = ['email' => $email, 'password' => $password];
+        $loginRequestBody = $correctLoginRequestBody;
+        if ($credentialsAreCorrect === false) {
+            $loginRequestBody = ['email' => 'wrong@email.com', 'password' => 'wrong_password'];
+        }
+        // Login request once with correct credentials, once with incorrect
+        // Prepare login request with either valid or invalid credentials
+        $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginRequestBody);
 
-        $throttleArr = $this->container->get('settings')['security']['login_throttle_rule'];
+        // Function to prepone last request time to simulate waiting delay
+        $preponeLastUserRequestEntry = function ($seconds) {
+            // Change row with the highest id
+            $query = "UPDATE user_request SET created_at = DATE_SUB(NOW(), INTERVAL $seconds SECOND) ORDER BY id DESC LIMIT 1";
+            $this->createQueryStatement($query);
+        };
 
-        // Failed request
-        $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginFormValues);
+        $throttleRules = $this->container->get('settings')['security']['login_throttle_rule'];
 
-        // Needed to prepone request date to simulate waiting delay
-        $requestPreponerRepository = $this->container->get(RequestPreponerRepository::class);
+        $lowestThreshold = array_key_first($throttleRules);
 
-        $lowestThreshold = array_key_first($throttleArr);
-        // It should be tested with the most strict throttle as well. This means that last run should exceed last threshold
-        $amountForStrictestThrottle = array_key_last($throttleArr) + 1;
+        // It should be tested with the most strict throttle as well. This means that last run should match last threshold
+        // Previously +1 had to be added as exception was only thrown on beginning next request but now the login
+        // security check is also done after an unsuccessful request
+        $thresholdForStrictestThrottle = array_key_last($throttleRules);
 
-        // $i > $delay would always match the delay after the first threshold and thus ignore all other thresholds
-        // Reversing throttleArr will check for the big delays first
-        krsort($throttleArr);
-        // highestThreshold + 1 because it should be tested against
-        for ($i = 1; $i <= $amountForStrictestThrottle; $i++) {
-            // Inside loop are if statements with right values
-            foreach ($throttleArr as $threshold => $delay) {
-                // Below and on the first threshold no exception is thrown
-                if (($threshold === $lowestThreshold) && $i <= $lowestThreshold) {
-                    $this->app->handle($request);
-                    break; // leave foreach loop
+        // Revers throttleRules for the loop iterations so that it will check for the big (stricter) delays first
+        krsort($throttleRules);
+
+        // Simulate amount of login requests to go through every throttling level
+        // $nthLoginRequest is the current nth amount of login request that is made (4th, 5th, 6th etc.)
+        for ($nthLoginRequest = 1; $nthLoginRequest <= $thresholdForStrictestThrottle; $nthLoginRequest++) {
+            // * If credentials are correct, remove 1 from $nthLoginRequest. The reason is the following:
+            // For login requests with correct credentials, the only security check is done before processing the request
+            // For invalid login requests an additional security check is done after the request. This means that if the
+            // first threshold is 4, the 4th valid login request does not throw exception but the 4th invalid login request
+            // will throw an exception. By decreasing the $nthLoginRequest, the same assertion logic can be used later
+            if ($credentialsAreCorrect === true) {
+                --$nthLoginRequest;
+            }
+
+            // * Until the lowest threshold is reached, the login requests are normal and should not be throttled
+            if ($nthLoginRequest < $lowestThreshold) {
+                // As long as the nth request is below first threshold no exception is thrown but user_request entry is
+                // added which is needed later for the throttling
+                $response = $this->app->handle($request);
+                self::assertSame($statusCode, $response->getStatusCode());
+                if ($credentialsAreCorrect === true) {
+                    // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
+                    ++$nthLoginRequest;
                 }
+                continue; // leave foreach loop
+            }
 
-                // Request amount beyond first threshold therefore experiencing throttle
-                if ($i > $threshold) {
-                    // captcha expected for the last threshold
+            // * Lowest threshold reached, assert that correct throttle is applied
+            foreach ($throttleRules as $threshold => $delay) {
+                // Apply correct throttling rule in relation to nth login request by checking which threshold is reached
+                if ($nthLoginRequest >= $threshold) {
+                    // If the amount of made login requests reaches the first threshold -> throttle
                     try {
                         $this->app->handle($request);
                         self::fail('SecurityException should be thrown');
                     } catch (SecurityException $se) {
-                        self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1);
-                        self::assertSame(SecurityException::USER_LOGIN, $se->getType());
+                        // As 1 is removed from nthLoginRequest the actual delay has to be adjusted if credentials are correct
+
+                        // if($credentialsAreCorrect === true){
+                        //     $delay = ;
+                        // }
+                        self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1, 'nth login: '.$nthLoginRequest);
+                        self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
                     }
-                    // Highest throttle is probably captcha not a numeric delay that could be preponed
-                    if (!($i >= $amountForStrictestThrottle)) {
+
+                    // Prepone last user request to simulate waiting except if $delay is not numeric (captcha)
+                    if (is_numeric($delay)) {
                         // Reset to time to simulate waiting
-                        $requestPreponerRepository->preponeLastRequest($delay);
-                        // After waiting the delay, user is allowed to make new login request
-                        $responseAfterWaiting = $this->app->handle($request);
-                        // Now it could be asserted that response an either successful or failed login
-                        // SecurityException will not be thrown after invalid login as check happens in beginning of next request
+                        $preponeLastUserRequestEntry($delay);
+
+                        // After waiting the delay, user is allowed to make new login request but if the credentials
+                        // are wrong again (using same $request), an exception is expected from the second security check
+                        // in LoginVerifier (which is not done if request has correct credentials)
+                        if ($credentialsAreCorrect === false) {
+                            $this->expectException(SecurityException::class);
+                            $this->app->handle($request);
+                        }
+
+                        // * Assert that after waiting the delay, a successful request can be made with correct credentials
+                        $requestAfterWaitingDelay = $this->createFormRequest(
+                            'POST',
+                            $this->urlFor('login-submit'),
+                            $correctLoginRequestBody
+                        );
+                        $responseAfterWaiting = $this->app->handle($requestAfterWaitingDelay);
+                        self::assertSame(StatusCodeInterface::STATUS_FOUND, $responseAfterWaiting->getStatusCode());
                     }
-                    break; // leave foreach loop
                 }
+                $previousDelay = $delay;
             }
+                if ($credentialsAreCorrect === true) {
+                    // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
+                    ++$nthLoginRequest;
+                }
         }
-        ksort($throttleArr);
+        ksort($throttleRules);
+
 
         // The above loop roughly has the same checks as the follows
-/*        for ($i = 1; $i <= 12; $i++) {
-            // SecurityCheck is done in beginning of next request so if threshold is 4, check that'll fail will be done
-            // in the 5th request
-            if ($i <= 4) {
-                // no exception expected
-                $this->app->handle($request);
-            } // First the highest threshold otherwise lowest would always match and it'd never go in the next ones
-            elseif ($i > 12) {// first throttle expected so 10s (after 4 failures)
-                try {
-                    $this->app->handle($request);
-                    self::fail('SecurityException should be thrown');
-                } catch (SecurityException $se) {
-                    self::assertSame('captcha', $se->getRemainingDelay());
-                    self::assertSame(SecurityException::USER_LOGIN, $se->getType());
-                }
-            } // If threshold is 12, check that'll fail will be done in the 13th request
-            elseif ($i > 9) {// second throttle expected so 120s
-                try {
-                    $this->app->handle($request);
-                    self::fail('SecurityException should be thrown');
-                } catch (SecurityException $se) {
-                    self::assertEqualsWithDelta(120, $se->getRemainingDelay(), 1);
-                    self::assertSame(SecurityException::USER_LOGIN, $se->getType());
-                    // Reset to time to simulate waiting
-                    $requestPreponerRepository->preponeLastRequest(120);
-                }
+        /*        for ($nthLoginRequest = 1; $nthLoginRequest <= 12; $nthLoginRequest++) {
+                    // SecurityCheck is done in beginning of next request so if threshold is 4, check that'll fail will be done
+                    // in the 5th request
+                    if ($nthLoginRequest <= 4) {
+                        // no exception expected
+                        $this->app->handle($request);
+                    } // First the highest threshold otherwise lowest would always match and it'd never go in the next ones
+                    elseif ($nthLoginRequest > 12) {// first throttle expected so 10s (after 4 failures)
+                        try {
+                            $this->app->handle($request);
+                            self::fail('SecurityException should be thrown');
+                        } catch (SecurityException $se) {
+                            self::assertSame('captcha', $se->getRemainingDelay());
+                            self::assertSame(SecurityType::USER_LOGIN, $se->getType());
+                        }
+                    } // If threshold is 12, check that'll fail will be done in the 13th request
+                    elseif ($nthLoginRequest > 9) {// second throttle expected so 120s
+                        try {
+                            $this->app->handle($request);
+                            self::fail('SecurityException should be thrown');
+                        } catch (SecurityException $se) {
+                            self::assertEqualsWithDelta(120, $se->getRemainingDelay(), 1);
+                            self::assertSame(SecurityType::USER_LOGIN, $se->getType());
+                            // Reset to time to simulate waiting
+                            $requestPreponerRepository->preponeLastRequest(120);
+                        }
 
-                // After waiting the delay, user is allowed to make new login request
-                $responseAfterWaiting = $this->app->handle($request);
-                // Assert that request was a login request with invalid credentials
-                self::assertSame(401, $responseAfterWaiting->getStatusCode());
-                // SecurityException will not be thrown after invalid login as check happens in beginning of next request
-            } elseif ($i > 4) {// captcha expected
-                try {
-                    $response = $this->app->handle($request);
-                    self::fail('SecurityException should be thrown');
-                } catch (SecurityException $se) {
-                    self::assertEqualsWithDelta(10, $se->getRemainingDelay(), 1);
-                    self::assertSame(SecurityException::USER_LOGIN, $se->getType());
-                    // Reset to time to simulate waiting
-                    $requestPreponerRepository->preponeLastRequest(10);
-                }
+                        // After waiting the delay, user is allowed to make new login request
+                        $responseAfterWaiting = $this->app->handle($request);
+                        // Assert that request was a login request with invalid credentials
+                        self::assertSame(401, $responseAfterWaiting->getStatusCode());
+                        // SecurityException will not be thrown after invalid login as check happens in beginning of next request
+                    } elseif ($nthLoginRequest > 4) {// captcha expected
+                        try {
+                            $response = $this->app->handle($request);
+                            self::fail('SecurityException should be thrown');
+                        } catch (SecurityException $se) {
+                            self::assertEqualsWithDelta(10, $se->getRemainingDelay(), 1);
+                            self::assertSame(SecurityType::USER_LOGIN, $se->getType());
+                            // Reset to time to simulate waiting
+                            $requestPreponerRepository->preponeLastRequest(10);
+                        }
 
-                // After waiting the delay, user is allowed to make new login request
-                $responseAfterWaiting = $this->app->handle($request);
-                // Assert that request was a login request with invalid credentials
-                self::assertSame(401, $responseAfterWaiting->getStatusCode());
-                // SecurityException will not be thrown after invalid login as check happens in beginning of next request
-            }
-        }*/
-
+                        // After waiting the delay, user is allowed to make new login request
+                        $responseAfterWaiting = $this->app->handle($request);
+                        // Assert that request was a login request with invalid credentials
+                        self::assertSame(401, $responseAfterWaiting->getStatusCode());
+                        // SecurityException will not be thrown after invalid login as check happens in beginning of next request
+                    }
+                }*/
     }
 }

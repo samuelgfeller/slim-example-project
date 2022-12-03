@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
+namespace App\Test\Traits\ProjectCustom;
 
-namespace App\Infrastructure\Security;
+use Selective\TestTrait\Traits\DatabaseTestTrait;
 
-use App\Infrastructure\Factory\QueryFactory;
-
-class RequestPreponerRepository
+/**
+ * Authentication throttling
+ */
+trait SecurityTestTrait
 {
-
-    public function __construct(private readonly QueryFactory $queryFactory)
-    {
-    }
+    use DatabaseTestTrait;
 
     /**
      * Set the created_at time to x amount of seconds earlier
@@ -22,6 +20,8 @@ class RequestPreponerRepository
      */
     public function preponeLastRequest(int $seconds): bool
     {
+
+        $this->getConnection()
         $query = $this->queryFactory->newQuery();
         $query->update('user_request')->set(
             [
@@ -29,6 +29,5 @@ class RequestPreponerRepository
             ]
         )->orderDesc('id')->limit(1)->bind(':sec', $seconds, 'integer');
         return $query->execute()->rowCount() > 0;
-    }
-
+}
 }
