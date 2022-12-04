@@ -4,12 +4,12 @@ namespace App\Test\Integration\Authentication;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
-use App\Infrastructure\Security\RequestPreponerRepository;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -28,7 +28,6 @@ class LoginSecurityTest extends TestCase
     /**
      * Test thresholds and according delays once with failed logins and once with successes
      * If login request amount exceeds threshold, the user has to wait a certain delay
-     * This is still far below a global test
      *
      * @dataProvider \App\Test\Provider\Authentication\AuthenticationCaseProvider::authenticationSecurityCases()
      *
@@ -37,13 +36,10 @@ class LoginSecurityTest extends TestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testTooManyLoginAttempts(
-        bool $credentialsAreCorrect,
-        int $statusCode
-    ): void {
+    public function testLoginThrottling(bool $credentialsAreCorrect, int $statusCode): void
+    {
         // If more than x percentage of global login requests are wrong, there is an exception but that won't happen
         // while testing as there is a minimal hard limit on allowed failed login requests
-
 
         $password = '12345678';
         $email = 'user@exmple.com';
@@ -115,12 +111,13 @@ class LoginSecurityTest extends TestCase
                         $this->app->handle($request);
                         self::fail('SecurityException should be thrown');
                     } catch (SecurityException $se) {
-                        // As 1 is removed from nthLoginRequest the actual delay has to be adjusted if credentials are correct
-
-                        // if($credentialsAreCorrect === true){
-                        //     $delay = ;
-                        // }
-                        self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1, 'nth login: '.$nthLoginRequest);
+                        self::assertEqualsWithDelta(
+                            $delay,
+                            $se->getRemainingDelay(),
+                            1,
+                            'nth login: ' .
+                            $nthLoginRequest . ' threshold: ' . $threshold
+                        );
                         self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
                     }
 
@@ -131,7 +128,7 @@ class LoginSecurityTest extends TestCase
 
                         // After waiting the delay, user is allowed to make new login request but if the credentials
                         // are wrong again (using same $request), an exception is expected from the second security check
-                        // in LoginVerifier (which is not done if request has correct credentials)
+                        // after the failed request in LoginVerifier (which is not done if request has correct credentials)
                         if ($credentialsAreCorrect === false) {
                             $this->expectException(SecurityException::class);
                             $this->app->handle($request);
@@ -144,20 +141,26 @@ class LoginSecurityTest extends TestCase
                             $correctLoginRequestBody
                         );
                         $responseAfterWaiting = $this->app->handle($requestAfterWaitingDelay);
+                        // Assert that user is logged in and redirected
+                        self::assertSame($user['id'], $this->container->get(SessionInterface::class)->get('user_id'));
                         self::assertSame(StatusCodeInterface::STATUS_FOUND, $responseAfterWaiting->getStatusCode());
                     }
+                    if ($credentialsAreCorrect === true) {
+                        // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
+                        ++$nthLoginRequest;
+                    }
+                    // If right threshold is reached and asserted, go out of nthLogin loop to test the next iteration
+                    // Otherwise the throttling foreach continues and the delay assertion fails as it would be too small
+                    // once nthLoginRequest reaches the second-strictest throttling.
+                    continue 2;
                 }
-                $previousDelay = $delay;
             }
-                if ($credentialsAreCorrect === true) {
-                    // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
-                    ++$nthLoginRequest;
-                }
         }
         ksort($throttleRules);
 
 
-        // The above loop roughly has the same checks as the follows
+        // The above loop roughly has the same checks as the follows (the test function was since refactored so a lot
+        // will be different
         /*        for ($nthLoginRequest = 1; $nthLoginRequest <= 12; $nthLoginRequest++) {
                     // SecurityCheck is done in beginning of next request so if threshold is 4, check that'll fail will be done
                     // in the 5th request

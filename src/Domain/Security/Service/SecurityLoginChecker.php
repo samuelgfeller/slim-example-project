@@ -100,14 +100,12 @@ class SecurityLoginChecker
                 // created_at in seconds
                 $latest = (int)date('U', strtotime($latestLoginRequest->createdAt));
 
-                if (true) {
-                    // Debug
-                    echo 'Actual time: ' . date('H:i:s') . "\n" .
-                        'Latest login time (id: ' . $latestLoginRequest->id . '): ' . date('H:i:s', $latest) . "\n" .
-                        'Delay: ' . $delay . "\n" .
-                        (is_numeric($delay) ? 'Time for next login: ' . date('H:i:s', $delay + $latest) . "\n" : '') .
-                        "---- \n";
-                }
+                // Debug
+                /*echo 'Actual time: ' . date('H:i:s') . "\n" .
+                    'Latest login time (id: ' . $latestLoginRequest->id . '): ' . date('H:i:s', $latest) . "\n" .
+                    'Delay: ' . $delay . "\n" .
+                    (is_numeric($delay) ? 'Time for next login: ' . date('H:i:s', $delay + $latest) . "\n" : '') .
+                    "---- \n";*/
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
@@ -117,7 +115,7 @@ class SecurityLoginChecker
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
-                    $errMsg .=' because of captcha';
+                    $errMsg .= ' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay
                     throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }

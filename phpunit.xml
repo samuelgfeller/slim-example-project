@@ -26,6 +26,7 @@
 
     </testsuites>
     <php>
+<!--    APP_ENV has to be "testing" for env.testing.php (test config values) to load  -->
         <env name="APP_ENV" value="testing"/>
         <env name="PHPUNIT_TEST_SUITE" value="1"/>
     </php>

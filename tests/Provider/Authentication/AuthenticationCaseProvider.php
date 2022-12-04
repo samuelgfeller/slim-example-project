@@ -57,7 +57,7 @@ class AuthenticationCaseProvider
 
     /**
      * Provide status and partial email content for login test user that is not active
-     * In provider mainly to reset datbase between correct and incorrect requests
+     * In provider mainly to reset database between correct and incorrect requests
      *
      * @return array
      */
