@@ -12,6 +12,8 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Infrastructure\Security\EmailRequestFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Threats:
@@ -31,27 +33,24 @@ class SecurityEmailCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::userEmailProvider()
+     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::individualEmailThrottlingTestCases()
      *
      * @param int|string $delay
-     * @param RequestStatsData $ipRequestStats
-     * @param RequestStatsData $userRequestStats
+     * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testPerformEmailAbuseCheck_user(
-        int|string $delay,
-        RequestStatsData $ipRequestStats,
-        RequestStatsData $userRequestStats
-    ): void {
+    public function testPerformEmailAbuseCheck_individual(int|string $delay, array $ipAndEmailRequestStats,): void
+    {
         // Preparation; making sure other security checks won't fail
         $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
         // Very important to return stats otherwise global check fails
         $requestFinderRepository->method('getGlobalSentEmailAmount')->willReturn(0);
 
         // Actual test
-        // Provider first makes $ipRequestStats filled with each values exceeding threshold (new threshold on each run)
-        $requestFinderRepository->method('getIpRequestStats')->willReturn($ipRequestStats);
-        // Vice versa $userRequestStats are 0 values when ip values are tested but full later for user tests
-        $requestFinderRepository->method('getUserRequestStats')->willReturn($userRequestStats);
+        // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
+        // email stats being empty and then vice versa
+        $requestFinderRepository->method('getEmailRequestStatsFromEmailAndIp')->willReturn($ipAndEmailRequestStats);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
         $lastRequest = new RequestData(

@@ -41,17 +41,15 @@ class SecurityLoginCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::userLoginProvider()
+     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::individualLoginThrottlingTestCases()
      *
      * @param int|string $delay
      * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformLoginSecurityCheck_individual(
-        int|string $delay,
-        array $ipAndEmailRequestStats
-    ): void {
+    public function testPerformLoginSecurityCheck_individual(int|string $delay, array $ipAndEmailRequestStats): void
+    {
         $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
@@ -60,12 +58,11 @@ class SecurityLoginCheckerTest extends TestCase
         );
 
         // Actual test
-        // Provider first makes $ipRequestStats filled with each values exceeding threshold (new threshold on each run)
+        // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
+        // email stats being empty and then vice versa
         $loginRequestFinderRepository->method('getLoginRequestStatsFromEmailAndIp')->willReturn(
             $ipAndEmailRequestStats
         );
-        // Vice versa $userRequestStats are 0 values when ip values are tested but full later for user tests
-        // $loginRequestFinderRepository->method('getUserRequestStats')->willReturn($userRequestStats);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
         $lastRequest = new RequestData(
