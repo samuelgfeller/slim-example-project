@@ -46,7 +46,7 @@ class ClientAuthorizationChecker
             // If hierarchy number is greater or equals newcomer it means that user is not allowed
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
                 // Advisor may create clients but can't assign them to someone other than himself
-                // If $client is null (not provided), advisor is authorized (used to display create btn for instance)
+                // If $client is null (not provided), advisor is authorized (used to check if create btn should be displayed)
                 if ($client === null || $client->userId === $loggedInUserId ||
                     // managing advisor can link user to someone else
                     $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
@@ -113,6 +113,9 @@ class ClientAuthorizationChecker
                 }
                 if (array_key_exists('sex', $clientDataToUpdate)) {
                     $grantedUpdateKeys[] = 'sex';
+                }
+                if (array_key_exists('vigilance_level', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'vigilance_level';
                 }
                 /** Update main note authorization is in @see NoteAuthorizationChecker::isGrantedToUpdate () */
 

@@ -69,7 +69,8 @@ final class ClientUpdateAction
                 'location',
                 'birthdate',
                 'email',
-                'sex'
+                'sex',
+                'vigilance_level',
             ])) {
                 // Try to update client with given values
                 try {

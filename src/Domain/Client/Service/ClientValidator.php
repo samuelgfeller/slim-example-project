@@ -3,8 +3,8 @@
 namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientData;
+use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 
@@ -31,7 +31,7 @@ class ClientValidator
      * Validate client creation
      *
      * @param ClientData $client
-     * @throws ValidationException
+     * @param string|null $birthdateValue
      */
     public function validateClientCreation(ClientData $client, null|string $birthdateValue = null): void
     {
@@ -57,6 +57,15 @@ class ClientValidator
         $this->validateSex($client->sex, $validationResult, false);
 
         $this->validateClientMessage($client->clientMessage, $validationResult, false);
+
+        $this->validator->validateBackedEnum(
+            $client->vigilanceLevel,
+            ClientVigilanceLevel::class,
+            'vigilance_level',
+            $validationResult,
+            false
+        );
+
 
         $this->validator->throwOnError($validationResult);
     }
@@ -98,6 +107,15 @@ class ClientValidator
         }
         if (array_key_exists('sex', $clientValues)) {
             $this->validateSex($clientValues['sex'], $validationResult, false);
+        }
+        if (array_key_exists('vigilance_level', $clientValues)) {
+            $this->validator->validateBackedEnum(
+                $clientValues['vigilance_level'],
+                ClientVigilanceLevel::class,
+                'vigilance_level',
+                $validationResult,
+                false
+            );
         }
 
         $this->validator->throwOnError($validationResult);
@@ -223,7 +241,6 @@ class ClientValidator
             $validationResult->setError('phone', 'Phone is required');
         }
     }
-
 
 
 }

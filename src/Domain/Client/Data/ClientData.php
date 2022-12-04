@@ -5,7 +5,7 @@ namespace App\Domain\Client\Data;
 
 use App\Common\ArrayReader;
 use App\Common\DateTimeImmutable;
-use App\Domain\Note\Data\NoteData;
+use App\Domain\Client\Enum\ClientVigilanceLevel;
 
 class ClientData
 {
@@ -22,6 +22,7 @@ class ClientData
     // https://ocelot.ca/blog/blog/2013/09/16/representing-sex-in-databases/
     public ?string $sex = null; // ENUM 'F' -> Female; 'M' -> Male; 'O' -> Other; NULL -> Not applicable.
     public ?string $clientMessage = null; // Message that client submitted via webform
+    public ?ClientVigilanceLevel $vigilanceLevel = null;
     public ?int $userId;
     public ?int $clientStatusId;
     public ?DateTimeImmutable $updatedAt;
@@ -46,6 +47,7 @@ class ClientData
         $this->email = $reader->findAsString('email');
         $this->sex = $reader->findAsString('sex');
         $this->clientMessage = $reader->findAsString('client_message');
+        $this->vigilanceLevel = $reader->findAsEnum('vigilance_level', ClientVigilanceLevel::class);
         $this->userId = $reader->findAsInt('user_id');
         $this->clientStatusId = $reader->findAsInt('client_status_id');
         $this->updatedAt = $reader->findAsDateTimeImmutable('updated_at');
@@ -76,6 +78,7 @@ class ClientData
             'email' => $this->email,
             'sex' => $this->sex,
             'client_message' => $this->clientMessage,
+            'vigilance_level' => $this->vigilanceLevel->value,
             'user_id' => $this->userId,
             'client_status_id' => $this->clientStatusId,
         ];

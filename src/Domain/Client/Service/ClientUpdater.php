@@ -60,7 +60,8 @@ class ClientUpdater
                     'location',
                     'birthdate',
                     'email',
-                    'sex'
+                    'sex',
+                    'vigilance_level'
                 ])) {
                     $updateData[$column] = $value;
                 } else {

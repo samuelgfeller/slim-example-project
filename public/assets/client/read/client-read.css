@@ -196,6 +196,8 @@
         box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
         align-self: start; /*Make it not expand to the same height as activity notes*/
         position: relative; /*For absolute edit icon on mobile*/
+        float: right;
+        width: fit-content;
     }
 
     #client-personal-info-flex-container a, #client-personal-info-flex-container > div {
@@ -273,22 +275,29 @@
     #add-client-personal-info-div {
         /*margin-left: 13px;*/
         padding: 6px;
-        border-radius: 99px;
+        border-radius: 30px;
         box-shadow: 0 0px 9px rgba(46, 66, 80, 0.12);
         /*border: 1px solid #d5d5d5;*/
         height: 45px;
-        width: 100%;
         margin-top: 10px;
         cursor: pointer;
         display: flex;
         align-items: center;
         max-width: 45px;
-        transition: max-width .5s ease-out;
+        transition: max-width .3s ease;
         overflow: hidden;
+        float: right;
     }
 
     #add-client-personal-info-div:hover {
         max-width: 100%;
+        /*Increase left and right padding when open*/
+        padding: 6px 10px;
+        /*Along with js function openAvailableIconsDiv*/
+    }
+
+    #add-client-personal-info-div:hover #toggle-personal-info-icons{
+        display: none;
     }
 
     #add-client-personal-info-div img {
@@ -370,7 +379,7 @@
     }
 
     #client-personal-info-flex-container {
-        min-width: 255px;
+        /*min-width: 255px;*/
     }
 }
 
@@ -382,6 +391,7 @@
     }
 
     #client-activity-personal-info-container > div {
+        /*For personal info container to not take more space than its content*/
         flex-basis: auto;
     }
 

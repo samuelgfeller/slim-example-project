@@ -1,5 +1,9 @@
 import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js?v=0.1";
-import {addIconToAvailableDiv, removeIconFromAvailableDiv} from "../client-read-personal-info.js?v=0.1";
+import {
+    addIconToAvailableDiv,
+    removeIconFromAvailableDiv,
+    showPersonalInfoContainerIfHidden
+} from "../client-read-personal-info.js?v=0.1";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,
@@ -22,9 +26,7 @@ export function makeClientFieldEditable() {
     let field = this.parentNode.querySelector(fieldElement);
 
     // Show personal info container if hidden because it was previously empty
-    if (personalInfoContainer.style.opacity) {
-        personalInfoContainer.style.opacity = null;
-    }
+    showPersonalInfoContainerIfHidden();
 
     // Lock min-width for the container to not shrink during editing
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';

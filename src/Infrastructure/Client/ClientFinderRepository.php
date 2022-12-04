@@ -25,6 +25,7 @@ class ClientFinderRepository
         'email' => 'client.email',
         'sex' => 'client.sex',
         'client_message' => 'client.client_message',
+        'vigilance_level' => 'client.vigilance_level',
         'user_id' => 'client.user_id',
         'client_status_id' => 'client.client_status_id',
         'updated_at' => 'client.updated_at',

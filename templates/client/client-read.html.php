@@ -235,23 +235,55 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                     ><?= html($emailParts[0]) ?><br>@<?= html($emailParts[1]) ?></span>
                 </div>
             </a>
+            <div id="vigilance_level-container" style="<?= $clientAggregate->vigilanceLevel ? '' : 'display: none;' ?>">
+                <img src="assets/general/img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
+                     alt="vigilance">
+                <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
+                     data-field-element="select"
+                     data-hide-if-empty="true">
+                    <?php
+                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                        <img src="assets/general/img/material-edit-icon.svg"
+                             class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                             id="edit-vigilance-level-btn">
+                        <select name="vigilance_level" class="default-select" id="vigilance-level-select">
+                            <option value=""><!-- is nullable --></option>
+                            <?php
+                            // Linked user select options
+                            foreach ($dropdownValues->vigilanceLevel as $id => $name) {
+                                $selected = $id === $clientAggregate->vigilanceLevel?->value ? 'selected' : '';
+                                echo "<option value='$id' $selected>$name</option>";
+                            }
+                            ?>
+                        </select>
+                        <?php
+                    } ?>
+                    <span spellcheck="false" data-name="sex" data-maxlength="254"
+                    ><?= $clientAggregate->vigilanceLevel ? $clientAggregate->vigilanceLevel->prettyName()
+                            : '' ?></span>
+                </div>
+            </div>
         </div>
+        <div class="clearfix"></div>
         <?php
         if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
             <div id="add-client-personal-info-div">
                 <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
+
                 <!-- Delete trash icon stays always there -->
                 <?= $clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::DELETE) ?
                     '<img src="assets/general/img/action/trash-icon.svg" class="personal-info-icon" id="delete-client-btn"
                      alt="delete">' : '' ?>
 
-                <!-- alt has to be the same as the field name -->
+                <!-- alt has to be exactly the same as the field name and field container id be "[alt]-container" -->
                 <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
                 <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
                 <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon"
                      alt="location">
                 <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
                 <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
+                     alt="vigilance_level">
             </div>
             <?php
         } ?>

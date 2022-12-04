@@ -48,6 +48,7 @@ document.querySelector('#edit-phone-btn')?.addEventListener('click', makeClientF
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
+document.querySelector('#edit-vigilance-level-btn')?.addEventListener('click', makeFieldSelectValueEditable);
 // Delete button
 document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
     let title = 'Are you sure that you want to delete this client?';

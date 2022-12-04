@@ -2,6 +2,7 @@
 
 namespace App\Domain\Client\Data;
 
+use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\General\Enum\SexOption;
 
 /**
@@ -13,6 +14,7 @@ class ClientDropdownValuesData
     public ?array $statuses;
     public ?array $users;
     public ?array $sexes;
+    public ?array $vigilanceLevel;
 
     public function __construct(
         ?array $statuses = null,
@@ -21,6 +23,7 @@ class ClientDropdownValuesData
     {
         $this->statuses = $statuses;
         $this->users = $users;
-        $this->sexes = SexOption::toArray();
+        $this->sexes = SexOption::toArrayWithPrettyNames();
+        $this->vigilanceLevel = ClientVigilanceLevel::toArrayWithPrettyNames();
     }
 }

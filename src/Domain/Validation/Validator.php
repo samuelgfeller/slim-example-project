@@ -52,8 +52,8 @@ final class Validator
     /**
      * Check if a values string is less than a defined value.
      *
-     * @param $value
-     * @param $fieldName
+     * @param string|int|null $value
+     * @param string $fieldName
      * @param ValidationResult $validationResult
      * @param int $length
      */
@@ -73,7 +73,7 @@ final class Validator
      * Check if a values string length is more than a defined value.
      *
      * @param string|int|null $value
-     * @param $fieldName
+     * @param string $fieldName
      * @param ValidationResult $validationResult
      * @param int $length
      */
@@ -249,29 +249,34 @@ final class Validator
     }
 
     /**
-     * Validate the users permission level.
+     * Validate user status dropdown
+     * @template Enum
      *
-     * @param string $userId
-     * @param string $requiredPermissionLevel
+     * @param \BackedEnum|string|null $value enum case or backed string value
+     * @param class-string $enum
+     * @param string $fieldName
      * @param ValidationResult $validationResult
+     * @param bool $required
+     * @return void
      */
-    /*    protected function validatePermissionLevel(string $userId, string $requiredPermissionLevel, ValidationResult $validationResult)
-        {
-            if ($this->hasPermissionLevel($userId, $requiredPermissionLevel)) {
-                $validationResult->setError('permission', __('You do not have the permission to execute this action'));
+    public function validateBackedEnum(
+        \BackedEnum|string|null $value,
+        string $enum,
+        string $fieldName,
+        ValidationResult $validationResult,
+        bool $required = false
+    ): void {
+        if (null !== $value && '' !== $value) {
+            // If $value is already an enum case, it means that its valid
+            if (!is_a($value, $enum, true) && !is_a($enum::tryFrom($value), $enum, true)) {
+                $validationResult->setError($fieldName, $fieldName . ' not existing');
             }
-        }*/
-
-    /**
-     * Check if the user has the right permission level.
-     *
-     * @param string $userId
-     * @param string $requiredPermissionLevel
-     * @return bool
-     */
-    /*    protected function hasPermissionLevel(string $userId, string $requiredPermissionLevel)
-        {
-            $level = $this->userRepository->getUserPermissionLevel($userId);
-            return $level >= $requiredPermissionLevel;
-        }*/
+            // Check if given user status is one of the enum cases
+            // if (!in_array($value, $enum::values(), true)) {
+            // }
+        } elseif (true === $required) {
+            // If it is null or empty string and required
+            $validationResult->setError($fieldName, $fieldName . ' required');
+        }
+    }
 }
