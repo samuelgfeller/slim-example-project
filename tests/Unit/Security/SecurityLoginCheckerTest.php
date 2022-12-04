@@ -8,8 +8,11 @@ use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Infrastructure\Security\EmailRequestFinderRepository;
+use App\Infrastructure\Security\LoginRequestFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Threats:
@@ -41,26 +44,28 @@ class SecurityLoginCheckerTest extends TestCase
      * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::userLoginProvider()
      *
      * @param int|string $delay
-     * @param RequestStatsData $ipRequestStats
-     * @param RequestStatsData $userRequestStats
+     * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testPerformLoginSecurityCheck_user(
+    public function testPerformLoginSecurityCheck_individual(
         int|string $delay,
-        RequestStatsData $ipRequestStats,
-        RequestStatsData $userRequestStats
+        array $ipAndEmailRequestStats
     ): void {
-        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
+        $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
-        $requestFinderRepository->method('getGlobalLoginAmountStats')->willReturn(
+        $loginRequestFinderRepository->method('getGlobalLoginAmountStats')->willReturn(
             ['login_total' => 21, 'login_failures' => 0] // 0 percent failures so global check won't fail
         );
 
         // Actual test
         // Provider first makes $ipRequestStats filled with each values exceeding threshold (new threshold on each run)
-        $requestFinderRepository->method('getIpRequestStats')->willReturn($ipRequestStats);
+        $loginRequestFinderRepository->method('getLoginRequestStatsFromEmailAndIp')->willReturn(
+            $ipAndEmailRequestStats
+        );
         // Vice versa $userRequestStats are 0 values when ip values are tested but full later for user tests
-        $requestFinderRepository->method('getUserRequestStats')->willReturn($userRequestStats);
+        // $loginRequestFinderRepository->method('getUserRequestStats')->willReturn($userRequestStats);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
         $lastRequest = new RequestData(
@@ -73,7 +78,7 @@ class SecurityLoginCheckerTest extends TestCase
                 'created_at' => date('Y-m-d H:i:s'), // Current time so delay will be the original length
             ]
         );
-        $requestFinderRepository->method('findLatestLoginRequestFromUserOrIp')->willReturn($lastRequest);
+        $loginRequestFinderRepository->method('findLatestLoginRequestFromUserOrIp')->willReturn($lastRequest);
 
         $securityService = $this->container->get(SecurityLoginChecker::class);
 
