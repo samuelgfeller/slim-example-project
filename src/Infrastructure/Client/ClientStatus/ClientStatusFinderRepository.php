@@ -14,11 +14,12 @@ class ClientStatusFinderRepository
     }
 
     /**
-     * Return all client statuses with as key the id and value the name
+     * Return all client statuses with as key the id and value the name.
+     * Used for dropdowns.
      *
      * @return array{id: string, name: string}
      */
-    public function findAllClientStatusesForDropdown(): array
+    public function findAllClientStatusesMappedByIdName(): array
     {
         $query = $this->queryFactory->newQuery()->from('client_status');
 

@@ -50,17 +50,25 @@ $this->addAttribute(
 <div id="active-filter-chips-div">
     <button id="add-filter-btn">+ Filter</button>
     <?php
-    foreach ($clientListFilters['active'] as $id => $name) { ?>
-        <div class="filter-chip filter-chip-active"><span data-id="<?= $id ?>"><?= $name ?></span></div>
-        <?php
+    foreach ($clientListFilters['active'] as $filterId => $filterValues) {
+        if ($filterValues['authorized'] === true) { ?>
+            <div class="filter-chip filter-chip-active">
+                <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterValues['param_name'] ?>"
+                      data-param-value="<?= $filterValues['param_value'] ?>"><?= $filterValues['name'] ?></span>
+            </div>
+            <?php
+        }
     } ?>
 
 </div>
 <div id="available-filter-div">
     <span id="no-more-available-filters-span">No more filters</span>
     <?php
-    foreach ($clientListFilters['inactive'] as $id => $name) { ?>
-        <div class="filter-chip"><span data-id="<?= $id ?>"><?= $name ?></span></div>
+    foreach ($clientListFilters['inactive'] as $filterId => $filterValues) { ?>
+        <div class="filter-chip">
+            <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterValues['param_name'] ?>"
+                  data-param-value="<?= $filterValues['param_value'] ?>"><?= $filterValues['name'] ?></span>
+        </div>
         <?php
     } ?>
 </div>

@@ -35,33 +35,67 @@ class ClientFinder
     }
 
     /**
-     * Gives clients from db with aggregate data
-     * matching given filter params
+     * Build query builder where array with filter params
      *
      * @param array $filterParams default deleted_at null
-     * @return ClientResultDataCollection
+     * @return array
      */
-    public function findClientsWithAggregates(array $filterParams = ['deleted_at' => null]): ClientResultDataCollection
+    public function buildWhereArrayWithFilterParams(array $filterParams = ['deleted_at' => null]): array
     {
         // Build where array for cakephp query builder
         $queryBuilderWhereArray = [];
-        foreach ($filterParams as $column => $value) {
+        $adaptColumnValueToQueryBuilder = static function (string &$column, null|string|int|array &$value) {
+            // If empty string it means that value should be null
+            if ($value === '') {
+                $value = null;
+            }
             // If expected value is "null" the word "IS" is needed in the array key right after the column
             $is = '';
-            if ($value === null) {
+            // If " IS" is already in column, it doesn't have to be added
+            if ($value === null && !str_contains($column, ' IS')) {
                 $is = ' IS'; // To be added right after column
             }
-            $queryBuilderWhereArray["client.$column$is"] = $value;
+            $column = "client.$column$is";
+        };
+        foreach ($filterParams as $column => $value) {
+            // If multiple values are given for a filter setting, separate by OR
+            if (is_array($value)) {
+                $orConditions = [];
+                foreach ($value as $rowId) {
+                    $value = $rowId;
+                    // Create column clone otherwise column (which is the same for each iteration of this loop) would
+                    // have "client." prepended in each iteration
+                    $columnClone = $column;
+                    $adaptColumnValueToQueryBuilder($columnClone, $value);
+                    $orConditions[][$columnClone] = $value;
+                }
+                // Add OR with conditions to where array
+                $queryBuilderWhereArray[]['OR'] = $orConditions;
+            }else{
+                $adaptColumnValueToQueryBuilder($column, $value);
+                $queryBuilderWhereArray[$column] = $value;
+            }
         }
+        return $queryBuilderWhereArray;
+    }
 
+    /**
+     * Gives clients from db with aggregate data
+     * matching given filter params
+     *
+     * @param $queryBuilderWhereArray
+     * @return ClientResultDataCollection
+     */
+    public function findClientsWithAggregates($queryBuilderWhereArray): ClientResultDataCollection
+    {
         $clientResultCollection = new ClientResultDataCollection();
         // Retrieve clients
         $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate(
             $queryBuilderWhereArray
         );
 
-        $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesForDropdown();
-        $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNamesForDropdown(
+        $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName();
+        $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNames(
             $this->userFinderRepository->findAllUsers()
         );
 

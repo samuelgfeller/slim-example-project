@@ -4,17 +4,14 @@
 namespace App\Domain\Client\Service;
 
 
-use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use Odan\Session\SessionInterface;
 
 class ClientFilterFinder
 {
     public function __construct(
         private readonly ClientFinder $clientFinder,
-        private readonly SessionInterface $session,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
     ) {
     }
@@ -34,22 +31,10 @@ class ClientFilterFinder
         $filterParams = ['deleted_at' => null]; // Default filter
         // Filter 'user'
         if (isset($params['user'])) {
-            // To display own posts, the client sends the filter user=session
-            if ($params['user'] === 'session') {
-                // User has to be logged-in to access own-posts
-                if (($userId = $this->session->get('user_id')) !== null) {
-                    $filterParams['user_id'] = $userId;
-                } else {
-                    throw new UnauthorizedException('You have to be logged in to access clients');
-                }
-            } // If user is a number
-            elseif (is_numeric($params['user'])) {
-                $filterParams['user_id'] = (int)$params['user'];
-            } // If is 'empty' it means that the value should be null in the database
-            elseif ($params['user'] === 'empty') {
-                $filterParams['user_id'] = null;
-            } // If not user 'session' and also not numeric neither 'empty'
-            else {
+            // User ids are numeric or empty string (will be translated to IS null in client finder)
+            if (is_numeric($params['user']) || $params['user'] === '' || is_array($params['user'])) {
+                $filterParams['user_id'] = $params['user'];
+            } else {
                 // Exception message in ClientListFilterProvider.php
                 throw new InvalidClientFilterException('Invalid filter format "user".');
             }
@@ -58,10 +43,25 @@ class ClientFilterFinder
         if (isset($params['include-deleted']) && (int)$params['include-deleted'] === 1) {
             unset($filterParams['deleted_at']);
         }
+        // Filter: deleted records
+        if (isset($params['deleted']) && (int)$params['deleted'] === 1) {
+            $filterParams['deleted_at IS NOT'] = null;
+        }
+        // Filter client 'status'
+        if (isset($params['status'])) {
+            // If user is a number
+            if (is_numeric($params['status']) || $params['status'] === '' || is_array($params['status'])) {
+                $filterParams['client_status_id'] = $params['status'];
+            } else {
+                // Exception message in ClientListFilterProvider.php
+                throw new InvalidClientFilterException('Invalid filter format "status".');
+            }
+        }
         // Other filters here
 
         // Find all clients matching the filter regardless of logged-in user rights
-        $clientResultDataCollection = $this->clientFinder->findClientsWithAggregates($filterParams);
+        $queryBuilderWhereArray = $this->clientFinder->buildWhereArrayWithFilterParams($filterParams);
+        $clientResultDataCollection = $this->clientFinder->findClientsWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
         $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
             $clientResultDataCollection->clients

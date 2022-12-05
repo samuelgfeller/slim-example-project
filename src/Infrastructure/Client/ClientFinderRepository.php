@@ -79,7 +79,8 @@ class ClientFinderRepository
                 'conditions' => 'client.client_status_id = client_status.id'
             ],
         ])
-            ->andWhere($whereArray);
+            ->where($whereArray);
+        $sql = $query->sql();
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);

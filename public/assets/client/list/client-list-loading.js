@@ -14,7 +14,10 @@ import {
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
 
-export function fetchAndLoadClients(){
+export function fetchAndLoadClients() {
+    // Remove no clients text if it exists
+    document.getElementById('no-clients')?.remove();
+
     fetchClients().then(jsonResponse => {
         removeClientCardContentPlaceholder();
         addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
@@ -46,11 +49,31 @@ export function fetchAndLoadClients(){
  */
 function fetchClients() {
     displayClientProfileCardLoadingPlaceholder();
-    // 'own' if own clients should be loaded after creation or 'all' if all should
-    let clientVisibilityScope = document.getElementById('client-wrapper').dataset.dataClientFilter;
-    let queryParams = clientVisibilityScope === 'own' ? '?user=session' : '';
+    const activeFilterChips = document.querySelectorAll('#active-filter-chips-div .filter-chip span');
 
-    return fetchData('clients' + queryParams, 'clients/list');
+    let searchParams = new URLSearchParams();
+    for (const chip of activeFilterChips) {
+        const paramName = chip.dataset.paramName;
+        // For PHP, GET params with multiple values have to have a "[]" appended to the name
+        let multiValue = '';
+        // If the search param already exists
+        if (searchParams.has(paramName) || searchParams.has(paramName + '[]')) {
+            // [] will be added after the param name
+            multiValue = '[]'
+            // Param name without brackets exists, it has to be removed and re-added with brackets
+            if (searchParams.has(paramName)) {
+                // But the first value that didn't have the brackets,
+                const firstValue = searchParams.get(paramName);
+                searchParams.delete(paramName);
+                searchParams.append(paramName + '[]', firstValue);
+            }
+        }
+        // Append param to searchParams
+        searchParams.append(paramName + multiValue, chip.dataset.paramValue);
+    }
+    // Add question mark
+    searchParams = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
+    return fetchData('clients' + searchParams, 'clients/list');
 }
 
 /**
@@ -65,7 +88,7 @@ function addClientsToDom(clients, allUsers, allStatuses) {
 
     // If no results, tell user so
     if (clients.length === 0) {
-        clientContainer.insertAdjacentHTML('afterend', '<p>No clients were found.</p>')
+        clientContainer.insertAdjacentHTML('afterend', '<p id="no-clients">No clients were found.</p>')
     }
 
     // Loop over clients and add to DOM

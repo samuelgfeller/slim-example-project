@@ -56,9 +56,9 @@ class UserNameAbbreviator
      * the first last name chars are added.
      *
      * @param UserData[] $users original users
-     * @return array array of users with abbreviated full names
+     * @return array{user_id: string} array of users with abbreviated full names
      */
-    public function abbreviateUserNamesForDropdown(array $users): array
+    public function abbreviateUserNames(array $users): array
     {
         $outputNames = [];
         $groupedUsers = [];

@@ -26,43 +26,70 @@ function toggleAvailableFilterDiv(hideOnly = false) {
 }
 
 // Available to active filter chip
-// Get filter chips that are not active (in availableFilterDiv)
-let availableFilterChips = availableFilterDiv.getElementsByClassName('filter-chip');
-for (let inactiveChip of availableFilterChips) {
-    inactiveChip.addEventListener('click', moveFilterChipToActive);
+function initFilterChipEventListeners(chipClickEventHandler) {
+    // Get active and inactive filter chips
+    let availableFilterChips = availableFilterDiv.querySelectorAll('.filter-chip');
+    for (let inactiveChip of availableFilterChips) {
+        // inactiveChip.addEventListener('click', moveFilterChipToActive);
+        inactiveChip.addEventListener('click', toggleFilterChip);
+        inactiveChip.addEventListener('click', chipClickEventHandler);
+    }
 }
 
-function moveFilterChipToActive() {
-    // Moves div to available list ("this" is the inactiveChip)
-    activeFilterDiv.append(this);
-    // Add active class
-    this.classList.add('filter-chip-active');
-    // Remove this event listener
-    this.removeEventListener('click', moveFilterChipToActive);
-    // Add event listener for chip to be added back to the available collection
-    this.addEventListener('click', moveFilterChipToAvailableCollection);
-    // Show that there are no more filters if needed
-    toggleNoMoreFilters();
+/**
+ * Add chip to available collection or from available to active
+ */
+function toggleFilterChip() {
+    if (this.closest('#available-filter-div')) {
+        // Moves div to active list ("this" is the inactiveChip)
+        activeFilterDiv.append(this);
+        // Add active class
+        this.classList.add('filter-chip-active');
+        // Remove this event listener
+        // this.removeEventListener('click', moveFilterChipToActive);
+        // Add event listener for chip to be added back to the available collection
+        // this.addEventListener('click', moveFilterChipToAvailableCollection);
+        // Show that there are no more filters if needed
+        toggleNoMoreFilters();
+    } else {
+        // Moves div to available list ("this" is the activeChip)
+        availableFilterDiv.append(this);
+        // Remove active class
+        this.classList.remove('filter-chip-active');
+        // Remove this event listener
+        // this.removeEventListener('click', moveFilterChipToAvailableCollection);
+        // Add event listener for chip to be added to the active collection
+        // this.addEventListener('click', moveFilterChipToActive);
+        // Hide that there are no more filters if needed
+        toggleNoMoreFilters();
+    }
 }
 
-// Active filter chips
-let activeFilterChips = document.getElementsByClassName('filter-chip-active');
-for (let activeChip of activeFilterChips) {
-    activeChip.addEventListener('click', moveFilterChipToAvailableCollection);
-}
-
-function moveFilterChipToAvailableCollection() {
-    // Moves div to available list ("this" is the activeChip)
-    availableFilterDiv.append(this);
-    // Remove active class
-    this.classList.remove('filter-chip-active');
-    // Remove this event listener
-    this.removeEventListener('click', moveFilterChipToAvailableCollection);
-    // Add event listener for chip to be added to the active collection
-    this.addEventListener('click', moveFilterChipToActive);
-    // Hide that there are no more filters if needed
-    toggleNoMoreFilters();
-}
+// function moveFilterChipToActive() {
+//     // Moves div to available list ("this" is the inactiveChip)
+//     activeFilterDiv.append(this);
+//     // Add active class
+//     this.classList.add('filter-chip-active');
+//     // Remove this event listener
+//     this.removeEventListener('click', moveFilterChipToActive);
+//     // Add event listener for chip to be added back to the available collection
+//     this.addEventListener('click', moveFilterChipToAvailableCollection);
+//     // Show that there are no more filters if needed
+//     toggleNoMoreFilters();
+// }
+//
+// function moveFilterChipToAvailableCollection() {
+//     // Moves div to available list ("this" is the activeChip)
+//     availableFilterDiv.append(this);
+//     // Remove active class
+//     this.classList.remove('filter-chip-active');
+//     // Remove this event listener
+//     this.removeEventListener('click', moveFilterChipToAvailableCollection);
+//     // Add event listener for chip to be added to the active collection
+//     this.addEventListener('click', moveFilterChipToActive);
+//     // Hide that there are no more filters if needed
+//     toggleNoMoreFilters();
+// }
 
 // Show chip that says that there are no more filters button
 function toggleNoMoreFilters() {
