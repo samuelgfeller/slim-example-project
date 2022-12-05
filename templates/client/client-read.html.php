@@ -258,7 +258,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                         </select>
                         <?php
                     } ?>
-                    <span spellcheck="false" data-name="sex" data-maxlength="254"
+                    <span spellcheck="false" data-maxlength="254"
                     ><?= $clientAggregate->vigilanceLevel ? $clientAggregate->vigilanceLevel->prettyName()
                             : '' ?></span>
                 </div>

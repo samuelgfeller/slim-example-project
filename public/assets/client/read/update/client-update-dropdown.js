@@ -9,59 +9,62 @@ import {submitUpdate} from "../../../general/js/request/submit-update-data.js?v=
  * Make personal info field editable by adding a dropdown
  */
 export function makeFieldSelectValueEditable() {
-    let editIcon = this;
-    let fieldContainer = this.parentNode;
-    let select = fieldContainer.querySelector('select');
-    let span = fieldContainer.querySelector('span');
+    return new Promise(function (resolve, reject) {
+        let editIcon = this;
+        let fieldContainer = this.parentNode;
+        let select = fieldContainer.querySelector('select');
+        let span = fieldContainer.querySelector('span');
 
-    // Show personal info container if hidden because it was previously empty
-    showPersonalInfoContainerIfHidden();
+        // Show personal info container if hidden because it was previously empty
+        showPersonalInfoContainerIfHidden();
 
-    showEditableSelect(editIcon, select, span);
-    // Focus select to catch focusout if click outside
-    select.focus();
+        showEditableSelect(editIcon, select, span);
+        // Focus select to catch focusout if click outside
+        select.focus();
 
-    let alreadySubmittedByChangeEvent = false;
-    const editableDropdownFieldUpdateEventHandler = (event) => {
-        // To catch both focusout (to save and hide dropdown field when no change was made) and change but not
-        // submit 2 requests each time, alreadySubmittedByChangeEvent is set to true when event listener picked up "change"
-        if (alreadySubmittedByChangeEvent === false || event.type === 'change') {
-            // Done here and not after successful request to indicate to user that change was taken into account
-            removeSelectAndShowSpan(editIcon, select, span);
-            let clientId = document.getElementById('client-id').value;
-            submitUpdate(
-                {[select.name]: select.value},
-                `clients/${clientId}`,
-                `clients/${clientId}`,
-            ).then(responseJson => {
-                let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
-                // If success is true and select value was empty string, remove dropdown from client personal infos
-                if ((select.value === '' || select.value === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
-                    addIconToAvailableDiv(availableIcon, fieldContainer.parentNode);
-                } else if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
-                    removeIconFromAvailableDiv(availableIcon);
-                }
-            }).catch(responseJson => {
-                // Re enable editable select on error
-                showEditableSelect(editIcon, select, span);
-            });
-            setTimeout(() =>{
+        let alreadySubmittedByChangeEvent = false;
+        const editableDropdownFieldUpdateEventHandler = (event) => {
+            // To catch both focusout (to save and hide dropdown field when no change was made) and change but not
+            // submit 2 requests each time, alreadySubmittedByChangeEvent is set to true when event listener picked up "change"
+            if (alreadySubmittedByChangeEvent === false || event.type === 'change') {
+                // Done here and not after successful request to indicate to user that change was taken into account
+                removeSelectAndShowSpan(editIcon, select, span);
+                let clientId = document.getElementById('client-id').value;
+                submitUpdate(
+                    {[select.name]: select.value},
+                    `clients/${clientId}`,
+                    `clients/${clientId}`,
+                ).then(responseJson => {
+                    let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
+                    // If success is true and select value was empty string, remove dropdown from client personal infos
+                    if ((select.value === '' || select.value === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
+                        addIconToAvailableDiv(availableIcon, fieldContainer.parentNode);
+                    } else if (fieldContainer.dataset.hideIfEmpty === 'true' && availableIcon !== null) {
+                        removeIconFromAvailableDiv(availableIcon);
+                    }
+                    resolve(select.value);
+                }).catch(responseJson => {
+                    // Re enable editable select on error
+                    showEditableSelect(editIcon, select, span);
+                    reject();
+                });
+
                 alreadySubmittedByChangeEvent = false;
-            }, 100)
-        }
-        // Remove event listeners if there were any (otherwise they are added multiple times making multiple requests for
-        // each change because this function gets executed on each click. A bit better would be to attach event listeners only
-        // once at the correct place, but I don't have time for this right now)
-        select?.removeEventListener('change', editableDropdownFieldUpdateEventHandler);
-        select?.removeEventListener('focusout', editableDropdownFieldUpdateEventHandler);
-    };
+            }
+            // Remove event listeners if there were any (otherwise they are added multiple times making multiple requests for
+            // each change because this function gets executed on each click. A bit better would be to attach event listeners only
+            // once at the correct place, but I don't have time for this right now)
+            select?.removeEventListener('change', editableDropdownFieldUpdateEventHandler);
+            select?.removeEventListener('focusout', editableDropdownFieldUpdateEventHandler);
+        };
 
-    // Add event listeners
-    select?.addEventListener('change', () => {
-        alreadySubmittedByChangeEvent = true;
-    });
-    select?.addEventListener('change', editableDropdownFieldUpdateEventHandler);
-    select?.addEventListener('focusout', editableDropdownFieldUpdateEventHandler);
+        // Add event listeners
+        select?.addEventListener('change', () => {
+            alreadySubmittedByChangeEvent = true;
+        });
+        select?.addEventListener('change', editableDropdownFieldUpdateEventHandler);
+        select?.addEventListener('focusout', editableDropdownFieldUpdateEventHandler);
+    }.bind(this));
 }
 
 function showEditableSelect(editIcon, select, span) {

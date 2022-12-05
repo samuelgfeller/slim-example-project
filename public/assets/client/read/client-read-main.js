@@ -28,6 +28,10 @@ loadClientNotes(() => {
 
 loadAvailablePersonalInfoIconsDiv();
 
+// Change main note border color if vigilance level is set
+let vigilanceLevel = document.getElementById('vigilance-level-select')?.value;
+changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel);
+
 // New note button event listener
 // After plus button is clicked, textarea for new note should be added
 document.querySelector('#create-note-btn').addEventListener('click', addNewNoteTextarea);
@@ -48,7 +52,10 @@ document.querySelector('#edit-phone-btn')?.addEventListener('click', makeClientF
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-birthdate-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-sex-btn')?.addEventListener('click', makeFieldSelectValueEditable);
-document.querySelector('#edit-vigilance-level-btn')?.addEventListener('click', makeFieldSelectValueEditable);
+const vigilanceLevelEditBtn = document.querySelector('#edit-vigilance-level-btn');
+vigilanceLevelEditBtn?.addEventListener('click', () => {
+    makeFieldSelectValueEditable.call(vigilanceLevelEditBtn).then(changeMainNoteBorderAccordingToVigilanceLevel);
+});
 // Delete button
 document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
     let title = 'Are you sure that you want to delete this client?';
@@ -86,4 +93,22 @@ function submitClientDropdownChange() {
     // "this" is the select element
     // Submit field change with flash message indicating that change was successful
     submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, `clients/${clientId}`);
+}
+
+function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {
+    let mainNote = document.querySelector('#main-note-textarea-div textarea');
+    switch (vigilanceLevel) {
+        case 'moderate':
+            mainNote.style.borderColor = 'rgb(227 193 28)';
+            break;
+        case 'caution':
+            mainNote.style.borderColor = 'rgb(232,136,26)';
+            break;
+        case 'extra_caution':
+            mainNote.style.borderColor = 'rgb(224,77,29)';
+            break;
+        default:
+            mainNote.style.borderColor = '#2e3e50';
+            break;
+    }
 }
