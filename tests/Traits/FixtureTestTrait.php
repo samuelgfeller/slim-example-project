@@ -59,8 +59,9 @@ trait FixtureTestTrait
      * This has to advantage to remove the dependency of each fixtures'
      * records as the relevant values are passed by the given $attributes.
      *
-     * @param array<string, mixed> $attributes array of db column name and the expected value.
-     * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
+     * @param array $attributes array of db column name and the expected value an array of multiple attribute sets
+     * Format: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',] or
+     * [['field_name' => 'expected_value'], ['field_name' => 'expected_value']] -> makes 2 insets
      * @param class-string $fixtureClass
      * @param int $amount
      * @return array row when $amount is 1 or array of rows when more than 1 inserted
@@ -70,20 +71,39 @@ trait FixtureTestTrait
         string $fixtureClass,
         int $amount = 1
     ): array {
-        $records = $this->getFixtureRecordsWithAttributes($attributes, $fixtureClass, $amount);
-        // Check if $records is a collection of records or only one
-        if (!(isset($records[0]) && is_array($records[0]))) {
-            $row = $records;
-            // If only one record, insert it and return row
-            $row['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
-            return $row;
+        $attributesIsMultidimensional = true; // I know there are technically no multidimensional arrays but its more readable
+        // Check if attributes is an array of different sets of attributes or directly the attributes
+        if (count($attributes) === count($attributes, COUNT_RECURSIVE)) {
+            // Put $attributes in an additional array
+            $attributes = [$attributes];
+            $attributesIsMultidimensional = false;
         }
-        // Loop through records and insert them
-        foreach ($records as $key => $row) {
-            // Insert records and add id to collection
-            $records[$key]['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+
+        $recordsCollection = [];
+        foreach ($attributes as $attributesForOneRow) {
+            $records = $this->getFixtureRecordsWithAttributes($attributesForOneRow, $fixtureClass, $amount);
+            // Check if $records is a collection of records or only one (if amount > 1 it will be a collection)
+            if (!(isset($records[0]) && is_array($records[0]))) {
+                $row = $records;
+                // If only one record, insert it and return row
+                $row['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+                $recordsCollection[] = $row;
+                continue;
+            }
+            // Loop through records and insert them
+            foreach ($records as $key => $row) {
+                // Insert records and add id to collection
+                $records[$key]['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+            }
+            // If $amount is greater than 1, the results are in a sub-array
+            $recordsCollection[] = $records;
         }
-        return $records;
+        // Checking if attributes is multidimensional and not $recordsCollection to prevent unexpected return value
+        // of a single row when a multidimensional array of 1 set of attributes is provided
+        if ($attributesIsMultidimensional === false) {
+            return $recordsCollection[0];
+        }
+        return $recordsCollection;
     }
 
     /**

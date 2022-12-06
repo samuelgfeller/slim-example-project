@@ -22,6 +22,7 @@ class ClientListFilterFinder
      */
     public function findClientListFilters(): array
     {
+        // Get all available filters
         $allClientFilters = $this->clientListFilterGenerator->generateClientListFilter();
 
         $returnArray['active'] = [];

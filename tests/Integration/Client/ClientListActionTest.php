@@ -5,19 +5,23 @@ namespace App\Test\Integration\Client;
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserRole;
-use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
+use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
+use App\Test\Traits\HttpJsonExtensionTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -40,8 +44,10 @@ class ClientListActionTest extends TestCase
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
+    use HttpJsonExtensionTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -93,36 +99,49 @@ class ClientListActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideValidClientListFilters()
      *
-     * @param array<string, mixed> $queryParams
-     * @param array<string, mixed> $rowFilter
+     * @param array $filterQueryParamsArr
+     * @param string $expectedClientsWhereString
+     * @param array $authenticatedUserAttributes
+     * @param array $clientsToInsert
+     * @param array $usersToInsert
+     * @param array $clientStatusesToInsert
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testClientListAction(array $queryParams, array $rowFilter): void
-    {
-        // Insert users and status linked to clients and all clients including deleted one
-        $this->insertFixtures([UserFixture::class, ClientStatusFixture::class, ClientFixture::class]);
+    public function testClientListAction(
+        array $filterQueryParamsArr,
+        string $expectedClientsWhereString,
+        array $authenticatedUserAttributes,
+        array $clientsToInsert,
+        array $usersToInsert,
+        array $clientStatusesToInsert,
+    ): void {
+        $users = $this->insertFixturesWithAttributes($usersToInsert, UserFixture::class);
+        $statuses = $this->insertFixturesWithAttributes($clientStatusesToInsert, ClientStatusFixture::class);
+        // Insert authenticated user before client
+        $loggedInUserId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId($authenticatedUserAttributes),
+            UserFixture::class
+        )['id'];
+        // Insert clients
+        $clients = $this->insertFixturesWithAttributes($clientsToInsert, ClientFixture::class);
+        // Add session
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(
             'GET',
             $this->urlFor('client-list')
         )   // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-        ->withQueryParams($queryParams);
-
-        // Simulate logged-in user with role user
-        $loggedInUserId = $this->findRecordsFromFixtureWhere(['role' => 'user'], UserFixture::class)[0]['id'];
-        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+        ->withQueryParams($filterQueryParamsArr);
 
         $response = $this->app->handle($request);
 
         // Assert: 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
-        // If user_id is 'session' replace it with the authenticated user id
-        if (isset($rowFilter['user_id']) && $rowFilter['user_id'] === 'session') {
-            $rowFilter['user_id'] = $loggedInUserId;
-        }
         // Filter fixture records with given row filter params
-        $clientRows = $this->findRecordsFromFixtureWhere($rowFilter, ClientFixture::class);
+        $clientRows = $this->findTableRowsWhere('client', $expectedClientsWhereString);
 
         // Create expected array based on fixture records
         $expected = [];
@@ -139,6 +158,7 @@ class ClientListActionTest extends TestCase
                 'email' => $clientRow['email'],
                 'sex' => $clientRow['sex'],
                 'clientMessage' => $clientRow['client_message'],
+                'vigilanceLevel' => $clientRow['vigilance_level'],
                 'userId' => $clientRow['user_id'],
                 'clientStatusId' => $clientRow['client_status_id'],
                 'updatedAt' => $clientRow['updated_at'],
@@ -146,23 +166,27 @@ class ClientListActionTest extends TestCase
                 'age' => (new \DateTime())->diff(new \DateTime($clientRow['birthdate']))->y,
                 'notes' => null,
                 'notesAmount' => null,
-                'mainNoteData' => (array)new NoteData(),
                 // Empty on client list but perhaps added later to display on hover
+                'mainNoteData' => (array)new NoteData(),
+                // Below not asserted as this test is about filtering not authorization
+                // 'mainDataPrivilege' => null
+                // 'clientStatusPrivilege' => 'NONE'
+                // 'assignedUserPrivilege' => 'NONE'
+                // 'noteCreatePrivilege' => null
             ];
         }
-        $clientStatuses = $this->findRecordsFromFixtureWhere(['deleted_at' => null], ClientStatusFixture::class);
+        $clientStatuses = $this->findTableRowsWhere('client_status', 'deleted_at IS NULL');
         foreach ($clientStatuses as $clientStatus) {
             $expected['statuses'][$clientStatus['id']] = $clientStatus['name'];
         }
-        $allUsers = $this->findRecordsFromFixtureWhere(['deleted_at' => null], UserFixture::class);
-        $allUsersAsObjects = $this->container->get(Hydrator::class)->hydrate($allUsers, UserStatus::class);
+        $allUsers = $this->findTableRowsWhere('user', 'deleted_at IS NULL');
         // Username abbreviator returns users in array with as key the user id and name the abbreviated name
-        $expected['users'] = $this->container->get(UserNameAbbreviator::class)->abbreviateUserNamesForDropdown(
-            $allUsersAsObjects
+        $expected['users'] = $this->container->get(UserNameAbbreviator::class)->abbreviateUserNames(
+            $this->container->get(Hydrator::class)->hydrate($allUsers, UserData::class)
         );
         $expected['sexes'] = (new ClientResultDataCollection())->sexes;
 
-        $this->assertJsonData($expected, $response);
+        $this->assertPartialJsonData($expected, $response);
     }
 
     /**

@@ -37,7 +37,6 @@ final class NoteDeleteSubmitAction
         LoggerFactory $logger
 
     ) {
-        $this->responder = $responder;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('note-delete');
     }
 

@@ -132,11 +132,10 @@ create table note
 
 
 
-create table client_list_filter
+create table user_client_list_filter
 (
-    id        int auto_increment
-        primary key,
-    name      varchar(50)  not null,
-    get_param varchar(500) null comment 'HTTP GET parameter'
+    user_id   int          not null,
+    filter_id varchar(100) not null,
+    primary key (user_id, filter_id)
 );
 

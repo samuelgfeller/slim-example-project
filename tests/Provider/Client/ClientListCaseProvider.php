@@ -4,6 +4,8 @@
 namespace App\Test\Provider\Client;
 
 
+use App\Domain\User\Enum\UserRole;
+
 class ClientListCaseProvider
 {
     /**
@@ -13,7 +15,45 @@ class ClientListCaseProvider
      */
     public function provideValidClientListFilters(): array
     {
+        $newcomerAttributes = ['id' => 1, 'user_role_id' => UserRole::NEWCOMER];
+        // Instead of inserting only the clients we need each time, all relevant clients are inserted to also test that
+        // clients that are not supposed to be found are not returned even if they exist in the database
+        // To test single and multiple results, at least 2 clients are inserted for each filter
+        $clientsToInsert = [
+            // Unassigned
+            ['user_id' => null, 'first_name' => 'First'],
+            ['user_id' => null, 'first_name' => 'Second'],
+            // Assigned to me (user id hardcoded - they must be provided in 'users_to_insert' with this id as attribute)
+            ['user_id' => 1, 'first_name' => 'First'],
+            ['user_id' => 1, 'first_name' => 'Second'],
+            // Deleted
+            ['deleted_at' => (new \DateTime())->format('Y-m-d H:i:s'), 'first_name' => 'First'],
+            ['deleted_at' => (new \DateTime())->format('Y-m-d H:i:s'), 'first_name' => 'Second'],
+            // Unassigned
+            ['user_id' => null, 'first_name' => 'First'],
+            ['user_id' => null, 'first_name' => 'Second'],
+        ];
+        // ! Users to insert attributes. Has to at least contain all 'user_id' from the clients to insert array
+        $usersToInsert = [['id' => 2],]; // User id 1 is already provided as authenticated user
+        // ! Client statuses to insert attributes. Has to at least contain all hardcoded 'client_status_id'
+        $clientStatusesToInsert = [['id' => 1],]; // Status id 1 is default for client fixture
+
+        // There are 3 "custom" filters unassigned, assigned_to_me, deleted
         return [
+            // Filter "user"
+            [ // Test user filter "unassigned"
+                'get_params_array' => ['user' => ''], // Query params for "unassigned"
+                'expected_clients_where_string' => 'user_id IS NULL',
+                'authenticated_user' => $newcomerAttributes,
+                'clients_to_insert' => $clientsToInsert,
+                'users_to_insert' => $usersToInsert,
+                'statuses_to_insert' => $clientStatusesToInsert,
+            ],
+
+        ];
+        // All client status entries are possible filters
+        // All users are possible filters
+        $arr = [
             // No filter
             [
                 // Filter values for url GET query parameters

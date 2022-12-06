@@ -71,7 +71,7 @@ class ClientFinder
                 }
                 // Add OR with conditions to where array
                 $queryBuilderWhereArray[]['OR'] = $orConditions;
-            }else{
+            } else {
                 $adaptColumnValueToQueryBuilder($column, $value);
                 $queryBuilderWhereArray[$column] = $value;
             }
@@ -81,7 +81,7 @@ class ClientFinder
 
     /**
      * Gives clients from db with aggregate data
-     * matching given filter params
+     * matching given filter params (client list)
      *
      * @param $queryBuilderWhereArray
      * @return ClientResultDataCollection
@@ -112,16 +112,20 @@ class ClientFinder
     {
         $clientResultsWithAggregates = $this->clientFinderRepository->findClientsWithResultAggregate($whereArray);
         // Add assigned user and client status privilege to each clientResultAggregate
-        foreach ($clientResultsWithAggregates as $client) {
-            $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
-                $client->userId,
-                'user_id'
-            );
-            //  Set client status privilege
-            $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
-                $client->userId,
-                'client_status_id',
-            );
+        foreach ($clientResultsWithAggregates as $key => $client) {
+            if ($this->clientAuthorizationChecker->isGrantedToRead($client->userId)) {
+                $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                    $client->userId,
+                    'user_id'
+                );
+                //  Set client status privilege
+                $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                    $client->userId,
+                    'client_status_id',
+                );
+            } else {
+                unset($clientResultsWithAggregates[$key]);
+            }
         }
         return $clientResultsWithAggregates;
     }

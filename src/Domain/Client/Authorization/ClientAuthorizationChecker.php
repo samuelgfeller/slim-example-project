@@ -69,11 +69,11 @@ class ClientAuthorizationChecker
      * update and value the new value. There may be one or multiple entries,
      * depending on what the user wants to update
      *
-     * @param int $ownerId user_id linked to client
+     * @param null|int $ownerId user_id linked to client
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToUpdate(array $clientDataToUpdate, int $ownerId, bool $log = true): bool
+    public function isGrantedToUpdate(array $clientDataToUpdate, ?int $ownerId, bool $log = true): bool
     {
         $grantedUpdateKeys = [];
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -154,11 +154,11 @@ class ClientAuthorizationChecker
     /**
      * Check if authenticated user is allowed to delete client
      *
-     * @param int $ownerId
+     * @param int|null $ownerId
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToDelete(int $ownerId, bool $log = true): bool
+    public function isGrantedToDelete(?int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -183,11 +183,11 @@ class ClientAuthorizationChecker
     /**
      * Check if authenticated user is allowed to read client
      *
-     * @param int $ownerId
+     * @param null|int $ownerId
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToRead(int $ownerId, bool $log = true): bool
+    public function isGrantedToRead(?int $ownerId, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(

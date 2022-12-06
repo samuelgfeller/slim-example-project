@@ -47,6 +47,36 @@ trait DatabaseExtensionTestTrait
     }
 
     /**
+     * Fetch rows by given where array.
+     *
+     * @param string $table Table name
+     * @param string $whereString
+     * @param array|null $fields The array of fields
+     *
+     * @return array[] array or rows
+     */
+    protected function findTableRowsWhere(
+        string $table,
+        string $whereString,
+        array $fields = null
+    ): array {
+        $sql = "SELECT * FROM `$table` WHERE $whereString;";
+        $statement = $this->createPreparedStatement($sql);
+        $statement->execute();
+
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $rowsWithFilteredFields = null;
+        if ($fields) {
+            foreach ($rows as $row) {
+                $rowsWithFilteredFields[] = array_intersect_key($row, array_flip($fields));
+            }
+        }
+
+        return $rowsWithFilteredFields ?? $rows;
+    }
+
+    /**
      * Returns the record with the highest id of the given table.
      *
      * @param string $table Table name
