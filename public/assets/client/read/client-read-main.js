@@ -99,16 +99,20 @@ function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {
     let mainNote = document.querySelector('#main-note-textarea-div textarea');
     switch (vigilanceLevel) {
         case 'moderate':
-            mainNote.style.borderColor = 'rgb(227 193 28)';
+            mainNote.style.boxShadow = '0 0 10px 5px rgb(227, 193, 28)';
+            // mainNote.style.borderColor = 'rgb(227, 193, 28)';
             break;
         case 'caution':
-            mainNote.style.borderColor = 'rgb(232,136,26)';
+            mainNote.style.boxShadow = '0 0 10px 5px rgb(232, 136, 26)';
+            // mainNote.style.borderColor = 'rgb(232, 136, 26)';
             break;
         case 'extra_caution':
-            mainNote.style.borderColor = 'rgb(224,77,29)';
+            // mainNote.style.borderColor = 'rgb(224, 77, 29)';
+            mainNote.style.boxShadow = '0 0 10px 5px rgb(224, 77, 29)';
             break;
         default:
-            mainNote.style.borderColor = '#2e3e50';
+            // mainNote.style.borderColor = '#2e3e50';
+            mainNote.style.boxShadow = 'none';
             break;
     }
 }

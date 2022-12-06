@@ -45,7 +45,7 @@ function initFilterChipEventListeners(chipClickEventHandler) {
  */
 function toggleFilterChip() {
     const category = this.querySelector('span').dataset.category;
-    const categoryTitle = availableFilterDiv
+    let categoryTitle = availableFilterDiv
                     .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
     // If filter chip is in available div
     if (this.closest('#available-filter-div')) {
@@ -56,7 +56,14 @@ function toggleFilterChip() {
     } else {
         // Moves div to available list below the right category ("this" is the activeChip)
         if (category !== ''){
-            // Making sure that category span is displayed by removing display property if set
+            // If category title doesn't exist in available div (happens when all filters of category are in use)
+            if (categoryTitle === null){
+                // Insert category title
+                availableFilterDiv.insertAdjacentHTML('beforeend', `<span 
+                    class='filter-chip-container-label' data-category='${category}'>${category}</span>`);
+                categoryTitle = availableFilterDiv
+                                    .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
+            }
             categoryTitle.after(this);
         }else{
             // Insert before first category title (if none exist, it will still be added)
@@ -68,6 +75,7 @@ function toggleFilterChip() {
     // Check if elements with current category exists in available, if yes show title otherwise hide it
     if (categoryTitle) {
         if (availableFilterDiv.querySelector(`.filter-chip span[data-category="${category}"]`)) {
+            // Making sure that category span is displayed by removing display property if set
             categoryTitle.style.display = null;
         } else {
             categoryTitle.style.display = 'none';
