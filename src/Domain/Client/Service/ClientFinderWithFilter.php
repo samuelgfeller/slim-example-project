@@ -7,12 +7,14 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
+use Odan\Session\SessionInterface;
 
-class ClientFilterFinder
+class ClientFinderWithFilter
 {
     public function __construct(
         private readonly ClientFinder $clientFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly SessionInterface $session,
     ) {
     }
 
@@ -57,6 +59,9 @@ class ClientFilterFinder
             }
         }
         // Other filters here
+
+        // Add filter ids to session
+        $this->session->set('client_list_filter', $params['filterIds'] ?? null);
 
         // Find all clients matching the filter regardless of logged-in user rights
         $queryBuilderWhereArray = $this->clientFinder->buildWhereArrayWithFilterParams($filterParams);

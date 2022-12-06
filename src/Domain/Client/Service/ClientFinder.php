@@ -90,9 +90,7 @@ class ClientFinder
     {
         $clientResultCollection = new ClientResultDataCollection();
         // Retrieve clients
-        $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate(
-            $queryBuilderWhereArray
-        );
+        $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate($queryBuilderWhereArray);
 
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName();
         $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNames(

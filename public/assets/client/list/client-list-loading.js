@@ -70,6 +70,9 @@ function fetchClients() {
         }
         // Append param to searchParams
         searchParams.append(paramName + multiValue, chip.dataset.paramValue);
+        // Add filter id to filterIds param
+        searchParams.append('filterIds[]', chip.dataset.filterId);
+
     }
     // Add question mark
     searchParams = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';

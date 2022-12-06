@@ -65,11 +65,13 @@ function toggleFilterChip() {
         // Remove active class
         this.classList.remove('filter-chip-active');
     }
-    // Check if elements with current category exists
-    if (availableFilterDiv.querySelector(`.filter-chip span[data-category="${category}"]`)){
-        categoryTitle.style.display = null;
-    }else{
-        categoryTitle.style.display = 'none';
+    // Check if elements with current category exists in available, if yes show title otherwise hide it
+    if (categoryTitle) {
+        if (availableFilterDiv.querySelector(`.filter-chip span[data-category="${category}"]`)) {
+            categoryTitle.style.display = null;
+        } else {
+            categoryTitle.style.display = 'none';
+        }
     }
 
     // Show / hide message that there are no more filters if needed
