@@ -100,7 +100,6 @@ class ClientFinder
         );
 
         // Add permissions on what logged-in user is allowed to do with object
-//        $this->clientUserRightSetter->defineUserRightsOnClients($allClientResults);
         return $clientResultCollection;
     }
 

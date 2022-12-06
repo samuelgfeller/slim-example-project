@@ -91,6 +91,14 @@
         /*font-weight: 500;*/
     }
 
+    .filter-chip-container-label{
+        display: block;
+        margin-top: 10px;
+        margin-left: 10px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
 }
 
 /* After very small phones (fold) until iPhone 4 */

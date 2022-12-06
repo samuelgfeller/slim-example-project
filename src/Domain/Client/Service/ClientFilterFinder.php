@@ -31,7 +31,7 @@ class ClientFilterFinder
         $filterParams = ['deleted_at' => null]; // Default filter
         // Filter 'user'
         if (isset($params['user'])) {
-            // User ids are numeric or empty string (will be translated to IS null in client finder)
+            // User ids are numeric or empty string (will be translated to IS null in client finder) or array
             if (is_numeric($params['user']) || $params['user'] === '' || is_array($params['user'])) {
                 $filterParams['user_id'] = $params['user'];
             } else {
@@ -49,7 +49,6 @@ class ClientFilterFinder
         }
         // Filter client 'status'
         if (isset($params['status'])) {
-            // If user is a number
             if (is_numeric($params['status']) || $params['status'] === '' || is_array($params['status'])) {
                 $filterParams['client_status_id'] = $params['status'];
             } else {

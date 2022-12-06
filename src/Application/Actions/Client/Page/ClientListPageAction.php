@@ -45,6 +45,8 @@ final class ClientListPageAction
         // Clients are loaded dynamically with js after page load for a faster loading time
         // Retrieving available filters
         $clientListFilters = $this->clientListFilterSetter->findClientListFilters();
+
+
         $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);
         $this->responder->addPhpViewAttribute(
             'clientCreatePrivilege',

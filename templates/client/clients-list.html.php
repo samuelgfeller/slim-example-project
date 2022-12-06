@@ -1,7 +1,11 @@
 <?php
 /**
  * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $clientListFilters array client list filters
+ * @var $clientListFilters array{
+ *     inactive: array{\App\Domain\ClientListFilter\Data\ClientListFilterData[]},
+ *     active: array{\App\Domain\ClientListFilter\Data\ClientListFilterData[]},
+ *     } client list filters
+ *
  * @var $clientCreatePrivilege Privilege create or none
  */
 
@@ -50,11 +54,13 @@ $this->addAttribute(
 <div id="active-filter-chips-div">
     <button id="add-filter-btn">+ Filter</button>
     <?php
-    foreach ($clientListFilters['active'] as $filterId => $filterValues) {
-        if ($filterValues['authorized'] === true) { ?>
+    foreach ($clientListFilters['active'] as $filterCategory => $filtersInCategory) {
+        /** @var \App\Domain\ClientListFilter\Data\ClientListFilterData $filterData */
+        foreach ($filtersInCategory as $filterId => $filterData) { ?>
             <div class="filter-chip filter-chip-active">
-                <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterValues['param_name'] ?>"
-                      data-param-value="<?= $filterValues['param_value'] ?>"><?= $filterValues['name'] ?></span>
+                <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterData->paramName ?>"
+                      data-param-value="<?= $filterData->paramValue ?>"
+                      data-category="<?= $filterData->category ?>"><?= $filterData->name ?></span>
             </div>
             <?php
         }
@@ -64,12 +70,18 @@ $this->addAttribute(
 <div id="available-filter-div">
     <span id="no-more-available-filters-span">No more filters</span>
     <?php
-    foreach ($clientListFilters['inactive'] as $filterId => $filterValues) { ?>
-        <div class="filter-chip">
-            <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterValues['param_name'] ?>"
-                  data-param-value="<?= $filterValues['param_value'] ?>"><?= $filterValues['name'] ?></span>
-        </div>
-        <?php
+    foreach ($clientListFilters['inactive'] as $filterCategory => $filtersInCategory) {
+        echo $filterCategory ?
+            "<span class='filter-chip-container-label' data-category='$filterCategory'>$filterCategory</span>" : '';
+        /** @var \App\Domain\ClientListFilter\Data\ClientListFilterData $filterData */
+        foreach ($filtersInCategory as $filterId => $filterData) { ?>
+            <div class="filter-chip">
+            <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterData->paramName ?>"
+                  data-param-value="<?= $filterData->paramValue ?>" data-category="<?= $filterData->category ?>"
+            ><?= $filterData->name ?></span>
+            </div>
+            <?php
+        }
     } ?>
 </div>
 
