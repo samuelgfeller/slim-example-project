@@ -39,7 +39,7 @@ final class QueryFactory
     }
 
     /**
-     * Data is an assoc array of rows to insert where the key is the column name
+     * Data is an assoc array of a row to insert where the key is the column name
      * Example:
      *     return (int)$this->queryFactory->newInsert($data)->into('user')->execute()->lastInsertId();
      *
@@ -49,6 +49,24 @@ final class QueryFactory
     public function newInsert(array $data): Query
     {
         return $this->connection->newQuery()->insert(array_keys($data))->values($data);
+    }
+
+    /**
+     * Data is an assoc array of rows to insert where the key is the column name
+     * Example:
+     *     return (int)$this->queryFactory->newMultipleInsert($data)->into('user')->execute()->lastInsertId();
+     *
+     * @param array $arrayOfData [['col_name' => 'Value', 'other_col' => 'Other value'], ['col_name' => 'value']]
+     * @return Query
+     */
+    public function newMultipleInsert(array $arrayOfData): Query
+    {
+        $query = $this->connection->newQuery()->insert(array_keys($arrayOfData[array_key_first($arrayOfData)]));
+        // According to the docs, chaining ->values is the way to go https://book.cakephp.org/4/en/orm/query-builder.html#inserting-data
+        foreach ($arrayOfData as $data) {
+            $query->values($data);
+        }
+        return $query;
     }
 
     /**

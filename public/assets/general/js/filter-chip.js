@@ -32,10 +32,10 @@ function toggleAvailableFilterDiv(hideOnly = false) {
 // Available to active filter chip
 function initFilterChipEventListeners(chipClickEventHandler) {
     // Get active and inactive filter chips
-    let availableFilterChips = availableFilterDiv.querySelectorAll('.filter-chip');
-    for (let inactiveChip of availableFilterChips) {
-        inactiveChip.addEventListener('click', toggleFilterChip);
-        inactiveChip.addEventListener('click', chipClickEventHandler);
+    let filterChips = document.querySelectorAll('.filter-chip');
+    for (let filterChip of filterChips) {
+        filterChip.addEventListener('click', toggleFilterChip);
+        filterChip.addEventListener('click', chipClickEventHandler);
     }
 }
 

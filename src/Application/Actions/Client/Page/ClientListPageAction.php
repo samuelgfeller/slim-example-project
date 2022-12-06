@@ -5,7 +5,7 @@ namespace App\Application\Actions\Client\Page;
 use App\Application\Responder\Responder;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
-use App\Domain\ClientListFilter\ClientListFilterFinder;
+use App\Domain\Client\Service\ClientListFilter\ClientListFilterFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

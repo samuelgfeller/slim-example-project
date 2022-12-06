@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\ClientListFilter\Data;
+namespace App\Domain\Client\Service\ClientListFilter\Data;
 
 
 class ClientListFilterData

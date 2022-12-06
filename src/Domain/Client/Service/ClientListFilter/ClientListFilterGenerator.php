@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\ClientListFilter;
+namespace App\Domain\Client\Service\ClientListFilter;
 
-use App\Domain\ClientListFilter\Data\ClientListFilterData;
+use App\Domain\Client\Service\ClientListFilter\Data\ClientListFilterData;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
