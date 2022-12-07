@@ -13,6 +13,7 @@ class ClientFinderWithFilter
 {
     public function __construct(
         private readonly ClientFinder $clientFinder,
+        private readonly ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly UserClientListFilterHandler $userClientListFilterHandler,
     ) {
@@ -60,13 +61,17 @@ class ClientFinderWithFilter
                 throw new InvalidClientFilterException('Invalid filter format "status".');
             }
         }
+        // Filter client by name
+        if (isset($params['name'])) {
+            $filterParams['name'] = $params['name'];
+        }
         // Other filters here
 
         // Add filter ids to session
         $this->userClientListFilterHandler->setClientListFilterSettingForAuthenticatedUser($params['filterIds'] ?? null);
 
         // Find all clients matching the filter regardless of logged-in user rights
-        $queryBuilderWhereArray = $this->clientFinder->buildWhereArrayWithFilterParams($filterParams);
+        $queryBuilderWhereArray = $this->clientFilterWhereConditionBuilder->buildWhereArrayWithFilterParams($filterParams);
         $clientResultDataCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
         $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(

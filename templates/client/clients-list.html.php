@@ -50,6 +50,7 @@ $this->addAttribute(
         <?php
     } ?>
 </div>
+<input autocomplete="none" id="name-search-input" type="text" placeholder="Search by name">
 
 <div id="active-filter-chips-div">
     <button id="add-filter-btn">+ Filter</button>
@@ -84,6 +85,8 @@ $this->addAttribute(
         }
     } ?>
 </div>
+
+
 
 <!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
 All posts and own posts pages are quite similar and share the same create form and modal box. After the creation of

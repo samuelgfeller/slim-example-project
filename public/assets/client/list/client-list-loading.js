@@ -13,45 +13,64 @@ import {
 } from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js?v=0.1";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 
+// When searching clients a request is made on each keyup and we want to show only the final result to the user,
+// not a flickering between content placeholders, the result of the first typed key, then the second and so on.
+// On each request this requestId variable increases by 1 after assigning its value to the variable previousRequest
+// If previousRequestId does not match requestId it means there was newer request
+let requestId = 0;
+let previousRequestId = 0;
 
+/**
+ * Fetch clients with active filter chips and name search if present
+ * then load clients into DOM
+ */
 export function fetchAndLoadClients() {
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();
 
     fetchClients().then(jsonResponse => {
-        removeClientCardContentPlaceholder();
-        addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
-        // Add event listeners to cards
-        let cards = document.querySelectorAll('.client-profile-card');
-        for (const card of cards) {
-            // Click on user card
-            card.addEventListener('click', openClientReadPageOnCardClick);
-            // Middle mouse wheel click
-            card.addEventListener('auxclick', openClientReadPageOnCardClick);
-            card.addEventListener('mousedown', disableMouseWheelClickScrolling);
-            // Enter or space bar key press
-            card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
+        // Add one to previous request id after request is done
+        previousRequestId++;
+        // If previousRequestId does not match requestId it means there was newer request and this response should be ignored
+        if (requestId === previousRequestId) {
+            removeClientCardContentPlaceholder();
+            addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
+            // Add event listeners to cards
+            let cards = document.querySelectorAll('.client-profile-card');
+            for (const card of cards) {
+                // Click on user card
+                card.addEventListener('click', openClientReadPageOnCardClick);
+                // Middle mouse wheel click
+                card.addEventListener('auxclick', openClientReadPageOnCardClick);
+                card.addEventListener('mousedown', disableMouseWheelClickScrolling);
+                // Enter or space bar key press
+                card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
 
-            // Status select change
-            // "this" context only passed to event handling function if it's not an anonymous
-            card.querySelector('select[name="client_status_id"]:not([disabled])')
-                ?.addEventListener('change', submitClientCardDropdownChange);
-            // User role select change
-            card.querySelector('select[name="user_id"]:not([disabled])')
-                ?.addEventListener('change', submitClientCardDropdownChange);
+                // Status select change
+                // "this" context only passed to event handling function if it's not an anonymous
+                card.querySelector('select[name="client_status_id"]:not([disabled])')
+                    ?.addEventListener('change', submitClientCardDropdownChange);
+                // User role select change
+                card.querySelector('select[name="user_id"]:not([disabled])')
+                    ?.addEventListener('change', submitClientCardDropdownChange);
+            }
         }
     });
+
 }
 
 /**
- *  Load clients into DOM
+ *  Fetch clients with active filter chips and name search if present
+ *  then load clients into DOM
+ *
  *  @return {Promise} load clients ajax promise
  */
 function fetchClients() {
     displayClientProfileCardLoadingPlaceholder();
-    const activeFilterChips = document.querySelectorAll('#active-filter-chips-div .filter-chip span');
-
     let searchParams = new URLSearchParams();
+
+    // Loop through all the active filter chips and add filters to query params
+    const activeFilterChips = document.querySelectorAll('#active-filter-chips-div .filter-chip span');
     for (const chip of activeFilterChips) {
         const paramName = chip.dataset.paramName;
         // For PHP, GET params with multiple values have to have a "[]" appended to the name
@@ -74,8 +93,17 @@ function fetchClients() {
         searchParams.append('filterIds[]', chip.dataset.filterId);
 
     }
+
+    // Check if name-search-input contains values
+    const searchInputValue = document.getElementById('name-search-input').value;
+    if (searchInputValue) {
+        searchParams.append('name', searchInputValue);
+    }
+
     // Add question mark
     searchParams = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
+    // Add 1 to the request id
+    requestId++;
     return fetchData('clients' + searchParams, 'clients/list');
 }
 
@@ -93,7 +121,7 @@ function addClientsToDom(clients, allUsers, allStatuses) {
     document.getElementById('no-clients')?.remove();
     // If no results, tell user so
     if (clients.length === 0) {
-        clientContainer.insertAdjacentHTML('afterend', '<p id="no-clients">No clients found.</p>')
+        clientContainer.insertAdjacentHTML('afterend', '<p id="no-clients">No clients found.</p>');
     }
 
     // Loop over clients and add to DOM
