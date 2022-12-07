@@ -7,7 +7,7 @@ let availablePersonalInfoIconsDiv = document.querySelector('#add-client-personal
 let availableIconsIncludingTrashBin = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon');
 let availableIcons = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon:not(#delete-client-btn)');
 let availableIconsAmount = availableIconsIncludingTrashBin?.length;
-let initialNewIconWidth = availablePersonalInfoIconsDiv?.offsetWidth;
+let initialAvailableIconDivWidth = availablePersonalInfoIconsDiv?.offsetWidth;
 
 export function addIconToAvailableDiv(availableIcon, containerToHide = null){
     // Hide field if given (dropdowns)
@@ -85,8 +85,10 @@ function addPersonalInfoIconToExisting() {
  * https://css-tricks.com/using-css-transitions-auto-dimensions/
  */
 function openCloseAvailablePersonalIconsEventSetup() {
-    // Re calculate max with of available container
-    initialNewIconWidth = availablePersonalInfoIconsDiv.offsetWidth;
+    // Previously re calculated max with of available container here ()
+    // but that breaks if the available div is open (user hovers over it) when an icon is added or removed
+    // initialAvailableIconDivWidth = availablePersonalInfoIconsDiv.offsetWidth // Not good here
+
     // Calculate available personal info icons div max width
     availablePersonalInfoIconsDiv.addEventListener('mouseover', openAvailableIconsDiv);
     availablePersonalInfoIconsDiv.addEventListener('mouseout', closeAvailableIconsDiv);
@@ -95,14 +97,19 @@ function openCloseAvailablePersonalIconsEventSetup() {
 function openAvailableIconsDiv() {
     // The second icon (plus btn would be the first, but it's hidden on hover)
     // has to have the exact same width and padding than the others
-    let oneIconWidth = availablePersonalInfoIconsDiv.getElementsByTagName('img')[1].offsetWidth;
-    let newIconsContainerWidthWithoutIcons = initialNewIconWidth - oneIconWidth;
+    const firstAvailableIcon = availablePersonalInfoIconsDiv.getElementsByTagName('img')[1];
+    // Make icon visible to get its offsetWidth (that would be 0 on display: none, when icon is in use)
+    const firstAvailableIconDisplayValue = firstAvailableIcon.style.display;
+    firstAvailableIcon.style.display = 'inline-block';
+    let oneIconWidth = firstAvailableIcon.offsetWidth;
+    firstAvailableIcon.style.display = firstAvailableIconDisplayValue; // Set to its initial value
+    let availableIconsContainerWidthWithoutIcons = initialAvailableIconDivWidth - oneIconWidth;
     // max-width is the first icon that is always displayed plus the total amount times the width of one icon and adding container
-        availablePersonalInfoIconsDiv.style.maxWidth = ((1 + availableIconsAmount) * oneIconWidth) + newIconsContainerWidthWithoutIcons + 10 + 'px';
+    availablePersonalInfoIconsDiv.style.maxWidth = ((1 + availableIconsAmount) * oneIconWidth) + availableIconsContainerWidthWithoutIcons + 10 + 'px';
 }
 
 function closeAvailableIconsDiv() {
-    availablePersonalInfoIconsDiv.style.maxWidth = initialNewIconWidth + 'px';
+    availablePersonalInfoIconsDiv.style.maxWidth = initialAvailableIconDivWidth + 'px';
 }
 
 export function showPersonalInfoContainerIfHidden(){
