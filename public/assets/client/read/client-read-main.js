@@ -9,6 +9,7 @@ import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-re
 import {scrollToAnchor} from "../../general/js/page/scroll-to-anchor.js?v=0.1";
 import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
 import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
+import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
 
 const clientId = document.getElementById('client-id').value;
 
@@ -65,6 +66,17 @@ document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
         });
     });
 });
+// Restore / undelete button
+document.querySelector('#undelete-client-btn')?.addEventListener('click', () => {
+    let title = 'Are you sure that you want to restore this client?';
+    createAlertModal(title, '', () => {
+        submitUpdate({'deleted_at': null}, `clients/${clientId}`,
+            `clients/${clientId}`).then(() => {
+            location.reload();
+        });
+    }, 'Yes undelete');
+});
+
 
 // Toggle personal info edit icons
 let personalInfoEditIconsToggle = document.querySelector('#toggle-personal-info-edit-icons');

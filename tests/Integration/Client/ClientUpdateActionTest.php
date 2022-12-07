@@ -66,8 +66,14 @@ class ClientUpdateActionTest extends TestCase
         // Insert client status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
+        $clientAttributes = ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']];
+        // If deleted at is provided in the request data, it means that client should be undeleted
+        if (array_key_exists('deleted_at', $requestData)) {
+            // Add deleted at to client attributes
+            $clientAttributes = array_merge($clientAttributes, ['deleted_at' => date('Y-m-d H:i:s')]);
+        }
         $clientRow = $this->insertFixturesWithAttributes(
-            ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
+            $clientAttributes,
             ClientFixture::class
         );
 
@@ -83,14 +89,14 @@ class ClientUpdateActionTest extends TestCase
             $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], ClientStatusFixture::class);
         }
 
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
+
         $request = $this->createJsonRequest(
             'PUT',
             $this->urlFor('client-update-submit', ['client_id' => $clientRow['id']]),
             $requestData
         );
-
-        // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $response = $this->app->handle($request);
         // Assert status code
@@ -115,7 +121,24 @@ class ClientUpdateActionTest extends TestCase
         } else {
             // If db is not expected to change, data should remain the same as when it was inserted from the fixture
             $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
-            $this->assertTableRowCount(0, 'user_activity');
+            // Assert that user activity is inserted but with status failed
+            $this->assertTableRow(
+                [
+                    'action' => UserActivity::UPDATED->value,
+                    'table' => 'client',
+                    'row_id' => $clientRow['id'],
+                    'data' => json_encode(array_merge(['status' => 'FAILED'], $requestData), JSON_THROW_ON_ERROR),
+                ],
+                'user_activity',
+                (int)$this->findLastInsertedTableRow('user_activity')['id']
+            );
+        }
+
+        // If birthdate is in request body, age is returned in response data
+        if (array_key_exists('birthdate', $requestData)) {
+            $expectedResult['json_response']['data'] = [
+                'age' => (new \DateTime())->diff(new \DateTime($requestData['birthdate']))->y
+            ];
         }
 
         $this->assertJsonData($expectedResult['json_response'], $response);

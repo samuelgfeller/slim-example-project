@@ -134,6 +134,10 @@ class ClientAuthorizationChecker
                         $grantedUpdateKeys[] = 'user_id';
                     }
                 }
+                // If there is an undelete request on client, the same authorization rules than deletion are valid
+                if(array_key_exists('deleted_at', $clientDataToUpdate) && $this->isGrantedToDelete($ownerId, $log)){
+                    $grantedUpdateKeys[] = 'deleted_at';
+                }
             }
         }
         // If data that the user wanted to update and the grantedUpdateKeys are equal by having the same keys -> granted

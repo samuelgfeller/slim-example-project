@@ -8,8 +8,7 @@ addFilterBtn.addEventListener('click', toggleAvailableFilterDiv);
 // Hide available filters if click outside of filter area
 document.addEventListener('click', event => {
     // If clicked element is not a child of available-filter-div or active-filter-chips-div, hide it
-    if (event.target.closest('#available-filter-div') === null &&
-        event.target.closest('#active-filter-chips-div') === null) {
+    if (event.target.closest('#available-filter-div') === null && event.target.closest('#add-filter-btn') === null) {
         toggleAvailableFilterDiv(true);
     }
 });

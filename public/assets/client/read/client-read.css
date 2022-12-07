@@ -314,7 +314,8 @@
         cursor: crosshair;
     }
 
-    #add-client-personal-info-div img#toggle-personal-info-icons, #add-client-personal-info-div img#delete-client-btn {
+    #add-client-personal-info-div img#toggle-personal-info-icons, #add-client-personal-info-div img#delete-client-btn,
+    #add-client-personal-info-div img#undelete-client-btn{
         cursor: pointer;
     }
 

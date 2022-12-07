@@ -308,6 +308,9 @@ a.currently-editable {
 .discrete-text {
     color: #5e5e5e;
 }
+[data-deleted="1"] {
+    color: orangered;
+}
 
 @media (min-width: 961px) {
     #wrapper {

@@ -11,6 +11,9 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
+    #full-header-edit-icon-container[data-deleted="1"] h1{
+        color: orangered;
+    }
     /*Clear float*/
     #full-header-edit-icon-container::after {
         content: "";

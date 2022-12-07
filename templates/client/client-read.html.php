@@ -33,7 +33,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
-    <div id="full-header-edit-icon-container">
+    <div id="full-header-edit-icon-container" data-deleted="<?= $clientAggregate->deletedAt ? '1' : 0 ?>">
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -278,8 +278,10 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
                 <!-- Delete trash icon stays always there -->
                 <?= $clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::DELETE) ?
-                    '<img src="assets/general/img/action/trash-icon.svg" class="personal-info-icon" id="delete-client-btn"
-                     alt="delete">' : '' ?>
+                    ($clientAggregate->deletedAt ? '<img src="assets/general/img/action/undelete-icon.svg" 
+                    class="personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
+                        '<img src="assets/general/img/action/trash-icon.svg" class="personal-info-icon permanently-in-available-icon-div" 
+                        id="delete-client-btn" alt="delete">') : '' ?>
 
                 <!-- alt has to be exactly the same as the field name.
                 The field container id has to be "[alt]-container".

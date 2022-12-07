@@ -150,9 +150,12 @@ class ClientFinder
      */
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
     {
-        $clientResultAggregate = $this->clientFinderRepository->findClientAggregateById($clientId);
+        $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id &&
-            $this->clientAuthorizationChecker->isGrantedToRead($clientResultAggregate->userId)
+            $this->clientAuthorizationChecker->isGrantedToRead(
+                $clientResultAggregate->userId,
+                $clientResultAggregate->deletedAt
+            )
         ) {
             // Set client mutation privilege
             $clientResultAggregate->mainDataPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(

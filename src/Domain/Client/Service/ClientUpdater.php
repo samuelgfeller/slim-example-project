@@ -61,7 +61,8 @@ class ClientUpdater
                     'birthdate',
                     'email',
                     'sex',
-                    'vigilance_level'
+                    'vigilance_level',
+                    'deleted_at',
                 ])) {
                     $updateData[$column] = $value;
                 } else {
@@ -94,10 +95,17 @@ class ClientUpdater
             ];
         }
 
-// User does not have needed rights to access area or function
+        // User does not have needed rights to access area or function
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to update client with id: ' . $clientId .
             ' but isn\'t allowed.'
+        );
+        // Add activity entry with failed update attempt
+        $this->userActivityManager->addUserActivity(
+            UserActivity::UPDATED,
+            'client',
+            $clientId,
+            array_merge(['status' => 'FAILED'], $clientValues)
         );
         throw new ForbiddenException('Not allowed to change that client.');
     }

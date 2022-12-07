@@ -40,7 +40,7 @@ class ClientUpdateCaseProvider
             'db_changed' => true,
             'json_response' => [
                 'status' => 'success',
-                'data' => ['age' => (new \DateTime())->diff(new \DateTime($basicClientDataChanges['birthdate']))->y],
+                'data' => null, // age added in test function if present in request data
             ],
         ];
         $unauthorizedResult = [
@@ -89,6 +89,12 @@ class ClientUpdateCaseProvider
                 'data_to_be_changed' => ['client_status_id' => 'new'],
                 'expected_result' => $unauthorizedResult,
             ],
+            [ // ? Advisor owner - undelete client - not allowed
+                'user_linked_to_client' => $newcomerAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => ['deleted_at' => null],
+                'expected_result' => $unauthorizedResult,
+            ],
 
             // * Managing advisor
             [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
@@ -98,6 +104,12 @@ class ClientUpdateCaseProvider
                     $basicClientDataChanges,
                     ['client_status_id' => 'new', 'user_id' => 'new']
                 ),
+                'expected_result' => $authorizedResult,
+            ],
+            [ // ? Managing advisor not owner - undelete client - allowed
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
+                'data_to_be_changed' => ['deleted_at' => null],
                 'expected_result' => $authorizedResult,
             ],
         ];

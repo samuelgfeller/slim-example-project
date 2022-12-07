@@ -71,6 +71,7 @@ final class ClientUpdateAction
                 'email',
                 'sex',
                 'vigilance_level',
+                'deleted_at',
             ])) {
                 // Try to update client with given values
                 try {

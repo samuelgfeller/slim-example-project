@@ -109,7 +109,7 @@ class ClientFinderRepository
      * @param int $id
      * @return ClientResultAggregateData
      */
-    public function findClientAggregateById(int $id): ClientResultAggregateData
+    public function findClientAggregateByIdIncludingDeleted(int $id): ClientResultAggregateData
     {
         $query = $this->queryFactory->newQuery()->from('client');
 
@@ -129,7 +129,7 @@ class ClientFinderRepository
                 ],
             ])
             ->andWhere(
-                ['client.id' => $id, 'client.deleted_at IS' => null]
+                ['client.id' => $id]
             );
 
         $resultRows = $query->execute()->fetch('assoc') ?: [];

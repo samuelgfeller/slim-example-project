@@ -5,7 +5,8 @@ let existingIcons = personalInfoContainer.querySelectorAll('.personal-info-icon'
 let availablePersonalInfoIconsDiv = document.querySelector('#add-client-personal-info-div');
 // Icons that don't have a value for the client
 let availableIconsIncludingTrashBin = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon');
-let availableIcons = availablePersonalInfoIconsDiv?.querySelectorAll('.personal-info-icon:not(#delete-client-btn)');
+let availableIcons = availablePersonalInfoIconsDiv
+    ?.querySelectorAll('.personal-info-icon:not(.permanently-in-available-icon-div)');
 let availableIconsAmount = availableIconsIncludingTrashBin?.length;
 let initialAvailableIconDivWidth = availablePersonalInfoIconsDiv?.offsetWidth;
 

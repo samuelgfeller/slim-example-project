@@ -22,7 +22,8 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
             </div>
         </div>
         <div class="profile-card-content">
-            <h3>${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
+            <h3 data-deleted="${client.deletedAt !== null ? '1' : '0'}"
+            >${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
             <div class="profile-card-infos-flexbox">
         ${// Display location icon and content if not empty 
             client.location !== null && client.location !== '' ?
