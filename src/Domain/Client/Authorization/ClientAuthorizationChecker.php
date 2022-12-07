@@ -2,6 +2,7 @@
 
 namespace App\Domain\Client\Authorization;
 
+use App\Common\DateTimeImmutable;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultAggregateData;
 use App\Domain\Factory\LoggerFactory;
@@ -184,11 +185,15 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to read client
      *
      * @param null|int $ownerId
+     * @param string|DateTimeImmutable|null $deletedAt
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
-    public function isGrantedToRead(?int $ownerId, bool $log = true): bool
-    {
+    public function isGrantedToRead(
+        ?int $ownerId,
+        string|DateTimeImmutable|null $deletedAt = null,
+        bool $log = true
+    ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
@@ -196,8 +201,14 @@ class ClientAuthorizationChecker
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-            // Newcomer are allowed to see all clients regardless of owner
-            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['newcomer']) {
+            // Newcomer are allowed to see all clients regardless of owner if not deleted
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]
+                && $deletedAt === null
+            ) {
+                return true;
+            }
+            // Managing advisors can see all clients including deleted ones
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 return true;
             }
         }

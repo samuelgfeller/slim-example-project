@@ -27,6 +27,7 @@ class ClientData
     public ?int $clientStatusId;
     public ?DateTimeImmutable $updatedAt;
     public ?DateTimeImmutable $createdAt;
+    public ?DateTimeImmutable $deletedAt;
 
     // Not database field but here so that age doesn't have to be calculated in view
     public ?int $age = null;
@@ -52,6 +53,7 @@ class ClientData
         $this->clientStatusId = $reader->findAsInt('client_status_id');
         $this->updatedAt = $reader->findAsDateTimeImmutable('updated_at');
         $this->createdAt = $reader->findAsDateTimeImmutable('created_at');
+        $this->deletedAt = $reader->findAsDateTimeImmutable('deleted_at');
 
         if ($this->birthdate){
             $this->age = (new \DateTime())->diff($this->birthdate)->y;

@@ -30,6 +30,7 @@ class ClientFinderRepository
         'client_status_id' => 'client.client_status_id',
         'updated_at' => 'client.updated_at',
         'created_at' => 'client.created_at',
+        'deleted_at' => 'client.deleted_at',
         // User data prefixed with user_
         'user_first_name' => 'user.first_name',
         'user_surname' => 'user.surname',

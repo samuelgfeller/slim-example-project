@@ -95,9 +95,9 @@ class ClientListActionTest extends TestCase
 
 
     /**
-     * Test list of clients
+     * Test list of clients with different kinds of filters
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideValidClientListFilters()
+     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::clientListFilterCases()
      *
      * @param array $filterQueryParamsArr
      * @param string $expectedClientsWhereString
@@ -144,7 +144,7 @@ class ClientListActionTest extends TestCase
         $clientRows = $this->findTableRowsWhere('client', $expectedClientsWhereString);
 
         // Create expected array based on fixture records
-        $expected = [];
+        $expected['clients'] = [];
         foreach ($clientRows as $clientRow) {
             // Add clients to expected array
             $expected['clients'][] = [
@@ -186,22 +186,31 @@ class ClientListActionTest extends TestCase
         );
         $expected['sexes'] = (new ClientResultDataCollection())->sexes;
 
-        $this->assertPartialJsonData($expected, $response);
+        // Get response json data
+        $responseJson = $this->getJsonData($response);
+        // Remove keys from response json that are not in the clients expected array
+        foreach ($responseJson['clients'] as $key => $clientFromResponse) {
+            // Replace client from response array with the same values but removed keys that are not in the expected array
+            $responseJson['clients'][$key] = array_intersect_key($clientFromResponse, $expected['clients'][0]);
+        }
+        self::assertSame($expected, $responseJson);
     }
 
     /**
      * Request list of clients but with invalid filter
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::provideInvalidClientListFilter()
+     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::clientListInvalidFilterCases()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
     {
-        $this->insertFixture('user', (new UserFixture())->records[0]);
-        $this->container->get(SessionInterface::class)->set('user_id', 1);
+        $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(
             'GET',

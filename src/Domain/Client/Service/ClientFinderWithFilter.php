@@ -47,6 +47,8 @@ class ClientFinderWithFilter
         }
         // Filter: deleted records
         if (isset($params['deleted']) && (int)$params['deleted'] === 1) {
+            // Remove deleted_at from filter params array
+            unset($filterParams['deleted_at']);
             $filterParams['deleted_at IS NOT'] = null;
         }
         // Filter client 'status'

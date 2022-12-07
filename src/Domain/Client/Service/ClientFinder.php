@@ -113,7 +113,7 @@ class ClientFinder
         $clientResultsWithAggregates = $this->clientFinderRepository->findClientsWithResultAggregate($whereArray);
         // Add assigned user and client status privilege to each clientResultAggregate
         foreach ($clientResultsWithAggregates as $key => $client) {
-            if ($this->clientAuthorizationChecker->isGrantedToRead($client->userId)) {
+            if ($this->clientAuthorizationChecker->isGrantedToRead($client->userId, $client->deletedAt)) {
                 $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
                     $client->userId,
                     'user_id'
