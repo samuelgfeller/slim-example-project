@@ -67,7 +67,7 @@ class ClientFinderWithFilter
 
         // Find all clients matching the filter regardless of logged-in user rights
         $queryBuilderWhereArray = $this->clientFinder->buildWhereArrayWithFilterParams($filterParams);
-        $clientResultDataCollection = $this->clientFinder->findClientsWithAggregates($queryBuilderWhereArray);
+        $clientResultDataCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
         $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
             $clientResultDataCollection->clients

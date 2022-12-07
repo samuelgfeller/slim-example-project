@@ -86,7 +86,7 @@ class ClientFinder
      * @param $queryBuilderWhereArray
      * @return ClientResultDataCollection
      */
-    public function findClientsWithAggregates($queryBuilderWhereArray): ClientResultDataCollection
+    public function findClientListWithAggregates($queryBuilderWhereArray): ClientResultDataCollection
     {
         $clientResultCollection = new ClientResultDataCollection();
         // Retrieve clients

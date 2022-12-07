@@ -66,6 +66,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <select name="client_status_id" class="default-select bigger-select"
                 <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
                     ? '' : 'disabled' ?>>
+                <option value=""></option>
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
@@ -81,6 +82,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <label for="assigned-user-select" class="bigger-select-label">Helper</label>
             <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
                 <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
+                <option value=""></option>
                 <?php
                 // Linked user select options
                 foreach ($dropdownValues->users as $id => $name) {

@@ -7,8 +7,12 @@
  */
 import {escapeHtml} from "../functions.js?v=0.1";
 
-export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0){
+export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable = false){
     let optionsHtml = '';
+    if (nullable){
+        // Add first option empty if nullable
+        optionsHtml = `<option value=""></option>\n`;
+    }
     for (const [entryKey, name] of Object.entries(allEntries)) {
         let selected = entryKey === selectedKey?.toString() ? `selected="selected"` : '';
         optionsHtml += `<option value="${entryKey}" ${selected}>${escapeHtml(name)}</option>\n`;

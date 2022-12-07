@@ -64,6 +64,10 @@ class ClientUpdater
                     'vigilance_level',
                     'deleted_at',
                 ])) {
+                    // If $value is an empty string, change it to null
+                    if ($value === '') {
+                        $value = null;
+                    }
                     $updateData[$column] = $value;
                 } else {
                     throw new NotAllowedException('Not allowed to change client column ' . $column);
