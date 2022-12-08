@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Home;
 
 use App\Application\Responder\Responder;
+use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,7 +21,8 @@ final class HomePageAction
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly SessionInterface $session
+        private readonly SessionInterface $session,
+        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
     ) {
     }
 
@@ -44,6 +46,13 @@ final class HomePageAction
 //        $array['nothing'];
 //        $GLOBALS['_1warning'] = true;
 
-        return $this->responder->render($response, 'home/home.html.php', ['name' => $name]);
+        return $this->responder->render(
+            $response,
+            'dashboard/dashboard.html.php',
+            [
+                'authenticatedUserId' => $this->session->get('user_id'),
+                'statuses' => array_flip($this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName())
+            ]
+        );
     }
 }

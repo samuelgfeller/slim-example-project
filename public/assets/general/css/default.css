@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: SF-Pro-Text;
-    src: url(../fonts/SF-Pro/SF-Pro.ttf)  format('truetype');
+    src: url(../fonts/SF-Pro/SF-Pro.ttf) format('truetype');
     font-weight: normal;
 }
 
@@ -36,8 +36,33 @@
 
 @font-face {
     font-family: SF-Pro Display;
-    src: url(../fonts/SF-Pro/SF-Pro-Display-Bold.otf);
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Heavy.otf);
+    font-weight: 800;
 }
+@font-face {
+    font-family: SF-Pro Display;
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Bold.otf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: SF-Pro Display;
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Semibold.otf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: SF-Pro Display;
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Medium.otf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: SF-Pro Display;
+    src: url(../fonts/SF-Pro/SF-Pro-Display-Regular.otf);
+    font-weight: 300;
+}
+
 
 @font-face {
     font-family: DM-Sans;
@@ -199,6 +224,7 @@ a.currently-editable {
 .btn-red:focus {
     background: #ec6969;
 }
+
 .icon-btn {
     width: 18px;
     float: left;
@@ -308,6 +334,7 @@ a.currently-editable {
 .discrete-text {
     color: #5e5e5e;
 }
+
 [data-deleted="1"] {
     color: orangered;
 }
@@ -316,6 +343,7 @@ a.currently-editable {
     #wrapper {
         height: 100vh;
     }
+
     /*Scrollbar*/
     ::-webkit-scrollbar {
         width: 10px;

@@ -1,0 +1,60 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    .panel-container {
+        flex-grow: 1;
+        border: 8px solid rgba(0, 0, 0, 0.15);
+        border-radius: 40px;
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
+        /*max-width: 100%;*/
+        /*width: fit-content;*/
+        /*height: auto;*/
+        /*min-width: max-content;*/
+    }
+    .panel-header{
+        background: rgba(0, 0, 0, 0.15);
+        /*border-top: 8px solid red;*/
+        overflow: hidden;
+        border-radius: 32px 32px 0 0;
+    }
+
+    .panel-header h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 12px 20px 20px 20px;
+        color: #2e3e50;
+        font-size: 1.7em;
+        font-weight: 600;
+    }
+
+    .panel-content {
+        padding: 20px 20px;
+        height: auto;
+    }
+
+    .panel-content h3 {
+        font-size: 1.4em;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    .panel-content a {
+        background: #ebecef;
+        padding: 2px;
+        border-radius: 5px;
+        color: #2e3e50;
+    }
+
+    .panel-content a:hover {
+        /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
+         of the :not() selectors */
+        text-decoration: none !important;
+        background: #d0d2de;
+    }
+}
+
+@media (min-width: 641px) {
+    .panel-container {
+        /*min-width: 500px;*/
+        /*margin-right: 40px;*/
+    }
+}

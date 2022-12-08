@@ -169,9 +169,9 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                         // Generate data string
                         $dataString = '';
                         foreach ($userActivity->data ?? [] as $column => $value) {
-                            if ($value !== null && !is_array($value)) {
+                            if (($value !== null || $column === 'deleted_at') && !is_array($value)) {
                                 $column = is_numeric($column) ? '' : "<span style='font-weight: 500'>$column</span>:";
-                                $dataString .= "<br> $column $value";
+                                $dataString .= "<br> $column ".($value ?: 'null');
                             }
                         }
 

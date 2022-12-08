@@ -50,7 +50,7 @@ $this->addAttribute(
         <?php
     } ?>
 </div>
-<input autocomplete="none" id="name-search-input" type="text" placeholder="Search by name">
+<input autocomplete="none" id="name-search-input" type="search" placeholder="Search by name">
 
 <div id="active-filter-chips-div">
     <button id="add-filter-btn">+ Filter</button>

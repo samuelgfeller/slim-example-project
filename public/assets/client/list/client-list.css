@@ -5,7 +5,7 @@
         width: 40px;
         height: 40px;
     }
-    #client-wrapper {
+    #client-wrapper, .client-wrapper {
         width: 100%;
         display: flex;
         /* Make items shrink if different height on same row */
@@ -246,7 +246,7 @@ for galaxy fold and very slim phones*/
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 @media (min-width: 641px) {
-    #client-wrapper {
+    #client-wrapper, .client-wrapper {
         padding: 0 10px;
     }
 

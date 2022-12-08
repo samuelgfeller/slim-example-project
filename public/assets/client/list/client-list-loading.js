@@ -23,18 +23,23 @@ let previousRequestId = 0;
 /**
  * Fetch clients with active filter chips and name search if present
  * then load clients into DOM
+ * @param {object[]|null} filterParams custom filter params that won't be
+ * saved in user_client_list_filter database table
+ * @param {string|null} clientWrapperId if client wrapper is not the default on the client list page,
+ * a custom one can be provided.
  */
-export function fetchAndLoadClients() {
+export function fetchAndLoadClients(filterParams = null, clientWrapperId = null) {
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();
 
-    fetchClients().then(jsonResponse => {
+    displayClientProfileCardLoadingPlaceholder(clientWrapperId);
+    fetchClients(filterParams).then(jsonResponse => {
         // Add one to previous request id after request is done
         previousRequestId++;
         // If previousRequestId does not match requestId it means there was newer request and this response should be ignored
-        if (requestId === previousRequestId) {
-            removeClientCardContentPlaceholder();
-            addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses);
+        if (requestId === previousRequestId || filterParams !== null) {
+            removeClientCardContentPlaceholder(clientWrapperId);
+            addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses, clientWrapperId);
             // Add event listeners to cards
             let cards = document.querySelectorAll('.client-profile-card');
             for (const card of cards) {
@@ -60,17 +65,28 @@ export function fetchAndLoadClients() {
 }
 
 /**
+ * Fetch and load clients into dom event handler
+ * Existing because fetchAndLoadClients has an optional
+ * object parameter "filterParams" so it would cause a type
+ * error when called from event listener
+ */
+export function fetchAndLoadClientsEventHandler() {
+    fetchAndLoadClients();
+}
+
+
+/**
  *  Fetch clients with active filter chips and name search if present
  *  then load clients into DOM
- *
- *  @return {Promise} load clients ajax promise
+ * @param {object[]|null} filterParams
+ * @return {Promise} load clients ajax promise
  */
-function fetchClients() {
-    displayClientProfileCardLoadingPlaceholder();
+function fetchClients(filterParams = null) {
     let searchParams = new URLSearchParams();
 
     // Loop through all the active filter chips and add filters to query params
-    const activeFilterChips = document.querySelectorAll('#active-filter-chips-div .filter-chip span');
+    const activeFilterChips = document
+        .querySelectorAll('#active-filter-chips-div .filter-chip span');
     for (const chip of activeFilterChips) {
         const paramName = chip.dataset.paramName;
         // For PHP, GET params with multiple values have to have a "[]" appended to the name
@@ -91,13 +107,19 @@ function fetchClients() {
         searchParams.append(paramName + multiValue, chip.dataset.paramValue);
         // Add filter id to filterIds param
         searchParams.append('filterIds[]', chip.dataset.filterId);
-
     }
 
     // Check if name-search-input contains values
-    const searchInputValue = document.getElementById('name-search-input').value;
+    const searchInputValue = document.getElementById('name-search-input')?.value;
     if (searchInputValue) {
         searchParams.append('name', searchInputValue);
+    }
+
+    // If filterParams is set those have to be added to the searchParams
+    if (filterParams) {
+        for (const filterParam of filterParams) {
+            searchParams.append(filterParam.paramName, filterParam.paramValue);
+        }
     }
 
     // Add question mark
@@ -113,9 +135,11 @@ function fetchClients() {
  * @param {object[]} clients
  * @param allUsers
  * @param allStatuses
+ * @param {string|null} clientWrapperId if client wrapper is not the default on the client list page,
+ * a custom one can be provided.
  */
-function addClientsToDom(clients, allUsers, allStatuses) {
-    let clientContainer = document.getElementById('client-wrapper');
+function addClientsToDom(clients, allUsers, allStatuses, clientWrapperId = null) {
+    let clientContainer = document.getElementById(clientWrapperId ?? 'client-wrapper');
 
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();

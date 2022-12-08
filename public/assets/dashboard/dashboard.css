@@ -1,0 +1,48 @@
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    .dashboard-panel-container{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-row: auto;
+        gap: 20px;
+        overflow: hidden;
+    }
+    /*Shrink profile card so that it takes the least amount of space*/
+    .panel-content .client-wrapper {
+        margin-top: 15px;
+    }
+    .panel-content .client-wrapper .client-profile-card {
+        font-size: initial;
+
+    }
+
+    .panel-content .profile-card-infos-flexbox, .panel-content .profile-card-assignee-and-status {
+        justify-content: space-around;
+    }
+
+    .panel-content .profile-card-infos-flexbox {
+        display: none;
+    }
+
+    .panel-content .profile-card-avatar {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (min-width: 641px) {
+    .panel-container {
+        /*min-width: 500px;*/
+        /*margin-right: 40px;*/
+    }
+}
+
+@media (min-width: 700px) {
+    .dashboard-panel-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .panel-content .client-wrapper .client-profile-card {
+        width: min-content;
+        font-size: initial;
+    }
+}

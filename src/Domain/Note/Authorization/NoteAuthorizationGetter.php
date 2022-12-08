@@ -19,10 +19,10 @@ class NoteAuthorizationGetter
      * Set user mutation rights on main note from clientResultAggregateData
      *
      * @param null|int $noteOwnerId main note owner id (null if main note doesn't exist yet)
-     * @param int $clientOwnerId
+     * @param null|int $clientOwnerId
      * @return Privilege
      */
-    public function getMainNotePrivilege(?int $noteOwnerId, int $clientOwnerId): Privilege
+    public function getMainNotePrivilege(?int $noteOwnerId, ?int $clientOwnerId): Privilege
     {
         // Delete not possible with main note
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
