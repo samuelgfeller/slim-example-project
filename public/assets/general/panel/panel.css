@@ -2,7 +2,6 @@
 @media (min-width: 100px) {
     .panel-container {
         flex-grow: 1;
-        border: 8px solid rgba(0, 0, 0, 0.15);
         border-radius: 40px;
         /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
         /*max-width: 100%;*/
@@ -10,25 +9,39 @@
         /*height: auto;*/
         /*min-width: max-content;*/
     }
-    .panel-header{
-        background: rgba(0, 0, 0, 0.15);
+
+    .panel-header {
+        /*background: rgba(0, 0, 0, 0.20);*/
+        /*background: #e0e2e5;*/
+        background: rgba(46, 62, 80, 0.2);
         /*border-top: 8px solid red;*/
         overflow: hidden;
         border-radius: 32px 32px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
     }
 
     .panel-header h2 {
         margin-top: 0;
         margin-bottom: 0;
-        padding: 12px 20px 20px 20px;
+        /*padding: 12px 20px 20px 20px;*/
+        padding: 20px;
         color: #2e3e50;
         font-size: 1.7em;
         font-weight: 600;
+        display: inline-block;
     }
 
     .panel-content {
         padding: 20px 20px;
         height: auto;
+        overflow: hidden;
+        background: rgba(46, 62, 80, 0.05);
+        border-radius: 0 0 30px 30px;
+        /*border: 8px solid rgba(46, 62, 80, 0.2);*/
+        /*border-top: none;*/
     }
 
     .panel-content h3 {
@@ -49,6 +62,21 @@
          of the :not() selectors */
         text-decoration: none !important;
         background: #d0d2de;
+    }
+
+    /*Open / close toggle arrow*/
+    .toggle-panel-icon {
+        width: 35px;
+        transition: transform .3s;
+        cursor: pointer;
+        float: right;
+        margin-right: 20px;
+        padding: 9px 9px;
+        transform: rotateZ(180deg);
+    }
+
+    .toggle-panel-icon.active {
+        transform: rotateZ(0deg);
     }
 }
 

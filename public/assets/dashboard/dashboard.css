@@ -1,19 +1,26 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    .dashboard-panel-container{
+    .dashboard-panel-container {
         display: grid;
         grid-template-columns: 1fr;
+        align-items: start;
         grid-row: auto;
         gap: 20px;
         overflow: hidden;
     }
+    .dashboard-panel-container > div{
+        /*This "magically" fixes grid items expanding over 100% of the available space */
+        min-width: 0; /* Source https://stackoverflow.com/a/43312314/9013718 */
+    }
+
     /*Shrink profile card so that it takes the least amount of space*/
     .panel-content .client-wrapper {
         margin-top: 15px;
+        justify-content: center;
     }
+
     .panel-content .client-wrapper .client-profile-card {
         font-size: initial;
-
     }
 
     .panel-content .profile-card-infos-flexbox, .panel-content .profile-card-assignee-and-status {
@@ -28,6 +35,8 @@
         width: 70px;
         height: 70px;
     }
+
+
 }
 
 @media (min-width: 641px) {
@@ -39,8 +48,22 @@
 
 @media (min-width: 700px) {
     .dashboard-panel-container {
-        grid-template-columns: 1fr 1fr;
+        /*grid-template-columns: 1fr 1fr;*/
     }
+
+    .panel-content .client-wrapper .client-profile-card {
+        width: min-content;
+        font-size: initial;
+    }
+}
+
+@media (min-width: 1330px) {
+    .dashboard-panel-container {
+        grid-template-columns: auto auto;
+        /*grid-template-rows: auto auto;*/
+        /*grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));*/
+    }
+
     .panel-content .client-wrapper .client-profile-card {
         width: min-content;
         font-size: initial;

@@ -25,6 +25,7 @@ $this->addAttribute('jsModules', [
     <div class="panel-container client-panel">
         <div class="panel-header">
             <h2>Unassigned clients</h2>
+            <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">
         </div>
         <div class="panel-content">
             <data data-param-name="user" data-param-value="" value=""></data>
@@ -34,6 +35,7 @@ $this->addAttribute('jsModules', [
     <div class="panel-container client-panel">
         <div class="panel-header">
             <h2>Clients assigned to me - action pending</h2>
+            <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">
         </div>
         <div class="panel-content">
             <data data-param-name="user" data-param-value="<?= $authenticatedUserId ?>" value=""></data>
@@ -46,7 +48,9 @@ $this->addAttribute('jsModules', [
             <h2>User activity</h2>
         </div>
         <div class="panel-content">
-            aaäslfjöylkdjfma
+            <p>
+            aaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfmaaaäslfjöylkdjfma
+            </p>
         </div>
     </div>
 </div>
