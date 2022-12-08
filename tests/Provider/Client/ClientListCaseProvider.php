@@ -102,6 +102,26 @@ class ClientListCaseProvider
                 'users_to_insert' => $usersToInsert,
                 'statuses_to_insert' => $clientStatusesToInsert,
             ],
+            // * Test search filter "name"
+            [ // Test user filter "name"
+                'get_params' => ['name' => 'th',],
+                'expected_clients_where_string' => 'deleted_at IS NULL AND (CONCAT(first_name, "  ", '.
+                    'last_name) LIKE "%th%")',
+                'authenticated_user' => $newcomerAttributes,
+                'clients_to_insert' => $clientsToInsert,
+                'users_to_insert' => $usersToInsert,
+                'statuses_to_insert' => $clientStatusesToInsert,
+            ],
+            // * Filter combination "status" - "name"
+            [ // Test user filter "status 68 or 69" and "name contains 'enth'"
+                'get_params' => ['status' => [68, 69], 'name' => 'enth'],
+                'expected_clients_where_string' => 'deleted_at IS NULL AND (client_status_id IN (68, 69)) AND '.
+                    '(CONCAT(first_name, "  ", last_name) LIKE "%enth%")',
+                'authenticated_user' => $newcomerAttributes,
+                'clients_to_insert' => $clientsToInsert,
+                'users_to_insert' => $usersToInsert,
+                'statuses_to_insert' => $clientStatusesToInsert,
+            ],
             // * Filter combination "user" - "status"
             [ // Test user filter "status 68 or 69" and "user 1 (default when not in attr) or 42 (authenticated)"
                 'get_params' => ['status' => [68, 69], 'user' => [1, 42]],
