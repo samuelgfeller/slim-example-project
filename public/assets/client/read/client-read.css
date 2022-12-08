@@ -196,8 +196,7 @@
         box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
         align-self: start; /*Make it not expand to the same height as activity notes*/
         position: relative; /*For absolute edit icon on mobile*/
-        float: right;
-        width: fit-content;
+        width: 100%;
     }
 
     #client-personal-info-flex-container a, #client-personal-info-flex-container > div {
@@ -283,7 +282,6 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        max-width: 45px;
         transition: max-width .3s ease;
         overflow: hidden;
         float: right;
@@ -295,8 +293,8 @@
         padding: 6px 10px;
         /*Along with js function openAvailableIconsDiv*/
     }
-
-    #add-client-personal-info-div:hover #toggle-personal-info-icons{
+    /*Always hide + icon to show available icons on mobile as its always expanded */
+    #toggle-personal-info-icons{
         display: none;
     }
 
@@ -385,7 +383,7 @@
 }
 
 /* last iPad portrait breakpoint is at 768 */
-@media (min-width: 768px) {
+@media (min-width: 768px) { /*If changed, breakpoint in */
     #client-activity-personal-info-container {
         flex-wrap: nowrap;
         column-gap: 5vw;
@@ -404,6 +402,19 @@
         flex-grow: 0;
         display: block; /*From display flex (wrap elements the easiest way) to inline-block for desktop */
         max-width: 400px;
+        float: right;
+        width: fit-content;
+    }
+    /*Max width is removed if touch or mobile in client-read-personal-info.js*/
+    #add-client-personal-info-div {
+        max-width: 45px;
+    }
+    /*Only hide plus icon on hover (it is hidden if touch in client-read-personal-info.js*/
+    #toggle-personal-info-icons{
+        display: initial;
+    }
+    #add-client-personal-info-div:hover #toggle-personal-info-icons {
+        display: none;
     }
 
     #client-personal-info-flex-container a, #client-personal-info-flex-container div {

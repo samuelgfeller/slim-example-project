@@ -90,9 +90,19 @@ function openCloseAvailablePersonalIconsEventSetup() {
     // but that breaks if the available div is open (user hovers over it) when an icon is added or removed
     // initialAvailableIconDivWidth = availablePersonalInfoIconsDiv.offsetWidth // Not good here
 
-    // Calculate available personal info icons div max width
-    availablePersonalInfoIconsDiv.addEventListener('mouseover', openAvailableIconsDiv);
-    availablePersonalInfoIconsDiv.addEventListener('mouseout', closeAvailableIconsDiv);
+    // On desktop the available icons div opens on mouse hover; this has to be calculated by js
+    if (window.matchMedia("(min-width: 768)").matches && !('ontouchstart' in window || navigator.msMaxTouchPoints)) {
+        // Calculate available personal info icons div max width
+        availablePersonalInfoIconsDiv.addEventListener('mouseover', openAvailableIconsDiv);
+        availablePersonalInfoIconsDiv.addEventListener('mouseout', closeAvailableIconsDiv);
+    }else{
+        // On mobile or on a touch device the available icons div is always expanded and the plus button should be hidden
+        const plusIcon = document.getElementById('toggle-personal-info-icons');
+        if (plusIcon && availablePersonalInfoIconsDiv) {
+            availablePersonalInfoIconsDiv.style.maxWidth = '100%';
+            plusIcon.style.display = 'none';
+        }
+    }
 }
 
 function openAvailableIconsDiv() {
