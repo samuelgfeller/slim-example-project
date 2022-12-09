@@ -84,6 +84,11 @@ class ClientUpdater
                     $responseData['age'] = (new \DateTime())->diff($birthdate)->y;
                 }
             }
+            // If assigned to user add assigned_at date as well
+            if (isset($updateData['user_id'])){
+                $updateData['assigned_at'] = date('Y-m-d H:i:s');
+            }
+            // Update client
             $updated = $this->clientUpdaterRepository->updateClient($updateData, $clientId);
             if ($updated) {
                 $this->userActivityManager->addUserActivity(

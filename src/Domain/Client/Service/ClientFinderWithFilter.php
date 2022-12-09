@@ -65,6 +65,22 @@ class ClientFinderWithFilter
         if (isset($params['name'])) {
             $filterParams['name'] = $params['name'];
         }
+        // Filter client by date at which it was assigned
+        if (isset($params['recently-assigned'])) {
+            // If value is 1 the default time range is taken which is 1 week
+            if ((int)$params['recently-assigned'] === 1){
+                $date = new \DateTime('-1 week');
+            } // If it's a valid date (validation source: https://stackoverflow.com/a/24401462/9013718), the date is taken
+            elseif(strtotime((string)$params['recently-assigned'])) {
+                 $date = new \DateTimeImmutable($params['recently-assigned']);
+            }else{
+                throw new InvalidClientFilterException('Invalid filter format "recently-assigned".');
+            }
+            // Add to filter params if date greater than given date and user_id is not null
+            $filterParams['assigned_at >'] = $date->format('Y-m-d H:i:s');
+            $filterParams['user_id IS NOT'] = null;
+        }
+
         // Other filters here
 
         // Add filter ids to session
