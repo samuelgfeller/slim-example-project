@@ -23,9 +23,17 @@ for (const toggleIcon of toggleIcons) {
 }
 
 // Collapse panels if collapsed in localStorage
-const hiddenPanels = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');
-for (const hiddenPanelId in hiddenPanels){
-    document.getElementById(hiddenPanelId).classList.add('collapsed');
+const hiddenPanelIds = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');
+for (const hiddenPanelId in hiddenPanelIds){
+    const hiddenPanel = document.getElementById(hiddenPanelId);
+    if (hiddenPanel) {
+        hiddenPanel.classList.add('collapsed');
+    } else {
+        // If hiddenPanel is not found it means that it doesn't exist for the user anymore so it should be deleted
+        delete hiddenPanelIds[hiddenPanelId];
+        // Store modified hidden panels in localstorage
+        window.localStorage.setItem('hiddenPanels', JSON.stringify(hiddenPanelIds));
+    }
 }
 
 // Load clients in client panels
@@ -36,6 +44,8 @@ for (const clientPanel of clientPanels) {
     for (const paramData of paramsData) {
         filterParams.push({paramName: paramData.dataset.paramName, paramValue: paramData.dataset.paramValue});
     }
+    console.log(filterParams, clientPanel.querySelector('.client-wrapper').id)
+    // client panels have to have a div.client-wrapper in the content section
     fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id);
 }
 

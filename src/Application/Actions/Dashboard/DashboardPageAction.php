@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Application\Actions\Home;
+namespace App\Application\Actions\Dashboard;
 
 use App\Application\Responder\Responder;
+use App\Domain\Dashboard\DashboardGetter;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Action.
  */
-final class HomePageAction
+final class DashboardPageAction
 {
 
     /**
@@ -23,6 +24,7 @@ final class HomePageAction
         private readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
+        private readonly DashboardGetter $dashboardGetter,
     ) {
     }
 
@@ -42,16 +44,13 @@ final class HomePageAction
     ): ResponseInterface {
         $name = $args['name'] ?? 'noname';
         $array = [];
-//        $a = $test;
-//        $array['nothing'];
-//        $GLOBALS['_1warning'] = true;
 
         return $this->responder->render(
             $response,
             'dashboard/dashboard.html.php',
             [
                 'authenticatedUserId' => $this->session->get('user_id'),
-                'statuses' => array_flip($this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName())
+                'dashboards' => $this->dashboardGetter->getDashboards()
             ]
         );
     }

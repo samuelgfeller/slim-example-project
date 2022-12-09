@@ -20,7 +20,7 @@
 
     /*Shrink profile card so that it takes the least amount of space*/
     .panel-content .client-wrapper {
-        margin-top: 15px;
+        margin-top: 5px;
         justify-content: center;
         gap: 20px 20px;
     }

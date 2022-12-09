@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Application\Actions\Home;
+namespace App\Application\Actions\Dashboard;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;

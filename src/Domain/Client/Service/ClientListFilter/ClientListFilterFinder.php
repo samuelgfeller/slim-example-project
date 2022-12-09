@@ -7,7 +7,7 @@ use App\Domain\Client\Service\ClientListFilter\Data\ClientListFilterData;
 class ClientListFilterFinder
 {
     public function __construct(
-        private readonly ClientListFilterGenerator $clientListFilterGenerator,
+        private readonly ClientListFilterGetter $clientListFilterGenerator,
         private readonly UserClientListFilterHandler $userClientListFilterHandler,
     ) {
     }
@@ -23,7 +23,7 @@ class ClientListFilterFinder
     public function findClientListFilters(): array
     {
         // Get all available filters
-        $allClientFilters = $this->clientListFilterGenerator->generateClientListFilter();
+        $allClientFilters = $this->clientListFilterGenerator->getClientListFilters();
 
         $returnArray['active'] = [];
         // Check which filters are active in session
