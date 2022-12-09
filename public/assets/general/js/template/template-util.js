@@ -7,11 +7,16 @@
  */
 import {escapeHtml} from "../functions.js?v=0.1";
 
+/**
+ * @param {Object} allEntries
+ * @param {string|int} selectedKey
+ * @param {string|boolean} nullable or nullable value
+ */
 export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable = false){
     let optionsHtml = '';
     if (nullable){
         // Add first option empty if nullable
-        optionsHtml = `<option value=""></option>\n`;
+        optionsHtml = `<option value="">${typeof nullable === 'string' ? nullable : ''}</option>\n`;
     }
     for (const [entryKey, name] of Object.entries(allEntries)) {
         let selected = entryKey === selectedKey?.toString() ? `selected="selected"` : '';

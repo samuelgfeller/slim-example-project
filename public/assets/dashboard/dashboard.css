@@ -2,15 +2,20 @@
 @media (min-width: 100px) {
     .dashboard-panel-container {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
         align-items: start;
-        grid-row: auto;
+        /*display: flex;*/
+        /*flex-wrap: wrap;*/
+        /*The Flexbox Holy Albatross https://heydonworks.com/article/the-flexbox-holy-albatross-reincarnated/*/
+        /*--modifier: calc(590px - 100%);*/
         gap: 20px;
         overflow: hidden;
     }
     .dashboard-panel-container > div{
         /*This "magically" fixes grid items expanding over 100% of the available space */
         min-width: 0; /* Source https://stackoverflow.com/a/43312314/9013718 */
+        /*flex-grow: 1;*/
+        /*flex-basis: calc(var(--modifier) * 999);*/
     }
 
     /*Shrink profile card so that it takes the least amount of space*/
@@ -35,31 +40,33 @@
         width: 70px;
         height: 70px;
     }
-
-
 }
+
 
 @media (min-width: 641px) {
-    .panel-container {
-        /*min-width: 500px;*/
-        /*margin-right: 40px;*/
-    }
-}
-
-@media (min-width: 700px) {
-    .dashboard-panel-container {
-        /*grid-template-columns: 1fr 1fr;*/
-    }
-
+    /*Switch between full width clients in panel to smallest width for side to side panels*/
     .panel-content .client-wrapper .client-profile-card {
         width: min-content;
         font-size: initial;
     }
+    .profile-card-assignee-and-status div{
+        min-width: 90%;
+    }
+/*    .dashboard-panel-container > div{
+        min-width: 590px;
+    }*/
+    .dashboard-panel-container {
+        grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
+    }
+}
+
+@media (min-width: 700px) {
+
 }
 
 @media (min-width: 1330px) {
     .dashboard-panel-container {
-        grid-template-columns: auto auto;
+        /*grid-template-columns: auto auto;*/
         /*grid-template-rows: auto auto;*/
         /*grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));*/
     }

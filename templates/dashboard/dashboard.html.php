@@ -46,6 +46,7 @@ $this->addAttribute('jsModules', [
     <div class="panel-container">
         <div class="panel-header">
             <h2>User activity</h2>
+            <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">
         </div>
         <div class="panel-content">
             <p>

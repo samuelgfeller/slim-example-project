@@ -35,10 +35,10 @@
     }
 
     .panel-content {
-        padding: 20px 20px;
+        padding: 7px;
         height: auto;
         overflow: hidden;
-        background: rgba(46, 62, 80, 0.05);
+        background: rgba(46, 62, 80, 0.10);
         border-radius: 0 0 30px 30px;
         /*border: 8px solid rgba(46, 62, 80, 0.2);*/
         /*border-top: none;*/
@@ -46,7 +46,7 @@
 
     .panel-content h3 {
         font-size: 1.4em;
-        margin-top: 15px;
+        /*margin-top: 15px;*/
         margin-bottom: 5px;
     }
 
@@ -79,7 +79,12 @@
         transform: rotateZ(0deg);
     }
 }
-
+@media (min-width: 400px) {
+    /*Breakpoint at which side padding can be added and clients still have enough space*/
+    .panel-content{
+        padding: 20px;
+    }
+}
 @media (min-width: 641px) {
     .panel-container {
         /*min-width: 500px;*/

@@ -44,7 +44,7 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
                 <div>
                     <select name="user_id" class="default-select" 
                             ${client.assignedUserPrivilege.includes('U') ? '' : 'disabled'}>
-                        ${getDropdownAsHtmlOptions(allUsers, client.userId, true)}
+                        ${getDropdownAsHtmlOptions(allUsers, client.userId,'Unassigned')}
                     </select>
                 </div>
                 <div>
