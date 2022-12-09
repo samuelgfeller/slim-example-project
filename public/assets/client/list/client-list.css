@@ -39,7 +39,7 @@
     /* Profile cards */
     .client-profile-card {
         width: 100%;
-        min-width: 232px;
+        min-width: 200px;
         /*position: relative; causes nav z-index to not work*/
         /*display: flex;*/
         display: inline-block;

@@ -22,7 +22,7 @@ $this->addAttribute('jsModules', [
 
 <div class="dashboard-panel-container">
 
-    <div class="panel-container client-panel">
+    <div class="panel-container client-panel" id="unassigned-panel">
         <div class="panel-header">
             <h2>Unassigned clients</h2>
             <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">
@@ -32,7 +32,7 @@ $this->addAttribute('jsModules', [
             <div id="client-wrapper-unassigned" class="client-wrapper"></div>
         </div>
     </div>
-    <div class="panel-container client-panel">
+    <div class="panel-container client-panel" id="assigned-to-me-panel">
         <div class="panel-header">
             <h2>Clients assigned to me - action pending</h2>
             <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">
@@ -43,7 +43,7 @@ $this->addAttribute('jsModules', [
             <div id="client-wrapper-assigned-to-me" class="client-wrapper"></div>
         </div>
     </div>
-    <div class="panel-container">
+    <div class="panel-container" id="adsf-panel">
         <div class="panel-header">
             <h2>User activity</h2>
             <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg" alt="toggle-open-close">

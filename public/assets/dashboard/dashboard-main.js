@@ -4,25 +4,31 @@ import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
 const toggleIcons = document.getElementsByClassName('toggle-panel-icon');
 for (const toggleIcon of toggleIcons) {
     const panelHeader = toggleIcon.closest('.panel-header');
-    const panelContent = toggleIcon.closest('.panel-container').querySelector('.panel-content');
     panelHeader.addEventListener('click', () => {
-        toggleIcon.classList.toggle('active');
-        if (panelContent.style.maxHeight) {
-            // Reset values to default to open panel
-            panelContent.style.maxHeight = null;
-            panelContent.style.padding = null;
-            panelHeader.style.borderRadius = null;
+        let hiddenPanels = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');
+        const panelContainer = toggleIcon.closest('.panel-container');
+        if (!panelContainer.classList.contains('collapsed')) {
+            // Collapse panel of not in class list
+            panelContainer.classList.add('collapsed');
+            // Add panel id to hidden panels object (as key to remove it easier later)
+            hiddenPanels[panelContainer.id] = true;
         } else {
-            // Collapse panel
-            panelContent.style.maxHeight = '0';
-            // Remove padding that was inside so that its fully collapsed
-            panelContent.style.padding = '0';
-            // Make all borders rounded when collapsed
-            panelHeader.style.borderRadius = '32px';
+            panelContainer.classList.remove('collapsed');
+            // Remove panel id from hidden panels
+            delete hiddenPanels[panelContainer.id]
         }
+        // Store value in localstorage
+        window.localStorage.setItem('hiddenPanels', JSON.stringify(hiddenPanels));
     })
 }
 
+// Collapse panels if collapsed in localStorage
+const hiddenPanels = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');
+for (const hiddenPanelId in hiddenPanels){
+    document.getElementById(hiddenPanelId).classList.add('collapsed');
+}
+
+// Load clients in client panels
 const clientPanels = document.getElementsByClassName('client-panel');
 for (const clientPanel of clientPanels) {
     let filterParams = [];
@@ -33,15 +39,3 @@ for (const clientPanel of clientPanels) {
     fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id);
 }
 
-
-// const toggleShrinkButtons = document.getElementsByClassName('client-panel');
-// for (const toggleShrinkBtn of toggleShrinkButtons) {
-//     toggleShrinkBtn.addEventListener('click', () => {
-//         const container = toggleShrinkBtn.closest('.panel-container');
-//         if (container.style.maxWidth) {
-//             container.style.maxWidth = null;
-//         } else {
-//             container.style.maxWidth = '45%';
-//         }
-//     })
-// }

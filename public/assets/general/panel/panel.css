@@ -75,16 +75,30 @@
         transform: rotateZ(180deg);
     }
 
-    .toggle-panel-icon.active {
+    .panel-container.collapsed .toggle-panel-icon {
         transform: rotateZ(0deg);
     }
+
+    /*Collapsed panel*/
+    .panel-container.collapsed .panel-content {
+        max-height: 0;
+        /*Remove padding that was inside so that its fully collapsed*/
+        padding: 0;
+    }
+
+    .panel-container.collapsed .panel-header {
+        /*Make all borders rounded when collapsed*/
+        border-radius: 32px;
+    }
 }
+
 @media (min-width: 400px) {
     /*Breakpoint at which side padding can be added and clients still have enough space*/
-    .panel-content{
+    .panel-content {
         padding: 20px;
     }
 }
+
 @media (min-width: 641px) {
     .panel-container {
         /*min-width: 500px;*/
