@@ -186,6 +186,38 @@ class NoteFinderRepository
     }
 
     /**
+     * Return all notes which are linked to the given user
+     *
+     * @param int $notesAmount
+     * @return NoteWithUserData[]
+     */
+    public function findMostRecentNotes(int $notesAmount): array
+    {
+        $query = $this->queryFactory->newQuery()->from('note');
+
+        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+
+        $query->select(
+            [
+                'note_id' => 'note.id',
+                'user_id' => 'user.id',
+                'note_message' => 'note.message',
+                'note_created_at' => 'note.created_at',
+                'note_updated_at' => 'note.updated_at',
+                'user_full_name' => $concatName,
+                'user_role_id' => 'user.user_role_id',
+            ]
+        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
+            [
+                'note.deleted_at IS' => null
+            ]
+        )->orderDesc('note.updated_at')->limit($notesAmount);
+        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+        // Convert to list of Note objects with associated User info
+        return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
+    }
+
+    /**
      * Find amount of notes without counting the main note
      *
      * @param int $clientId

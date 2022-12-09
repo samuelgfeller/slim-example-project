@@ -91,6 +91,20 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
+     * Return all notes which are linked to the given user
+     *
+     * @param int $notesAmount
+     * @return NoteWithUserData[]
+     */
+    public function findMostRecentNotes(int $notesAmount = 10): array
+    {
+        $allNotes = $this->noteFinderRepository->findMostRecentNotes($notesAmount);
+        $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
+        $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
+        return $allNotes;
+    }
+
+    /**
      * Return all notes except the main note that are linked to the given client
      *
      * @param int $clientId

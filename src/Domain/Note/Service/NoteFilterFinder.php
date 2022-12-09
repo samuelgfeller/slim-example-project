@@ -27,6 +27,20 @@ class NoteFilterFinder
      */
     public function findNotesWithFilter(array $params): array
     {
+        // Filter client id
+        if (isset($params['most-recent']) && (int)$params['most-recent'] === 1) {
+            return $this->noteFinder->findMostRecentNotes();
+        }
+        // Filter client id
+        if (isset($params['client_id'])) {
+            // To display own notes, the client sends the filter user=session
+            if (is_numeric($params['client_id'])) {
+                // User is already logged in as UserAuthenticationMiddleware is present for the note group
+                return $this->noteFinder->findAllNotesFromClientExceptMain((int)$params['client_id']);
+            }
+            // Exception message tested in NoteFilterProvider.php
+            throw new InvalidNoteFilterException('client_id has to be numeric.');
+        }
         // Filter 'user'
         if (isset($params['user'])) {
             // To display own notes, the client sends the filter user=session
@@ -45,16 +59,6 @@ class NoteFilterFinder
             return $this->noteFinder->findAllNotesFromUser((int)$params['user']);
         }
 
-        // Filter client id
-        if (isset($params['client_id'])) {
-            // To display own notes, the client sends the filter user=session
-            if (is_numeric($params['client_id'])) {
-                // User is already logged in as UserAuthenticationMiddleware is present for the note group
-                return $this->noteFinder->findAllNotesFromClientExceptMain((int)$params['client_id']);
-            }
-            // Exception message tested in NoteFilterProvider.php
-            throw new InvalidNoteFilterException('client_id has to be numeric.');
-        }
         // Other filters here
 
 
