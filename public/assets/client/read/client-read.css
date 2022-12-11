@@ -50,10 +50,6 @@
         position: relative;
     }
 
-    .note-container {
-        margin-bottom: 20px;
-    }
-
     #main-note-textarea-div textarea {
         border-radius: 20px;
         border: 4px solid #2e3e50;
@@ -79,50 +75,6 @@
         min-width: 100%;
     }
 
-    .textarea-label {
-        margin: 0 0 7px 20px;
-        color: black;
-        font-weight: normal;
-    }
-
-    .btn-above-note {
-        width: 13px;
-        vertical-align: middle;
-        margin-left: 10px;
-        cursor: pointer;
-        display: none;
-    }
-
-    .note-container:hover .btn-above-note {
-        display: inline-block;
-    }
-
-    .hide-note-btn{
-        width: 14px; /* 13 is too small for the eye icon */
-    }
-    .not-clickable{
-        /* Remove pointer cursor of not clickable hide note button */
-        cursor: default;
-    }
-    .note-right-side-label-span {
-        float: right;
-        margin-right: 20px;
-        font-size: 12px;
-        /*margin-top: 4px;*/
-    }
-
-    .hidden-note-message{
-        color: transparent;
-        text-shadow: 0 0 7px rgb(0 0 0 / 50%);
-        cursor: default;
-        user-select: none;
-    }
-    .hidden-textarea-overlay{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-    }
-
     /*Flex container containing notes under activity and personal infos */
     #client-activity-personal-info-container {
         display: flex;
@@ -136,52 +88,13 @@
         flex-basis: 100%;
     }
 
-    #client-activity-textarea-container {
+    #client-note-wrapper {
         /* Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718 */
         position: relative;
         display: inline-block;
-        /*width: 70%;*/
     }
 
-    /*Extra relative positioned div for the checkmark loader to know to which element it has to position itself*/
-    /*Using the > changes the description to: "Find any divs that are the direct descendents of section divs" which is what you want.*/
-    #client-activity-textarea-container > div {
-        width: 100%;
-        position: relative;
-    }
-
-    #client-activity-textarea-container textarea {
-        border-radius: 30px;
-        border: none;
-        width: 100%;
-        font-size: 15px;
-        background: rgba(46, 66, 80, 0.08);
-        padding: 15px 45px 15px 25px;
-        line-height: 21px;
-        /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
-    }
-
-    #client-activity-textarea-container textarea:not([data-editable="0"]):focus {
-        outline: #eef0f1;
-        box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
-    }
-
-    #client-activity-textarea-container textarea[data-editable="0"]:focus {
-        outline: 1px solid #cccccc;
-        box-shadow: none;
-    }
-
-    #client-activity-textarea-container .vertical-center {
-        /*Reduce bottom margin as .vertical-center has default 25px margin for h1 but its too much for h2*/
-        margin-bottom: 10px;
-    }
-
-    .circle-loader.client-read {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        /*box-shadow: 0 1px 3px rgba(46, 62, 80, 0.24);*/
-    }
+    /*Note CSS in client-note.css*/
 
     /*This grid places all the icons and their span value with the same space between icon and text*/
     #client-personal-info-flex-container {
@@ -394,7 +307,7 @@
         flex-basis: auto;
     }
 
-    #client-activity-textarea-container {
+    #client-note-wrapper {
         flex-grow: 1;
     }
 

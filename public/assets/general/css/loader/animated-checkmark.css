@@ -2,7 +2,8 @@
 :root{
     --animated-checkmark-factor: 0.25;
     --animated-checkmark-color: #2e3e50;
-    --animated-checkmark-bright-color: #eef0f1;
+    /*--animated-checkmark-bright-color: #eef0f1;*/
+    --animated-checkmark-bright-color: transparent;
 }
 .circle-loader {
     margin-bottom: calc(3.5em * var(--animated-checkmark-factor));

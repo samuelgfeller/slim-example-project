@@ -31,6 +31,7 @@ class NoteFinderRepository
         $query->select(
             [
                 'note_id' => 'note.id',
+                'client_id' => 'note.client_id',
                 'user_id' => 'user.id',
                 'note_message' => 'note.message',
                 'note_created_at' => 'note.created_at',
@@ -78,6 +79,7 @@ class NoteFinderRepository
         $query->select(
             [
                 'note_id' => 'note.id',
+                'client_id' => 'note.client_id',
                 'user_id' => 'user.id',
                 'note_message' => 'note.message',
                 'note_created_at' => 'note.created_at',
@@ -129,6 +131,7 @@ class NoteFinderRepository
         $query->select(
             [
                 'note_id' => 'note.id',
+                'client_id' => 'note.client_id',
                 'user_id' => 'user.id',
                 'note_message' => 'note.message',
                 'note_created_at' => 'note.created_at',
@@ -163,6 +166,7 @@ class NoteFinderRepository
         $query->select(
             [
                 'note_id' => 'note.id',
+                'client_id' => 'note.client_id',
                 'note_message' => 'note.message',
                 'note_hidden' => 'note.hidden',
                 'note_updated_at' => 'note.updated_at',
@@ -195,19 +199,24 @@ class NoteFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+        $concatUserName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+        $concatClientName = $query->func()->concat(['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']);
 
         $query->select(
             [
                 'note_id' => 'note.id',
-                'user_id' => 'user.id',
+                'client_id' => 'note.client_id',
+                'user_id' => 'note.user_id',
                 'note_message' => 'note.message',
+                'note_hidden' => 'note.hidden',
                 'note_created_at' => 'note.created_at',
                 'note_updated_at' => 'note.updated_at',
-                'user_full_name' => $concatName,
+                'user_full_name' => $concatUserName,
                 'user_role_id' => 'user.user_role_id',
+                'client_full_name' => $concatClientName,
             ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
+        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
+            ->leftJoin('client', ['note.client_id = client.id'])->andWhere(
             [
                 'note.deleted_at IS' => null
             ]

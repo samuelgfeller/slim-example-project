@@ -62,9 +62,9 @@ class DashboardGetter
             new DashboardData([
                 'title' => 'New notes',
                 'panelId' => "new-notes-panel",
-                'panelClass' => 'notes-panel',
-                'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>
-                                                <div id="client-wrapper-recently-assigned" class="client-wrapper"></div>',
+                'panelClass' => 'note-panel',
+                'panelHtmlContent' => '<data data-param-name="most-recent" data-param-value="1" value=""></data>
+                                                <div id="note-wrapper-most-recent" class="client-note-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::MANAGING_ADVISOR),
             ]),
             new DashboardData([

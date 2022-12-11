@@ -22,7 +22,8 @@ $this->addAttribute('css', [
     'assets/general/css/content-placeholder.css',
     'assets/general/css/contenteditable.css',
     // page specific css has to come last to overwrite other styles
-    'assets/client/read/client-read.css'
+    'assets/client/note/client-note.css',
+    'assets/client/read/client-read.css',
 ]);
 $this->addAttribute('js', []);
 // Js files that import things from other js files
@@ -104,7 +105,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
                   placeholder="New main note"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
-        <div class="circle-loader client-read">
+        <div class="circle-loader client-note">
             <div class="checkmark draw"></div>
         </div>
     </div>
@@ -112,7 +113,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 </div>
 
 <div id="client-activity-personal-info-container">
-    <div id="client-activity-textarea-container" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
+    <div id="client-note-wrapper" class="client-note-wrapper" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
         <div class="vertical-center" id="activity-header">
             <h2>Aktivität</h2>
             <?php

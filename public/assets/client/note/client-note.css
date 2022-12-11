@@ -1,0 +1,95 @@
+/*Client notes CSS mainly for client read page but also dashboard note panels*/
+/* mobile first min-width sets base and content is adapted to computers. */
+@media (min-width: 100px) {
+    /*Using relative positioned div for the checkmark loader to know to which element it has to position itself*/
+    /*Using the > changes the description to: "Find any divs that are the direct descendents of section divs" which is what you want.*/
+    .client-note-wrapper > div {
+        width: 100%;
+        position: relative;
+    }
+
+    .client-note-wrapper textarea {
+        border-radius: 30px;
+        border: none;
+        width: 100%;
+        font-size: 15px;
+        background: rgba(46, 66, 80, 0.08);
+        padding: 15px 45px 15px 25px;
+        line-height: 21px;
+        /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
+    }
+
+    .client-note-wrapper textarea:not([data-editable="0"]):focus {
+        outline: #eef0f1;
+        box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
+    }
+
+    .client-note-wrapper textarea[data-editable="0"]:focus {
+        outline: 1px solid #cccccc;
+        box-shadow: none;
+    }
+
+    .client-note-wrapper .vertical-center {
+        /*Reduce bottom margin as .vertical-center has default 25px margin for h1 but its too much for h2*/
+        margin-bottom: 10px;
+    }
+
+    .circle-loader.client-note {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        /*box-shadow: 0 1px 3px rgba(46, 62, 80, 0.24);*/
+    }
+
+    .textarea-label {
+        margin: 0 0 7px 20px;
+        color: black;
+        font-weight: normal;
+    }
+
+    .btn-above-note {
+        width: 13px;
+        vertical-align: middle;
+        margin-left: 10px;
+        cursor: pointer;
+        display: none;
+    }
+
+    .note-container {
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+
+    .note-container:hover .btn-above-note {
+        display: inline-block;
+    }
+
+    .hide-note-btn {
+        width: 14px; /* 13 is too small for the eye icon */
+    }
+
+    .not-clickable {
+        /* Remove pointer cursor of not clickable hide note button */
+        cursor: default;
+    }
+
+    .note-right-side-label-span {
+        float: right;
+        margin-right: 20px;
+        font-size: 12px;
+        margin-top: 0px;
+    }
+
+    .hidden-note-message {
+        color: transparent;
+        text-shadow: 0 0 7px rgb(0 0 0 / 50%);
+        cursor: default;
+        user-select: none;
+    }
+
+    .hidden-textarea-overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+}

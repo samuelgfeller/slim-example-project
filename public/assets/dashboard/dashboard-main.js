@@ -1,4 +1,5 @@
 import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
+import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
 
 // Add toggle open - close event listeners
 const toggleIcons = document.getElementsByClassName('toggle-panel-icon');
@@ -39,13 +40,27 @@ for (const hiddenPanelId in hiddenPanelIds){
 // Load clients in client panels
 const clientPanels = document.getElementsByClassName('client-panel');
 for (const clientPanel of clientPanels) {
-    let filterParams = [];
+    let filterParams = new URLSearchParams();
     const paramsData = clientPanel.querySelectorAll('data');
     for (const paramData of paramsData) {
-        filterParams.push({paramName: paramData.dataset.paramName, paramValue: paramData.dataset.paramValue});
+        filterParams.append(paramData.dataset.paramName, paramData.dataset.paramValue);
     }
-    console.log(filterParams, clientPanel.querySelector('.client-wrapper').id)
+
     // client panels have to have a div.client-wrapper in the content section
     fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id);
 }
+
+// Load notes in notes panels
+const notesPanels = document.getElementsByClassName('note-panel');
+for (const notePanel of notesPanels) {
+    let noteFilterParam = new URLSearchParams();
+    const paramsData = notePanel.querySelectorAll('data');
+    for (const paramData of paramsData) {
+        noteFilterParam.append(paramData.dataset.paramName, paramData.dataset.paramValue);
+    }
+
+    // client panels have to have a div.client-wrapper in the content section
+    fetchAndLoadClientNotes(noteFilterParam, notePanel.querySelector('.client-note-wrapper').id);
+}
+
 

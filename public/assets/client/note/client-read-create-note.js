@@ -36,10 +36,10 @@ export function addNewNoteTextarea() {
         // Insert after end of activity header and not container as header comes as first element
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note" class="bigger-select-label textarea-label" data-note-id="">
-                       <span class="note-left-side-label-span"></span>
-                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg"
+                       <a class="note-left-side-label no-style-a"></a>
+                       <img class="btn-above-note hide-note-btn" alt="hide" src="../../general/img/eye-icon.svg"
                        style="display: none">
-                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" 
+                       <img class="btn-above-note delete-note-btn" alt="delete" src="../../general/img/del-icon.svg" 
                        style="display: none">
                        <span
                             class="discrete-text note-right-side-label-span"></span></label>
@@ -49,13 +49,13 @@ export function addNewNoteTextarea() {
                     <textarea class="auto-resize-textarea" id="new-note"
                               data-note-id="new-note" minlength="4" maxlength="1000"
                               name="message"></textarea>
-                    <div class="circle-loader client-read" data-note-id="">
+                    <div class="circle-loader client-note" data-note-id="">
                         <div class="checkmark draw"></div>
                     </div>
                 </div>
             </div>`);
         let textarea = document.getElementById('new-note');
-        // let textarea = document.querySelector('#client-activity-textarea-container textarea:first-of-type');
+        // let textarea = document.querySelector('#client-note-wrapper textarea:first-of-type');
         // Refresh all activity textareas event listeners to count new ones in too didn't work as it created
         // duplicate events like saving but this simply adds event listener to targets textarea
         addTextareaInputEventListener(textarea);
@@ -151,7 +151,8 @@ function populateNewNoteDomAttributes(textarea, responseData) {
         // There are 2 parents before the label is a child
         let label = noteContainer.querySelector('label.textarea-label');
         label.setAttribute('for', textarea.id);
-        label.querySelector('.note-left-side-label-span').innerHTML = responseData.createdDateFormatted;
+        label.querySelector('.note-left-side-label').innerHTML = responseData.createdDateFormatted;
+        label.querySelector('.note-left-side-label').href = `${window.location.href}#note-${noteId}-container"`;
         label.dataset.noteId = noteId;
         // Show buttons above note (default css behaviour)
         const buttonsAboveNote = label.querySelectorAll(`.btn-above-note`);

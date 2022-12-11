@@ -92,7 +92,6 @@ function openCloseAvailablePersonalIconsEventSetup() {
 
     // On desktop the available icons div opens on mouse hover; this has to be calculated by js
     if (window.matchMedia("(min-width: 768px)").matches && !('ontouchstart' in window || navigator.msMaxTouchPoints)) {
-        console.log('is not touch');
         // Calculate available personal info icons div max width
         availablePersonalInfoIconsDiv.addEventListener('mouseover', openAvailableIconsDiv);
         availablePersonalInfoIconsDiv.addEventListener('mouseout', closeAvailableIconsDiv);

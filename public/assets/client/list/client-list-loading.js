@@ -23,12 +23,12 @@ let previousRequestId = 0;
 /**
  * Fetch clients with active filter chips and name search if present
  * then load clients into DOM
- * @param {object[]|null} filterParams custom filter params that won't be
+ * @param {URLSearchParams} filterParams custom filter params that won't be
  * saved in user_client_list_filter database table
  * @param {string|null} clientWrapperId if client wrapper is not the default on the client list page,
  * a custom one can be provided.
  */
-export function fetchAndLoadClients(filterParams = null, clientWrapperId = null) {
+export function fetchAndLoadClients(filterParams = new URLSearchParams(), clientWrapperId = null) {
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();
 
@@ -37,7 +37,7 @@ export function fetchAndLoadClients(filterParams = null, clientWrapperId = null)
         // Add one to previous request id after request is done
         previousRequestId++;
         // If previousRequestId does not match requestId it means there was newer request and this response should be ignored
-        if (requestId === previousRequestId || filterParams !== null) {
+        if (requestId === previousRequestId || filterParams !== new URLSearchParams()) {
             removeClientCardContentPlaceholder(clientWrapperId);
             addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses, clientWrapperId);
             // Add event listeners to cards
@@ -78,11 +78,10 @@ export function fetchAndLoadClientsEventHandler() {
 /**
  *  Fetch clients with active filter chips and name search if present
  *  then load clients into DOM
- * @param {object[]|null} filterParams
  * @return {Promise} load clients ajax promise
+ * @param {URLSearchParams} searchParams
  */
-function fetchClients(filterParams = null) {
-    let searchParams = new URLSearchParams();
+function fetchClients(searchParams = new URLSearchParams()) {
 
     // Loop through all the active filter chips and add filters to query params
     const activeFilterChips = document
@@ -114,14 +113,6 @@ function fetchClients(filterParams = null) {
     if (searchInputValue) {
         searchParams.append('name', searchInputValue);
     }
-
-    // If filterParams is set those have to be added to the searchParams
-    if (filterParams) {
-        for (const filterParam of filterParams) {
-            searchParams.append(filterParam.paramName, filterParam.paramValue);
-        }
-    }
-
     // Add question mark
     searchParams = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
     // Add 1 to the request id

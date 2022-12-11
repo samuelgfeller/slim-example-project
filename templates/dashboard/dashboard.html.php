@@ -9,7 +9,10 @@ $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
     'assets/general/css/content-placeholder.css',
     'assets/client/list/client-list-loading-placeholder.css',
-    'assets/client/list/client-list.css',
+    'assets/client/list/client-list.css', // For clients
+    'assets/general/css/contenteditable.css', // For notes
+    'assets/general/css/loader/animated-checkmark.css', // Note loader
+    'assets/client/note/client-note.css',
     'assets/general/panel/panel.css',
     'assets/dashboard/dashboard.css',
 ]);

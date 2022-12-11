@@ -26,17 +26,16 @@ create table `user`
 -- User token verification used for email validation at registration AND for password reset
 CREATE TABLE `user_verification`
 (
-    `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`    INT(11) UNSIGNED NOT NULL,
+    `id`         INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+    `user_id`    INT unsigned NOT NULL,
     `token`      VARCHAR(300)     NOT NULL COLLATE utf8mb4_unicode_ci,
     `expires_at` BIGINT(20)       NOT NULL,
     `used_at`    DATETIME         NULL DEFAULT NULL,
     `created_at` DATETIME         NULL DEFAULT current_timestamp(),
     `deleted_at` DATETIME         NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `FK__user_issuer` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+    CONSTRAINT FK__user_issuer FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) COLLATE = utf8mb4_unicode_ci
-  ENGINE = InnoDB
 ;
 
 -- Requests that should be limited like failed logins, password recovery, registration etc. for security
@@ -98,8 +97,9 @@ create table client
     sex              enum ('M', 'F', 'O')                          null,
     client_message   varchar(1000)                                 null comment 'Message that client submitted via webform',
     vigilance_level  enum ('moderate', 'caution', 'extra_caution') null,
-    user_id          int unsigned                                  null,
-    client_status_id int unsigned                                  null,
+    user_id          int                                           null,
+    client_status_id int                                           null,
+    assigned_at      datetime                                      null comment 'date at which user_id was set',
     updated_at       datetime default current_timestamp()          not null on update current_timestamp(),
     created_at       datetime default current_timestamp()          not null,
     deleted_at       datetime                                      null,
@@ -109,6 +109,8 @@ create table client
         foreign key (user_id) references user (id)
 )
     comment 'Advisors help and consult clients';
+
+
 
 
 

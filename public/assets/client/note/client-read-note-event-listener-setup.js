@@ -22,7 +22,7 @@ export function initNotesEventListeners() {
 
     // Target all textareas including main note
     let clientReadTextareas = document.querySelectorAll(
-        '#client-activity-textarea-container textarea, #main-note-textarea-div textarea'
+        '.client-note-wrapper textarea, #main-note-textarea-div textarea'
     );
     initAllButtonsAboveNotesEventListeners();
     for (let textarea of clientReadTextareas) {
@@ -47,7 +47,6 @@ let textareaInputPauseTimeoutId;
 
 export function addTextareaInputEventListener(textarea) {
     let noteId = textarea.dataset.noteId;
-
     // Remove focus when ctrl + enter is pressed
     textarea.addEventListener('keypress', function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {

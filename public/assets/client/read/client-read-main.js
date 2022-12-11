@@ -1,31 +1,16 @@
-import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.1";
-import {addNewNoteTextarea} from "./client-read-create-note.js?v=0.1";
-import {loadClientNotes} from "./client-read-note-loading.js?v=0.1";
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.1";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.1";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.1";
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
-import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
-import {scrollToAnchor} from "../../general/js/page/scroll-to-anchor.js?v=0.1";
 import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
 import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
 import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
+import {fetchAndLoadClientNotes} from "../note/client-read-note-loading.js?v=0.1";
+import {addNewNoteTextarea} from "../note/client-read-create-note.js?v=0.1";
 
 const clientId = document.getElementById('client-id').value;
 
-loadClientNotes(() => {
-    // Script loaded with defer so waiting for DOMContentLoaded is not needed
-    initNotesEventListeners();
-    // Add note delete btn event listeners
-    // The reason it is not in initNotesEventListeners() is that event listener were set up twice and alert modal
-    // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllButtonsAboveNotesEventListeners
-    // AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
-    // initAllButtonsAboveNotesEventListeners();
-
-    // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
-    initAutoResizingTextareas();
-    scrollToAnchor();
-});
+fetchAndLoadClientNotes();
 
 loadAvailablePersonalInfoIconsDiv();
 

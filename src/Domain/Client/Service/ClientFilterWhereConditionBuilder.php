@@ -33,6 +33,8 @@ class ClientFilterWhereConditionBuilder
             $queryBuilderWhereArray[]['OR'] = [
                 [$this->columnPrefix.'first_name LIKE' => '%' . $filterParams['name'] . '%'],
                 [$this->columnPrefix.'last_name LIKE' => '%' . $filterParams['name'] . '%'],
+                // [$c->like($c => '%' . $filterParams['name'] . '%'],
+                //
             ];
             unset($filterParams['name']);
         }

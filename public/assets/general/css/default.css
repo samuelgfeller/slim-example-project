@@ -138,11 +138,6 @@ a.currently-editable {
     cursor: text;
 }
 
-.no-style-a, .no-style-a:hover {
-    font-weight: normal;
-    text-decoration: none;
-}
-
 .green-text {
     color: limegreen;
 }

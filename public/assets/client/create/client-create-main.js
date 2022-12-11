@@ -4,8 +4,8 @@ import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js
 import {displayValidationErrorMessage} from "../../general/js/validation/form-validation.js?v=0.1";
 import {fetchAndLoadClients} from "../list/client-list-loading.js?v=0.1";
 
-// Init event listeners
-document.getElementById('create-client-btn').addEventListener('click', displayClientCreateModal);
+// Init event listeners if button is present
+document.getElementById('create-client-btn')?.addEventListener('click', displayClientCreateModal);
 
 // Submit form on create button click
 document.addEventListener('click', e => {

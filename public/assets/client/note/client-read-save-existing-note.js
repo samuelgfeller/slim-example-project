@@ -75,8 +75,11 @@ export function saveNoteChangeToDb(noteId) {
 
     xHttp.open('PUT', basePath + 'notes' + '/' + noteId, true);
     xHttp.setRequestHeader("Content-type", "application/json");
-    let clientId = document.getElementById('client-id').value;
-    xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
+    let clientId = document.getElementById('client-id')?.value;
+    // When notes loaded in dashboard there is no client id
+    if (clientId) {
+        xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
+    }
 
     // Data format: "fname=Henry&lname=Ford"
     // In [square brackets] to be evaluated
