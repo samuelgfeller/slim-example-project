@@ -5,8 +5,11 @@ import {submitModalForm} from "../../general/js/modal/modal-submit-request.js?v=
 import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
 import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
 import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
+import {loadUserActivities} from "./user-activity/activity-main.js?v=0.1";
 
 const userId = document.getElementById('user-id').value;
+
+loadUserActivities(userId);
 
 // Null safe operator as edit icon doesn't exist if not privileged
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);

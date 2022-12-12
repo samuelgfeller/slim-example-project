@@ -6,7 +6,10 @@ use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivity;
 use App\Infrastructure\User\UserActivityRepository;
+use InvalidArgumentException;
 use Odan\Session\SessionInterface;
+use RuntimeException;
+use Slim\Interfaces\RouteParserInterface;
 
 class UserActivityManager
 {
@@ -14,6 +17,7 @@ class UserActivityManager
         private readonly UserActivityRepository $userActivityRepository,
         private readonly SessionInterface $session,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly RouteParserInterface $routeParser,
     ) {
     }
 
@@ -65,8 +69,32 @@ class UserActivityManager
     public function findUserActivityReport(int $userId): array
     {
         if ($this->userAuthorizationChecker->isGrantedToReadUserActivity($userId)) {
-            return $this->userActivityRepository->findUserActivities($userId);
+            $userActivities = $this->userActivityRepository->findUserActivities($userId);
+            // return $userActivities;
+
+            // Group user activities by date
+            $groupedActivitiesByDate = [];
+            foreach ($userActivities as $userActivity) {
+                try {
+                    // Generate read url. The route name HAS to be in the following format: "[table_name]-read-page"
+                    // and the url argument has to be called "[table-name]-id"
+                    $userActivity->pageUrl = $this->routeParser->urlFor(
+                        "$userActivity->table-read-page",
+                        [$userActivity->table . '_id' => $userActivity->row_id]
+                    );
+                } catch (RuntimeException|InvalidArgumentException $exception) {
+                    $userActivity->pageUrl = null;
+                }
+                // Add the time and action name
+                $userActivity->timeAndActionName = $userActivity->datetime->format('H:i') . ": " .
+                    ucfirst($userActivity->action->value);
+
+                $groupedActivitiesByDate[$userActivity->datetime->format('d. F Y')][] = $userActivity;
+            }
+            return $groupedActivitiesByDate;
         }
         return [];
     }
+
+
 }

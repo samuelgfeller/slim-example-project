@@ -8,7 +8,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
     // Home page
-   $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
+    $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
     $app->get('/', \App\Application\Actions\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
@@ -22,13 +22,18 @@ return function (App $app) {
 
 
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginPageAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Actions\Authentication\Submit\LoginSubmitAction::class)->setName('login-submit');
+    $app->post('/login', \App\Application\Actions\Authentication\Submit\LoginSubmitAction::class)->setName(
+        'login-submit'
+    );
     $app->get('/logout', \App\Application\Actions\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
         SessionMiddleware::class
     );
 
     // Authentication - email verification - token
-    $app->get('/register-verification', \App\Application\Actions\Authentication\Submit\RegisterVerifySubmitAction::class)->setName(
+    $app->get(
+        '/register-verification',
+        \App\Application\Actions\Authentication\Submit\RegisterVerifySubmitAction::class
+    )->setName(
         'register-verification'
     );
 
@@ -45,7 +50,10 @@ return function (App $app) {
         'password-reset-page'
     );
     // Submit new password (reset-password hardcoded in login-main.js)
-    $app->post('/reset-password', \App\Application\Actions\Authentication\Submit\PasswordResetSubmitAction::class)->setName(
+    $app->post(
+        '/reset-password',
+        \App\Application\Actions\Authentication\Submit\PasswordResetSubmitAction::class
+    )->setName(
         'password-reset-submit'
     );
 
@@ -62,10 +70,12 @@ return function (App $app) {
         $group->get('', \App\Application\Actions\User\Ajax\UserListAction::class)
             ->setName('user-list');
 
-        $group->get(
-            '/dropdown-options',
-            \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class
-        )->setName('user-list-dropdown');
+        $group // User list dropdown options
+        ->get('/dropdown-options', \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class)
+            ->setName('user-list-dropdown');
+
+        $group->get('/activity[/{user_id:[0-9]+}]', \App\Application\Actions\User\Ajax\ListUserActivityAction::class)
+            ->setName('user-get-activity');
 
         $group->post('', \App\Application\Actions\User\Ajax\UserSubmitCreateAction::class)
             ->setName('user-create-submit');

@@ -16,6 +16,10 @@ class UserActivityData
     public ?string $ip_address;
     public ?string $user_agent;
 
+    // When returning the report to the client add the page url
+    public ?string $pageUrl = null;
+    public ?string $timeAndActionName = null; // Time in the correct format and action name with upper case
+
     /**
      * @param array $userActivityValues assoc values array with as key the column name
      */

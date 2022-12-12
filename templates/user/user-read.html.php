@@ -142,46 +142,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                 <h2>User activity</h2>
             </div>
             <div id="user-activity-content">
-                <?php
-                $userActivities = array_reverse($userActivities);
-                $groupedActivitiesByDate = [];
-                foreach ($userActivities as $userActivity) {
-                    $groupedActivitiesByDate[$userActivity->datetime->format('d. F Y')][] = $userActivity;
-                }
-                foreach ($groupedActivitiesByDate as $dateString => $userActivities) {
-                    echo "<h3 class='collapsible-button'>$dateString</h3><section class='collapsible-content'>";
-                    foreach ($userActivities as $userActivity) {
-                        // Build entries string
-                        $activityString = $userActivity->datetime->format('H:i') . ": " .
-                            ucfirst($userActivity->action->value);
 
-                        // Generate read url. The route name HAS to be in the following format: "[table_name]-read-page"
-                        // and the url argument has to be called "[table-name]-id"
-                        try {
-                            $readUrl = $route->urlFor(
-                                "$userActivity->table-read-page",
-                                [$userActivity->table . '_id' => $userActivity->row_id]
-                            );
-                            $readLink = "<a href='$readUrl' target='_blank'>$userActivity->table $userActivity->row_id</a>";
-                        } catch (RuntimeException|InvalidArgumentException $exception) {
-                            $readLink = $userActivity->table . ' ' . $userActivity->row_id;
-                        }
-                        // Generate data string
-                        $dataString = '';
-                        foreach ($userActivity->data ?? [] as $column => $value) {
-                            if (($value !== null || $column === 'deleted_at') && !is_array($value)) {
-                                $column = is_numeric($column) ? '' : "<span style='font-weight: 500'>$column</span>:";
-                                $dataString .= "<br> $column ".($value ?: 'null');
-                            }
-                        }
-
-                        // Output everything
-                        echo "<p><b>$activityString $readLink</b> $dataString</p>";
-                    }
-                    // close p tag
-                    echo '</section>';
-                }
-                ?>
             </div>
         </div>
         <?php

@@ -6,7 +6,6 @@ import {getUserCardLoadingPlaceholderHtml} from "./user-list-card.html.js?v=0.1"
  * a custom one can be provided.
  */
 export function displayUserCardLoadingPlaceholder(userWrapperId = null) {
-    console.log(userWrapperId);
     let wrapper = document.getElementById(userWrapperId ?? 'user-wrapper');
     // Empty clients
     wrapper.innerHTML = '';

@@ -26,12 +26,6 @@ $this->addAttribute('css', [
     'assets/client/list/client-list.css',
     'assets/client/list/client-list-loading-placeholder.css',
 ]);
-$this->addAttribute(
-    'js',
-    [
-        'assets/general/js/filter-chip.js',
-    ]
-);
 // Js files that import things from other js files
 $this->addAttribute(
     'jsModules',

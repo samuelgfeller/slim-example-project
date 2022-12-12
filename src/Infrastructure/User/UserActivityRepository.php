@@ -39,7 +39,7 @@ class UserActivityRepository
     {
         $query = $this->queryFactory->newQuery()->select('*')->from('user_activity')->where(
             ['user_id' => $userId]
-        );
+        )->orderDesc('datetime');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         return $this->hydrator->hydrate($resultRows, UserActivityData::class);
     }
