@@ -12,7 +12,10 @@ $this->addAttribute('css', [
     'assets/client/list/client-list.css', // For clients
     'assets/general/css/contenteditable.css', // For notes
     'assets/general/css/loader/animated-checkmark.css', // Note loader
-    'assets/client/note/client-note.css',
+    'assets/client/note/client-note.css', // Note css
+    'assets/general/css/filter-chip.css', // User
+    'assets/user/list/user-list-content-placeholder.css', // User
+    'assets/user/list/user-list.css', // User
     'assets/general/panel/panel.css',
     'assets/dashboard/dashboard.css',
 ]);

@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Dashboard;
 
 use App\Application\Responder\Responder;
-use App\Domain\Dashboard\DashboardGetter;
+use App\Domain\Dashboard\DashboardPanelProvider;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -24,7 +24,7 @@ final class DashboardPageAction
         private readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly DashboardGetter $dashboardGetter,
+        private readonly DashboardPanelProvider $dashboardGetter,
     ) {
     }
 

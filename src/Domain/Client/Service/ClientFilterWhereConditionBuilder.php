@@ -3,17 +3,21 @@
 namespace App\Domain\Client\Service;
 
 use App\Infrastructure\Factory\QueryFactory;
+use Cake\Database\Expression\QueryExpression;
+use Cake\Database\Query;
 
 class ClientFilterWhereConditionBuilder
 {
+    private
+    string $columnPrefix = 'client.';
+
     public function __construct(
         private readonly QueryFactory $queryFactory,
-    )
-    {
+    ) {
     }
 
-    // In the select query there are multiple joins. This is the alias for the client table.
-    private string $columnPrefix = 'client.';
+// In the select query there are multiple joins. This is the alias for the client table.
+
 
     /**
      * Build cakephp query builder where array with filter params
@@ -30,10 +34,22 @@ class ClientFilterWhereConditionBuilder
             $query = $this->queryFactory->newQuery();
             // Name is always an AND condition
             $c = $query->func()->concat(['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']);
+            $firstAndLastNameConcat = $query->where(
+                function (QueryExpression $exp, Query $query) use ($filterParams) {
+                    return $exp->like(
+                        $query->func()->concat(
+                            [$query->identifier('first_name'), ' ', $query->identifier('last_name')],
+                            ['string', 'string', 'string']
+                        ),
+                        '%' . $filterParams['name'] . '%',
+                        'string'
+                    );
+                }
+            );
             $queryBuilderWhereArray[]['OR'] = [
-                [$this->columnPrefix.'first_name LIKE' => '%' . $filterParams['name'] . '%'],
-                [$this->columnPrefix.'last_name LIKE' => '%' . $filterParams['name'] . '%'],
-                // [$c->like($c => '%' . $filterParams['name'] . '%'],
+                [$this->columnPrefix . 'first_name LIKE' => '%' . $filterParams['name'] . '%'],
+                [$this->columnPrefix . 'last_name LIKE' => '%' . $filterParams['name'] . '%'],
+                $firstAndLastNameConcat,
                 //
             ];
             unset($filterParams['name']);

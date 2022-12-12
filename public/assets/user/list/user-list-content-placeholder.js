@@ -2,9 +2,12 @@ import {getUserCardLoadingPlaceholderHtml} from "./user-list-card.html.js?v=0.1"
 
 /**
  * Display content placeholders
+ * @param {string|null} userWrapperId if client wrapper is not the default on the client list page,
+ * a custom one can be provided.
  */
-export function displayUserCardLoadingPlaceholder() {
-    let wrapper = document.getElementById('user-wrapper');
+export function displayUserCardLoadingPlaceholder(userWrapperId = null) {
+    console.log(userWrapperId);
+    let wrapper = document.getElementById(userWrapperId ?? 'user-wrapper');
     // Empty clients
     wrapper.innerHTML = '';
 

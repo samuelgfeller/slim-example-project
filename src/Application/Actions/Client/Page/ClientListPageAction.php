@@ -5,6 +5,7 @@ namespace App\Application\Actions\Client\Page;
 use App\Application\Responder\Responder;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,7 +22,7 @@ final class ClientListPageAction
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly ClientListFilterFinder $clientListFilterSetter,
+        private readonly ClientListFilterChipProvider $clientListFilterChipGetter,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker
     ) {
     }
@@ -44,7 +45,7 @@ final class ClientListPageAction
     ): ResponseInterface {
         // Clients are loaded dynamically with js after page load for a faster loading time
         // Retrieving available filters
-        $clientListFilters = $this->clientListFilterSetter->findClientListFilters();
+        $clientListFilters = $this->clientListFilterChipGetter->getActiveAndInactiveClientListFilters();
 
 
         $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);

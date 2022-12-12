@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\UserFilterSetting;
+namespace App\Domain\FilterSetting;
 
-enum UserFilterModule: string
+enum FilterModule: string
 {
     case CLIENT_LIST = 'client-list';
     case DASHBOARD_USER_ACTIVITY = 'dashboard-user-activity';

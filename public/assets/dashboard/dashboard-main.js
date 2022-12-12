@@ -1,5 +1,7 @@
 import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
 import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
+import {loadUserList} from "../user/list/user-list-loading.js?v=0.1";
+import {initFilterChipEventListeners} from "../general/js/filter-chip.js?v=0.1";
 
 // Add toggle open - close event listeners
 const toggleIcons = document.getElementsByClassName('toggle-panel-icon');
@@ -25,7 +27,7 @@ for (const toggleIcon of toggleIcons) {
 
 // Collapse panels if collapsed in localStorage
 const hiddenPanelIds = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');
-for (const hiddenPanelId in hiddenPanelIds){
+for (const hiddenPanelId in hiddenPanelIds) {
     const hiddenPanel = document.getElementById(hiddenPanelId);
     if (hiddenPanel) {
         hiddenPanel.classList.add('collapsed');
@@ -59,7 +61,29 @@ for (const notePanel of notesPanels) {
         noteFilterParam.append(paramData.dataset.paramName, paramData.dataset.paramValue);
     }
 
-    // client panels have to have a div.client-wrapper in the content section
+    // client panels have to have a div.client-wrapper in the content section with a unique id
     fetchAndLoadClientNotes(noteFilterParam, notePanel.querySelector('.client-note-wrapper').id);
 }
+
+// Load users in users panel
+const userPanels = document.getElementsByClassName('user-panel');
+for (const panel of userPanels) {
+    let noteFilterParam = new URLSearchParams();
+    const paramsData = panel.querySelectorAll('data');
+    for (const paramData of paramsData) {
+        noteFilterParam.append(paramData.dataset.paramName, paramData.dataset.paramValue);
+    }
+
+    // user panels have to have a div.user-wrapper in the content section with a unique id
+    // this is for the case there are multiple panels that have users that need to be loaded
+    const userWrapperId = panel.querySelector('.user-wrapper').id;
+    loadUserList(userWrapperId);
+    // Pass var to user to event handler function https://stackoverflow.com/a/45696430/9013718
+    let curriedLoadUserFunction = () => {
+        console.log('hey');
+        return loadUserList(userWrapperId);
+    }
+    initFilterChipEventListeners(curriedLoadUserFunction);
+}
+
 

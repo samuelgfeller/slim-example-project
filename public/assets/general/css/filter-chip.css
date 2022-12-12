@@ -1,5 +1,8 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
+    .filter-chip-container{
+        position: relative;
+    }
     #active-filter-chips-div button{
         font-size: 14px;
         background: transparent;

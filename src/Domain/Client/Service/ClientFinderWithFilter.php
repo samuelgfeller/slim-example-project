@@ -7,9 +7,8 @@ namespace App\Domain\Client\Service;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use App\Domain\Client\Service\ClientListFilter\UserClientListFilterHandler;
-use App\Domain\UserFilterSetting\UserFilterHandler;
-use App\Domain\UserFilterSetting\UserFilterModule;
+use App\Domain\FilterSetting\FilterModule;
+use App\Domain\FilterSetting\FilterSettingSetter;
 
 class ClientFinderWithFilter
 {
@@ -17,7 +16,7 @@ class ClientFinderWithFilter
         private readonly ClientFinder $clientFinder,
         private readonly ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly UserFilterHandler $userFilterHandler,
+        private readonly FilterSettingSetter $filterSettingHandler,
     ) {
     }
 
@@ -86,9 +85,9 @@ class ClientFinderWithFilter
         // Other filters here
 
         // Insert filter ids into db
-        $this->userFilterHandler->setFilterSettingForAuthenticatedUser(
+        $this->filterSettingHandler->setFilterSettingForAuthenticatedUser(
             $params['filterIds'] ?? null,
-            UserFilterModule::CLIENT_LIST
+            FilterModule::CLIENT_LIST
         );
 
         // Find all clients matching the filter regardless of logged-in user rights

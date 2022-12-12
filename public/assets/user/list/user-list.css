@@ -1,6 +1,6 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    #user-wrapper {
+    #user-wrapper, .user-wrapper {
         width: 100%;
         display: flex;
         /* Make items shrink if different height on same row */

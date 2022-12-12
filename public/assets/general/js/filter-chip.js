@@ -2,16 +2,26 @@ let addFilterBtn = document.getElementById('add-filter-btn');
 let availableFilterDiv = document.getElementById('available-filter-div');
 let activeFilterDiv = document.getElementById('active-filter-chips-div');
 
-// Available filter chip collection
-addFilterBtn.addEventListener('click', toggleAvailableFilterDiv);
+// Available to active filter chip
+export function initFilterChipEventListeners(chipClickEventHandler) {
+    // Button to open available filter chip collection
+    addFilterBtn.addEventListener('click', toggleAvailableFilterDiv);
 
-// Hide available filters if click outside of filter area
-document.addEventListener('click', event => {
-    // If clicked element is not a child of available-filter-div or active-filter-chips-div, hide it
-    if (event.target.closest('#available-filter-div') === null && event.target.closest('#add-filter-btn') === null) {
-        toggleAvailableFilterDiv(true);
+    // Get active and inactive filter chips
+    let filterChips = document.querySelectorAll('.filter-chip');
+    for (let filterChip of filterChips) {
+        filterChip.addEventListener('click', toggleFilterChip);
+        filterChip.addEventListener('click', chipClickEventHandler);
     }
-});
+
+    // Hide available filters if click outside of filter area
+    document.addEventListener('click', event => {
+        // If clicked element is not a child of available-filter-div or active-filter-chips-div, hide it
+        if (event.target.closest('#available-filter-div') === null && event.target.closest('#add-filter-btn') === null) {
+            toggleAvailableFilterDiv(true);
+        }
+    });
+}
 
 // Show or hide available filters container
 function toggleAvailableFilterDiv(hideOnly = false) {
@@ -28,16 +38,6 @@ function toggleAvailableFilterDiv(hideOnly = false) {
     }
 }
 
-// Available to active filter chip
-function initFilterChipEventListeners(chipClickEventHandler) {
-    // Get active and inactive filter chips
-    let filterChips = document.querySelectorAll('.filter-chip');
-    for (let filterChip of filterChips) {
-        filterChip.addEventListener('click', toggleFilterChip);
-        filterChip.addEventListener('click', chipClickEventHandler);
-    }
-}
-
 /**
  * Add chip to available collection or from available to active
  * "this" is the .filter-chip
@@ -45,7 +45,7 @@ function initFilterChipEventListeners(chipClickEventHandler) {
 function toggleFilterChip() {
     const category = this.querySelector('span').dataset.category;
     let categoryTitle = availableFilterDiv
-                    .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
+        .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
     // If filter chip is in available div
     if (this.closest('#available-filter-div')) {
         // Moves div to active list ("this" is the inactiveChip)
@@ -54,17 +54,17 @@ function toggleFilterChip() {
         this.classList.add('filter-chip-active');
     } else {
         // Moves div to available list below the right category ("this" is the activeChip)
-        if (category !== ''){
+        if (category !== '') {
             // If category title doesn't exist in available div (happens when all filters of category are in use)
-            if (categoryTitle === null){
+            if (categoryTitle === null) {
                 // Insert category title
                 availableFilterDiv.insertAdjacentHTML('beforeend', `<span 
                     class='filter-chip-container-label' data-category='${category}'>${category}</span>`);
                 categoryTitle = availableFilterDiv
-                                    .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
+                    .querySelector(`.filter-chip-container-label[data-category="${category}"]`);
             }
             categoryTitle.after(this);
-        }else{
+        } else {
             // Insert before first category title (if none exist, it will still be added)
             availableFilterDiv.insertBefore(this, availableFilterDiv.querySelector(`.filter-chip-container-label`));
         }

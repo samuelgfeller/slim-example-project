@@ -4,16 +4,18 @@ namespace App\Domain\Dashboard;
 
 use App\Domain\Authorization\AuthorizationChecker;
 use App\Domain\Dashboard\Data\DashboardData;
+use App\Domain\Dashboard\Panel\UserFilterChipProvider;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 use Odan\Session\SessionInterface;
 
-class DashboardGetter
+class DashboardPanelProvider
 {
     public function __construct(
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly AuthorizationChecker $authorizationChecker,
         private readonly SessionInterface $session,
+        private readonly UserFilterChipProvider $userFilterChipProvider,
     ) {
     }
 
@@ -70,8 +72,9 @@ class DashboardGetter
             new DashboardData([
                 'title' => 'User activity',
                 'panelId' => "user-activity-panel",
-                'panelClass' => null,
-                'panelHtmlContent' => null,
+                'panelClass' => 'user-panel',
+                'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
+                    '<div class="user-wrapper" id="user-activity-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
                     UserRole::MANAGING_ADVISOR
                 ),

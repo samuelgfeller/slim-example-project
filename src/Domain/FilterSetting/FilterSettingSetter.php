@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\UserFilterSetting;
+namespace App\Domain\FilterSetting;
 
 use App\Infrastructure\UserFilterSetting\UserFilterHandlerRepository;
 use Odan\Session\SessionInterface;
 
-class UserFilterHandler
+class FilterSettingSetter
 {
     public function __construct(
         private readonly SessionInterface $session,
@@ -13,30 +13,17 @@ class UserFilterHandler
     ) {
     }
 
-    /**
-     * Find saved filters from authenticated user
-     *
-     * @param UserFilterModule $userFilterModule
-     * @return array
-     */
-    public function findFiltersFromAuthenticatedUser(UserFilterModule $userFilterModule): array
-    {
-        return $this->userFilterHandlerRepository->findFiltersFromUser(
-            $this->session->get('user_id'),
-            $userFilterModule->value
-        );
-    }
 
     /**
      * Remove old filters from db and save given filters
      *
      * @param array|null $filters
-     * @param UserFilterModule $userFilterModule
+     * @param FilterModule $userFilterModule
      * @return void
      */
     public function setFilterSettingForAuthenticatedUser(
         ?array $filters,
-        UserFilterModule $userFilterModule
+        FilterModule $userFilterModule
     ): void {
         $loggedInUser = $this->session->get('user_id');
         $this->userFilterHandlerRepository->deleteFilterSettingFromUser($loggedInUser, $userFilterModule->value);

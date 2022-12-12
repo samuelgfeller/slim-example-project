@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Domain\Client\Service\ClientListFilter\Data;
+namespace App\Domain\FilterSetting\Data;
 
 
-class ClientListFilterData
+class FilterData
 {
     public string $name;
     public string $paramName;
