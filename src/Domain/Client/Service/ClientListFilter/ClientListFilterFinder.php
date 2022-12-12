@@ -3,12 +3,14 @@
 namespace App\Domain\Client\Service\ClientListFilter;
 
 use App\Domain\Client\Service\ClientListFilter\Data\ClientListFilterData;
+use App\Domain\UserFilterSetting\UserFilterHandler;
+use App\Domain\UserFilterSetting\UserFilterModule;
 
 class ClientListFilterFinder
 {
     public function __construct(
         private readonly ClientListFilterGetter $clientListFilterGenerator,
-        private readonly UserClientListFilterHandler $userClientListFilterHandler,
+        private readonly UserFilterHandler $userFilterHandler,
     ) {
     }
 
@@ -27,7 +29,8 @@ class ClientListFilterFinder
 
         $returnArray['active'] = [];
         // Check which filters are active in session
-        if (($activeFilters = $this->userClientListFilterHandler->findFiltersFromAuthenticatedUser()) !== null) {
+        if (($activeFilters = $this->userFilterHandler
+                ->findFiltersFromAuthenticatedUser(UserFilterModule::CLIENT_LIST)) !== null) {
             foreach ($activeFilters as $activeFilterId) {
                 // Add to session active filters only if it exists in $allClientFilters and is authorized
                 if (isset($allClientFilters[$activeFilterId]) && $allClientFilters[$activeFilterId]->authorized) {
@@ -39,7 +42,10 @@ class ClientListFilterFinder
             }
         }
         // Add active filters to session (refresh in case there was an old filter that doesn't exist anymore)
-        $this->userClientListFilterHandler->setClientListFilterSettingForAuthenticatedUser(array_keys($returnArray['active']));
+        $this->userFilterHandler->setFilterSettingForAuthenticatedUser(
+            array_keys($returnArray['active']),
+            UserFilterModule::CLIENT_LIST
+        );
         // Inactive are the ones that were not added to 'active' previously
         foreach ($allClientFilters as $filterId => $filterData) {
             // Add to inactive if authorized

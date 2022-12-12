@@ -63,4 +63,3 @@ for (const notePanel of notesPanels) {
     fetchAndLoadClientNotes(noteFilterParam, notePanel.querySelector('.client-note-wrapper').id);
 }
 
-

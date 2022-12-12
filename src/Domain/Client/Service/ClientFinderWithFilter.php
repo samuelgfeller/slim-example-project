@@ -8,6 +8,8 @@ use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientListFilter\UserClientListFilterHandler;
+use App\Domain\UserFilterSetting\UserFilterHandler;
+use App\Domain\UserFilterSetting\UserFilterModule;
 
 class ClientFinderWithFilter
 {
@@ -15,7 +17,7 @@ class ClientFinderWithFilter
         private readonly ClientFinder $clientFinder,
         private readonly ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly UserClientListFilterHandler $userClientListFilterHandler,
+        private readonly UserFilterHandler $userFilterHandler,
     ) {
     }
 
@@ -68,12 +70,12 @@ class ClientFinderWithFilter
         // Filter client by date at which it was assigned
         if (isset($params['recently-assigned'])) {
             // If value is 1 the default time range is taken which is 1 week
-            if ((int)$params['recently-assigned'] === 1){
+            if ((int)$params['recently-assigned'] === 1) {
                 $date = new \DateTime('-1 week');
             } // If it's a valid date (validation source: https://stackoverflow.com/a/24401462/9013718), the date is taken
-            elseif(strtotime((string)$params['recently-assigned'])) {
-                 $date = new \DateTimeImmutable($params['recently-assigned']);
-            }else{
+            elseif (strtotime((string)$params['recently-assigned'])) {
+                $date = new \DateTimeImmutable($params['recently-assigned']);
+            } else {
                 throw new InvalidClientFilterException('Invalid filter format "recently-assigned".');
             }
             // Add to filter params if date greater than given date and user_id is not null
@@ -83,11 +85,16 @@ class ClientFinderWithFilter
 
         // Other filters here
 
-        // Add filter ids to session
-        $this->userClientListFilterHandler->setClientListFilterSettingForAuthenticatedUser($params['filterIds'] ?? null);
+        // Insert filter ids into db
+        $this->userFilterHandler->setFilterSettingForAuthenticatedUser(
+            $params['filterIds'] ?? null,
+            UserFilterModule::CLIENT_LIST
+        );
 
         // Find all clients matching the filter regardless of logged-in user rights
-        $queryBuilderWhereArray = $this->clientFilterWhereConditionBuilder->buildWhereArrayWithFilterParams($filterParams);
+        $queryBuilderWhereArray = $this->clientFilterWhereConditionBuilder->buildWhereArrayWithFilterParams(
+            $filterParams
+        );
         $clientResultDataCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
         $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(

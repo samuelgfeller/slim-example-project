@@ -24,7 +24,7 @@ let previousRequestId = 0;
  * Fetch clients with active filter chips and name search if present
  * then load clients into DOM
  * @param {URLSearchParams} filterParams custom filter params that won't be
- * saved in user_client_list_filter database table
+ * saved in user_filter_setting database table
  * @param {string|null} clientWrapperId if client wrapper is not the default on the client list page,
  * a custom one can be provided.
  */

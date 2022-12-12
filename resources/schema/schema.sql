@@ -108,6 +108,8 @@ create table client
     constraint FK_client_user
         foreign key (user_id) references user (id)
 )
+    engine = InnoDB
+    charset = utf8mb4
     comment 'Advisors help and consult clients';
 
 
@@ -130,14 +132,20 @@ create table note
     constraint FK_note_client
         foreign key (client_id) references client (id)
 )
-    charset = utf8;
+    engine = InnoDB
+    charset = utf8mb4;
 
 
 
-create table user_client_list_filter
+create table user_filter_setting
 (
-    user_id   int          not null,
-    filter_id varchar(100) not null,
-    primary key (user_id, filter_id)
-);
+    user_id   int                         not null,
+    filter_id varchar(100) charset latin1 not null,
+    module    varchar(100)                not null,
+    primary key (user_id, filter_id, module)
+)
+    engine = InnoDB
+    charset = utf8mb4;
+
+
 
