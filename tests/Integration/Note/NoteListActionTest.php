@@ -109,6 +109,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         $expectedResponseArray[] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
             'noteId' => $noteData['id'],
+            'clientId' => $clientRow['id'],
             // Note message either plain text or replaced with lorem ipsum if not allowed to read
             'noteMessage' => $expectedResult['privilege'] === Privilege::NONE ?
                 substr($loremIpsum, 0, mb_strlen($noteData['message'])) : $noteData['message'],
@@ -118,6 +119,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
             'userId' => $noteData['user_id'],
             'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
+            'clientFullName' => null,
             // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
             'privilege' => $expectedResult['privilege']->value,
         ];

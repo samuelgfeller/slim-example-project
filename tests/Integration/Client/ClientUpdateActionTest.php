@@ -109,6 +109,9 @@ class ClientUpdateActionTest extends TestCase
             $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
             // Get client row from db to have the assigned_at timestamp to assert user activity entry json data
             $clientRow = $this->findTableRowById('client', $clientRow['id']);
+            if ($clientRow['assigned_at'] !== null){
+                $updateActivityData = array_merge($requestData, ['assigned_at' => $clientRow['assigned_at']]);
+            }
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
@@ -117,7 +120,7 @@ class ClientUpdateActionTest extends TestCase
                     'row_id' => $clientRow['id'],
                     'data' => json_encode(
                     // Add the missing "assigned_at" that is added while updating the client with a current timestamp
-                        array_merge($requestData, ['assigned_at' => $clientRow['assigned_at']]),
+                        $updateActivityData ?? $requestData,
                         JSON_THROW_ON_ERROR
                     ),
                 ],

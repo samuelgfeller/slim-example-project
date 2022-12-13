@@ -92,7 +92,19 @@ class UserCreateActionTest extends TestCase
                     'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
                 ],
                 'user_activity',
-                (int)$this->findLastInsertedTableRow('user_activity')['id']
+                (int)$this->findTableRowsByColumn('user_activity', 'table', 'user')[0]['id']
+            );
+
+            // Assert that user activity is inserted
+            $this->assertTableRow(
+                [
+                    'action' => UserActivity::CREATED->value,
+                    'table' => 'user_verification',
+                    'row_id' => (int)$this->findLastInsertedTableRow('user_verification')['id'],
+                    // Data not asserted
+                ],
+                'user_activity',
+                (int)$this->findTableRowsByColumn('user_activity', 'table', 'user_verification')[0]['id']
             );
         } else {
             // Only 1 rows (authenticated user) expected in user table
