@@ -20,11 +20,27 @@ class DashboardPanelProvider
     }
 
     /**
+     * Returns authorized dashboards
+     *
+     * @return DashboardData[]
+     */
+    public function getAuthorizedDashboards(): array
+    {
+        $authorizedDashboards = [];
+        foreach ($this->getDashboards() as $dashboard) {
+            if ($dashboard->authorized) {
+                $authorizedDashboards[] = $dashboard;
+            }
+        }
+        return $authorizedDashboards;
+    }
+
+    /**
      * Returns default dashboards
      *
-     * @return array
+     * @return DashboardData[]
      */
-    public function getDashboards(): array
+    private function getDashboards(): array
     {
         $statusesMappedByNameId = array_flip(
             $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName()
@@ -52,11 +68,11 @@ class DashboardPanelProvider
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             new DashboardData([
-                'title' => 'Recently assigned clients',
-                'panelId' => "recently-assigned-panel",
-                'panelClass' => 'client-panel',
-                'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>
-                                <div id="client-wrapper-recently-assigned" class="client-wrapper"></div>',
+                'title' => 'User activity',
+                'panelId' => "user-activity-panel",
+                'panelClass' => null,
+                'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
+                    '<div id="user-activity-content"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
                     UserRole::MANAGING_ADVISOR
                 ),
@@ -70,13 +86,13 @@ class DashboardPanelProvider
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::MANAGING_ADVISOR),
             ]),
             new DashboardData([
-                'title' => 'User activity',
-                'panelId' => "user-activity-panel",
-                'panelClass' => null,
-                'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
-                    '<div id="user-activity-content"></div>',
+                'title' => 'Recently assigned clients',
+                'panelId' => "recently-assigned-panel",
+                'panelClass' => 'client-panel',
+                'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>
+                                <div id="client-wrapper-recently-assigned" class="client-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
-                    UserRole::NEWCOMER
+                    UserRole::MANAGING_ADVISOR
                 ),
             ]),
         ];

@@ -85,7 +85,7 @@ function fetchClients(searchParams = new URLSearchParams()) {
 
     // Loop through all the active filter chips and add filters to query params
     const activeFilterChips = document
-        .querySelectorAll('#active-filter-chips-div .filter-chip span');
+        .querySelectorAll('#active-client-filter-chips .filter-chip span');
     for (const chip of activeFilterChips) {
         const paramName = chip.dataset.paramName;
         // For PHP, GET params with multiple values have to have a "[]" appended to the name

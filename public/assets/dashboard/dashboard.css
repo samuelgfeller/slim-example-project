@@ -1,5 +1,32 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
+    #dashboard-panel-toggle-buttons-div {
+        margin-bottom: 30px;
+    }
+
+    .checkbox-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 7px 15px;
+        background: #f1f1f1;
+        border: 3px solid #d5d5d5;
+        border-radius: 20px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        /*Change native input style: https://moderncss.dev/pure-css-custom-checkbox-style*/
+        margin: 0;
+        min-width: 16px;
+        min-height: 16px;
+        /*Nudge it up half the width of the border*/
+        transform: translateY(-0.5px);
+        cursor: pointer;
+    }
+
     .dashboard-panel-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
@@ -11,7 +38,8 @@
         gap: 20px;
         overflow: hidden;
     }
-    .dashboard-panel-container > div{
+
+    .dashboard-panel-container > div {
         /*This "magically" fixes grid items expanding over 100% of the available space */
         min-width: 0; /* Source https://stackoverflow.com/a/43312314/9013718 */
         /*flex-grow: 1;*/
@@ -44,19 +72,21 @@
     }
 
     /*NOTES PANEL*/
-    .client-note-wrapper > a{
+    .client-note-wrapper > a {
         font-weight: bold;
         margin-bottom: 10px;
     }
+
     /*Remove panel link hover style for note textarea label*/
-    .textarea-label a:hover{
+    .textarea-label a:hover {
         background: none;
     }
 
     /*User activity panel*/
-    #user-activity-panel .panel-content{
+    #user-activity-panel .panel-content {
         min-height: 200px;
     }
+
 }
 
 
@@ -66,23 +96,28 @@
         width: min-content;
         /*font-size: initial;*/
     }
-    .panel-content .client-wrapper .client-profile-card select{
+
+    .panel-content .client-wrapper .client-profile-card select {
         font-size: 12px;
         padding: 3px;
     }
-    .panel-content .client-wrapper .client-profile-card h3{
+
+    .panel-content .client-wrapper .client-profile-card h3 {
         font-size: 1.2em;
     }
-    .panel-content .client-wrapper .client-profile-card .profile-card-header{
+
+    .panel-content .client-wrapper .client-profile-card .profile-card-header {
         padding-top: 10px;
     }
+
     /*Expand select full width*/
-    .profile-card-assignee-and-status div{
+    .profile-card-assignee-and-status div {
         min-width: 90%;
     }
-/*    .dashboard-panel-container > div{
-        min-width: 590px;
-    }*/
+
+    /*    .dashboard-panel-container > div{
+            min-width: 590px;
+        }*/
     .dashboard-panel-container {
         grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
     }

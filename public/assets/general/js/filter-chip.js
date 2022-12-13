@@ -1,6 +1,8 @@
 let addFilterBtn = document.getElementById('add-filter-btn');
 let availableFilterDiv = document.getElementById('available-filter-div');
-let activeFilterDiv = document.getElementById('active-filter-chips-div');
+// Currently only one filter chip system is possible in dom - still using class instead of id because it is used
+// in dashboard to filter users, and it also has client panels
+let activeFilterDiv = document.querySelector('.active-filter-chips-div');
 
 // Available to active filter chip
 export function initFilterChipEventListeners(chipClickEventHandler) {

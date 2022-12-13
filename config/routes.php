@@ -20,6 +20,9 @@ return function (App $app) {
         return $response;
     })->setName('test-post-request');
 
+    $app->put('/dashboard-toggle-panel', \App\Application\Actions\Dashboard\DashboardTogglePanelAction::class)
+        ->setName('dashboard-toggle-panel');
+
 
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginPageAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\Submit\LoginSubmitAction::class)->setName(

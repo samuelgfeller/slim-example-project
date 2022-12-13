@@ -2,10 +2,44 @@ import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
 import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
 import {initFilterChipEventListeners} from "../general/js/filter-chip.js?v=0.1";
 import {loadUserActivities} from "../user/read/user-activity/activity-main.js?v=0.1";
+import {submitUpdate} from "../general/js/request/submit-update-data.js?v=0.1";
+
+// Toggle enable / disable panel
+const panelToggleButtons = document.getElementsByClassName('dashboard-panel-toggle-btn');
+for (const toggleBtn of panelToggleButtons) {
+    const inputCheckbox = toggleBtn.querySelector('input[type="checkbox"]');
+    const panel = document.getElementById(toggleBtn.dataset.panelId);
+    // Hide panels that don't have the button checked on load
+    if (inputCheckbox.checked) {
+        panel.style.display = null;
+    } else {
+        panel.style.display = 'none';
+    }
+    toggleBtn.addEventListener('click', (e) => {
+        // Click on label triggers click event twice https://stackoverflow.com/a/19595155/9013718
+        if (e.target.tagName === 'INPUT') {
+            // Hide show on click
+            if (inputCheckbox.checked) {
+                panel.style.display = null;
+            } else {
+                panel.style.display = 'none';
+            }
+            // Send the server a list of the active panels
+            const activePanelInputs = document.querySelectorAll(`.dashboard-panel-toggle-btn input[type="checkbox"]:checked`)
+            let panelIds = [];
+            for (const checkedInput of activePanelInputs) {
+                // Get the panel id from the parent label data attribute
+                panelIds.push(checkedInput.closest('label').dataset.panelId);
+            }
+            submitUpdate({panelIds: JSON.stringify(panelIds)}, 'dashboard-toggle-panel').then(r => {
+            });
+        }
+    });
+}
 
 // Add toggle open - close event listeners
-const toggleIcons = document.getElementsByClassName('toggle-panel-icon');
-for (const toggleIcon of toggleIcons) {
+const panelHeaderToggleIcons = document.getElementsByClassName('toggle-panel-icon');
+for (const toggleIcon of panelHeaderToggleIcons) {
     const panelHeader = toggleIcon.closest('.panel-header');
     panelHeader.addEventListener('click', () => {
         let hiddenPanels = JSON.parse(window.localStorage.getItem('hiddenPanels') ?? '{}');

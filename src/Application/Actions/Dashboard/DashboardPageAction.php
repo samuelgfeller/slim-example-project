@@ -4,7 +4,8 @@ namespace App\Application\Actions\Dashboard;
 
 use App\Application\Responder\Responder;
 use App\Domain\Dashboard\DashboardPanelProvider;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
+use App\Domain\FilterSetting\FilterModule;
+use App\Domain\FilterSetting\FilterSettingFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,7 +24,7 @@ final class DashboardPageAction
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
+        private readonly FilterSettingFinder $filterSettingFinder,
         private readonly DashboardPanelProvider $dashboardGetter,
     ) {
     }
@@ -42,15 +43,17 @@ final class DashboardPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $name = $args['name'] ?? 'noname';
-        $array = [];
+        $dashboards = $this->dashboardGetter->getAuthorizedDashboards();
 
         return $this->responder->render(
             $response,
             'dashboard/dashboard.html.php',
             [
                 'authenticatedUserId' => $this->session->get('user_id'),
-                'dashboards' => $this->dashboardGetter->getDashboards()
+                'dashboards' => $dashboards,
+                'enabledDashboards' => $this->filterSettingFinder->findFiltersFromAuthenticatedUser(
+                    FilterModule::DASHBOARD_PANEL
+                ),
             ]
         );
     }

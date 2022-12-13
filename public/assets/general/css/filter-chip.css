@@ -3,7 +3,7 @@
     .filter-chip-container{
         position: relative;
     }
-    #active-filter-chips-div button{
+    .active-filter-chips-div button{
         font-size: 14px;
         background: transparent;
         padding: 3px 10px 3px 10px;
@@ -37,11 +37,11 @@
         z-index: 20; /* Has to be on top of client in list but below nav menu */
         vertical-align: middle;
     }
-    #active-filter-chips-div button:active{
+    .active-filter-chips-div button:active{
         background: transparent;
         /*background: #e1e1e1;*/
     }
-    #active-filter-chips-div button:focus {
+    .active-filter-chips-div button:focus {
         /*background: transparent;*/
         background: #efefef;
     }

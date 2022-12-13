@@ -56,7 +56,7 @@ class UserFilterChipProvider
             }
         }
 
-        return "<div class='filter-chip-container'><div id='active-filter-chips-div'>
+        return "<div class='filter-chip-container'><div id='active-user-filter-chips-div' class='active-filter-chips-div'>
             <button id='add-filter-btn'>+ Filter</button>
             $activeFilterChips
             </div>

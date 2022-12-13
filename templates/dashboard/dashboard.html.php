@@ -3,6 +3,7 @@
 /**
  * @var int $authenticatedUserId
  * @var \App\Domain\Dashboard\Data\DashboardData[] $dashboards
+ * @var array $enabledDashboards dashboard ids of enabled dashboards
  */
 
 $this->setLayout('layout.html.php');
@@ -26,22 +27,29 @@ $this->addAttribute('jsModules', [
 
 <h1>Dashboard</h1>
 
-<div class="dashboard-panel-container">
-
+<div id="dashboard-panel-toggle-buttons-div">
     <?php
     foreach ($dashboards as $dashboard) {
-        if ($dashboard->authorized) { ?>
-            <div class="panel-container <?= $dashboard->panelClass ?>" id="<?= $dashboard->panelId ?>">
-                <div class="panel-header">
-                    <h2><?= $dashboard->title ?></h2>
-                    <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg"
-                         alt="toggle-open-close">
-                </div>
-                <div class="panel-content">
-                    <?= $dashboard->panelHtmlContent ?>
-                </div>
+        $checked = in_array($dashboard->panelId, $enabledDashboards, true) ? 'checked' : '';
+        echo "<label class='checkbox-label dashboard-panel-toggle-btn' data-panel-id='$dashboard->panelId'>
+                <input type='checkbox' $checked><span>$dashboard->title</span>
+              </label>";
+    }
+    ?>
+</div>
+<div class="dashboard-panel-container">
+    <?php
+    foreach ($dashboards as $dashboard) { ?>
+        <div class="panel-container <?= $dashboard->panelClass ?>" id="<?= $dashboard->panelId ?>">
+            <div class="panel-header">
+                <h2><?= $dashboard->title ?></h2>
+                <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg"
+                     alt="toggle-open-close">
             </div>
-            <?php
-        }
+            <div class="panel-content">
+                <?= $dashboard->panelHtmlContent ?>
+            </div>
+        </div>
+        <?php
     } ?>
 </div>
