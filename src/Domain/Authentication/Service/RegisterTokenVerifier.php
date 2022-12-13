@@ -54,14 +54,15 @@ final class RegisterTokenVerifier
                 );
                 if ($hasUpdated === true) {
                     // Mark token as being used only after making sure that user is active
-                    $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId);
+                    $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
                     $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
                     // Add user activity entry
                     $this->userActivityManager->addUserActivity(
                         UserActivity::UPDATED,
                         'user',
                         $userId,
-                        ['status' => UserStatus::Active->value]
+                        ['status' => UserStatus::Active->value],
+                        $userId,
                     );
                     return $userId;
                 }

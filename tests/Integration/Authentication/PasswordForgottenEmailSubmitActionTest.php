@@ -5,6 +5,7 @@ namespace App\Test\Integration\Authentication;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -30,15 +31,15 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     use RouteTestTrait;
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
+    use FixtureTestTrait;
 
     /**
      * Request to change password
      */
     public function testPasswordForgottenEmailSubmit(): void
     {
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
+        // Insert user
+        $userRow = $this->insertFixturesWithAttributes([],UserFixture::class);
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
@@ -73,7 +74,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         // Assert that there is a verification token in the database
         $expectedVerificationToken = [
             // CakePHP Database returns always strings
-            'user_id' => (string)$userId,
+            'user_id' => $userId,
             'used_at' => null,
             'deleted_at' => null,
         ];

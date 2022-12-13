@@ -36,7 +36,7 @@ final class VerificationTokenVerifier
             true === password_verify($token, $verification->token)
         ) {
             // Mark token as being used
-            $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId);
+            $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
         }
 

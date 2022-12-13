@@ -6,6 +6,7 @@ use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -30,6 +31,7 @@ class PasswordResetSubmitActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
+    use FixtureTestTrait;
 
     /**
      * Request to reset password with token
@@ -42,9 +44,8 @@ class PasswordResetSubmitActionTest extends TestCase
     public function testResetPasswordSubmit(UserVerificationData $verification, string $clearTextToken): void
     {
         $newPassword = 'new password';
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
+        // Insert user
+        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], UserFixture::class);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -88,9 +89,10 @@ class PasswordResetSubmitActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::Unverified;
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
         $newPassword = 'new password';
@@ -121,7 +123,7 @@ class PasswordResetSubmitActionTest extends TestCase
         );
 
         // Assert that password was not changed to the new one
-        $this->assertTableRowValue(UserStatus::Unverified, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Unverified->value, 'user', $userRow['id'], 'status');
 
         // Assert that user is not logged in
         self::assertNull($this->container->get(SessionInterface::class)->get('user_id'));
@@ -140,13 +142,14 @@ class PasswordResetSubmitActionTest extends TestCase
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testResetPasswordSubmit_invalidData(UserVerificationData $verification, string $clearTextToken): void
-    {
+    public function testResetPasswordSubmit_invalidData(
+        UserVerificationData $verification,
+        string $clearTextToken
+    ): void {
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId],UserFixture::class);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -165,7 +168,6 @@ class PasswordResetSubmitActionTest extends TestCase
 
         // Assert that response has error status 422
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-
         // As form is directly rendered with validation errors it's not possible to test them as response is a stream
     }
 
@@ -186,8 +188,7 @@ class PasswordResetSubmitActionTest extends TestCase
     public function testChangePassword_malformedBody(null|array $malformedBody, string $message): void
     {
         // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes([],UserFixture::class);
 
         $malformedRequest = $this->createFormRequest(
             'POST',

@@ -51,15 +51,16 @@ final class AccountUnlockTokenVerifier
 
             // Change user status to active
             $this->userUpdaterRepository->changeUserStatus(UserStatus::Active, $verification->userId);
-            // Mark token as being used only after making sure that user is active
-            $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId);
+            // Mark token as being used only after being sure that user is active
+            $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
             $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
             // Add user activity entry
             $this->userActivityManager->addUserActivity(
                 UserActivity::UPDATED,
                 'user',
                 $userId,
-                ['status' => UserStatus::Active->value]
+                ['status' => UserStatus::Active->value],
+                $userId
             );
             return $userId;
         }

@@ -6,6 +6,7 @@ use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
+use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
@@ -28,6 +29,7 @@ class RegisterVerifyActionTest extends TestCase
     use DatabaseTestTrait;
     use HttpTestTrait;
     use RouteTestTrait;
+    use FixtureTestTrait;
 
     /**
      * Test that with given correct token the account status is set to active
@@ -39,9 +41,10 @@ class RegisterVerifyActionTest extends TestCase
     public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
-        $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::Unverified;
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -66,7 +69,7 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
 
         // Assert that status is active on user
-        $this->assertTableRowValue(UserStatus::Active, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Active->value, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is set meaning user is logged-in
@@ -85,9 +88,10 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::Active;
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['id' => $verification->userId, 'status' => UserStatus::Active->value],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
         // Any location to test that page that user visited before is in the redirect param
@@ -132,13 +136,14 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = (new UserFixture())->records[1];
-        $userRow['status'] = UserStatus::Unverified;
-        $this->insertFixture('user', $userRow);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
-        $redirectLocation = $this->urlFor('user-list');
+        $redirectLocation = $this->urlFor('user-list-page');
         $queryParams = [
             // Test redirect at the same time
             'redirect' => $redirectLocation,
@@ -154,7 +159,7 @@ class RegisterVerifyActionTest extends TestCase
         // Assert that client is redirected to register page with the redirect GET param
         // because he/she has to register again to get a new token
         self::assertSame(
-            $this->urlFor('register-page', [], ['redirect' => $redirectLocation]),
+            $this->urlFor('login-page', [], ['redirect' => $redirectLocation]),
             $response->getHeaderLine('Location')
         );
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
@@ -166,7 +171,7 @@ class RegisterVerifyActionTest extends TestCase
         );
 
         // Assert that status is still unverified on user
-        $this->assertTableRowValue(UserStatus::Unverified, 'user', $userRow['id'], 'status');
+        $this->assertTableRowValue(UserStatus::Unverified->value, 'user', $userRow['id'], 'status');
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is not set

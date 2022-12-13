@@ -7,7 +7,7 @@ use App\Domain\User\Enum\UserActivity;
 class UserActivityData
 {
     public ?int $id;
-    public ?int $user_id;
+    public ?int $user_id; // Has to be nullable when user id is unknown
     public ?UserActivity $action;
     public ?string $table;
     public ?int $row_id;
