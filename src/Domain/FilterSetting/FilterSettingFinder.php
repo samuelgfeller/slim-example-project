@@ -10,7 +10,7 @@ class FilterSettingFinder
 {
     public function __construct(
         private readonly UserFilterHandlerRepository $userFilterHandlerRepository,
-        private readonly FilterSettingSetter $filterSettingSetter,
+        private readonly FilterSettingSaver $filterSettingSaver,
         private readonly SessionInterface $session,
     ) {
     }
@@ -29,7 +29,7 @@ class FilterSettingFinder
      */
     public function getActiveAndInactiveFilters(array $allAvailableFilters, FilterModule $filterModule): array
     {
-        $returnArray['active'] = [];
+        $returnArray = ['active' => [], 'inactive' => []];
         // Check which filters are active in session
         if (($activeFilters = $this->findFiltersFromAuthenticatedUser($filterModule)) !== null) {
             foreach ($activeFilters as $activeFilterId) {
@@ -43,7 +43,7 @@ class FilterSettingFinder
             }
         }
         // Add active filters to database (refresh in case there was an old filters that don't exist anymore)
-        $this->filterSettingSetter->setFilterSettingForAuthenticatedUser(
+        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
             array_keys($returnArray['active']),
             $filterModule
         );

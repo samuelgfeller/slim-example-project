@@ -56,7 +56,6 @@ final class UserReadPageAction
                 'user' => $this->userFinder->findUserReadResult($userId),
                 'isOwnProfile' => $userId === $authenticatedUserId,
                 'userStatuses' => UserStatus::cases(),
-                'userActivities' => $this->userActivityManager->findUserActivityReport($userId),
             ]);
         } catch (ForbiddenException $forbiddenException) {
             throw new HttpForbiddenException($request, $forbiddenException->getMessage());

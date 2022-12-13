@@ -32,13 +32,16 @@ class UserActivityRepository
      * Return user with given id if it exists
      * otherwise null
      *
-     * @param int $userId
+     * @param int|array $userIds
      * @return UserActivityData[]
      */
-    public function findUserActivities(int $userId): array
+    public function findUserActivities(int|array $userIds): array
     {
+        if ($userIds === []){
+            return [];
+        }
         $query = $this->queryFactory->newQuery()->select('*')->from('user_activity')->where(
-            ['user_id' => $userId]
+            ['user_id IN' => $userIds]
         )->orderDesc('datetime');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         return $this->hydrator->hydrate($resultRows, UserActivityData::class);

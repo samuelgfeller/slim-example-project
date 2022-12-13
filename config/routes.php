@@ -74,7 +74,7 @@ return function (App $app) {
         ->get('/dropdown-options', \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class)
             ->setName('user-list-dropdown');
 
-        $group->get('/activity[/{user_id:[0-9]+}]', \App\Application\Actions\User\Ajax\ListUserActivityAction::class)
+        $group->get('/activity', \App\Application\Actions\User\Ajax\ListUserActivityAction::class)
             ->setName('user-get-activity');
 
         $group->post('', \App\Application\Actions\User\Ajax\UserSubmitCreateAction::class)

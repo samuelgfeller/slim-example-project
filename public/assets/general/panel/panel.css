@@ -82,6 +82,7 @@
     /*Collapsed panel*/
     .panel-container.collapsed .panel-content {
         max-height: 0;
+        min-height: 0 !important; /*Important otherwise user activity panel that has a min-height doesn't get overridden*/
         /*Remove padding that was inside so that its fully collapsed*/
         padding: 0;
     }

@@ -321,9 +321,11 @@ class UserAuthorizationChecker
 
             $userToReadRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($userIdToRead);
 
-            // Only managing advisor are allowed to see users activity but only if target user role is not higher than advisor
+            // Only managing advisor are allowed to see users activity but only if target user role is not higher than also managing advisor
             if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
-                && $userToReadRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
+                && $userToReadRoleData->hierarchy >= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value])
+                // or authenticated user is admin
+                || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value]
                 // or user wants to view his own activity
                 || $loggedInUserId === $userIdToRead) {
                 return true;

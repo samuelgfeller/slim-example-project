@@ -6,7 +6,7 @@ use App\Domain\Authorization\AuthorizationChecker;
 use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
-use App\Domain\User\Enum\UserRole;
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Service\UserNameAbbreviator;
 use App\Infrastructure\User\UserFinderRepository;
 use Odan\Session\SessionInterface;
@@ -19,6 +19,7 @@ class UserFilterChipProvider
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly UserFinderRepository $userFinderRepository,
         private readonly AuthorizationChecker $authorizationChecker,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
     ) {
     }
 
@@ -34,9 +35,11 @@ class UserFilterChipProvider
         foreach ($filters['active'] as $filterCategory => $filtersInCategory) {
             /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) {
-                $activeFilterChips .= "<span data-filter-id='$filterId' data-param-name='$filterData->paramName'
+                $activeFilterChips .= "<div class='filter-chip filter-chip-active'>\n
+                               <span data-filter-id='$filterId' data-param-name='$filterData->paramName'
                               data-param-value='$filterData->paramValue'
-                              data-category='$filterData->category'>$filterData->name</span>\n";
+                              data-category='$filterData->category'>$filterData->name</span>\n
+                              </div>";
             }
         }
         $inactiveFilterChips = '';
@@ -74,7 +77,7 @@ class UserFilterChipProvider
     public function getActiveAndInactiveUserFilters(): array
     {
         return $this->filterSettingFinder->getActiveAndInactiveFilters(
-            $this->getUserFilters(),
+            $this->getUserActivityFilters(),
             FilterModule::DASHBOARD_USER_ACTIVITY
         );
     }
@@ -84,7 +87,7 @@ class UserFilterChipProvider
      *
      * @return FilterData[]
      */
-    private function getUserFilters(): array
+    private function getUserActivityFilters(): array
     {
         $loggedInUserId = $this->session->get('user_id');
 
@@ -93,14 +96,14 @@ class UserFilterChipProvider
         );
         $userFilters = [];
         foreach ($abbreviatedUserNames as $userId => $abbreviatedUserName) {
-// All users except authenticated user as there is already a filter "Assigned to me"
+            // All users except authenticated user as the own activity is not that pertinent
             if ($userId !== $loggedInUserId) {
                 $userFilters["user_$userId"] = new FilterData([
                     'name' => $abbreviatedUserName,
                     'paramName' => "user",
                     'paramValue' => $userId,
                     'category' => null,
-                    'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER)
+                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity($userId),
                 ]);
             }
         }

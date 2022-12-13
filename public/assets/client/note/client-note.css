@@ -81,7 +81,7 @@
     }
 
     .hidden-note-message {
-        color: transparent;
+        color: transparent !important; /*Important otherwise overridden by main * color*/
         text-shadow: 0 0 7px rgb(0 0 0 / 50%);
         cursor: default;
         user-select: none;

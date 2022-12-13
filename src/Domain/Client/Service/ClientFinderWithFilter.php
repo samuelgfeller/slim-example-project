@@ -8,7 +8,7 @@ use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\FilterSetting\FilterModule;
-use App\Domain\FilterSetting\FilterSettingSetter;
+use App\Domain\FilterSetting\FilterSettingSaver;
 
 class ClientFinderWithFilter
 {
@@ -16,7 +16,7 @@ class ClientFinderWithFilter
         private readonly ClientFinder $clientFinder,
         private readonly ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly FilterSettingSetter $filterSettingHandler,
+        private readonly FilterSettingSaver $filterSettingSaver,
     ) {
     }
 
@@ -85,7 +85,7 @@ class ClientFinderWithFilter
         // Other filters here
 
         // Insert filter ids into db
-        $this->filterSettingHandler->setFilterSettingForAuthenticatedUser(
+        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
             $params['filterIds'] ?? null,
             FilterModule::CLIENT_LIST
         );

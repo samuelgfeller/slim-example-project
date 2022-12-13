@@ -1,6 +1,5 @@
 import {displayServerSideFlashMessages} from "./requestUtil/flash-message.js?v=0.1";
 import {initAutoResizingTextareas} from "./pageComponents/auto-resizing-textarea.js?v=0.1";
-import {initCollapsible} from "./pageComponents/collapsible.js?v=0.1";
 import {scrollToAnchor} from "./page/scroll-to-anchor.js?v=0.1";
 import {countDownThrottleTimer} from "../../authentication/throttle-timer.js?v=0.1";
 
@@ -29,8 +28,12 @@ window.addEventListener("load", function (event) {
     /** Throttle time countdown */
     countDownThrottleTimer();
 
-    /** Init collapsible */
-    initCollapsible();
+    /** Init collapsible should NOT be called in default; only when used as it breaks
+     * user-read activity panel collapsible as event listeners are registered twice for some reason
+     * even if I make a non-anonymous event handler and remove the event listener first
+     * Note: that happens only if initCollapsible() is called the first time from default.js and not if
+     * another place called initCollapsible before*/
+    // initCollapsible();
 
     /** Scroll to anchor if there are some in url */
     scrollToAnchor();

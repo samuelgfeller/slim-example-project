@@ -135,8 +135,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <?php
         } ?>
     </div>
-    <?php
-    if ($userActivities !== []) { ?>
+
         <div id="user-activity-container">
             <div id="user-activity-header">
                 <h2>User activity</h2>
@@ -145,6 +144,4 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
 
             </div>
         </div>
-        <?php
-    } ?>
 </div>

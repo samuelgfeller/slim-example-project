@@ -7,6 +7,9 @@ export function initFilterChipEventListeners(chipClickEventHandler) {
     // Button to open available filter chip collection
     addFilterBtn.addEventListener('click', toggleAvailableFilterDiv);
 
+    // Show no more filter span if there are none on initialisation
+    toggleNoMoreFilters();
+
     // Get active and inactive filter chips
     let filterChips = document.querySelectorAll('.filter-chip');
     for (let filterChip of filterChips) {
@@ -93,7 +96,7 @@ function toggleNoMoreFilters() {
         noMoreFilterSpan.style.display = 'none';
     } else {
         noMoreFilterSpan.style.display = 'inline-block';
-        // Hide available filters
-        toggleAvailableFilterDiv();
+        // Hide available filters if not already hidden
+        toggleAvailableFilterDiv(true);
     }
 }

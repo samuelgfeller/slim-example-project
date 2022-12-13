@@ -72,11 +72,11 @@ class DashboardPanelProvider
             new DashboardData([
                 'title' => 'User activity',
                 'panelId' => "user-activity-panel",
-                'panelClass' => 'user-panel',
+                'panelClass' => null,
                 'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
-                    '<div class="user-wrapper" id="user-activity-wrapper"></div>',
+                    '<div id="user-activity-content"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
-                    UserRole::MANAGING_ADVISOR
+                    UserRole::NEWCOMER
                 ),
             ]),
         ];

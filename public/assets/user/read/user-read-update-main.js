@@ -9,7 +9,7 @@ import {loadUserActivities} from "./user-activity/activity-main.js?v=0.1";
 
 const userId = document.getElementById('user-id').value;
 
-loadUserActivities(userId);
+loadUserActivities(`user=${userId}`);
 
 // Null safe operator as edit icon doesn't exist if not privileged
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);

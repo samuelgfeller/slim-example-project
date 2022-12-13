@@ -1,8 +1,7 @@
 import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
 import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
-import {loadUserList} from "../user/list/user-list-loading.js?v=0.1";
 import {initFilterChipEventListeners} from "../general/js/filter-chip.js?v=0.1";
-import {loadUserActivities} from "../user/read/user-activity/activity-main.js";
+import {loadUserActivities} from "../user/read/user-activity/activity-main.js?v=0.1";
 
 // Add toggle open - close event listeners
 const toggleIcons = document.getElementsByClassName('toggle-panel-icon');
@@ -66,23 +65,26 @@ for (const notePanel of notesPanels) {
     fetchAndLoadClientNotes(noteFilterParam, notePanel.querySelector('.client-note-wrapper').id);
 }
 
-// Load users in users panel
-const userPanel = document.getElementById('user-activity-panel');
-let noteFilterParam = new URLSearchParams();
-const paramsData = panel.querySelectorAll('data');
-for (const paramData of paramsData) {
-    noteFilterParam.append(paramData.dataset.paramName, paramData.dataset.paramValue);
-}
-
 // User activity panel
+const userPanel = document.getElementById('user-activity-panel');
 
 
-loadUserActivities();
 // Pass var to user to event handler function https://stackoverflow.com/a/45696430/9013718
-let curriedLoadUserFunction = () => {
-    return loadUserList(userWrapperId);
+let curriedLoadUserActivityFunction = () => {
+    let userActivityFilterParam = new URLSearchParams();
+    const paramsData = userPanel.querySelectorAll('.filter-chip-active span');
+    for (const paramData of paramsData) {
+        // Add [] to param name so that its
+        userActivityFilterParam.append(paramData.dataset.paramName + '[]', paramData.dataset.paramValue);
+        // Add filter id to filterIds param
+        userActivityFilterParam.append('filterIds[]', paramData.dataset.filterId);
+    }
+    // submitUpdate(userActivityFilterParam, 'dashboard-user-activity-filter-setting').then(r => {});
+    return loadUserActivities(userActivityFilterParam.toString(), true);
 }
-initFilterChipEventListeners(curriedLoadUserFunction);
+curriedLoadUserActivityFunction();
+
+initFilterChipEventListeners(curriedLoadUserActivityFunction);
 
 
 

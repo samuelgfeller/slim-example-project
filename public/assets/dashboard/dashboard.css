@@ -52,6 +52,11 @@
     .textarea-label a:hover{
         background: none;
     }
+
+    /*User activity panel*/
+    #user-activity-panel .panel-content{
+        min-height: 200px;
+    }
 }
 
 

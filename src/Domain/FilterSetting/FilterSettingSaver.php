@@ -5,7 +5,7 @@ namespace App\Domain\FilterSetting;
 use App\Infrastructure\UserFilterSetting\UserFilterHandlerRepository;
 use Odan\Session\SessionInterface;
 
-class FilterSettingSetter
+class FilterSettingSaver
 {
     public function __construct(
         private readonly SessionInterface $session,
@@ -21,7 +21,7 @@ class FilterSettingSetter
      * @param FilterModule $userFilterModule
      * @return void
      */
-    public function setFilterSettingForAuthenticatedUser(
+    public function saveFilterSettingForAuthenticatedUser(
         ?array $filters,
         FilterModule $userFilterModule
     ): void {
