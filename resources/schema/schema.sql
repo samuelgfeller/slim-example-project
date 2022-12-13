@@ -26,13 +26,13 @@ create table `user`
 -- User token verification used for email validation at registration AND for password reset
 CREATE TABLE `user_verification`
 (
-    `id`         INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+    `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`    INT unsigned NOT NULL,
-    `token`      VARCHAR(300)     NOT NULL COLLATE utf8mb4_unicode_ci,
-    `expires_at` BIGINT(20)       NOT NULL,
-    `used_at`    DATETIME         NULL DEFAULT NULL,
-    `created_at` DATETIME         NULL DEFAULT current_timestamp(),
-    `deleted_at` DATETIME         NULL DEFAULT NULL,
+    `token`      VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,
+    `expires_at` BIGINT(20)   NOT NULL,
+    `used_at`    DATETIME     NULL DEFAULT NULL,
+    `created_at` DATETIME     NULL DEFAULT current_timestamp(),
+    `deleted_at` DATETIME     NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT FK__user_issuer FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) COLLATE = utf8mb4_unicode_ci
@@ -97,8 +97,8 @@ create table client
     sex              enum ('M', 'F', 'O')                          null,
     client_message   varchar(1000)                                 null comment 'Message that client submitted via webform',
     vigilance_level  enum ('moderate', 'caution', 'extra_caution') null,
-    user_id          int                                           null,
-    client_status_id int                                           null,
+    user_id          int unsigned                                  null,
+    client_status_id int unsigned                                  null,
     assigned_at      datetime                                      null comment 'date at which user_id was set',
     updated_at       datetime default current_timestamp()          not null on update current_timestamp(),
     created_at       datetime default current_timestamp()          not null,
@@ -111,8 +111,6 @@ create table client
     engine = InnoDB
     charset = utf8mb4
     comment 'Advisors help and consult clients';
-
-
 
 
 

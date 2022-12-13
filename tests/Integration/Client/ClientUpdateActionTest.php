@@ -107,16 +107,22 @@ class ClientUpdateActionTest extends TestCase
             // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
             // Check that data in request body was changed
             $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
+            // Get client row from db to have the assigned_at timestamp to assert user activity entry json data
+            $clientRow = $this->findTableRowById('client', $clientRow['id']);
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
                     'action' => UserActivity::UPDATED->value,
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
-                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
+                    'data' => json_encode(
+                    // Add the missing "assigned_at" that is added while updating the client with a current timestamp
+                        array_merge($requestData, ['assigned_at' => $clientRow['assigned_at']]),
+                        JSON_THROW_ON_ERROR
+                    ),
                 ],
                 'user_activity',
-                (int)$this->findLastInsertedTableRow('user_activity')['id']
+                (int)$this->findLastInsertedTableRow('user_activity')['id'],
             );
         } else {
             // If db is not expected to change, data should remain the same as when it was inserted from the fixture

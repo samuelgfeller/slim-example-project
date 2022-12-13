@@ -80,7 +80,7 @@ class ClientData
             'email' => $this->email,
             'sex' => $this->sex,
             'client_message' => $this->clientMessage,
-            'vigilance_level' => $this->vigilanceLevel->value,
+            'vigilance_level' => $this->vigilanceLevel?->value,
             'user_id' => $this->userId,
             'client_status_id' => $this->clientStatusId,
         ];

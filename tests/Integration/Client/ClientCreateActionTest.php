@@ -69,6 +69,7 @@ class ClientCreateActionTest extends TestCase
             'email' => 'new-user@email.com',
             'sex' => 'M',
             'client_message' => null,
+            'vigilance_level' => null,
             'user_id' => $userLinkedToClientRow['id'],
             'client_status_id' => $clientStatusId,
             'message' => 'Test main note.',
