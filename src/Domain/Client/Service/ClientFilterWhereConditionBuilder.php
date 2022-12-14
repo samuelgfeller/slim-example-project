@@ -3,8 +3,6 @@
 namespace App\Domain\Client\Service;
 
 use App\Infrastructure\Factory\QueryFactory;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Query;
 
 class ClientFilterWhereConditionBuilder
 {
@@ -31,25 +29,40 @@ class ClientFilterWhereConditionBuilder
         $queryBuilderWhereArray = [];
         // Name is a special case in the filtering
         if (isset($filterParams['name'])) {
+            $namePartsConditions = [];
+            if (str_contains($filterParams['name'], ' ')) {
+                $nameParts = explode(' ', $filterParams['name'], 2);
+                // Check if name part are from first name or last name
+                $namePartsConditions['OR'] = [
+                    [
+                        [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[0] . '%'],
+                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[1] . '%']
+                    ],
+                    [
+                        [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[1] . '%'],
+                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[0] . '%']
+                    ]
+                ];
+            }
             $query = $this->queryFactory->newQuery();
             // Name is always an AND condition
-            $c = $query->func()->concat(['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']);
-            $firstAndLastNameConcat = $query->where(
-                function (QueryExpression $exp, Query $query) use ($filterParams) {
-                    return $exp->like(
-                        $query->func()->concat(
-                            [$query->identifier('first_name'), ' ', $query->identifier('last_name')],
-                            ['string', 'string', 'string']
-                        ),
-                        '%' . $filterParams['name'] . '%',
-                        'string'
-                    );
-                }
+            $firstAndLastNameConcat = $query->newExpr()->like(
+                $query->func()->concat(
+                    [
+                        $query->identifier($this->columnPrefix . 'first_name'),
+                        ' ',
+                        $query->identifier($this->columnPrefix . 'last_name')
+                    ],
+                    ['string', 'string', 'string']
+                ),
+                '%' . $filterParams['name'] . '%',
+                'string'
             );
             $queryBuilderWhereArray[]['OR'] = [
                 [$this->columnPrefix . 'first_name LIKE' => '%' . $filterParams['name'] . '%'],
                 [$this->columnPrefix . 'last_name LIKE' => '%' . $filterParams['name'] . '%'],
-                // $firstAndLastNameConcat
+                $firstAndLastNameConcat,
+                $namePartsConditions
             ];
             unset($filterParams['name']);
         }
