@@ -11,10 +11,10 @@ $this->setLayout('layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/css/form.css',
-    'assets/general/css/plus-button.css',
-    'assets/general/css/modal/form-modal.css',
-    'assets/general/css/content-placeholder.css',
+    'assets/general/page-component/form/form.css',
+    'assets/general/page-component/button/plus-button.css',
+    'assets/general/page-component/modal/form-modal.css',
+    'assets/general/page-component/content-placeholder/content-placeholder.css',
     'assets/user/list/user-list-content-placeholder.css',
     'assets/user/list/user-list.css',
     // post.css has to come last to overwrite other styles

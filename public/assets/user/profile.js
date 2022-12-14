@@ -1,6 +1,6 @@
 // First name
-import {createAlertModal} from "../general/js/modal/alert-modal.js?v=0.1";
-import {handleFail} from "../general/js/requestUtil/fail-handler.js?v=0.1";
+import {createAlertModal} from "../general/page-component/modal/alert-modal.js?v=0.1";
+import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.1";
 
 let firstNameEditIco = document.getElementById('edit-first-name-ico');
 firstNameEditIco.addEventListener('click', function () {

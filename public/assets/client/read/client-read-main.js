@@ -1,10 +1,10 @@
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.1";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.1";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.1";
-import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
-import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
-import {submitDelete} from "../../general/js/request/submit-delete-request.js?v=0.1";
-import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
+import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.1";
+import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.1";
+import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.1";
 import {fetchAndLoadClientNotes} from "../note/client-read-note-loading.js?v=0.1";
 import {addNewNoteTextarea} from "../note/client-read-create-note.js?v=0.1";
 

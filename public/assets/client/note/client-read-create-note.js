@@ -1,4 +1,4 @@
-import {basePath} from "../../general/js/config.js?v=0.1";
+import {basePath} from "../../general/general-js/config.js?v=0.1";
 import {
     addDeleteNoteBtnEventListener,
     addHideNoteBtnEventListener,
@@ -6,8 +6,8 @@ import {
     hideCheckmarkLoader,
     toggleReadOnlyAndBtnAboveNote
 } from "./client-read-note-event-listener-setup.js?v=0.1";
-import {handleFail, removeValidationErrorMessages} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
-import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
+import {handleFail, removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.1";
+import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.1";
 
 let noteCreationHideCheckMarkTimeout = [];
 
@@ -37,9 +37,9 @@ export function addNewNoteTextarea() {
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note" class="bigger-select-label textarea-label" data-note-id="">
                        <a class="note-left-side-label no-style-a"></a>
-                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg"
+                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg"
                        style="display: none">
-                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg" 
+                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg" 
                        style="display: none">
                        <span
                             class="discrete-text note-right-side-label-span"></span></label>

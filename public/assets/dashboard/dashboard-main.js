@@ -1,8 +1,8 @@
 import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
 import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
-import {initFilterChipEventListeners} from "../general/js/filter-chip.js?v=0.1";
+import {initFilterChipEventListeners} from "../general/page-component/filter-chip/filter-chip.js?v=0.1";
 import {loadUserActivities} from "../user/read/user-activity/activity-main.js?v=0.1";
-import {submitUpdate} from "../general/js/request/submit-update-data.js?v=0.1";
+import {submitUpdate} from "../general/ajax/submit-update-data.js?v=0.1";
 
 // Toggle enable / disable panel
 const panelToggleButtons = document.getElementsByClassName('dashboard-panel-toggle-btn');
@@ -101,7 +101,6 @@ for (const notePanel of notesPanels) {
 
 // User activity panel
 const userPanel = document.getElementById('user-activity-panel');
-
 if (userPanel) {
 // Pass var to user to event handler function https://stackoverflow.com/a/45696430/9013718
     let curriedLoadUserActivityFunction = () => {

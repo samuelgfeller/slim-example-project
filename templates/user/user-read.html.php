@@ -17,11 +17,11 @@ $this->setLayout('layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/css/form.css',
-    'assets/general/css/modal/alert-modal.css',
-    'assets/general/css/modal/form-modal.css',
+    'assets/general/page-component/form/form.css',
+    'assets/general/page-component/modal/alert-modal.css',
+    'assets/general/page-component/modal/form-modal.css',
     // profile.css has to come last to overwrite other styles
-    'assets/general/css/contenteditable.css',
+    'assets/general/page-component/contenteditable/contenteditable.css',
     'assets/user/user.css',
 ]);
 
@@ -38,7 +38,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                 <?php
                 if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                     <!-- Img has to be before title because we are only able to style next sibling in css -->
-                    <img src="assets/general/img/material-edit-icon.svg"
+                    <img src="assets/general/general-img/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
                          id="edit-first-name-btn">
@@ -50,7 +50,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
                 <?php
                 if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                    <img src="assets/general/img/material-edit-icon.svg"
+                    <img src="assets/general/general-img/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
                          id="edit-last-name-btn">
@@ -99,7 +99,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
         <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-email-btn">
                 <?php
@@ -129,7 +129,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
         <?php
         if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
             <button class="btn" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
-                <img class="icon-btn" src="assets/general/img/action/trash-icon.svg" alt="">
+                <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
                 Delete <?= $isOwnProfile ? 'profile' : 'user' ?>
             </button>
             <?php

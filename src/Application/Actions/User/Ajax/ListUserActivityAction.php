@@ -22,7 +22,6 @@ class ListUserActivityAction
     public function __construct(
         private readonly Responder $responder,
         private readonly UserActivityFinder $userActivityFinder,
-        private readonly SessionInterface $session,
         private readonly FilterSettingSaver $filterSettingSaver,
     ) {
     }
@@ -48,13 +47,11 @@ class ListUserActivityAction
 
         $userResultDataArray = $this->userActivityFinder->findUserActivityReport($userIds);
 
-        // If filter ids are provided they have to be saved too
-        if (isset($queryParams['filterIds'])) {
-            $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
-                $queryParams['filterIds'] ?? null,
-                FilterModule::DASHBOARD_USER_ACTIVITY
-            );
-        }
+        // Filter ids have to be saved too
+        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
+            $queryParams['filterIds'] ?? null,
+            FilterModule::DASHBOARD_USER_ACTIVITY
+        );
 
         return $this->responder->respondWithJson($response, $userResultDataArray);
     }

@@ -1,8 +1,8 @@
 import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.1";
 import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.1";
 import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.1";
-import {createAlertModal} from "../../general/js/modal/alert-modal.js?v=0.1";
-import {submitUpdate} from "../../general/js/request/submit-update-data.js?v=0.1";
+import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.1";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is
@@ -182,13 +182,13 @@ export function addHideNoteBtnEventListener(btn) {
                 if (document.activeElement !== noteContainer.querySelector('textarea')) {
                     btn.style.display = null;
                 }
-                btn.src = 'assets/general/img/eye-icon.svg';
+                btn.src = 'assets/general/general-img/eye-icon.svg';
             } else {
                 // If note not already hidden, it has to be changed to 1
                 newHiddenValue = 1;
                 btn.style.display = 'inline-block';
                 noteContainer.classList.add('hidden-note');
-                btn.src = 'assets/general/img/eye-icon-active.svg';
+                btn.src = 'assets/general/general-img/eye-icon-active.svg';
             }
         }
         // Toggle eye icon as soon as user clicks even before request

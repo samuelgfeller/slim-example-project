@@ -3,10 +3,10 @@ import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
 } from "./client-read-note-loading-placeholder.js?v=0.1";
-import {fetchData} from "../../general/js/request/fetch-data.js?v=0.1";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=0.1";
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.1";
-import {initAutoResizingTextareas} from "../../general/js/pageComponents/auto-resizing-textarea.js?v=0.1";
-import {scrollToAnchor} from "../../general/js/page/scroll-to-anchor.js?v=0.1";
+import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.1";
+import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.1";
 
 /**
  * Loading notes into dom

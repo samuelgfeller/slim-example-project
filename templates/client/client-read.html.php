@@ -15,12 +15,12 @@ $this->setLayout('layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/css/form.css',
-    'assets/general/css/modal/alert-modal.css',
-    'assets/general/css/loader/animated-checkmark.css',
-    'assets/general/css/plus-button.css',
-    'assets/general/css/content-placeholder.css',
-    'assets/general/css/contenteditable.css',
+    'assets/general/page-component/form/form.css',
+    'assets/general/page-component/modal/alert-modal.css',
+    'assets/general/page-component/loader/animated-checkmark.css',
+    'assets/general/page-component/button/plus-button.css',
+    'assets/general/page-component/content-placeholder/content-placeholder.css',
+    'assets/general/page-component/contenteditable/contenteditable.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/note/client-note.css',
     'assets/client/read/client-read.css',
@@ -39,7 +39,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <!-- Img has to be before title because we are only able to style next sibling in css -->
-                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-first-name-btn">
                 <?php
@@ -50,7 +50,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                <img src="assets/general/img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-last-name-btn">
                 <?php
@@ -128,19 +128,19 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div id="client-personal-info-flex-container" style="<?= $clientAggregate->birthdate || $clientAggregate->sex ||
         $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
             <!-- Toggle edit icons on mobile -->
-            <img src="assets/general/img/material-edit-icon.svg"
+            <img src="assets/general/general-img/material-edit-icon.svg"
                  class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                  id="toggle-personal-info-edit-icons">
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
+                <img src="assets/general/general-img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-birthdate-btn">
                         <?php
@@ -160,13 +160,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             </div>
             <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-sex-btn">
                         <select name="sex" class="default-select" id="sex-select">
@@ -189,14 +189,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
                id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon"
+                <img src="assets/general/general-img/personal-data-icons/location-icon.svg" class="personal-info-icon"
                      alt="location">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
                         <?php
@@ -208,13 +208,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
+                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
                         <?php
@@ -226,13 +226,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
                 <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
                         <?php
@@ -245,14 +245,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             </a>
             <div id="vigilance_level-container" style="<?= $clientAggregate->vigilanceLevel ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
+                <img src="assets/general/general-img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
                      alt="vigilance_level">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
                     if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                        <img src="assets/general/img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-vigilance-level-btn">
                         <select name="vigilance_level" class="default-select" id="vigilance-level-select">
@@ -277,25 +277,25 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <?php
         if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
             <div id="add-client-personal-info-div">
-                <img src="assets/general/img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
+                <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons" alt="add info">
 
                 <!-- Delete trash icon stays always there -->
                 <?= $clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::DELETE) ?
-                    ($clientAggregate->deletedAt ? '<img src="assets/general/img/action/undelete-icon.svg" 
+                    ($clientAggregate->deletedAt ? '<img src="assets/general/general-img/action/undelete-icon.svg" 
                     class="personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
-                        '<img src="assets/general/img/action/trash-icon.svg" class="personal-info-icon permanently-in-available-icon-div" 
+                        '<img src="assets/general/general-img/action/trash-icon.svg" class="personal-info-icon permanently-in-available-icon-div" 
                         id="delete-client-btn" alt="delete">') : '' ?>
 
                 <!-- alt has to be exactly the same as the field name.
                 The field container id has to be "[alt]-container".
                 The edit icon image in the existing container has to have the same alt as the name as well. -->
-                <img src="assets/general/img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-                <img src="assets/general/img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
-                <img src="assets/general/img/personal-data-icons/location-icon.svg" class="personal-info-icon"
+                <img src="assets/general/general-img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
+                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/general-img/personal-data-icons/location-icon.svg" class="personal-info-icon"
                      alt="location">
-                <img src="assets/general/img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
-                <img src="assets/general/img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
-                <img src="assets/general/img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
+                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
+                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/general-img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
                      alt="vigilance_level">
             </div>
             <?php

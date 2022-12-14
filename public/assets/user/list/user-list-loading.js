@@ -2,16 +2,16 @@ import {
     displayUserCardLoadingPlaceholder,
     removeUserCardContentPlaceholder
 } from "./user-list-content-placeholder.js?v=0.1";
-import {fetchData} from "../../general/js/request/fetch-data.js?v=0.1";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=0.1";
 import {addUsersToDom} from "./user-list-card-dom-appending.js?v=0.1";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
-} from "../../general/js/eventHandler/open-link-on-html-element.js?v=0.1";
+} from "../../general/event-handler/open-link-on-html-element.js?v=0.1";
 import {
     triggerClickOnHtmlElementEnterKeypress
-} from "../../general/js/eventHandler/trigger-click-on-enter-keypress.js?v=0.1";
-import {submitFieldChangeWithFlash} from "../../general/js/request/submit-field-change-with-flash.js?v=0.1";
+} from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.1";
+import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.1";
 
 /**
  * Load user list into DOM

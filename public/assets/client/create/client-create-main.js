@@ -1,7 +1,7 @@
 import {displayClientCreateModal} from "./client-create-modal.html.js?v=0.1";
-import {submitModalForm} from "../../general/js/modal/modal-submit-request.js?v=0.1";
-import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
-import {displayValidationErrorMessage} from "../../general/js/validation/form-validation.js?v=0.1";
+import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.1";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.1";
+import {displayValidationErrorMessage} from "../../general/validation/form-validation.js?v=0.1";
 import {fetchAndLoadClients} from "../list/client-list-loading.js?v=0.1";
 
 // Init event listeners if button is present

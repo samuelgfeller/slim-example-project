@@ -1,7 +1,7 @@
-import {createModal} from "../../general/js/modal/modal.js?v=0.1";
-import {requestDropdownOptions} from "../../general/js/modal/dropdown-request.js?v=0.1";
-import {getDropdownAsHtmlOptions} from "../../general/js/template/template-util.js?v=0.1";
-import {displayFlashMessage} from "../../general/js/requestUtil/flash-message.js?v=0.1";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.1";
+import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.1";
+import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.1";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.1";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.1";
 
 /**

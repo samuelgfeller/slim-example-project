@@ -220,7 +220,7 @@ class DefaultErrorHandler
         }
         $error .= '</table></div>'; // close table
         $error .= '<style>
-            @font-face { font-family: CenturyGothic; src: url(assets/general/fonts/CenturyGothic.ttf); }
+            @font-face { font-family: CenturyGothic; src: url(assets/general/general-font/CenturyGothic.ttf); }
             * { white-space: break-spaces; overflow-wrap: anywhere; }
             body { margin: 0; background: #ffd9d0; font-family: "CenturyGothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
             body.warning { background: #ffead0; }

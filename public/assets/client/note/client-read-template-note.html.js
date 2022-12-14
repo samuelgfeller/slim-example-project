@@ -1,4 +1,4 @@
-import {escapeHtml} from "../../general/js/functions.js?v=0.1";
+import {escapeHtml} from "../../general/general-js/functions.js?v=0.1";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
@@ -15,11 +15,11 @@ export function getNoteHtml(note) {
                     ${/*Show active eye icon if hidden*/ hidden === 1 || hidden === '1' ? `<img 
                         class="btn-above-note hide-note-btn ${userHasPrivilegeTo(privilege, 'U') ? `` : `
                             not-clickable` /*Add not clickable class when not allowed to update*/}" alt="hide" 
-                        style="display: inline-block" src="assets/general/img/eye-icon-active.svg"
+                        style="display: inline-block" src="assets/general/general-img/eye-icon-active.svg"
                         >` : /* Else the non-active one if allowed*/ userHasPrivilegeTo(privilege, 'U') ? `
-                        <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/img/eye-icon.svg">` : ''}
+                        <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg">` : ''}
                     ${/*Show delete button */ userHasPrivilegeTo(privilege, 'D') ? `<img 
-                        class="btn-above-note delete-note-btn" alt="delete" src="assets/general/img/del-icon.svg">` : ''}
+                        class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
                     <span class="discrete-text note-right-side-label-span">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->

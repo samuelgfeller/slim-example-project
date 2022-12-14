@@ -4,9 +4,9 @@
  * @param noteId
  * @param noteContainer
  */
-import {basePath} from "../../general/js/config.js?v=0.1";
+import {basePath} from "../../general/general-js/config.js?v=0.1";
 import {hideCheckmarkLoader} from "./client-read-note-event-listener-setup.js?v=0.1";
-import {handleFail} from "../../general/js/requestUtil/fail-handler.js?v=0.1";
+import {handleFail} from "../../general/ajax/ajax-util/fail-handler.js?v=0.1";
 
 /**
  * Make delete request to db

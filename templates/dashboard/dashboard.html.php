@@ -8,16 +8,16 @@
 
 $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
-    'assets/general/css/content-placeholder.css',
+    'assets/general/page-component/content-placeholder/content-placeholder.css',
     'assets/client/list/client-list-loading-placeholder.css',
     'assets/client/list/client-list.css', // For clients
-    'assets/general/css/contenteditable.css', // For notes
-    'assets/general/css/loader/animated-checkmark.css', // Note loader
+    'assets/general/page-component/contenteditable/contenteditable.css', // For notes
+    'assets/general/page-component/loader/animated-checkmark.css', // Note loader
     'assets/client/note/client-note.css', // Note css
-    'assets/general/css/filter-chip.css', // User
+    'assets/general/page-component/filter-chip/filter-chip.css', // User
     'assets/user/list/user-list-content-placeholder.css', // User
     'assets/user/list/user-list.css', // User
-    'assets/general/panel/panel.css',
+    'assets/general/page-component/panel/panel.css',
     'assets/dashboard/dashboard.css',
 ]);
 $this->addAttribute('jsModules', [
@@ -43,7 +43,7 @@ $this->addAttribute('jsModules', [
         <div class="panel-container <?= $dashboard->panelClass ?>" id="<?= $dashboard->panelId ?>">
             <div class="panel-header">
                 <h2><?= $dashboard->title ?></h2>
-                <img class="toggle-panel-icon" src="assets/general/img/action/arrow-icon.svg"
+                <img class="toggle-panel-icon" src="assets/general/general-img/action/arrow-icon.svg"
                      alt="toggle-open-close">
             </div>
             <div class="panel-content">

@@ -1,6 +1,6 @@
-import {fetchData} from "../../../general/js/request/fetch-data.js?v=0.1";
+import {fetchData} from "../../../general/ajax/fetch-data.js?v=0.1";
 import {getUserActivityListHtml} from "./user-activtiy-list.html.js?v=0.1";
-import {initCollapsible} from "../../../general/js/pageComponents/collapsible.js?v=0.1";
+import {initCollapsible} from "../../../general/page-component/collapsible/collapsible.js?v=0.1";
 
 
 /**
@@ -19,6 +19,6 @@ export function loadUserActivities(queryParams, multipleUsers = false) {
         container.insertAdjacentHTML('afterbegin', getUserActivityListHtml(resultJson));
         initCollapsible();
         // Pre-open first date collapsible
-        container.querySelector('.collapsible-button').click();
+        container.querySelector('.collapsible-button')?.click();
     });
 }

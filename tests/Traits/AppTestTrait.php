@@ -54,7 +54,7 @@ trait AppTestTrait
         if (method_exists($this, 'setUpDatabase')) {
             // Check that database name in config contains the word "test"
             // This is a double security check to prevent unwanted use of dev db for testing
-            if (strpos($container->get('settings')['db']['database'], 'test') === false) {
+            if (!str_contains($container->get('settings')['db']['database'], 'test')) {
                 throw new UnexpectedValueException('Test database name MUST contain the word "test"');
             }
 

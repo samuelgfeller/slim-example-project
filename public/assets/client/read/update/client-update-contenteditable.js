@@ -1,4 +1,4 @@
-import {removeValidationErrorMessages} from "../../../general/js/requestUtil/fail-handler.js?v=0.1";
+import {removeValidationErrorMessages} from "../../../general/ajax/ajax-util/fail-handler.js?v=0.1";
 import {
     addIconToAvailableDiv,
     removeIconFromAvailableDiv,
@@ -8,8 +8,8 @@ import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
-} from "../../../general/js/contenteditable/contenteditable-main.js?v=0.1";
-import {submitUpdate} from "../../../general/js/request/submit-update-data.js?v=0.1";
+} from "../../../general/page-component/contenteditable/contenteditable-main.js?v=0.1";
+import {submitUpdate} from "../../../general/ajax/submit-update-data.js?v=0.1";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */

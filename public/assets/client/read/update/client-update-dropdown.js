@@ -3,7 +3,7 @@ import {
     removeIconFromAvailableDiv,
     showPersonalInfoContainerIfHidden
 } from "../client-read-personal-info.js?v=0.1";
-import {submitUpdate} from "../../../general/js/request/submit-update-data.js?v=0.1";
+import {submitUpdate} from "../../../general/ajax/submit-update-data.js?v=0.1";
 
 /**
  * Make personal info field editable by adding a dropdown

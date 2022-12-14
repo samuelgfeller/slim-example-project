@@ -25,15 +25,15 @@ $this->setLayout('');
         'layout/assets.html.php',
         [
             'stylesheets' => [
-                'assets/general/css/flash-message.css',
-                'assets/general/css/form.css',
-                'assets/general/css/layout.css',
-                'assets/general/css/general.css',
-                'assets/general/css/default.css',
+                'assets/general/page-component/flash-message/flash-message.css',
+                'assets/general/page-component/form/form.css',
+                'assets/general/general-css/layout.css',
+                'assets/general/general-css/general.css',
+                'assets/general/general-css/default.css',
                 'assets/authentication/login.css'
             ],
             // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => ['assets/general/js/default.js', 'assets/authentication/login-main.js'],
+            'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/login-main.js'],
         ]
     );
     ?>

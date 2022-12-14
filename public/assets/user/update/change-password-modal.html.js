@@ -1,4 +1,4 @@
-import {createModal} from "../../general/js/modal/modal.js?v=0.1";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.1";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.1";
 
 /**

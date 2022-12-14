@@ -24,18 +24,18 @@
     <?php
     // Define layout assets
     $layoutCss = [
-        'assets/general/css/general.css',
-        'assets/general/css/default.css',
-        'assets/general/css/layout.css',
-        'assets/general/css/side-navbar.css',
-        'assets/general/css/flash-message.css',
+        'assets/general/general-css/general.css',
+        'assets/general/general-css/default.css',
+        'assets/general/general-css/layout.css',
+        'assets/navbar/side-navbar.css',
+        'assets/general/page-component/flash-message/flash-message.css',
     ];
     $layoutJs = [
         'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
-        'assets/general/js/navbar.js',
+        'assets/navbar/navbar.js',
     ];
     $layoutJsModules = [
-        'assets/general/js/default.js',
+        'assets/general/general-js/default.js',
     ];
 
     // fetch() includes another template into the current template
@@ -66,39 +66,39 @@
         <nav>
             <a href="<?= $route->urlFor('home-page') ?>"
                 <?= $currRouteName === 'home-page' ? 'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/gallery-tiles.svg" alt="Dashboard">
-                <img src="assets/general/img/nav/gallery-tiles-half-filled.svg" alt="Dashboard">
+                <img src="assets/navbar/img/gallery-tiles.svg" alt="Dashboard">
+                <img src="assets/navbar/img/gallery-tiles-half-filled.svg" alt="Dashboard">
                 <span class="nav-span">Dashboard</span>
             </a>
             <a href="<?= $route->urlFor('client-list-page') ?>"
                 <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
                     'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/people.svg" alt="Non-assigned">
-                <img src="assets/general/img/nav/people-filled.svg" alt="People">
+                <img src="assets/navbar/img/people.svg" alt="Non-assigned">
+                <img src="assets/navbar/img/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
             </a>
             <?php
             if ($userListAuthorization === true) { ?>
                 <a href="<?= $route->urlFor('user-list-page') ?>"
                     <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
-                    <img src="assets/general/img/nav/users.svg" alt="Users">
-                    <img src="assets/general/img/nav/users-filled.svg" alt="Users">
+                    <img src="assets/navbar/img/users.svg" alt="Users">
+                    <img src="assets/navbar/img/users-filled.svg" alt="Users">
                     <span class="nav-span">Users</span>
                 </a>
             <?php
             } else { ?>
                 <a href="<?= $route->urlFor('profile-page') ?>"
                     <?= $currRouteName === 'profile-page' ? 'class="is-active"' : '' ?>>
-                    <img src="assets/general/img/nav/user-icon.svg" alt="Profile">
-                    <img src="assets/general/img/nav/user-icon-filled.svg" alt="Profile">
+                    <img src="assets/navbar/img/user-icon.svg" alt="Profile">
+                    <img src="assets/navbar/img/user-icon-filled.svg" alt="Profile">
                     <span class="nav-span">Profile</span>
                 </a>
             <?php
             } ?>
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
-                <img src="assets/general/img/nav/logout.svg" alt="Logout">
-                <img src="assets/general/img/nav/logout-filled.svg" alt="Logout">
+                <img src="assets/navbar/img/logout.svg" alt="Logout">
+                <img src="assets/navbar/img/logout-filled.svg" alt="Logout">
                 <span class="nav-span">Logout</span>
             </a>
         </nav>
@@ -117,9 +117,9 @@
     </main>
 
     <footer>
-        <address>Made with <img src="assets/general/img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
+        <address>Made with <img src="assets/general/general-img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
                     href="https://samuel-gfeller.ch" class="no-style-a" target="_blank">
-                Samuel Gfeller <img src="assets/general/img/github-icon.svg" alt="github icon" id="github-icon"
+                Samuel Gfeller <img src="assets/general/general-img/github-icon.svg" alt="github icon" id="github-icon"
                                     class="footer-icon"></a></address>
     </footer>
 
