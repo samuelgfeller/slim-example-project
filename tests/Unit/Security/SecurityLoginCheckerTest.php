@@ -7,7 +7,6 @@ use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Infrastructure\Security\EmailRequestFinderRepository;
 use App\Infrastructure\Security\LoginRequestFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -104,15 +103,18 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheck_global(): void
     {
-        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here
-        $emptyStats = new RequestStatsData(
+        $emptyStatsData = new RequestStatsData(
             ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0]
         );
-        $requestFinderRepository->method('getIpRequestStats')->willReturn($emptyStats);
-        $requestFinderRepository->method('getUserRequestStats')->willReturn($emptyStats);
+        $emptyEmailAndIpStats = [
+            'email_stats' => $emptyStatsData,
+            'ip_stats' => $emptyStatsData,
+        ];
+        $requestFinderRepository->method('getLoginRequestStatsFromEmailAndIp')->willReturn($emptyEmailAndIpStats);
 
         // Actual test starts here
         // Login amount stats used to calculate threshold

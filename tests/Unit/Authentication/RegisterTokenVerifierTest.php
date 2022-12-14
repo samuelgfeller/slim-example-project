@@ -7,8 +7,8 @@ use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -47,13 +47,13 @@ class RegisterTokenVerifierTest extends TestCase
             'findUserVerification'
         )->willReturn($verification);
         // Return active user (empty user, only status is populated)
-        $this->mock(UserFinderRepository::class)->expects(self::once())->method('findUserById')->willReturn(
+        $this->mock(UserFinder::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be already active for exception to be thrown
             new UserData(['status' => UserStatus::Active])
         );
 
         $this->expectException(UserAlreadyVerifiedException::class);
-        $this->expectExceptionMessage('User has not status "' . UserStatus::Unverified . '"');
+        $this->expectExceptionMessage('User has not status "' . UserStatus::Unverified->value . '"');
 
         // Call function under test
         $this->container->get(RegisterTokenVerifier::class)->getUserIdIfRegisterTokenIsValid(
