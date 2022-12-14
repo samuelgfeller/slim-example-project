@@ -58,12 +58,13 @@ class UserFinder
     /**
      * @param string|int $id
      * @return UserData
+     * @throws \Exception
      */
     public function findUserById(string|int $id): UserData
     {
         // Find user in database and return object
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($this->userFinderRepository->findUserById((int)$id), true);
+        return new UserData($this->userFinderRepository->findUserById((int)$id));
     }
 
 
@@ -72,13 +73,14 @@ class UserFinder
      *
      * @param int $id
      * @return UserResultData
+     * @throws \Exception
      */
     public function findUserReadResult(int $id): UserResultData
     {
         if ($this->userAuthorizationChecker->isGrantedToRead($id)) {
             $userRow = $this->userFinderRepository->findUserById($id);
             if (!empty($userRow)) {
-                $userResultData = new UserResultData($userRow, true);
+                $userResultData = new UserResultData($userRow);
                 // Status privilege
                 $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
                     $id,

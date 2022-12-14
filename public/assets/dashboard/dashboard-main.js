@@ -102,23 +102,24 @@ for (const notePanel of notesPanels) {
 // User activity panel
 const userPanel = document.getElementById('user-activity-panel');
 
-
+if (userPanel) {
 // Pass var to user to event handler function https://stackoverflow.com/a/45696430/9013718
-let curriedLoadUserActivityFunction = () => {
-    let userActivityFilterParam = new URLSearchParams();
-    const paramsData = userPanel.querySelectorAll('.filter-chip-active span');
-    for (const paramData of paramsData) {
-        // Add [] to param name so that its
-        userActivityFilterParam.append(paramData.dataset.paramName + '[]', paramData.dataset.paramValue);
-        // Add filter id to filterIds param
-        userActivityFilterParam.append('filterIds[]', paramData.dataset.filterId);
+    let curriedLoadUserActivityFunction = () => {
+        let userActivityFilterParam = new URLSearchParams();
+        const paramsData = userPanel?.querySelectorAll('.filter-chip-active span');
+        for (const paramData of paramsData) {
+            // Add [] to param name so that its
+            userActivityFilterParam.append(paramData.dataset.paramName + '[]', paramData.dataset.paramValue);
+            // Add filter id to filterIds param
+            userActivityFilterParam.append('filterIds[]', paramData.dataset.filterId);
+        }
+        // submitUpdate(userActivityFilterParam, 'dashboard-user-activity-filter-setting').then(r => {});
+        return loadUserActivities(userActivityFilterParam.toString(), true);
     }
-    // submitUpdate(userActivityFilterParam, 'dashboard-user-activity-filter-setting').then(r => {});
-    return loadUserActivities(userActivityFilterParam.toString(), true);
-}
-curriedLoadUserActivityFunction();
+    curriedLoadUserActivityFunction();
 
-initFilterChipEventListeners(curriedLoadUserActivityFunction);
+    initFilterChipEventListeners(curriedLoadUserActivityFunction);
+}
 
 
 

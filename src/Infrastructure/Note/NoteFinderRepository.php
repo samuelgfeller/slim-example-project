@@ -6,12 +6,23 @@ namespace App\Infrastructure\Note;
 
 use App\Common\Hydrator;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Data\NoteWithUserData;
+use App\Domain\Note\Data\NoteResultData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
 class NoteFinderRepository
 {
+
+    /** Fields for queries that populate @see NoteResultData */
+    public array $noteResultFields = [
+        'id' => 'note.id',
+        'client_id' => 'note.client_id',
+        'message' => 'note.message',
+        'hidden' => 'note.hidden',
+        'updated_at' => 'note.updated_at',
+        'created_at' => 'note.created_at',
+        'user_id' => 'note.user_id',
+    ];
 
     public function __construct(
         private readonly QueryFactory $queryFactory,
@@ -22,30 +33,18 @@ class NoteFinderRepository
     /**
      * Return all notes with users attribute loaded
      *
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findAllNotesWithUsers(): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
-        $query->select(
-            [
-                'note_id' => 'note.id',
-                'client_id' => 'note.client_id',
-                'user_id' => 'user.id',
-                'note_message' => 'note.message',
-                'note_created_at' => 'note.created_at',
-                'note_updated_at' => 'note.updated_at',
-                'user_full_name' => $concatName,
-                'user_email' => 'user.email',
-                'user_role_id' => 'user.user_role_id',
-            ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
-            ['note.deleted_at IS' => null]
-        );
+        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName,]))
+            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
+            ->andWhere(['note.deleted_at IS' => null]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
-        return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
+        return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
 
     /**
@@ -68,31 +67,21 @@ class NoteFinderRepository
      * Return all notes with users attribute loaded
      *
      * @param int $id
-     * @return NoteWithUserData
+     * @return NoteResultData
+     * @throws \Exception
      */
-    public function findNoteWithUserById(int $id): NoteWithUserData
+    public function findNoteWithUserById(int $id): NoteResultData
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
 
-        $query->select(
-            [
-                'note_id' => 'note.id',
-                'client_id' => 'note.client_id',
-                'user_id' => 'user.id',
-                'note_message' => 'note.message',
-                'note_created_at' => 'note.created_at',
-                'note_updated_at' => 'note.updated_at',
-                'user_full_name' => $concatName,
-                'user_role_id' => 'user.user_role_id',
-            ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
-            ['note.id' => $id, 'note.deleted_at IS' => null]
-        );
+        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
+            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
+            ->andWhere(['note.id' => $id, 'note.deleted_at IS' => null]);
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserNote DTO
-        return new NoteWithUserData($resultRows);
+        return new NoteResultData($resultRows);
     }
 
 
@@ -120,7 +109,7 @@ class NoteFinderRepository
      * Return all notes which are linked to the given user
      *
      * @param int $userId
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findAllNotesByUserId(int $userId): array
     {
@@ -128,26 +117,16 @@ class NoteFinderRepository
 
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
 
-        $query->select(
-            [
-                'note_id' => 'note.id',
-                'client_id' => 'note.client_id',
-                'user_id' => 'user.id',
-                'note_message' => 'note.message',
-                'note_created_at' => 'note.created_at',
-                'note_updated_at' => 'note.updated_at',
-                'user_full_name' => $concatName,
-                'user_role_id' => 'user.user_role_id',
-            ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])->andWhere(
-            [
-                'note.user_id' => $userId, // Not unsafe as it's not an expression and thus escaped by querybuilder
+        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName,]))
+            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
+            ->andWhere([
+                // Not unsafe as it's not an expression and thus escaped by querybuilder
+                'note.user_id' => $userId,
                 'note.deleted_at IS' => null
-            ]
-        );
+            ]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
-        return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
+        return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
 
     /**
@@ -155,7 +134,7 @@ class NoteFinderRepository
      * from most recent to oldest EXCEPT for the main note
      *
      * @param int $clientId
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findAllNotesExceptMainWithUserByClientId(int $clientId): array
     {
@@ -163,20 +142,8 @@ class NoteFinderRepository
 
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
 
-        $query->select(
-            [
-                'note_id' => 'note.id',
-                'client_id' => 'note.client_id',
-                'note_message' => 'note.message',
-                'note_hidden' => 'note.hidden',
-                'note_updated_at' => 'note.updated_at',
-                'note_created_at' => 'note.created_at',
-                'user_id' => 'user.id',
-                'user_full_name' => $concatName,
-            ]
-        )->join([
-            'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],
-        ])
+        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName,]))
+            ->join(['user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id'],])
             ->where([
                     // Not unsafe as it's not an expression and thus escaped by querybuilder
                     'note.client_id' => $clientId,
@@ -186,44 +153,39 @@ class NoteFinderRepository
             )->orderDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
-        return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
+        return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
 
     /**
      * Return all notes which are linked to the given user
      *
      * @param int $notesAmount
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findMostRecentNotes(int $notesAmount): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
-        $concatUserName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
-        $concatClientName = $query->func()->concat(['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']);
+        $concatUserName = $query->func()->concat(
+            ['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']
+        );
+        $concatClientName = $query->func()->concat(
+            ['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']
+        );
 
         $query->select(
-            [
-                'note_id' => 'note.id',
-                'client_id' => 'note.client_id',
-                'user_id' => 'note.user_id',
-                'note_message' => 'note.message',
-                'note_hidden' => 'note.hidden',
-                'note_created_at' => 'note.created_at',
-                'note_updated_at' => 'note.updated_at',
+            array_merge($this->noteResultFields, [
                 'user_full_name' => $concatUserName,
-                'user_role_id' => 'user.user_role_id',
                 'client_full_name' => $concatClientName,
-            ]
-        )->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
-            ->leftJoin('client', ['note.client_id = client.id'])->andWhere(
-            [
-                'note.deleted_at IS' => null
-            ]
-        )->orderDesc('note.updated_at')->limit($notesAmount);
+            ])
+        )
+            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
+            ->leftJoin('client', ['note.client_id = client.id'])
+            ->andWhere(['note.deleted_at IS' => null])
+            ->orderDesc('note.updated_at')->limit($notesAmount);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
-        return $this->hydrator->hydrate($resultRows, NoteWithUserData::class);
+        return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
 
     /**
@@ -236,13 +198,8 @@ class NoteFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('client');
 
-        $query->select(
-            [
-                'amount' => $query->func()->count('n.id'),
-            ]
-        )->join([
-            'n' => ['table' => 'note', 'type' => 'LEFT', 'conditions' => 'n.client_id = client.id'],
-        ])
+        $query->select(['amount' => $query->func()->count('n.id'),])
+            ->join(['n' => ['table' => 'note', 'type' => 'LEFT', 'conditions' => 'n.client_id = client.id'],])
             ->where([
                     'client.id' => $clientId,
                     // The main note should not be counted in
@@ -251,8 +208,6 @@ class NoteFinderRepository
                 ]
             );
         // Return amount of notes
-        $amount = (int)$query->execute()->fetch('assoc')['amount'];
-        return $amount;
+        return (int)$query->execute()->fetch('assoc')['amount'];
     }
-
 }

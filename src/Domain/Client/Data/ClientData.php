@@ -3,11 +3,9 @@
 namespace App\Domain\Client\Data;
 
 
-use App\Common\ArrayReader;
-use App\Common\DateTimeImmutable;
 use App\Domain\Client\Enum\ClientVigilanceLevel;
 
-class ClientData
+class ClientData implements \JsonSerializable
 {
 
     public ?int $id;
@@ -15,7 +13,7 @@ class ClientData
     public ?string $firstName = null;
     public ?string $lastName = null;
     // DateTimeImmutable to not change original reference when modified
-    public ?DateTimeImmutable $birthdate = null;
+    public ?\DateTimeImmutable $birthdate = null;
     public ?string $location = null;
     public ?string $phone = null;
     public ?string $email = null;
@@ -25,9 +23,9 @@ class ClientData
     public ?ClientVigilanceLevel $vigilanceLevel = null;
     public ?int $userId;
     public ?int $clientStatusId;
-    public ?DateTimeImmutable $updatedAt;
-    public ?DateTimeImmutable $createdAt;
-    public ?DateTimeImmutable $deletedAt;
+    public ?\DateTimeImmutable $updatedAt;
+    public ?\DateTimeImmutable $createdAt;
+    public ?\DateTimeImmutable $deletedAt;
 
     // Not database field but here so that age doesn't have to be calculated in view
     public ?int $age = null;
@@ -35,25 +33,26 @@ class ClientData
     /**
      * Client Data constructor.
      * @param array|null $clientData
+     * @throws \Exception
      */
     public function __construct(?array $clientData = [])
     {
-        $reader = new ArrayReader($clientData);
-        $this->id = $reader->findAsInt('id');
-        $this->firstName = $reader->findAsString('first_name');
-        $this->lastName = $reader->findAsString('last_name');
-        $this->birthdate = $reader->findAsDateTimeImmutable('birthdate');
-        $this->location = $reader->findAsString('location');
-        $this->phone = $reader->findAsString('phone');
-        $this->email = $reader->findAsString('email');
-        $this->sex = $reader->findAsString('sex');
-        $this->clientMessage = $reader->findAsString('client_message');
-        $this->vigilanceLevel = $reader->findAsEnum('vigilance_level', ClientVigilanceLevel::class);
-        $this->userId = $reader->findAsInt('user_id');
-        $this->clientStatusId = $reader->findAsInt('client_status_id');
-        $this->updatedAt = $reader->findAsDateTimeImmutable('updated_at');
-        $this->createdAt = $reader->findAsDateTimeImmutable('created_at');
-        $this->deletedAt = $reader->findAsDateTimeImmutable('deleted_at');
+        $this->id = $clientData['id'] ?? null;
+        $this->firstName = $clientData['first_name'] ?? null;
+        $this->lastName = $clientData['last_name'] ?? null;
+        $this->birthdate = $clientData['birthdate'] ?? null ? new \DateTimeImmutable($clientData['birthdate']) : null;
+        $this->location = $clientData['location'] ?? null;
+        $this->phone = $clientData['phone'] ?? null;
+        $this->email = $clientData['email'] ?? null;
+        $this->sex = $clientData['sex'] ?? null;
+        $this->clientMessage = $clientData['client_message'] ?? null;
+        $this->vigilanceLevel = $clientData['vigilance_level'] ?? null ?
+            ClientVigilanceLevel::tryFrom($clientData['vigilance_level']) : null;
+        $this->userId = $clientData['user_id'] ?? null;
+        $this->clientStatusId = $clientData['client_status_id'] ?? null;
+        $this->updatedAt = $clientData['updated_at'] ?? null ? new \DateTimeImmutable($clientData['updated_at']) : null;
+        $this->createdAt = $clientData['created_at'] ?? null ? new \DateTimeImmutable($clientData['created_at']) : null;
+        $this->deletedAt = $clientData['deleted_at'] ?? null ? new \DateTimeImmutable($clientData['deleted_at']) : null;
 
         if ($this->birthdate){
             $this->age = (new \DateTime())->diff($this->birthdate)->y;
@@ -92,5 +91,31 @@ class ClientData
         }
 
         return $clientArray;
+    }
+
+    /**
+     * Output for json_encode
+     * camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'birthdate' => $this->birthdate?->format('Y-m-d'),
+            'location' => $this->location,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'sex' => $this->sex,
+            'clientMessage' => $this->clientMessage,
+            'vigilanceLevel' => $this->vigilanceLevel?->value,
+            'userId' => $this->userId,
+            'clientStatusId' => $this->clientStatusId,
+            'updatedAt' => $this->updatedAt?->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt?->format('Y-m-d H:i:s'),
+            'deletedAt' => $this->deletedAt?->format('Y-m-d H:i:s'),
+            'age' => $this->age,
+        ];
     }
 }

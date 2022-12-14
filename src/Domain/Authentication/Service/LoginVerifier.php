@@ -8,7 +8,6 @@ use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\Settings;
-use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserActivityManager;
@@ -41,29 +40,27 @@ class LoginVerifier
      * If yes, the user object is returned with id
      * If no, an InvalidCredentialsException is thrown
      *
-     * @param array $userData
+     * @param array $userLoginValues
      * @param string|null $captcha user captcha response if filled out
      * @return int id
      *
      */
     public function getUserIdIfAllowedToLogin(
-        array $userData,
+        array $userLoginValues,
         string|null $captcha = null,
         array $queryParams = []
     ): int {
-        $user = new UserData($userData, true);
-
         // Validate entries coming from client
-        $this->userValidator->validateUserLogin($user);
+        $this->userValidator->validateUserLogin($userLoginValues);
 
         // Perform login security check
-        $this->loginSecurityChecker->performLoginSecurityCheck($user->email, $captcha);
+        $this->loginSecurityChecker->performLoginSecurityCheck($userLoginValues['email'], $captcha);
 
-        $dbUser = $this->userFinderRepository->findUserByEmail($user->email);
+        $dbUser = $this->userFinderRepository->findUserByEmail($userLoginValues['email']);
         // Check if user exists
         if ($dbUser->email !== null) {
             // Verify if password matches and enter login request
-            if (password_verify($user->password, $dbUser->passwordHash)) {
+            if (password_verify($userLoginValues['password'], $dbUser->passwordHash)) {
                 // If password correct and status active, log user in by
                 if ($dbUser->status === UserStatus::Active) {
                     // Insert login success request
@@ -117,13 +114,13 @@ class LoginVerifier
             }
         }
         // Password not correct or user not existing - insert login request for ip
-        $this->requestCreatorRepo->insertLoginRequest($user->email, $_SERVER['REMOTE_ADDR'], false);
+        $this->requestCreatorRepo->insertLoginRequest($userLoginValues['email'], $_SERVER['REMOTE_ADDR'], false);
 
         // Perform second login request check to display the correct error message to the user if throttle is in place
-        $this->loginSecurityChecker->performLoginSecurityCheck($user->email, $captcha);
+        $this->loginSecurityChecker->performLoginSecurityCheck($userLoginValues['email'], $captcha);
 
         // Throw InvalidCred exception if user doesn't exist or wrong password
         // Vague exception on purpose for security
-        throw new InvalidCredentialsException($user->email);
+        throw new InvalidCredentialsException($userLoginValues['email']);
     }
 }

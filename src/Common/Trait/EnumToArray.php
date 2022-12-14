@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Utility\Trait;
+namespace App\Common\Trait;
 
 /**
  * Source: https://stackoverflow.com/a/71680007/9013718

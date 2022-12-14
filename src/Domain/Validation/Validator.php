@@ -2,7 +2,6 @@
 
 namespace App\Domain\Validation;
 
-use App\Common\DateTimeImmutable;
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 use Psr\Log\LoggerInterface;
@@ -34,7 +33,7 @@ final class Validator
      * Throw a validation exception if the validation result fails.
      *
      * @param ValidationResult $validationResult
-     * @throws ValidationException
+     * @throws ValidationException|\JsonException
      */
     public function throwOnError(ValidationResult $validationResult): void
     {
@@ -141,14 +140,15 @@ final class Validator
     /**
      * Validate birthdate
      *
-     * @param DateTimeImmutable|string|null $birthdate
+     * @param \DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
      * @param bool $required
      * @param null|string $birthdateUserInput
+     * @throws \Exception
      */
     public
     function validateBirthdate(
-        DateTimeImmutable|string|null $birthdate,
+        \DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
         bool $required = false,
         null|string $birthdateUserInput = null,
@@ -159,7 +159,7 @@ final class Validator
             if (is_string($birthdate) === true && !empty($birthdate) && (bool)strtotime($birthdate)) {
                 // If birthdate is string, change it to DateTimeImmutable object for validation
                 $birthdate = new \DateTimeImmutable($birthdate);
-            } elseif (!$birthdate instanceof DateTimeImmutable) {
+            } elseif (!$birthdate instanceof \DateTimeImmutable) {
                 // Birthdate is not null, not a string with valid date and also not an instance of the custom
                 // DateTimeImmutable format (from the data object) it means that its invalid
                 $validationResult->setError('birthdate', 'Invalid birthdate');

@@ -6,7 +6,7 @@ namespace App\Infrastructure\Client;
 
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientResultAggregateData;
+use App\Domain\Client\Data\ClientResultData;
 use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
@@ -63,7 +63,7 @@ class ClientFinderRepository
      * Side note: difference between Association, aggregation / composition and inheritance
      * https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/
      *
-     * @return ClientResultAggregateData[]
+     * @return ClientResultData[]
      */
     public function findClientsWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
@@ -84,7 +84,7 @@ class ClientFinderRepository
         $sql = $query->sql();
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with associated User info
-        return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);
+        return $this->hydrator->hydrate($resultRows, ClientResultData::class);
     }
 
     /**
@@ -107,9 +107,9 @@ class ClientFinderRepository
      * Return client with relevant aggregate data for client read
      *
      * @param int $id
-     * @return ClientResultAggregateData
+     * @return ClientResultData
      */
-    public function findClientAggregateByIdIncludingDeleted(int $id): ClientResultAggregateData
+    public function findClientAggregateByIdIncludingDeleted(int $id): ClientResultData
     {
         $query = $this->queryFactory->newQuery()->from('client');
 
@@ -134,7 +134,7 @@ class ClientFinderRepository
 
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
-        return new ClientResultAggregateData($resultRows);
+        return new ClientResultData($resultRows);
     }
 
 
@@ -162,7 +162,7 @@ class ClientFinderRepository
      * Return all posts which are linked to the given user
      *
      * @param int $userId
-     * @return ClientResultAggregateData[]
+     * @return ClientResultData[]
      */
     public function findAllClientsByUserId(int $userId): array
     {
@@ -177,6 +177,6 @@ class ClientFinderRepository
             );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Post objects with aggregate
-        return $this->hydrator->hydrate($resultRows, ClientResultAggregateData::class);
+        return $this->hydrator->hydrate($resultRows, ClientResultData::class);
     }
 }

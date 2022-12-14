@@ -2,8 +2,6 @@
 
 namespace App\Domain\User\Data;
 
-use App\Common\ArrayReader;
-use App\Common\DateTimeImmutable;
 use App\Domain\User\Enum\UserStatus;
 
 /**
@@ -12,7 +10,7 @@ use App\Domain\User\Enum\UserStatus;
  * sense to keep them private otherwise not really.
  *
  */
-class UserData
+class UserData implements \JsonSerializable
 {
     // Variable names matching database columns (camelCase instead of snake_case)
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
@@ -25,35 +23,29 @@ class UserData
     public ?string $passwordHash;
     public ?UserStatus $status = null;
     public ?int $userRoleId = null;
-    public ?DateTimeImmutable $updatedAt;
-    public ?DateTimeImmutable $createdAt;
+    public ?\DateTimeImmutable $updatedAt;
+    public ?\DateTimeImmutable $createdAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added to authorization and service
 
     /**
      * User constructor.
      * @param array $userData
-     * @param bool $notRestricted With or without security related attributes (has to be default false e.g. for hydrate())
+     * @throws \Exception
      */
-    public function __construct(array $userData = [], bool $notRestricted = false)
+    public function __construct(array $userData = [])
     {
-        $arrayReader = new ArrayReader($userData);
-        // Keys may be taken from client form or database so they have to correspond to both; otherwise use mapper
-        // ArrayReader findDatatype casts the values in the wanted format too
-        $this->id = $arrayReader->findAsInt('id');
-        $this->firstName = $arrayReader->findAsString('first_name');
-        $this->surname = $arrayReader->findAsString('surname');
-        $this->email = $arrayReader->findAsString('email');
-        $this->password = $arrayReader->findAsString('password');
-        $this->password2 = $arrayReader->findAsString('password2');
-        $this->passwordHash = $arrayReader->findAsString('password_hash');
-        $this->updatedAt = $arrayReader->findAsDateTimeImmutable('updated_at');
-        $this->createdAt = $arrayReader->findAsDateTimeImmutable('created_at');
-
-        // Making sure that role and status aren't filled with malicious data
-        if ($notRestricted === true){
-            $this->status = $arrayReader->findAsEnum('status', UserStatus::class);
-            $this->userRoleId = $arrayReader->findAsInt('user_role_id');
-        }
+        // Keys may be taken from view form or database, so they have to correspond to both; otherwise use mapper
+        $this->id = $userData['id'] ?? null;
+        $this->firstName = $userData['first_name'] ?? null;
+        $this->surname = $userData['surname'] ?? null;
+        $this->email = $userData['email'] ?? null;
+        $this->password = $userData['password'] ?? null;
+        $this->password2 = $userData['password2'] ?? null;
+        $this->passwordHash = $userData['password_hash'] ?? null;
+        $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
+        $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
+        $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;
+        $this->userRoleId = $userData['user_role_id'] ?? null;
     }
 
     /**
@@ -86,4 +78,18 @@ class UserData
         ];
     }
 
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'surname' => $this->surname,
+            'email' => $this->email,
+            'status' => $this->status,
+            'userRoleId' => $this->userRoleId,
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+        ];
+    }
 }

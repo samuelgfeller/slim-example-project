@@ -5,11 +5,11 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
-use App\Domain\User\Data\UserData;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Mailer;
 use App\Domain\Validation\ValidationException;
 use App\Infrastructure\User\UserFinderRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -50,19 +50,17 @@ class PasswordRecoveryEmailSender
     /**
      * When user requests a new password for email
      *
-     * @param array $userData
-     * @throws ValidationException|\Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws ValidationException|TransportExceptionInterface|\JsonException
      */
-    public function sendPasswordRecoveryEmail(array $userData, string|null $captcha = null): void
+    public function sendPasswordRecoveryEmail(array $userValues, string|null $captcha = null): void
     {
-        $user = new UserData($userData);
-
-        $this->userValidator->validatePasswordResetEmail($user);
+        $email = $userValues['email'];
+        $this->userValidator->validatePasswordResetEmail($email);
 
         // Verify that user (concerned email) or ip address doesn't spam email sending
-        $this->securityEmailChecker->performEmailAbuseCheck($user->email, $captcha);
+        $this->securityEmailChecker->performEmailAbuseCheck($email, $captcha);
 
-        $dbUser = $this->userFinderRepository->findUserByEmail($user->email);
+        $dbUser = $this->userFinderRepository->findUserByEmail($email);
 
         if ($dbUser->email !== null) {
             // Create verification token, so he doesn't have to register again

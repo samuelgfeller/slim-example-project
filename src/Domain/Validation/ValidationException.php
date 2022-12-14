@@ -25,7 +25,7 @@ class ValidationException extends RuntimeException
      *
      * @return ValidationResult
      */
-    public function getValidationResult()
+    public function getValidationResult(): ValidationResult
     {
         return $this->validationResult;
     }

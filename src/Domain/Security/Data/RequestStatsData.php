@@ -3,7 +3,6 @@
 
 namespace App\Domain\Security\Data;
 
-use App\Common\ArrayReader;
 
 /**
  * Summary of requests
@@ -17,12 +16,12 @@ class RequestStatsData
 
     /**
      * RequestStatsData constructor.
-     * @param array $data
+     *
+     * @param array $requestStatsData
      */
-    public function __construct(array $data = []) {
-        $reader = new ArrayReader($data);
-        $this->sentEmails = $reader->findAsInt('sent_emails');
-        $this->loginFailures = $reader->findAsInt('login_failures');
-        $this->loginSuccesses = $reader->findAsInt('login_successes');
+    public function __construct(array $requestStatsData = []) {
+        $this->sentEmails = $requestStatsData['sent_emails'] ?? null;
+        $this->loginFailures = $requestStatsData['login_failures'] ?? null;
+        $this->loginSuccesses = $requestStatsData['login_successes'] ?? null;
     }
 }

@@ -4,8 +4,6 @@
 namespace App\Domain\Security\Data;
 
 
-use App\Common\ArrayReader;
-
 class RequestData
 {
     public ?int $id;
@@ -13,15 +11,19 @@ class RequestData
     public ?string $ipAddress;
     public ?bool $sentEmail;
     public ?string $isLogin;
-    public ?string $createdAt;
+    public ?\DateTimeImmutable $createdAt;
 
-    public function __construct(array $data = []) {
-        $reader = new ArrayReader($data);
-        $this->id = $reader->findAsInt('id');
-        $this->email = $reader->findAsString('email');
-        $this->ipAddress = $reader->findAsString('ip_address');
-        $this->sentEmail = $reader->findAsBool('sent_email');
-        $this->isLogin = $reader->findAsString('is_login');
-        $this->createdAt = $reader->findAsString('created_at');
+    /**
+     * @throws \Exception
+     */
+    public function __construct(array $requestData = [])
+    {
+        $this->id = $requestData['id'] ?? null;
+        $this->email = $requestData['email'] ?? null;
+        $this->ipAddress = $requestData['ip_address'] ?? null;
+        $this->sentEmail = $requestData['sent_email'] ?? null;
+        $this->isLogin = $requestData['is_login'] ?? null;
+        $this->createdAt = $requestData['created_at'] ?? null
+            ? new \DateTimeImmutable($requestData['created_at']) : null;
     }
 }

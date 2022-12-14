@@ -2,7 +2,6 @@
 
 namespace App\Domain\Authentication\Data;
 
-use App\Common\ArrayReader;
 
 /**
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
@@ -23,14 +22,12 @@ class UserVerificationData
      */
     public function __construct(array $verificationData = [])
     {
-        $arrayReader = new ArrayReader($verificationData);
-        // ArrayReader find*() casts the values in the given format
-        $this->id = $arrayReader->findAsInt('id');
-        $this->userId = $arrayReader->findAsInt('user_id');
-        $this->token = $arrayReader->findAsString('token');
-        $this->expiresAt = $arrayReader->findAsString('expires_at');
-        $this->usedAt = $arrayReader->findAsString('used_at');
-        $this->createdAt = $arrayReader->findAsString('created_at');
+        $this->id = $verificationData['id'] ?? null;
+        $this->userId = $verificationData['user_id'] ?? null;
+        $this->token = $verificationData['token'] ?? null;
+        $this->expiresAt = $verificationData['expires_at'] ?? null;
+        $this->usedAt = $verificationData['used_at'] ?? null;
+        $this->createdAt = $verificationData['created_at'] ?? null;
     }
 
     /**

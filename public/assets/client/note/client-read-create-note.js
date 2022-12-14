@@ -143,7 +143,7 @@ function populateNewNoteDomAttributes(textarea, responseData) {
     circleLoader.classList.add('load-complete');
     circleLoader.querySelector('.checkmark').style.display = 'block';
 
-    let noteId = responseData.noteId;
+    let noteId = responseData.id;
     textarea.id = 'note-' + noteId;
     textarea.dataset.noteId = noteId;
     // If noteContainer is null it means that it's the main textarea which doesn't have a label

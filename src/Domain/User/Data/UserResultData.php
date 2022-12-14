@@ -4,7 +4,7 @@ namespace App\Domain\User\Data;
 
 use App\Domain\Authorization\Privilege;
 
-class UserResultData extends UserData implements \JsonSerializable
+class UserResultData extends UserData
 {
     public ?Privilege $generalPrivilege = null;
     // If authenticated user is allowed to change status
@@ -26,22 +26,13 @@ class UserResultData extends UserData implements \JsonSerializable
      * serialized by json_encode, but it's a harder to hydrate a
      * collection of results.
      * It has also an added benefit of exactly controlling what and how its serialized.
-     * For now, I will do it this way but this may change in the future.
      */
     public function jsonSerialize(): array
     {
-        return [
-            'firstName' => $this->firstName,
-            'surname' => $this->surname,
-            'email' => $this->email,
-            'id' => $this->id,
-            'status' => $this->status->value,
-            'updatedAt' => $this->updatedAt,
-            'createdAt' => $this->createdAt,
-            'userRoleId' => $this->userRoleId,
+        return array_merge(parent::jsonSerialize(), [
             'statusPrivilege' => $this->statusPrivilege->value,
             'userRolePrivilege' => $this->userRolePrivilege->value,
             'availableUserRoles' => $this->availableUserRoles,
-        ];
+        ]);
     }
 }

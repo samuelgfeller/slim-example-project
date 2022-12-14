@@ -39,11 +39,11 @@ class UserCreator
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
      * @return int|bool insert id, false if user already exists
-     * @throws TransportExceptionInterface
+     * @throws TransportExceptionInterface|\JsonException|\Exception
      */
     public function createUser(array $userValues, string|null $captcha = null, array $queryParams = []): bool|int
     {
-        $user = new UserData($userValues, true);
+        $user = new UserData($userValues);
 
         // Validate entries coming from client
         $this->userValidator->validateUserCreation($user);

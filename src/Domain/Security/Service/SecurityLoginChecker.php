@@ -98,7 +98,7 @@ class SecurityLoginChecker
                 // Retrieve the latest email sent for specific email or coming from ip
                 $latestLoginRequest = $this->loginRequestFinder->findLatestLoginRequestFromEmailOrIp($email);
                 // created_at in seconds
-                $latest = (int)date('U', strtotime($latestLoginRequest->createdAt));
+                $latest = (int)$latestLoginRequest->createdAt->format('U');
 
                 // Debug
                 /*echo 'Actual time: ' . date('H:i:s') . "\n" .

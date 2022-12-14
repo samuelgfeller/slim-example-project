@@ -2,7 +2,7 @@
 
 namespace App\Domain\General\Enum;
 
-use App\Domain\Utility\Trait\EnumToArray;
+use App\Common\Trait\EnumToArray;
 
 enum SexOption : string
 {

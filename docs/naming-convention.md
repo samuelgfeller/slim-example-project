@@ -3,20 +3,20 @@
 ## Root-level directories
 From [php-pds/skeleton](https://github.com/php-pds/skeleton)
 
-If a package has a root-level directory for ... |	... then it MUST be named:
---- | ---
-command-line executables	| `bin/`
-configuration files	| `config/`
-documentation files	| `docs/`
-web server files	| `public/`
-other resource files	| `resources/`
-PHP source code	| `src/`
-test code	| `tests/`
+| If a package has a root-level directory for ... |	... then it MUST be named: |
+|-------------------------------------------------|:---:|
+| command-line executables	                       | `bin/` |
+| configuration files	                            | `config/` |
+| documentation files	                            | `docs/` |
+| web server files	                               | `public/` |
+| other resource files	                           | `resources/` |
+| PHP source code	                                | `src/` |
+| test code	                                      | `tests/` |
 
 ## General files and folders
 E.g. project name, config files in `config/`, doc files in `docs/`, log files in `logs/`, resources in 
 `resources/`, assets in `public/assets/`
-* All filenames SHOULD be all lowercase `file.ext`
+* All filenames SHOULD be lowercase `file.ext`
 * All words of filenames SHOULD be separated by hyphens `file-name.ext`
 * It SHOULD be tried to avoid multi-worded folders but if there are, they MUST be all lowercase 
 and separated by hyphens `folder-name`
@@ -31,8 +31,15 @@ is separated by an uppercase too
   service class if there is any: `UserCreatorRepository.php`
 * **Exception classes** MUST end with the word Exception: `InvalidCredentialsException.php`
 * **Middlewares** MUST end with the word Middleware: `UserAuthenticationMiddleware.php`
-* **Data Transfer Objects (DTO)** MUST end with Data: `UserData.php` because they are just a format of 
-dealing with data.
+* **Data Transfer Objects (DTO)** MUST end with Data: `UserData.php` and SHOULD implement `\JsonSerializable`
+and have a `jsonSerialize()` function when needed (e.g. to return the correct `\DateTime` format to the view).   
+There are three kinds of DTOs: 
+  * Entity-like which SHOULD be named after the database table MUST contain attributes with the same name
+    as the database column names in camelCase.
+  * Result-values which contain aggregate data from different tables and are tailored to the 
+    view with the needed values in the correct format. These classes MUST end with ResultData: `ClientResultData`.
+  * Collection of Data objects with optional additional attributes. MUST end with ResultDataCollection: 
+    `ClientResultDataCollection`.
   
 ## Templates
 * Follow [general files and folders](#General-files-and-folders) rules
@@ -43,7 +50,7 @@ dealing with data.
 
 ### HTML elements
 * IDs and class names words MUST be separated by a hyphen: `class-name`
-* Form `name` attributes words MUST be separated by an underscore and MUST be similar to the database
+* Form `name` attributes words MUST be separated by an underscore and MUST be the same as the database
 column name: `name="input_name"`.  
 The reason is that `Data` classes are populated via constructor from the parsed request body.
   
@@ -52,9 +59,9 @@ The reason is that `Data` classes are populated via constructor from the parsed 
   is separated by an uppercase too
 * **Test classes** names MUST contain the name of the class under test (Action for integration tests) 
   and end with the word Test:  
-  Unit test: `UserCreatorTest.php`, Integration test: `RegisterActionTest.php`
-* **Fixtures** MUST end with the word Fixture: `UserFixture.php`
-* **Provider** MUST end with the word Provider: `UserProvider.php`
+  Unit test: `ClientCreatorTest.php`, Integration test: `ClientCreatorActionTest.php`
+* **Fixtures** MUST end with the word Fixture: `ClientFixture.php`
+* **Provider** MUST end with the word Provider: `ClientProvider.php`
 * **Helper Traits** MUST end with the name Trait: `AppTestTrait.php`
 
 ### Test functions
@@ -66,7 +73,7 @@ the word "test" followed by the name of the function which is being tested in ca
   
 * **Integration test functions** MUST start with test as well but then describe the use case which
 is being tested and additional info can be added in camel case separated by an underscore 
-  e.g. `testUserRegistration_existingActiveUser`
+  e.g. `testClientCreation_authorization`
   
 ### Providers
 I differentiate providers into two types. They have to be in a sub folder "Provider" at the root of 
@@ -85,8 +92,9 @@ the folder "Provider".
 #### Case Providers
 They contain both the input data but also the expected value for
 the assertion. They are here to make more generic test cases which are like a formula 
-and being able to feed them with many different data and expected values.  
-E.g. Asserting that validation exception occurs with a specific error message and behaviour.
+and being able to feed them with different data and expected values.  
+E.g. Asserting that validation exception occurs with a specific error message and behaviour or different 
+authorization cases.
 
 Case provider MUST end with `CaseProvider.php` and be in the folder of their module name which is in
 the folder "Provider".

@@ -7,7 +7,7 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Data\NoteWithUserData;
+use App\Domain\Note\Data\NoteResultData;
 use App\Infrastructure\Client\ClientFinderRepository;
 use App\Infrastructure\Note\NoteFinderRepository;
 
@@ -21,9 +21,33 @@ class NoteFinder
     }
 
     /**
+     * Find one note in the database
+     *
+     * @param $id
+     * @return NoteData
+     */
+    public function findNote($id): NoteData
+    {
+        return $this->noteFinderRepository->findNoteById($id);
+    }
+
+    /**
+     * Return all notes which are linked to the given user
+     *
+     * @param int $userId
+     * @return NoteResultData[]
+     */
+    public function findAllNotesFromUser(int $userId): array
+    {
+        $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
+        $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
+        return $allNotes;
+    }
+
+    /**
      * Populate $privilege attribute of given NoteWithUserData array
      *
-     * @param array{NoteWithUserData} $notes
+     * @param NoteResultData[] $notes
      * @param int|null $clientOwnerId if client owner id not provided, client id should be passed in next parameter
      * @param int|null $clientId
      *
@@ -48,58 +72,32 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             $clientOwnerId = $this->clientFinderRepository->findClientById($clientId)->userId;
         }
 
-        foreach ($notes as $userNote) {
+        foreach ($notes as $noteResultData) {
             // Privilege only create possible if user may not see the note but may create one
-            $userNote->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
-                $userNote->userId,
+            $noteResultData->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
+                $noteResultData->userId,
                 $clientOwnerId,
-                $userNote->noteHidden,
+                $noteResultData->hidden,
             );
             // If not allowed to read
-            if (!$userNote->privilege->hasPrivilege(Privilege::READ)) {
+            if (!$noteResultData->privilege->hasPrivilege(Privilege::READ)) {
                 // Change message of note to lorem ipsum
-                $userNote->noteMessage = substr($randomText, 0, strlen($userNote->noteMessage));
+                $noteResultData->message = substr($randomText, 0, strlen($noteResultData->message));
                 // Remove line breaks and extra spaces from string
-                $userNote->noteMessage = preg_replace('/\s\s+/', ' ', $userNote->noteMessage);
+                $noteResultData->message = preg_replace('/\s\s+/', ' ', $noteResultData->message);
             }
         }
-    }
-
-    /**
-     * Find one note in the database
-     *
-     * @param $id
-     * @return NoteData
-     */
-    public function findNote($id): NoteData
-    {
-        return $this->noteFinderRepository->findNoteById($id);
-    }
-
-    /**
-     * Return all notes which are linked to the given user
-     *
-     * @param int $userId
-     * @return NoteWithUserData[]
-     */
-    public function findAllNotesFromUser(int $userId): array
-    {
-        $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
-        $this->changeDateFormat($allNotes);
-        $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
-        return $allNotes;
     }
 
     /**
      * Return all notes which are linked to the given user
      *
      * @param int $notesAmount
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findMostRecentNotes(int $notesAmount = 10): array
     {
         $allNotes = $this->noteFinderRepository->findMostRecentNotes($notesAmount);
-        $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
         return $allNotes;
     }
@@ -108,7 +106,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      * Return all notes except the main note that are linked to the given client
      *
      * @param int $clientId
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findAllNotesFromClientExceptMain(int $clientId): array
     {
@@ -116,7 +114,6 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // In PHP, an object variable doesn't contain the object itself as value. It only contains an object identifier
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
-        $this->changeDateFormat($allNotes, 'd. F Y • H:i'); // F is the full month name in english
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
         return $allNotes;
     }
@@ -130,28 +127,5 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     public function findClientNotesAmount(int $clientId): int
     {
         return $this->noteFinderRepository->findClientNotesAmount($clientId);
-    }
-
-
-    /**
-     * Change created and updated date format from SQL datetime to
-     * something we are used to see in Switzerland
-     *
-     * @param NoteWithUserData[] $userNotes
-     * @param string $format If default format changes, it has to be adapted in NoteListActionTest
-     *
-     * @return void
-     */
-    private function changeDateFormat(array $userNotes, string $format = 'd.m.Y H:i:s'): void
-    {
-        // Tested in NoteListActionTest
-        foreach ($userNotes as $userNote) {
-            // Change updated at format
-            $userNote->noteUpdatedAt = $userNote->noteUpdatedAt ? (new \DateTime($userNote->noteUpdatedAt))
-                ->format($format) : null;
-            // Change created at format
-            $userNote->noteCreatedAt = $userNote->noteCreatedAt ? (new \DateTime($userNote->noteCreatedAt))
-                ->format($format) : null;
-        }
     }
 }

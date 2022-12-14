@@ -5,20 +5,20 @@ namespace App\Domain\Client\Data;
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Data\NoteWithUserData;
+use App\Domain\Note\Data\NoteResultData;
 
 /**
  * Aggregate DTO to store ClientData combined with
- * some linked (aggregate) classes.
+ * some linked (aggregate) tables.
  * Used as result DTO when access to aggregate
  * details is relevant like client read.
  */
-class ClientResultAggregateData extends ClientData
+class ClientResultData extends ClientData
 {
 
     // public ?ClientStatusData $clientStatusData;
     // public ?UserData $userData;
-    /** @var NoteWithUserData[]|null $notes */
+    /** @var NoteResultData[]|null $notes */
     public ?array $notes = null;
     // Amount of notes for the client to know how many content placeholders to display
     public ?int $notesAmount = null;
@@ -35,20 +35,12 @@ class ClientResultAggregateData extends ClientData
     /**
      * Client Data constructor.
      * @param array $clientResultData
+     * @throws \Exception
      */
     public function __construct(array $clientResultData = [])
     {
         parent::__construct($clientResultData);
 
-        // Aggregate DTOs populated with values relevant to client result
-        // $this->clientStatusData = new ClientStatusData([
-        //     'name' => $clientResultData['status_name'] ?? null
-        // ]);
-        // User data populated with values relevant to client result
-        // $this->userData = new UserData([
-        //     'first_name' => $clientResultData['user_first_name'] ?? null,
-        //     'surname' => $clientResultData['user_surname'] ?? null,
-        // ]);
         // Populate mainNote if set (only when read)
         $this->mainNoteData = new NoteData([
             'id' => $clientResultData['main_note_id'] ?? null,
@@ -59,5 +51,21 @@ class ClientResultAggregateData extends ClientData
         ]);
     }
 
+    /**
+     * Output for json_encode
+     */
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'notes' => $this->notes,
+            'notesAmount' => $this->notesAmount,
+            'mainNoteData' => $this->mainNoteData,
+
+            'mainDataPrivilege' => $this->mainDataPrivilege?->value,
+            'clientStatusPrivilege' => $this->clientStatusPrivilege?->value,
+            'assignedUserPrivilege' => $this->assignedUserPrivilege?->value,
+            'noteCreatePrivilege' => $this->noteCreatePrivilege?->value,
+        ]);
+    }
     // No need for toArrayForDatabase() as this is a result DTO
 }

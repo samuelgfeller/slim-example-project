@@ -2,8 +2,6 @@
 
 namespace App\Domain\ClientStatus\Data;
 
-use App\Common\ArrayReader;
-
 class ClientStatusData
 {
     public ?int $id;
@@ -11,8 +9,7 @@ class ClientStatusData
 
     public function __construct(array $statusData = [])
     {
-        $reader = new ArrayReader($statusData);
-        $this->id = $reader->findAsInt('id');
-        $this->name = $reader->findAsString('name');
+        $this->id = $statusData['id'] ?? null;
+        $this->name = $statusData['name'] ?? null;
     }
 }

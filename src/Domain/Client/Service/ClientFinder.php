@@ -9,7 +9,7 @@ use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Authorization\ClientAuthorizationGetter;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientResultAggregateData;
+use App\Domain\Client\Data\ClientResultData;
 use App\Domain\Client\Data\ClientResultDataCollection;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
@@ -61,7 +61,7 @@ class ClientFinder
      * to found clientResultAggregate filtered by the given $whereArray
      *
      * @param array $whereArray cake query builder where array -> ['table.field' => 'value']
-     * @return ClientResultAggregateData[]
+     * @return ClientResultData[]
      */
     private function findClientsWhereWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
@@ -101,9 +101,9 @@ class ClientFinder
      *
      * @param int $clientId
      * @param bool $includingNotes
-     * @return ClientResultAggregateData
+     * @return ClientResultData
      */
-    public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultAggregateData
+    public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id &&

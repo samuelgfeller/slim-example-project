@@ -42,9 +42,8 @@ final class VerificationTokenVerifier
 
         $invalidTokenException = new InvalidTokenException('Not existing, invalid, used or expired token.');
         // Add user details to invalid token exception
-        $invalidTokenException->userData = $this->verificationTokenFinderRepository->findUserDetailsFromAlsoDeletedVerification(
-            $verificationId
-        );
+        $invalidTokenException->userData = $this->verificationTokenFinderRepository
+            ->findUserDetailsByVerificationIncludingDeleted($verificationId);
 
         throw $invalidTokenException;
     }

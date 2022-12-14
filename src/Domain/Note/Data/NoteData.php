@@ -3,11 +3,10 @@
 namespace App\Domain\Note\Data;
 
 
-use App\Common\ArrayReader;
 use App\Domain\Authorization\Privilege;
 use App\Domain\User\Data\UserData;
 
-class NoteData
+class NoteData implements \JsonSerializable
 {
     public ?int $id;
     public ?int $userId;
@@ -15,9 +14,9 @@ class NoteData
     public ?string $message;
     public ?int $isMain; // int 1 or 0
     public ?int $hidden; // int 1 or 0
-    public ?string $createdAt;
-    public ?string $updatedAt;
-    public ?string $deletedAt;
+    public ?\DateTimeImmutable $createdAt;
+    public ?\DateTimeImmutable $updatedAt;
+    public ?\DateTimeImmutable $deletedAt;
 
     // Not in database
     public ?UserData $user;
@@ -27,20 +26,23 @@ class NoteData
 
     /**
      * Note constructor.
-     * @param array|null $noteData
+     * @param array|null $noteResultData
+     * @throws \Exception
      */
-    public function __construct(?array $noteData = null)
+    public function __construct(?array $noteResultData = null)
     {
-        $arrayReader = new ArrayReader($noteData);
-        $this->id = $arrayReader->findAsInt('id');
-        $this->userId = $arrayReader->findAsInt('user_id');
-        $this->clientId = $arrayReader->findAsInt('client_id');
-        $this->message = $arrayReader->findAsString('message');
-        $this->isMain = $arrayReader->findAsInt('is_main');
-        $this->hidden = $arrayReader->findAsInt('hidden');
-        $this->createdAt = $arrayReader->findAsString('created_at');
-        $this->updatedAt = $arrayReader->findAsString('updated_at');
-        $this->deletedAt = $arrayReader->findAsString('deleted_at');
+        $this->id = $noteResultData['id'] ?? null;
+        $this->userId = $noteResultData['user_id'] ?? null;
+        $this->clientId = $noteResultData['client_id'] ?? null;
+        $this->message = $noteResultData['message'] ?? null;
+        $this->isMain = $noteResultData['is_main'] ?? null;
+        $this->hidden = $noteResultData['hidden'] ?? null;
+        $this->createdAt = $noteResultData['created_at'] ?? null
+            ? new \DateTimeImmutable($noteResultData['created_at']) : null;
+        $this->updatedAt = $noteResultData['updated_at'] ?? null
+            ? new \DateTimeImmutable($noteResultData['updated_at']) : null;
+        $this->deletedAt = $noteResultData['deleted_at'] ?? null
+            ? new \DateTimeImmutable($noteResultData['deleted_at']) : null;
     }
 
     /**
@@ -65,12 +67,28 @@ class NoteData
         }
 
 
-        // Message is nullable and null is a valid value so it has to be included
-        // todo detect null values and add IS for cakequery builder IS NULL
+        // Message is nullable and null is a valid value, so it has to be included
         $note['message'] = $this->message;
         $note['is_main'] = $this->isMain;
         $note['hidden'] = $this->hidden;
 
         return $note;
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'userId' => $this->userId,
+            'clientId' => $this->clientId,
+            'message' => $this->message,
+            // 'isMain' => $this->isMain,
+            'hidden' => $this->hidden,
+            // F is the full month name in english
+            'createdAt' => $this->createdAt?->format('d. F Y • H:i'),
+            'updatedAt' => $this->updatedAt?->format('d. F Y • H:i'),
+            // 'deletedAt' => $this->deletedAt?->format('Y-m-d H:i:s'),
+        ];
     }
 }

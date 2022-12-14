@@ -86,6 +86,7 @@ class UserFinderRepository
      *
      * @param int $id
      * @return UserData
+     * @throws \Exception
      */
     public function findUserByIdWithPasswordHash(int $id): UserData
     {
@@ -95,7 +96,7 @@ class UserFinderRepository
         $userRows = $query->execute()->fetch('assoc') ?: [];
         // Empty user object if not found
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows, true);
+        return new UserData($userRows);
     }
 
 
@@ -107,6 +108,7 @@ class UserFinderRepository
      *
      * @param string|null $email
      * @return UserData
+     * @throws \Exception
      */
     public function findUserByEmail(?string $email): UserData
     {
@@ -118,7 +120,7 @@ class UserFinderRepository
 
         // Empty user object if not found
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows, true);
+        return new UserData($userRows);
     }
 
     /**
@@ -128,6 +130,7 @@ class UserFinderRepository
      * @param int $id
      * @return UserData
      * Throws PersistenceRecordNotFoundException if not found
+     * @throws \Exception
      */
     public function getUserById(int $id): UserData
     {
@@ -138,6 +141,6 @@ class UserFinderRepository
         $userRows = $query->execute()->fetch('assoc');
 
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows, true);
+        return new UserData($userRows);
     }
 }

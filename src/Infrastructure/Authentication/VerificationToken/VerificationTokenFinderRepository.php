@@ -49,12 +49,14 @@ class VerificationTokenFinderRepository
     }
 
     /**
-     * Search and return user details of given verification entry even if it was deleted
+     * Search and return user details of given verification entry
+     * even if user_verification was deleted
      *
      * @param int $verificationId
      * @return UserData
+     * @throws \Exception
      */
-    public function findUserDetailsFromAlsoDeletedVerification(int $verificationId): UserData
+    public function findUserDetailsByVerificationIncludingDeleted(int $verificationId): UserData
     {
         $query = $this->queryFactory->newQuery()->from('user_verification');
 

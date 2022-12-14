@@ -67,7 +67,7 @@ export function addNotesToDom(notes, wrapperId = null) {
         // If wrapperId is provided and note client name is in response it means that it is not called from
         // client read page and there should be a link to the correct client read page
         if (wrapperId && note.clientFullName) {
-            noteHtml = `<a href="clients/${note.clientId}#note-${note.noteId}-container">Client ${note.clientFullName}</a>` + noteHtml;
+            noteHtml = `<a href="clients/${note.clientId}#note-${note.id}-container">Client ${note.clientFullName}</a>` + noteHtml;
         }
         // Add to DOM
         noteContainer.insertAdjacentHTML('beforeend', noteHtml);

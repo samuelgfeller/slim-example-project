@@ -11,6 +11,8 @@ use App\Domain\User\Service\UserFinder;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Email verification test (after user clicked on link)
@@ -37,6 +39,7 @@ class RegisterTokenVerifierTest extends TestCase
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
      * @param UserVerificationData $verification
      * @param string $clearTextToken
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface|\Exception
      */
     public function testGetUserIdIfRegisterTokenIsValid_alreadyVerified(
         UserVerificationData $verification,

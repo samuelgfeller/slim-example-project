@@ -67,7 +67,7 @@ class UserValidator
      *
      * @param UserData $user
      * @return ValidationResult
-     * @throws ValidationException
+     * @throws ValidationException|\JsonException
      */
     public function validateUserCreation(UserData $user): ValidationResult
     {
@@ -94,17 +94,17 @@ class UserValidator
      * Validate if user inputs for the login
      * are valid
      *
-     * @param UserData $user
+     * @param array{email: null|string, password: null|string} $userLoginValues
      * @return ValidationResult
-     * @throws ValidationException
+     * @throws ValidationException|\JsonException
      */
-    public function validateUserLogin(UserData $user): ValidationResult
+    public function validateUserLogin(array $userLoginValues): ValidationResult
     {
         $validationResult = new ValidationResult('There is a validation error when trying to login');
 
         // Intentionally not validating user existence as invalid login should be vague
-        $this->validator->validateEmail($user->email, $validationResult, true);
-        $this->validatePassword($user->password, true, $validationResult);
+        $this->validator->validateEmail($userLoginValues['email'] ?? null, $validationResult, true);
+        $this->validatePassword($userLoginValues['password'] ?? null, $validationResult, true);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->validator->throwOnError($validationResult);
@@ -115,16 +115,16 @@ class UserValidator
     /**
      * Validate email for password recovery
      *
-     * @param UserData $user
+     * @param string|null $email
      * @return ValidationResult
-     * @throws ValidationException
+     * @throws \JsonException
      */
-    public function validatePasswordResetEmail(UserData $user): ValidationResult
+    public function validatePasswordResetEmail(?string $email): ValidationResult
     {
         $validationResult = new ValidationResult('There is a validation error when trying to login');
 
         // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
-        $this->validator->validateEmail($user->email, $validationResult, true);
+        $this->validator->validateEmail($email, $validationResult, true);
 
         // If the validation failed, throw the exception which will be caught in the Controller
         $this->validator->throwOnError($validationResult);
@@ -154,8 +154,8 @@ class UserValidator
             $validationResult->setError('password2', 'Passwords do not match');
         }
 
-        $this->validatePassword($passwords[0], $required, $validationResult);
-        $this->validatePassword($passwords[1], $required, $validationResult, 'password2');
+        $this->validatePassword($passwords[0], $validationResult, $required);
+        $this->validatePassword($passwords[1], $validationResult, $required, 'password2');
 
         if ($validationResultIsGiven === false) {
             // If the validation failed, throw the exception which will be caught in the Controller
@@ -204,8 +204,8 @@ class UserValidator
      */
     private function validatePassword(
         ?string $password,
-        bool $required,
         ValidationResult $validationResult,
+        bool $required,
         string $fieldName = 'password'
     ): void {
         // Required check done here (and not validatePasswords) because login validation uses it as well

@@ -2,9 +2,8 @@
 
 namespace App\Domain\Client\Authorization;
 
-use App\Common\DateTimeImmutable;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientResultAggregateData;
+use App\Domain\Client\Data\ClientResultData;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
@@ -189,13 +188,13 @@ class ClientAuthorizationChecker
      * Check if authenticated user is allowed to read client
      *
      * @param null|int $ownerId
-     * @param string|DateTimeImmutable|null $deletedAt
+     * @param string|\DateTimeImmutable|null $deletedAt
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      * @return bool
      */
     public function isGrantedToRead(
         ?int $ownerId,
-        string|DateTimeImmutable|null $deletedAt = null,
+        string|\DateTimeImmutable|null $deletedAt = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -230,8 +229,8 @@ class ClientAuthorizationChecker
      * with isGrantedToReadClient and removes clients that
      * authenticated user may not see.
      *
-     * @param ClientResultAggregateData[] $clients
-     * @return ClientResultAggregateData[]
+     * @param ClientResultData[] $clients
+     * @return ClientResultData[]
      */
     public function removeNonAuthorizedClientsFromList(array $clients): array
     {

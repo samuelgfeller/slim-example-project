@@ -71,14 +71,14 @@ class UserListActionTest extends TestCase
         // Add response array of authenticated user to expected userResultDataArray
         $expectedResponseArray['userResultDataArray'][] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+            'id' => $authenticatedUserRow['id'],
             'firstName' => $authenticatedUserRow['first_name'],
             'surname' => $authenticatedUserRow['surname'],
             'email' => $authenticatedUserRow['email'],
-            'id' => $authenticatedUserRow['id'],
             'status' => $authenticatedUserRow['status'],
+            'userRoleId' => $authenticatedUserRow['user_role_id'],
             'updatedAt' => $authenticatedUserRow['updated_at'],
             'createdAt' => $authenticatedUserRow['created_at'],
-            'userRoleId' => $authenticatedUserRow['user_role_id'],
             'statusPrivilege' => $expectedResult['own']['statusPrivilege']->value,
             'userRolePrivilege' => $expectedResult['own']['userRolePrivilege']->value,
             'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['own']['availableUserRoles']),
@@ -87,14 +87,14 @@ class UserListActionTest extends TestCase
         // Add response array of other user if it is set
         if ($expectedResult['other'] !== false) {
             $expectedResponseArray['userResultDataArray'][] = [
+                'id' => $userRow['id'],
                 'firstName' => $userRow['first_name'],
                 'surname' => $userRow['surname'],
                 'email' => $userRow['email'],
-                'id' => $userRow['id'],
                 'status' => $userRow['status'],
+                'userRoleId' => $userRow['user_role_id'],
                 'updatedAt' => $userRow['updated_at'],
                 'createdAt' => $userRow['created_at'],
-                'userRoleId' => $userRow['user_role_id'],
                 'statusPrivilege' => $expectedResult['other']['statusPrivilege']->value,
                 'userRolePrivilege' => $expectedResult['other']['userRolePrivilege']->value,
                 'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['other']['availableUserRoles']),

@@ -2,17 +2,17 @@ import {escapeHtml} from "../../general/js/functions.js?v=0.1";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
-    const {noteId, noteCreatedAt, privilege, noteHidden, userFullName, noteMessage,} = note;
+    const {id, createdAt, privilege, hidden, userFullName, message,} = note;
 
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
 
-    return `<div id="note-${noteId}-container" 
-              class="note-container ${noteHidden === 1 || noteHidden === '1' ? 'hidden-note' : ''}">
-                <label for="note-${noteId}" data-note-id="${noteId}" class="bigger-select-label textarea-label">
-                    <a href="${window.location.href}#note-${noteId}-container" 
-                        class="note-left-side-label no-style-a">${noteCreatedAt}</a>
-                    ${/*Show active eye icon if hidden*/ noteHidden === 1 || noteHidden === '1' ? `<img 
+    return `<div id="note-${id}-container" 
+              class="note-container ${hidden === 1 || hidden === '1' ? 'hidden-note' : ''}">
+                <label for="note-${id}" data-note-id="${id}" class="bigger-select-label textarea-label">
+                    <a href="${window.location.href}#note-${id}-container" 
+                        class="note-left-side-label no-style-a">${createdAt}</a>
+                    ${/*Show active eye icon if hidden*/ hidden === 1 || hidden === '1' ? `<img 
                         class="btn-above-note hide-note-btn ${userHasPrivilegeTo(privilege, 'U') ? `` : `
                             not-clickable` /*Add not clickable class when not allowed to update*/}" alt="hide" 
                         style="display: inline-block" src="assets/general/img/eye-icon-active.svg"
@@ -28,12 +28,12 @@ export function getNoteHtml(note) {
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea ${userHasPrivilegeTo(privilege, 'R') ? `
                                 ` : `hidden-note-message` /* class to blur note text if not allowed to read*/}" 
-                              id="note-${noteId}"
-                              data-note-id="${noteId}"
+                              id="note-${id}"
+                              data-note-id="${id}"
                               minlength="4" maxlength="1000" required
                               data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
-                              name="message">${escapeHtml(noteMessage)}</textarea>
-                    <div class="circle-loader client-note" data-note-id="${noteId}">
+                              name="message">${escapeHtml(message)}</textarea>
+                    <div class="circle-loader client-note" data-note-id="${id}">
                         <div class="checkmark draw"></div>
                     </div>
                 </div>

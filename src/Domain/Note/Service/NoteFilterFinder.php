@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 
 
 use App\Domain\Authorization\UnauthorizedException;
-use App\Domain\Note\Data\NoteWithUserData;
+use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use Odan\Session\SessionInterface;
 
@@ -23,7 +23,7 @@ class NoteFilterFinder
      *
      * @param array $params GET parameters containing filter values
      *
-     * @return NoteWithUserData[]
+     * @return NoteResultData[]
      */
     public function findNotesWithFilter(array $params): array
     {

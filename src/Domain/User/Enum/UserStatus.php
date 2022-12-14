@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Enum;
 
-use App\Domain\Utility\Trait\EnumToArray;
+use App\Common\Trait\EnumToArray;
 
 /**
  * User authentication status

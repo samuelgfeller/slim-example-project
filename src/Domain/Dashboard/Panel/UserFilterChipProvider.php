@@ -2,7 +2,6 @@
 
 namespace App\Domain\Dashboard\Panel;
 
-use App\Domain\Authorization\AuthorizationChecker;
 use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
@@ -18,7 +17,6 @@ class UserFilterChipProvider
         private readonly SessionInterface $session,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly UserFinderRepository $userFinderRepository,
-        private readonly AuthorizationChecker $authorizationChecker,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
     ) {
     }
