@@ -68,7 +68,7 @@ export function fetchAndLoadClients(filterParams = new URLSearchParams(), client
  * Fetch and load clients into dom event handler
  * Existing because fetchAndLoadClients has an optional
  * object parameter "filterParams" so it would cause a type
- * error when called from event listener
+ * error when called directly from event listener
  */
 export function fetchAndLoadClientsEventHandler() {
     fetchAndLoadClients();
@@ -85,7 +85,7 @@ function fetchClients(searchParams = new URLSearchParams()) {
 
     // Loop through all the active filter chips and add filters to query params
     const activeFilterChips = document
-        .querySelectorAll('#active-client-filter-chips .filter-chip span');
+        .querySelectorAll('#active-client-filter-chips-div .filter-chip span');
     for (const chip of activeFilterChips) {
         const paramName = chip.dataset.paramName;
         // For PHP, GET params with multiple values have to have a "[]" appended to the name
