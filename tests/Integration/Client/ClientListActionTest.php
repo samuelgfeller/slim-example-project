@@ -167,7 +167,7 @@ class ClientListActionTest extends TestCase
                 'notes' => null,
                 'notesAmount' => null,
                 // Empty on client list but perhaps added later to display on hover
-                'mainNoteData' => (array)new NoteData(),
+                'mainNoteData' => (new NoteData())->jsonSerialize(),
                 // Below not asserted as this test is about filtering not authorization
                 // 'mainDataPrivilege' => null
                 // 'clientStatusPrivilege' => 'NONE'

@@ -33,12 +33,12 @@ class UserActivityManager
         ?int $userId = null,
     ): int {
         $userActivity = new UserActivityData();
-        $userActivity->ip_address = $_SERVER['REMOTE_ADDR'];
-        $userActivity->user_agent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        $userActivity->user_id = $this->session->get('user_id') ?? $userId;
+        $userActivity->ipAddress = $_SERVER['REMOTE_ADDR'];
+        $userActivity->userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+        $userActivity->userId = $this->session->get('user_id') ?? $userId;
         $userActivity->action = $userActivityAction;
         $userActivity->table = $table;
-        $userActivity->row_id = $rowId;
+        $userActivity->rowId = $rowId;
         $userActivity->data = $data;
 
         return $this->userActivityRepository->insertUserActivity($userActivity->toArray());

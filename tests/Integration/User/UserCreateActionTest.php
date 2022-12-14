@@ -14,6 +14,8 @@ use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -144,6 +146,7 @@ class UserCreateActionTest extends TestCase
      *
      * @param array $requestBody
      * @param array $jsonResponse
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
     public function testUserSubmitCreate_invalid(array $requestBody, array $jsonResponse): void
     {

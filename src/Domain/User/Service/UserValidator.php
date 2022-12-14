@@ -213,7 +213,7 @@ class UserValidator
             $this->validator->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required
-            $validationResult->setError($fieldName, 'Password required');
+            $validationResult->setError($fieldName, 'Password is required');
         }
     }
 
@@ -263,7 +263,7 @@ class UserValidator
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('status', 'Status required');
+            $validationResult->setError('status', 'Status is required');
         }
     }
 

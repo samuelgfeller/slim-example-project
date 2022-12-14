@@ -86,15 +86,15 @@ class SecurityEmailChecker
             if (
                 $ipStats->sentEmails >= $requestLimit || $userStats->sentEmails >= $requestLimit
             ) {
-                // Retrieve latest email sent for specific email or coming from ip
+                // Retrieve the latest email sent for specific email or coming from ip
                 $latestEmailRequestFromUser = $this->emailRequestFinder->findLatestEmailRequestFromUserOrIp($email);
 
                 $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
                     // created_at in seconds
-                    $latest = (int)date('U', strtotime($latestEmailRequestFromUser->createdAt));
+                    $latest = (int)$latestEmailRequestFromUser->createdAt->format('U');
 
-                    // Check that time is in the future by comparing actual time with forced delay + to latest request
+                    // Check that time is in the future by comparing actual time with forced delay + to the latest request
                     if (time() < ($timeForNextRequest = $delay + $latest)) {
                         $remainingDelay = $timeForNextRequest - time();
                         throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);

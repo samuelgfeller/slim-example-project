@@ -31,6 +31,10 @@ final class UserSubmitCreateAction
         $this->logger = $logger->addFileHandler('error.log')->createInstance('user-create-action');
     }
 
+    /**
+     * @throws \Throwable
+     * @throws \JsonException
+     */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         $flash = $this->session->getFlash();

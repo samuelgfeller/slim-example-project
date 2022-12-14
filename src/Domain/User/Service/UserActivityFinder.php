@@ -61,7 +61,7 @@ class UserActivityFinder
                 // and the url argument has to be called "[table-name]-id"
                 $userActivity->pageUrl = $this->routeParser->urlFor(
                     "$userActivity->table-read-page",
-                    [$userActivity->table . '_id' => $userActivity->row_id]
+                    [$userActivity->table . '_id' => $userActivity->rowId]
                 );
             } catch (RuntimeException|InvalidArgumentException $exception) {
                 $userActivity->pageUrl = null;
@@ -71,7 +71,7 @@ class UserActivityFinder
                 ucfirst($userActivity->action->value);
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {
-                $userRow = $this->userFinderRepository->findUserById($userActivity->user_id);
+                $userRow = $this->userFinderRepository->findUserById($userActivity->userId);
                 $userActivity->timeAndActionName = '<span style="color: black">' .$userRow['first_name'] . ' '
                     . $userRow['surname'] . '</span> • ' .
                     $userActivity->timeAndActionName;

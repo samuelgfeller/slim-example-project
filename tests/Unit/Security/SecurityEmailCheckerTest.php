@@ -104,11 +104,15 @@ class SecurityEmailCheckerTest extends TestCase
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here
-        $emptyStats = new RequestStatsData(
+        $emptyStatsData = new RequestStatsData(
             ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0]
         );
-        $requestFinderRepository->method('getIpRequestStats')->willReturn($emptyStats);
-        $requestFinderRepository->method('getUserRequestStats')->willReturn($emptyStats);
+        $emptyEmailAndIpStats = [
+            'email_stats' => $emptyStatsData,
+            'ip_stats' => $emptyStatsData,
+        ];
+        $requestFinderRepository->method('getEmailRequestStatsFromEmailAndIp')
+            ->willReturn($emptyEmailAndIpStats);
 
         // Actual test starts here
         // In the first test iteration the provider sets the daily amount and leaves monthly blank

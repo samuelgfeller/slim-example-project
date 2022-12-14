@@ -52,7 +52,7 @@ class RegisterTokenVerifierTest extends TestCase
         // Return active user (empty user, only status is populated)
         $this->mock(UserFinder::class)->expects(self::once())->method('findUserById')->willReturn(
         // IMPORTANT: user has to be already active for exception to be thrown
-            new UserData(['status' => UserStatus::Active])
+            new UserData(['status' => UserStatus::Active->value])
         );
 
         $this->expectException(UserAlreadyVerifiedException::class);
