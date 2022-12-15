@@ -14,13 +14,13 @@
                     <?php
                     // Sadly I cannot use the `content:` tag because its impossible set basepath for css ?>
                     <img class="<?= $key === "success" ? "open" : '' ?>" draggable="false"
-                         src="../../public/assets/general/page-component/flash-message/img/flash-checkmark.svg" alt="success">
+                         src="assets/general/page-component/flash-message/img/flash-checkmark.svg" alt="success">
                     <img class="<?= $key === "error" ? "open" : '' ?>" draggable="false"
-                         src="../../public/assets/general/page-component/flash-message/img/flash-error.svg" alt="error">
+                         src="assets/general/page-component/flash-message/img/flash-error.svg" alt="error">
                     <img class="<?= $key === "info" ? "open" : '' ?>" draggable="false"
-                         src="../../public/assets/general/page-component/flash-message/img/flash-info.svg" alt="info">
+                         src="assets/general/page-component/flash-message/img/flash-info.svg" alt="info">
                     <img class="<?= $key === "warning" ? "open" : '' ?>" draggable="false"
-                         src="../../public/assets/general/page-component/flash-message/img/flash-warning.svg" alt="warning">
+                         src="assets/general/page-component/flash-message/img/flash-warning.svg" alt="warning">
                 </figure>
                 <!-- Elements in flash-message div have to be stuck together, all spaces are interpreted literally and
                  display in DOM -->

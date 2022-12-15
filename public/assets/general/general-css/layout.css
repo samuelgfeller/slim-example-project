@@ -1,3 +1,5 @@
+/* This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
+especially elements from the layout.html.php */
 :root {
     --layout-main-color: #2e3e50;
     --layout-light-color: #b6e9ff;
@@ -14,6 +16,10 @@
         display: flex;
         flex-direction: column;
         /* No top/bottom margin on wrapper it makes body not touch the top */
+        /* --vh set by javascript file default.js
+        https://css-tricks.com/the-trick-to-viewport-units-on-mobile
+        if not found 1vh is fallback value, phpStorm warning can be ignored */
+        height: calc(var(--vh, 2vh) * 100);
     }
     header{
         flex: none;
@@ -106,6 +112,7 @@
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
         width: 100%;
+        height: 100vh;
         /*background: darkgrey;*/
         /*border-right: 8px solid #cc0033;*/
     }

@@ -21,7 +21,7 @@ export function makeFieldEditable(field) {
     let saveBtnId = editIcon.id + '-save';
     // Add save button if not already existing but hidden until an input is made
     if (document.querySelector('#' + saveBtnId) === null) {
-        fieldContainer.insertAdjacentHTML('afterbegin', `<img src="../../img/checkmark.svg"
+        fieldContainer.insertAdjacentHTML('afterbegin', `<img src="assets/general/general-img/checkmark.svg"
                                                       class="contenteditable-save-icon cursor-pointer" alt="Save"
                                                       id="${saveBtnId}" style="display: none">`);
     }
