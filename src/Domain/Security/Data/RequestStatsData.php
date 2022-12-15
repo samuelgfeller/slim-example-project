@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\Domain\Security\Data;
 
-
 /**
- * Summary of requests
+ * Summary of requests.
  */
 class RequestStatsData
 {
@@ -19,7 +17,8 @@ class RequestStatsData
      *
      * @param array $requestStatsData
      */
-    public function __construct(array $requestStatsData = []) {
+    public function __construct(array $requestStatsData = [])
+    {
         $this->sentEmails = $requestStatsData['sent_emails'] ?? null;
         $this->loginFailures = $requestStatsData['login_failures'] ?? null;
         $this->loginSuccesses = $requestStatsData['login_successes'] ?? null;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Note\Service;
-
 
 use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Note\Data\NoteResultData;
@@ -56,11 +54,11 @@ class NoteFilterFinder
                 // Exception message tested in NoteFilterProvider.php
                 throw new InvalidNoteFilterException('Filter "user" is not numeric.');
             }
+
             return $this->noteFinder->findAllNotesFromUser((int)$params['user']);
         }
 
         // Other filters here
-
 
         // If there is no filter, an empty array is returned
         return [];

@@ -19,11 +19,10 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
- * Integration testing user update Process
+ * Integration testing user update Process.
  */
 class UserUpdateActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -34,7 +33,7 @@ class UserUpdateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * User update process with valid data
+     * User update process with valid data.
      *
      * @dataProvider \App\Test\Provider\User\UserUpdateProvider::userUpdateAuthorizationCases()
      *
@@ -42,9 +41,10 @@ class UserUpdateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
      * @return void
      */
-    public function testUserSubmitUpdate_authorization(
+    public function testUserSubmitUpdateAuthorization(
         array $userToChangeRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -78,7 +78,7 @@ class UserUpdateActionTest extends TestCase
                     'action' => UserActivity::UPDATED->value,
                     'table' => 'user',
                     'row_id' => $userToChangeRow['id'],
-                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR)
+                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -93,11 +93,11 @@ class UserUpdateActionTest extends TestCase
 
     /**
      * Test that user is redirected to login page
-     * if trying to do unauthenticated request
+     * if trying to do unauthenticated request.
      *
      * @return void
      */
-    public function testUserSubmitUpdate_unauthenticated(): void
+    public function testUserSubmitUpdateUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => 1]));
@@ -115,14 +115,14 @@ class UserUpdateActionTest extends TestCase
     }
 
     /**
-     * Test user submit invalid update data
+     * Test user submit invalid update data.
      *
      * @dataProvider \App\Test\Provider\User\UserUpdateProvider::invalidUserUpdateCases()
      *
      * @param array $requestBody
      * @param array $jsonResponse
      */
-    public function testUserSubmitUpdate_invalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixturesWithAttributes(
@@ -152,13 +152,13 @@ class UserUpdateActionTest extends TestCase
      * the request but "email" is not present in the body or
      * misspelled.
      * Good: "email: valid_or_invalid@data.com"
-     * Bad: "emal: valid_or_invalid@data.com"
+     * Bad: "emal: valid_or_invalid@data.com".
      *
      * If the request contains a different body than expected, HttpBadRequestException
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      */
-    public function testUserSubmitUpdate_malformedBody(): void
+    public function testUserSubmitUpdateMalformedBody(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

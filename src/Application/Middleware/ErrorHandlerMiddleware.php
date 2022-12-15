@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Domain\Factory\LoggerFactory;
@@ -13,11 +12,10 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Middleware which sets set_error_handler() to custom DefaultErrorHandler
- * and logs warning and notices
+ * and logs warning and notices.
  */
 final class ErrorHandlerMiddleware implements MiddlewareInterface
 {
-
     private bool $displayErrorDetails;
 
     private bool $logErrors;
@@ -46,8 +44,9 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
      * @param ServerRequestInterface $request The request
      * @param RequestHandlerInterface $handler The handler
      *
-     * @return ResponseInterface The response
      * @throws ErrorException
+     *
+     * @return ResponseInterface The response
      */
     public function process(
         ServerRequestInterface $request,
@@ -79,6 +78,7 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
                         throw new ErrorException($message, 0, $severity, $file, $line);
                     }
                 }
+
                 return true;
             }
         );

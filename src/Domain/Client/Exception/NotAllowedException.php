@@ -3,7 +3,7 @@
 namespace App\Domain\Client\Exception;
 
 /**
- * Action not allowed
+ * Action not allowed.
  */
 class NotAllowedException extends \RuntimeException
 {

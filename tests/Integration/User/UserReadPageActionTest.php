@@ -15,7 +15,6 @@ use Slim\Exception\HttpForbiddenException;
 
 class UserReadPageActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use RouteTestTrait;
@@ -24,15 +23,17 @@ class UserReadPageActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Normal page action while being authenticated
+     * Normal page action while being authenticated.
      *
      * @dataProvider \App\Test\Provider\User\UserReadProvider::userReadAuthorizationCases()
+     *
      * @param array $userData user attributes containing the user_role_id
      * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
      * @param array{string: StatusCodeInterface} $expectedResult
+     *
      * @return void
      */
-    public function testClientReadPageAction_authorization(
+    public function testClientReadPageActionAuthorization(
         array $userData,
         array $authenticatedUserData,
         array $expectedResult,
@@ -57,11 +58,11 @@ class UserReadPageActionTest extends TestCase
     }
 
     /**
-     * Test that user has to be logged in to display the page
+     * Test that user has to be logged in to display the page.
      *
      * @return void
      */
-    public function testClientReadPageAction_unauthenticated(): void
+    public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);

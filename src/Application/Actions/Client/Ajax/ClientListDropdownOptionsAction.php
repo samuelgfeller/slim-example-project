@@ -28,10 +28,11 @@ class ClientListDropdownOptionsAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -46,11 +47,12 @@ class ClientListDropdownOptionsAction
                 // Response format tested in PostFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidClientFilterException->getMessage()
+                    'message' => $invalidClientFilterException->getMessage(),
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
         }
+
         return $this->responder->respondWithJson($response, $dropdownOptions);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Test\Fixture;
 
 /**
  * Client status values that can be inserted into the database
- * No fixture has to be inserted first
+ * No fixture has to be inserted first.
  */
 class ClientStatusFixture
 {

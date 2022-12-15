@@ -30,7 +30,7 @@ class UserDeleteProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to delete user.',
-            ]
+            ],
         ];
 
         return [
@@ -57,8 +57,8 @@ class UserDeleteProvider
                 'expected_result' => $authorizedResult,
             ],
             [ // ? Admin not owner - other is also admin - allowed
-                'user_to_delete' =>  ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Bill'],
-                'authenticated_user' =>  ['user_role_id' => UserRole::ADMIN],
+                'user_to_delete' => ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Bill'],
+                'authenticated_user' => ['user_role_id' => UserRole::ADMIN],
                 'expected_result' => $authorizedResult,
             ],
         ];

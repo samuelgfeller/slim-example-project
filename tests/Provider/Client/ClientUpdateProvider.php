@@ -8,7 +8,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class ClientUpdateProvider
 {
-
     use FixtureTestTrait;
 
     /**
@@ -49,9 +48,8 @@ class ClientUpdateProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to update client.',
-            ]
+            ],
         ];
-
 
         // To avoid testing each column separately for each user role, the most basic change is taken to test.
         // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database first.
@@ -62,7 +60,7 @@ class ClientUpdateProvider
                 'user_linked_to_client' => $newcomerAttr,
                 'authenticated_user' => $newcomerAttr,
                 'data_to_be_changed' => ['first_name' => 'value'],
-                'expected_result' => $unauthorizedResult
+                'expected_result' => $unauthorizedResult,
             ],
             // * Advisor
             [ // ? Advisor owner - data to be changed allowed
@@ -114,7 +112,6 @@ class ClientUpdateProvider
             ],
         ];
     }
-
 
     /**
      * Returns combinations of invalid data to trigger validation exception
@@ -181,9 +178,9 @@ class ClientUpdateProvider
                                 'field' => 'sex',
                                 'message' => 'Invalid sex value given.',
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Most values too long
@@ -234,10 +231,10 @@ class ClientUpdateProvider
                                 'field' => 'phone',
                                 'message' => 'Maximum length is 20',
                             ],
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

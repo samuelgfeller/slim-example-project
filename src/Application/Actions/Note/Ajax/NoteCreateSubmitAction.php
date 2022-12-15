@@ -20,7 +20,6 @@ use Slim\Exception\HttpBadRequestException;
  */
 final class NoteCreateSubmitAction
 {
-
     /**
      * The constructor.
      *
@@ -46,10 +45,11 @@ final class NoteCreateSubmitAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -62,7 +62,7 @@ final class NoteCreateSubmitAction
             // Check that request body syntax is formatted right
             if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
                 $noteValues,
-                ['message', 'client_id', 'is_main',]
+                ['message', 'client_id', 'is_main']
             )) {
                 try {
                     $insertId = $this->noteCreator->createNote($noteValues);
@@ -77,7 +77,7 @@ final class NoteCreateSubmitAction
                         $response,
                         [// Response content asserted in ClientReadCaseProvider.php
                             'status' => 'error',
-                            'message' => 'Not allowed to create note.'
+                            'message' => 'Not allowed to create note.',
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );
@@ -93,14 +93,15 @@ final class NoteCreateSubmitAction
                             'noteId' => $insertId,
                             'createdDateFormatted' => $noteDataFromDb->createdAt->format(
                                 'd. F Y • H:i'
-                            )
+                            ),
                         ],
                     ], 201);
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'Note not created'
+                    'message' => 'Note not created',
                 ]);
+
                 return $response->withAddedHeader('Warning', 'The note could not be created');
             }
             throw new HttpBadRequestException($request, 'Request body malformed.');

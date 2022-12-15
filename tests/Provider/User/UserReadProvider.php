@@ -7,7 +7,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserReadProvider
 {
-
     /**
      * Provides authenticated and other user which is requested to be read.
      * Only status code can be asserted as expected result as page is rendered
@@ -26,17 +25,17 @@ class UserReadProvider
             [// ? advisor owner - other is newcomer - not allowed to read other
                 'other_user' => $newcomerAttr,
                 'authenticated_user' => $advisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,],
+                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN],
             ],
             [// ? managing advisor - other also managing advisor other - allowed to read
                 'other_user' => ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'Josh'],
                 'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,],
+                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
             ],
             [// ? managing advisor - other is admin - allowed to read
                 'other_user' => $adminAttr,
                 'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,],
+                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
             ],
         ];
     }

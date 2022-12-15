@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Application\Exceptions\CorsMiddlewareException;
@@ -26,7 +25,7 @@ final class CorsMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Invoke Cors middleware
+     * Invoke Cors middleware.
      *
      * Source: http://www.slimframework.com/docs/v4/cookbook/enable-cors.html
      * https://odan.github.io/2019/11/24/slim4-cors.html
@@ -68,7 +67,7 @@ final class CorsMiddleware implements MiddlewareInterface
                     [
                         'error' => [
                             'message' => $throwable->getMessage(),
-                        ]
+                        ],
                     ],
                 )
             );

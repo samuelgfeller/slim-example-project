@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
-
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
@@ -16,15 +14,18 @@ final class VerificationTokenVerifier
     }
 
     /**
-     * Most simple form of verifying token and return user id
+     * Most simple form of verifying token and return user id.
      *
      * Token also verified @param int $verificationId
+     *
      * @param string $token
-     * @return int
+     * @param int $verificationId
      *
      * @throws InvalidTokenException
-     * @see AccountUnlockTokenVerifier, RegisterTokenVerifier
      *
+     * @return int
+     *
+     * @see AccountUnlockTokenVerifier, RegisterTokenVerifier
      */
     public function getUserIdIfTokenIsValid(int $verificationId, string $token): int
     {
@@ -37,6 +38,7 @@ final class VerificationTokenVerifier
         ) {
             // Mark token as being used
             $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
+
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
         }
 

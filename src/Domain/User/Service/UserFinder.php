@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\User\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\DomainRecordNotFoundException;
@@ -44,8 +42,8 @@ class UserFinder
                     $userResultData->id,
                     'status',
                 );
-                // General data privilege like first name, email and so on no needed for list
-                // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+            // General data privilege like first name, email and so on no needed for list
+            // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
                 //     'general_data', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
@@ -57,8 +55,10 @@ class UserFinder
 
     /**
      * @param string|int $id
-     * @return UserData
+     *
      * @throws \Exception
+     *
+     * @return UserData
      */
     public function findUserById(string|int $id): UserData
     {
@@ -67,13 +67,14 @@ class UserFinder
         return new UserData($this->userFinderRepository->findUserById((int)$id));
     }
 
-
     /**
-     * Find user with authorization check and privilege attributes
+     * Find user with authorization check and privilege attributes.
      *
      * @param int $id
-     * @return UserResultData
+     *
      * @throws \Exception
+     *
+     * @return UserResultData
      */
     public function findUserReadResult(int $id): UserResultData
     {
@@ -112,11 +113,11 @@ class UserFinder
         throw new ForbiddenException('Not allowed to read user.');
     }
 
-
     /**
-     * Find user via email
+     * Find user via email.
      *
      * @param string $email
+     *
      * @return UserData
      */
     public function findUserByEmail(string $email): UserData

@@ -21,7 +21,7 @@ final class QueryFactory
 
     /**
      * Get a query instance
-     * ! Dont forget deleted_at when selecting or mass updating
+     * ! Dont forget deleted_at when selecting or mass updating.
      *
      * SELECT Example:
      *     $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->where(
@@ -41,9 +41,10 @@ final class QueryFactory
     /**
      * Data is an assoc array of a row to insert where the key is the column name
      * Example:
-     *     return (int)$this->queryFactory->newInsert($data)->into('user')->execute()->lastInsertId();
+     *     return (int)$this->queryFactory->newInsert($data)->into('user')->execute()->lastInsertId();.
      *
      * @param array $data ['col_name' => 'Value', 'other_col' => 'Other value']
+     *
      * @return Query
      */
     public function newInsert(array $data): Query
@@ -54,9 +55,10 @@ final class QueryFactory
     /**
      * Data is an assoc array of rows to insert where the key is the column name
      * Example:
-     *     return (int)$this->queryFactory->newMultipleInsert($data)->into('user')->execute()->lastInsertId();
+     *     return (int)$this->queryFactory->newMultipleInsert($data)->into('user')->execute()->lastInsertId();.
      *
      * @param array $arrayOfData [['col_name' => 'Value', 'other_col' => 'Other value'], ['col_name' => 'value']]
+     *
      * @return Query
      */
     public function newMultipleInsert(array $arrayOfData): Query
@@ -66,6 +68,7 @@ final class QueryFactory
         foreach ($arrayOfData as $data) {
             $query->values($data);
         }
+
         return $query;
     }
 
@@ -74,14 +77,14 @@ final class QueryFactory
      * Table name needed here as its a required argument for update() function
      * Example:
      *     $query = $this->queryFactory->newDelete('post')->where(['id' => $id]);
-     *     return $query->execute()->rowCount() > 0;
+     *     return $query->execute()->rowCount() > 0;.
      *
      * @param string $fromTable
+     *
      * @return Query
      */
     public function newDelete(string $fromTable): Query
     {
         return $this->connection->newQuery()->update($fromTable)->set(['deleted_at' => date('Y-m-d H:i:s')]);
     }
-
 }

@@ -4,7 +4,7 @@ namespace App\Test\Fixture;
 
 /**
  * Post values that can be inserted into the database
- * UserFixture HAS to be inserted first
+ * UserFixture HAS to be inserted first.
  */
 class NoteFixture
 {

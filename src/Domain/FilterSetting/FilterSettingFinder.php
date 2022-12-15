@@ -17,7 +17,7 @@ class FilterSettingFinder
 
     /**
      * Checks in database which filters are active and
-     * returns an array with active and inactive filters
+     * returns an array with active and inactive filters.
      *
      * @param FilterData[] $allAvailableFilters
      * @param FilterModule $filterModule
@@ -59,9 +59,10 @@ class FilterSettingFinder
     }
 
     /**
-     * Find saved filters from authenticated user
+     * Find saved filters from authenticated user.
      *
      * @param FilterModule $userFilterModule
+     *
      * @return array
      */
     public function findFiltersFromAuthenticatedUser(FilterModule $userFilterModule): array

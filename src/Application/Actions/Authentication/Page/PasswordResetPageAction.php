@@ -17,6 +17,8 @@ class PasswordResetPageAction
      * The constructor.
      *
      * @param Responder $responder
+     * @param SessionInterface $session
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         private readonly Responder $responder,
@@ -27,12 +29,14 @@ class PasswordResetPageAction
     }
 
     /**
-     * Check if token is valid and if yes display password form
+     * Check if token is valid and if yes display password form.
      *
      * @param ServerRequest $request
      * @param Response $response
-     * @return Response
+     *
      * @throws \Throwable
+     *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -43,7 +47,7 @@ class PasswordResetPageAction
         if (isset($queryParams['id'], $queryParams['token'])) {
             return $this->responder->render($response, 'authentication/reset-password.html.php', [
                 'token' => $queryParams['token'],
-                'id' => $queryParams['id']
+                'id' => $queryParams['id'],
             ]);
         }
 
@@ -51,7 +55,7 @@ class PasswordResetPageAction
         $this->logger->error('GET request malformed: ' . json_encode($queryParams));
 
         return $this->responder->render($response, 'authentication/reset-password.html.php', [
-            'formErrorMessage'=> 'Token not found. Please click on the link you received via email.'
+            'formErrorMessage' => 'Token not found. Please click on the link you received via email.',
         ]);
     }
 }

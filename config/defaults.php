@@ -1,6 +1,6 @@
 <?php
 /**
- * Default configuration values
+ * Default configuration values.
  *
  * This file should contain all keys even secret ones to serve as template
  *
@@ -86,7 +86,7 @@ $settings['db'] = [
         PDO::ATTR_EMULATE_PREPARES => true,
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]
+    ],
 ];
 
 // Template renderer settings

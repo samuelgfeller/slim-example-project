@@ -22,11 +22,10 @@ use Slim\Exception\HttpMethodNotAllowedException;
 /**
  * Test cases for client read note deletion
  *  - Authenticated with different user roles
- *  - Unauthenticated
+ *  - Unauthenticated.
  */
 class NoteDeleteActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -41,12 +40,14 @@ class NoteDeleteActionTest extends TestCase
      * while being authenticated with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
+     *
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+     *
      * @return void
      */
-    public function testNoteSubmitDeleteAction_authorization(
+    public function testNoteSubmitDeleteActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -102,7 +103,6 @@ class NoteDeleteActionTest extends TestCase
         // Database is not expected to change for the main note as there is no way to delete it from the frontend
         $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
 
-
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'DELETE',
@@ -127,7 +127,7 @@ class NoteDeleteActionTest extends TestCase
                     'action' => UserActivity::CREATED->value,
                     'table' => 'note',
                     'row_id' => $normalNoteData['id'],
-                    'data' => null
+                    'data' => null,
                 ],
                 'user_activity',
                 (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -146,7 +146,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitDeleteAction_unauthenticated(): void
+    public function testNoteSubmitDeleteActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

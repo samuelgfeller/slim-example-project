@@ -16,7 +16,7 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Threats:
  *  - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
- *  - Distributed brute force attacks (try to log in 1000 different users with most common password)
+ *  - Distributed brute force attacks (try to log in 1000 different users with most common password).
  *
  * Testing whole function performLoginSecurityCheck() and performEmailAbuseCheck() and not sub-functions directly as
  * they are private mainly because here (https://stackoverflow.com/a/2798203/9013718 comments), they say:
@@ -36,18 +36,20 @@ class SecurityLoginCheckerTest extends TestCase
      * - [Login from ip] Test with every defined threshold of login failure and success requests coming from the same
      *    ip. Throttled same as rapid fire
      * - [Login with user] Test with every defined (in provider) threshold of login failure and success requests
-     *    concerning the same user (target email)
+     *    concerning the same user (target email).
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
+     *
      * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualLoginThrottlingTestCases()
      *
      * @param int|string $delay
      * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformLoginSecurityCheck_individual(int|string $delay, array $ipAndEmailRequestStats): void
+    public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
         $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
@@ -96,12 +98,12 @@ class SecurityLoginCheckerTest extends TestCase
     }
 
     /**
-     * Threat: Distributed brute force attacks (try to log in 1000 different users with most common password)
+     * Threat: Distributed brute force attacks (try to log in 1000 different users with most common password).
      *
      * Covered in this test:
      *  - Global login failures exceeding allowed threshold
      */
-    public function testPerformLoginSecurityCheck_global(): void
+    public function testPerformLoginSecurityCheckGlobal(): void
     {
         $requestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
@@ -124,7 +126,7 @@ class SecurityLoginCheckerTest extends TestCase
             'login_total' => $totalLogins,
             // Allowed failures amount have to be LESS than actual failures so this should trigger exception as its same
             'login_failures' => $totalLogins / 100 *
-                $this->container->get('settings')['security']['login_failure_percentage']
+                $this->container->get('settings')['security']['login_failure_percentage'],
         ];
         $requestFinderRepository->method('getGlobalLoginAmountStats')->willReturn($loginAmountStats);
 

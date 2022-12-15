@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Provider\Note;
-
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\User\Enum\UserRole;
@@ -47,7 +45,7 @@ class NoteProvider
                 'authenticated_user' => $newcomerRow,
                 'note_hidden' => 1,
                 'expected_result' => [
-                    'privilege' => Privilege::DELETE
+                    'privilege' => Privilege::DELETE,
                 ],
             ],
             [// ? advisor not owner of note - note hidden - allowed to read
@@ -55,7 +53,7 @@ class NoteProvider
                 'authenticated_user' => $advisorRow,
                 'note_hidden' => 1,
                 'expected_result' => [
-                    'privilege' => Privilege::READ
+                    'privilege' => Privilege::READ,
                 ],
             ],
             [// ? managing advisor not owner of note - note hidden - allowed to do everything
@@ -64,7 +62,7 @@ class NoteProvider
                 'note_hidden' => 1,
                 'expected_result' => [
                     // Full privilege, so it must not be tested further
-                    'privilege' => Privilege::DELETE
+                    'privilege' => Privilege::DELETE,
                 ],
             ],
         ];
@@ -73,7 +71,7 @@ class NoteProvider
     /**
      * Provides logged-in user and user linked to note along the expected result
      * As the permissions are a lot more simple than for client for instance,
-     * Create Update Delete cases are all in this function
+     * Create Update Delete cases are all in this function.
      *
      * @return array{
      *              array{
@@ -111,7 +109,7 @@ class NoteProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to change note.',
-            ]
+            ],
         ];
         $unauthorizedUpdateResult = $unauthorizedResult;
         $unauthorizedUpdateResult['json_response']['message'] = 'Not allowed to change note.';
@@ -133,7 +131,7 @@ class NoteProvider
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $unauthorizedDeleteResult
+                        'normal_note' => $unauthorizedDeleteResult,
                     ],
                 ],
             ],
@@ -152,7 +150,7 @@ class NoteProvider
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult
+                        'normal_note' => $authorizedResult,
                     ],
                 ],
             ],
@@ -170,7 +168,7 @@ class NoteProvider
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult
+                        'normal_note' => $authorizedResult,
                     ],
                 ],
             ],
@@ -186,7 +184,7 @@ class NoteProvider
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $unauthorizedDeleteResult
+                        'normal_note' => $unauthorizedDeleteResult,
                     ],
                 ],
             ],
@@ -202,7 +200,7 @@ class NoteProvider
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult
+                        'normal_note' => $authorizedResult,
                     ],
                 ],
             ],
@@ -230,11 +228,11 @@ class NoteProvider
                         'errors' => [
                             0 => [
                                 'field' => 'is_main',
-                                'message' => 'Main note exists already'
+                                'message' => 'Main note exists already',
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Note message too short
@@ -250,9 +248,9 @@ class NoteProvider
                                 'field' => 'message',
                                 'message' => 'Minimum length is 4',
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Too long
@@ -267,12 +265,11 @@ class NoteProvider
                             0 => [
                                 'field' => 'message',
                                 'message' => 'Maximum length is 1000',
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ],
-
         ];
     }
 
@@ -296,10 +293,10 @@ class NoteProvider
                             0 => [
                                 'field' => 'message',
                                 'message' => 'Minimum length is 4',
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'message_too_long' => str_repeat('i', 1001),
@@ -312,18 +309,16 @@ class NoteProvider
                             0 => [
                                 'field' => 'message',
                                 'message' => 'Maximum length is 1000',
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ],
-
         ];
     }
 
-
     /**
-     * Provide malformed note creation request body
+     * Provide malformed note creation request body.
      *
      * @return array
      */
@@ -377,7 +372,7 @@ class NoteProvider
     }
 
     /**
-     * Provide malformed note message request body
+     * Provide malformed note message request body.
      *
      * @return array
      */
@@ -394,9 +389,7 @@ class NoteProvider
                     'message' => 'Message',
                     'second_key' => 'invalid',
                 ],
-            ]
+            ],
         ];
     }
-
-
 }

@@ -22,11 +22,10 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
- * Integration testing user update Process
+ * Integration testing user update Process.
  */
 class UserCreateActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -37,16 +36,17 @@ class UserCreateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * User create authorization test with different user roles
+     * User create authorization test with different user roles.
      *
      * @dataProvider \App\Test\Provider\User\UserCreateProvider::userCreateAuthorizationCases()
      *
      * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
      * @param UserRole $newUserRole user role id of new user
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
      * @return void
      */
-    public function testUserSubmitCreate_authorization(
+    public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
         UserRole $newUserRole,
         array $expectedResult
@@ -118,11 +118,11 @@ class UserCreateActionTest extends TestCase
 
     /**
      * Test that user is redirected to login page
-     * if trying to do unauthenticated request
+     * if trying to do unauthenticated request.
      *
      * @return void
      */
-    public function testUserSubmitCreate_unauthenticated(): void
+    public function testUserSubmitCreateUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('POST', $this->urlFor('user-create-submit'));
@@ -140,15 +140,16 @@ class UserCreateActionTest extends TestCase
     }
 
     /**
-     * Test user submit invalid update data
+     * Test user submit invalid update data.
      *
      * @dataProvider \App\Test\Provider\User\UserCreateProvider::invalidUserCreateCases()
      *
      * @param array $requestBody
      * @param array $jsonResponse
+     *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
-    public function testUserSubmitCreate_invalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
         $userRow = $this->insertFixturesWithAttributes(
@@ -172,7 +173,7 @@ class UserCreateActionTest extends TestCase
     }
 
     /**
-     * Test request with malformed body
+     * Test request with malformed body.
      *
      * If the request contains a different body than expected, HttpBadRequestException
      * is thrown and an error page is displayed to the user and that means that
@@ -180,10 +181,11 @@ class UserCreateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\User\UserCreateProvider::malformedRequestBodyCases()
      *
-     * @param null|array $requestBody request body may be null
+     * @param array|null $requestBody request body may be null
+     *
      * @return void
      */
-    public function testUserSubmitCreate_malformedBody(?array $requestBody): void
+    public function testUserSubmitCreateMalformedBody(?array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

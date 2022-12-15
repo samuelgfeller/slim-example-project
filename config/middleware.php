@@ -10,7 +10,6 @@ use Slim\Middleware\ErrorMiddleware;
 return function (App $app) {
     $app->addBodyParsingMiddleware();
 
-
     // Slim middlewares are LIFO (last in, first out) so when responding, the order is backwards
     // so BasePathMiddleware is invoked before routing and which is before PhpViewExtensionMiddleware
     $app->add(PhpViewExtensionMiddleware::class);
@@ -21,9 +20,7 @@ return function (App $app) {
     // Has to be after Routing (called before on response)
     $app->add(BasePathMiddleware::class);
 
-
-
-    //Error middleware should be added last. It will not handle any exceptions/errors
+    // Error middleware should be added last. It will not handle any exceptions/errors
     $app->add(ErrorHandlerMiddleware::class);
     $app->add(ErrorMiddleware::class);
 };

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\Authentication;
-
 
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
@@ -17,11 +15,13 @@ class UserRoleFinderRepository
     }
 
     /**
-     * Retrieve user role
+     * Retrieve user role.
      *
      * @param int $userId
-     * @return int
+     *
      * @throws PersistenceRecordNotFoundException if entry not found
+     *
+     * @return int
      */
     public function getRoleIdFromUser(int $userId): int
     {
@@ -32,13 +32,15 @@ class UserRoleFinderRepository
         if (!$roleId) {
             throw new PersistenceRecordNotFoundException('user');
         }
+
         return $roleId;
     }
 
     /**
-     * Get role data from user that has status active
+     * Get role data from user that has status active.
      *
      * @param int $userId
+     *
      * @return UserRoleData empty object if user is not active
      */
     public function getUserRoleDataFromUser(int $userId): UserRoleData
@@ -54,14 +56,15 @@ class UserRoleFinderRepository
             $userRoleData->id = $roleResultRow['id'];
             $userRoleData->name = $roleResultRow['name'];
             $userRoleData->hierarchy = $roleResultRow['hierarchy'];
+
             return $userRoleData;
         }
+
         return new UserRoleData();
     }
 
-
     /**
-     * Get user role hierarchies mapped by name or id if param is true
+     * Get user role hierarchies mapped by name or id if param is true.
      *
      * @param bool $mappedById if key of return array should be the role id or name
      *
@@ -80,11 +83,12 @@ class UserRoleFinderRepository
                 $userRoles[$resultRow['id']] = $resultRow['hierarchy'];
             }
         }
+
         return $userRoles;
     }
 
     /**
-     * Return all user roles with as key the id and value the name
+     * Return all user roles with as key the id and value the name.
      *
      * @return array{id: string, name: string}
      */
@@ -98,13 +102,15 @@ class UserRoleFinderRepository
         foreach ($resultRows as $resultRow) {
             $userRoles[(int)$resultRow['id']] = UserRole::from($resultRow['name'])->roleNameForDropdown();
         }
+
         return $userRoles;
     }
 
     /**
-     * Find the id of a user role with the given name
+     * Find the id of a user role with the given name.
      *
      * @param string $roleName
+     *
      * @return int|null
      */
     public function findUserRoleIdByName(string $roleName): ?int
@@ -113,6 +119,7 @@ class UserRoleFinderRepository
 
         $query->select(['id'])->where(['name' => $roleName]);
         $resultRow = $query->execute()->fetch('assoc') ?: [];
+
         return isset($resultRow['id']) ? (int)$resultRow['id'] : null;
     }
 }

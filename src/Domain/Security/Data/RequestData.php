@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Security\Data;
-
 
 class RequestData
 {
@@ -14,6 +12,8 @@ class RequestData
     public ?\DateTimeImmutable $createdAt;
 
     /**
+     * @param array $requestData
+     *
      * @throws \Exception
      */
     public function __construct(array $requestData = [])

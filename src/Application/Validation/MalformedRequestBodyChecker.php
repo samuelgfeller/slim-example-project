@@ -3,17 +3,17 @@
 namespace App\Application\Validation;
 
 /**
- * Validate that request body contains the given keys
+ * Validate that request body contains the given keys.
  */
 class MalformedRequestBodyChecker
 {
-
     /**
-     * Validate that parsed body array contains the given keys
+     * Validate that parsed body array contains the given keys.
      *
      * @param array|null $parsedBody null if parsed body is empty
      * @param array $requiredKeys
      * @param array $optionalKeys
+     *
      * @return bool
      */
     public function requestBodyHasValidKeys(?array $parsedBody, array $requiredKeys, array $optionalKeys = []): bool

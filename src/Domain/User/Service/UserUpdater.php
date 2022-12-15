@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\User\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Exception\NotAllowedException;
@@ -29,10 +27,11 @@ final class UserUpdater
     /**
      * Update user values.
      * This function is intended for changes coming from a user
-     * therefore it changes only "user changeable" general info (not password)
+     * therefore it changes only "user changeable" general info (not password).
      *
      * @param int $userIdToChange user id on which the change is requested to be made
      * @param array $userValues values to change
+     *
      * @return bool
      */
     public function updateUser(int $userIdToChange, array $userValues): bool
@@ -53,7 +52,7 @@ final class UserUpdater
                     'email',
                     'status',
                     'user_role_id',
-                ])) {
+                ], true)) {
                     $validUpdateData[$column] = $value;
                 } else {
                     throw new NotAllowedException('Not allowed to change client column ' . $column);
@@ -68,6 +67,7 @@ final class UserUpdater
                     $validUpdateData
                 );
             }
+
             return $updated;
         }
 

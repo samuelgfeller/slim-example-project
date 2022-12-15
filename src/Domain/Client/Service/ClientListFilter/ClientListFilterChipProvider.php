@@ -25,7 +25,7 @@ class ClientListFilterChipProvider
     }
 
     /**
-     * Returns active and inactive filters
+     * Returns active and inactive filters.
      *
      * @return array{
      *     active: array{string: FilterData[]},
@@ -41,7 +41,7 @@ class ClientListFilterChipProvider
     }
 
     /**
-     * Returns default filters
+     * Returns default filters.
      *
      * @return FilterData[]
      */
@@ -61,14 +61,14 @@ class ClientListFilterChipProvider
             ]),
             'assigned_to_me' => new FilterData([
                 'name' => 'Assigned to me',
-                'paramName' => "user",
+                'paramName' => 'user',
                 'paramValue' => $loggedInUserId,
                 'category' => null,
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             'deleted' => new FilterData([
                 'name' => 'Deleted',
-                'paramName' => "deleted",
+                'paramName' => 'deleted',
                 'paramValue' => 1,
                 'category' => null,
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
@@ -81,10 +81,10 @@ class ClientListFilterChipProvider
         foreach ($clientStatuses as $id => $name) {
             $allClientFilters["status_$id"] = new FilterData([
                 'name' => $name,
-                'paramName' => "status",
+                'paramName' => 'status',
                 'paramValue' => $id,
                 'category' => 'Status',
-                'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER)
+                'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]);
         }
 
@@ -97,13 +97,14 @@ class ClientListFilterChipProvider
             if ($userId !== $loggedInUserId) {
                 $allClientFilters["user_$userId"] = new FilterData([
                     'name' => "Assigned to $name",
-                    'paramName' => "user",
+                    'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => 'Other user',
-                    'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER)
+                    'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
                 ]);
             }
         }
+
         return $allClientFilters;
     }
 }

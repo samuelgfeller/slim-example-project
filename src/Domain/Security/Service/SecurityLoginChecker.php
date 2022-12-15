@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Security\Service;
-
 
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
@@ -26,7 +24,7 @@ class SecurityLoginChecker
     /**
      * Threats:
      * - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
-     * - Distributed brute force attacks (try to log in 1000 different users with most common password)
+     * - Distributed brute force attacks (try to log in 1000 different users with most common password).
      *
      * Perform security check for login requests:
      * - coming from the same ip address
@@ -126,7 +124,7 @@ class SecurityLoginChecker
     }
 
     /**
-     * Perform global login check - allow up to x percent of login failures
+     * Perform global login check - allow up to x percent of login failures.
      *
      * For the global request check set the login threshold to some ratio from unsuccessful to the total logins.
      * (permitting like 20% of total login requests to be unsuccessful).

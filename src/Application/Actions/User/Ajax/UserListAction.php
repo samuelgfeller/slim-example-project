@@ -30,10 +30,11 @@ final class UserListAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,

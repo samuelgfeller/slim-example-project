@@ -15,11 +15,13 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class DashboardPageAction
 {
-
     /**
      * The constructor.
+     *
      * @param Responder $responder
      * @param SessionInterface $session
+     * @param FilterSettingFinder $filterSettingFinder
+     * @param DashboardPanelProvider $dashboardGetter
      */
     public function __construct(
         private readonly Responder $responder,
@@ -34,8 +36,10 @@ final class DashboardPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
+     *
+     * @throws \Throwable
+     *
      * @return ResponseInterface The response
      */
     public function __invoke(

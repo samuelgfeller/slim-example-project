@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\User;
-
 
 use App\Common\Hydrator;
 use App\Domain\User\Data\UserData;
@@ -20,7 +18,7 @@ class UserFinderRepository
         'user_role_id',
         'status',
         'updated_at',
-        'created_at'
+        'created_at',
     ];
 
     public function __construct(
@@ -30,7 +28,7 @@ class UserFinderRepository
     }
 
     /**
-     * Return all users
+     * Return all users.
      *
      * @return UserData[]
      */
@@ -41,7 +39,7 @@ class UserFinderRepository
     }
 
     /**
-     * Return all users with as UserResultData instance
+     * Return all users with as UserResultData instance.
      *
      * @return UserResultData[]
      */
@@ -51,7 +49,7 @@ class UserFinderRepository
     }
 
     /**
-     * Returns array of user rows
+     * Returns array of user rows.
      *
      * @return array|false
      */
@@ -60,15 +58,16 @@ class UserFinderRepository
         $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null]
         );
+
         return $query->execute()->fetchAll('assoc') ?: [];
     }
 
-
     /**
      * Return user with given id if it exists
-     * otherwise null
+     * otherwise null.
      *
      * @param int $id
+     *
      * @return array user row
      */
     public function findUserById(int $id): array
@@ -82,11 +81,13 @@ class UserFinderRepository
 
     /**
      * Return user with password hash if it exists
-     * otherwise null
+     * otherwise null.
      *
      * @param int $id
-     * @return UserData
+     *
      * @throws \Exception
+     *
+     * @return UserData
      */
     public function findUserByIdWithPasswordHash(int $id): UserData
     {
@@ -99,16 +100,17 @@ class UserFinderRepository
         return new UserData($userRows);
     }
 
-
     /**
      * Return user with given id if it exists
      * If there is no user, an empty object is returned because:
      * > It is considered a best practice to NEVER return null when returning a collection or enumerable
-     * Source: https://stackoverflow.com/a/1970001/9013718
+     * Source: https://stackoverflow.com/a/1970001/9013718.
      *
      * @param string|null $email
-     * @return UserData
+     *
      * @throws \Exception
+     *
+     * @return UserData
      */
     public function findUserByEmail(?string $email): UserData
     {
@@ -125,12 +127,14 @@ class UserFinderRepository
 
     /**
      * Retrieve user from database
-     * If not found error is thrown
+     * If not found error is thrown.
      *
      * @param int $id
+     *
+     * @throws \Exception
+     *
      * @return UserData
      * Throws PersistenceRecordNotFoundException if not found
-     * @throws \Exception
      */
     public function getUserById(int $id): UserData
     {

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Note\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
@@ -15,7 +13,6 @@ use Odan\Session\SessionInterface;
 
 class NoteCreator
 {
-
     public function __construct(
         private readonly NoteValidator $noteValidator,
         private readonly NoteCreatorRepository $noteCreatorRepository,
@@ -27,7 +24,7 @@ class NoteCreator
     }
 
     /**
-     * Note creation logic
+     * Note creation logic.
      *
      * @param array $noteValues
      *
@@ -50,6 +47,7 @@ class NoteCreator
                         $noteValues
                     );
                 }
+
                 return $noteId;
             }
         }

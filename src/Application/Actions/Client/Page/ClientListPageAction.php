@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
-use App\Domain\Client\Service\ClientListFilter\ClientListFilterFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -19,6 +18,8 @@ final class ClientListPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param ClientListFilterChipProvider $clientListFilterChipGetter
+     * @param ClientAuthorizationChecker $clientAuthorizationChecker
      */
     public function __construct(
         private readonly Responder $responder,
@@ -32,11 +33,12 @@ final class ClientListPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
      * @throws \Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -47,12 +49,12 @@ final class ClientListPageAction
         // Retrieving available filters
         $clientListFilters = $this->clientListFilterChipGetter->getActiveAndInactiveClientListFilters();
 
-
         $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);
         $this->responder->addPhpViewAttribute(
             'clientCreatePrivilege',
             $this->clientAuthorizationChecker->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
         );
+
         return $this->responder->render($response, 'client/clients-list.html.php');
     }
 }

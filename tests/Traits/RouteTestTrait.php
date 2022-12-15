@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Traits;
-
 
 /**
  * Slim App Route Test Trait.

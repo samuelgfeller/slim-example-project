@@ -6,15 +6,16 @@ use App\Domain\Authentication\Data\UserVerificationData;
 
 class UserVerificationProvider
 {
-
     /**
-     * @return array[]
      * @throws \Exception
+     *
+     * @return array[]
      */
     public function userVerificationProvider(): array
     {
         // Same as in AuthService:createAndSendUserVerification()
         $token = bin2hex(random_bytes(50));
+
         return [
             [
                 'verification' => new UserVerificationData([
@@ -23,23 +24,25 @@ class UserVerificationProvider
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
-                    'created_at' => date('Y-m-d H:i:s')
+                    'created_at' => date('Y-m-d H:i:s'),
                 ]),
-                'token' => $token
+                'token' => $token,
             ],
         ];
     }
 
     /**
-     * Provides one time invalid and one time expired token
+     * Provides one time invalid and one time expired token.
+     *
+     * @throws \Exception
      *
      * @return array[]
-     * @throws \Exception
      */
     public function userVerificationInvalidExpiredProvider(): array
     {
         // Same as in AuthService:createAndSendUserVerification()
         $token = bin2hex(random_bytes(50));
+
         return [
             // Invalid token
             [
@@ -49,9 +52,9 @@ class UserVerificationProvider
                     'token' => password_hash($token, PASSWORD_DEFAULT),
                     'expires_at' => time() + (60 * 60 * 2), // Time as seconds plus 2h
                     'used_at' => null,
-                    'created_at' => date('Y-m-d H:i:s')
+                    'created_at' => date('Y-m-d H:i:s'),
                 ]),
-                'token' => 'invalid token' // test relevant
+                'token' => 'invalid token', // test relevant
             ],
             // Expired token
             [
@@ -79,7 +82,4 @@ class UserVerificationProvider
             ],
         ];
     }
-
-
-
 }

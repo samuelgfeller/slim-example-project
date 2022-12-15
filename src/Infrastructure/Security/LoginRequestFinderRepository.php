@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\Security;
-
 
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
@@ -16,16 +14,17 @@ class LoginRequestFinderRepository
     }
 
     /**
-     * Retrieves request summary from the given ip address
+     * Retrieves request summary from the given ip address.
      *
      * @param string $email
      * @param string $ip
      * @param int $seconds
+     *
      * @return array{email_stats: RequestStatsData, ip_stats: RequestStatsData}
      */
     public function getLoginRequestStatsFromEmailAndIp(string $email, string $ip, int $seconds): array
     {
-        $stats = ['email_stats' => [], 'ip_stats' => [],];
+        $stats = ['email_stats' => [], 'ip_stats' => []];
 
         // Only return values if not empty string as it doesn't represent a user request
         if ($email !== '') {
@@ -37,14 +36,16 @@ class LoginRequestFinderRepository
                 $seconds
             );
         }
+
         return $stats;
     }
 
     /**
-     * Retrieves info about request concerning a specific email address
+     * Retrieves info about request concerning a specific email address.
      *
      * @param array $whereEmailOrIpArr
      * @param int $seconds
+     *
      * @return RequestStatsData
      */
     private function getLoginRequestStats(array $whereEmailOrIpArr, int $seconds): RequestStatsData
@@ -59,7 +60,7 @@ class LoginRequestFinderRepository
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
-                'is_login IS NOT' => null
+                'is_login IS NOT' => null,
             ]
         )->andWhere($whereEmailOrIpArr)->bind(':sec', $seconds, 'integer');
         $sql = $query->sql();
@@ -68,10 +69,11 @@ class LoginRequestFinderRepository
     }
 
     /**
-     * Searches the latest failed login request concerning a specific email address
+     * Searches the latest failed login request concerning a specific email address.
      *
      * @param string $email
      * @param string $ip
+     *
      * @return RequestData
      */
     public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): RequestData
@@ -80,16 +82,17 @@ class LoginRequestFinderRepository
         $query->select('*')->from('user_request')->where(
             [
                 'is_login IS NOT' => null,
-                'OR' => ['email' => $email, 'ip_address' => $query->newExpr("INET_ATON(:ip)")],
+                'OR' => ['email' => $email, 'ip_address' => $query->newExpr('INET_ATON(:ip)')],
                 // output: WHERE ((`is_login`) IS NOT NULL AND (`email` = :c0 OR `ip_address` = (INET_ATON(:ip))))
             ]
             // Order desc id instead of created at for testing as last request is preponed to simulate waiting
         )->bind(':ip', $ip, 'string')->orderDesc('id')->limit(1);
+
         return new RequestData($query->execute()->fetch('assoc') ?: []);
     }
 
     /**
-     * Returns global login amount stats of last day
+     * Returns global login amount stats of last day.
      *
      * @return array{
      *     login_total: array,
@@ -110,6 +113,7 @@ class LoginRequestFinderRepository
                 'is_login IS NOT' => null,
             ]
         );
+
         return $query->execute()->fetch('assoc');
     }
 }

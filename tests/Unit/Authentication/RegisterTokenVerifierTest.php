@@ -15,7 +15,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * Email verification test (after user clicked on link)
+ * Email verification test (after user clicked on link).
  *
  * Important note: with SLE-152 I removed useless unit tests that break when doing changes on the
  * function under test. On this test class I kept only a select case where I see it being useful for now.
@@ -25,7 +25,7 @@ class RegisterTokenVerifierTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Case when user clicks on the link even though the user is not 'unverified' anymore
+     * Case when user clicks on the link even though the user is not 'unverified' anymore.
      *
      * Assert that UserAlreadyVerifiedException is thrown when already verified
      *
@@ -37,11 +37,13 @@ class RegisterTokenVerifierTest extends TestCase
      * the way to get there is not really relevant.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
+     *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|\Exception
      */
-    public function testGetUserIdIfRegisterTokenIsValid_alreadyVerified(
+    public function testGetUserIdIfRegisterTokenIsValidAlreadyVerified(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -51,7 +53,7 @@ class RegisterTokenVerifierTest extends TestCase
         )->willReturn($verification);
         // Return active user (empty user, only status is populated)
         $this->mock(UserFinder::class)->expects(self::once())->method('findUserById')->willReturn(
-        // IMPORTANT: user has to be already active for exception to be thrown
+            // IMPORTANT: user has to be already active for exception to be thrown
             new UserData(['status' => UserStatus::Active->value])
         );
 

@@ -2,7 +2,6 @@
 
 namespace App\Domain\FilterSetting\Data;
 
-
 class FilterData
 {
     public string $name;

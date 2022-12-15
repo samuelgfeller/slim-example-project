@@ -3,7 +3,7 @@
 namespace App\Test\Fixture;
 
 /**
- * Client values that can be inserted into the database
+ * Client values that can be inserted into the database.
  */
 class ClientFixture
 {

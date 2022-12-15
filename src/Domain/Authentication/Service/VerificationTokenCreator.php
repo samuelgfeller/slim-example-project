@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
-
 
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
@@ -12,17 +10,15 @@ use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleter
 
 class VerificationTokenCreator
 {
-
     public function __construct(
         private readonly VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
         private readonly VerificationTokenCreatorRepository $verificationTokenCreatorRepository,
         private readonly UserActivityManager $userActivityManager,
-
     ) {
     }
 
     /**
-     * Create and insert verification token
+     * Create and insert verification token.
      *
      * @param UserData $user WITH id
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
@@ -46,7 +42,7 @@ class VerificationTokenCreator
             'user_id' => $user->id,
             'token' => password_hash($token, PASSWORD_DEFAULT),
             // expiresAt format 'U' is the same as time() so it can be used later to compare easily
-            'expires_at' => $expiresAt->format('U')
+            'expires_at' => $expiresAt->format('U'),
         ];
         $tokenId = $this->verificationTokenCreatorRepository->insertUserVerification($userVerificationRow);
 

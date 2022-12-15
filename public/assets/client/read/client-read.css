@@ -31,7 +31,6 @@
     }
 
     #status-and-assigned-user-select-container {
-        margin: 0 auto 0 auto; /* Make it be on the top of right flex container and centered for mobile */
         flex-grow: 1; /*Needed to display max-width fit-content*/
         display: inline-flex;
         flex-wrap: wrap;
@@ -41,7 +40,7 @@
         /*height: min-content;*/
         /* I wanted to do a nested flexbox (with both dropdowns) or grid that wraps before the container wraps
         but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718 */
-        margin-bottom: 30px; /* Same bottom margin than header */
+        margin: 0 auto 30px auto; /* Make it be on the top of right flex container and centered for mobile */
     }
 
     #main-note-textarea-div {

@@ -27,7 +27,7 @@ use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 
 /**
- * Copied and pasted content from client for now
+ * Copied and pasted content from client for now.
  */
 
 /**
@@ -36,11 +36,10 @@ use Selective\TestTrait\Traits\HttpTestTrait;
  *   - Authenticated
  * - client list json request
  * - client list filtered
- * - client list with invalid filters
+ * - client list with invalid filters.
  */
 class ClientListActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -51,13 +50,12 @@ class ClientListActionTest extends TestCase
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
-
     /**
      * Normal page action while having an active session.
      *
      * @return void
      */
-    public function testClientListPageAction_authorization(): void
+    public function testClientListPageActionAuthorization(): void
     {
         // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixturesWithAttributes(
@@ -79,7 +77,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageAction_unauthenticated(): void
+    public function testClientListPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-list-page');
@@ -93,9 +91,8 @@ class ClientListActionTest extends TestCase
         self::assertSame($expectedLoginUrl, $response->getHeaderLine('Location'));
     }
 
-
     /**
-     * Test list of clients with different kinds of filters
+     * Test list of clients with different kinds of filters.
      *
      * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListFilterCases()
      *
@@ -105,9 +102,11 @@ class ClientListActionTest extends TestCase
      * @param array $clientsToInsert
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
-     * @return void
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testClientListAction(
         array $filterQueryParamsArr,
@@ -197,17 +196,19 @@ class ClientListActionTest extends TestCase
     }
 
     /**
-     * Request list of clients but with invalid filter
+     * Request list of clients but with invalid filter.
      *
      * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListInvalidFilterCases()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
-     * @return void
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
+    public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
     {
         $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

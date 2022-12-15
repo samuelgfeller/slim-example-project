@@ -6,8 +6,7 @@ use App\Infrastructure\Factory\QueryFactory;
 
 class ClientFilterWhereConditionBuilder
 {
-    private
-    string $columnPrefix = 'client.';
+    private string $columnPrefix = 'client.';
 
     public function __construct(
         private readonly QueryFactory $queryFactory,
@@ -16,11 +15,11 @@ class ClientFilterWhereConditionBuilder
 
 // In the select query there are multiple joins. This is the alias for the client table.
 
-
     /**
-     * Build cakephp query builder where array with filter params
+     * Build cakephp query builder where array with filter params.
      *
      * @param array $filterParams default deleted_at null
+     *
      * @return array
      */
     public function buildWhereArrayWithFilterParams(array $filterParams = ['deleted_at' => null]): array
@@ -36,12 +35,12 @@ class ClientFilterWhereConditionBuilder
                 $namePartsConditions['OR'] = [
                     [
                         [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[0] . '%'],
-                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[1] . '%']
+                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[1] . '%'],
                     ],
                     [
                         [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[1] . '%'],
-                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[0] . '%']
-                    ]
+                        [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[0] . '%'],
+                    ],
                 ];
             }
             $query = $this->queryFactory->newQuery();
@@ -51,7 +50,7 @@ class ClientFilterWhereConditionBuilder
                     [
                         $query->identifier($this->columnPrefix . 'first_name'),
                         ' ',
-                        $query->identifier($this->columnPrefix . 'last_name')
+                        $query->identifier($this->columnPrefix . 'last_name'),
                     ],
                     ['string', 'string', 'string']
                 ),
@@ -62,7 +61,7 @@ class ClientFilterWhereConditionBuilder
                 [$this->columnPrefix . 'first_name LIKE' => '%' . $filterParams['name'] . '%'],
                 [$this->columnPrefix . 'last_name LIKE' => '%' . $filterParams['name'] . '%'],
                 $firstAndLastNameConcat,
-                $namePartsConditions
+                $namePartsConditions,
             ];
             unset($filterParams['name']);
         }
@@ -86,12 +85,13 @@ class ClientFilterWhereConditionBuilder
                 $queryBuilderWhereArray[$column] = $value;
             }
         }
+
         return $queryBuilderWhereArray;
     }
 
     /**
      * Change column and value to valid cakephp query builder
-     * conditions for the client list request
+     * conditions for the client list request.
      *
      * @param string $column column reference
      * @param string|int|array|null $value value reference

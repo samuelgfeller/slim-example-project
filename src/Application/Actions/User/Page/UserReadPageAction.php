@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\User\Enum\UserStatus;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -23,12 +22,13 @@ final class UserReadPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param UserFinder $userFinder
+     * @param SessionInterface $session
      */
     public function __construct(
         private readonly Responder $responder,
         private readonly UserFinder $userFinder,
         private readonly SessionInterface $session,
-        private readonly UserActivityManager $userActivityManager,
     ) {
     }
 
@@ -37,11 +37,12 @@ final class UserReadPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
      * @throws \Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -59,7 +60,7 @@ final class UserReadPageAction
             ]);
         } catch (ForbiddenException $forbiddenException) {
             throw new HttpForbiddenException($request, $forbiddenException->getMessage());
-        } catch (DomainRecordNotFoundException $domainRecordNotFoundException){
+        } catch (DomainRecordNotFoundException $domainRecordNotFoundException) {
             throw new HttpNotFoundException($request, $domainRecordNotFoundException->getMessage());
         }
     }

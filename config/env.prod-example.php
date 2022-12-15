@@ -1,6 +1,6 @@
 <?php
 /**
- * Environment specific configuration values
+ * Environment specific configuration values.
  *
  * Make sure env.php file is added to .gitignore and ideally place the env.php outside
  * the project root directory, to protect against overwriting at deployment.
@@ -22,8 +22,3 @@ $settings['db']['host'] = 'localhost';
 $settings['db']['database'] = 'slim_example_project';
 $settings['db']['username'] = 'Admin';
 $settings['db']['password'] = '12345678';
-
-
-
-
-

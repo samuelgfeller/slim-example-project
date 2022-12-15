@@ -39,10 +39,11 @@ final class ClientCreateAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -78,7 +79,7 @@ final class ClientCreateAction
                         $response,
                         [
                             'status' => 'error',
-                            'message' => 'Not allowed to create client.'
+                            'message' => 'Not allowed to create client.',
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );
@@ -89,8 +90,9 @@ final class ClientCreateAction
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'Post not created'
+                    'message' => 'Post not created',
                 ]);
+
                 return $response->withAddedHeader('Warning', 'The post could not be created');
             }
             throw new HttpBadRequestException($request, 'Request body malformed.');

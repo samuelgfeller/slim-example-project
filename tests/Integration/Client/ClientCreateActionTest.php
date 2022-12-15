@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Integration\Client;
-
 
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
@@ -25,11 +23,10 @@ use Slim\Exception\HttpBadRequestException;
  * Client creation submit tests
  *  - Normal client creation
  *  - With invalid values -> 422
- *  - With malformed request body -> Bad request exception
+ *  - With malformed request body -> Bad request exception.
  */
 class ClientCreateActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -40,16 +37,17 @@ class ClientCreateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Client creation with valid data
+     * Client creation with valid data.
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationUsersAndExpectedResultProvider()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
      * @return void
      */
-    public function testClientSubmitCreateAction_authorization(
+    public function testClientSubmitCreateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -112,7 +110,7 @@ class ClientCreateActionTest extends TestCase
                     'action' => UserActivity::CREATED->value,
                     'table' => 'client',
                     'row_id' => $clientDbRow['id'],
-                    'data' => json_encode($clientCreationValues, JSON_THROW_ON_ERROR)
+                    'data' => json_encode($clientCreationValues, JSON_THROW_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findTableRowsByColumn('user_activity', 'table', 'client')[0]['id']
@@ -127,7 +125,7 @@ class ClientCreateActionTest extends TestCase
                     'action' => UserActivity::CREATED->value,
                     'table' => 'note',
                     'row_id' => $noteId,
-                    'data' => json_encode($noteValues, JSON_THROW_ON_ERROR)
+                    'data' => json_encode($noteValues, JSON_THROW_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findTableRowsByColumn('user_activity', 'table', 'note')[0]['id']
@@ -145,11 +143,13 @@ class ClientCreateActionTest extends TestCase
      * Test client creation values validation.
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::invalidClientCreationValuesAndExpectedResponseProvider()
+     *
      * @param array $requestBody
      * @param array $jsonResponse
+     *
      * @return void
      */
-    public function testClientSubmitCreateAction_invalid(array $requestBody, array $jsonResponse): void
+    public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixturesWithAttributes(
@@ -182,13 +182,12 @@ class ClientCreateActionTest extends TestCase
         $this->assertJsonData($jsonResponse, $response);
     }
 
-
     /**
-     * Client creation with valid data
+     * Client creation with valid data.
      *
      * @return void
      */
-    public function testClientSubmitCreateAction_unauthenticated(): void
+    public function testClientSubmitCreateActionUnauthenticated(): void
     {
         // Create request (no body needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
@@ -200,20 +199,25 @@ class ClientCreateActionTest extends TestCase
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
         // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
+        $expectedLoginUrl = $this->urlFor(
+            'login-page',
+            [],
+            ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
         );
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 
     /**
-     * Test client creation with malformed request body
+     * Test client creation with malformed request body.
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::malformedRequestBodyCases()
+     *
      * @param array $requestBody
+     *
      * @return void
      */
-    public function testClientSubmitCreateAction_malformedRequest(array $requestBody): void
+    public function testClientSubmitCreateActionMalformedRequest(array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
@@ -234,5 +238,4 @@ class ClientCreateActionTest extends TestCase
         // Handle request after defining expected exceptions
         $this->app->handle($request);
     }
-
 }

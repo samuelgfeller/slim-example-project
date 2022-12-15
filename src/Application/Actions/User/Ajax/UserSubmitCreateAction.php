@@ -32,6 +32,9 @@ final class UserSubmitCreateAction
     }
 
     /**
+     * @param ServerRequest $request
+     * @param Response $response
+     *
      * @throws \Throwable
      * @throws \JsonException
      */
@@ -62,6 +65,7 @@ final class UserSubmitCreateAction
                     $this->logger->info('Account creation tried with existing email: "' . $userValues['email'] . '"');
                     $response = $response->withAddedHeader('Warning', 'The post could not be created');
                 }
+
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
             } catch (ValidationException $validationException) {
                 return $this->responder->respondWithJsonOnValidationError(
@@ -71,12 +75,14 @@ final class UserSubmitCreateAction
             } catch (TransportExceptionInterface $e) {
                 // Flash message has to be added in the frontend as form is submitted via Ajax
                 $this->logger->error('Mailer exception: ' . $e->getMessage());
+
                 return $this->responder->respondWithJson(
                     $response,
                     ['status' => 'error', 'message' => 'Email error. Please contact an administrator.']
                 );
                 $response = $response->withStatus(500);
                 $this->responder->addPhpViewAttribute('formError', true);
+
                 return $this->responder->render(
                     $response,
                     'authentication/register.html.php',
@@ -97,7 +103,7 @@ final class UserSubmitCreateAction
                     [
                         'firstName' => $userValues['first_name'],
                         'surname' => $userValues['surname'],
-                        'email' => $userValues['email']
+                        'email' => $userValues['email'],
                     ],
                 );
             } catch (ForbiddenException $forbiddenException) {
@@ -105,7 +111,7 @@ final class UserSubmitCreateAction
                     $response,
                     [
                         'status' => 'error',
-                        'message' => 'Not allowed to create user.'
+                        'message' => 'Not allowed to create user.',
                     ],
                     StatusCodeInterface::STATUS_FORBIDDEN
                 );

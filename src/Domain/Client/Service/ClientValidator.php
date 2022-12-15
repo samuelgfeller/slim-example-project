@@ -9,11 +9,10 @@ use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
 
 /**
- * Client user input validator
+ * Client user input validator.
  */
 class ClientValidator
 {
-
     /**
      * PostValidator constructor.
      *
@@ -28,7 +27,7 @@ class ClientValidator
     }
 
     /**
-     * Validate client creation
+     * Validate client creation.
      *
      * @param ClientData $client
      * @param string|null $birthdateValue
@@ -66,12 +65,11 @@ class ClientValidator
             false
         );
 
-
         $this->validator->throwOnError($validationResult);
     }
 
     /**
-     * Validate post update
+     * Validate post update.
      *
      * @param array $clientValues values that user wants to change
      */
@@ -121,15 +119,15 @@ class ClientValidator
         $this->validator->throwOnError($validationResult);
     }
 
-
     // Validate functions for each field
 
     /**
-     * Validate client user id dropdown
+     * Validate client user id dropdown.
      *
      * @param $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateUserId($value, ValidationResult $validationResult, bool $required = false): void
@@ -144,11 +142,12 @@ class ClientValidator
     }
 
     /**
-     * Validate client status dropdown
+     * Validate client status dropdown.
      *
      * @param mixed $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateClientStatusId(
@@ -166,11 +165,12 @@ class ClientValidator
     }
 
     /**
-     * Validate client location input
+     * Validate client location input.
      *
      * @param $location
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateLocation($location, ValidationResult $validationResult, bool $required = false): void
@@ -185,11 +185,12 @@ class ClientValidator
     }
 
     /**
-     * Validate client phone input
+     * Validate client phone input.
      *
      * @param $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validatePhone($value, ValidationResult $validationResult, bool $required = false): void
@@ -204,11 +205,12 @@ class ClientValidator
     }
 
     /**
-     * Validate client sex options
+     * Validate client sex options.
      *
      * @param $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateSex($value, ValidationResult $validationResult, bool $required = false): void
@@ -224,11 +226,12 @@ class ClientValidator
     }
 
     /**
-     * Validate client message input
+     * Validate client message input.
      *
      * @param $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     private function validateClientMessage($value, ValidationResult $validationResult, bool $required = false): void
@@ -241,6 +244,4 @@ class ClientValidator
             $validationResult->setError('phone', 'Phone is required');
         }
     }
-
-
 }

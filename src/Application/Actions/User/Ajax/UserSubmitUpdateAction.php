@@ -24,13 +24,13 @@ final class UserSubmitUpdateAction
      * @param Responder $responder The responder
      * @param UserUpdater $userUpdater
      * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         private readonly Responder $responder,
         private readonly UserUpdater $userUpdater,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $loggerFactory
-
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-update-action');
     }
@@ -40,10 +40,11 @@ final class UserSubmitUpdateAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args The routing arguments
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -72,7 +73,7 @@ final class UserSubmitUpdateAction
                     $response,
                     [
                         'status' => 'error',
-                        'message' => 'Not allowed to update user.'
+                        'message' => 'Not allowed to update user.',
                     ],
                     StatusCodeInterface::STATUS_FORBIDDEN
                 );

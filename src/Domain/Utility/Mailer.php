@@ -11,11 +11,10 @@ use Symfony\Component\Mime\Email;
 /**
  * Mailer class with added method to get the html string from a template and added request audit in the send() function
  * This class in not defined in the container and therefore is autowired. Configuration is defined in MailerInterface
- * Test sender score: https://www.mail-tester.com/
+ * Test sender score: https://www.mail-tester.com/.
  */
 class Mailer
 {
-
     /**
      * Mailer constructor.
      *
@@ -48,15 +47,18 @@ class Mailer
         foreach ($templateData as $key => $data) {
             $this->phpRenderer->addAttribute($key, $data);
         }
+
         return $this->phpRenderer->fetch($templatePath);
     }
 
     /**
-     * Function to send email and add insert to request tracking table
+     * Function to send email and add insert to request tracking table.
      *
      * @param Email $email
-     * @return void
+     *
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     public function send(Email $email): void
     {

@@ -26,7 +26,7 @@ use Slim\Exception\HttpBadRequestException;
  *  - Authenticated with different user roles
  *  - Unauthenticated
  *  - Invalid data (validation test)
- *  - Malformed request body
+ *  - Malformed request body.
  */
 class NoteCreateActionTest extends TestCase
 {
@@ -40,16 +40,16 @@ class NoteCreateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Returns the given $dateTime in the default note format
+     * Returns the given $dateTime in the default note format.
      *
      * @param string $dateTime
+     *
      * @return string
      */
     private function dateTimeToClientReadNoteFormat(string $dateTime): string
     {
         return (new \DateTime($dateTime))->format('d. F Y • H:i');
     }
-
 
     /**
      * Test main note and normal note update on client-read page while being authenticated
@@ -60,9 +60,10 @@ class NoteCreateActionTest extends TestCase
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+     *
      * @return void
      */
-    public function testNoteSubmitCreateAction_authorization(
+    public function testNoteSubmitCreateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -86,7 +87,7 @@ class NoteCreateActionTest extends TestCase
             [
                 'message' => $noteMessage,
                 'client_id' => $clientRow['id'],
-                'is_main' => 0
+                'is_main' => 0,
             ]
         );
         // Simulate logged-in user
@@ -112,7 +113,7 @@ class NoteCreateActionTest extends TestCase
                 'data' => json_encode([
                     'message' => $noteMessage,
                     'client_id' => $clientRow['id'],
-                    'is_main' => 0
+                    'is_main' => 0,
                 ], JSON_THROW_ON_ERROR),
             ],
             'user_activity',
@@ -136,7 +137,7 @@ class NoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitCreateAction_unauthenticated(): void
+    public function testNoteSubmitCreateActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
         // Create url where client should be redirected to after login
@@ -156,12 +157,17 @@ class NoteCreateActionTest extends TestCase
      * Test note creation on client-read page with invalid data.
      * Fixture dependencies:
      *   - 1 client
-     *   - 1 user linked to client
+     *   - 1 user linked to client.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::clientCreationInvalidNoteAndExpectedResponseProvider()
+     *
+     * @param array $invalidRequestBody
+     * @param bool $existingMainNote
+     * @param array $expectedResponseData
+     *
      * @return void
      */
-    public function testNoteSubmitCreateAction_invalid(
+    public function testNoteSubmitCreateActionInvalid(
         array $invalidRequestBody,
         bool $existingMainNote,
         array $expectedResponseData
@@ -211,10 +217,12 @@ class NoteCreateActionTest extends TestCase
      * combinations of malformed request body.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::provideNoteMalformedRequestBodyForCreation()
-     * @param null|array $malformedRequestBody
+     *
+     * @param array|null $malformedRequestBody
+     *
      * @return void
      */
-    public function testNoteSubmitCreateAction_malformedRequest(?array $malformedRequestBody): void
+    public function testNoteSubmitCreateActionMalformedRequest(?array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

@@ -16,13 +16,16 @@ class UserActivityManager
     }
 
     /**
-     * Insert new user activity
+     * Insert new user activity.
      *
      * @param UserActivity $userActivityAction
      * @param string $table
      * @param int $rowId
      * @param array|null $data
-     * @param null|int $userId in case there is no session like on login
+     * @param int|null $userId in case there is no session like on login
+     *
+     * @throws \JsonException
+     *
      * @return int
      */
     public function addUserActivity(
@@ -45,9 +48,10 @@ class UserActivityManager
     }
 
     /**
-     * Delete entry
+     * Delete entry.
      *
      * @param int $activityId
+     *
      * @return bool if deleted
      */
     public function deleteUserActivity(int $activityId): bool

@@ -21,13 +21,14 @@ class NoteAuthorizationChecker
     }
 
     /**
-     * Check if authenticated user is allowed to read note
+     * Check if authenticated user is allowed to read note.
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
      * @param int|null $clientOwnerId client owner might become relevant
      * @param int|null $hidden when note message is hidden
      * @param bool $log
+     *
      * @return bool
      */
     public function isGrantedToRead(
@@ -45,7 +46,8 @@ class NoteAuthorizationChecker
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes
             if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) &&
-                (in_array($hidden, [null, 0], true) || // When hidden is not null or 0, user has to be advisor to read note
+                (
+                    in_array($hidden, [null, 0], true) || // When hidden is not null or 0, user has to be advisor to read note
                     $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value] ||
                     // If authenticated user is client owner or note owner -> granted to read hidden notes
                     $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
@@ -59,14 +61,17 @@ class NoteAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to read note but isn\'t allowed'
             );
         }
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to create note
+     * Check if authenticated user is allowed to create note.
      *
      * @param int $isMain
      * @param int|null $clientOwnerId client owner might become relevant
+     * @param bool $log
+     *
      * @return bool
      */
     public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
@@ -90,19 +95,21 @@ class NoteAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to create note but isn\'t allowed'
             );
         }
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to update note
+     * Check if authenticated user is allowed to update note.
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
      * @param int|null $clientOwnerId client owner might become relevant
+     * @param bool $log
+     *
      * @return bool
      */
-    public
-    function isGrantedToUpdate(
+    public function isGrantedToUpdate(
         int $isMain,
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
@@ -132,20 +139,21 @@ class NoteAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to update note but isn\'t allowed'
             );
         }
+
         return false;
     }
 
-
     /**
      * Check if authenticated user is allowed to delete note
-     * Main note is not deletable so no need for this argument
+     * Main note is not deletable so no need for this argument.
      *
      * @param int|null $noteOwnerId
      * @param int|null $clientOwnerId
+     * @param bool $log
+     *
      * @return bool
      */
-    public
-    function isGrantedToDelete(
+    public function isGrantedToDelete(
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
         bool $log = true
@@ -170,6 +178,7 @@ class NoteAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to delete note but isn\'t allowed'
             );
         }
+
         return false;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Domain\Authentication\Data;
 
-
 /**
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
  * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
@@ -31,7 +30,7 @@ class UserVerificationData
     }
 
     /**
-     * Returns values of object as array for database
+     * Returns values of object as array for database.
      *
      * The array keys MUST match with the database column names since it can
      * be used to modify a database entry
@@ -49,5 +48,4 @@ class UserVerificationData
             'created_at' => $this->createdAt,
         ];
     }
-
 }

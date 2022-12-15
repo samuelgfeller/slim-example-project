@@ -2,7 +2,6 @@
 
 namespace App\Domain\Note\Data;
 
-
 use App\Domain\Authorization\Privilege;
 use App\Domain\User\Data\UserData;
 
@@ -26,7 +25,9 @@ class NoteData implements \JsonSerializable
 
     /**
      * Note constructor.
+     *
      * @param array|null $noteResultData
+     *
      * @throws \Exception
      */
     public function __construct(?array $noteResultData = null)
@@ -49,7 +50,7 @@ class NoteData implements \JsonSerializable
      * Returns all values of object as array.
      * The array keys should match with the database
      * column names since it is likely used to
-     * modify a database table
+     * modify a database table.
      *
      * @return array
      */
@@ -66,7 +67,6 @@ class NoteData implements \JsonSerializable
             $note['client_id'] = $this->clientId;
         }
 
-
         // Message is nullable and null is a valid value, so it has to be included
         $note['message'] = $this->message;
         $note['is_main'] = $this->isMain;
@@ -74,7 +74,6 @@ class NoteData implements \JsonSerializable
 
         return $note;
     }
-
 
     public function jsonSerialize(): array
     {

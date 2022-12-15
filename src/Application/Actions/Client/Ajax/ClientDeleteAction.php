@@ -19,7 +19,6 @@ final class ClientDeleteAction
 {
     protected LoggerInterface $logger;
 
-
     /**
      * The constructor.
      *
@@ -33,7 +32,6 @@ final class ClientDeleteAction
         private readonly ClientDeleter $clientDeleter,
         private readonly SessionInterface $session,
         LoggerFactory $logger
-
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('client-delete');
     }
@@ -43,10 +41,11 @@ final class ClientDeleteAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -65,6 +64,7 @@ final class ClientDeleteAction
                 if ($deleted) {
                     // Add flash here as user gets redirected to client list after deletion
                     $flash->add('success', 'Successfully deleted client.');
+
                     return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }
 
@@ -74,6 +74,7 @@ final class ClientDeleteAction
                 );
                 // If not deleted, inform user
                 $flash->add('warning', 'The client was not deleted');
+
                 return $response->withAddedHeader('Warning', 'The client was not deleted');
             } catch (ForbiddenException $fe) {
                 // Log event as this should not be able to happen with normal use. User has to manually make exact request

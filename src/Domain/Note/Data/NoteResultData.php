@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Domain\Note\Data;
 
 use App\Domain\Authorization\Privilege;
 
 /**
- * Note with user and client full name and privilege
+ * Note with user and client full name and privilege.
  */
 class NoteResultData extends NoteData
 {
@@ -18,7 +17,9 @@ class NoteResultData extends NoteData
 
     /**
      * Note constructor.
+     *
      * @param array $noteResultData
+     *
      * @throws \Exception
      */
     public function __construct(array $noteResultData = [])

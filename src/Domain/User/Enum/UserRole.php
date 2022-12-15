@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Enum;
 
-enum UserRole : string
+enum UserRole: string
 {
     // Value is `user_role`.`name`
     case NEWCOMER = 'newcomer';
@@ -11,7 +11,7 @@ enum UserRole : string
     case ADMIN = 'admin';
 
     /**
-     * Removes underscore and adds capital first letter
+     * Removes underscore and adds capital first letter.
      *
      * @return string
      */

@@ -36,10 +36,11 @@ class LoginMailer
     }
 
     /**
-     * When user tries to log in but his status is unverified
+     * When user tries to log in but his status is unverified.
      *
      * @param UserData $user
      * @param array $queryParamsWithToken
+     *
      * @throws TransportExceptionInterface
      */
     public function sendInfoToUnverifiedUser(UserData $user, array $queryParamsWithToken): void
@@ -57,9 +58,10 @@ class LoginMailer
     }
 
     /**
-     * When user tries to log in but his status is suspended
+     * When user tries to log in but his status is suspended.
      *
      * @param UserData $user
+     *
      * @throws TransportExceptionInterface
      */
     public function sendInfoToSuspendedUser(UserData $user): void
@@ -77,10 +79,11 @@ class LoginMailer
     }
 
     /**
-     * When user tries to log in but his status is suspended
+     * When user tries to log in but his status is suspended.
      *
      * @param UserData $user
      * @param array $queryParamsWithToken
+     *
      * @throws TransportExceptionInterface
      */
     public function sendInfoToLockedUser(UserData $user, array $queryParamsWithToken): void

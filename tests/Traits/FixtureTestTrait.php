@@ -1,13 +1,11 @@
 <?php
 
-
 namespace App\Test\Traits;
-
 
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
- * Util. trait to better deal with fixtures in tests
+ * Util. trait to better deal with fixtures in tests.
  */
 trait FixtureTestTrait
 {
@@ -22,6 +20,7 @@ trait FixtureTestTrait
      * @param array $attributes
      * @param string $fixtureClass
      * @param int $amount amount rows that will be returned
+     *
      * @return array either one row of requested fixture or array of rows if $amount is higher than 1
      */
     protected function getFixtureRecordsWithAttributes(array $attributes, string $fixtureClass, int $amount = 1): array
@@ -45,12 +44,13 @@ trait FixtureTestTrait
                 $rows[$rowKey][$colum] = $value;
             }
             $returnArray[] = $rows[$rowKey];
-            ++$rowKey;
+            $rowKey++;
         }
 
         if ($amount === 1) {
             return $returnArray[0];
         }
+
         return $returnArray;
     }
 
@@ -64,6 +64,7 @@ trait FixtureTestTrait
      * [['field_name' => 'expected_value'], ['field_name' => 'expected_value']] -> makes 2 insets
      * @param class-string $fixtureClass
      * @param int $amount
+     *
      * @return array row when $amount is 1 or array of rows when more than 1 inserted
      */
     protected function insertFixturesWithAttributes(
@@ -103,11 +104,15 @@ trait FixtureTestTrait
         if ($attributesIsMultidimensional === false) {
             return $recordsCollection[0];
         }
+
         return $recordsCollection;
     }
 
     /**
-     * Insert multiple given fixture rows
+     * Insert multiple given fixture rows.
+     *
+     * @param string $table
+     * @param array $rows
      *
      * @return array rows with id
      */
@@ -116,17 +121,19 @@ trait FixtureTestTrait
         foreach ($rows as $key => $row) {
             $rows[$key]['id'] = (int)$this->insertFixture($table, $row);
         }
+
         return $rows;
     }
 
     /**
      * Returns fixture rows where given condition matches
-     * Note: this relies on the function of selective/test-traits DatabaseTestTrait.php
+     * Note: this relies on the function of selective/test-traits DatabaseTestTrait.php.
      *
      * @param array<string, mixed> $conditions array of db field name and the expected value. Example:
      *  ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
      * @param class-string $fixtureClass
      * @param array $oppositeConditions optional NOT conditions. If ['id' => 1] is provided -> user 1 will NOT be returned
+     *
      * @return array[] records matching the conditions
      */
     protected function findRecordsFromFixtureWhere(
@@ -159,16 +166,18 @@ trait FixtureTestTrait
             // If all conditions matched, this part is not skipped (with continue) and row is added to matching records
             $matchingRecords[] = $row;
         }
+
         return $matchingRecords;
     }
 
     /**
      * If only specific fixtures should be inserted for instance
-     * linked to a specific resource
+     * linked to a specific resource.
      *
      * @param array<string, mixed> $conditions array of db column name and the expected value.
      * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
      * @param class-string $fixtureClass
+     *
      * @return void
      */
     protected function insertFixtureWhere(array $conditions, string $fixtureClass): void
@@ -187,6 +196,7 @@ trait FixtureTestTrait
      *
      * @param string $key that will be the value
      * @param class-string $class
+     *
      * @return array
      */
 //    public function getFixtureRowsWithValueKey(string $key, string $class): array

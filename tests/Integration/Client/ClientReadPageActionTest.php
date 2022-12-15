@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Integration\Client;
-
 
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
@@ -19,11 +17,10 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 /**
  * Test cases for client read page load
  *  - Authenticated
- *  - Unauthenticated
+ *  - Unauthenticated.
  */
 class ClientReadPageActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use RouteTestTrait;
@@ -31,19 +28,21 @@ class ClientReadPageActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Normal page action while being authenticated
+     * Normal page action while being authenticated.
      *
      * @return void
      */
-    public function testClientReadPageAction_authorization(): void
+    public function testClientReadPageActionAuthorization(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
         // Insert linked client status
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Add needed database values to correctly display the page
-        $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['user_id' => $userId, 'client_status_id' => $clientStatusId],
+            ClientFixture::class
+        );
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));
         // Simulate logged-in user with logged-in user id
@@ -55,11 +54,11 @@ class ClientReadPageActionTest extends TestCase
     }
 
     /**
-     * Test that user has to be logged in to display the page
+     * Test that user has to be logged in to display the page.
      *
      * @return void
      */
-    public function testClientReadPageAction_unauthenticated(): void
+    public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);

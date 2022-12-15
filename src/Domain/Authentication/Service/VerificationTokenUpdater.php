@@ -15,10 +15,11 @@ class VerificationTokenUpdater
     }
 
     /**
-     * Set verification token to used
+     * Set verification token to used.
      *
      * @param int $verificationId
      * @param int $userId
+     *
      * @return bool
      */
     public function setVerificationEntryToUsed(int $verificationId, int $userId): bool
@@ -35,6 +36,7 @@ class VerificationTokenUpdater
                 $userId
             );
         }
+
         return $success;
     }
 }

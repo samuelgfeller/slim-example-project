@@ -22,7 +22,7 @@ class UserFilterChipProvider
     }
 
     /**
-     * Returns filter chip html including container and button
+     * Returns filter chip html including container and button.
      *
      * @return string
      */
@@ -65,7 +65,7 @@ class UserFilterChipProvider
     }
 
     /**
-     * Returns active and inactive filters
+     * Returns active and inactive filters.
      *
      * @return array{
      *     active: array{string: FilterData[]},
@@ -81,7 +81,7 @@ class UserFilterChipProvider
     }
 
     /**
-     * Provides all users as FilterData for filter chips
+     * Provides all users as FilterData for filter chips.
      *
      * @return FilterData[]
      */
@@ -98,13 +98,14 @@ class UserFilterChipProvider
             if ($userId !== $loggedInUserId) {
                 $userFilters["user_$userId"] = new FilterData([
                     'name' => $abbreviatedUserName,
-                    'paramName' => "user",
+                    'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => null,
                     'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity($userId),
                 ]);
             }
         }
+
         return $userFilters;
     }
 }

@@ -44,9 +44,10 @@ class UserListActionTest extends TestCase
      *          availableUserRoles: UserRole        }
      *     }
      * $expectedResult HTTP status code and privilege
+     *
      * @return void
      */
-    public function testUserList_authorization(
+    public function testUserListAuthorization(
         array $userRow,
         array $authenticatedUserRow,
         array $expectedResult,
@@ -106,11 +107,11 @@ class UserListActionTest extends TestCase
     }
 
     /**
-     * Test user list action when not logged-in
+     * Test user list action when not logged-in.
      *
      * @return void
      */
-    public function testUserList_unauthenticated(): void
+    public function testUserListUnauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));
 
@@ -125,7 +126,9 @@ class UserListActionTest extends TestCase
 
         // Build expected login url as UserAuthenticationMiddleware.php does
         $expectedLoginUrl = $this->urlFor(
-            'login-page', [], ['redirect' => $redirectToUrlAfterLogin]
+            'login-page',
+            [],
+            ['redirect' => $redirectToUrlAfterLogin]
         );
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);

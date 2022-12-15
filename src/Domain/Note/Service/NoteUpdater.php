@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Note\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
@@ -13,7 +11,6 @@ use App\Infrastructure\Note\NoteUpdaterRepository;
 
 class NoteUpdater
 {
-
     public function __construct(
         private readonly NoteValidator $noteValidator,
         private readonly NoteUpdaterRepository $noteUpdaterRepository,
@@ -24,10 +21,11 @@ class NoteUpdater
     }
 
     /**
-     * Change something or multiple things on note
+     * Change something or multiple things on note.
      *
      * @param int $noteId id of note being changed
      * @param array|null $noteValues values that have to be changed
+     *
      * @return bool if update was successful
      */
     public function updateNote(int $noteId, null|array $noteValues): bool
@@ -59,6 +57,7 @@ class NoteUpdater
             if ($updated) {
                 $this->userActivityManager->addUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
             }
+
             return $updated;
         }
 

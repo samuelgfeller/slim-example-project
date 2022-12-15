@@ -48,7 +48,10 @@ class PasswordRecoveryEmailSender
     }
 
     /**
-     * When user requests a new password for email
+     * When user requests a new password for email.
+     *
+     * @param array $userValues
+     * @param string|null|null $captcha
      *
      * @throws ValidationException|TransportExceptionInterface|\JsonException
      */
@@ -68,9 +71,11 @@ class PasswordRecoveryEmailSender
 
             // Send verification mail
             $this->email->subject('Reset password')->html(
-                    $this->mailer->getContentFromTemplate('authentication/email/password-reset.email.php',
-                        ['user' => $dbUser, 'queryParams' => $queryParamsWithToken])
-                )->to(new Address($dbUser->email, $dbUser->getFullName()));
+                $this->mailer->getContentFromTemplate(
+                    'authentication/email/password-reset.email.php',
+                    ['user' => $dbUser, 'queryParams' => $queryParamsWithToken]
+                )
+            )->to(new Address($dbUser->email, $dbUser->getFullName()));
             // Send email
             $this->mailer->send($this->email);
             // User activity entry is done when user verification token is created
@@ -79,5 +84,4 @@ class PasswordRecoveryEmailSender
 
         throw new DomainRecordNotFoundException('User not existing');
     }
-
 }

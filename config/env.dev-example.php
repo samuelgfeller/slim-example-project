@@ -1,6 +1,6 @@
 <?php
 /**
- * Environment specific configuration values
+ * Environment specific configuration values.
  *
  * Make sure env.php file is added to .gitignore and ideally place the env.php outside
  * the project root directory, to protect against overwriting at deployment.
@@ -44,7 +44,5 @@ if ($useProdServer = false) {
     $settings['smtp']['username'] = 'user@example.com';
     $settings['smtp']['password'] = 'secret';
 }
-
-
 
 // When adding new values (above this comment), please refer to the section [How to set values] in the PHPDoc on top of the page

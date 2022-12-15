@@ -17,6 +17,7 @@ final class UserListPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param UserFinder $userFinder
      */
     public function __construct(
         private readonly Responder $responder,
@@ -29,11 +30,12 @@ final class UserListPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
      * @throws \Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -42,6 +44,7 @@ final class UserListPageAction
     ): ResponseInterface {
         // Retrieve users
         $users = $this->userFinder->findAllUsersResultDataForList();
+
         return $this->responder->render($response, 'user/user-list.html.php', [
             'users' => $users,
             'userStatuses' => UserStatus::cases(),

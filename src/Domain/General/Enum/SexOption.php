@@ -4,7 +4,7 @@ namespace App\Domain\General\Enum;
 
 use App\Common\Trait\EnumToArray;
 
-enum SexOption : string
+enum SexOption: string
 {
     use EnumToArray;
 

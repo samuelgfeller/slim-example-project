@@ -20,11 +20,10 @@ use Slim\Exception\HttpBadRequestException;
  *  - submit valid email
  *  - submit email of non-existing user -> act normal but no database change
  *  - submit invalid email -> 422 backend validation fail
- *  - submit malformed request body -> HttpBadRequestException
+ *  - submit malformed request body -> HttpBadRequestException.
  */
 class PasswordForgottenEmailSubmitActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use MailerTestTrait;
@@ -34,12 +33,12 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Request to change password
+     * Request to change password.
      */
     public function testPasswordForgottenEmailSubmit(): void
     {
         // Insert user
-        $userRow = $this->insertFixturesWithAttributes([],UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
@@ -100,11 +99,10 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         );
     }
 
-
     /**
      * Test that nothing special is done if user does not exist.
      */
-    public function testPasswordForgottenEmailSubmit_userNotExisting(): void
+    public function testPasswordForgottenEmailSubmitUserNotExisting(): void
     {
         // Not inserting user as it shouldn't exist
 
@@ -125,9 +123,9 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     }
 
     /**
-     * Test that backend validation fails when email is invalid
+     * Test that backend validation fails when email is invalid.
      */
-    public function testPasswordForgottenEmailSubmit_invalidData(): void
+    public function testPasswordForgottenEmailSubmitInvalidData(): void
     {
         // Insert user id 2 role: user
         $userRow = (new UserFixture())->records[1];
@@ -158,7 +156,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      */
-    public function testChangePassword_malformedBody(): void
+    public function testChangePasswordMalformedBody(): void
     {
         // Not necessary to insert fixture as exception must be thrown in action
         $validEmail = 'user@example.com';

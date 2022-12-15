@@ -4,7 +4,6 @@ namespace App\Test\Provider;
 
 trait TestHydrator
 {
-
     /**
      * Hydrate a collection of objects with data from an array with multiple items.
      *

@@ -3,11 +3,10 @@
 namespace App\Common\Trait;
 
 /**
- * Source: https://stackoverflow.com/a/71680007/9013718
+ * Source: https://stackoverflow.com/a/71680007/9013718.
  */
 trait EnumToArray
 {
-
     public static function names(): array
     {
         return array_column(self::cases(), 'name');
@@ -30,17 +29,19 @@ trait EnumToArray
 
     /**
      * All letters lowercase except first capital letter
-     * and replaces underscores with spaces
+     * and replaces underscores with spaces.
      *
      * @param array $names
+     *
      * @return array
      */
     private static function prettifyNames(array $names): array
     {
         $prettyNames = [];
         foreach ($names as $name) {
-            $prettyNames[] =  str_replace('_', ' ', ucfirst(mb_strtolower($name)));
+            $prettyNames[] = str_replace('_', ' ', ucfirst(mb_strtolower($name)));
         }
+
         return $prettyNames;
     }
 }

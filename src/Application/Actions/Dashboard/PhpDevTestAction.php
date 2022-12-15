@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Actions\Dashboard;
 
 use App\Application\Responder\Responder;
@@ -9,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * This action serves when I want to test php concepts, syntax or else while developing
+ * This action serves when I want to test php concepts, syntax or else while developing.
  */
 class PhpDevTestAction
 {
@@ -24,8 +23,8 @@ class PhpDevTestAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
+     *
      * @return ResponseInterface The response
      */
     public function __invoke(
@@ -46,8 +45,7 @@ class PhpDevTestAction
         ];
         $success = false;
 
-        var_dump($this->requestBodyKeysValidator->requestBodyHasValidKeys($parsedBody, $requiredKeys, $optionalKeys));
-
+        // var_dump($this->requestBodyKeysValidator->requestBodyHasValidKeys($parsedBody, $requiredKeys, $optionalKeys));
 
         return $this->responder->createResponse($response, ['success' => $success]);
     }

@@ -3,7 +3,7 @@
 namespace App\Test\Fixture;
 
 /**
- * User role fixture
+ * User role fixture.
  */
 class UserRoleFixture
 {

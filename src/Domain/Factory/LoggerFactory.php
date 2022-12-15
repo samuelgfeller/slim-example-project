@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Domain\Factory;
 
 use Monolog\Formatter\LineFormatter;
@@ -9,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Logger factory
- * Not final because it is mocked in testing but this class shall NOT be extended
+ * Not final because it is mocked in testing but this class shall NOT be extended.
  */
 class LoggerFactory
 {
@@ -80,8 +81,9 @@ class LoggerFactory
      *
      * @param int|null $level The level (optional)
      *
-     * @return self The instance
      * @throws \Exception
+     *
+     * @return self The instance
      */
     public function addConsoleHandler(int $level = null): self
     {

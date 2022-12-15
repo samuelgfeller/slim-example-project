@@ -5,7 +5,7 @@ namespace App\Domain\User\Enum;
 use App\Common\Trait\EnumToArray;
 
 /**
- * User authentication status
+ * User authentication status.
  */
 enum UserStatus: string
 {

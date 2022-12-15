@@ -1,13 +1,11 @@
 <?php
 /**
- * From https://akrabat.com/custom-error-rendering-in-slim-4/
+ * From https://akrabat.com/custom-error-rendering-in-slim-4/.
  */
 
 namespace App\Application\Exceptions;
 
-use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Interfaces\ErrorRendererInterface;
 use Throwable;
 
 final class HtmlErrorRenderer

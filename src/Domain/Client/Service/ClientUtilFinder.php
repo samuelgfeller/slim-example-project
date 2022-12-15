@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\User\Service\UserNameAbbreviator;
@@ -19,7 +17,7 @@ class ClientUtilFinder
     }
 
     /**
-     * Find all dropdown values for a client
+     * Find all dropdown values for a client.
      *
      * @return ClientDropdownValuesData
      */
@@ -30,5 +28,4 @@ class ClientUtilFinder
             $this->userNameAbbreviator->abbreviateUserNames($this->userFinderRepository->findAllUsers()),
         );
     }
-
 }

@@ -29,12 +29,13 @@ class PasswordChanger
     }
 
     /**
-     * Reset forgotten password with token received by mail
+     * Reset forgotten password with token received by mail.
      *
      * @param string $password1
      * @param string $password2
      * @param int $tokenId
      * @param string $token
+     *
      * @return bool
      */
     public function resetPasswordWithToken(string $password1, string $password2, int $tokenId, string $token): bool
@@ -55,12 +56,13 @@ class PasswordChanger
     }
 
     /**
-     * Normal password change with old password
+     * Normal password change with old password.
      *
      * @param string $password1
      * @param string $password2
      * @param int $userId
      * @param string|null $oldPassword
+     *
      * @return bool
      */
     public function changeUserPassword(
@@ -72,8 +74,10 @@ class PasswordChanger
         // Check if password strings are valid
         $this->userValidator->validatePasswords([$password1, $password2], true);
 
-        if (!$this->userAuthorizationChecker->isGrantedToUpdate(['password_without_verification' => 'value'],
-                $userId) &&
+        if (!$this->userAuthorizationChecker->isGrantedToUpdate(
+            ['password_without_verification' => 'value'],
+            $userId
+        ) &&
             // Test password correctness only if user is allowed to change password hash as it's indicated to the user
             $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
@@ -93,7 +97,7 @@ class PasswordChanger
     }
 
     /**
-     * Change user password if authorized
+     * Change user password if authorized.
      *
      * @param string $newPassword
      * @param int $userId
@@ -113,6 +117,7 @@ class PasswordChanger
                     ['password_hash' => '******']
                 );
             }
+
             return $updated;
         }
 

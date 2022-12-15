@@ -40,7 +40,7 @@ final class RegisterVerifySubmitAction
 
                 $flash->add(
                     'success',
-                    'Congratulations!<br>Your account has been  verified! <br>' . '<b>You are now logged in.</b>'
+                    'Congratulations!<br>Your account has been  verified! <br><b>You are now logged in.</b>'
                 );
                 // Log user in
                 // Clear all session data and regenerate session ID
@@ -51,6 +51,7 @@ final class RegisterVerifySubmitAction
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
+
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add('error', 'Invalid or expired link. Please login in to receive a new mail.');
@@ -64,6 +65,7 @@ final class RegisterVerifySubmitAction
                     // If not logged in, redirect to login page with correct further redirect query param
                     $flash->add('info', 'You are already verified. Please log in.');
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+
                     return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
                 }
                 // Already logged in
@@ -72,6 +74,7 @@ final class RegisterVerifySubmitAction
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
+
                 return $this->responder->redirectToRouteName($response, 'home-page');
             }
         }

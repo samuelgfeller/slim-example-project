@@ -23,13 +23,13 @@ class UserRequestProvider
     // ! And  $settings['security']['global_monthly_email_threshold']
     private int $globalMonthlyEmailThreshold = 1000;
 
-
     /**
      * Get request stats array populated with a specific amount
-     * For global or user as $requestAmount is passed as argument
+     * For global or user as $requestAmount is passed as argument.
      *
      * @param int|string $requestAmount
      * @param string $type
+     *
      * @return RequestStatsData
      */
     private function stats(int|string $requestAmount, string $type): RequestStatsData
@@ -66,7 +66,7 @@ class UserRequestProvider
     /**
      * Provides all login request amounts in each different threshold where an exception must be thrown
      *  - Too many login failures in each threshold from same ip or specific user
-     *  - Too many login success requests (also for each threshold) from same ip or specific user
+     *  - Too many login success requests (also for each threshold) from same ip or specific user.
      *
      * @return array[]
      */
@@ -239,7 +239,7 @@ class UserRequestProvider
     }
 
     /**
-     * Provides values for global emails abuse test
+     * Provides values for global emails abuse test.
      *
      * The first time the provider sets the daily amount and leaves the monthly blank
      * The second time this test is executed the provider sets monthly amount and lefts daily blank

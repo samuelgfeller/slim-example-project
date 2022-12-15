@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\Client;
-
 
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientData;
@@ -51,7 +49,7 @@ class ClientFinderRepository
             'note_message' => 'note.message',
             'note_hidden' => 'note.hidden',
             'note_user_id' => 'note.user_id',
-            'note_updated_at' => 'note.updated_at'
+            'note_updated_at' => 'note.updated_at',
         ]);
     }
 
@@ -62,6 +60,8 @@ class ClientFinderRepository
      *
      * Side note: difference between Association, aggregation / composition and inheritance
      * https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/
+     *
+     * @param array $whereArray
      *
      * @return ClientResultData[]
      */
@@ -77,7 +77,7 @@ class ClientFinderRepository
             'client_status' => [
                 'table' => 'client_status',
                 'type' => 'LEFT',
-                'conditions' => 'client.client_status_id = client_status.id'
+                'conditions' => 'client.client_status_id = client_status.id',
             ],
         ])
             ->where($whereArray);
@@ -89,9 +89,10 @@ class ClientFinderRepository
 
     /**
      * Return post with given id if it exists
-     * otherwise null
+     * otherwise null.
      *
      * @param string|int $id
+     *
      * @return ClientData
      */
     public function findClientById(string|int $id): ClientData
@@ -100,13 +101,15 @@ class ClientFinderRepository
             ['deleted_at IS' => null, 'id' => $id]
         );
         $postRow = $query->execute()->fetch('assoc') ?: [];
+
         return new ClientData($postRow);
     }
 
     /**
-     * Return client with relevant aggregate data for client read
+     * Return client with relevant aggregate data for client read.
      *
      * @param int $id
+     *
      * @return ClientResultData
      */
     public function findClientAggregateByIdIncludingDeleted(int $id): ClientResultData
@@ -120,12 +123,12 @@ class ClientFinderRepository
                 'client_status' => [
                     'table' => 'client_status',
                     'type' => 'LEFT',
-                    'conditions' => 'client.client_status_id = client_status.id'
+                    'conditions' => 'client.client_status_id = client_status.id',
                 ],
                 'note' => [
                     'table' => 'note',
                     'type' => 'LEFT',
-                    'conditions' => 'client.id = note.client_id AND note.deleted_at IS NULL AND note.is_main = 1'
+                    'conditions' => 'client.id = note.client_id AND note.deleted_at IS NULL AND note.is_main = 1',
                 ],
             ])
             ->andWhere(
@@ -137,14 +140,15 @@ class ClientFinderRepository
         return new ClientResultData($resultRows);
     }
 
-
     /**
      * Retrieve post from database
-     * If not found error is thrown
+     * If not found error is thrown.
      *
      * @param int $id
-     * @return array
+     *
      * @throws PersistenceRecordNotFoundException
+     *
+     * @return array
      */
     public function getPostById(int $id): array
     {
@@ -155,13 +159,15 @@ class ClientFinderRepository
         if (!$entry) {
             throw new PersistenceRecordNotFoundException('post');
         }
+
         return $entry;
     }
 
     /**
-     * Return all posts which are linked to the given user
+     * Return all posts which are linked to the given user.
      *
      * @param int $userId
+     *
      * @return ClientResultData[]
      */
     public function findAllClientsByUserId(int $userId): array

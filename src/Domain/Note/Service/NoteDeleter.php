@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Note\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Exception\NotAllowedException;
@@ -22,9 +20,10 @@ class NoteDeleter
     }
 
     /**
-     * Delete one note logic
+     * Delete one note logic.
      *
      * @param int $noteId
+     *
      * @return bool
      */
     public function deleteNote(int $noteId): bool
@@ -48,6 +47,7 @@ class NoteDeleter
                     ['message' => $noteFromDb->message]
                 );
             }
+
             return $deleted;
         }
         throw new ForbiddenException('You have to be admin or the note creator to update this note');

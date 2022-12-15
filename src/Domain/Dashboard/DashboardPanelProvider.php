@@ -20,7 +20,7 @@ class DashboardPanelProvider
     }
 
     /**
-     * Returns authorized dashboards
+     * Returns authorized dashboards.
      *
      * @return DashboardData[]
      */
@@ -32,11 +32,12 @@ class DashboardPanelProvider
                 $authorizedDashboards[] = $dashboard;
             }
         }
+
         return $authorizedDashboards;
     }
 
     /**
-     * Returns default dashboards
+     * Returns default dashboards.
      *
      * @return DashboardData[]
      */
@@ -60,7 +61,7 @@ class DashboardPanelProvider
             ]),
             new DashboardData([
                 'title' => 'Clients assigned to me &nbsp; — &nbsp;  action pending',
-                'panelId' => "assigned-to-me-panel",
+                'panelId' => 'assigned-to-me-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="user" data-param-value="' . $loggedInUserId . '" value=""></data>
                 <data data-param-name="status" data-param-value="' . $statusesMappedByNameId['Action pending'] . '" value=""></data>
@@ -69,7 +70,7 @@ class DashboardPanelProvider
             ]),
             new DashboardData([
                 'title' => 'User activity',
-                'panelId' => "user-activity-panel",
+                'panelId' => 'user-activity-panel',
                 'panelClass' => null,
                 'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
                     '<div id="user-activity-content"></div>',
@@ -79,7 +80,7 @@ class DashboardPanelProvider
             ]),
             new DashboardData([
                 'title' => 'New notes',
-                'panelId' => "new-notes-panel",
+                'panelId' => 'new-notes-panel',
                 'panelClass' => 'note-panel',
                 'panelHtmlContent' => '<data data-param-name="most-recent" data-param-value="1" value=""></data>
                                                 <div id="note-wrapper-most-recent" class="client-note-wrapper"></div>',
@@ -87,7 +88,7 @@ class DashboardPanelProvider
             ]),
             new DashboardData([
                 'title' => 'Recently assigned clients',
-                'panelId' => "recently-assigned-panel",
+                'panelId' => 'recently-assigned-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>
                                 <div id="client-wrapper-recently-assigned" class="client-wrapper"></div>',

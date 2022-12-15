@@ -7,7 +7,7 @@ use App\Infrastructure\Authentication\UserRoleFinderRepository;
 
 /**
  * The client should know when to display edit and delete icons
- * Admins can edit all notes, users only their own
+ * Admins can edit all notes, users only their own.
  */
 class UserAuthorizationGetter
 {
@@ -17,9 +17,8 @@ class UserAuthorizationGetter
     ) {
     }
 
-
     /**
-     * Returns authorized user roles for given user
+     * Returns authorized user roles for given user.
      *
      * @param array $grantedUserRoles
      *
@@ -31,6 +30,7 @@ class UserAuthorizationGetter
         if (count($grantedUserRoles) > 1) {
             return Privilege::UPDATE;
         }
+
         return Privilege::READ;
     }
 
@@ -46,6 +46,7 @@ class UserAuthorizationGetter
      * anyway and the user list action is quite rare and limited to some users.
      *
      * @param int|null $attributedUserRoleId
+     *
      * @return array
      */
     public function getAuthorizedUserRoles(?int $attributedUserRoleId = null): array
@@ -62,15 +63,17 @@ class UserAuthorizationGetter
                 $grantedCreateUserRoles[$roleId] = $roleName;
             }
         }
+
         return $grantedCreateUserRoles;
     }
 
     /**
      * Checks if authenticated user is allowed to update or read given column
-     * or delete user
+     * or delete user.
      *
      * @param int $userId
      * @param string|null $column
+     *
      * @return Privilege
      */
     public function getMutationPrivilegeForUserColumn(int $userId, ?string $column = null): Privilege
@@ -99,7 +102,7 @@ class UserAuthorizationGetter
         if ($this->userAuthorizationChecker->isGrantedToRead($userId, false)) {
             return Privilege::READ;
         }
+
         return Privilege::NONE;
     }
-
 }

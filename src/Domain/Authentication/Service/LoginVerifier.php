@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
-
 
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
@@ -18,7 +16,6 @@ use Symfony\Component\Mailer\Exception\TransportException;
 
 class LoginVerifier
 {
-
     private string $mainContactEmail;
 
     public function __construct(
@@ -38,12 +35,13 @@ class LoginVerifier
     /**
      * Checks if user is allowed to login.
      * If yes, the user object is returned with id
-     * If no, an InvalidCredentialsException is thrown
+     * If no, an InvalidCredentialsException is thrown.
      *
      * @param array $userLoginValues
      * @param string|null $captcha user captcha response if filled out
-     * @return int id
+     * @param array $queryParams
      *
+     * @return int id
      */
     public function getUserIdIfAllowedToLogin(
         array $userLoginValues,

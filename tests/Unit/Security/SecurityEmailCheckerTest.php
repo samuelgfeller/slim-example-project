@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Unit\Security;
-
 
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
@@ -17,7 +15,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Threats:
- *  - Email abuse (sending a lot of emails may be costly)
+ *  - Email abuse (sending a lot of emails may be costly).
  *
  * Testing whole performEmailAbuseCheck() function and not sub-functions directly as
  * they are private. Reasons are summarized in the class doc of SecurityLoginCheckerTest.php
@@ -29,18 +27,20 @@ class SecurityEmailCheckerTest extends TestCase
     /**
      * Covered in this test:
      *  - [Individual Email abuse] Test with every defined threshold of requests sending an email from a specific ip or
-     *    concerning an email
+     *    concerning an email.
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
+     *
      * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualEmailThrottlingTestCases()
      *
      * @param int|string $delay
      * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformEmailAbuseCheck_individual(int|string $delay, array $ipAndEmailRequestStats,): void
+    public function testPerformEmailAbuseCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
         // Preparation; making sure other security checks won't fail
         $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
@@ -88,15 +88,16 @@ class SecurityEmailCheckerTest extends TestCase
      * Threat: Distributed email abuse (sending few emails with a lot of different users)
      * Covered in this test:
      *  - First iteration: email amount reaching DAILY threshold (and thus fail)
-     *  - Second iteration: email amount reaching MONTHLY threshold (and thus fail)
+     *  - Second iteration: email amount reaching MONTHLY threshold (and thus fail).
      *
      * @dataProvider \App\Test\Provider\Security\UserRequestProvider::globalEmailStatsProvider()
      *
      * Values same as threshold as exception is thrown if it equals or is greater than threshold
+     *
      * @param int $dailyEmailAmount too many daily emails
      * @param int $monthlyEmailAmount too many monthly emails
      */
-    public function testPerformEmailAbuseCheck_global(
+    public function testPerformEmailAbuseCheckGlobal(
         int $dailyEmailAmount,
         int $monthlyEmailAmount
     ): void {

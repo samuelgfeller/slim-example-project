@@ -16,11 +16,10 @@ use UnexpectedValueException;
 /**
  * Handles slim app for testing
  * Traits basically "extend" the class that include them with their content.
- * Or simply "language assisted copy and paste" (from PHP docs comments)
+ * Or simply "language assisted copy and paste" (from PHP docs comments).
  */
 trait AppTestTrait
 {
-
     use HttpTestTrait;
     use MockTestTrait;
 
@@ -29,7 +28,7 @@ trait AppTestTrait
     protected App $app;
 
     /**
-     * PHP Unit function setUp is called automatically before each test
+     * PHP Unit function setUp is called automatically before each test.
      */
     protected function setUp(): void
     {
@@ -68,7 +67,7 @@ trait AppTestTrait
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 
         // XDebug start_with_request produces errors when testing (SLE-102)
-        if (!isset($_ENV['AUTO_XDEBUG_DISABLED'])){
+        if (!isset($_ENV['AUTO_XDEBUG_DISABLED'])) {
             // Disable xdebug.start_with_request (when already disabled, delay is approx 200ms for 80 tests)
             shell_exec(__DIR__ . '/../../resources/scripts/1_disable_autostart_minimized_shortcut.lnk');
             $_ENV['AUTO_XDEBUG_DISABLED'] = true;

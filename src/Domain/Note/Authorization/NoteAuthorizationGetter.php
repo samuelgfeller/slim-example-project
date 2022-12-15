@@ -6,7 +6,7 @@ use App\Domain\Authorization\Privilege;
 
 /**
  * The client should know when to display edit and delete icons
- * Admins can edit all notes, users only their own
+ * Admins can edit all notes, users only their own.
  */
 class NoteAuthorizationGetter
 {
@@ -16,10 +16,11 @@ class NoteAuthorizationGetter
     }
 
     /**
-     * Set user mutation rights on main note from clientResultAggregateData
+     * Set user mutation rights on main note from clientResultAggregateData.
      *
-     * @param null|int $noteOwnerId main note owner id (null if main note doesn't exist yet)
-     * @param null|int $clientOwnerId
+     * @param int|null $noteOwnerId main note owner id (null if main note doesn't exist yet)
+     * @param int|null $clientOwnerId
+     *
      * @return Privilege
      */
     public function getMainNotePrivilege(?int $noteOwnerId, ?int $clientOwnerId): Privilege
@@ -35,15 +36,17 @@ class NoteAuthorizationGetter
         if ($this->noteAuthorizationChecker->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::READ;
         }
+
         return Privilege::NONE;
     }
 
-
     /**
-     * Get privilege of a specific note (delete, update, read)
+     * Get privilege of a specific note (delete, update, read).
      *
      * @param int $noteOwnerId
      * @param int|null $clientOwnerId
+     * @param ?int $hidden
+     *
      * @return Privilege
      */
     public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): Privilege
@@ -60,6 +63,7 @@ class NoteAuthorizationGetter
         if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
             return Privilege::READ;
         }
+
         return Privilege::NONE;
     }
 }

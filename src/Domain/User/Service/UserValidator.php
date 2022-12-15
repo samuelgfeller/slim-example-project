@@ -10,11 +10,10 @@ use App\Domain\Validation\Validator;
 use App\Infrastructure\User\UserFinderRepository;
 
 /**
- * Class UserValidator
+ * Class UserValidator.
  */
 class UserValidator
 {
-
     public function __construct(
         private readonly Validator $validator,
         private readonly UserFinderRepository $userFinderRepository,
@@ -26,6 +25,7 @@ class UserValidator
      *
      * @param int $userId
      * @param array $userValues values to change
+     *
      * @return ValidationResult
      */
     public function validateUserUpdate(int $userId, array $userValues): ValidationResult
@@ -43,7 +43,8 @@ class UserValidator
         }
         if (array_key_exists('email', $userValues)) {
             if ($this->validator->resourceExistenceCheckerRepository->rowExists(
-                ['email' => $userValues['email'], 'id !=' => $userId], 'user'
+                ['email' => $userValues['email'], 'id !=' => $userId],
+                'user'
             )) {
                 $validationResult->setError('email', 'User with this email already exists');
             }
@@ -66,8 +67,10 @@ class UserValidator
      * Validate registration.
      *
      * @param UserData $user
-     * @return ValidationResult
+     *
      * @throws ValidationException|\JsonException
+     *
+     * @return ValidationResult
      */
     public function validateUserCreation(UserData $user): ValidationResult
     {
@@ -92,11 +95,13 @@ class UserValidator
 
     /**
      * Validate if user inputs for the login
-     * are valid
+     * are valid.
      *
-     * @param array{email: null|string, password: null|string} $userLoginValues
-     * @return ValidationResult
+     * @param array{email: string|null, password: string|null} $userLoginValues
+     *
      * @throws ValidationException|\JsonException
+     *
+     * @return ValidationResult
      */
     public function validateUserLogin(array $userLoginValues): ValidationResult
     {
@@ -113,11 +118,13 @@ class UserValidator
     }
 
     /**
-     * Validate email for password recovery
+     * Validate email for password recovery.
      *
      * @param string|null $email
-     * @return ValidationResult
+     *
      * @throws \JsonException
+     *
+     * @return ValidationResult
      */
     public function validatePasswordResetEmail(?string $email): ValidationResult
     {
@@ -132,9 +139,8 @@ class UserValidator
         return $validationResult;
     }
 
-
     /**
-     * Validate password and password2
+     * Validate password and password2.
      *
      * (used for password change from profile, forgotten password and registration)
      *
@@ -168,9 +174,10 @@ class UserValidator
      * Previously in own service class passwordVerifier, but it's simpler
      * to display normal validation errors in the client form.
      *
-     * @param null|string $password
+     * @param string|null $password
      * @param string $field
      * @param int $userId
+     *
      * @return void
      */
     public function checkIfPasswordIsCorrect(?string $password, string $field, int $userId): void
@@ -195,7 +202,7 @@ class UserValidator
 
     /**
      * Validate single password
-     * If passwords are not empty when required is already tested in validatePasswords
+     * If passwords are not empty when required is already tested in validatePasswords.
      *
      * @param string|null $password
      * @param bool $required
@@ -218,11 +225,12 @@ class UserValidator
     }
 
     /**
-     * Validate user role select
+     * Validate user role select.
      *
      * @param mixed $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateUserRoleId(
@@ -241,11 +249,12 @@ class UserValidator
     }
 
     /**
-     * Validate user status dropdown
+     * Validate user status dropdown.
      *
      * @param mixed $value
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     protected function validateUserStatus(
@@ -254,7 +263,7 @@ class UserValidator
         bool $required = false
     ): void {
         if (null !== $value && '' !== $value) {
-            if ($value instanceof UserStatus){
+            if ($value instanceof UserStatus) {
                 $value = $value->value;
             }
             // Check if given user status is one of the enum cases
@@ -266,5 +275,4 @@ class UserValidator
             $validationResult->setError('status', 'Status is required');
         }
     }
-
 }

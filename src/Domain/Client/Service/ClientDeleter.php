@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
@@ -23,11 +21,13 @@ class ClientDeleter
     }
 
     /**
-     * Delete one post logic
+     * Delete one post logic.
      *
      * @param int $clientId
-     * @return bool
+     *
      * @throws ForbiddenException
+     *
+     * @return bool
      */
     public function deleteClient(int $clientId): bool
     {
@@ -40,6 +40,7 @@ class ClientDeleter
             if ($deleted) {
                 $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'client', $clientId);
             }
+
             return $deleted;
         }
 

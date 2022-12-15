@@ -22,7 +22,7 @@ use Selective\TestTrait\Traits\MailerTestTrait;
  *  - login request with invalid values (400 Bad request)
  *  - login request on unverified account (401 Unverified + email with verification token)
  *  - login request on suspended account (401 Unverified + email with info)
- *  - login request on locked account (401 Unverified + email with unlock token)
+ *  - login request on locked account (401 Unverified + email with unlock token).
  *
  * Login tests involving request throttle are done in @see LoginSecurityTest
  */
@@ -36,7 +36,7 @@ class LoginSubmitActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Test successful login
+     * Test successful login.
      */
     public function testLoginSubmitAction(): void
     {
@@ -44,7 +44,7 @@ class LoginSubmitActionTest extends TestCase
         $userRow = $this->insertFixturesWithAttributes(
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
-                'email' => $loginValues['email']
+                'email' => $loginValues['email'],
             ],
             UserFixture::class
         );
@@ -66,7 +66,7 @@ class LoginSubmitActionTest extends TestCase
                 'action' => UserActivity::READ->value,
                 'table' => 'user',
                 'row_id' => $userRow['id'],
-                'data' => json_encode(['login'], JSON_THROW_ON_ERROR)
+                'data' => json_encode(['login'], JSON_THROW_ON_ERROR),
             ],
             'user_activity',
             (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -75,9 +75,9 @@ class LoginSubmitActionTest extends TestCase
 
     /**
      * Test that 401 Unauthorized is returned when trying to log in
-     * with wrong password
+     * with wrong password.
      */
-    public function testLoginSubmitAction_wrongPassword(): void
+    public function testLoginSubmitActionWrongPassword(): void
     {
         $this->insertFixtures([UserFixture::class]);
 
@@ -105,7 +105,7 @@ class LoginSubmitActionTest extends TestCase
      *
      * @param array $invalidLoginValues valid credentials
      */
-    public function testLoginSubmitAction_invalidValues(array $invalidLoginValues): void
+    public function testLoginSubmitActionInvalidValues(array $invalidLoginValues): void
     {
         $this->insertFixtures([UserFixture::class]);
 
@@ -121,15 +121,16 @@ class LoginSubmitActionTest extends TestCase
         self::assertNull($session->get('user_id'));
     }
 
-
     /**
      * Test login with user status unverified.
      * When account is unverified, a verification link is sent to the user via the email.
+     *
      * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::nonActiveAuthenticationRequestCases()
+     *
      * @param UserStatus $status
      * @param string $partialEmailBody
      */
-    public function testLoginSubmitAction_notActiveAccount(UserStatus $status, string $partialEmailBody): void
+    public function testLoginSubmitActionNotActiveAccount(UserStatus $status, string $partialEmailBody): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
         $userRow = $this->insertFixturesWithAttributes(

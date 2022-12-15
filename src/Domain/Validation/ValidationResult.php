@@ -24,7 +24,7 @@ class ValidationResult
     /**
      * Get message.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getMessage(): ?string
     {

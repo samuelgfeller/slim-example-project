@@ -8,7 +8,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserUpdateProvider
 {
-
     use FixtureTestTrait;
 
     /**
@@ -36,7 +35,7 @@ class UserUpdateProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to update user.',
-            ]
+            ],
         ];
         $basicDataChanges = [
             'first_name' => 'NewFirstName',
@@ -53,7 +52,7 @@ class UserUpdateProvider
                 'user_to_change' => $newcomerAttr,
                 'authenticated_user' => $newcomerAttr,
                 'data_to_be_changed' => $basicDataChanges,
-                'expected_result' => $authorizedResult
+                'expected_result' => $authorizedResult,
             ],
 
             // * Advisor
@@ -103,10 +102,8 @@ class UserUpdateProvider
                 'data_to_be_changed' => ['user_role_id' => UserRole::ADMIN],
                 'expected_result' => $unauthorizedResult,
             ],
-
         ];
     }
-
 
     /**
      * Returns combinations of invalid data to trigger validation exception
@@ -138,9 +135,9 @@ class UserUpdateProvider
                             ['field' => 'email', 'message' => 'Invalid email address'],
                             ['field' => 'status', 'message' => 'Status not existing'],
                             ['field' => 'user_role', 'message' => 'User role not existing'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Values too long
@@ -158,9 +155,9 @@ class UserUpdateProvider
                             ['field' => 'first_name', 'message' => 'Maximum length is 100'],
                             ['field' => 'surname', 'message' => 'Maximum length is 100'],
                             ['field' => 'email', 'message' => 'Invalid email address'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
         ];
     }

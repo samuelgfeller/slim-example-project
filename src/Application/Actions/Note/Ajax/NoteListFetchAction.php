@@ -32,10 +32,11 @@ final class NoteListFetchAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -51,7 +52,7 @@ final class NoteListFetchAction
                 // Response format tested in NoteFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidNoteFilterException->getMessage()
+                    'message' => $invalidNoteFilterException->getMessage(),
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
@@ -64,11 +65,13 @@ final class NoteListFetchAction
                     'loginUrl' => $this->responder->urlFor(
                         'login-page',
                         [],
-                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')])
+                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')]
+                    ),
                 ],
                 401
             );
         }
+
         return $this->responder->respondWithJson($response, $filteredNotes);
     }
 }

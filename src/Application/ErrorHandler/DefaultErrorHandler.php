@@ -18,7 +18,6 @@ use Throwable;
  */
 class DefaultErrorHandler
 {
-
     private LoggerInterface $logger;
 
     /**
@@ -44,8 +43,9 @@ class DefaultErrorHandler
      * @param bool $displayErrorDetails Show error details
      * @param bool $logErrors Log errors
      *
-     * @return ResponseInterface The response
      * @throws Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -92,7 +92,7 @@ class DefaultErrorHandler
             $errorMessage = [
                 'exceptionMessage' => $exceptionMessage,
                 'statusCode' => $statusCode,
-                'reasonPhrase' => $reasonPhrase
+                'reasonPhrase' => $reasonPhrase,
             ];
             $errorTemplate = 'error/error-page.html.php';
         }
@@ -104,7 +104,7 @@ class DefaultErrorHandler
         $response = $this->phpRenderer->render(
             $response,
             $errorTemplate,
-            ['errorMessage' => $errorMessage,]
+            ['errorMessage' => $errorMessage]
         );
 
         return $response->withStatus($statusCode);
@@ -139,12 +139,12 @@ class DefaultErrorHandler
     }
 
     /**
-     * Build HTML with exception content and styling
+     * Build HTML with exception content and styling.
      *
      * @param Throwable $exception Error
-     *
      * @param int|null $statusCode
      * @param string|null $reasonPhrase
+     *
      * @return string The full error message
      */
     private function getExceptionDetailsAsHtml(
@@ -159,7 +159,6 @@ class DefaultErrorHandler
         $line = $exception->getLine();
         $message = $exception->getMessage();
         $trace = $exception->getTrace();
-
 
         // Check if it is a warning message or error
         $errorCssClass = $exception instanceof \ErrorException ? 'warning' : 'error';

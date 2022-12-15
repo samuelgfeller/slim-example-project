@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Integration\Client;
-
 
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
@@ -29,11 +27,10 @@ use Slim\Exception\HttpBadRequestException;
  * - unauthenticated client update
  * - client update request with value to change being the same as in database
  * NOT in this test:
- * - edit non-existing client - reason: delete request on non-existing client is tested
+ * - edit non-existing client - reason: delete request on non-existing client is tested.
  */
 class ClientUpdateActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -52,9 +49,10 @@ class ClientUpdateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
      * @return void
      */
-    public function testClientSubmitUpdateAction_authorization(
+    public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -109,7 +107,7 @@ class ClientUpdateActionTest extends TestCase
             $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
             // Get client row from db to have the assigned_at timestamp to assert user activity entry json data
             $clientRow = $this->findTableRowById('client', $clientRow['id']);
-            if ($clientRow['assigned_at'] !== null){
+            if ($clientRow['assigned_at'] !== null) {
                 $updateActivityData = array_merge($requestData, ['assigned_at' => $clientRow['assigned_at']]);
             }
             // Assert that user activity is inserted
@@ -119,7 +117,7 @@ class ClientUpdateActionTest extends TestCase
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
                     'data' => json_encode(
-                    // Add the missing "assigned_at" that is added while updating the client with a current timestamp
+                        // Add the missing "assigned_at" that is added while updating the client with a current timestamp
                         $updateActivityData ?? $requestData,
                         JSON_THROW_ON_ERROR
                     ),
@@ -146,7 +144,7 @@ class ClientUpdateActionTest extends TestCase
         // If birthdate is in request body, age is returned in response data
         if (array_key_exists('birthdate', $requestData)) {
             $expectedResult['json_response']['data'] = [
-                'age' => (new \DateTime())->diff(new \DateTime($requestData['birthdate']))->y
+                'age' => (new \DateTime())->diff(new \DateTime($requestData['birthdate']))->y,
             ];
         }
 
@@ -157,11 +155,13 @@ class ClientUpdateActionTest extends TestCase
      * Test client values validation.
      *
      * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::invalidClientUpdateValuesAndExpectedResponseProvider()
+     *
      * @param array $requestBody
      * @param array $jsonResponse
+     *
      * @return void
      */
-    public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
+    public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -170,8 +170,10 @@ class ClientUpdateActionTest extends TestCase
         )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
-            ClientFixture::class);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['client_status_id' => $clientStatusId, 'user_id' => $userId],
+            ClientFixture::class
+        );
 
         $request = $this->createJsonRequest(
             'PUT',
@@ -192,14 +194,13 @@ class ClientUpdateActionTest extends TestCase
         $this->assertJsonData($jsonResponse, $response);
     }
 
-
     /**
      * Test that dropdown values client status and assigned user
      * can be changed when authenticated. Any user role can do this.
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_unauthenticated(): void
+    public function testClientSubmitUpdateActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-update-submit', ['client_id' => 1]);
@@ -224,7 +225,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_unchangedContent(): void
+    public function testClientSubmitUpdateActionUnchangedContent(): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -233,8 +234,10 @@ class ClientUpdateActionTest extends TestCase
         )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
-        $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
-            ClientFixture::class);
+        $clientRow = $this->insertFixturesWithAttributes(
+            ['client_status_id' => $clientStatusId, 'user_id' => $userId],
+            ClientFixture::class
+        );
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
@@ -252,18 +255,20 @@ class ClientUpdateActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that response contains warning
-        $this->assertJsonData(['status' => 'warning', 'message' => 'The client was not updated.', 'data' => null],
-            $response);
+        $this->assertJsonData(
+            ['status' => 'warning', 'message' => 'The client was not updated.', 'data' => null],
+            $response
+        );
 
         $this->assertTableRowEquals(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
     }
 
     /**
-     * Test client modification with malformed request body
+     * Test client modification with malformed request body.
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_malformedRequest(): void
+    public function testClientSubmitUpdateActionMalformedRequest(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

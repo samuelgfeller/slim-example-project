@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
-
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
@@ -25,10 +23,11 @@ final class RegisterTokenVerifier
     }
 
     /**
-     * Verify token and return user id
+     * Verify token and return user id.
      *
      * @param int $verificationId
      * @param string $token
+     *
      * @return int
      */
     public function getUserIdIfRegisterTokenIsValid(int $verificationId, string $token): int
@@ -64,6 +63,7 @@ final class RegisterTokenVerifier
                         ['status' => UserStatus::Active->value],
                         $userId,
                     );
+
                     return $userId;
                 }
                 // If somehow the record could not be updated

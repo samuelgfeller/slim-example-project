@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\User\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
@@ -21,6 +19,7 @@ class UserDeleter
      * @param UserDeleterRepository $userDeleterRepository
      * @param SessionInterface $session
      * @param UserAuthorizationChecker $userAuthorizationChecker
+     * @param UserActivityManager $userActivityManager
      */
     public function __construct(
         LoggerFactory $logger,
@@ -33,11 +32,13 @@ class UserDeleter
     }
 
     /**
-     * Delete user service method
+     * Delete user service method.
      *
      * @param int $userIdToDelete
-     * @return bool
+     *
      * @throws ForbiddenException
+     *
+     * @return bool
      */
     public function deleteUser(int $userIdToDelete): bool
     {
@@ -47,6 +48,7 @@ class UserDeleter
             if ($isDeleted) {
                 $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);
             }
+
             return $isDeleted;
         }
 

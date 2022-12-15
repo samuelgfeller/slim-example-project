@@ -32,10 +32,11 @@ final class ClientListAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -45,6 +46,7 @@ final class ClientListAction
         try {
             // Retrieve posts with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
+
             return $this->responder->respondWithJson($response, $clientResultCollection);
         } catch (InvalidClientFilterException $invalidClientFilterException) {
             return $this->responder->respondWithJson(
@@ -52,7 +54,7 @@ final class ClientListAction
                 // Response format tested in PostFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidClientFilterException->getMessage()
+                    'message' => $invalidClientFilterException->getMessage(),
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
@@ -65,7 +67,8 @@ final class ClientListAction
                     'loginUrl' => $this->responder->urlFor(
                         'login-page',
                         [],
-                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')])
+                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')]
+                    ),
                 ],
                 401
             );

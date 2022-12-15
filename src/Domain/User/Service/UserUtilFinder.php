@@ -13,7 +13,7 @@ class UserUtilFinder
     }
 
     /**
-     * Find all dropdown values for a client
+     * Find all dropdown values for a client.
      *
      * @return array
      */
@@ -21,7 +21,7 @@ class UserUtilFinder
     {
         return [
             'userRoles' => $this->userAuthorizationGetter->getAuthorizedUserRoles(),
-            'statuses' => UserStatus::toArray()
+            'statuses' => UserStatus::toArray(),
         ];
     }
 }

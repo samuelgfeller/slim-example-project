@@ -4,7 +4,7 @@ namespace App\Test\Fixture;
 
 /**
  * User values that can be inserted into the database
- * * All user roles are inserted automatically for each test (in AppTestTrait)
+ * * All user roles are inserted automatically for each test (in AppTestTrait).
  */
 class UserFixture
 {
@@ -171,7 +171,5 @@ class UserFixture
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => '2021-01-01 00:00:02',
         ],
-
-
     ];
 }

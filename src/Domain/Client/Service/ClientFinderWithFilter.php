@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientResultDataCollection;
@@ -99,6 +97,7 @@ class ClientFinderWithFilter
         $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
             $clientResultDataCollection->clients
         );
+
         return $clientResultDataCollection;
     }
 }

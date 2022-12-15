@@ -12,7 +12,10 @@ class UserFilterHandlerRepository
     }
 
     /**
-     * Return filters from user
+     * Return filters from user.
+     *
+     * @param int|string $userId
+     * @param string $userFilterModule
      */
     public function findFiltersFromUser(int|string $userId, string $userFilterModule): array
     {
@@ -20,14 +23,16 @@ class UserFilterHandlerRepository
             ->where(['user_id' => $userId, 'module' => $userFilterModule]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $filterIds = array_column($resultRows, 'filter_id');
+
         return $filterIds;
     }
 
     /**
-     * Removes all filters previously saved from user
+     * Removes all filters previously saved from user.
      *
      * @param int|string $userId
      * @param string|null $userFilterModule
+     *
      * @return bool
      */
     public function deleteFilterSettingFromUser(int|string $userId, ?string $userFilterModule = null): bool
@@ -35,11 +40,12 @@ class UserFilterHandlerRepository
         $moduleWhere = $userFilterModule ? ['module' => $userFilterModule] : [];
         $query = $this->queryFactory->newQuery()->delete('user_filter_setting')
             ->where(array_merge(['user_id' => $userId], $moduleWhere));
+
         return $query->execute()->rowCount() > 0;
     }
 
     /**
-     * Inserts client list filters
+     * Inserts client list filters.
      *
      * @param array $userFilterRow
      */
@@ -48,5 +54,4 @@ class UserFilterHandlerRepository
         $this->queryFactory->newMultipleInsert($userFilterRow)->into('user_filter_setting')
             ->execute()->lastInsertId();
     }
-
 }

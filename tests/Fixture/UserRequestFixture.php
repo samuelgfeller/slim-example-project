@@ -3,7 +3,7 @@
 namespace App\Test\Fixture;
 
 /**
- * This fixture inserts valid requests
+ * This fixture inserts valid requests.
  */
 class UserRequestFixture
 {
@@ -80,6 +80,5 @@ class UserRequestFixture
         $this->records[3]['created_at'] = $recentDate->format('Y-m-d H:i:s');
         $this->records[4]['created_at'] = $recentDate->format('Y-m-d H:i:s');
         $this->records[5]['created_at'] = $recentDate->format('Y-m-d H:i:s');
-
     }
 }

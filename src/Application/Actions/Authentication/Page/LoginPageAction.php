@@ -12,11 +12,11 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class LoginPageAction
 {
-
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param SessionInterface $session
      */
     public function __construct(
         private readonly Responder $responder,
@@ -41,19 +41,22 @@ final class LoginPageAction
             $flash = $this->session->getFlash();
             $flash->add(
                 'info',
-                'You are already logged-in.<br>' . 'Would you like to <a href="' . $this->responder->urlFor('logout') .
+                'You are already logged-in.<br>Would you like to <a href="' . $this->responder->urlFor('logout') .
                 '">logout</a>?'
             );
             // If redirect param set, redirect to this url
-            if (isset($queryParams['redirect'])){
+            if (isset($queryParams['redirect'])) {
                 return $this->responder->redirectToUrl($response, $queryParams['redirect']);
             }
             // Otherwise, go to home page
             return $this->responder->redirectToRouteName($response, 'home-page');
         }
-        return $this->responder->render($response,
+
+        return $this->responder->render(
+            $response,
             'authentication/login.html.php',
             // Provide same query params passed to login page to be added to the login submit request
-            ['queryParams' => $request->getQueryParams()]);
+            ['queryParams' => $request->getQueryParams()]
+        );
     }
 }

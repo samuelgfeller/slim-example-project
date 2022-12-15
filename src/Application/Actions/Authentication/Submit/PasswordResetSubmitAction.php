@@ -22,6 +22,10 @@ class PasswordResetSubmitAction
      * The constructor.
      *
      * @param Responder $responder
+     * @param SessionInterface $session
+     * @param PasswordChanger $passwordChanger
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         private readonly Responder $responder,
@@ -34,12 +38,14 @@ class PasswordResetSubmitAction
     }
 
     /**
-     * Check if token is valid and if yes display password form
+     * Check if token is valid and if yes display password form.
      *
      * @param ServerRequest $request
      * @param Response $response
-     * @return Response
+     *
      * @throws \Throwable
+     *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -49,7 +55,8 @@ class PasswordResetSubmitAction
         // There may be other query params e.g. redirect
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
             $parsedBody,
-            ['id', 'token', 'password', 'password2'], ['redirect']
+            ['id', 'token', 'password', 'password2'],
+            ['redirect']
         )) {
             try {
                 $this->passwordChanger->resetPasswordWithToken(
@@ -84,6 +91,7 @@ class PasswordResetSubmitAction
                 // Add token and id to php view attribute like PasswordResetAction does
                 $this->responder->addPhpViewAttribute('token', $parsedBody['token']);
                 $this->responder->addPhpViewAttribute('id', $parsedBody['id']);
+
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/reset-password.html.php',

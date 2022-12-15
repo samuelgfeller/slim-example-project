@@ -7,7 +7,7 @@ use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
 use Psr\Log\LoggerInterface;
 
 /**
- * User input validator
+ * User input validator.
  */
 final class Validator
 {
@@ -16,7 +16,7 @@ final class Validator
     /**
      * AppValidation constructor. Very important that it is public
      * because PostValidation inherits this constructor and can't
-     * be instantiated otherwise
+     * be instantiated otherwise.
      *
      * @param LoggerFactory $logger
      * @param ResourceExistenceCheckerRepository $resourceExistenceCheckerRepository
@@ -33,6 +33,7 @@ final class Validator
      * Throw a validation exception if the validation result fails.
      *
      * @param ValidationResult $validationResult
+     *
      * @throws ValidationException|\JsonException
      */
     public function throwOnError(ValidationResult $validationResult): void
@@ -56,8 +57,7 @@ final class Validator
      * @param ValidationResult $validationResult
      * @param int $length
      */
-    public
-    function validateLengthMin(
+    public function validateLengthMin(
         string|int|null $value,
         string $fieldName,
         ValidationResult $validationResult,
@@ -76,8 +76,7 @@ final class Validator
      * @param ValidationResult $validationResult
      * @param int $length
      */
-    public
-    function validateLengthMax(
+    public function validateLengthMax(
         string|int|null $value,
         string $fieldName,
         ValidationResult $validationResult,
@@ -96,8 +95,7 @@ final class Validator
      * @param ValidationResult $validationResult
      * @param bool $required on update the name doesn't have to be set but on creation it has
      */
-    public
-    function validateName(
+    public function validateName(
         ?string $name,
         string $fieldName,
         ValidationResult $validationResult,
@@ -113,14 +111,13 @@ final class Validator
     }
 
     /**
-     * Validate email
+     * Validate email.
      *
      * @param string|null $email
      * @param bool $required
      * @param ValidationResult $validationResult
      */
-    public
-    function validateEmail(
+    public function validateEmail(
         string|null $email,
         ValidationResult $validationResult,
         bool $required = false,
@@ -138,16 +135,16 @@ final class Validator
     }
 
     /**
-     * Validate birthdate
+     * Validate birthdate.
      *
      * @param \DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
      * @param bool $required
-     * @param null|string $birthdateUserInput
+     * @param string|null $birthdateUserInput
+     *
      * @throws \Exception
      */
-    public
-    function validateBirthdate(
+    public function validateBirthdate(
         \DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
         bool $required = false,
@@ -163,6 +160,7 @@ final class Validator
                 // Birthdate is not null, not a string with valid date and also not an instance of the custom
                 // DateTimeImmutable format (from the data object) it means that its invalid
                 $validationResult->setError('birthdate', 'Invalid birthdate');
+
                 return;
             }
 
@@ -174,11 +172,11 @@ final class Validator
                 $birthdate->getTimestamp() < $oldestAge->getTimestamp()) {
                 $validationResult->setError('birthdate', 'Invalid birthdate');
             }
-            // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
-            // There are cases where client submits data in different format than Y-m-d so this check was removed
-            // if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
+        // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
+        // There are cases where client submits data in different format than Y-m-d so this check was removed
+        // if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
             //     $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input');
-            // }
+        // }
         } elseif (true === $required) {
             // If it is null and required
             $validationResult->setError('birthdate', 'Birthdate is required');
@@ -186,15 +184,15 @@ final class Validator
     }
 
     /**
-     * Check if user resource
+     * Check if user resource.
      *
-     * @param null|int $rowId
+     * @param int|null $rowId
      * @param string $table
      * @param ValidationResult $validationResult
      * @param bool $required
+     * @param bool $excludingSoftDelete
      */
-    public
-    function validateExistence(
+    public function validateExistence(
         ?int $rowId,
         string $table,
         ValidationResult $validationResult,
@@ -202,9 +200,11 @@ final class Validator
         bool $excludingSoftDelete = true
     ): void {
         if (null !== $rowId && $rowId !== 0) {
-            $exists = $this->resourceExistenceCheckerRepository->rowExists(['id' => $rowId],
+            $exists = $this->resourceExistenceCheckerRepository->rowExists(
+                ['id' => $rowId],
                 $table,
-                $excludingSoftDelete);
+                $excludingSoftDelete
+            );
             if (!$exists) {
                 $validationResult->setError(
                     $table,
@@ -223,16 +223,16 @@ final class Validator
     }
 
     /**
-     * Validate that given input is numeric
+     * Validate that given input is numeric.
      *
      * @param string|int|null $numericValue
      * @param string $fieldName
      * @param bool $required
      * @param ValidationResult $validationResult
+     *
      * @return void
      */
-    public
-    function validateNumeric(
+    public function validateNumeric(
         string|null|int $numericValue,
         string $fieldName,
         ValidationResult $validationResult,
@@ -249,7 +249,8 @@ final class Validator
     }
 
     /**
-     * Validate user status dropdown
+     * Validate user status dropdown.
+     *
      * @template Enum
      *
      * @param \BackedEnum|string|null $value enum case or backed string value
@@ -257,6 +258,7 @@ final class Validator
      * @param string $fieldName
      * @param ValidationResult $validationResult
      * @param bool $required
+     *
      * @return void
      */
     public function validateBackedEnum(
@@ -271,9 +273,9 @@ final class Validator
             if (!is_a($value, $enum, true) && !is_a($enum::tryFrom($value), $enum, true)) {
                 $validationResult->setError($fieldName, $fieldName . ' not existing');
             }
-            // Check if given user status is one of the enum cases
-            // if (!in_array($value, $enum::values(), true)) {
-            // }
+        // Check if given user status is one of the enum cases
+        // if (!in_array($value, $enum::values(), true)) {
+        // }
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError($fieldName, $fieldName . ' is required');

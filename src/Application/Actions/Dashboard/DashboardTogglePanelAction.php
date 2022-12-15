@@ -16,11 +16,13 @@ use Slim\Exception\HttpBadRequestException;
  */
 final class DashboardTogglePanelAction
 {
-
     /**
      * The constructor.
+     *
      * @param Responder $responder
      * @param SessionInterface $session
+     * @param FilterSettingSaver $filterSettingSaver
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
         private readonly Responder $responder,
@@ -35,10 +37,11 @@ final class DashboardTogglePanelAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -51,7 +54,8 @@ final class DashboardTogglePanelAction
                 json_decode($params['panelIds'], true),
                 FilterModule::DASHBOARD_PANEL
             );
-            return $this->responder->respondWithJson($response,['success' => true]);
+
+            return $this->responder->respondWithJson($response, ['success' => true]);
         }
         $flash = $this->session->getFlash();
         $flash->add('error', 'Malformed request body syntax. Please contact an administrator');

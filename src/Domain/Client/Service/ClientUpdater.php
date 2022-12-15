@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
@@ -29,11 +27,12 @@ class ClientUpdater
     }
 
     /**
-     * Change something or multiple things on post
+     * Change something or multiple things on post.
      *
      * @param int $clientId id of post being changed
      * @param array|null $clientValues values that user wants to change
      * @param int $loggedInUserId
+     *
      * @return array update infos containing status and optionally other
      */
     public function updateClient(int $clientId, null|array $clientValues, int $loggedInUserId): array
@@ -63,7 +62,7 @@ class ClientUpdater
                     'sex',
                     'vigilance_level',
                     'deleted_at',
-                ])) {
+                ], true)) {
                     // If $value is an empty string, change it to null
                     if ($value === '') {
                         $value = null;
@@ -85,7 +84,7 @@ class ClientUpdater
                 }
             }
             // If assigned to user add assigned_at date as well
-            if (isset($updateData['user_id'])){
+            if (isset($updateData['user_id'])) {
                 $updateData['assigned_at'] = date('Y-m-d H:i:s');
             }
             // Update client
@@ -98,6 +97,7 @@ class ClientUpdater
                     $updateData
                 );
             }
+
             return [
                 'updated' => $updated,
                 'data' => $responseData,

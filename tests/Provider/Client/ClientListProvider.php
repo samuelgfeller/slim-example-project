@@ -1,15 +1,13 @@
 <?php
 
-
 namespace App\Test\Provider\Client;
-
 
 use App\Domain\User\Enum\UserRole;
 
 class ClientListProvider
 {
     /**
-     * Returns every filter combination
+     * Returns every filter combination.
      *
      * @return array GET params with valid filter values
      */
@@ -40,7 +38,6 @@ class ClientListProvider
             ['client_status_id' => 69, 'first_name' => 'Twelfth'], // Assigned to other status
             // Assigned to status 68, user 42 and deleted
             ['client_status_id' => 68, 'deleted_at' => $sqlDateTime, 'user_id' => 42, 'first_name' => 'Eleventh'],
-
         ];
         // ! Users to insert attributes. Has to at least contain all 'user_id' from the clients to insert array
         $usersToInsert = [
@@ -68,7 +65,7 @@ class ClientListProvider
                 'statuses_to_insert' => $clientStatusesToInsert,
             ],
             [ // Test user filter "assigned to user" could be other user or authenticated user
-                'get_params' => ['user' => 42,],
+                'get_params' => ['user' => 42],
                 'expected_clients_where_string' => 'deleted_at IS NULL AND user_id = 42',
                 'authenticated_user' => $newcomerAttributes,
                 'clients_to_insert' => $clientsToInsert,
@@ -76,7 +73,7 @@ class ClientListProvider
                 'statuses_to_insert' => $clientStatusesToInsert,
             ],
             [ // Test user filter "unassigned" and "assigned to me" together
-                'get_params' => ['user' => ['', 1],], // Query params for "unassigned"
+                'get_params' => ['user' => ['', 1]], // Query params for "unassigned"
                 'expected_clients_where_string' => 'deleted_at IS NULL AND (user_id IS NULL OR user_id = 1)',
                 'authenticated_user' => $newcomerAttributes,
                 'clients_to_insert' => $clientsToInsert,
@@ -85,7 +82,7 @@ class ClientListProvider
             ],
             // * Test filter "deleted"
             [ // Test user filter "unassigned" and "assigned to me" together
-                'get_params' => ['deleted' => 1,], // Query params for "unassigned"
+                'get_params' => ['deleted' => 1], // Query params for "unassigned"
                 'expected_clients_where_string' => 'deleted_at IS NOT NULL',
                 // Managing advisor needed for the deleted filter.
                 'authenticated_user' => ['id' => 42, 'user_role_id' => UserRole::MANAGING_ADVISOR],
@@ -95,7 +92,7 @@ class ClientListProvider
             ],
             // * Test filter "status"
             [ // Test user filter "assigned to other user"
-                'get_params' => ['status' => 68,], // Status id that is not fixture default
+                'get_params' => ['status' => 68], // Status id that is not fixture default
                 'expected_clients_where_string' => 'deleted_at IS NULL AND (client_status_id = 68)',
                 'authenticated_user' => $newcomerAttributes,
                 'clients_to_insert' => $clientsToInsert,
@@ -104,8 +101,8 @@ class ClientListProvider
             ],
             // * Test search filter "name"
             [ // Test user filter "name"
-                'get_params' => ['name' => 'th',],
-                'expected_clients_where_string' => 'deleted_at IS NULL AND (CONCAT(first_name, "  ", '.
+                'get_params' => ['name' => 'th'],
+                'expected_clients_where_string' => 'deleted_at IS NULL AND (CONCAT(first_name, "  ", ' .
                     'last_name) LIKE "%th%")',
                 'authenticated_user' => $newcomerAttributes,
                 'clients_to_insert' => $clientsToInsert,
@@ -115,7 +112,7 @@ class ClientListProvider
             // * Filter combination "status" - "name"
             [ // Test user filter "status 68 or 69" and "name contains 'enth'"
                 'get_params' => ['status' => [68, 69], 'name' => 'enth'],
-                'expected_clients_where_string' => 'deleted_at IS NULL AND (client_status_id IN (68, 69)) AND '.
+                'expected_clients_where_string' => 'deleted_at IS NULL AND (client_status_id IN (68, 69)) AND ' .
                     '(CONCAT(first_name, "  ", last_name) LIKE "%enth%")',
                 'authenticated_user' => $newcomerAttributes,
                 'clients_to_insert' => $clientsToInsert,
@@ -152,7 +149,7 @@ class ClientListProvider
     }
 
     /**
-     * Returns invalid filters
+     * Returns invalid filters.
      *
      * @return array
      */

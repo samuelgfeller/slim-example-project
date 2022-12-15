@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Application\Responder\Responder;
@@ -13,14 +12,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * User auth verification middleware
+ * User auth verification middleware.
  *
  * Class UserAuthMiddleware
- * @package App\Application\Middleware
  */
 final class UserAuthenticationMiddleware implements MiddlewareInterface
 {
-
     public function __construct(
         protected readonly SessionInterface $session,
         protected readonly Responder $responder,
@@ -61,7 +58,6 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
             $queryParams['redirect'] = $routeName;
         }
 
-
         // If it's a JSON request return 401 with the login url and its possible query params
         if ($request->getHeaderLine('Content-Type') === 'application/json') {
             return $this->responder->respondWithJson(
@@ -72,6 +68,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
         }
         // If no redirect header is set, and it's not a JSON request, redirect to same url as the request after login
         $queryParams = ['redirect' => $request->getUri()->getPath()];
+
         return $this->responder->redirectToRouteName($response, 'login-page', [], $queryParams);
     }
 }

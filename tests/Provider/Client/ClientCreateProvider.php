@@ -8,11 +8,10 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class ClientCreateProvider
 {
-
     use FixtureTestTrait;
 
     /**
-     * Provide malformed request body for client creation
+     * Provide malformed request body for client creation.
      *
      * @return array[]
      */
@@ -47,7 +46,7 @@ class ClientCreateProvider
                     'message' => 'value',
                     'key_too_much' => 'value',
                 ],
-            ]
+            ],
         ];
     }
 
@@ -79,14 +78,15 @@ class ClientCreateProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to create client.',
-            ]
+            ],
         ];
+
         return [
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - not allowed
                 'user_linked_to_client' => $newcomerAttributes,
                 'authenticated_user' => $newcomerAttributes,
-                'expected_result' => $unauthorizedResult
+                'expected_result' => $unauthorizedResult,
             ],
             [ // ? Advisor owner - allowed
                 'user_linked_to_client' => $advisorAttributes,
@@ -173,9 +173,9 @@ class ClientCreateProvider
                                 'field' => 'sex',
                                 'message' => 'Invalid sex value given.',
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Most values too long
@@ -227,9 +227,9 @@ class ClientCreateProvider
                                 'field' => 'phone',
                                 'message' => 'Maximum length is 20',
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [ // Main note validation
                 // All client values valid but not main note message

@@ -37,7 +37,9 @@ final class LoginSubmitAction
         $queryParams = $request->getQueryParams();
 
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
-            $submitValues, ['email', 'password'], ['g-recaptcha-response']
+            $submitValues,
+            ['email', 'password'],
+            ['g-recaptcha-response']
         )) {
             try {
                 // Throws InvalidCredentialsException if not allowed
@@ -59,6 +61,7 @@ final class LoginSubmitAction
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $request->getQueryParams()['redirect']);
                 }
+
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (ValidationException $ve) {
                 return $this->responder->renderOnValidationError(
@@ -100,6 +103,7 @@ final class LoginSubmitAction
                 $this->responder->addPhpViewAttribute('formError', true);
                 // Add form error message
                 $this->responder->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());
+
                 return $this->responder->render(
                     $response->withStatus(401),
                     'authentication/login.html.php',

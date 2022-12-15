@@ -6,7 +6,7 @@ use App\Domain\Authorization\Privilege;
 
 /**
  * The client should know when to display edit and delete icons
- * Admins can edit all notes, users only their own
+ * Admins can edit all notes, users only their own.
  */
 class ClientAuthorizationGetter
 {
@@ -16,10 +16,11 @@ class ClientAuthorizationGetter
     }
 
     /**
-     * Checks if authenticated user is allowed to delete, update or read given column
+     * Checks if authenticated user is allowed to delete, update or read given column.
      *
-     * @param null|int $clientOwnerId
+     * @param int|null $clientOwnerId
      * @param string|null $column
+     *
      * @return Privilege
      */
     public function getMutationPrivilegeForClientColumn(?int $clientOwnerId, string $column = null): Privilege
@@ -34,6 +35,7 @@ class ClientAuthorizationGetter
         ) {
             return Privilege::UPDATE;
         }
+
         return Privilege::NONE;
     }
 }

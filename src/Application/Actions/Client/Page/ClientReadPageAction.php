@@ -32,10 +32,11 @@ final class ClientReadPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
+     *
+     * @throws \JsonException|\Throwable
+     *
      * @return ResponseInterface The response
-     * @throws \JsonException
      */
     public function __invoke(
         ServerRequestInterface $request,

@@ -8,7 +8,6 @@ use App\Domain\User\Enum\UserStatus;
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
  * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
  * sense to keep them private otherwise not really.
- *
  */
 class UserData implements \JsonSerializable
 {
@@ -29,7 +28,9 @@ class UserData implements \JsonSerializable
 
     /**
      * User constructor.
+     *
      * @param array $userData
+     *
      * @throws \Exception
      */
     public function __construct(array $userData = [])
@@ -50,7 +51,8 @@ class UserData implements \JsonSerializable
     }
 
     /**
-     * Returns the first and surname in one string separated by a whitespace
+     * Returns the first and surname in one string separated by a whitespace.
+     *
      * @return string
      */
     public function getFullName(): string
@@ -59,7 +61,7 @@ class UserData implements \JsonSerializable
     }
 
     /**
-     * Returns values of object as array for database (pw2 not included)
+     * Returns values of object as array for database (pw2 not included).
      *
      * The array keys MUST match with the database column names since it can
      * be used to modify a database entry
@@ -78,7 +80,6 @@ class UserData implements \JsonSerializable
             'status' => $this->status->value,
         ];
     }
-
 
     public function jsonSerialize(): array
     {

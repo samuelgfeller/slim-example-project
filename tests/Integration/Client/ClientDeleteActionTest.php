@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Integration\Client;
-
 
 use App\Domain\User\Enum\UserActivity;
 use App\Test\Fixture\ClientFixture;
@@ -22,11 +20,10 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 /**
  * Client submit delete action tests
  *  - Authenticated with different user roles
- *  - Unauthenticated
+ *  - Unauthenticated.
  */
 class ClientDeleteActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -44,9 +41,10 @@ class ClientDeleteActionTest extends TestCase
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db is supposed to change and json_response
+     *
      * @return void
      */
-    public function testClientSubmitDeleteAction_authorization(
+    public function testClientSubmitDeleteActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -86,7 +84,7 @@ class ClientDeleteActionTest extends TestCase
                     'action' => UserActivity::DELETED->value,
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
-                    'data' => null
+                    'data' => null,
                 ],
                 'user_activity',
                 (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -101,15 +99,14 @@ class ClientDeleteActionTest extends TestCase
         $this->assertJsonData($expectedResult['json_response'], $response);
     }
 
-
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
      * and that the authentication middleware provides the correct login url
-     * if Redirect-to-route-name-if-unauthorized header is set
+     * if Redirect-to-route-name-if-unauthorized header is set.
      *
      * @return void
      */
-    public function testClientSubmitDeleteAction_unauthenticated(): void
+    public function testClientSubmitDeleteActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',
@@ -126,16 +123,17 @@ class ClientDeleteActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
         // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
+        $expectedLoginUrl = $this->urlFor(
+            'login-page',
+            [],
+            ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
         );
 
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 
-
     // Unchanged content test not done as it's not being used by the frontend
     // Malformed request body also not so relevant as there is no body for deletion
     // Invalid data not relevant either as there is no data in the request body
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Test\Integration\Authentication;
 
-
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
@@ -19,7 +18,7 @@ use Selective\TestTrait\Traits\MailerTestTrait;
  * Test that the link sent to a locked user to unblock his account
  * works correctly and safely. Covered in this test:
  *  - Unlock account with valid token with redirect (status active, redirect, auto login)
- *  - Attempt to unlock account with used, invalid and expired token
+ *  - Attempt to unlock account with used, invalid and expired token.
  */
 class AccountUnlockActionTest extends TestCase
 {
@@ -30,17 +29,20 @@ class AccountUnlockActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Test that with given correct token the account status is set to active
+     * Test that with given correct token the account status is set to active.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
     public function testAccountUnlockAction(UserVerificationData $verification, string $clearTextToken): void
     {
         // Insert locked user
-        $userRow = $this->insertFixturesWithAttributes(['status' => 'locked', 'id' => $verification->userId],
-            UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['status' => 'locked', 'id' => $verification->userId],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -74,19 +76,22 @@ class AccountUnlockActionTest extends TestCase
 
     /**
      * Test that with given used, invalid or expired token the account cannot be unlocked
-     * This is a very important test for security
+     * This is a very important test for security.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testAccountUnlockAction_invalidExpiredToken(
+    public function testAccountUnlockActionInvalidExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
         // Insert locked user
-        $userRow = $this->insertFixturesWithAttributes(['status' => 'locked', 'id' => $verification->userId],
-            UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(
+            ['status' => 'locked', 'id' => $verification->userId],
+            UserFixture::class
+        );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -120,6 +125,4 @@ class AccountUnlockActionTest extends TestCase
         // Assert that session user_id is null meaning user is NOT logged-in
         self::assertNull($session->get('user_id'));
     }
-
-
 }

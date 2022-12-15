@@ -29,14 +29,15 @@ final class UserSubmitDeleteAction
     /**
      * Action used by two different use cases.
      *  - User deletes its own account
-     *  - Admin deletes user account
+     *  - Admin deletes user account.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args The routing arguments
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -58,12 +59,13 @@ final class UserSubmitDeleteAction
                         'success',
                         'Successfully deleted your account. You are now logged out.'
                     );
-                }else {
+                } else {
                     $this->session->getFlash()->add(
                         'success',
                         'Successfully deleted user.'
                     );
                 }
+
                 return $this->responder->respondWithJson($response, ['status' => 'success']);
             }
 
@@ -72,6 +74,7 @@ final class UserSubmitDeleteAction
                 // response json body asserted in UserDeleteActionTest
                 ['status' => 'warning', 'message' => 'User not deleted.']
             );
+
             return $response->withAddedHeader('Warning', 'The account was not deleted');
         } catch (ForbiddenException $fe) {
             // Not throwing HttpForbiddenException as it's a json request and response should be json too

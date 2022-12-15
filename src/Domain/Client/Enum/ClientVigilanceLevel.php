@@ -14,7 +14,7 @@ enum ClientVigilanceLevel: string
 
     /**
      * All letters lowercase except first capital letter
-     * and replaces underscores with spaces
+     * and replaces underscores with spaces.
      *
      * Would love this function to be global / be in a trait that could be used
      * but don't know the best way to implement it right now as there is no access

@@ -5,7 +5,7 @@ namespace App\Domain\Security\Exception;
 use App\Domain\Security\Enum\SecurityType;
 
 /**
- * Security throttle exception
+ * Security throttle exception.
  */
 class SecurityException extends \RuntimeException
 {
@@ -24,7 +24,6 @@ class SecurityException extends \RuntimeException
     {
         return $this->remainingDelay;
     }
-
 
     public function getSecurityType(): SecurityType
     {

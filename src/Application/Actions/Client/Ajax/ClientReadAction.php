@@ -31,10 +31,11 @@ final class ClientReadAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
@@ -44,7 +45,7 @@ final class ClientReadAction
             // json_encode transforms object with public attributes to camelCase which matches Google recommendation
             // https://stackoverflow.com/a/19287394/9013718
             return $this->responder->respondWithJson($response, $clientAggregate);
-        } catch (ForbiddenException $forbiddenException){
+        } catch (ForbiddenException $forbiddenException) {
             throw new HttpForbiddenException($request, $forbiddenException->getMessage());
         }
     }

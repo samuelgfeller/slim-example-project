@@ -23,11 +23,10 @@ use Slim\Exception\HttpBadRequestException;
  *  - change password authenticated - authorization
  *  - change password authenticated - invalid data -> 400 Bad request
  *  - change password not authenticated -> 302 to login page with correct redirect param
- *  - change password authenticated malformed request body -> HttpBadRequestException
+ *  - change password authenticated malformed request body -> HttpBadRequestException.
  */
 class UserChangePasswordActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use RouteTestTrait;
@@ -38,11 +37,15 @@ class UserChangePasswordActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Test user password change with different user roles
+     * Test user password change with different user roles.
      *
      * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::userPasswordChangeAuthorizationCases()
+     *
+     * @param array $userToUpdateRow
+     * @param array $authenticatedUserRow
+     * @param array $expectedResult
      */
-    public function testChangePasswordSubmitAction_authorization(
+    public function testChangePasswordSubmitActionAuthorization(
         array $userToUpdateRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -89,7 +92,7 @@ class UserChangePasswordActionTest extends TestCase
                     'action' => UserActivity::UPDATED->value,
                     'table' => 'user',
                     'row_id' => $userToUpdateRow['id'],
-                    'data' => json_encode(['password_hash' => '******'], JSON_THROW_ON_ERROR)
+                    'data' => json_encode(['password_hash' => '******'], JSON_THROW_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -105,11 +108,11 @@ class UserChangePasswordActionTest extends TestCase
 
     /**
      * Test that user is redirected to login page
-     * if trying to do unauthenticated request
+     * if trying to do unauthenticated request.
      *
      * @return void
      */
-    public function testChangePasswordSubmitAction_unauthenticated(): void
+    public function testChangePasswordSubmitActionUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('change-password-submit', ['user_id' => 1]));
@@ -127,14 +130,16 @@ class UserChangePasswordActionTest extends TestCase
     }
 
     /**
-     * Test that backend validation fails when new passwords are invalid
+     * Test that backend validation fails when new passwords are invalid.
      *
      * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::invalidPasswordChangeCases()
+     *
      * @param array $requestBody
      * @param array $jsonResponse
+     *
      * @return void
      */
-    public function testChangePasswordSubmitAction_invalid(array $requestBody, array $jsonResponse): void
+    public function testChangePasswordSubmitActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userRow = $this->insertFixturesWithAttributes(
@@ -165,7 +170,7 @@ class UserChangePasswordActionTest extends TestCase
      *
      * @param array|null $malformedRequestBody null for the case that request body is null
      */
-    public function testChangePasswordSubmitAction_malformedBody(null|array $malformedRequestBody): void
+    public function testChangePasswordSubmitActionMalformedBody(null|array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

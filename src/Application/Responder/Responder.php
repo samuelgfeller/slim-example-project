@@ -48,8 +48,9 @@ final class Responder
      * @param string $template Template pathname relative to templates directory
      * @param array $data Associative array of template variables
      *
-     * @return ResponseInterface The response
      * @throws \Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function render(
         ResponseInterface $response,
@@ -60,7 +61,7 @@ final class Responder
     }
 
     /**
-     * Add global variable accessible in templates
+     * Add global variable accessible in templates.
      *
      * @param string $key
      * @param $value
@@ -73,7 +74,7 @@ final class Responder
     }
 
     /**
-     * Creates a redirect for the given url
+     * Creates a redirect for the given url.
      *
      * This method prepares the response object to return an HTTP Redirect
      * response to the client.
@@ -119,7 +120,7 @@ final class Responder
     }
 
     /**
-     * Build the path for a named route including the base path
+     * Build the path for a named route including the base path.
      *
      * @param string $routeName Route name
      * @param string[] $data Named argument replacement data
@@ -133,15 +134,17 @@ final class Responder
     }
 
     /**
-     * Render template with validation errors
+     * Render template with validation errors.
      *
      * @param ResponseInterface $response
      * @param string $template
      * @param ValidationException $validationException
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      * @param array|null $preloadValues
-     * @return ResponseInterface|null
+     *
      * @throws \Throwable
+     *
+     * @return ResponseInterface|null
      */
     public function renderOnValidationError(
         ResponseInterface $response,
@@ -165,15 +168,17 @@ final class Responder
     }
 
     /**
-     * Respond with delay user has to wait or action that needs to be made before repeating the action
+     * Respond with delay user has to wait or action that needs to be made before repeating the action.
      *
      * @param ResponseInterface $response
      * @param int|string $remainingDelay
      * @param string $template
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
-     * @return ResponseInterface
+     *
      * @throws \Throwable
+     *
+     * @return ResponseInterface
      */
     public function respondWithThrottle(
         ResponseInterface $response,
@@ -200,8 +205,10 @@ final class Responder
      * @param SecurityException $securityException
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
-     * @return ResponseInterface
+     *
      * @throws \Throwable
+     *
+     * @return ResponseInterface
      */
     public function respondWithFormThrottle(
         ResponseInterface $response,
@@ -230,6 +237,7 @@ final class Responder
      * @param ResponseInterface $response The response
      * @param mixed $data The data
      * @param int $status
+     *
      * @return ResponseInterface The response
      */
     public function respondWithJson(
@@ -239,6 +247,7 @@ final class Responder
     ): ResponseInterface {
         $response->getBody()->write((string)json_encode($data, JSON_THROW_ON_ERROR));
         $response = $response->withStatus($status);
+
         return $response->withHeader('Content-Type', 'application/json');
     }
 
@@ -251,6 +260,7 @@ final class Responder
             'message' => 'Validation error',
             'data' => $validationResult->toArray(),
         ];
+
         return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
     }
 }

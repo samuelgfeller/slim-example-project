@@ -21,11 +21,10 @@ use Slim\Exception\HttpBadRequestException;
  *  - request to set new password with valid token
  *  - request to set new password with invalid, expired and used token -> redirect to login page
  *  - request to set new password with valid token but invalid data -> 400 Bad request
- *  - request to set new password with malformed request body -> HttpBadRequestException
+ *  - request to set new password with malformed request body -> HttpBadRequestException.
  */
 class PasswordResetSubmitActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -34,7 +33,7 @@ class PasswordResetSubmitActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Request to reset password with token
+     * Request to reset password with token.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      *
@@ -78,13 +77,14 @@ class PasswordResetSubmitActionTest extends TestCase
     }
 
     /**
-     * Test password submit reset with invalid, used or expired token
+     * Test password submit reset with invalid, used or expired token.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testResetPasswordSubmit_invalidUsedExpiredToken(
+    public function testResetPasswordSubmitInvalidUsedExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -133,23 +133,22 @@ class PasswordResetSubmitActionTest extends TestCase
         self::assertFalse(password_verify($newPassword, $dbPasswordHash));
     }
 
-
     /**
-     * Test that backend validation fails when new passwords are invalid
+     * Test that backend validation fails when new passwords are invalid.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testResetPasswordSubmit_invalidData(
+    public function testResetPasswordSubmitInvalidData(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId],UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], UserFixture::class);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -171,7 +170,6 @@ class PasswordResetSubmitActionTest extends TestCase
         // As form is directly rendered with validation errors it's not possible to test them as response is a stream
     }
 
-
     /**
      * Empty or malformed request body is when parameters are not set or have
      * the wrong name ("key").
@@ -185,10 +183,10 @@ class PasswordResetSubmitActionTest extends TestCase
      * @param array|null $malformedBody null for the case that request body is null
      * @param string $message
      */
-    public function testChangePassword_malformedBody(null|array $malformedBody, string $message): void
+    public function testChangePasswordMalformedBody(null|array $malformedBody, string $message): void
     {
         // Insert user id 2 role: user
-        $userRow = $this->insertFixturesWithAttributes([],UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
 
         $malformedRequest = $this->createFormRequest(
             'POST',

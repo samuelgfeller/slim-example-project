@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Note\Service;
-
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
@@ -21,9 +19,10 @@ class NoteFinder
     }
 
     /**
-     * Find one note in the database
+     * Find one note in the database.
      *
      * @param $id
+     *
      * @return NoteData
      */
     public function findNote($id): NoteData
@@ -32,20 +31,22 @@ class NoteFinder
     }
 
     /**
-     * Return all notes which are linked to the given user
+     * Return all notes which are linked to the given user.
      *
      * @param int $userId
+     *
      * @return NoteResultData[]
      */
     public function findAllNotesFromUser(int $userId): array
     {
         $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
+
         return $allNotes;
     }
 
     /**
-     * Populate $privilege attribute of given NoteWithUserData array
+     * Populate $privilege attribute of given NoteWithUserData array.
      *
      * @param NoteResultData[] $notes
      * @param int|null $clientOwnerId if client owner id not provided, client id should be passed in next parameter
@@ -90,22 +91,25 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
-     * Return all notes which are linked to the given user
+     * Return all notes which are linked to the given user.
      *
      * @param int $notesAmount
+     *
      * @return NoteResultData[]
      */
     public function findMostRecentNotes(int $notesAmount = 10): array
     {
         $allNotes = $this->noteFinderRepository->findMostRecentNotes($notesAmount);
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
+
         return $allNotes;
     }
 
     /**
-     * Return all notes except the main note that are linked to the given client
+     * Return all notes except the main note that are linked to the given client.
      *
      * @param int $clientId
+     *
      * @return NoteResultData[]
      */
     public function findAllNotesFromClientExceptMain(int $clientId): array
@@ -115,13 +119,15 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
+
         return $allNotes;
     }
 
     /**
-     * Return the number of notes attached to a client
+     * Return the number of notes attached to a client.
      *
      * @param int $clientId
+     *
      * @return int
      */
     public function findClientNotesAmount(int $clientId): int

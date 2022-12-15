@@ -18,6 +18,7 @@ class ListUserActivityAction
      * @param Responder $responder The responder
      * @param UserActivityFinder $userActivityFinder
      * @param SessionInterface $session
+     * @param FilterSettingSaver $filterSettingSaver
      */
     public function __construct(
         private readonly Responder $responder,
@@ -31,10 +32,11 @@ class ListUserActivityAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,

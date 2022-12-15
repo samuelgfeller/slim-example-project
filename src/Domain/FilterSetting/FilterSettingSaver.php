@@ -13,12 +13,12 @@ class FilterSettingSaver
     ) {
     }
 
-
     /**
-     * Remove old filters from db and save given filters
+     * Remove old filters from db and save given filters.
      *
      * @param array|null $filters
      * @param FilterModule $userFilterModule
+     *
      * @return void
      */
     public function saveFilterSettingForAuthenticatedUser(

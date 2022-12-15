@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\User\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authentication\Service\RegistrationMailer;
@@ -32,14 +30,15 @@ class UserCreator
     }
 
     /**
-     * Insert user in database
+     * Insert user in database.
      *
      * @param array $userValues
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
-     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
+     *
+     * @return int|bool insert id, false if user already exists
      */
     public function createUser(array $userValues, string|null $captcha = null, array $queryParams = []): bool|int
     {

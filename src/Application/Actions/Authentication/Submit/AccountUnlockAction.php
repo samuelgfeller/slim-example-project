@@ -47,10 +47,12 @@ final class AccountUnlockAction
                 if (isset($queryParams['redirect'])) {
                     $flash->add(
                         'success',
-                        'Congratulations! <br>Your account has been unlocked! <br>' . '<b>You are now logged in.</b>'
+                        'Congratulations! <br>Your account has been unlocked! <br><b>You are now logged in.</b>'
                     );
+
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
                 }
+
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add(
@@ -67,6 +69,7 @@ final class AccountUnlockAction
                     'Not locked user tried to unlock account. user_verification id: ' . $queryParams['id']
                 );
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+
                 return $this->responder->redirectToRouteName(
                     $response,
                     'login-page',

@@ -20,15 +20,13 @@ use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
-
 /**
  *  Test cases for client read note loading
  *   - Authenticated
- *   - Unauthenticated
+ *   - Unauthenticated.
  */
 class NoteListActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -37,7 +35,6 @@ class NoteListActionTest extends TestCase
     use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
-
 
     /**
      * Tests notes that are loaded with ajax on client read page.
@@ -51,9 +48,10 @@ class NoteListActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param int|null $noteHidden 1 or 0 or null if tested note is hidden
      * @param array{privilege: Privilege} $expectedResult privilege
+     *
      * @return void
      */
-    public function testNoteListAction_authorization(
+    public function testNoteListActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         ?int $noteHidden,
@@ -84,7 +82,7 @@ class NoteListActionTest extends TestCase
                 'is_main' => 0,
                 'client_id' => $clientRow['id'],
                 'user_id' => $userLinkedToNoteRow['id'],
-                'hidden' => $noteHidden
+                'hidden' => $noteHidden,
             ],
             NoteFixture::class
         );
@@ -134,7 +132,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      *
      * @return void
      */
-    public function testClientReadNotesLoad_unauthenticated(): void
+    public function testClientReadNotesLoadUnauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
             ->withQueryParams(['client_id' => 1]);
@@ -150,7 +148,9 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         // Build expected login url as UserAuthenticationMiddleware.php does
         $expectedLoginUrl = $this->urlFor(
-            'login-page', [], ['redirect' => $redirectToUrlAfterLogin]
+            'login-page',
+            [],
+            ['redirect' => $redirectToUrlAfterLogin]
         );
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);

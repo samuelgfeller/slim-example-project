@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Settings;
@@ -20,7 +19,6 @@ use Symfony\Component\Mime\Email;
  */
 class RegistrationMailer
 {
-
     private Email $email;
 
     /**
@@ -43,10 +41,11 @@ class RegistrationMailer
     }
 
     /**
-     * Send verification token
+     * Send verification token.
      *
      * @param UserData $user
      * @param array $queryParams
+     *
      * @throws TransportExceptionInterface
      */
     public function sendRegisterVerificationToken(UserData $user, array $queryParams): void

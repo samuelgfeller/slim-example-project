@@ -3,7 +3,7 @@
 namespace App\Domain;
 
 /**
- * Class Settings
+ * Class Settings.
  */
 class Settings
 {
@@ -20,9 +20,8 @@ class Settings
         $this->settings = $settings;
     }
 
-
     /**
-     * Get settings by key
+     * Get settings by key.
      *
      * @param string $key
      *

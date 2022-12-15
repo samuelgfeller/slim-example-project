@@ -7,15 +7,15 @@ use App\Domain\User\Data\UserData;
 class UserNameAbbreviator
 {
     public function __construct(
-    )
-    {
+    ) {
     }
 
     /**
-     * Recursive function that builds abbreviation for lastname
+     * Recursive function that builds abbreviation for lastname.
      *
      * @param string $lastName
      * @param UserData[] $usersToCheck
+     *
      * @return string
      */
     private function buildLastNameAbbreviation(string $lastName, array $usersToCheck): string
@@ -23,7 +23,8 @@ class UserNameAbbreviator
         $abbreviatedLastName = '';
         foreach ($usersToCheck as $userToCheck) {
             // Check given lastname against all other lastnames that have the same firstname
-            $buildLastName = static function (string $lastName, string $lastNameToCheck, int $i = 1) use (&$buildLastName
+            $buildLastName = static function (string $lastName, string $lastNameToCheck, int $i = 1) use (
+                &$buildLastName
             ): string {
                 // When $i (amount of letters) of last name to abbreviate is the same as the full name,
                 // there is no short form and the function must end as it would cause infinite recursion.
@@ -36,6 +37,7 @@ class UserNameAbbreviator
                     // Return first $i letters of lastname
                     $shortName = substr($lastName, 0, $i);
                 }
+
                 return $shortName;
             };
             // Always privilege longest lastname abbreviation as it means that this length necessary
@@ -47,6 +49,7 @@ class UserNameAbbreviator
         if ($abbreviatedLastName !== $lastName) {
             $abbreviatedLastName .= '.';
         }
+
         return $abbreviatedLastName;
     }
 
@@ -56,6 +59,7 @@ class UserNameAbbreviator
      * the first last name chars are added.
      *
      * @param UserData[] $users original users
+     *
      * @return array{user_id: string} array of users with abbreviated full names
      */
     public function abbreviateUserNames(array $users): array
@@ -70,7 +74,7 @@ class UserNameAbbreviator
         }
 
         // Loop over the ordered user array
-        /** @var  UserData[] $usersWithIdenticalFirstName */
+        /** @var UserData[] $usersWithIdenticalFirstName */
         foreach ($groupedUsers as $firstName => $usersWithIdenticalFirstName) {
             // If there is only one entry it means that it's a unique first name
             if (count($usersWithIdenticalFirstName) === 1) {
@@ -92,6 +96,7 @@ class UserNameAbbreviator
                 $outputNames[(int)$userId] = $user->firstName . ' ' . $lastNameAbbr;
             }
         }
+
         return $outputNames;
     }
 }

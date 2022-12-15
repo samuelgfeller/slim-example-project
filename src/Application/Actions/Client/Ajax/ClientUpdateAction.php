@@ -22,7 +22,6 @@ final class ClientUpdateAction
 {
     protected LoggerInterface $logger;
 
-
     /**
      * The constructor.
      *
@@ -30,6 +29,7 @@ final class ClientUpdateAction
      * @param SessionInterface $session
      * @param ClientUpdater $clientUpdater
      * @param LoggerFactory $logger
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
         protected readonly Responder $responder,
@@ -46,10 +46,11 @@ final class ClientUpdateAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -85,6 +86,7 @@ final class ClientUpdateAction
                         'message' => 'The client was not updated.',
                         'data' => $updateData['data'],
                     ]);
+
                     return $response->withAddedHeader('Warning', 'The client was not updated.');
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
@@ -96,7 +98,7 @@ final class ClientUpdateAction
                         $response,
                         [
                             'status' => 'error',
-                            'message' => 'Not allowed to update client.'
+                            'message' => 'Not allowed to update client.',
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );

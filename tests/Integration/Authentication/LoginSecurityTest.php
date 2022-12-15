@@ -16,7 +16,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
- * In this class actions that are processed by the `SecurityService` are tested
+ * In this class actions that are processed by the `SecurityService` are tested.
  */
 class LoginSecurityTest extends TestCase
 {
@@ -27,12 +27,13 @@ class LoginSecurityTest extends TestCase
 
     /**
      * Test thresholds and according delays once with failed logins and once with successes
-     * If login request amount exceeds threshold, the user has to wait a certain delay
+     * If login request amount exceeds threshold, the user has to wait a certain delay.
      *
      * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::authenticationSecurityCases()
      *
      * @param bool $credentialsAreCorrect
      * @param int $statusCode
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -46,7 +47,7 @@ class LoginSecurityTest extends TestCase
         // Insert user fixture
         $user = $this->insertFixturesWithAttributes([
             'email' => $email,
-            'password_hash' => password_hash($password, PASSWORD_DEFAULT)
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
         ], UserFixture::class);
         // Login request body
         $correctLoginRequestBody = ['email' => $email, 'password' => $password];
@@ -86,7 +87,7 @@ class LoginSecurityTest extends TestCase
             // first threshold is 4, the 4th valid login request does not throw exception but the 4th invalid login request
             // will throw an exception. By decreasing the $nthLoginRequest, the same assertion logic can be used later
             if ($credentialsAreCorrect === true) {
-                --$nthLoginRequest;
+                $nthLoginRequest--;
             }
 
             // * Until the lowest threshold is reached, the login requests are normal and should not be throttled
@@ -97,7 +98,7 @@ class LoginSecurityTest extends TestCase
                 self::assertSame($statusCode, $response->getStatusCode());
                 if ($credentialsAreCorrect === true) {
                     // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
-                    ++$nthLoginRequest;
+                    $nthLoginRequest++;
                 }
                 continue; // leave foreach loop
             }
@@ -147,7 +148,7 @@ class LoginSecurityTest extends TestCase
                     }
                     if ($credentialsAreCorrect === true) {
                         // Add 1 to nthLoginRequest to have the correct number in the next for loop iteration
-                        ++$nthLoginRequest;
+                        $nthLoginRequest++;
                     }
                     // If right threshold is reached and asserted, go out of nthLogin loop to test the next iteration
                     // Otherwise the throttling foreach continues and the delay assertion fails as it would be too small
@@ -157,7 +158,6 @@ class LoginSecurityTest extends TestCase
             }
         }
         ksort($throttleRules);
-
 
         // The above loop roughly has the same checks as the follows (the test function was since refactored so a lot
         // will be different

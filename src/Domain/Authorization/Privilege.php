@@ -27,6 +27,7 @@ enum Privilege: string
      * for CRUD operations or if a collection of privileges would be better.
      *
      * @param Privilege $requiredPrivilege
+     *
      * @return bool
      */
     public function hasPrivilege(Privilege $requiredPrivilege): bool

@@ -9,7 +9,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserCreateProvider
 {
-
     use FixtureTestTrait;
 
     /**
@@ -37,7 +36,7 @@ class UserCreateProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to create user.',
-            ]
+            ],
         ];
 
         // Lower privilege must not be tested as authorization is hierarchical meaning if given privilege is
@@ -68,7 +67,6 @@ class UserCreateProvider
             ],
         ];
     }
-
 
     /**
      * Returns combinations of invalid data to trigger validation exception.
@@ -107,9 +105,9 @@ class UserCreateProvider
                             ['field' => 'password2', 'message' => 'Passwords do not match'],
                             ['field' => 'password', 'message' => 'Minimum length is 3'],
                             ['field' => 'password2', 'message' => 'Minimum length is 3'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Values too long
@@ -132,9 +130,9 @@ class UserCreateProvider
                             ['field' => 'first_name', 'message' => 'Maximum length is 100'],
                             ['field' => 'surname', 'message' => 'Maximum length is 100'],
                             ['field' => 'email', 'message' => 'Invalid email address'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Required values not given
@@ -161,16 +159,15 @@ class UserCreateProvider
                             ['field' => 'user_role_id', 'message' => 'User role is required'],
                             ['field' => 'password', 'message' => 'Password is required'],
                             ['field' => 'password2', 'message' => 'Password is required'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
-
         ];
     }
 
     /**
-     * Provide cases of malformed request body
+     * Provide cases of malformed request body.
      *
      * @return array[]
      */
@@ -206,7 +203,7 @@ class UserCreateProvider
                     'password2' => 'value',
                     'other_random_key' => 'value',
                 ],
-            ]
+            ],
         ];
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Traits;
-
 
 use Psr\Http\Message\ResponseInterface;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;

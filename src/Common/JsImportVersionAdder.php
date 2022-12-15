@@ -28,7 +28,7 @@ class JsImportVersionAdder
      * but it is good enough for now especially if function is called only on
      * actual not too frequent changes or on development.
      * Performance wise, this function takes 10 and 20ms when content is unchanged
-     * and between 30 and 50ms when content is replaced
+     * and between 30 and 50ms when content is replaced.
      *
      * @return void
      */

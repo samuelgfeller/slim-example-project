@@ -1,13 +1,11 @@
 <?php
 
-
 namespace App\Infrastructure\Client\ClientStatus;
 
 use App\Infrastructure\Factory\QueryFactory;
 
 class ClientStatusFinderRepository
 {
-
     public function __construct(
         private readonly QueryFactory $queryFactory,
     ) {
@@ -32,6 +30,7 @@ class ClientStatusFinderRepository
         foreach ($resultRows as $resultRow) {
             $statuses[(int)$resultRow['id']] = $resultRow['name'];
         }
+
         return $statuses;
     }
 }

@@ -2,12 +2,10 @@
 
 namespace App\Domain\Client\Data;
 
-
 use App\Domain\Client\Enum\ClientVigilanceLevel;
 
 class ClientData implements \JsonSerializable
 {
-
     public ?int $id;
     // Optional values have to be init with null as they are used even when not set in client-read template
     public ?string $firstName = null;
@@ -32,7 +30,9 @@ class ClientData implements \JsonSerializable
 
     /**
      * Client Data constructor.
+     *
      * @param array|null $clientData
+     *
      * @throws \Exception
      */
     public function __construct(?array $clientData = [])
@@ -54,7 +54,7 @@ class ClientData implements \JsonSerializable
         $this->createdAt = $clientData['created_at'] ?? null ? new \DateTimeImmutable($clientData['created_at']) : null;
         $this->deletedAt = $clientData['deleted_at'] ?? null ? new \DateTimeImmutable($clientData['deleted_at']) : null;
 
-        if ($this->birthdate){
+        if ($this->birthdate) {
             $this->age = (new \DateTime())->diff($this->birthdate)->y;
         }
     }
@@ -95,7 +95,7 @@ class ClientData implements \JsonSerializable
 
     /**
      * Output for json_encode
-     * camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+     * camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718.
      */
     public function jsonSerialize(): array
     {

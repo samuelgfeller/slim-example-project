@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Security\Service;
-
 
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
@@ -24,7 +22,7 @@ class SecurityEmailChecker
     }
 
     /**
-     * Threat: Email abuse (sending a lot of emails may be costly)
+     * Threat: Email abuse (sending a lot of emails may be costly).
      *
      * Throttle behaviour: Limit email sending
      * - After x amount of emails sent from ip or user they have 3 thresholds with
@@ -67,10 +65,12 @@ class SecurityEmailChecker
 
     /**
      * Make email abuse check for requests coming from same ip
-     * or concerning the same email address
+     * or concerning the same email address.
      *
      * @param RequestStatsData $ipStats email request summary from actual ip address
      * @param RequestStatsData $userStats email request summary by concerning email / coming for same user
+     * @param string $email
+     *
      * @throws SecurityException
      */
     private function performEmailRequestsCheck(
@@ -109,7 +109,7 @@ class SecurityEmailChecker
     }
 
     /**
-     * Protection against email abuse
+     * Protection against email abuse.
      */
     private function performGlobalEmailCheck(): void
     {

@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Check if authenticated user is permitted to do actions
- * Roles: newcomer < advisor < managing_advisor < administrator
+ * Roles: newcomer < advisor < managing_advisor < administrator.
  */
 class ClientAuthorizationChecker
 {
@@ -27,10 +27,11 @@ class ClientAuthorizationChecker
     }
 
     /**
-     * Check if authenticated user is allowed to create client
+     * Check if authenticated user is allowed to create client.
      *
      * @param ClientData|null $client null if check before actual client creation
      *  request otherwise it has to be provided
+     *
      * @return bool
      */
     public function isGrantedToCreate(?ClientData $client = null): bool
@@ -59,18 +60,19 @@ class ClientAuthorizationChecker
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to create client but isn\'t allowed.'
         );
+
         return false;
     }
 
     /**
-     * Logic to check if logged-in user is granted to update client
+     * Logic to check if logged-in user is granted to update client.
      *
      * @param array $clientDataToUpdate validated array with as key the column to
      * update and value the new value. There may be one or multiple entries,
      * depending on what the user wants to update
-     *
-     * @param null|int $ownerId user_id linked to client
+     * @param int|null $ownerId user_id linked to client
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
     public function isGrantedToUpdate(array $clientDataToUpdate, ?int $ownerId, bool $log = true): bool
@@ -134,7 +136,7 @@ class ClientAuthorizationChecker
                     }
                 }
                 // If there is an undelete request on client, the same authorization rules than deletion are valid
-                if(array_key_exists('deleted_at', $clientDataToUpdate) && $this->isGrantedToDelete($ownerId, $log)){
+                if (array_key_exists('deleted_at', $clientDataToUpdate) && $this->isGrantedToDelete($ownerId, $log)) {
                     $grantedUpdateKeys[] = 'deleted_at';
                 }
             }
@@ -149,17 +151,20 @@ class ClientAuthorizationChecker
                         $key . ' to "' . $value . '".'
                     );
                 }
+
                 return false;
             }
         }
+
         return true;
     }
 
     /**
-     * Check if authenticated user is allowed to delete client
+     * Check if authenticated user is allowed to delete client.
      *
      * @param int|null $ownerId
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
     public function isGrantedToDelete(?int $ownerId, bool $log = true): bool
@@ -181,15 +186,17 @@ class ClientAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to delete client but isn\'t allowed.'
             );
         }
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to read client
+     * Check if authenticated user is allowed to read client.
      *
-     * @param null|int $ownerId
+     * @param int|null $ownerId
      * @param string|\DateTimeImmutable|null $deletedAt
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
     public function isGrantedToRead(
@@ -220,9 +227,9 @@ class ClientAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to read client but isn\'t allowed.'
             );
         }
+
         return false;
     }
-
 
     /**
      * Instead of isGrantedToListClient this function checks
@@ -230,6 +237,7 @@ class ClientAuthorizationChecker
      * authenticated user may not see.
      *
      * @param ClientResultData[] $clients
+     *
      * @return ClientResultData[]
      */
     public function removeNonAuthorizedClientsFromList(array $clients): array
@@ -241,8 +249,7 @@ class ClientAuthorizationChecker
                 $authorizedClients[] = $client;
             }
         }
+
         return $authorizedClients;
     }
-
-
 }

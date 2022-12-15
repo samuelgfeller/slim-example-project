@@ -39,6 +39,7 @@ return [
 
         // Register middleware
         (require __DIR__ . '/middleware.php')($app);
+
         return $app;
     },
     LoggerFactory::class => function (ContainerInterface $container) {
@@ -54,7 +55,6 @@ return [
         return $container->get(Psr17Factory::class);
     },
 
-
     // For Responder
     RouteParserInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getRouteCollector()->getRouteParser();
@@ -66,7 +66,9 @@ return [
         $logger = $container->get(LoggerFactory::class);
 
         return new ErrorHandlerMiddleware(
-            (bool)$config['display_error_details'], (bool)$config['log_errors'], $logger,
+            (bool)$config['display_error_details'],
+            (bool)$config['log_errors'],
+            $logger,
         );
     },
     ErrorMiddleware::class => function (ContainerInterface $container) {
@@ -94,11 +96,13 @@ return [
     // Database
     Connection::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['db'];
+
         return new Connection($settings);
     },
     PDO::class => function (ContainerInterface $container) {
         $connection = $container->get(Connection::class);
         $connection->getDriver()->connect();
+
         return $connection->getDriver()->getConnection();
     },
     Settings::class => function (ContainerInterface $container) {
@@ -136,7 +140,7 @@ return [
         return new Mailer($container->get(TransportInterface::class));
     },
     // Mailer transport
-    TransportInterface::class  => function (ContainerInterface $container) {
+    TransportInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['smtp'];
 
         // smtp://user:pass@smtp.example.com:25
@@ -163,6 +167,4 @@ return [
 
         return $eventDispatcher;
     },
-
-
 ];

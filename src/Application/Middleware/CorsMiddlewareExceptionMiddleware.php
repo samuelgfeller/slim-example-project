@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Application\Exceptions\CorsMiddlewareException;

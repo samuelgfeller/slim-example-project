@@ -11,11 +11,10 @@ use App\Infrastructure\Note\NoteValidatorRepository;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class NoteValidator
+ * Class NoteValidator.
  */
 class NoteValidator
 {
-
     private LoggerInterface $logger;
 
     /**
@@ -34,9 +33,10 @@ class NoteValidator
     }
 
     /**
-     * Validate note creation
+     * Validate note creation.
      *
      * @param NoteData $note
+     *
      * @throws ValidationException
      */
     public function validateNoteCreation(NoteData $note): void
@@ -57,9 +57,10 @@ class NoteValidator
     }
 
     /**
-     * Validate note update
+     * Validate note update.
      *
      * @param NoteData $note
+     *
      * @throws ValidationException
      */
     public function validateNoteUpdate(NoteData $note): void
@@ -68,10 +69,10 @@ class NoteValidator
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
         if (null !== $note->message) {
-            if ($note->isMain === 1){
+            if ($note->isMain === 1) {
                 // If main note, min length is 0 as it's not possible to delete it
                 $this->validateNoteMessage($note->message, $validationResult, false, 0);
-            }else{
+            } else {
                 $this->validateNoteMessage($note->message, $validationResult, false);
             }
         }
@@ -83,15 +84,15 @@ class NoteValidator
         $this->validator->throwOnError($validationResult);
     }
 
-
     /**
-     * Validate note message
+     * Validate note message.
      *
      * @param $noteMsg
      * @param ValidationResult $validationResult
      * @param bool $required
      * @param int $minLength the min length for a normal note is 4
      * but as main note cannot be deleted, it has to be 0 for the main note
+     *
      * @return void
      */
     protected function validateNoteMessage(
@@ -111,10 +112,11 @@ class NoteValidator
     }
 
     /**
-     * Validate if main note can be created
+     * Validate if main note can be created.
      *
      * @param int $clientId
      * @param ValidationResult $validationResult
+     *
      * @return void
      */
     protected function validateMainNote(int $clientId, ValidationResult $validationResult): void

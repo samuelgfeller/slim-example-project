@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Factory\LoggerFactory;
@@ -9,7 +8,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Logic on cases where user tries to log in but his status is not active
- * In separate class to not overload LoginVerifier
+ * In separate class to not overload LoginVerifier.
  */
 class LoginNonActiveUserHandler
 {
@@ -24,10 +23,11 @@ class LoginNonActiveUserHandler
     }
 
     /**
-     * When user tries to log in but his status is unverified
+     * When user tries to log in but his status is unverified.
      *
      * @param UserData $user
      * @param array $queryParams
+     *
      * @return void
      */
     public function handleUnverifiedUserLoginAttempt(UserData $user, array $queryParams = []): void
@@ -41,9 +41,10 @@ class LoginNonActiveUserHandler
     }
 
     /**
-     * When user tries to log in but his status is suspended
+     * When user tries to log in but his status is suspended.
      *
      * @param UserData $user
+     *
      * @return void
      */
     public function handleSuspendedUserLoginAttempt(UserData $user): void
@@ -57,10 +58,11 @@ class LoginNonActiveUserHandler
 
     /**
      * When user tries to log in but his status is locked
-     * which can happen on too many failed login requests
+     * which can happen on too many failed login requests.
      *
      * @param UserData $user
      * @param array $queryParams existing query params like redirect
+     *
      * @return void
      */
     public function handleLockedUserLoginAttempt(UserData $user, array $queryParams = []): void
@@ -74,6 +76,4 @@ class LoginNonActiveUserHandler
         // Write event in logger
         $this->logger->info('Login attempt on locked user id ' . $user->id . '.');
     }
-
-
 }

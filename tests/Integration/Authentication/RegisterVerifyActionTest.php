@@ -21,7 +21,7 @@ use Slim\Exception\HttpBadRequestException;
  *  - Set user account status from unverified to active with valid token
  *  - Attempt to verify user account that is already active
  *  - Attempt to verify user with used, invalid and expired token
- *  - Test action with invalid parameters (400 Bad request)
+ *  - Test action with invalid parameters (400 Bad request).
  */
 class RegisterVerifyActionTest extends TestCase
 {
@@ -32,9 +32,10 @@ class RegisterVerifyActionTest extends TestCase
     use FixtureTestTrait;
 
     /**
-     * Test that with given correct token the account status is set to active
+     * Test that with given correct token the account status is set to active.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
@@ -77,13 +78,14 @@ class RegisterVerifyActionTest extends TestCase
     }
 
     /**
-     * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown
+     * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_alreadyVerified(
+    public function testRegisterVerificationAlreadyVerified(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -122,16 +124,16 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNull($session->get('user_id'));
     }
 
-
     /**
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
-     * according exception should be thrown and user redirected to register page
+     * according exception should be thrown and user redirected to register page.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testRegisterVerification_invalidUsedExpiredToken(
+    public function testRegisterVerificationInvalidUsedExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -179,9 +181,9 @@ class RegisterVerifyActionTest extends TestCase
     }
 
     /**
-     * Test that exception is thrown when request body is malformed
+     * Test that exception is thrown when request body is malformed.
      */
-    public function testRegisterVerification_badRequest(): void
+    public function testRegisterVerificationBadRequest(): void
     {
         // No need to insert anything as exception should be thrown immediately
 
@@ -198,5 +200,4 @@ class RegisterVerifyActionTest extends TestCase
 
         $this->app->handle($request);
     }
-
 }

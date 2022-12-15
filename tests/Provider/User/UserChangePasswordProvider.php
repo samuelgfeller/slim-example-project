@@ -8,7 +8,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserChangePasswordProvider
 {
-
     use FixtureTestTrait;
 
     /**
@@ -28,7 +27,7 @@ class UserChangePasswordProvider
         $otherManagingAdvisorAttr = [
             'first_name' => 'Other',
             'user_role_id' => UserRole::MANAGING_ADVISOR,
-            'password_hash' => $passwordHash
+            'password_hash' => $passwordHash,
         ];
 
         $advisorAttr = ['user_role_id' => UserRole::ADVISOR, 'password_hash' => $passwordHash];
@@ -48,9 +47,8 @@ class UserChangePasswordProvider
             'json_response' => [
                 'status' => 'error',
                 'message' => 'Not allowed to change password.',
-            ]
+            ],
         ];
-
 
         // To avoid testing each column separately for each user role, the most basic change is taken to test.
         // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database first
@@ -60,7 +58,7 @@ class UserChangePasswordProvider
             [ // ? Newcomer owner - allowed
                 'user_to_change' => $newcomerAttr,
                 'authenticated_user' => $newcomerAttr,
-                'expected_result' => $authorizedResult
+                'expected_result' => $authorizedResult,
             ],
             // Higher privilege than newcomer must not be tested as authorization is hierarchical meaning if
             // the lowest privilege is allowed to do action, higher will be able too.
@@ -87,10 +85,8 @@ class UserChangePasswordProvider
                 'authenticated_user' => $adminAttr,
                 'expected_result' => $authorizedResult,
             ],
-
         ];
     }
-
 
     /**
      * Returns combinations of invalid data to trigger validation exception
@@ -118,9 +114,9 @@ class UserChangePasswordProvider
                             ['field' => 'password2', 'message' => 'Passwords do not match'],
                             ['field' => 'password', 'message' => 'Minimum length is 3'],
                             ['field' => 'password2', 'message' => 'Minimum length is 3'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 // Wrong old password
@@ -136,16 +132,16 @@ class UserChangePasswordProvider
                         'message' => 'There is a validation error with the password.',
                         'errors' => [
                             ['field' => 'old_password', 'message' => 'Incorrect password'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
         ];
     }
 
     /**
      * Provide malformed bodies for password change submit request as well as
-     * according error messages
+     * according error messages.
      *
      * @return array[]
      */

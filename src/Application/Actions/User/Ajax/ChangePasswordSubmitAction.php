@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
 /**
- * When user wants to change password being authenticated
+ * When user wants to change password being authenticated.
  */
 class ChangePasswordSubmitAction
 {
@@ -42,13 +42,15 @@ class ChangePasswordSubmitAction
     }
 
     /**
-     * Check if token is valid and if yes display password form
+     * Check if token is valid and if yes display password form.
      *
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Response
+     *
      * @throws \JsonException
+     *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response, array $args): Response
     {
@@ -58,7 +60,7 @@ class ChangePasswordSubmitAction
 
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($parsedBody, [
             'password',
-            'password2'
+            'password2',
         ], ['old_password'])) {
             try {
                 $this->passwordChanger->changeUserPassword(
@@ -74,7 +76,7 @@ class ChangePasswordSubmitAction
                     $validationException->getValidationResult(),
                     $response,
                 );
-            } catch (ForbiddenException $forbiddenException){
+            } catch (ForbiddenException $forbiddenException) {
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
                 return $this->responder->respondWithJson(
                     $response,

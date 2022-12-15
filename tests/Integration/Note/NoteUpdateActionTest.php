@@ -21,17 +21,15 @@ use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
-
 /**
  * Test cases for client read note modification
  *  - Authenticated with different user roles
  *  - Unauthenticated
  *  - Invalid data (validation test)
- *  - Malformed request body
+ *  - Malformed request body.
  */
 class NoteUpdateActionTest extends TestCase
 {
-
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
@@ -46,12 +44,14 @@ class NoteUpdateActionTest extends TestCase
      * with different user roles.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
+     *
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
+     *
      * @return void
      */
-    public function testNoteSubmitUpdateAction_authorization(
+    public function testNoteSubmitUpdateActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -86,7 +86,8 @@ class NoteUpdateActionTest extends TestCase
         // --- *MAIN note request ---
         // Create request to edit main note
         $mainNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
+            'PUT',
+            $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
             ['message' => $newNoteMessage, 'is_main' => 1]
         );
         // Make request
@@ -110,7 +111,8 @@ class NoteUpdateActionTest extends TestCase
 
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
+            'PUT',
+            $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
             // Change the two values that may be changed
             ['message' => $newNoteMessage, 'hidden' => 1]
         );
@@ -137,9 +139,11 @@ class NoteUpdateActionTest extends TestCase
             );
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
-            $this->assertTableRow(['message' => $normalNoteRow['message'], 'hidden' => 0],
+            $this->assertTableRow(
+                ['message' => $normalNoteRow['message'], 'hidden' => 0],
                 'note',
-                $normalNoteRow['id']);
+                $normalNoteRow['id']
+            );
         }
 
         $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
@@ -150,11 +154,12 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitUpdateAction_unauthenticated(): void
+    public function testNoteSubmitUpdateActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => 1]),
-            ['message' => 'New test message',]
+            'PUT',
+            $this->urlFor('note-submit-modification', ['note_id' => 1]),
+            ['message' => 'New test message']
         );
         // Create url where client should be redirected to after login
         $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
@@ -173,11 +178,13 @@ class NoteUpdateActionTest extends TestCase
      * Test note modification on client-read page with invalid data.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::provideInvalidNoteAndExpectedResponseDataForUpdate()
+     *
      * @param string $invalidMessage
      * @param array $expectedResponseData
+     *
      * @return void
      */
-    public function testNoteSubmitUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
+    public function testNoteSubmitUpdateActionInvalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Insert authorized user
         $userId = $this->insertFixturesWithAttributes(
@@ -202,7 +209,8 @@ class NoteUpdateActionTest extends TestCase
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(
-            'PUT', $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
+            'PUT',
+            $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
             ['message' => $invalidMessage]
         );
         $response = $this->app->handle($request);
@@ -215,12 +223,15 @@ class NoteUpdateActionTest extends TestCase
     }
 
     /**
-     * Test client read note modification with malformed request body
+     * Test client read note modification with malformed request body.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::provideMalformedNoteRequestBodyForUpdate()
+     *
+     * @param array $malformedRequestBody
+     *
      * @return void
      */
-    public function testNoteSubmitUpdateAction_malformedRequest(array $malformedRequestBody): void
+    public function testNoteSubmitUpdateActionMalformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);

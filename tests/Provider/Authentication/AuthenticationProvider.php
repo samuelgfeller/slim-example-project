@@ -2,14 +2,13 @@
 
 namespace App\Test\Provider\Authentication;
 
-
 use App\Domain\User\Enum\UserStatus;
 use Fig\Http\Message\StatusCodeInterface;
 
 class AuthenticationProvider
 {
     /**
-     * Provide status and partial email content for registration test on existing user
+     * Provide status and partial email content for registration test on existing user.
      *
      * @return array
      */
@@ -28,12 +27,11 @@ class AuthenticationProvider
                 'existing_user_status' => UserStatus::Suspended,
                 'partial_email_body' => 'If this was you, then we have the regret to inform you that your account is suspended',
             ],
-
         ];
     }
 
     /**
-     * Provide status and partial email content for login test user that is not active
+     * Provide status and partial email content for login test user that is not active.
      *
      * @return array
      */
@@ -57,7 +55,7 @@ class AuthenticationProvider
 
     /**
      * Provide status and partial email content for login test user that is not active
-     * In provider mainly to reset database between correct and incorrect requests
+     * In provider mainly to reset database between correct and incorrect requests.
      *
      * @return array
      */
@@ -76,7 +74,7 @@ class AuthenticationProvider
     }
 
     /**
-     * Invalid login credentials provider that should fail validation
+     * Invalid login credentials provider that should fail validation.
      *
      * @return string[][][]
      */
@@ -110,13 +108,14 @@ class AuthenticationProvider
                     'email' => 'admin@example.com',
                     'password' => '',
                 ],
-            ]
+            ],
         ];
     }
 
     /**
      * Provide malformed request bodies for password reset submit request as well as
-     * according error messages
+     * according error messages.
+     *
      * @return array[]
      */
     public function malformedPasswordResetRequestBodyProvider(): array

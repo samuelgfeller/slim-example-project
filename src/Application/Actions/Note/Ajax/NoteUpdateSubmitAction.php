@@ -26,6 +26,7 @@ final class NoteUpdateSubmitAction
      * @param SessionInterface $session
      * @param NoteUpdater $noteUpdater
      * @param LoggerFactory $logger
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
         private readonly Responder $responder,
@@ -42,10 +43,11 @@ final class NoteUpdateSubmitAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
-     * @return ResponseInterface The response
+     *
      * @throws \JsonException
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -57,7 +59,9 @@ final class NoteUpdateSubmitAction
             $noteValues = $request->getParsedBody();
             // Check that request body syntax is formatted right (if changed, )
             if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
-                $noteValues, [], ['message', 'is_main', 'hidden']
+                $noteValues,
+                [],
+                ['message', 'is_main', 'hidden']
             )) {
                 try {
                     $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
@@ -67,8 +71,9 @@ final class NoteUpdateSubmitAction
                     }
                     $response = $this->responder->respondWithJson($response, [
                         'status' => 'warning',
-                        'message' => 'The note was not updated.'
+                        'message' => 'The note was not updated.',
                     ]);
+
                     return $response->withAddedHeader('Warning', 'The note was not updated.');
                 } catch (ValidationException $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
@@ -81,7 +86,7 @@ final class NoteUpdateSubmitAction
                         [
                             // Response content asserted in ClientReadCaseProvider.php
                             'status' => 'error',
-                            'message' => 'Not allowed to change note.'
+                            'message' => 'Not allowed to change note.',
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );

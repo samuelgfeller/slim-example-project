@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authorization\Privilege;
@@ -36,9 +34,10 @@ class ClientFinder
 
     /**
      * Gives clients from db with aggregate data
-     * matching given filter params (client list)
+     * matching given filter params (client list).
      *
      * @param $queryBuilderWhereArray
+     *
      * @return ClientResultDataCollection
      */
     public function findClientListWithAggregates($queryBuilderWhereArray): ClientResultDataCollection
@@ -58,9 +57,10 @@ class ClientFinder
 
     /**
      * Finds and adds user_id change and client_status_id change privilege
-     * to found clientResultAggregate filtered by the given $whereArray
+     * to found clientResultAggregate filtered by the given $whereArray.
      *
      * @param array $whereArray cake query builder where array -> ['table.field' => 'value']
+     *
      * @return ClientResultData[]
      */
     private function findClientsWhereWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
@@ -82,13 +82,15 @@ class ClientFinder
                 unset($clientResultsWithAggregates[$key]);
             }
         }
+
         return $clientResultsWithAggregates;
     }
 
     /**
-     * Find one client in the database
+     * Find one client in the database.
      *
      * @param $id
+     *
      * @return ClientData
      */
     public function findClient($id): ClientData
@@ -97,10 +99,11 @@ class ClientFinder
     }
 
     /**
-     * Find one client in the database with aggregate
+     * Find one client in the database with aggregate.
      *
      * @param int $clientId
      * @param bool $includingNotes
+     *
      * @return ClientResultData
      */
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultData
@@ -147,6 +150,7 @@ class ClientFinder
             } else {
                 $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
             }
+
             return $clientResultAggregate;
         }
         // The reasons this exception is thrown when tried to access soft deleted clients:
@@ -156,11 +160,11 @@ class ClientFinder
         throw new ForbiddenException('Not allowed to read client.');
     }
 
-
     /**
-     * Return all posts which are linked to the given user
+     * Return all posts which are linked to the given user.
      *
      * @param int $userId
+     *
      * @return ClientResultDataCollection
      */
     public function findAllClientsFromUser(int $userId): ClientResultDataCollection
@@ -170,5 +174,4 @@ class ClientFinder
 //        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
         return $clientResultCollection;
     }
-
 }

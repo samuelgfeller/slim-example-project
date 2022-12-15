@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Security\Service;
-
 
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
@@ -21,9 +19,10 @@ class EmailRequestFinder
     }
 
     /**
-     * Retrieve email requests from given email and client ip
+     * Retrieve email requests from given email and client ip.
      *
      * @param string $email
+     *
      * @return array{email_stats: RequestStatsData, ip_stats: RequestStatsData}
      */
     public function findEmailStats(string $email): array
@@ -38,9 +37,10 @@ class EmailRequestFinder
     }
 
     /**
-     * Returns the very last EMAIL request from actual ip or given email
+     * Returns the very last EMAIL request from actual ip or given email.
      *
      * @param string $email
+     *
      * @return RequestData
      */
     public function findLatestEmailRequestFromUserOrIp(string $email): RequestData

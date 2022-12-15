@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 final class LogoutPageAction
 {
     /**
-     * LogoutAction constructor
+     * LogoutAction constructor.
      *
      * @param SessionInterface $session
      * @param Responder $responder

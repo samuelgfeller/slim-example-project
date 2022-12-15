@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Test\Traits;
-
 
 use PDO;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -121,6 +119,4 @@ trait DatabaseExtensionTestTrait
             );
         }
     }
-
-
 }

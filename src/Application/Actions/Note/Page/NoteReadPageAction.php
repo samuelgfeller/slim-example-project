@@ -29,16 +29,15 @@ final class NoteReadPageAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     *
      * @param array $args
+     *
      * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $noteData = $this->noteFinder->findNote((int)$args['note_id']);
         if ($noteData->id) {
             // Redirect to client read page with hash anchor to the correct note container

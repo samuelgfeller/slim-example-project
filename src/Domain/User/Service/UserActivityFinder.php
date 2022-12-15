@@ -20,8 +20,10 @@ class UserActivityFinder
     }
 
     /**
-     * Find user activity entries for the user read page
+     * Find user activity entries for the user read page.
+     *
      * @param array|int|string|null $userIds array of user ids or user id
+     *
      * @return array
      */
     public function findUserActivityReport(null|array|int|string $userIds): array
@@ -29,15 +31,17 @@ class UserActivityFinder
         if ($userIds) {
             return $this->findUserActivitiesGroupedByDate($userIds);
         }
+
         return [];
     }
 
     /**
      * Find user activities grouped by date
      * Either for one user or for multiple users (dashboard panel) in which case
-     * the user name precedes the time and action name
+     * the user name precedes the time and action name.
      *
      * @param int|array $userIds
+     *
      * @return array
      */
     private function findUserActivitiesGroupedByDate(int|array $userIds): array
@@ -67,18 +71,19 @@ class UserActivityFinder
                 $userActivity->pageUrl = null;
             }
             // Add the time and action name
-            $userActivity->timeAndActionName = $userActivity->datetime->format('H:i') . ": " .
+            $userActivity->timeAndActionName = $userActivity->datetime->format('H:i') . ': ' .
                 ucfirst($userActivity->action->value);
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {
                 $userRow = $this->userFinderRepository->findUserById($userActivity->userId);
-                $userActivity->timeAndActionName = '<span style="color: black">' .$userRow['first_name'] . ' '
+                $userActivity->timeAndActionName = '<span style="color: black">' . $userRow['first_name'] . ' '
                     . $userRow['surname'] . '</span> • ' .
                     $userActivity->timeAndActionName;
             }
 
             $groupedActivitiesByDate[$userActivity->datetime->format('d. F Y')][] = $userActivity;
         }
+
         return $groupedActivitiesByDate;
     }
 }

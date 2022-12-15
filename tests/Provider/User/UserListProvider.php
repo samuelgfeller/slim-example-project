@@ -8,7 +8,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserListProvider
 {
-
     /**
      * One authenticated user and one other is tested at a time is tested for clarity and simplicity.
      */
@@ -46,7 +45,7 @@ class UserListProvider
                     'own' => [
                         'statusPrivilege' => Privilege::DELETE,
                         'userRolePrivilege' => Privilege::READ,
-                        'availableUserRoles' => [UserRole::MANAGING_ADVISOR,],
+                        'availableUserRoles' => [UserRole::MANAGING_ADVISOR],
                     ],
                     'other' => [
                         'statusPrivilege' => Privilege::DELETE,

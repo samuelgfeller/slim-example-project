@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Domain\Authentication\Exception;
-
 
 class InvalidCredentialsException extends AuthenticationException
 {
-
     // Voluntarily not more information
     private string $userEmail;
 
@@ -31,5 +28,4 @@ class InvalidCredentialsException extends AuthenticationException
     {
         $this->userEmail = $userEmail;
     }
-
 }

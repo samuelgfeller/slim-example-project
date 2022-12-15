@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Check if authenticated user is permitted to do actions
- * Roles: newcomer < advisor < managing_advisor < administrator
+ * Roles: newcomer < advisor < managing_advisor < administrator.
  */
 class UserAuthorizationChecker
 {
@@ -28,9 +28,10 @@ class UserAuthorizationChecker
 
     /**
      * Check if authenticated user is allowed to create
-     * Important to have user role in the object
+     * Important to have user role in the object.
      *
      * @param UserData $userData
+     *
      * @return bool
      */
     public function isGrantedToCreate(UserData $userData): bool
@@ -68,16 +69,18 @@ class UserAuthorizationChecker
         $this->logger->notice(
             'User ' . $loggedInUserId . ' tried to create user but isn\'t allowed.'
         );
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to assign given user role
+     * Check if authenticated user is allowed to assign given user role.
      *
      * @param int $userRoleId
-     * @param null|int $userRoleIdOfUserToMutate whenever possible user role of user to be changed has to be provided
+     * @param int|null $userRoleIdOfUserToMutate whenever possible user role of user to be changed has to be provided
      * @param UserRoleData|null $authenticatedUserRoleData optional so that it can be called outside this class
      * @param array|null $userRoleHierarchies optional so that it can be called outside this class
+     *
      * @return bool
      */
     public function userRoleIsGranted(
@@ -114,22 +117,22 @@ class UserAuthorizationChecker
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Logic to check if logged-in user is granted to update user
+     * Logic to check if logged-in user is granted to update user.
      *
      * @param array $userDataToUpdate validated array with as key the column to
      * update and value the new value. There may be one or multiple entries,
      * depending on what the user wants to update
-     *
      * @param string|int $userIdToUpdate
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
-    public
-    function isGrantedToUpdate(
+    public function isGrantedToUpdate(
         array $userDataToUpdate,
         string|int $userIdToUpdate,
         bool $log = true
@@ -153,7 +156,7 @@ class UserAuthorizationChecker
                         && $userToUpdateRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
                     // or it's an admin which is allowed to change users with role
                     || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value])
-                ||// or user edits his own profile
+                || // or user edits his own profile
                 $loggedInUserId === (int)$userIdToUpdate
             ) {
                 // Managing advisor cannot change other managing advisors or admins but admins can change themselves and everyone else
@@ -185,11 +188,11 @@ class UserAuthorizationChecker
                     }
                     // Check that authenticated user is granted to attribute role
                     if (array_key_exists('user_role_id', $userDataToUpdate) && $this->userRoleIsGranted(
-                            $userDataToUpdate['user_role_id'],
-                            $userToUpdateRoleData->id,
-                            $authenticatedUserRoleData,
-                            $userRoleHierarchies
-                        ) === true) {
+                        $userDataToUpdate['user_role_id'],
+                        $userToUpdateRoleData->id,
+                        $authenticatedUserRoleData,
+                        $userRoleHierarchies
+                    ) === true) {
                         $grantedUpdateKeys[] = 'user_role_id';
                     }
 
@@ -220,21 +223,23 @@ class UserAuthorizationChecker
                         $key . ' to "' . $value . '".'
                     );
                 }
+
                 return false;
             }
         }
+
         return true;
     }
 
     /**
-     * Check if authenticated user is allowed to delete user
+     * Check if authenticated user is allowed to delete user.
      *
      * @param int $userIdToDelete
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
-    public
-    function isGrantedToDelete(
+    public function isGrantedToDelete(
         int $userIdToDelete,
         bool $log = true
     ): bool {
@@ -262,18 +267,19 @@ class UserAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to delete user but isn\'t allowed.'
             );
         }
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to read user
+     * Check if authenticated user is allowed to read user.
      *
      * @param int $userIdToRead
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
+     *
      * @return bool
      */
-    public
-    function isGrantedToRead(
+    public function isGrantedToRead(
         int $userIdToRead,
         bool $log = true
     ): bool {
@@ -297,18 +303,19 @@ class UserAuthorizationChecker
                 'User ' . $loggedInUserId . ' tried to read user but isn\'t allowed.'
             );
         }
+
         return false;
     }
 
     /**
-     * Check if authenticated user is allowed to read user activity
+     * Check if authenticated user is allowed to read user activity.
      *
      * @param int $userIdToRead
      * @param bool $log log if forbidden
+     *
      * @return bool
      */
-    public
-    function isGrantedToReadUserActivity(
+    public function isGrantedToReadUserActivity(
         int $userIdToRead,
         bool $log = true
     ): bool {
@@ -337,7 +344,7 @@ class UserAuthorizationChecker
                 "User $loggedInUserId tried to read activity of user $userIdToRead but isn't allowed."
             );
         }
+
         return false;
     }
-
 }

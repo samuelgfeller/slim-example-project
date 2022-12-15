@@ -2,7 +2,6 @@
 
 namespace App\Domain\Client\Data;
 
-
 use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
@@ -15,10 +14,7 @@ use App\Domain\Note\Data\NoteResultData;
  */
 class ClientResultData extends ClientData
 {
-
-    // public ?ClientStatusData $clientStatusData;
-    // public ?UserData $userData;
-    /** @var NoteResultData[]|null $notes */
+    /** @var NoteResultData[]|null */
     public ?array $notes = null;
     // Amount of notes for the client to know how many content placeholders to display
     public ?int $notesAmount = null;
@@ -34,7 +30,9 @@ class ClientResultData extends ClientData
 
     /**
      * Client Data constructor.
+     *
      * @param array $clientResultData
+     *
      * @throws \Exception
      */
     public function __construct(array $clientResultData = [])
@@ -52,7 +50,7 @@ class ClientResultData extends ClientData
     }
 
     /**
-     * Output for json_encode
+     * Output for json_encode.
      */
     public function jsonSerialize(): array
     {

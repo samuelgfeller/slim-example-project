@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\Client\Service;
-
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
@@ -16,7 +14,6 @@ use App\Infrastructure\Client\ClientDeleterRepository;
 
 class ClientCreator
 {
-
     public function __construct(
         private readonly ClientValidator $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
@@ -28,10 +25,13 @@ class ClientCreator
     }
 
     /**
-     * Validate user input values and client
+     * Validate user input values and client.
+     *
+     * @param array $clientValues
+     *
+     * @throws ForbiddenException
      *
      * @return int insert id
-     * @throws ForbiddenException
      */
     public function createClient(array $clientValues): int
     {
@@ -57,7 +57,7 @@ class ClientCreator
                         'message' => $clientValues['message'],
                         'client_id' => $clientId,
                         'user_id' => $client->userId,
-                        'is_main' => 1
+                        'is_main' => 1,
                     ];
                     $mainNoteId = $this->noteCreator->createNote($mainNoteValues);
                     $this->userActivityManager->addUserActivity(
@@ -67,6 +67,7 @@ class ClientCreator
                         $mainNoteValues
                     );
                 }
+
                 return $clientId;
             } catch (ValidationException $validationException) {
                 // Main note creation wasn't successful so user has to adapt form and will re-submit all client data

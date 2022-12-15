@@ -5,7 +5,7 @@ namespace App\Domain\Client\Data;
 class ClientResultDataCollection
 {
     // Collection of clients
-    /** @var ClientResultData[]|null  */
+    /** @var ClientResultData[]|null */
     public ?array $clients = [];
 
     // This is a result data class and is transmitted to the view that needs all status, sex and users for dropdowns

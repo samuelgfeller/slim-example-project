@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Common\JsImportVersionAdder;
@@ -45,7 +44,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'uri' => $request->getUri(),
             'basePath' => $this->app->getBasePath(),
             'route' => $this->app->getRouteCollector()->getRouteParser(),
-            'currRouteName' => (RouteContext::fromRequest($request)->getRoute())->getName(),
+            'currRouteName' => RouteContext::fromRequest($request)->getRoute()->getName(),
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,

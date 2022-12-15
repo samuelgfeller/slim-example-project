@@ -27,6 +27,7 @@ final class PasswordForgottenEmailSubmitAction
      * @param SessionInterface $session
      * @param PasswordRecoveryEmailSender $passwordRecoveryEmailSender
      * @param LoggerFactory $logger
+     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(
         private readonly Responder $responder,
@@ -34,7 +35,6 @@ final class PasswordForgottenEmailSubmitAction
         private readonly PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $logger,
-
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login');
     }
@@ -42,8 +42,10 @@ final class PasswordForgottenEmailSubmitAction
     /**
      * @param ServerRequest $request
      * @param Response $response
-     * @return Response
+     *
      * @throws \Throwable
+     *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -56,7 +58,7 @@ final class PasswordForgottenEmailSubmitAction
                 $this->passwordRecoveryEmailSender->sendPasswordRecoveryEmail($userValues);
             } catch (DomainRecordNotFoundException $domainRecordNotFoundException) {
                 // User was not found. Do nothing special as it would be a security flaw to say that user doesn't exist
-            } catch (ValidationException $validationException){
+            } catch (ValidationException $validationException) {
                 // Form error messages set in function below
                 return $this->responder->renderOnValidationError(
                     $response,
@@ -64,7 +66,7 @@ final class PasswordForgottenEmailSubmitAction
                     $validationException,
                     $request->getQueryParams(),
                 );
-            } catch (SecurityException $securityException){
+            } catch (SecurityException $securityException) {
                 return $this->responder->respondWithFormThrottle(
                     $response,
                     'authentication/login.html.php',
@@ -72,8 +74,9 @@ final class PasswordForgottenEmailSubmitAction
                     $request->getQueryParams(),
                     ['email' => $userValues['email']]
                 );
-            } catch (TransportExceptionInterface $transportException){
+            } catch (TransportExceptionInterface $transportException) {
                 $flash->add('error', 'There was an error when sending the email.');
+
                 return $this->responder->render(
                     $response,
                     'authentication/login.html.php',
@@ -82,6 +85,7 @@ final class PasswordForgottenEmailSubmitAction
             }
             $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>.<br>' .
             'Please check your inbox and the spam folder if needed.');
+
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
 

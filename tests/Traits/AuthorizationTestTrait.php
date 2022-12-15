@@ -8,7 +8,6 @@ use App\Test\Fixture\UserFixture;
 
 trait AuthorizationTestTrait
 {
-
     /**
      * Adds the correct user role id to given attributes containing
      * UserRole enum case.
@@ -23,13 +22,15 @@ trait AuthorizationTestTrait
         if ($userAttr['user_role_id'] ?? '' instanceof UserRole) {
             $userAttr['user_role_id'] = $this->getUserRoleIdByEnum($userAttr['user_role_id']);
         }
+
         return $userAttr;
     }
 
     /**
-     * Returns user role id from given Enum case
+     * Returns user role id from given Enum case.
      *
      * @param UserRole $userRole
+     *
      * @return int
      */
     protected function getUserRoleIdByEnum(UserRole $userRole): int
@@ -41,9 +42,10 @@ trait AuthorizationTestTrait
 
     /**
      * Change array of UserRole Enum cases to expected availableUserRoles
-     * array from the server with id and capitalized role name [{id} => {Role name}]
+     * array from the server with id and capitalized role name [{id} => {Role name}].
      *
      * @param array $userRoles user roles with Enum cases array
+     *
      * @return array
      */
     protected function formatAvailableUserRoles(array $userRoles): array
@@ -53,6 +55,7 @@ trait AuthorizationTestTrait
             // Key is role id and value the name for the dropdown
             $formattedRoles[$this->getUserRoleIdByEnum($userRole)] = $userRole->roleNameForDropdown();
         }
+
         return $formattedRoles;
     }
 

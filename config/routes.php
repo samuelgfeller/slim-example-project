@@ -23,7 +23,6 @@ return function (App $app) {
     $app->put('/dashboard-toggle-panel', \App\Application\Actions\Dashboard\DashboardTogglePanelAction::class)
         ->setName('dashboard-toggle-panel');
 
-
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginPageAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Actions\Authentication\Submit\LoginSubmitAction::class)->setName(
         'login-submit'
@@ -146,14 +145,17 @@ return function (App $app) {
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
-     * NOTE: make sure this route is defined last
+     * NOTE: make sure this route is defined last.
      * //     */
     $app->map(
-        ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) use ($app) {
-        throw new HttpNotFoundException(
-            $request, 'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
+        ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+        '/{routes:.+}',
+        function ($request, $response) use ($app) {
+            throw new HttpNotFoundException(
+                $request,
+                'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
             <br>Basepath: "' . $app->getBasePath() . '"'
-        );
-    }
+            );
+        }
     );
 };
