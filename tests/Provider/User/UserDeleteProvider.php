@@ -5,7 +5,7 @@ namespace App\Test\Provider\User;
 use App\Domain\User\Enum\UserRole;
 use Fig\Http\Message\StatusCodeInterface;
 
-class UserDeleteCaseProvider
+class UserDeleteProvider
 {
     /**
      * @return array[]

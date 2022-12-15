@@ -34,7 +34,7 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Test that with given correct token the account status is set to active
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
@@ -79,7 +79,7 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
@@ -127,7 +127,7 @@ class RegisterVerifyActionTest extends TestCase
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
      * according exception should be thrown and user redirected to register page
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */

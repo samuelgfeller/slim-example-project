@@ -40,7 +40,7 @@ class UserChangePasswordActionTest extends TestCase
     /**
      * Test user password change with different user roles
      *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::userPasswordChangeAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::userPasswordChangeAuthorizationCases()
      */
     public function testChangePasswordSubmitAction_authorization(
         array $userToUpdateRow,
@@ -129,7 +129,7 @@ class UserChangePasswordActionTest extends TestCase
     /**
      * Test that backend validation fails when new passwords are invalid
      *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::invalidPasswordChangeCases()
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::invalidPasswordChangeCases()
      * @param array $requestBody
      * @param array $jsonResponse
      * @return void
@@ -161,7 +161,7 @@ class UserChangePasswordActionTest extends TestCase
      * Empty or malformed request body is when parameters are not set or have
      * the wrong name ('key').
      *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordCaseProvider::malformedPasswordChangeRequestCases()
+     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::malformedPasswordChangeRequestCases()
      *
      * @param array|null $malformedRequestBody null for the case that request body is null
      */

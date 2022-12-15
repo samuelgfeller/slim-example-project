@@ -46,7 +46,7 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test client values update when authenticated with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::provideUsersAndExpectedResultForClientUpdate()
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::clientUpdateUsersAndExpectedResultProvider()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -156,7 +156,7 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test client values validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateCaseProvider::invalidClientUpdateValuesAndExpectedResponseData()
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::invalidClientUpdateValuesAndExpectedResponseProvider()
      * @param array $requestBody
      * @param array $jsonResponse
      * @return void

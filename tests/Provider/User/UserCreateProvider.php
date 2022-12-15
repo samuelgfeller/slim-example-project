@@ -7,7 +7,7 @@ use App\Domain\User\Enum\UserStatus;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class UserCreateCaseProvider
+class UserCreateProvider
 {
 
     use FixtureTestTrait;
@@ -77,7 +77,7 @@ class UserCreateCaseProvider
      */
     public function invalidUserCreateCases(): array
     {
-        /** Same values as @see UserUpdateCaseProvider::invalidUserUpdateCases() but with password and password2 */
+        /** Same values as @see UserUpdateProvider::invalidUserUpdateCases() but with password and password2 */
         // Including as many values as possible that trigger validation errors in each case
         return [
             [

@@ -36,7 +36,7 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Request to reset password with token
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
@@ -80,7 +80,7 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Test password submit reset with invalid, used or expired token
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
@@ -137,7 +137,7 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Test that backend validation fails when new passwords are invalid
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
@@ -180,7 +180,7 @@ class PasswordResetSubmitActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::malformedPasswordResetRequestBodyProvider()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::malformedPasswordResetRequestBodyProvider()
      *
      * @param array|null $malformedBody null for the case that request body is null
      * @param string $message

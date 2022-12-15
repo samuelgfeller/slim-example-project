@@ -6,50 +6,10 @@ use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class ClientCreateCaseProvider
+class ClientUpdateProvider
 {
 
     use FixtureTestTrait;
-
-    /**
-     * Provide malformed request body for client creation
-     *
-     * @return array[]
-     */
-    public function malformedRequestBody(): array
-    {
-        return [
-            [
-                // If any of the list except client_message is missing it's a bad request
-                'missing_first_name' => [
-                    'last_name' => 'value',
-                    'birthdate' => 'value',
-                    'location' => 'value',
-                    'phone' => 'value',
-                    'email' => 'value',
-                    'sex' => 'value',
-                    'client_message' => 'value',
-                    'user_id' => 'value',
-                    'client_status_id' => 'value',
-                    'message' => 'value', // main note
-                ],
-                'key_too_much_without_client_message' => [
-                    'first_name' => 'value',
-                    'last_name' => 'value',
-                    'birthdate' => 'value',
-                    'location' => 'value',
-                    'phone' => 'value',
-                    'email' => 'value',
-                    'sex' => 'value',
-                    // 'client_message' => 'value',
-                    'user_id' => 'value',
-                    'client_status_id' => 'value',
-                    'message' => 'value',
-                    'key_too_much' => 'value',
-                ],
-            ]
-        ];
-    }
 
     /**
      * Client creation authorization
@@ -58,62 +18,111 @@ class ClientCreateCaseProvider
      *
      * @return array[]
      */
-    public function provideUsersAndExpectedResultForClientCreation(): array
+    public function clientUpdateUsersAndExpectedResultProvider(): array
     {
-        // Get users with different roles
-        $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
-        $advisorAttributes = ['user_role_id' => UserRole::ADVISOR];
-        $newcomerAttributes = ['user_role_id' => UserRole::NEWCOMER];
+        // Set different user role attributes
+        $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
+        $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
+
+        $basicClientDataChanges = [
+            'first_name' => 'NewFirstName',
+            'last_name' => 'NewLastName',
+            'birthdate' => '1999-10-22',
+            'location' => 'NewLocation',
+            'phone' => '011 111 11 11',
+            'email' => 'new.email@test.ch',
+            'sex' => 'O',
+        ];
 
         $authorizedResult = [
-            StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-            'db_entry_created' => true,
+            StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
+            'db_changed' => true,
             'json_response' => [
                 'status' => 'success',
-                'data' => null,
+                'data' => null, // age added in test function if present in request data
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_entry_created' => false,
+            'db_changed' => false,
             'json_response' => [
                 'status' => 'error',
-                'message' => 'Not allowed to create client.',
+                'message' => 'Not allowed to update client.',
             ]
         ];
+
+
+        // To avoid testing each column separately for each user role, the most basic change is taken to test.
+        // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database first.
         return [
+            // * Newcomer
             // "owner" means from the perspective of the authenticated user
-            [ // ? Newcomer owner - not allowed
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $newcomerAttributes,
+            [ // ? Newcomer owner - data to be changed is the one with the least privilege needed - not allowed
+                'user_linked_to_client' => $newcomerAttr,
+                'authenticated_user' => $newcomerAttr,
+                'data_to_be_changed' => ['first_name' => 'value'],
                 'expected_result' => $unauthorizedResult
             ],
-            [ // ? Advisor owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
+            // * Advisor
+            [ // ? Advisor owner - data to be changed allowed
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $basicClientDataChanges),
                 'expected_result' => $authorizedResult,
             ],
-            [ // ? Advisor not owner - not allowed
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $advisorAttributes,
+            [ // ? Advisor owner - data to be changed not allowed
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => ['user_id' => 'new'],
                 'expected_result' => $unauthorizedResult,
             ],
-            [ // ? Managing not owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
+            [ // ? Advisor not owner - data to be changed allowed
+                'user_linked_to_client' => $managingAdvisorAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => $basicClientDataChanges,
+                'expected_result' => $authorizedResult,
+            ],
+            [ // ? Advisor not owner - data to be changed not allowed
+                'user_linked_to_client' => $managingAdvisorAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => ['client_status_id' => 'new'],
+                'expected_result' => $unauthorizedResult,
+            ],
+            [ // ? Advisor owner - undelete client - not allowed
+                'user_linked_to_client' => $newcomerAttr,
+                'authenticated_user' => $advisorAttr,
+                'data_to_be_changed' => ['deleted_at' => null],
+                'expected_result' => $unauthorizedResult,
+            ],
+
+            // * Managing advisor
+            [ // ? Managing advisor not owner - there is no data change that is not allowed for managing advisor
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
+                'data_to_be_changed' => array_merge(
+                    $basicClientDataChanges,
+                    ['client_status_id' => 'new', 'user_id' => 'new']
+                ),
+                'expected_result' => $authorizedResult,
+            ],
+            [ // ? Managing advisor not owner - undelete client - allowed
+                'user_linked_to_client' => $advisorAttr,
+                'authenticated_user' => $managingAdvisorAttr,
+                'data_to_be_changed' => ['deleted_at' => null],
                 'expected_result' => $authorizedResult,
             ],
         ];
     }
 
+
     /**
      * Returns combinations of invalid data to trigger validation exception
-     * for client creation. Couldn't be combined with update as creation
-     * form includes main note message field.
+     * for client modification.
      *
      * @return array
      */
-    public function invalidClientCreationValuesAndExpectedResponseData(): array
+    public function invalidClientUpdateValuesAndExpectedResponseProvider(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
@@ -129,7 +138,6 @@ class ClientCreateCaseProvider
                     'sex' => 'A', // invalid value
                     'user_id' => '999', // non-existing user
                     'client_status_id' => '999', // non-existing status
-                    'message' => '', // valid vor now as note validation is done only if all client values are valid
                 ],
                 'json_response' => [
                     'status' => 'error',
@@ -191,7 +199,6 @@ class ClientCreateCaseProvider
                     // and the json_response has to be equal too so the value can't be null.
                     'user_id' => '999', // non-existing user
                     'client_status_id' => '999', // non-existing status
-                    'message' => '', // valid vor now as note validation is done only if all client values are valid
                 ],
                 'json_response' => [
                     'status' => 'error',
@@ -230,35 +237,7 @@ class ClientCreateCaseProvider
                         ]
                     ]
                 ]
-            ],
-            [ // Main note validation
-                // All client values valid but not main note message
-                'request_body' => [
-                    'first_name' => 'Test',
-                    'last_name' => 'test',
-                    'birthdate' => '1950-01-01',
-                    'location' => 'Basel',
-                    'phone' => '0771111111',
-                    'email' => 'test@test.ch',
-                    'sex' => 'F',
-                    'user_id' => 'valid', // 'valid' replaced by authenticated user id in test function
-                    'client_status_id' => 'valid', // 'valid' replaced by inserted client status id in test function
-                    'message' => str_repeat('i', 1001), // invalid
-                ],
-                'json_response' => [
-                    'status' => 'error',
-                    'message' => 'Validation error',
-                    'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
-                        'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Maximum length is 1000',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+            ]
         ];
     }
 }

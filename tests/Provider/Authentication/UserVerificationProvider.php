@@ -4,11 +4,12 @@ namespace App\Test\Provider\Authentication;
 
 use App\Domain\Authentication\Data\UserVerificationData;
 
-class UserVerificationDataProvider
+class UserVerificationProvider
 {
 
     /**
      * @return array[]
+     * @throws \Exception
      */
     public function userVerificationProvider(): array
     {

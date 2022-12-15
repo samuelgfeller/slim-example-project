@@ -37,7 +37,7 @@ class UserDeleteActionTest extends TestCase
     /**
      * Test delete user submit with different authenticated user roles.
      *
-     * @dataProvider \App\Test\Provider\User\UserDeleteCaseProvider::userDeleteAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserDeleteProvider::userDeleteAuthorizationCases()
      *
      * @param array $userToDeleteRow user to delete attributes containing user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id

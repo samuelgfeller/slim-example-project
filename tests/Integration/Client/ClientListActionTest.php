@@ -97,7 +97,7 @@ class ClientListActionTest extends TestCase
     /**
      * Test list of clients with different kinds of filters
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::clientListFilterCases()
+     * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListFilterCases()
      *
      * @param array $filterQueryParamsArr
      * @param string $expectedClientsWhereString
@@ -199,7 +199,7 @@ class ClientListActionTest extends TestCase
     /**
      * Request list of clients but with invalid filter
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListCaseProvider::clientListInvalidFilterCases()
+     * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListInvalidFilterCases()
      *
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body

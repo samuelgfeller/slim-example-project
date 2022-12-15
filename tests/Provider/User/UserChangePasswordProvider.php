@@ -6,7 +6,7 @@ use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class UserChangePasswordCaseProvider
+class UserChangePasswordProvider
 {
 
     use FixtureTestTrait;

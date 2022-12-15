@@ -29,7 +29,7 @@ class LoginSecurityTest extends TestCase
      * Test thresholds and according delays once with failed logins and once with successes
      * If login request amount exceeds threshold, the user has to wait a certain delay
      *
-     * @dataProvider \App\Test\Provider\Authentication\AuthenticationCaseProvider::authenticationSecurityCases()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::authenticationSecurityCases()
      *
      * @param bool $credentialsAreCorrect
      * @param int $statusCode

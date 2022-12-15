@@ -55,7 +55,7 @@ class NoteCreateActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -158,7 +158,7 @@ class NoteCreateActionTest extends TestCase
      *   - 1 client
      *   - 1 user linked to client
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForCreation()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::clientCreationInvalidNoteAndExpectedResponseProvider()
      * @return void
      */
     public function testNoteSubmitCreateAction_invalid(
@@ -210,7 +210,7 @@ class NoteCreateActionTest extends TestCase
      * Test client read note creation with different
      * combinations of malformed request body.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteMalformedRequestBodyForCreation()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::provideNoteMalformedRequestBodyForCreation()
      * @param null|array $malformedRequestBody
      * @return void
      */

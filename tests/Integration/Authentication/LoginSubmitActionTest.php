@@ -101,7 +101,7 @@ class LoginSubmitActionTest extends TestCase
     /**
      * Test login with invalid values that must not pass validation.
      *
-     * @dataProvider \App\Test\Provider\User\UserDataProvider::invalidLoginCredentialsProvider()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::invalidLoginCredentialsProvider()
      *
      * @param array $invalidLoginValues valid credentials
      */
@@ -125,7 +125,7 @@ class LoginSubmitActionTest extends TestCase
     /**
      * Test login with user status unverified.
      * When account is unverified, a verification link is sent to the user via the email.
-     * @dataProvider \App\Test\Provider\Authentication\AuthenticationCaseProvider::nonActiveAuthenticationRequestCases()
+     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::nonActiveAuthenticationRequestCases()
      * @param UserStatus $status
      * @param string $partialEmailBody
      */

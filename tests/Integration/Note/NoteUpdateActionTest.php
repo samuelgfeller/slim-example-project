@@ -45,7 +45,7 @@ class NoteUpdateActionTest extends TestCase
      * Test note modification on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
@@ -172,7 +172,7 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test note modification on client-read page with invalid data.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideInvalidNoteAndExpectedResponseDataForUpdate()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::provideInvalidNoteAndExpectedResponseDataForUpdate()
      * @param string $invalidMessage
      * @param array $expectedResponseData
      * @return void
@@ -217,7 +217,7 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test client read note modification with malformed request body
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideMalformedNoteRequestBodyForUpdate()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::provideMalformedNoteRequestBodyForUpdate()
      * @return void
      */
     public function testNoteSubmitUpdateAction_malformedRequest(array $malformedRequestBody): void

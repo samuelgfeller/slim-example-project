@@ -42,7 +42,7 @@ class ClientCreateActionTest extends TestCase
     /**
      * Client creation with valid data
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::provideUsersAndExpectedResultForClientCreation()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationUsersAndExpectedResultProvider()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -144,7 +144,7 @@ class ClientCreateActionTest extends TestCase
     /**
      * Test client creation values validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::invalidClientCreationValuesAndExpectedResponseData()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::invalidClientCreationValuesAndExpectedResponseProvider()
      * @param array $requestBody
      * @param array $jsonResponse
      * @return void
@@ -209,7 +209,7 @@ class ClientCreateActionTest extends TestCase
     /**
      * Test client creation with malformed request body
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateCaseProvider::malformedRequestBody()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::malformedRequestBodyCases()
      * @param array $requestBody
      * @return void
      */

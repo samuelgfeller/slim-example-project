@@ -6,7 +6,7 @@ use App\Domain\Authorization\Privilege;
 use App\Domain\User\Enum\UserRole;
 use Fig\Http\Message\StatusCodeInterface;
 
-class UserListCaseProvider
+class UserListProvider
 {
 
     /**

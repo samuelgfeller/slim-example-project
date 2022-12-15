@@ -9,7 +9,7 @@ use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class NoteCaseProvider
+class NoteProvider
 {
     use FixtureTestTrait;
 
@@ -18,7 +18,7 @@ class NoteCaseProvider
      *
      * @return array[]
      */
-    public function provideUserAttributesAndExpectedResultForNoteList(): array
+    public function noteListUserAttributesAndExpectedResultProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorRow = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -87,7 +87,7 @@ class NoteCaseProvider
      *                  }
      *           }
      */
-    public function provideUserAttributesAndExpectedResultForNoteCUD(): array
+    public function noteCUDUserAttributesAndExpectedResultProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -215,7 +215,7 @@ class NoteCaseProvider
      *
      * @return array
      */
-    public function provideInvalidNoteAndExpectedResponseDataForCreation(): array
+    public function clientCreationInvalidNoteAndExpectedResponseProvider(): array
     {
         return [
             [

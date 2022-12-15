@@ -40,7 +40,7 @@ class SecurityLoginCheckerTest extends TestCase
      *
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
-     * @dataProvider \App\Test\Provider\Security\UserRequestCaseProvider::individualLoginThrottlingTestCases()
+     * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualLoginThrottlingTestCases()
      *
      * @param int|string $delay
      * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats

@@ -39,7 +39,7 @@ class ClientDeleteActionTest extends TestCase
     /**
      * Test delete client submit with different authenticated user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientDeleteCaseProvider::provideUsersForClientDelete()
+     * @dataProvider \App\Test\Provider\Client\ClientDeleteProvider::clientDeleteUsersAndExpectedResultProvider()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id

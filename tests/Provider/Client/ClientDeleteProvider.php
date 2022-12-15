@@ -6,13 +6,13 @@ use App\Domain\User\Enum\UserRole;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
-class ClientDeleteCaseProvider
+class ClientDeleteProvider
 {
     use FixtureTestTrait;
     /**
      * @return array[]
      */
-    public function provideUsersForClientDelete(): array
+    public function clientDeleteUsersAndExpectedResultProvider(): array
         {
             // Get users with different roles
             $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];

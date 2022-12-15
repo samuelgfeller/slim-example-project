@@ -26,7 +26,7 @@ class UserReadPageActionTest extends TestCase
     /**
      * Normal page action while being authenticated
      *
-     * @dataProvider \App\Test\Provider\User\UserReadCaseProvider::userReadAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserReadProvider::userReadAuthorizationCases()
      * @param array $userData user attributes containing the user_role_id
      * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
      * @param array{string: StatusCodeInterface} $expectedResult

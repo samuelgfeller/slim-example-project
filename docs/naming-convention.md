@@ -76,18 +76,16 @@ is being tested and additional info can be added in camel case separated by an u
   e.g. `testClientCreation_authorization`
   
 ### Providers
-I differentiate providers into two types. They have to be in a sub folder "Provider" at the root of 
-the `/tests` folder. As the same providers are used by both unit and integration tests, they can't 
-be inside the test case bundle.  
-Each are in folders with the bundle name after "Provider".
+They have to be in a sub folder "Provider" at the root of 
+the `/tests` folder. The same providers may be used by both unit and integration tests.  
+Each are in folders with the bundle name in the folder "Provider".
+
+Previously I differentiated two types of providers that had different class names: 
 
 #### Data Providers
 Provide different only the data to run for a specific test.   
 E.g. For a test asserting that a validationException occurs with different invalid data 
 (name too long, password too short, not given email address etc.)  
-
-Data provider MUST end with `DataProvider.php` and be in the folder of their module name which is in
-the folder "Provider".
 
 #### Case Providers
 They contain both the input data but also the expected value for
@@ -96,15 +94,14 @@ and being able to feed them with different data and expected values.
 E.g. Asserting that validation exception occurs with a specific error message and behaviour or different 
 authorization cases.
 
-Case provider MUST end with `CaseProvider.php` and be in the folder of their module name which is in
-the folder "Provider".
+But it doesn't make that much of a difference and I don't want to add useless complexity so all providers are in 
+classes that MUST end with "Provider": `ClientCreateProvider` that can both contain data and case providers.
 
 ### Fixtures
 Unlike providers, fixtures are only used in integration tests. Therefore, they can be stored inside
 the integration test case bundle folder in a "Fixture" sub folder 
 (e.g. `tests\Integration\User\Fixture`).  
 Fixtures MUST end with `Fixture.php`.
-
 
 ## Database
 * Database and table names MUST be all lower case and words separated by underscores

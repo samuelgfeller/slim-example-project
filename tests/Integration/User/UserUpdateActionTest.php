@@ -36,7 +36,7 @@ class UserUpdateActionTest extends TestCase
     /**
      * User update process with valid data
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::userUpdateAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserUpdateProvider::userUpdateAuthorizationCases()
      *
      * @param array $userToChangeRow user to change attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -117,7 +117,7 @@ class UserUpdateActionTest extends TestCase
     /**
      * Test user submit invalid update data
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateCaseProvider::invalidUserUpdateCases()
+     * @dataProvider \App\Test\Provider\User\UserUpdateProvider::invalidUserUpdateCases()
      *
      * @param array $requestBody
      * @param array $jsonResponse

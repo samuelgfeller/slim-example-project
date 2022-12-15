@@ -6,7 +6,7 @@ namespace App\Test\Provider\Client;
 
 use App\Domain\User\Enum\UserRole;
 
-class ClientListCaseProvider
+class ClientListProvider
 {
     /**
      * Returns every filter combination
@@ -15,7 +15,7 @@ class ClientListCaseProvider
      */
     public function clientListFilterCases(): array
     {
-        // Id does not matter as long as it's not used as default value by the fixtures
+        // ID does not matter as long as it's not used as default value by the fixtures
         $newcomerAttributes = ['id' => 42, 'user_role_id' => UserRole::NEWCOMER];
         $sqlDateTime = (new \DateTime())->format('Y-m-d H:i:s');
         // Instead of inserting only the clients we need each time, all relevant clients are inserted to also test that

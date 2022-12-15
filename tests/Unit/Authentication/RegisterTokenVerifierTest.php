@@ -36,7 +36,7 @@ class RegisterTokenVerifierTest extends TestCase
      * As long as the end result both in what the user sees (redirect) and database entries is correct,
      * the way to get there is not really relevant.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationDataProvider::userVerificationProvider
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|\Exception

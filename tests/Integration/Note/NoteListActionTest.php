@@ -43,7 +43,7 @@ class NoteListActionTest extends TestCase
      * Tests notes that are loaded with ajax on client read page.
      * One note at a time is tested for the sake of simplicity.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteList()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteListUserAttributesAndExpectedResultProvider()
      * Different privileges of notes depending on authenticated user and
      * note owner are tested with the provider.
      *

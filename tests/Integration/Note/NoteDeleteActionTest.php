@@ -40,7 +40,7 @@ class NoteDeleteActionTest extends TestCase
      * Test normal and main note deletion on client-read page
      * while being authenticated with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideUserAttributesAndExpectedResultForNoteCUD()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response

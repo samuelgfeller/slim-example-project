@@ -28,7 +28,7 @@ class UserListActionTest extends TestCase
      * Tests users that are loaded with ajax on user list page.
      * One authenticated user and only one other is tested at a time for clarity and simplicity.
      *
-     * @dataProvider \App\Test\Provider\User\UserListCaseProvider::userListAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserListProvider::userListAuthorizationCases()
      *
      * @param array $userRow user attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id

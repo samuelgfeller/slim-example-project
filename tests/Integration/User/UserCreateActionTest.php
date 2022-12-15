@@ -39,7 +39,7 @@ class UserCreateActionTest extends TestCase
     /**
      * User create authorization test with different user roles
      *
-     * @dataProvider \App\Test\Provider\User\UserCreateCaseProvider::userCreateAuthorizationCases()
+     * @dataProvider \App\Test\Provider\User\UserCreateProvider::userCreateAuthorizationCases()
      *
      * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
      * @param UserRole $newUserRole user role id of new user
@@ -142,7 +142,7 @@ class UserCreateActionTest extends TestCase
     /**
      * Test user submit invalid update data
      *
-     * @dataProvider \App\Test\Provider\User\UserCreateCaseProvider::invalidUserCreateCases()
+     * @dataProvider \App\Test\Provider\User\UserCreateProvider::invalidUserCreateCases()
      *
      * @param array $requestBody
      * @param array $jsonResponse
@@ -178,7 +178,7 @@ class UserCreateActionTest extends TestCase
      * is thrown and an error page is displayed to the user and that means that
      * there is an error with the client sending the request that has to be fixed.
      *
-     * @dataProvider \App\Test\Provider\User\UserCreateCaseProvider::malformedRequestBodyCases()
+     * @dataProvider \App\Test\Provider\User\UserCreateProvider::malformedRequestBodyCases()
      *
      * @param null|array $requestBody request body may be null
      * @return void

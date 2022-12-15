@@ -4,7 +4,7 @@ namespace App\Test\Provider\Security;
 
 use App\Domain\Security\Data\RequestStatsData;
 
-class UserRequestCaseProvider
+class UserRequestProvider
 {
     // Placed on top to easily change.
     // ! This should be the same as the config values $settings['security']['login_throttle_rule']
@@ -32,7 +32,7 @@ class UserRequestCaseProvider
      * @param string $type
      * @return RequestStatsData
      */
-    public function stats(int|string $requestAmount, string $type): RequestStatsData
+    private function stats(int|string $requestAmount, string $type): RequestStatsData
     {
         if ($type === 'email') {
             return new RequestStatsData([
