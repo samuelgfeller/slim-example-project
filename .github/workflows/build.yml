@@ -5,26 +5,69 @@ on:
       - master
   pull_request:
     types: [ opened, synchronize, reopened ]
+
 jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '8.1' ]
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+
+    services:
+      mysql:
+        image: mysql:8.0.23
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+        ports:
+          - 33306:3306
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Setup PHP with Xdebug
+
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, pdo, pdo_mysql, intl, zip
           coverage: xdebug
 
-      - name: Install dependencies with composer
+      - name: Check PHP version
+        run: php -v
+
+      - name: Check Composer version
+        run: composer -V
+
+      - name: Check PHP extensions
+        run: php -m
+
+      - name: Check MySQL version
+        run: mysql -V
+
+      - name: Start MySQL
+        run: sudo systemctl start mysql
+
+      - name: Check MySQL variables
+        run: mysql -uroot -proot -e "SHOW VARIABLES LIKE 'version%';"
+
+      - name: Create database
+        run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
         run: composer update --no-ansi --no-interaction --no-progress
 
-      - name: Run tests with phpunit/phpunit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Run test suite
+        run: composer test:coverage
+        env:
+          APP_ENV: github
+          PHP_CS_FIXER_IGNORE_ENV: 1
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

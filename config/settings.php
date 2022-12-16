@@ -1,19 +1,25 @@
 <?php
 
-// Defaults
+// Load default settings
 $settings = require __DIR__ . '/defaults.php';
 
-// Load environment configuration
+// Load secret configuration
 if (file_exists(__DIR__ . '/../../env.php')) {
     require __DIR__ . '/../../env.php';
 } elseif (file_exists(__DIR__ . '/env.php')) {
     require __DIR__ . '/env.php';
 }
 
-// Overwrite previous config with integration testing values if APP_ENV is set to 'testing'
+// Set APP_ENV if not already set
+$_ENV['APP_ENV'] = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'dev';
+
+// Overwrite previous config with APP_ENV specific values ("env", "test" or "github")
 if (isset($_ENV['APP_ENV'])) {
-    //  env.testing.php
-    require __DIR__ . '/env.' . $_ENV['APP_ENV'] . '.php';
+    $appEnvConfigFile = __DIR__ . '/env.' . $_ENV['APP_ENV'] . '.php';
+    if (file_exists($appEnvConfigFile)) {
+        // e.g. env.test.php
+        require $appEnvConfigFile;
+    }
 }
 
 return $settings;

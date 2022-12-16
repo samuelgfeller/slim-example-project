@@ -17,8 +17,4 @@
 // Error handler. More controlled than ini
 $settings['error']['display_error_details'] = false;
 
-// Database
-$settings['db']['host'] = 'localhost';
 $settings['db']['database'] = 'slim_example_project';
-$settings['db']['username'] = 'Admin';
-$settings['db']['password'] = '12345678';

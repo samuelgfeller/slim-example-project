@@ -12,11 +12,11 @@
 // Init settings var
 $settings = [];
 
-// Bool if env is dev. Used in phpRenderer when rendering resources to break cache always for mobile
+// Simulate prod env
 $settings['dev'] = false;
 
 $settings['deployment'] = [
-    // null or string. When null, all query param versions from js imports are removed
+    // null or string. When `null`, all query param versions from js imports are removed
     'version' => '0.1',
     'assetsPath' => __DIR__ . '/../public/assets',
 ];
