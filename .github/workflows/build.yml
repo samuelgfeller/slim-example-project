@@ -13,7 +13,7 @@ jobs:
       matrix:
         operating-system: [ ubuntu-latest ]
         php-versions: [ '8.1' ]
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} Test
 
     services:
       mysql:
