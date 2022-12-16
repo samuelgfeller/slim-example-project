@@ -4,6 +4,7 @@ namespace App\Test\Traits;
 
 use App\Domain\Factory\LoggerFactory;
 use App\Test\Fixture\UserRoleFixture;
+use Cake\Database\Connection;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -73,5 +74,26 @@ trait AppTestTrait
         // $_ENV['AUTO_XDEBUG_DISABLED'] = true;
 //            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
 //         }
+    }
+
+    /**
+     * Function called after each test
+     * Close database connection to prevent errors:
+     *  - PDOException: Packets out of order. Expected 0 received 1. Packet size=23
+     *  - PDOException: SQLSTATE[HY000] [2006] MySQL server has gone away
+     *  - Cake\Database\Exception\MissingConnectionException:
+     *        Connection to Mysql could not be established: SQLSTATE[08004] [1040] Too many connections.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if (method_exists($this, 'setUpDatabase')) {
+            $connection = $this->container->get(Connection::class);
+            $connection->disconnect();
+        }
     }
 }

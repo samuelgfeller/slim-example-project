@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/env.test.php';
 
 // Database
