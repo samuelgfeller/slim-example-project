@@ -1,28 +1,26 @@
-# Slim example project [work in progress]
+# Slim example project
 
 Lightweight example project of a backend and frontend done with the [Slim](https://www.slimframework.com/)
 micro-framework.   
 It can be used as a template when creating new projects or just serve as inspiration.
 
-If you want to learn how to develop properly however, I strongly recommend that you check out Daniel Opitz's
-resources.  
-This whole project is greatly inspired by Daniel's fabulous [blog articles](https://odan.github.io/)
-, [ebook](https://odan.github.io/2022/07/02/slim4-ebook-online.html)
-and the [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project.
+Installation guide is coming soon.
 
-## Functionalities include:
+## Functionalities
 
 It will grow into a usable application for non-profit organizations that need a platform to manage the people they
 are helping.  
-This project is done in collaboration with the organization [Retter in der Not](https://www.retter-in-der-not.org).
+This project is done in collaboration with the non-profit organization [Retter in der Not](https://www.retter-in-der-not.org).
 
 * Authentication (login)
 * User management for admins
 * Clients creation and mutation with linked status and user
 * Notes creation and mutation for clients with different user rights
+* Dashboard with panels
 * Protection against rapid fire and distributed brute force attacks (time throttling and
   captcha) - [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/security-concept.md)
 * [Custom error handler](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/error-handling.md)
+* Lot of integration testing with fixtures and data providers 
 
 ## Technologies
 
@@ -31,8 +29,7 @@ This project is done in collaboration with the organization [Retter in der Not](
 #### Languages & libraries
 
 * Mainly **Vanilla JS** to be as "native" as possible and since E6 JavaScript supports a lot
-* Avoiding the use of jQuery but rather add the needed missing components specifically one by one and then bundle it
-  into 1 static file
+* Avoiding the use of jQuery but rather add the needed missing components specifically one by one
 
 #### Template renderer
 
@@ -46,17 +43,9 @@ This project is done in collaboration with the organization [Retter in der Not](
 
 #### Asset management
 
-After talking with [Odan](http://disq.us/p/2dlx8ql) (comment section) I will do the following:
-
 * Link application specific resources directly in template (which are located under `public/assets/*`)
 * Not using any PHP asset library (like [symfony/asset](https://github.com/symfony/asset)
   or [odan/twig-assets](https://github.com/odan/twig-assets))
-* If during the development of a larger project many libraries are being used, I will
-    1. Install webpack and use it to download and compile/bundle my external dependencies (like jQuery, Bootstrap,
-       etc.) into a single JS file.
-    1. Link this static file in my global layout template(s). For this, I don't need an asset function.
-    1. And then I can update my external dependencies with `npx webpack --mode=production`.
-       But I think most smaller projects won't need enough to justify it.
 
 ### Backend
 * **HTTP Router & Middleware**: [slimphp/Slim](https://github.com/slimphp/Slim)
@@ -96,17 +85,22 @@ and [selective-php/test-traits](https://github.com/selective-php/test-traits)
    -- Traits // test utility traits  
 ```
 
+## Credits
+
+If you want to learn how to develop properly I strongly recommend that you check out Daniel Opitz's
+resources.  
+This whole project is greatly inspired by his awesome [knowledge base](https://odan.github.io/), 
+[ebook](https://odan.github.io/2022/07/02/slim4-ebook-online.html)
+and the [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project.  
+
+Daniel made developing this project so much more fun. Genuinely, big thanks to him. 
+Follow him on [Twitter](https://twitter.com/dopitz).
+
+Huge thanks to [JetBrains](https://jb.gg/OpenSource) as well for supporting this project.  
+PHPStorm is by far [the best PHP IDE](https://www.cloudways.com/blog/top-ide-and-code-editors-php-development/);
+I cannot recommend it enough. 
+
 ## Licence
 
 The MIT Licence (MIT). Please
 see [Licence File](https://github.com/samuelgfeller/slim-example-project/blob/master/LICENCE.txt) for more information.
-
-### Credits
-
-Daniel made developing this project so much more fun. Thanks to his [knowledgebase](https://odan.github.io/),
-his [slim4-skeleton](https://odan.github.io/slim4-skeleton/) project and the answers to my multiple questions he
-made me save countless hours. It's worth following him on [Twitter](https://twitter.com/dopitz).
-
-Big thanks to [JetBrains](https://jb.gg/OpenSource) as well for supporting this project.  
-PHPStorm is by far [the best PHP IDE](https://www.cloudways.com/blog/top-ide-and-code-editors-php-development/);
-I cannot recommend it enough. 
