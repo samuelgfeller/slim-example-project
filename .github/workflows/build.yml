@@ -54,6 +54,12 @@ jobs:
       - name: Check MySQL variables
         run: mysql -uroot -proot -e "SHOW VARIABLES LIKE 'version%';"
 
+      - name: Increase max allowed packet size
+        run: mysql -uroot -proot -e "SET GLOBAL max_allowed_packet='1073741824';"
+
+      - name: Increase max connections
+        run: mysql -uroot -proot -e "SET GLOBAL max_connections = '4096';"
+
       - name: Create database
         run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 

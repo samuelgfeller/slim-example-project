@@ -94,6 +94,10 @@ trait AppTestTrait
         if (method_exists($this, 'setUpDatabase')) {
             $connection = $this->container->get(Connection::class);
             $connection->disconnect();
+            $container = $this->container->get(App::class)->getContainer();
+            if ($container instanceof \DI\Container) {
+                $container->set(Connection::class, null);
+            }
         }
     }
 }
