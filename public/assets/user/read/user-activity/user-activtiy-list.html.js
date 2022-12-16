@@ -5,14 +5,14 @@ export function getUserActivityListHtml(userActivitiesGroupedByDate) {
         activityListHtml += `<h3 class='collapsible-button'>${dateString}</h3>\n                
             <section class='collapsible-content'>\n`
         for (const userActivity of userActivities) {
-            const {timeAndActionName, pageUrl, table, row_id, data} = userActivity;
+            const {timeAndActionName, pageUrl, table, rowId, data} = userActivity;
 
             // Build entries string
             let activityLabel = timeAndActionName;
             if (pageUrl) {
-                activityLabel += ` <a href='${pageUrl}' target='_blank'>${table} ${row_id}</a>`;
+                activityLabel += ` <a href='${pageUrl}' target='_blank'>${table} ${rowId}</a>`;
             } else {
-                activityLabel += ` ${table} ${row_id}`;
+                activityLabel += ` ${table} ${rowId}`;
             }
             // Generate data string
             let dataString = '';

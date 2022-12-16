@@ -28,6 +28,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        fetch-depth: 0 #sonarcloud shallow clone warning https://stackoverflow.com/a/62500400/9013718
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
