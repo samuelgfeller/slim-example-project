@@ -1,149 +1,142 @@
-create table user_role
-(
-    id        int UNSIGNED auto_increment primary key,
-    name      varchar(30) not null,
-    hierarchy int         null
-)
-    charset = utf8mb4;
+CREATE TABLE `client` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `location` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(254) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sex` enum('M','F','O') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_message` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Message that client submitted via webform',
+  `vigilance_level` enum('moderate','caution','extra_caution') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `client_status_id` int(11) DEFAULT NULL,
+  `assigned_at` datetime DEFAULT NULL COMMENT 'date at which user_id was set',
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_client_user` (`user_id`),
+  KEY `FK_client_status` (`client_status_id`) USING BTREE,
+  CONSTRAINT `FK_client_status` FOREIGN KEY (`client_status_id`) REFERENCES `client_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_client_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Advisors help and consult clients';
 
-create table `user`
-(
-    id            int UNSIGNED auto_increment primary key,
-    first_name    varchar(100)                                                                     not null,
-    surname       varchar(100)                                                                     not null,
-    email         varchar(254)                                                                     not null,
-    password_hash varchar(300)                                                                     not null,
-    user_role_id  int unsigned                                         default 0                   not null,
-    `status`      enum ('active', 'locked', 'unverified', 'suspended') default 'unverified'        null,
-    updated_at    datetime                                             default current_timestamp() null on update current_timestamp(),
-    created_at    datetime                                             default current_timestamp() null,
-    deleted_at    datetime                                                                         null,
-    constraint FK_user_user_role
-        foreign key (user_role_id) references user_role (id)
-);
+CREATE TABLE `client_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `deleted_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Client status';
 
+CREATE TABLE `note` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `message` varchar(1000) DEFAULT NULL,
+  `is_main` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Bool if it''s the client''s main note',
+  `hidden` tinyint(4) DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK__user` (`user_id`),
+  KEY `FK_note_client` (`client_id`),
+  CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FK_note_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- User token verification used for email validation at registration AND for password reset
-CREATE TABLE `user_verification`
-(
-    `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`    INT unsigned NOT NULL,
-    `token`      VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,
-    `expires_at` BIGINT(20)   NOT NULL,
-    `used_at`    DATETIME     NULL DEFAULT NULL,
-    `created_at` DATETIME     NULL DEFAULT current_timestamp(),
-    `deleted_at` DATETIME     NULL DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT FK__user_issuer FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) COLLATE = utf8mb4_unicode_ci
-;
+CREATE TABLE `permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'module where action takes place',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Requests that should be limited like failed logins, password recovery, registration etc. for security
-CREATE TABLE `user_request`
-(
-    `id`         INT(11) UNSIGNED           NOT NULL AUTO_INCREMENT,
-    `email`      VARCHAR(254)               NOT NULL COLLATE utf8mb4_unicode_ci, -- cannot use user_id as it's not known for failed logins
-    `ip_address` INT(11) UNSIGNED           NULL     DEFAULT NULL,
-    `sent_email` TINYINT UNSIGNED           NOT NULL DEFAULT 0,
-    `is_login`   ENUM ('success','failure') NULL     DEFAULT NULL COLLATE utf8mb4_unicode_ci,
-    `created_at` DATETIME                   NULL     DEFAULT current_timestamp(),
-    INDEX `user_request_idx_created_at` (`created_at`),
-    INDEX `user_request_idx_is_login` (`is_login`),
-    PRIMARY KEY (`id`)
-) COLLATE = utf8mb4_unicode_ci
-  ENGINE = InnoDB
-;
+CREATE TABLE `phinxlog` (
+  `version` bigint(20) NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-create table user_activity
-(
-    id         int unsigned auto_increment
-        primary key,
-    user_id    int unsigned                                   not null,
-    action     enum ('created', 'updated', 'deleted', 'read') not null,
-    `table`    varchar(100)                                   null,
-    row_id     int                                            null,
-    data       text                                           null,
-    datetime   datetime default current_timestamp()           not null,
-    ip_address varchar(50)                                    null,
-    user_agent varchar(255)                                   null,
-    constraint user_activity_user_null_fk
-        foreign key (user_id) references user (id)
-);
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_role_id` int(11) NOT NULL DEFAULT 0,
+  `status` enum('active','locked','unverified','suspended') COLLATE utf8mb4_unicode_ci DEFAULT 'unverified',
+  `email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password_hash` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_user_user_role` (`user_role_id`),
+  CONSTRAINT `FK_user_user_role` FOREIGN KEY (`user_role_id`) REFERENCES `user_role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `user_activity` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `action` enum('created','updated','deleted','read') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `table` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `row_id` int(11) DEFAULT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `datetime` datetime NOT NULL DEFAULT current_timestamp(),
+  `ip_address` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_activity_user_id_fk` (`user_id`),
+  CONSTRAINT `user_activity_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `client_status`
-(
-    `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name`       VARCHAR(50)      NOT NULL DEFAULT '0' COLLATE 'utf8mb4_unicode_ci',
-    `deleted_at` DATETIME         NULL     DEFAULT NULL,
-    PRIMARY KEY (`id`)
-)
-    COMMENT ='Client status'
-    COLLATE = 'utf8mb4_unicode_ci'
-    ENGINE = InnoDB
-;
+CREATE TABLE `user_filter_setting` (
+  `user_id` int(11) NOT NULL,
+  `filter_id` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `module` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`,`filter_id`,`module`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `user_request` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` int(11) unsigned DEFAULT NULL,
+  `sent_email` tinyint(3) NOT NULL DEFAULT 0,
+  `is_login` enum('success','failure') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `created_at_index` (`created_at`),
+  KEY `request_track_idx_is_login` (`is_login`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-create table client
-(
-    id               int unsigned auto_increment
-        primary key,
-    first_name       varchar(100)                                  null,
-    last_name        varchar(100)                                  null,
-    birthdate        date                                          null,
-    location         varchar(100)                                  null,
-    phone            varchar(20)                                   null,
-    email            varchar(254)                                  null,
-    sex              enum ('M', 'F', 'O')                          null,
-    client_message   varchar(1000)                                 null comment 'Message that client submitted via webform',
-    vigilance_level  enum ('moderate', 'caution', 'extra_caution') null,
-    user_id          int unsigned                                  null,
-    client_status_id int unsigned                                  null,
-    assigned_at      datetime                                      null comment 'date at which user_id was set',
-    updated_at       datetime default current_timestamp()          not null on update current_timestamp(),
-    created_at       datetime default current_timestamp()          not null,
-    deleted_at       datetime                                      null,
-    constraint FK_client_status
-        foreign key (client_status_id) references client_status (id),
-    constraint FK_client_user
-        foreign key (user_id) references user (id)
-)
-    engine = InnoDB
-    charset = utf8mb4
-    comment 'Advisors help and consult clients';
+CREATE TABLE `user_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `hierarchy` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `user_role_to_permission` (
+  `user_role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_role_id`,`permission_id`),
+  KEY `user_role_to_permission_permission_null_fk` (`permission_id`),
+  CONSTRAINT `user_role_to_permission_permission_null_fk` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
+  CONSTRAINT `user_role_to_permission_user_role_null_fk` FOREIGN KEY (`user_role_id`) REFERENCES `user_role` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-create table note
-(
-    id         int unsigned auto_increment primary key,
-    user_id    int unsigned                           not null,
-    client_id  int unsigned                           not null,
-    message    varchar(1000)                          null,
-    is_main    tinyint(1) default 0                   not null comment 'Bool if it''s the client''s main note',
-    hidden     tinyint                                null,
-    updated_at datetime   default current_timestamp() not null on update current_timestamp(),
-    created_at datetime   default current_timestamp() not null,
-    deleted_at datetime                               null,
-    constraint FK__user
-        foreign key (user_id) references user (id),
-    constraint FK_note_client
-        foreign key (client_id) references client (id)
-)
-    engine = InnoDB
-    charset = utf8mb4;
-
-
-
-create table user_filter_setting
-(
-    user_id   int                         not null,
-    filter_id varchar(100) charset latin1 not null,
-    module    varchar(100)                not null,
-    primary key (user_id, filter_id, module)
-)
-    engine = InnoDB
-    charset = utf8mb4;
-
-
-
+CREATE TABLE `user_verification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expires_at` bigint(20) NOT NULL,
+  `used_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK__user_table` (`user_id`),
+  CONSTRAINT `FK__user_table` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

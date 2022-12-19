@@ -1,48 +1,62 @@
 {
-    "require": {
-        "slim/slim": "^4.7.1",
-        "monolog/monolog": "^1.24",
-        "php-di/php-di": "^6.0",
-        "ext-pdo": "*",
-        "ext-json": "*",
-        "cakephp/database": "^4",
-        "symfony/polyfill-uuid": "^1.20",
-        "cakephp/chronos": "^2.0",
-        "odan/session": "^5.0",
-        "slim/php-view": "^3.0",
-        "selective/basepath": "^2.0",
-        "symfony/mailer": "^5.3",
-        "nyholm/psr7": "^1.5",
-        "fig/http-message-util": "^1.1",
-        "nyholm/psr7-server": "^1.0"
+  "require": {
+    "slim/slim": "^4.7.1",
+    "monolog/monolog": "^1.24",
+    "php-di/php-di": "^6.0",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "cakephp/database": "^4",
+    "symfony/polyfill-uuid": "^1.20",
+    "cakephp/chronos": "^2.0",
+    "odan/session": "^5.0",
+    "slim/php-view": "^3.0",
+    "selective/basepath": "^2.0",
+    "symfony/mailer": "^5.3",
+    "nyholm/psr7": "^1.5",
+    "fig/http-message-util": "^1.1",
+    "nyholm/psr7-server": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
     },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        },
-        "files": [
-            "config/functions.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Test\\": "tests/"
-        }
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-master",
-        "phpunit/phpunit": "^8 || ^9",
-        "selective/test-traits": "^3",
-        "phpstan/phpstan": "^0.12.81",
-        "jetbrains/phpstorm-attributes": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3"
-    },
-    "scripts": {
-        "test": "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always",
-        "test:coverage": "vendor/bin/phpunit --coverage-clover=coverage.xml",
-        "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
-        "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi"
-    },
-    "name": "samuelgfeller/slim-example-project",
-    "description": "Example project with SlimPHP"
+    "files": [
+      "config/functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Test\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^8 || ^9",
+    "selective/test-traits": "^3",
+    "phpstan/phpstan": "^0.12.81",
+    "jetbrains/phpstorm-attributes": "^1.0",
+    "friendsofphp/php-cs-fixer": "^3",
+    "odan/phinx-migrations-generator": "^5.6"
+  },
+  "scripts": {
+    "schema:generate": "php bin/console.php DatabaseSqlSchemaGenerator generateSqlSchema",
+    "test": [
+      "@schema:generate",
+      "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always"
+    ],
+    "test:coverage": [
+      "@schema:generate",
+      "vendor/bin/phpunit --coverage-clover=coverage.xml"
+    ],
+    "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
+    "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi",
+    "migration:create": "phinx create -c config/phinx.php --ansi",
+    "migration:generate": [
+      "phinx-migrations generate --overwrite -c config/phinx.php --ansi",
+      "@schema:generate"
+    ],
+    "migrate": "phinx migrate -c config/phinx.php --ansi -vvv"
+  },
+  "name": "samuelgfeller/slim-example-project",
+  "description": "Example project with SlimPHP"
 }

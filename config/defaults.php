@@ -9,14 +9,25 @@
  * Permitted to do the following: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
+// Error reporting
+error_reporting(0);
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+
+// Timezone
+date_default_timezone_set('Europe/Zurich');
+
 // Init settings var
 $settings = [];
+
+// Path settings
+$settings['root'] = dirname(__DIR__);
 
 // Simulate prod env
 $settings['dev'] = false;
 
 $settings['deployment'] = [
-    // null or string. When `null`, all query param versions from js imports are removed
+    // When JsImportVersionAdder enabled `null` removes all query param versions from js imports
     'version' => '0.1',
     'assetsPath' => __DIR__ . '/../public/assets',
 ];
@@ -53,19 +64,22 @@ $settings['security'] = [
     // If login successes should be throttled the same way failures ars (if login_throttle is [4 => 10, 9 => 120, ...]
     // it means that after the 4th login success, each following success requests (in the given timespan) have to be in
     // a 10s interval. After 9 it's 120s and so on)
-    'throttle_login_success' => false, // bool
+    'throttle_login_success' => false,
+    // bool
 
     // Percentage of login requests that may be failures (threshold)
     'login_failure_percentage' => 20,
 
-    'global_daily_email_threshold' => 300, // optional
+    'global_daily_email_threshold' => 300,
+    // optional
     // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
-    'global_monthly_email_threshold' => 1000, // optional
+    'global_monthly_email_threshold' => 1000,
+    // optional
 ];
 
 // Secret values are overwritten in env.php
 $settings['db'] = [
-    'host' => 'localhost',
+    'host' => '127.0.0.1',
     'database' => 'slim_example_project',
     'username' => 'root',
     'password' => '',
@@ -86,6 +100,23 @@ $settings['db'] = [
         PDO::ATTR_EMULATE_PREPARES => true,
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ],
+];
+
+// Phinx database migrations settings
+$settings['phinx'] = [
+    'paths' => [
+        'migrations' => $settings['root'] . '/resources/migrations',
+        'seeds' => $settings['root'] . '/resources/seeds',
+    ],
+    // Fix "Invalid migration file" error if schema.php is in migrations
+    'schema_file' => $settings['root'] . '/resources/schema/schema.php',
+    'default_migration_prefix' => 'db_change_',
+    'generate_migration_name' => true,
+    'environments' => [
+        'default_migration_table' => 'phinxlog',
+        'default_database' => 'local',
+        'local' => [],
     ],
 ];
 

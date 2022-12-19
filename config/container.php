@@ -105,6 +105,13 @@ return [
 
         return $connection->getDriver()->getConnection();
     },
+    // Used by command line to generate `schema.sql` for integration testing
+    'DatabaseSqlSchemaGenerator' => function (ContainerInterface $container) {
+        return new \App\Common\Database\DatabaseSqlSchemaGenerator(
+            $container->get(PDO::class),
+            $container->get('settings')['root']
+        );
+    },
     Settings::class => function (ContainerInterface $container) {
         return new Settings($container->get('settings'));
     },

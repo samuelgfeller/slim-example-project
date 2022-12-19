@@ -74,6 +74,14 @@ class DefaultErrorHandler
 
         // Error output if script is called via cli (e.g. testing)
         if (PHP_SAPI === 'cli') {
+            // If the column is not found and the request is coming from the command line, it probably means
+            // that the database and code was changed and `composer migration:generate` and `composer schema:generate`
+            // were not executed after the change.
+            if ($exception instanceof \PDOException
+                && str_contains($exception->getMessage(), 'Column not found')
+            ) {
+                echo "Column not existing. Try running `composer schema:generate` in the console and run tests again. \n";
+            }
             // The exception is thrown to have the standard behaviour (important for testing)
             throw $exception;
         }

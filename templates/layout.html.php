@@ -77,6 +77,12 @@
                 <img src="assets/navbar/img/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
             </a>
+            <a href="<?= $route->urlFor('profile-page') ?>"
+                <?= $currRouteName === 'profile-page' ? 'class="is-active"' : '' ?>>
+                <img src="assets/navbar/img/user-icon.svg" alt="Profile">
+                <img src="assets/navbar/img/user-icon-filled.svg" alt="Profile">
+                <span class="nav-span">Profile</span>
+            </a>
             <?php
             if ($userListAuthorization === true) { ?>
                 <a href="<?= $route->urlFor('user-list-page') ?>"
@@ -85,15 +91,7 @@
                     <img src="assets/navbar/img/users-filled.svg" alt="Users">
                     <span class="nav-span">Users</span>
                 </a>
-            <?php
-            } else { ?>
-                <a href="<?= $route->urlFor('profile-page') ?>"
-                    <?= $currRouteName === 'profile-page' ? 'class="is-active"' : '' ?>>
-                    <img src="assets/navbar/img/user-icon.svg" alt="Profile">
-                    <img src="assets/navbar/img/user-icon-filled.svg" alt="Profile">
-                    <span class="nav-span">Profile</span>
-                </a>
-            <?php
+                <?php
             } ?>
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
@@ -117,7 +115,8 @@
     </main>
 
     <footer>
-        <address>Made with <img src="assets/general/general-img/heart-icon.svg" alt="heart icon" class="footer-icon"> by <a
+        <address>Made with <img src="assets/general/general-img/heart-icon.svg" alt="heart icon" class="footer-icon"> by
+            <a
                     href="https://samuel-gfeller.ch" class="no-style-a" target="_blank">
                 Samuel Gfeller <img src="assets/general/general-img/github-icon.svg" alt="github icon" id="github-icon"
                                     class="footer-icon"></a></address>
