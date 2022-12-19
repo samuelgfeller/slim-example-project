@@ -73,8 +73,6 @@ jobs:
 
       - name: Add github settings to env.php
         run: cp config/env.github.php config/env.php
-        env:
-          APP_ENV: github
 
       - name: Execute database migrations
         run: composer migrate
