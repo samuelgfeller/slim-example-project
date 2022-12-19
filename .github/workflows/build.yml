@@ -71,13 +71,17 @@ jobs:
       - name: Install dependencies
         run: composer update --no-ansi --no-interaction --no-progress
 
+      - name: Add github settings to env.php
+        run: cp config/env.github.php config/env.php
+        env:
+          APP_ENV: github
+
       - name: Execute database migrations
         run: composer migrate
 
       - name: Run test suite
         run: composer test:coverage
         env:
-          APP_ENV: github
           PHP_CS_FIXER_IGNORE_ENV: 1
 
       - name: SonarCloud Scan

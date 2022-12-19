@@ -1,5 +1,6 @@
 <?php
 
+// Add all test settings
 require __DIR__ . '/env.test.php';
 
 // Database
