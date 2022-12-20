@@ -46,9 +46,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /
           exclude: |
-            **/.git*/**
-            **/docs/**
-            **/tests/**
+            .git*/**
+            docs/**
+            tests/**
             
       - name: Executing database migrations
         uses: appleboy/ssh-action@v0.1.6
@@ -68,9 +68,9 @@ jobs:
           password: ${{ secrets.CARE_POINT_FTP_PASSWORD }}
           server-dir: /
           exclude: |
-            **/.git*/**
-            **/docs/**
-            **/tests/**
+            .git*/**
+            docs/**
+            tests/**
 
       - name: Executing care-point database migrations
         uses: appleboy/ssh-action@v0.1.6
