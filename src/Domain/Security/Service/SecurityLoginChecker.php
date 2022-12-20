@@ -96,21 +96,27 @@ class SecurityLoginChecker
                 // Retrieve the latest email sent for specific email or coming from ip
                 $latestLoginRequest = $this->loginRequestFinder->findLatestLoginRequestFromEmailOrIp($email);
                 // created_at in seconds
-                $latest = (int)$latestLoginRequest->createdAt->format('U');
+                $latestRequestTimestamp = (int)$latestLoginRequest->createdAt->format('U');
+                $actualTime = new \DateTime();
+                // Had issues when deploying the application and testing on github actions. date_default_timezone_set
+                // isn't taken into account according to https://stackoverflow.com/a/44193886/9013718 because
+                // time() and date() are timezone independent.
+                $actualTimestamp = $actualTime->setTimezone(new \DateTimeZone('Europe/Zurich'))->format('U');
 
-                // Debug
-                echo 'Actual time: ' . date('H:i:s') . "\n" .
-                    'Latest login time (id: ' . $latestLoginRequest->id . '): ' . date('H:i:s', $latest) . "\n" .
-                    'Delay: ' . $delay . "\n" .
-                    (is_numeric($delay) ? 'Time for next login: ' . date('H:i:s', $delay + $latest) . "\n" : '') .
-                    'Security exception: ' . (time() < ($delay + $latest)) .
-                    "\n---- \n";
+                // Uncomment to debug
+                // echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' . $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
+                //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
+                //         (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
+                //             ->format('H:i:s') . "\n" : '') .
+                //     'Security exception: ' . ($actualTimestamp < ($delay + $latestRequestTimestamp)) .
+                //     "\n---- \n";
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
-                    if (($time = time()) < ($timeForNextLogin = $delay + $latest)) {
-                        $remainingDelay = $timeForNextLogin - $time;
+                    if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
+                        $remainingDelay = $timeForNextLogin - $actualTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {

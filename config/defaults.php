@@ -14,7 +14,7 @@ error_reporting(0);
 ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
 
-// Timezone
+// Timezone - time() is timezone independent https://stackoverflow.com/a/36390811/9013718
 date_default_timezone_set('Europe/Zurich');
 
 // Init settings var
