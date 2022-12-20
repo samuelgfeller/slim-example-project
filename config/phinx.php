@@ -4,6 +4,7 @@
  * In separate file to add PDO instance to config and these additional
  * settings are appended as parameter the command.
  */
+
 use Cake\Core\Configure;
 use Slim\App;
 
@@ -16,6 +17,7 @@ $container = $app->getContainer();
 $pdo = $container->get(PDO::class);
 $config = $container->get('settings');
 $database = $config['db']['database'];
+echo $database;
 $phinxConfig = $config['phinx'];
 
 $phinxConfig['environments']['local'] = [
