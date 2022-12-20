@@ -1,7 +1,7 @@
 <?php
 
 // Add all test settings
-require __DIR__ . '/env.test.php';
+$settings = require __DIR__ . '/env.test.php';
 
 // Database
 $settings['db']['host'] = '127.0.0.1';

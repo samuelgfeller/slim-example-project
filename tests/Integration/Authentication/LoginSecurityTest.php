@@ -110,7 +110,10 @@ class LoginSecurityTest extends TestCase
                     // If the amount of made login requests reaches the first threshold -> throttle
                     try {
                         $this->app->handle($request);
-                        self::fail('SecurityException should be thrown');
+                        self::fail(
+                            'SecurityException should be thrown' . "nthLoginrequest: $nthLoginRequest, threshold: 
+                            $threshold, " . (int)$this->container->get('settings')['security']['throttle_login_success']
+                        );
                     } catch (SecurityException $se) {
                         self::assertEqualsWithDelta(
                             $delay,
