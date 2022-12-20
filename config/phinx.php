@@ -17,7 +17,8 @@ $container = $app->getContainer();
 $pdo = $container->get(PDO::class);
 $config = $container->get('settings');
 $database = $config['db']['database'];
-echo $database;
+shell_exec('echo "db in phinx.php: '. $database . '"');
+
 $phinxConfig = $config['phinx'];
 
 $phinxConfig['environments']['local'] = [
