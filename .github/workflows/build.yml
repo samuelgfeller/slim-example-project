@@ -31,6 +31,12 @@ jobs:
         with:
           fetch-depth: 0 #sonarcloud shallow clone warning https://stackoverflow.com/a/62500400/9013718
 
+      - name: Add github settings to env.php
+        run: cp config/env.github.php config/env.php
+
+      - name: Output env.php content
+        run: echo "$(<config/env.php )"
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -70,9 +76,6 @@ jobs:
 
       - name: Install dependencies
         run: composer update --no-ansi --no-interaction --no-progress
-
-      - name: Add github settings to env.php
-        run: cp config/env.github.php config/env.php
 
       - name: Execute database migrations
         run: composer migrate
