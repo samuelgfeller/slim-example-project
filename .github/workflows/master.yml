@@ -1,0 +1,49 @@
+name: 🚀 Deploy demo slim-example-project
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    name: Deploy PHP application
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 #sonarcloud shallow clone warning https://stackoverflow.com/a/62500400/9013718
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          # extensions: mbstring, pdo, pdo_mysql, intl, zip
+          coverage: none
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: demo.slim-example-project.samuel-gfeller.ch
+          exclude: |
+            **/.git*/**
+            **/docs/**
+            **/tests/**

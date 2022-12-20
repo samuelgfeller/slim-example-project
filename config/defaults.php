@@ -6,7 +6,7 @@
  *
  * This is the first file loaded in settings.php and can as such safely define arrays
  * without the risk of overwriting something.
- * Permitted to do the following: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * Permitted to do the following: $settings['db'] = ['key' => 'val', 'nextKey' => 'nextVal',];
  */
 
 // Error reporting
@@ -16,6 +16,9 @@ ini_set('display_startup_errors', '0');
 
 // Timezone - time() is timezone independent https://stackoverflow.com/a/36390811/9013718
 date_default_timezone_set('Europe/Zurich');
+
+// Set APP_ENV to "dev" - should be "prod" in prod secret env.php
+$_ENV['APP_ENV'] = 'dev';
 
 // Init settings var
 $settings = [];
