@@ -107,6 +107,8 @@ class LoginSecurityTest extends TestCase
             foreach ($throttleRules as $threshold => $delay) {
                 // Apply correct throttling rule in relation to nth login request by checking which threshold is reached
                 if ($nthLoginRequest >= $threshold) {
+                    echo "$nthLoginRequest  $threshold\n";
+
                     // If the amount of made login requests reaches the first threshold -> throttle
                     try {
                         $this->app->handle($request);

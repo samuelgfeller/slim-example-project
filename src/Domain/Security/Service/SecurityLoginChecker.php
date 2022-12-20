@@ -99,11 +99,12 @@ class SecurityLoginChecker
                 $latest = (int)$latestLoginRequest->createdAt->format('U');
 
                 // Debug
-                /*echo 'Actual time: ' . date('H:i:s') . "\n" .
+                echo 'Actual time: ' . date('H:i:s') . "\n" .
                     'Latest login time (id: ' . $latestLoginRequest->id . '): ' . date('H:i:s', $latest) . "\n" .
                     'Delay: ' . $delay . "\n" .
                     (is_numeric($delay) ? 'Time for next login: ' . date('H:i:s', $delay + $latest) . "\n" : '') .
-                    "---- \n";*/
+                    'Security exception: ' . (time() < ($delay + $latest)) .
+                    "\n---- \n";
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
