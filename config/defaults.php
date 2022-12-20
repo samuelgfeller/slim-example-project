@@ -17,9 +17,6 @@ ini_set('display_startup_errors', '0');
 // Timezone - time() is timezone independent https://stackoverflow.com/a/36390811/9013718
 date_default_timezone_set('Europe/Zurich');
 
-// Set APP_ENV to "dev" - should be "prod" in prod secret env.php
-$_ENV['APP_ENV'] = 'dev';
-
 // Init settings var
 $settings = [];
 
