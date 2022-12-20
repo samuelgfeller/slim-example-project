@@ -42,7 +42,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: demo.slim-example-project.samuel-gfeller.ch
+          server-dir: /
           exclude: |
             **/.git*/**
             **/docs/**
