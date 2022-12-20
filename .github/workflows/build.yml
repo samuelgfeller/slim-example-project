@@ -77,6 +77,9 @@ jobs:
       - name: Execute database migrations
         run: composer migrate
 
+      - name: Show test db tables
+        run: mysql -uroot -proot -D slim_example_project_test -e "SHOW TABLES;"
+
       - name: Run test suite
         run: composer test:coverage
         env:
