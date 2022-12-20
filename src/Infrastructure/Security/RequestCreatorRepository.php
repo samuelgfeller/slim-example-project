@@ -23,14 +23,15 @@ class RequestCreatorRepository
     {
         $query = $this->queryFactory->newQuery();
 
-        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('user_request')->values(
-            [
+        return $query->insert(['email', 'ip_address', 'sent_email', 'is_login', 'created_at'])
+            ->into('user_request')->values([
                 'email' => $email,
                 'ip_address' => $query->newExpr('INET_ATON(:ip)'),
                 'sent_email' => true,
                 'is_login' => null,
-            ]
-        )->bind(':ip', $ip, 'string')->execute()->lastInsertId();
+                // Set time in PHP to be sure that time matches php timezone
+                'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+            ])->bind(':ip', $ip, 'string')->execute()->lastInsertId();
     }
 
     /**
@@ -45,14 +46,15 @@ class RequestCreatorRepository
     public function insertLoginRequest(string $email, string $ip, bool $success): string
     {
         $query = $this->queryFactory->newQuery();
-        $query->insert(['email', 'ip_address', 'sent_email', 'is_login'])->into('user_request')->values(
-            [
+        $query->insert(['email', 'ip_address', 'sent_email', 'is_login', 'created_at'])->into('user_request')
+            ->values([
                 'email' => $email,
                 'ip_address' => $query->newExpr('INET_ATON(:ip)'),
                 'sent_email' => 0,
                 'is_login' => $success === true ? 'success' : 'failure',
-            ]
-        )->bind(':ip', $ip, 'string');
+                // Set time in PHP to be sure that time matches php timezone
+                'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+            ])->bind(':ip', $ip, 'string');
 
         return $query->execute()->lastInsertId();
     }

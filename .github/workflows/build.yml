@@ -59,8 +59,8 @@ jobs:
       - name: Check MySQL variables
         run: mysql -uroot -proot -e "SHOW VARIABLES LIKE 'version%';"
 
-      - name: Set mysql timezone to Europe/Zurich
-        run: mysql -uroot -proot -e "SET GLOBAL time_zone = 'Europe/Zurich';"
+      - name: Set mysql timezone to Europe/Paris
+        run: mysql -uroot -proot -e "SET GLOBAL time_zone = 'Europe/Paris';"
 
       - name: Increase max allowed packet size
         run: mysql -uroot -proot -e "SET GLOBAL max_allowed_packet=1073741824;"
