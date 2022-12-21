@@ -58,7 +58,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
-          script: composer migrate
+          script: | 
+            cd ${{ secrets.DEMO_PROJECT_ROOT }}
+            composer migrate
 
       - name: ♥️ Sync files with care-point
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
@@ -79,4 +81,6 @@ jobs:
           key: ${{ secrets.CARE_POINT_SSH_KEY }}
           passphrase: ${{ secrets.CARE_POINT_SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.CARE_POINT_SSH_PORT }}
-          script: composer migrate
+          script: |
+           cd ${{ secrets.CARE_POINT_PROJECT_ROOT }}
+           composer migrate
