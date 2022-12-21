@@ -41,8 +41,11 @@ class SecurityLoginChecker
      * @param string $email
      * @param string|null $reCaptchaResponse
      */
-    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null, $debug = false): void
-    {
+    public function performLoginSecurityCheck(
+        string $email,
+        string|null $reCaptchaResponse = null,
+        $debug = false
+    ): void {
         if ($this->securitySettings['throttle_login'] === true) {
             // reCAPTCHA verification
             $validCaptcha = false;
@@ -124,12 +127,14 @@ class SecurityLoginChecker
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
+                        echo $debug === true ? "\nsecurityException is thrown" : '';
                         $remainingDelay = $timeForNextLogin - $actualTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
                     $errMsg .= ' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay
+                    echo $debug === true ? "\nsecurityException is thrown" : '';
                     throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }
             }

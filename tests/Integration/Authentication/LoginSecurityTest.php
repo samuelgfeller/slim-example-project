@@ -269,7 +269,7 @@ class LoginSecurityTest extends TestCase
                         $sql = "SELECT * FROM user_request";
                         $statement = $this->createPreparedStatement($sql);
                         $statement->execute();
-                        $result = $statement->fetch(PDO::FETCH_ASSOC);
+                        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                         self::fail(
                             'SecurityException should be thrown' .
                             "\nnthLoginrequest: $nthLoginRequest, threshold: $threshold\n" . json_encode($result)

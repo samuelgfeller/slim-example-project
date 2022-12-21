@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Authentication;
 
+use App\Domain\Settings;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
@@ -44,6 +45,10 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
 
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
+
+        $mailSettings = $this->container->get(Settings::class)->get('smtp');
+        echo "Mail transport type: ".$mailSettings['type'];
+
 
         $request = $this->createFormRequest('POST', // Request to change password
             $this->urlFor('password-forgotten-email-submit'), [
