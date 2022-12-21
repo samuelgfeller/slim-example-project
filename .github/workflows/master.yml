@@ -1,4 +1,4 @@
-name: 🚀 Deploy demo slim-example-project
+name: 🚀 Deploy demo
 on:
   push:
     branches:
@@ -60,6 +60,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: | 
             cd ${{ secrets.DEMO_PROJECT_ROOT }}
+            chmod +x vendor/bin/phinx 
             composer migrate
 
       - name: ♥️ Sync files with care-point
@@ -73,6 +74,7 @@ jobs:
             .git*/**
             docs/**
             tests/**
+            config/env.prod.php
 
       - name: Executing care-point database migrations
         uses: appleboy/ssh-action@v0.1.6
@@ -83,4 +85,5 @@ jobs:
           port: ${{ secrets.CARE_POINT_SSH_PORT }}
           script: |
            cd ${{ secrets.CARE_POINT_PROJECT_ROOT }}
+           chmod +x vendor/bin/phinx
            composer migrate

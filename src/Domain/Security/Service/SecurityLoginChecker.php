@@ -104,13 +104,13 @@ class SecurityLoginChecker
                 $actualTimestamp = $actualTime->setTimezone(new \DateTimeZone('Europe/Zurich'))->format('U');
 
                 // Uncomment to debug
-                // echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
-                //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' . $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
-                //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
-                //         (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
-                //             ->format('H:i:s') . "\n" : '') .
-                //     'Security exception: ' . ($actualTimestamp < ($delay + $latestRequestTimestamp)) .
-                //     "\n---- \n";
+                echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                    'Latest login time (id: ' . $latestLoginRequest->id . '): ' . $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
+                    'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
+                        (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
+                            ->format('H:i:s') . "\n" : '') .
+                    'Security exception: ' . ($actualTimestamp < ($delay + $latestRequestTimestamp)) .
+                    "\n---- \n";
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {

@@ -17,4 +17,4 @@
 // Error handler. More controlled than ini
 $settings['error']['display_error_details'] = false;
 
-$settings['db']['database'] = 'slim_example_project';
+$settings['db']['database'] = 'samuelgfeller_demo_slim_example_project';
