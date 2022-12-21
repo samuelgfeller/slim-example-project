@@ -53,6 +53,7 @@ class UserRequestProvider
         }
         if ($type === 'loginS') {
             return new RequestStatsData([
+                // One is added as
                 'request_amount' => $requestAmount,
                 'sent_emails' => 0,
                 'login_failures' => 0,

@@ -75,6 +75,7 @@ final class UserSubmitCreateAction
             } catch (TransportExceptionInterface $e) {
                 // Flash message has to be added in the frontend as form is submitted via Ajax
                 $this->logger->error('Mailer exception: ' . $e->getMessage());
+                echo 'Transport exception user creation ';
 
                 return $this->responder->respondWithJson(
                     $response,

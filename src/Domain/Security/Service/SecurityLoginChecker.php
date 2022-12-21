@@ -41,7 +41,7 @@ class SecurityLoginChecker
      * @param string $email
      * @param string|null $reCaptchaResponse
      */
-    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null): void
+    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null, $debug = false): void
     {
         if ($this->securitySettings['throttle_login'] === true) {
             // reCAPTCHA verification
@@ -56,7 +56,7 @@ class SecurityLoginChecker
             if ($validCaptcha !== true) {
                 // Most strict. Very low limit on failed requests for specific email or coming from an ip
                 $stats = $this->loginRequestFinder->findLoginStats($email);
-                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email);
+                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email, $debug);
                 // Global login check
                 $this->performGlobalLoginCheck();
             }
@@ -76,8 +76,12 @@ class SecurityLoginChecker
      * @param RequestStatsData $userStats login request summary by concerning email / coming for same user
      * @param string $email to get the latest request
      */
-    private function performLoginCheck(RequestStatsData $ipStats, RequestStatsData $userStats, string $email): void
-    {
+    private function performLoginCheck(
+        RequestStatsData $ipStats,
+        RequestStatsData $userStats,
+        string $email,
+        $debug = false
+    ): void {
         $throttleSuccess = $this->securitySettings['throttle_login_success'];
         // Reverse order to compare fails the longest delay first and then go down from there
         krsort($this->securitySettings['login_throttle_rule']);
@@ -105,14 +109,16 @@ class SecurityLoginChecker
                     ->format('U');
 
                 // Uncomment to debug
-                // echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
-                //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
-                //     $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
-                //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
-                //         (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
-                //             ->format('H:i:s') . "\n" . 'Security exception: ' .
-                //         $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
-                //     "\n---- \n";
+                if ($debug === true) {
+                    echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                        'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
+                        $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
+                        'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
+                            (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
+                                ->format('H:i:s') . "\n" . 'Security exception: ' .
+                            $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
+                        "\n---- \n";
+                }
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
@@ -121,7 +127,6 @@ class SecurityLoginChecker
                         $remainingDelay = $timeForNextLogin - $actualTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
-                    // echo "not thrown exception $latestLoginRequest->id";
                 } elseif ($delay === 'captcha') {
                     $errMsg .= ' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay

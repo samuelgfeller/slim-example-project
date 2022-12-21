@@ -10,6 +10,7 @@ use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -264,9 +265,14 @@ class LoginSecurityTest extends TestCase
                     try {
                         // echo "\n threshold: $threshold, delay: $delay";
                         $this->app->handle($request);
+                        // If exception is not thrown, get user request stats
+                        $sql = "SELECT * FROM user_request";
+                        $statement = $this->createPreparedStatement($sql);
+                        $statement->execute();
+                        $result = $statement->fetch(PDO::FETCH_ASSOC);
                         self::fail(
                             'SecurityException should be thrown' .
-                            "\nnthLoginrequest: $nthLoginRequest, threshold: $threshold"
+                            "\nnthLoginrequest: $nthLoginRequest, threshold: $threshold\n" . json_encode($result)
                         );
                     } catch (SecurityException $se) {
                         self::assertEqualsWithDelta(

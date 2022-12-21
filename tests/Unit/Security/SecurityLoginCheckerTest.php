@@ -51,6 +51,10 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
+        if ($ipAndEmailRequestStats['ip_stats']->loginSuccesses > 0){
+            $d =1 ;
+        }
+
         $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
@@ -86,7 +90,7 @@ class SecurityLoginCheckerTest extends TestCase
 
         // In try catch to assert exception attributes
         try {
-            $securityService->performLoginSecurityCheck('email.does@not-matter.com');
+            $securityService->performLoginSecurityCheck('email.does@not-matter.com', null, true);
         } catch (SecurityException $se) {
             self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
             $delayMessage = 'Remaining delay not matching. ' .
