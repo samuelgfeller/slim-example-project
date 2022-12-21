@@ -85,8 +85,8 @@ class SecurityLoginCheckerTest extends TestCase
         $securityService = $this->container->get(SecurityLoginChecker::class);
 
         // Assert
-        // $this->expectException(SecurityException::class);
-        // $this->expectExceptionMessage('Exceeded maximum of tolerated login requests.');
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionMessage('Exceeded maximum of tolerated login requests.');
 
         // In try catch to assert exception attributes
         try {
