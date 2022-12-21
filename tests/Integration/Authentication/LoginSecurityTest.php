@@ -111,8 +111,8 @@ class LoginSecurityTest extends TestCase
                     try {
                         $this->app->handle($request);
                         self::fail(
-                            'SecurityException should be thrown' . "\nnthLoginrequest: $nthLoginRequest, threshold: 
-                            $threshold"
+                            'SecurityException should be thrown' .
+                            "\nnthLoginrequest: $nthLoginRequest, threshold: $threshold"
                         );
                     } catch (SecurityException $se) {
                         self::assertEqualsWithDelta(

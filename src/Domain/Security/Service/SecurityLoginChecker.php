@@ -101,7 +101,8 @@ class SecurityLoginChecker
                 // Had issues when deploying the application and testing on github actions. date_default_timezone_set
                 // isn't taken into account according to https://stackoverflow.com/a/44193886/9013718 because
                 // time() and date() are timezone independent.
-                $actualTimestamp = $actualTime->setTimezone(new \DateTimeZone('Europe/Zurich'))->format('U');
+                $actualTimestamp = (int)$actualTime->setTimezone(new \DateTimeZone('Europe/Zurich'))
+                    ->format('U');
 
                 // Uncomment to debug
                 echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
