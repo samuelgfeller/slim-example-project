@@ -66,10 +66,10 @@ class AuthenticationProvider
                 'correct_credentials' => true,
                 'status_code' => StatusCodeInterface::STATUS_FOUND,
             ],
-            [
-                'correct_credentials' => false,
-                'status_code' => StatusCodeInterface::STATUS_UNAUTHORIZED,
-            ],
+            // [
+            //     'correct_credentials' => false,
+            //     'status_code' => StatusCodeInterface::STATUS_UNAUTHORIZED,
+            // ],
         ];
     }
 

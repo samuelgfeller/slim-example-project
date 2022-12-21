@@ -63,6 +63,7 @@ class LoginVerifier
                 if ($dbUser->status === UserStatus::Active) {
                     // Insert login success request
                     $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
+
                     $this->userActivityManager->addUserActivity(
                         UserActivity::READ,
                         'user',
