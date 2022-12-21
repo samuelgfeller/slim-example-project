@@ -22,4 +22,6 @@ if (isset($_ENV['APP_ENV'])) {
     }
 }
 
+echo "\nEnv: " . $_ENV['APP_ENV'] . " Mailer transport type: " . $settings['smtp']['type']."\n";
+
 return $settings;

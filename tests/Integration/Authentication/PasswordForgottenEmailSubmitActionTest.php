@@ -47,7 +47,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $mailSettings = $this->container->get(Settings::class)->get('smtp');
-        echo "Mail transport type: ".$mailSettings['type'];
+        echo "Mail transport type: ". $mailSettings['type'];
 
 
         $request = $this->createFormRequest('POST', // Request to change password

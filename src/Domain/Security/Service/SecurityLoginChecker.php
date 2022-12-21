@@ -112,8 +112,8 @@ class SecurityLoginChecker
                     ->format('U');
 
                 // Uncomment to debug
-                if ($debug === true) {
-                    echo 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                if ($ipStats->loginSuccesses >= 5) {
+                    echo "\n".'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
                         'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
                         $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
                         'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
@@ -127,14 +127,14 @@ class SecurityLoginChecker
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
-                        echo $debug === true ? "\nsecurityException is thrown" : '';
+                        echo $debug === true ? "\nsecurityException is thrown in unit test" : '';
                         $remainingDelay = $timeForNextLogin - $actualTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
                     $errMsg .= ' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay
-                    echo $debug === true ? "\nsecurityException is thrown" : '';
+                    echo $debug === true ? "\nsecurityException is thrown in unit test" : '';
                     throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }
             }
