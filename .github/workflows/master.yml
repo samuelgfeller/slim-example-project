@@ -39,7 +39,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -64,7 +64,7 @@ jobs:
             composer migrate
 
       - name: ♥️ Sync files with care-point
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.CARE_POINT_FTP_HOST }}
           username: ${{ secrets.CARE_POINT_FTP_USERNAME }}
