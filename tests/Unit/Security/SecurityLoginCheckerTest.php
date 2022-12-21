@@ -51,10 +51,6 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
-        if ($ipAndEmailRequestStats['ip_stats']->loginSuccesses > 0){
-            $d =1 ;
-        }
-
         $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
@@ -91,14 +87,12 @@ class SecurityLoginCheckerTest extends TestCase
         // In try catch to assert exception attributes
         try {
             $securityService->performLoginSecurityCheck('email.does@not-matter.com', null, true);
-            self::fail('SecurityException should be thrown when performing unit login security.');
         } catch (SecurityException $se) {
             self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
             $delayMessage = 'Remaining delay not matching. ' .
                 'May be because mock created_at time and assertion were done in different seconds so please try again';
             self::assertSame($delay, $se->getRemainingDelay(), $delayMessage);
-            // Throw because it's expected to verify that exception is thrown
-            echo "\nmanually throwing security exception";
+            // Throw exception as expectException is set up to assert that exception is thrown
             throw $se;
         }
     }

@@ -41,11 +41,8 @@ class SecurityLoginChecker
      * @param string $email
      * @param string|null $reCaptchaResponse
      */
-    public function performLoginSecurityCheck(
-        string $email,
-        string|null $reCaptchaResponse = null,
-        $debug = false
-    ): void {
+    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null): void
+    {
         if ($this->securitySettings['throttle_login'] === true) {
             // reCAPTCHA verification
             $validCaptcha = false;
@@ -59,7 +56,7 @@ class SecurityLoginChecker
             if ($validCaptcha !== true) {
                 // Most strict. Very low limit on failed requests for specific email or coming from an ip
                 $stats = $this->loginRequestFinder->findLoginStats($email);
-                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email, $debug);
+                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email);
                 // Global login check
                 $this->performGlobalLoginCheck();
             }
@@ -79,12 +76,8 @@ class SecurityLoginChecker
      * @param RequestStatsData $userStats login request summary by concerning email / coming for same user
      * @param string $email to get the latest request
      */
-    private function performLoginCheck(
-        RequestStatsData $ipStats,
-        RequestStatsData $userStats,
-        string $email,
-        $debug = false
-    ): void {
+    private function performLoginCheck(RequestStatsData $ipStats, RequestStatsData $userStats, string $email): void
+    {
         $throttleSuccess = $this->securitySettings['throttle_login_success'];
         // Reverse order to compare fails the longest delay first and then go down from there
         krsort($this->securitySettings['login_throttle_rule']);
@@ -112,29 +105,25 @@ class SecurityLoginChecker
                     ->format('U');
 
                 // Uncomment to debug
-                if ($ipStats->loginSuccesses >= 5) {
-                    echo "\n".'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
-                        'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
-                        $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
-                        'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
-                            (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
-                                ->format('H:i:s') . "\n" . 'Security exception: ' .
-                            $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
-                        "\n---- \n";
-                }
+                // echo "\n" . 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
+                //     $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
+                //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
+                //         (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
+                //             ->format('H:i:s') . "\n" . 'Security exception: ' .
+                //         $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
+                //     "\n---- \n";
 
                 $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
-                        echo $debug === true ? "\nsecurityException is thrown in unit test" : '';
                         $remainingDelay = $timeForNextLogin - $actualTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
                     $errMsg .= ' because of captcha';
                     // If delay not int, it means that 'captcha' is the delay
-                    echo $debug === true ? "\nsecurityException is thrown in unit test" : '';
                     throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }
             }

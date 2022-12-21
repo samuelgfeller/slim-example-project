@@ -1,4 +1,5 @@
 <?php
+// MUST be "require"; not require_once otherwise test settings are not included for the tests cases after the first one
 
 // Load default settings
 $settings = require __DIR__ . '/defaults.php';
@@ -21,7 +22,5 @@ if (isset($_ENV['APP_ENV'])) {
         require $appEnvConfigFile;
     }
 }
-
-echo "\nEnv: " . $_ENV['APP_ENV'] . " Mailer transport type: " . $settings['smtp']['type']."\n";
 
 return $settings;

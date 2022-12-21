@@ -76,7 +76,7 @@ final class PasswordForgottenEmailSubmitAction
                 );
             } catch (TransportExceptionInterface $transportException) {
                 $flash->add('error', 'There was an error when sending the email.');
-                echo 'Transport exception password forgotten submit';
+
                 return $this->responder->render(
                     $response,
                     'authentication/login.html.php',
@@ -85,8 +85,6 @@ final class PasswordForgottenEmailSubmitAction
             }
             $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>.<br>' .
             'Please check your inbox and the spam folder if needed.');
-
-            echo "\nPassword forgotten action redirecting to login page";
 
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
