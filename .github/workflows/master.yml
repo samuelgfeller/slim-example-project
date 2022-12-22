@@ -80,6 +80,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.CARE_POINT_SSH_HOST }}
+          username: ${{ secrets.CARE_POINT_SSH_USERNAME }}
           key: ${{ secrets.CARE_POINT_SSH_KEY }}
           passphrase: ${{ secrets.CARE_POINT_SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.CARE_POINT_SSH_PORT }}
