@@ -8,12 +8,12 @@ use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 
 /**
  * Test login submit actions. Contents of this test:

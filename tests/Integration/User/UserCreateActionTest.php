@@ -10,7 +10,6 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +18,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -46,7 +46,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreateAuthorization(
+    public function testUserSubmitCreate_authorization(
         array $authenticatedUserAttr,
         UserRole $newUserRole,
         array $expectedResult
@@ -122,7 +122,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreateUnauthenticated(): void
+    public function testUserSubmitCreate_unauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('POST', $this->urlFor('user-create-submit'));
@@ -149,7 +149,7 @@ class UserCreateActionTest extends TestCase
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
-    public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitCreate_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
         $userRow = $this->insertFixturesWithAttributes(
@@ -185,7 +185,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreateMalformedBody(?array $requestBody): void
+    public function testUserSubmitCreate_malformedBody(?array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

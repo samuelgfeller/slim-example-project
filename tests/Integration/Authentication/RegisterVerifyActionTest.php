@@ -7,12 +7,12 @@ use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**

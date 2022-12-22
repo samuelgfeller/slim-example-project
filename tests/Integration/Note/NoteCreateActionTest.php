@@ -63,7 +63,7 @@ class NoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitCreateActionAuthorization(
+    public function testNoteSubmitCreateAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -137,7 +137,7 @@ class NoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitCreateActionUnauthenticated(): void
+    public function testNoteSubmitCreateAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
         // Create url where client should be redirected to after login
@@ -167,7 +167,7 @@ class NoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitCreateActionInvalid(
+    public function testNoteSubmitCreateAction_invalid(
         array $invalidRequestBody,
         bool $existingMainNote,
         array $expectedResponseData

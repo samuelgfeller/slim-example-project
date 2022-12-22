@@ -11,13 +11,13 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -52,7 +52,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateActionAuthorization(
+    public function testClientSubmitUpdateAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -161,7 +161,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
+    public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -200,7 +200,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateActionUnauthenticated(): void
+    public function testClientSubmitUpdateAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-update-submit', ['client_id' => 1]);
@@ -225,7 +225,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateActionUnchangedContent(): void
+    public function testClientSubmitUpdateAction_unchangedContent(): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -268,7 +268,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateActionMalformedRequest(): void
+    public function testClientSubmitUpdateAction_malformedRequest(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

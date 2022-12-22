@@ -10,13 +10,13 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -149,7 +149,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
+    public function testClientSubmitCreateAction_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixturesWithAttributes(
@@ -187,7 +187,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitCreateActionUnauthenticated(): void
+    public function testClientSubmitCreateAction_unauthenticated(): void
     {
         // Create request (no body needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
@@ -217,7 +217,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitCreateActionMalformedRequest(array $requestBody): void
+    public function testClientSubmitCreateAction_malformedRequestBody(array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

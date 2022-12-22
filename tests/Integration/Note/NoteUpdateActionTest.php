@@ -51,7 +51,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionAuthorization(
+    public function testNoteSubmitUpdateAction_authorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -154,7 +154,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionUnauthenticated(): void
+    public function testNoteSubmitUpdateAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'PUT',
@@ -184,7 +184,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionInvalid(string $invalidMessage, array $expectedResponseData): void
+    public function testNoteSubmitUpdateAction_invalid(string $invalidMessage, array $expectedResponseData): void
     {
         // Insert authorized user
         $userId = $this->insertFixturesWithAttributes(
@@ -231,7 +231,7 @@ class NoteUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionMalformedRequest(array $malformedRequestBody): void
+    public function testNoteSubmitUpdateAction_malformedRequest(array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);

@@ -8,12 +8,12 @@ use App\Domain\User\Enum\UserStatus;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 
 class UserListActionTest extends TestCase
 {
@@ -47,7 +47,7 @@ class UserListActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserListAuthorization(
+    public function testUserList_authorization(
         array $userRow,
         array $authenticatedUserRow,
         array $expectedResult,
@@ -111,7 +111,7 @@ class UserListActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserListUnauthenticated(): void
+    public function testUserList_unauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));
 

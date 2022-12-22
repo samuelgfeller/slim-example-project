@@ -8,6 +8,8 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
@@ -32,8 +34,10 @@ class UserReadPageActionTest extends TestCase
      * @param array{string: StatusCodeInterface} $expectedResult
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testClientReadPageActionAuthorization(
+    public function testClientReadPageAction_authorization(
         array $userData,
         array $authenticatedUserData,
         array $expectedResult,
@@ -62,7 +66,7 @@ class UserReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageActionUnauthenticated(): void
+    public function testClientReadPageAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);

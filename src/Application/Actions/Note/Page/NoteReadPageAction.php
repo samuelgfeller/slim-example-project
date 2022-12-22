@@ -4,6 +4,7 @@ namespace App\Application\Actions\Note\Page;
 
 use App\Application\Responder\Responder;
 use App\Domain\Note\Service\NoteFinder;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,10 +18,12 @@ final class NoteReadPageAction
      *
      * @param Responder $responder The responder
      * @param NoteFinder $noteFinder
+     * @param SessionInterface $session
      */
     public function __construct(
         private readonly Responder $responder,
         private readonly NoteFinder $noteFinder,
+        private readonly SessionInterface $session,
     ) {
     }
 
@@ -47,6 +50,9 @@ final class NoteReadPageAction
                 "#note-$noteData->id-container"
             );
         }
+        $flash = $this->session->getFlash();
+        // If not existing note, inform user
+        $flash->add('error', 'The note was not not found.');
         // When note does not exist link to client list page
         return $this->responder->redirectToRouteName($response, 'client-list-page');
     }

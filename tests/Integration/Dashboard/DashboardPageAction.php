@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Test\Integration\Client;
+namespace App\Test\Integration\Dashboard;
 
-use App\Test\Fixture\ClientFixture;
-use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
@@ -14,12 +12,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
-/**
- * Test cases for client read page load
- *  - Authenticated
- *  - Unauthenticated.
- */
-class ClientReadPageActionTest extends TestCase
+class DashboardPageAction extends TestCase
 {
     use AppTestTrait;
     use HttpTestTrait;
@@ -27,46 +20,27 @@ class ClientReadPageActionTest extends TestCase
     use DatabaseTestTrait;
     use FixtureTestTrait;
 
-    /**
-     * Normal page action while being authenticated.
-     *
-     * @return void
-     */
-    public function testClientReadPageAction_authorization(): void
+    public function testDashboardPageAction_authenticated(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
-        // Insert linked client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
-        // Add needed database values to correctly display the page
-        $clientRow = $this->insertFixturesWithAttributes(
-            ['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class
-        );
-
-        $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));
         // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
+        $request = $this->createRequest('GET', $this->urlFor('home-page'));
         $response = $this->app->handle($request);
         // Assert 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
     }
 
-    /**
-     * Test that user has to be logged in to display the page.
-     *
-     * @return void
-     */
-    public function testClientReadPageAction_unauthenticated(): void
+    public function testDashboardPageAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $requestRoute = $this->urlFor('home-page');
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-
         // Build expected login url with redirect to initial request route as UserAuthenticationMiddleware.php does
         $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $requestRoute]);
         self::assertSame($expectedLoginUrl, $response->getHeaderLine('Location'));

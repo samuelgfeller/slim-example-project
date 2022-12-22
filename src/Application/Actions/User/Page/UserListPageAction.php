@@ -3,8 +3,6 @@
 namespace App\Application\Actions\User\Page;
 
 use App\Application\Responder\Responder;
-use App\Domain\User\Enum\UserStatus;
-use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,11 +15,9 @@ final class UserListPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param UserFinder $userFinder
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly UserFinder $userFinder,
     ) {
     }
 
@@ -42,12 +38,6 @@ final class UserListPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Retrieve users
-        $users = $this->userFinder->findAllUsersResultDataForList();
-
-        return $this->responder->render($response, 'user/user-list.html.php', [
-            'users' => $users,
-            'userStatuses' => UserStatus::cases(),
-        ]);
+        return $this->responder->render($response, 'user/user-list.html.php');
     }
 }

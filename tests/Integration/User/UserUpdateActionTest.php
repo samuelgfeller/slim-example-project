@@ -9,13 +9,15 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -43,8 +45,11 @@ class UserUpdateActionTest extends TestCase
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
      * @return void
+     * @throws \JsonException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testUserSubmitUpdateAuthorization(
+    public function testUserSubmitUpdate_authorization(
         array $userToChangeRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -97,7 +102,7 @@ class UserUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitUpdateUnauthenticated(): void
+    public function testUserSubmitUpdate_unauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => 1]));
@@ -122,7 +127,7 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      */
-    public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitUpdate_invalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixturesWithAttributes(
@@ -158,7 +163,7 @@ class UserUpdateActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      */
-    public function testUserSubmitUpdateMalformedBody(): void
+    public function testUserSubmitUpdate_malformedBody(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

@@ -9,13 +9,13 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 
 /**
  * Client submit delete action tests
@@ -44,7 +44,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitDeleteActionAuthorization(
+    public function testClientSubmitDeleteAction_authorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -106,7 +106,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitDeleteActionUnauthenticated(): void
+    public function testClientSubmitDeleteAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

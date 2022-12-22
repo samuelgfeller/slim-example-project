@@ -16,7 +16,6 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\HttpJsonExtensionTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +24,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 
 /**
  * Copied and pasted content from client for now.
@@ -55,7 +55,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageActionAuthorization(): void
+    public function testClientListPageAction_authorization(): void
     {
         // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixturesWithAttributes(
@@ -77,7 +77,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageActionUnauthenticated(): void
+    public function testClientListPageAction_unauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-list-page');
@@ -208,7 +208,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
+    public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
     {
         $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

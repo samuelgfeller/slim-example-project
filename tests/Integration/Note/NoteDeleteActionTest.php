@@ -47,7 +47,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitDeleteActionAuthorization(
+    public function testNoteSubmitDeleteAction_authorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -86,23 +86,6 @@ class NoteDeleteActionTest extends TestCase
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
-        // --- *MAIN note request ---
-        // Create request to edit main note
-        $mainNoteRequest = $this->createJsonRequest(
-            'DELETE',
-            $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
-        );
-
-        // As deleting the main note is not a valid request the server throws an HttpMethodNotAllowed exception
-        $this->expectException(HttpMethodNotAllowedException::class);
-        $this->expectExceptionMessage('The main note cannot be deleted.');
-
-        // Make request
-        $this->app->handle($mainNoteRequest);
-
-        // Database is not expected to change for the main note as there is no way to delete it from the frontend
-        $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
-
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'DELETE',
@@ -124,10 +107,10 @@ class NoteDeleteActionTest extends TestCase
             // Assert that user activity is inserted
             $this->assertTableRow(
                 [
-                    'action' => UserActivity::CREATED->value,
+                    'action' => UserActivity::DELETED->value,
                     'table' => 'note',
                     'row_id' => $normalNoteData['id'],
-                    'data' => null,
+                    'data' => json_encode(['message' => $normalNoteData['message']]),
                 ],
                 'user_activity',
                 (int)$this->findLastInsertedTableRow('user_activity')['id']
@@ -139,6 +122,23 @@ class NoteDeleteActionTest extends TestCase
         }
 
         $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
+
+        // --- *MAIN note request ---
+        // Create request to edit main note
+        $mainNoteRequest = $this->createJsonRequest(
+            'DELETE',
+            $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
+        );
+
+        // As deleting the main note is not a valid request the server throws an HttpMethodNotAllowed exception
+        $this->expectException(HttpMethodNotAllowedException::class);
+        $this->expectExceptionMessage('The main note cannot be deleted.');
+
+        // Make request
+        $this->app->handle($mainNoteRequest);
+
+        // Database is not expected to change for the main note as there is no way to delete it from the frontend
+        $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
     }
 
     /**
@@ -146,7 +146,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitDeleteActionUnauthenticated(): void
+    public function testNoteSubmitDeleteAction_unauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

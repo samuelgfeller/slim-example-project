@@ -36,29 +36,31 @@ class UserCreator
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
+     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
-     * @return int|bool insert id, false if user already exists
      */
     public function createUser(array $userValues, string|null $captcha = null, array $queryParams = []): bool|int
     {
         $user = new UserData($userValues);
 
-        // Validate entries coming from client
-        $this->userValidator->validateUserCreation($user);
-
-        // Verify that user (concerned email) or ip address doesn't spam email sending
-        $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
-
-        $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
-
-        // Set default status and role
-        $user->status = $user->status ?? UserStatus::Unverified;
-        $user->userRoleId = $user->userRoleId ??
-            $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
-
         // Check if authenticated user is authorized to create user with the given data
+        // Has to be at the top to not reveal potential sensitive infos such as from the validation
         if ($this->userAuthorizationChecker->isGrantedToCreate($user)) {
+            // Validate entries coming from client
+            $this->userValidator->validateUserCreation($user);
+
+            // Verify that user (concerned email) or ip address doesn't spam email sending
+            $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
+
+            $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
+
+            // Set default status and role
+            $user->status = $user->status ?? UserStatus::Unverified;
+            $user->userRoleId = $user->userRoleId ??
+                $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
+
+
             // Insert new user into database
             $userRow = $user->toArrayForDatabase();
             $user->id = $this->userCreatorRepository->insertUser($userRow);

@@ -7,12 +7,14 @@ use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\RouteTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
+use Selective\TestTrait\Traits\RouteTestTrait;
 
 /**
  * Test that the link sent to a locked user to unblock his account
@@ -40,7 +42,7 @@ class AccountUnlockActionTest extends TestCase
     {
         // Insert locked user
         $userRow = $this->insertFixturesWithAttributes(
-            ['status' => 'locked', 'id' => $verification->userId],
+            ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
             UserFixture::class
         );
 
@@ -89,7 +91,7 @@ class AccountUnlockActionTest extends TestCase
     ): void {
         // Insert locked user
         $userRow = $this->insertFixturesWithAttributes(
-            ['status' => 'locked', 'id' => $verification->userId],
+            ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
             UserFixture::class
         );
 
@@ -123,6 +125,54 @@ class AccountUnlockActionTest extends TestCase
 
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is null meaning user is NOT logged-in
+        self::assertNull($session->get('user_id'));
+    }
+
+    /**
+     * Test that if user has status already on active he gets redirected
+     * but not authenticated
+     *
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
+     *
+     * @param UserVerificationData $verification
+     * @param string $clearTextToken
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function testAccountUnlockAction_alreadyUnlocked(
+        UserVerificationData $verification,
+        string $clearTextToken
+    ): void {
+        // Insert locked user
+        $userRow = $this->insertFixturesWithAttributes(
+            ['status' => UserStatus::Active->value, 'id' => $verification->userId],
+            UserFixture::class
+        );
+
+        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+
+        // Test redirect at the same time
+        $redirectLocation = $this->urlFor('client-list-page');
+        $queryParams = [
+            'redirect' => $redirectLocation,
+            'token' => $clearTextToken,
+            'id' => $verification->id,
+        ];
+
+        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams))
+            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+            ->withQueryParams($queryParams);
+        $response = $this->app->handle($request);
+
+        // Assert that redirect worked
+        self::assertSame(
+            $this->urlFor('login-page', [], ['redirect' => $redirectLocation]),
+            $response->getHeaderLine('Location')
+        );
+        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
+
+        $session = $this->container->get(SessionInterface::class);
+        // Assert that user is not logged in (would also make sense to auth user if unlock token is valid)
         self::assertNull($session->get('user_id'));
     }
 }

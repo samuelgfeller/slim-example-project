@@ -86,7 +86,7 @@ final class NoteDeleteSubmitAction
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'You have to be note author to delete this note.'],
+                    ['status' => 'error', 'message' => 'Not allowed to delete note.'],
                     StatusCodeInterface::STATUS_FORBIDDEN
                 );
             }

@@ -1,9 +1,6 @@
 <?php
 /**
  * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $users \App\Domain\User\Data\UserResultData[] users
- * @var $userStatuses array all user statuses for dropdown with as key and value the name
- * @var $userRoles array all user roles for dropdown with as key the id and value the name
  */
 
 $this->setLayout('layout.html.php');

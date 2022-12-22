@@ -75,7 +75,7 @@ use AppTestTrait; // Custom
 use HttpTestTrait;
 use RouteTestTrait;
 use DatabaseTestTrait;
-use FixtureTrait; // Custom
+use FixtureTestTrait; // Custom
 
 public function testClientReadPageAction_authenticated(): void
 {
@@ -85,11 +85,12 @@ public function testClientReadPageAction_authenticated(): void
     $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
     // Add needed database values to correctly display the page
     $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
+    
+    // Simulate logged-in user with logged-in user id
+    $this->container->get(SessionInterface::class)->set('user_id', $userId);
         ClientFixture::class);
         
     $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
-    // Simulate logged-in user with logged-in user id
-    $this->container->get(SessionInterface::class)->set('user_id', 1);
     $response = $this->app->handle($request);
     // Assert 200 OK
     self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
@@ -125,10 +126,10 @@ placeholders it's nice for the users as well.
 
 At first, the needed test data has to be inserted into the database. This is made by the awesome `DatabaseTestTrait.php`
 .  
-To be able to test more agilely with fixtures, I created the `FixtureTrait.php`:
+To be able to test more agilely with fixtures, I created the `FixtureTestTrait.php`:
 
 ```php
-use FixtureTrait;
+use FixtureTestTrait;
 ```
 
 The main advantage is being in control of the fixtures in the test function. The `$records` values of the `Fixture`
