@@ -130,16 +130,17 @@ class AccountUnlockActionTest extends TestCase
 
     /**
      * Test that if user has status already on active he gets redirected
-     * but not authenticated
+     * but not authenticated.
      *
      * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testAccountUnlockAction_alreadyUnlocked(
+    public function testAccountUnlockActionAlreadyUnlocked(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {

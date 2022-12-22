@@ -20,7 +20,7 @@ class DashboardPageAction extends TestCase
     use DatabaseTestTrait;
     use FixtureTestTrait;
 
-    public function testDashboardPageAction_authenticated(): void
+    public function testDashboardPageActionAuthenticated(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
@@ -33,7 +33,7 @@ class DashboardPageAction extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
     }
 
-    public function testDashboardPageAction_unauthenticated(): void
+    public function testDashboardPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('home-page');

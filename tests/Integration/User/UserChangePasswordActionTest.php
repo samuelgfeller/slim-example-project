@@ -45,7 +45,7 @@ class UserChangePasswordActionTest extends TestCase
      * @param array $authenticatedUserRow
      * @param array $expectedResult
      */
-    public function testChangePasswordSubmitAction_authorization(
+    public function testChangePasswordSubmitActionAuthorization(
         array $userToUpdateRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -112,7 +112,7 @@ class UserChangePasswordActionTest extends TestCase
      *
      * @return void
      */
-    public function testChangePasswordSubmitAction_unauthenticated(): void
+    public function testChangePasswordSubmitActionUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('change-password-submit', ['user_id' => 1]));
@@ -139,7 +139,7 @@ class UserChangePasswordActionTest extends TestCase
      *
      * @return void
      */
-    public function testChangePasswordSubmitAction_invalid(array $requestBody, array $jsonResponse): void
+    public function testChangePasswordSubmitActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userRow = $this->insertFixturesWithAttributes(
@@ -170,7 +170,7 @@ class UserChangePasswordActionTest extends TestCase
      *
      * @param array|null $malformedRequestBody null for the case that request body is null
      */
-    public function testChangePasswordSubmitAction_malformedBody(null|array $malformedRequestBody): void
+    public function testChangePasswordSubmitActionMalformedBody(null|array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

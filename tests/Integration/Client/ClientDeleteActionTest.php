@@ -44,7 +44,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitDeleteAction_authorization(
+    public function testClientSubmitDeleteActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -106,7 +106,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitDeleteAction_unauthenticated(): void
+    public function testClientSubmitDeleteActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

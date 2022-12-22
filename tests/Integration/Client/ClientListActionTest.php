@@ -55,7 +55,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageAction_authorization(): void
+    public function testClientListPageActionAuthorization(): void
     {
         // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixturesWithAttributes(
@@ -77,7 +77,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageAction_unauthenticated(): void
+    public function testClientListPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-list-page');
@@ -208,7 +208,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListAction_invalidFilters(array $queryParams, array $expectedBody): void
+    public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
     {
         $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

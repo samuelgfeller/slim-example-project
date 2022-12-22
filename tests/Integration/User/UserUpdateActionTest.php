@@ -44,12 +44,13 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @return void
      * @throws \JsonException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testUserSubmitUpdate_authorization(
+    public function testUserSubmitUpdateAuthorization(
         array $userToChangeRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -102,7 +103,7 @@ class UserUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitUpdate_unauthenticated(): void
+    public function testUserSubmitUpdateUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => 1]));
@@ -127,7 +128,7 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      */
-    public function testUserSubmitUpdate_invalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixturesWithAttributes(
@@ -163,7 +164,7 @@ class UserUpdateActionTest extends TestCase
      * is thrown and an error page is displayed to the user because that means that
      * there is an error with the client sending the request that has to be fixed.
      */
-    public function testUserSubmitUpdate_malformedBody(): void
+    public function testUserSubmitUpdateMalformedBody(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

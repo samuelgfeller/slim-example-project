@@ -30,11 +30,12 @@ class LoginSecurityTest extends TestCase
      * Test thresholds and according delays of login failures
      * If login request amount exceeds threshold, the user has to wait a certain delay.
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testLoginThrottling_wrongCredentials(): void
+    public function testLoginThrottlingWrongCredentials(): void
     {
         // If more than x percentage of global login requests are wrong, there is an exception but that won't happen
         // while testing as there is a minimal hard limit on allowed failed login requests
@@ -159,9 +160,10 @@ class LoginSecurityTest extends TestCase
     }
 
     /**
-     * Prepone last request time to simulate waiting delay
+     * Prepone last request time to simulate waiting delay.
      *
      * @param int $seconds
+     *
      * @return void
      */
     private function preponeLastUserRequestEntry(int $seconds): void
@@ -172,22 +174,23 @@ class LoginSecurityTest extends TestCase
     }
 
     /**
-     * Delete most recent request
+     * Delete most recent request.
      *
      * @return void
      */
     private function deleteLastUserRequestEntry(): void
     {
         // Change row with the highest id
-        $query = "DELETE FROM user_request ORDER BY id DESC LIMIT 1";
+        $query = 'DELETE FROM user_request ORDER BY id DESC LIMIT 1';
         $this->createQueryStatement($query);
     }
 
     /**
      * Postpone last request (the last request has to be reset to its initial value as security check is done before
-     * the `user_request` of the next login request is inserted
+     * the `user_request` of the next login request is inserted.
      *
      * @param int $seconds
+     *
      * @return void
      */
     private function postponeLastUserRequestEntry(int $seconds): void
@@ -208,12 +211,12 @@ class LoginSecurityTest extends TestCase
      * For login requests with correct credentials, the only security check is done before processing the request
      * For invalid login requests an additional security check is done after the request. This means that if the
      * first threshold is 4, the 4th valid login request does not throw exception but the 4th invalid login request
-     * This changes the test behaviour too much to test both in the same function hence separated in 2
+     * This changes the test behaviour too much to test both in the same function hence separated in 2.
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testLoginThrottling_correctCredentials(): void
+    public function testLoginThrottlingCorrectCredentials(): void
     {
         // If more than x percentage of global login requests are wrong, there is an exception but that won't happen
         // while testing as there is a minimal hard limit on allowed failed login requests
@@ -266,7 +269,7 @@ class LoginSecurityTest extends TestCase
                         // echo "\n threshold: $threshold, delay: $delay";
                         $this->app->handle($request);
                         // If exception is not thrown, get user request stats
-                        $sql = "SELECT * FROM user_request";
+                        $sql = 'SELECT * FROM user_request';
                         $statement = $this->createPreparedStatement($sql);
                         $statement->execute();
                         $result = $statement->fetchAll(PDO::FETCH_ASSOC);

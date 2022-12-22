@@ -31,13 +31,14 @@ class NoteReadPageActionTest extends TestCase
     /**
      * Notes don't have an own read page. When accessed
      * there should be a redirect to the client read page
-     * scrolling to the note
+     * scrolling to the note.
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testNoteReadPageAction_authenticated(): void
+    public function testNoteReadPageActionAuthenticated(): void
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userId = $this->insertFixturesWithAttributes(
@@ -91,7 +92,7 @@ class NoteReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteReadPageAction_unauthenticated(): void
+    public function testNoteReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('note-read-page', ['note_id' => 1]);

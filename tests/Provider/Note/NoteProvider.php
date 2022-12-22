@@ -100,6 +100,7 @@ class NoteProvider
             'db_changed' => true,
             'json_response' => [
                 'status' => 'success',
+                'data' => null,
             ],
         ];
         $unauthorizedResult = [

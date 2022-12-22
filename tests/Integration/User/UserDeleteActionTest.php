@@ -42,7 +42,7 @@ class UserDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitDeleteAction_authorization(
+    public function testUserSubmitDeleteActionAuthorization(
         array $userToDeleteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -96,7 +96,7 @@ class UserDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitDeleteAction_unauthenticated(): void
+    public function testUserSubmitDeleteActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

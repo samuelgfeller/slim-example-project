@@ -51,7 +51,7 @@ class NoteListActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteListAction_authorization(
+    public function testNoteListActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         ?int $noteHidden,
@@ -132,7 +132,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      *
      * @return void
      */
-    public function testClientReadNotesLoad_unauthenticated(): void
+    public function testClientReadNotesLoadUnauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
             ->withQueryParams(['client_id' => 1]);

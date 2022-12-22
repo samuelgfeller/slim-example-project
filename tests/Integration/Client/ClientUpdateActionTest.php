@@ -52,7 +52,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_authorization(
+    public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $requestData,
@@ -161,7 +161,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_invalid(array $requestBody, array $jsonResponse): void
+    public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -200,7 +200,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_unauthenticated(): void
+    public function testClientSubmitUpdateActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-update-submit', ['client_id' => 1]);
@@ -225,7 +225,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_unchangedContent(): void
+    public function testClientSubmitUpdateActionUnchangedContent(): void
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
@@ -268,7 +268,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientSubmitUpdateAction_malformedRequest(): void
+    public function testClientSubmitUpdateActionMalformedRequest(): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userData = $this->insertFixturesWithAttributes([], UserFixture::class);

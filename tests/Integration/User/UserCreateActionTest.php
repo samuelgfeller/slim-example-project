@@ -46,7 +46,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreate_authorization(
+    public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
         UserRole $newUserRole,
         array $expectedResult
@@ -122,7 +122,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreate_unauthenticated(): void
+    public function testUserSubmitCreateUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('POST', $this->urlFor('user-create-submit'));
@@ -149,7 +149,7 @@ class UserCreateActionTest extends TestCase
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
-    public function testUserSubmitCreate_invalid(array $requestBody, array $jsonResponse): void
+    public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
         $userRow = $this->insertFixturesWithAttributes(
@@ -185,7 +185,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserSubmitCreate_malformedBody(?array $requestBody): void
+    public function testUserSubmitCreateMalformedBody(?array $requestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

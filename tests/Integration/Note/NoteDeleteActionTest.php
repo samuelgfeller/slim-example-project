@@ -47,7 +47,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitDeleteAction_authorization(
+    public function testNoteSubmitDeleteActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         array $expectedResult
@@ -146,7 +146,7 @@ class NoteDeleteActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitDeleteAction_unauthenticated(): void
+    public function testNoteSubmitDeleteActionUnauthenticated(): void
     {
         $request = $this->createJsonRequest(
             'DELETE',

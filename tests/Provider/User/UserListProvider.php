@@ -8,7 +8,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserListProvider
 {
-
     /**
      * Different combinations of user logged-in users and owner user requesting to fetch users.
      * One authenticated user and one other is tested at a time is tested for clarity and simplicity.

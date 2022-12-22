@@ -24,13 +24,14 @@ class DashboardTogglePanelAction extends TestCase
 
     /**
      * Test that when user clicks to enable 2 panels it is
-     * saved in the database table user_filter_setting
+     * saved in the database table user_filter_setting.
      *
-     * @return void
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testDashboardTogglePanelAction_authenticated(): void
+    public function testDashboardTogglePanelActionAuthenticated(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];

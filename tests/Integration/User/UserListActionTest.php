@@ -47,7 +47,7 @@ class UserListActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserList_authorization(
+    public function testUserListAuthorization(
         array $userRow,
         array $authenticatedUserRow,
         array $expectedResult,
@@ -111,7 +111,7 @@ class UserListActionTest extends TestCase
      *
      * @return void
      */
-    public function testUserList_unauthenticated(): void
+    public function testUserListUnauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));
 

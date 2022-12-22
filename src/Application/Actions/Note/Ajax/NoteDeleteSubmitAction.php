@@ -62,7 +62,7 @@ final class NoteDeleteSubmitAction
                 $deleted = $this->noteDeleter->deleteNote($noteId);
 
                 if ($deleted) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success']);
+                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }
 
                 $response = $this->responder->respondWithJson(

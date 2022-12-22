@@ -1,4 +1,5 @@
 <?php
+
 // MUST be "require"; not require_once otherwise test settings are not included for the tests cases after the first one
 
 // Load default settings

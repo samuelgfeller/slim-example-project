@@ -36,9 +36,9 @@ class UserCreator
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
-     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
+     * @return int|bool insert id, false if user already exists
      */
     public function createUser(array $userValues, string|null $captcha = null, array $queryParams = []): bool|int
     {
@@ -59,7 +59,6 @@ class UserCreator
             $user->status = $user->status ?? UserStatus::Unverified;
             $user->userRoleId = $user->userRoleId ??
                 $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
-
 
             // Insert new user into database
             $userRow = $user->toArrayForDatabase();

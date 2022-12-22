@@ -33,11 +33,12 @@ class UserReadPageActionTest extends TestCase
      * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
      * @param array{string: StatusCodeInterface} $expectedResult
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testClientReadPageAction_authorization(
+    public function testClientReadPageActionAuthorization(
         array $userData,
         array $authenticatedUserData,
         array $expectedResult,
@@ -66,7 +67,7 @@ class UserReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_unauthenticated(): void
+    public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);

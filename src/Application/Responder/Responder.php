@@ -247,6 +247,7 @@ final class Responder
     ): ResponseInterface {
         $response->getBody()->write((string)json_encode($data, JSON_THROW_ON_ERROR));
         $response = $response->withStatus($status);
+
         return $response->withHeader('Content-Type', 'application/json');
     }
 

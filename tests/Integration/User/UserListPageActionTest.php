@@ -28,11 +28,12 @@ class UserListPageActionTest extends TestCase
     /**
      * Normal page action while being authenticated.
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
-    public function testClientListPageAction_authenticated(): void
+    public function testClientListPageActionAuthenticated(): void
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userRow = $this->insertFixturesWithAttributes(
@@ -56,7 +57,7 @@ class UserListPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageAction_unauthenticated(): void
+    public function testClientListPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-list-page');

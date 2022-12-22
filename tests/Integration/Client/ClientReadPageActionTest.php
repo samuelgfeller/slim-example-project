@@ -32,7 +32,7 @@ class ClientReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_authorization(): void
+    public function testClientReadPageActionAuthorization(): void
     {
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
@@ -58,7 +58,7 @@ class ClientReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageAction_unauthenticated(): void
+    public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
