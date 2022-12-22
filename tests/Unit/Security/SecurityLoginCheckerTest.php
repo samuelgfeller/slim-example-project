@@ -89,9 +89,8 @@ class SecurityLoginCheckerTest extends TestCase
             $securityService->performLoginSecurityCheck('email.does@not-matter.com', null, true);
         } catch (SecurityException $se) {
             self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
-            $delayMessage = 'Remaining delay not matching. ' .
-                'May be because mock created_at time and assertion were done in different seconds so please try again';
-            self::assertSame($delay, $se->getRemainingDelay(), $delayMessage);
+            $delayMessage = 'Remaining delay not matching expected.';
+            self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1, $delayMessage);
             // Throw exception as expectException is set up to assert that exception is thrown
             throw $se;
         }

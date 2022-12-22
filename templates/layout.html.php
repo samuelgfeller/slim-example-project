@@ -119,7 +119,7 @@
             <a
                     href="https://samuel-gfeller.ch" class="no-style-a" target="_blank">
                 Samuel Gfeller <img src="assets/general/general-img/github-icon.svg" alt="github icon" id="github-icon"
-                                    class="footer-icon"></a></address>
+                                    rel="noopener" class="footer-icon"></a></address>
     </footer>
 
 </div>

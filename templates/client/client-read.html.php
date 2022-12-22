@@ -205,7 +205,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                         html($clientAggregate->location) ?></span>
                 </div>
             </a>
-            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank"
+            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank" rel="noopener"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
@@ -223,7 +223,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                         html($clientAggregate->phone) ?></span>
                 </div>
             </a>
-            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank"
+            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank" rel="noopener"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">

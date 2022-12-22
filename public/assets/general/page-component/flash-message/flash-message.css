@@ -21,7 +21,6 @@
         white-space: nowrap;
         align-items: center;
         display: none; /*Flash should only be displayed if it has class .flash-slide-in*/
-
         /* Revert default styling of <dialog> */
         position: relative;
         border: none;
@@ -102,6 +101,7 @@
         flex-shrink: 0;
         border-radius: 99px;
         cursor: pointer;
+        pointer-events: none;
     }
 
     .flash-slide-in .flash-fig {
