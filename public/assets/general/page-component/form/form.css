@@ -186,7 +186,7 @@
     .err-msg {
         padding-top: 10px;
         display: block;
-        color: #9f0009;
+        color: #9f0009 !important;
         font-size: 15px;
     }
 

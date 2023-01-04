@@ -2,11 +2,10 @@ import {escapeHtml} from "../../general/general-js/functions.js?v=0.1";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
-    const {id, createdAt, privilege, hidden, userFullName, message,} = note;
+    const {id, createdAt, privilege, hidden, userFullName, message, isClientMessage} = note;
 
     // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
     // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
-
     return `<div id="note-${id}-container" 
               class="note-container ${hidden === 1 || hidden === '1' ? 'hidden-note' : ''}">
                 <label for="note-${id}" data-note-id="${id}" class="bigger-select-label textarea-label">
@@ -20,14 +19,16 @@ export function getNoteHtml(note) {
                         <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg">` : ''}
                     ${/*Show delete button */ userHasPrivilegeTo(privilege, 'D') ? `<img 
                         class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
-                    <span class="discrete-text note-right-side-label-span">${escapeHtml(userFullName)}</span>
+                    <span class="discrete-text note-right-side-label-span 
+                    ${isClientMessage === 1 ? 'client-message-label' : ''}">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                    ${userHasPrivilegeTo(privilege, 'R') ? '' : `<div class="hidden-textarea-overlay"></div>`}
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
-                    <textarea class="auto-resize-textarea ${userHasPrivilegeTo(privilege, 'R') ? `
-                                ` : `hidden-note-message` /* class to blur note text if not allowed to read*/}" 
+                    <textarea class="auto-resize-textarea ${isClientMessage === 1 ? 'client-message-textarea' : ''}
+                      ${/* Blur note text if not allowed to read*/ userHasPrivilegeTo(privilege, 'R') ? `
+                      ` : 'hidden-note-message'}"
                               id="note-${id}"
                               data-note-id="${id}"
                               minlength="4" maxlength="1000" required

@@ -92,4 +92,18 @@
         height: 100%;
         position: absolute;
     }
+
+    .client-message-textarea {
+        /*Specificity smaller than .client-note-wrapper textarea hence !important*/
+        border: 4px solid gold !important;
+        background: rgba(255, 215, 0, 0.15) !important;
+    }
+
+    .client-message-label {
+        /*background: gold;*/
+        padding: 2px 5px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
 }

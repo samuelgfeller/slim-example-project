@@ -5,7 +5,6 @@ namespace App\Infrastructure\Client;
 use App\Common\Hydrator;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
-use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
 class ClientFinderRepository
@@ -138,29 +137,6 @@ class ClientFinderRepository
         $resultRows = $query->execute()->fetch('assoc') ?: [];
         // Instantiate UserPost DTO
         return new ClientResultData($resultRows);
-    }
-
-    /**
-     * Retrieve post from database
-     * If not found error is thrown.
-     *
-     * @param int $id
-     *
-     * @throws PersistenceRecordNotFoundException
-     *
-     * @return array
-     */
-    public function getPostById(int $id): array
-    {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('post')->where(
-            ['deleted_at IS' => null, 'id' => $id]
-        );
-        $entry = $query->execute()->fetch('assoc');
-        if (!$entry) {
-            throw new PersistenceRecordNotFoundException('post');
-        }
-
-        return $entry;
     }
 
     /**

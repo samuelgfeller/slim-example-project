@@ -11,8 +11,9 @@ class NoteResultData extends NoteData
 {
     public ?string $userFullName;
     public ?string $clientFullName;
+    public ?bool $isClientMessage = false;
 
-    // Not note value from db, populated in NoteUserRightSetter
+    // Populated in NoteUserRightSetter
     public ?Privilege $privilege; // json_encode automatically takes $enum->value
 
     /**
@@ -36,6 +37,7 @@ class NoteResultData extends NoteData
             'userFullName' => $this->userFullName,
             'clientFullName' => $this->clientFullName,
             'privilege' => $this->privilege->value,
+            'isClientMessage' => (int)$this->isClientMessage,
         ]);
     }
 }

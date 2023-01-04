@@ -39,7 +39,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <!-- Img has to be before title because we are only able to style next sibling in css -->
-                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg"
+                     class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-first-name-btn">
                 <?php
@@ -50,7 +51,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg"
+                     class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-last-name-btn">
                 <?php
@@ -160,7 +162,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             </div>
             <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon"
+                     alt="sex">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="select"
                      data-hide-if-empty="true">
@@ -208,7 +211,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="tel:<?= $clientAggregate->phone ?>" target="_blank" rel="noopener"
                id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
+                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon"
+                     alt="phone">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="a-span"
                      data-hide-if-empty="true">
@@ -226,7 +230,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <a href="mailto:<?= $clientAggregate->email ?>" target="_blank" rel="noopener"
                id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon"
+                     alt="email">
                 <div id="email-div" class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="a-span"
                      data-hide-if-empty="true">
@@ -238,9 +243,9 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                         <?php
                     } ?>
                     <?php
-                    $emailParts = $clientAggregate->email ? explode('@', $clientAggregate->email) : ['', '']; ?>
+                    $emailParts = $clientAggregate->email ? explode('@', $clientAggregate->email) : null; ?>
                     <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
-                    ><?= html($emailParts[0]) ?><br>@<?= html($emailParts[1]) ?></span>
+                    ><?= $emailParts ? html($emailParts[0]) . '<br>@' . html($emailParts[1]) : '' ?></span>
                 </div>
             </a>
             <div id="vigilance_level-container" style="<?= $clientAggregate->vigilanceLevel ? '' : 'display: none;' ?>">
@@ -290,11 +295,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 The field container id has to be "[alt]-container".
                 The edit icon image in the existing container has to have the same alt as the name as well. -->
                 <img src="assets/general/general-img/birthdate-icon.svg" class="personal-info-icon" alt="birthdate">
-                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon" alt="sex">
+                <img src="assets/general/general-img/personal-data-icons/gender-icon.svg" class="personal-info-icon"
+                     alt="sex">
                 <img src="assets/general/general-img/personal-data-icons/location-icon.svg" class="personal-info-icon"
                      alt="location">
-                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon" alt="phone">
-                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon" alt="email">
+                <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="personal-info-icon"
+                     alt="phone">
+                <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="personal-info-icon"
+                     alt="email">
                 <img src="assets/general/general-img/personal-data-icons/warning-icon.svg" class="personal-info-icon"
                      alt="vigilance_level">
             </div>

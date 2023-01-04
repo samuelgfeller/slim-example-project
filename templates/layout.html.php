@@ -31,7 +31,6 @@
         'assets/general/page-component/flash-message/flash-message.css',
     ];
 $layoutJs = [
-    'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
     'assets/navbar/navbar.js',
 ];
 $layoutJsModules = [

@@ -119,6 +119,18 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
+        // Add client message as last note (it's always the "oldest" as it's the same age as the client  entry itself)
+        $clientData = $this->clientFinderRepository->findClientById($clientId);
+        if (!empty($clientData->clientMessage)) {
+            $clientMessageNote = new NoteResultData();
+            $clientMessageNote->message = $clientData->clientMessage;
+            $clientMessageNote->userFullName = $clientData->firstName . ' ' . $clientData->lastName;
+            $clientMessageNote->createdAt = $clientData->createdAt;
+            // Always READ privilege as same as client read right and this request is for client read
+            $clientMessageNote->privilege = Privilege::READ;
+            $clientMessageNote->isClientMessage = true;
+            $allNotes[] = $clientMessageNote;
+        }
 
         return $allNotes;
     }
