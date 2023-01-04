@@ -37,7 +37,7 @@ export function displayClientCreateModal() {
         </div>
         <div class="form-input-div" id="client-sex-input-group-div">
             <label>Sex</label><br>
-            <!-- Sex radio buttons are added after modal load in client-template-util.js  -->
+            <!-- Sex radio buttons are added after modal load below in addClientDropdownOptionsToCreateModal() -->
         </div>
         <div class="form-input-div">
             <label for="phone-input">Phone number</label>
@@ -50,6 +50,7 @@ export function displayClientCreateModal() {
         <div class="form-input-div">
             <label for="assigned-user-select">Assigned user</label>
             <select name="user_id" id="assigned-user-select">
+            <option value=""></option>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>

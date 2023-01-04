@@ -90,7 +90,7 @@ final class ClientCreateAction
                 }
                 $response = $this->responder->respondWithJson($response, [
                     'status' => 'warning',
-                    'message' => 'Post not created',
+                    'message' => 'Client not created',
                 ]);
 
                 return $response->withAddedHeader('Warning', 'The post could not be created');

@@ -39,7 +39,8 @@ class ClientValidator
 
         $this->validateClientStatusId($client->clientStatusId, $validationResult, true);
 
-        $this->validateUserId($client->userId, $validationResult, true);
+        // User id should not be required when client is created from authenticated area and public portal
+        $this->validateUserId($client->userId, $validationResult, false);
 
         // First and last name not required in case advisor only knows either first or last name
         $this->validator->validateName($client->firstName, 'first_name', $validationResult, false);
@@ -241,7 +242,7 @@ class ClientValidator
             $this->validator->validateLengthMin($value, 'client_message', $validationResult, 3);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('phone', 'Phone is required');
+            $validationResult->setError('client_message', 'Message is required');
         }
     }
 }

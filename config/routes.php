@@ -122,6 +122,10 @@ return function (App $app) {
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
 
+    // Client creation API call
+    $app->post('/api/clients', \App\Application\Actions\Client\Ajax\ApiClientCreateAction::class)
+        ->setName('api-client-create-submit');
+
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
         $group->get('', \App\Application\Actions\Note\Ajax\NoteListFetchAction::class)->setName('note-list');

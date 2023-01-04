@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Client\ClientStatus;
 
+use App\Domain\Client\Enum\ClientStatus;
 use App\Infrastructure\Factory\QueryFactory;
 
 class ClientStatusFinderRepository
@@ -9,6 +10,27 @@ class ClientStatusFinderRepository
     public function __construct(
         private readonly QueryFactory $queryFactory,
     ) {
+    }
+
+    /**
+     * Returns client status id of given status enum case.
+     *
+     * @param ClientStatus $clientStatus
+     *
+     * @return int|null
+     */
+    public function findClientStatusByName(ClientStatus $clientStatus): ?int
+    {
+        $query = $this->queryFactory->newQuery()->from('client_status');
+
+        $query->select(['id', 'name'])
+            ->where(
+                ['name' => $clientStatus->value],
+                ['deleted_at IS' => null]
+            );
+        $resultRow = $query->execute()->fetch('assoc') ?: [];
+
+        return $resultRow['id'] ?? null;
     }
 
     /**

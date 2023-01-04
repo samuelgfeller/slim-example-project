@@ -30,26 +30,26 @@
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',
     ];
-    $layoutJs = [
-        'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
-        'assets/navbar/navbar.js',
-    ];
-    $layoutJsModules = [
-        'assets/general/general-js/default.js',
-    ];
+$layoutJs = [
+    'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' /* Will be removed with SLE-81 */,
+    'assets/navbar/navbar.js',
+];
+$layoutJsModules = [
+    'assets/general/general-js/default.js',
+];
 
-    // fetch() includes another template into the current template
-    // Include template which contains HTML to include assets
-    echo $this->fetch(
-        'layout/assets.html.php', // Merge layout assets and from sub templates
-        [
-            'stylesheets' => array_merge($layoutCss, $css ?? []),
-            'scripts' => array_merge($layoutJs, $js ?? []),
-            // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
-        ]
-    );
-    ?>
+// fetch() includes another template into the current template
+// Include template which contains HTML to include assets
+echo $this->fetch(
+    'layout/assets.html.php', // Merge layout assets and from sub templates
+    [
+        'stylesheets' => array_merge($layoutCss, $css ?? []),
+        'scripts' => array_merge($layoutJs, $js ?? []),
+        // The type="module" allows the use of import and export inside a JS file.
+        'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
+    ]
+);
+?>
 
     <title><?= $title ?></title>
 </head>
@@ -72,7 +72,7 @@
             </a>
             <a href="<?= $route->urlFor('client-list-page') ?>"
                 <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
-                    'class="is-active"' : '' ?>>
+                'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/people.svg" alt="Non-assigned">
                 <img src="assets/navbar/img/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
@@ -84,7 +84,7 @@
                 <span class="nav-span">Profile</span>
             </a>
             <?php
-            if ($userListAuthorization === true) { ?>
+        if ($userListAuthorization === true) { ?>
                 <a href="<?= $route->urlFor('user-list-page') ?>"
                     <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/users.svg" alt="Users">
@@ -92,7 +92,7 @@
                     <span class="nav-span">Users</span>
                 </a>
                 <?php
-            } ?>
+        } ?>
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/logout.svg" alt="Logout">
