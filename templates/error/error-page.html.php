@@ -20,7 +20,7 @@ $this->addAttribute('css', ['assets/error/error.css']); ?>
     switch ($errorMessage['statusCode']) {
         case 404:
             $title = 'Nothing but clouds here.';
-            $message = 'Try to navigate with the menu or if you did, <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
+            $message = 'Try to navigate with the menu or <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
             break;
         case 403:
             $title = 'Access forbidden.';

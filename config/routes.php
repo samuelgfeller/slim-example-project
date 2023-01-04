@@ -125,6 +125,9 @@ return function (App $app) {
     // Client creation API call
     $app->post('/api/clients', \App\Application\Actions\Client\Ajax\ApiClientCreateAction::class)
         ->setName('api-client-create-submit');
+    $app->options('/api/clients', function ($request, $response) {
+        return $response;
+    });
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {

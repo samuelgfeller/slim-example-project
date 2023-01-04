@@ -91,8 +91,8 @@ class ClientCreateActionTest extends TestCase
             $noteValues['message'] = $clientCreationValues['message'];
             unset($clientCreationValues['message']);
             $clientDbRow = $this->findLastInsertedTableRow('client');
-            // Assert that db entry corresponds to the given client creation values. This is possible as the keys
-            // that the frontend sends to the server are the same as database columns.
+            // Assert that db entry corresponds to the given client creation values. This is possible with
+            // $clientCreationValues as the keys that the frontend sends to the server are the same as database columns.
             // It is done with the function assertTableRow even though we already have the clientDbRow for simplicity
             $this->assertTableRowEquals($clientCreationValues, 'client', $clientDbRow['id']);
             // The same check could also be done with array_intersect_key (which removes any keys from the db array
