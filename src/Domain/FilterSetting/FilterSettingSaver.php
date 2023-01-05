@@ -15,6 +15,8 @@ class FilterSettingSaver
 
     /**
      * Remove old filters from db and save given filters.
+     * This function should really be called only once per request otherwise
+     * only the filters from the last call will be saved.
      *
      * @param array|null $filters
      * @param FilterModule $userFilterModule
@@ -23,10 +25,14 @@ class FilterSettingSaver
      */
     public function saveFilterSettingForAuthenticatedUser(
         ?array $filters,
-        FilterModule $userFilterModule
+        FilterModule $userFilterModule,
     ): void {
         $loggedInUser = $this->session->get('user_id');
-        $this->userFilterHandlerRepository->deleteFilterSettingFromUser($loggedInUser, $userFilterModule->value);
+        // Delete previous active filters in database before adding the new ones
+        $this->userFilterHandlerRepository->deleteFilterSettingFromUser(
+            $loggedInUser,
+            $userFilterModule->value
+        );
         if ($filters !== null && $filters !== []) {
             $userFilterRow = [];
             foreach ($filters as $key => $filterId) {

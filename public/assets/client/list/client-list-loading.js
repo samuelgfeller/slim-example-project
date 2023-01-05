@@ -23,17 +23,22 @@ let previousRequestId = 0;
 /**
  * Fetch clients with active filter chips and name search if present
  * then load clients into DOM
- * @param {URLSearchParams} filterParams custom filter params that won't be
+ * @param {URLSearchParams} filterParams custom filter params that are not from filter chip and won't be
  * saved in user_filter_setting database table
  * @param {string|null} clientWrapperId if client wrapper is not the default on the client list page,
  * a custom one can be provided.
+ * @param {boolean} saveFilter if false, filter is only for fetching and should not be saved in database
+ * (user filter setting). Should be true only for client list page
  */
-export function fetchAndLoadClients(filterParams = new URLSearchParams(), clientWrapperId = null) {
+export function fetchAndLoadClients(
+    filterParams = new URLSearchParams(),
+    clientWrapperId = null,
+    saveFilter = false) {
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();
 
     displayClientProfileCardLoadingPlaceholder(clientWrapperId);
-    fetchClients(filterParams).then(jsonResponse => {
+    fetchClients(filterParams, saveFilter).then(jsonResponse => {
         // Add one to previous request id after request is done
         previousRequestId++;
         // If previousRequestId does not match requestId it means there was newer request and this response should be ignored
@@ -71,7 +76,7 @@ export function fetchAndLoadClients(filterParams = new URLSearchParams(), client
  * error when called directly from event listener
  */
 export function fetchAndLoadClientsEventHandler() {
-    fetchAndLoadClients();
+    fetchAndLoadClients(new URLSearchParams(), null, true);
 }
 
 
@@ -79,9 +84,12 @@ export function fetchAndLoadClientsEventHandler() {
  *  Fetch clients with active filter chips and name search if present
  *  then load clients into DOM
  * @return {Promise} load clients ajax promise
- * @param {URLSearchParams} searchParams
+ * @param {URLSearchParams} searchParams custom filter params that are not from filter chip and won't be
+ * saved in user_filter_setting database table
+ * @param {boolean} saveFilter if false, filter is only for fetching and should not be saved in database
+ * (user filter setting). Should be true only for client list page
  */
-function fetchClients(searchParams = new URLSearchParams()) {
+function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) {
 
     // Loop through all the active filter chips and add filters to query params
     const activeFilterChips = document
@@ -113,11 +121,15 @@ function fetchClients(searchParams = new URLSearchParams()) {
     if (searchInputValue) {
         searchParams.append('name', searchInputValue);
     }
+
+    // Add saveFilter bool value to searchParams
+    searchParams.append('saveFilter', saveFilter ? '1' : '0');
+
     // Add question mark
-    searchParams = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
+    const queryString = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
     // Add 1 to the request id
     requestId++;
-    return fetchData('clients' + searchParams, 'clients/list');
+    return fetchData('clients' + queryString, 'clients/list');
 }
 
 /**

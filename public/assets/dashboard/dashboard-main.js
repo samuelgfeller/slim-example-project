@@ -83,7 +83,7 @@ for (const clientPanel of clientPanels) {
     }
 
     // client panels have to have a div.client-wrapper in the content section
-    fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id);
+    fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id, false);
 }
 
 // Load notes in notes panels

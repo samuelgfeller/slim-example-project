@@ -33,20 +33,30 @@ class FilterSettingFinder
         // Check which filters are active in session
         if (($activeFilters = $this->findFiltersFromAuthenticatedUser($filterModule)) !== null) {
             foreach ($activeFilters as $activeFilterId) {
-                // Add to session active filters only if it exists in $allClientFilters and is authorized
+                // Add to active filters only if it exists in $allClientFilters and is authorized
                 if (isset($allAvailableFilters[$activeFilterId]) && $allAvailableFilters[$activeFilterId]->authorized) {
                     $category = $allAvailableFilters[$activeFilterId]->category;
+                    // Group filters by category (null is a valid array key (becomes ''))
                     $returnArray['active'][$category][$activeFilterId] = $allAvailableFilters[$activeFilterId];
                     // Remove filter from $allClientFilters if it's an active filter
                     unset($allAvailableFilters[$activeFilterId]);
                 }
             }
         }
+
+        $activeFilterIds = [];
+        foreach ($returnArray['active'] as $category => $activeFilters) {
+            // Create array with active filter ids from returnArray to save them all at once as
+            // saveFilterSettingForAuthenticatedUser must be called only once
+            foreach ($activeFilters as $filterId => $filterValues) {
+                // The IDE prefers a nested foreach than array_merge
+                $activeFilterIds[] = $filterId;
+            }
+        }
+
         // Add active filters to database (refresh in case there was an old filters that don't exist anymore)
-        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
-            array_keys($returnArray['active']),
-            $filterModule
-        );
+        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser($activeFilterIds, $filterModule);
+
         // Inactive are the ones that were not added to 'active' previously
         foreach ($allAvailableFilters as $filterId => $filterData) {
             // Add to inactive if authorized

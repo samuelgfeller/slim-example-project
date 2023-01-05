@@ -83,10 +83,12 @@ class ClientFinderWithFilter
         // Other filters here
 
         // Insert filter ids into db
-        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
-            $params['filterIds'] ?? null,
-            FilterModule::CLIENT_LIST
-        );
+        if (isset($params['saveFilter']) && (int)$params['saveFilter'] === 1) {
+            $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
+                $params['filterIds'] ?? null,
+                FilterModule::CLIENT_LIST
+            );
+        }
 
         // Find all clients matching the filter regardless of logged-in user rights
         $queryBuilderWhereArray = $this->clientFilterWhereConditionBuilder->buildWhereArrayWithFilterParams(
