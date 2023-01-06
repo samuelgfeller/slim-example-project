@@ -27,8 +27,8 @@ class Settings
      *
      * @return mixed
      */
-    public function get(string $key)
+    public function get(string $key): mixed
     {
-        return $this->settings[$key];
+        return $this->settings[$key] ?? null;
     }
 }

@@ -103,6 +103,11 @@ $settings['db'] = [
     ],
 ];
 
+$settings['api'] = [
+    // Url that is allowed to make api calls to this app
+    'allowedOrigin' => null,
+];
+
 // Phinx database migrations settings
 $settings['phinx'] = [
     'paths' => [
