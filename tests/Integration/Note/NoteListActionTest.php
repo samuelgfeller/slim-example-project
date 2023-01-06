@@ -120,6 +120,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             'clientFullName' => null,
             // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
             'privilege' => $expectedResult['privilege']->value,
+            'isClientMessage' => 0,
         ];
 
         // Assert response data

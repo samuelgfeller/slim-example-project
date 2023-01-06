@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Middleware;
 
 use App\Application\Exceptions\CorsMiddlewareException;
@@ -18,10 +17,11 @@ use Throwable;
  */
 final class CorsMiddleware implements MiddlewareInterface
 {
-    private string $allowedOrigin;
+    private ?string $allowedOrigin;
 
     /**
      * @param ResponseFactoryInterface $responseFactory The response factory
+     * @param Settings $settings
      */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
@@ -31,7 +31,7 @@ final class CorsMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Invoke Cors middleware
+     * Invoke Cors middleware.
      *
      * Source: http://www.slimframework.com/docs/v4/cookbook/enable-cors.html
      * https://odan.github.io/2019/11/24/slim4-cors.html
@@ -73,13 +73,14 @@ final class CorsMiddleware implements MiddlewareInterface
                     json_encode([
                         'error' => [
                             'message' => $throwable->getMessage(),
-                        ]
+                        ],
                     ], JSON_THROW_ON_ERROR)
                 );
 
                 // Throw exception to pass the response with the CORS headers
                 throw new CorsMiddlewareException($response, $throwable->getMessage(), 500, $throwable);
             }
+
             return $response;
         }
         // If no allowOrigin url, handle return response
