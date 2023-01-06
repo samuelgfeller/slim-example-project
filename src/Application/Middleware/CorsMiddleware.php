@@ -2,7 +2,6 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Exceptions\CorsMiddlewareException;
 use App\Domain\Settings;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -80,7 +79,7 @@ final class CorsMiddleware implements MiddlewareInterface
                 // );
 
                 // Throw exception to pass the response with the CORS headers
-                throw new CorsMiddlewareException($response, $throwable->getMessage(), 500, $throwable);
+                // throw new CorsMiddlewareException($response, $throwable->getMessage(), 500, $throwable);
                 throw $throwable;
             }
 
