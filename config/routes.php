@@ -1,5 +1,6 @@
 <?php
 
+use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
 use Slim\App;
@@ -12,6 +13,16 @@ return function (App $app) {
     $app->get('/', \App\Application\Actions\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
+
+    $app->group('/api', function (RouteCollectorProxy $group) {
+        // Client creation API call
+        $group->post('/clients', \App\Application\Actions\Client\Ajax\ApiClientCreateAction::class)
+            ->setName('api-client-create-submit');
+        $group->options('/clients', function ($request, $response) {
+            return $response;
+        });
+    })->add(CorsMiddleware::class);
+
     // Testing
     $app->get('/test', \App\Application\Actions\Dashboard\PhpDevTestAction::class)
         ->setName('test-get-request');
@@ -121,13 +132,6 @@ return function (App $app) {
     $app->get('/clients/list', \App\Application\Actions\Client\Page\ClientListPageAction::class)->setName(
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
-
-    // Client creation API call
-    $app->post('/api/clients', \App\Application\Actions\Client\Ajax\ApiClientCreateAction::class)
-        ->setName('api-client-create-submit');
-    $app->options('/api/clients', function ($request, $response) {
-        return $response;
-    });
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {

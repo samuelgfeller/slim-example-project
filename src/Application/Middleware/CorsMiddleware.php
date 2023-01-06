@@ -27,7 +27,7 @@ final class CorsMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         Settings $settings,
     ) {
-        $this->allowedOrigin = $settings->get('api')['allowedOrigin'] ?? null;
+        $this->allowedOrigin = $settings->get('api')['allowed_origin'] ?? null;
     }
 
     /**
@@ -49,6 +49,8 @@ final class CorsMiddleware implements MiddlewareInterface
             $methods = $routingResults->getAllowedMethods();
             $requestHeaders = $request->getHeaderLine('Access-Control-Request-Headers');
 
+            // In try catch to check if handling the request produces an exception. If yes, the exception should be
+            // passed in the response and sent to the client WITH the CORS headers.
             try {
                 $response = $handler->handle($request);
             } catch (Throwable $throwable) {
@@ -69,16 +71,17 @@ final class CorsMiddleware implements MiddlewareInterface
                 $response = $response->withHeader('Content-Type', 'application/json');
 
                 // Add custom response body here...
-                $response->getBody()->write(
-                    json_encode([
-                        'error' => [
-                            'message' => $throwable->getMessage(),
-                        ],
-                    ], JSON_THROW_ON_ERROR)
-                );
+                // $response->getBody()->write(
+                //     json_encode([
+                //         'error' => [
+                //             'message' => $throwable->getMessage(),
+                //         ],
+                //     ], JSON_THROW_ON_ERROR)
+                // );
 
                 // Throw exception to pass the response with the CORS headers
                 throw new CorsMiddlewareException($response, $throwable->getMessage(), 500, $throwable);
+                throw $throwable;
             }
 
             return $response;

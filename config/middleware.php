@@ -1,6 +1,5 @@
 <?php
 
-use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use Odan\Session\Middleware\SessionMiddleware;
@@ -17,7 +16,7 @@ return function (App $app) {
     // Has to be after PhpViewExtensionMiddleware to be called before on request as session is used in php-view extension
     $app->add(SessionMiddleware::class);
     // Cors middleware has to be before routing so that it is performed after routing (LIFO)
-    $app->add(CorsMiddleware::class);
+    // $app->add(CorsMiddleware::class); // Middleware added in api group in routes.php
     // Has to be after phpViewExtensionMiddleware https://www.slimframework.com/docs/v4/cookbook/retrieving-current-route.html
     // The RoutingMiddleware should be added after our CORS middleware so routing is performed first
     $app->addRoutingMiddleware();

@@ -13,3 +13,6 @@ $settings['security']['throttle_login_success'] = true;
 
 // Using the null adapter to prevent emails from actually being sent
 $settings['smtp']['type'] = 'null';
+
+// Add example.com to allowed origin to test out CORS
+$settings['api']['allowed_origin'] = 'https://example.com/';

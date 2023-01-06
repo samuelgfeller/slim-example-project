@@ -32,7 +32,8 @@ class ApiClientCreateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Client creation with valid data.
+     * Client creation from api endpoint with valid data.
+     * Test CORS headers.
      *
      * @throws \JsonException
      *
@@ -63,9 +64,14 @@ class ApiClientCreateActionTest extends TestCase
             $this->urlFor('api-client-create-submit'),
             $clientCreationValues
         );
+
         $response = $this->app->handle($request);
         // Assert response status code: 201 Created
         self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
+        // Get test allowed origin url for CORS test
+        $allowedOriginUrl = $this->container->get('settings')['api']['allowed_origin'] ?? '';
+        // Test CORS header
+        self::assertSame($allowedOriginUrl, $response->getHeaderLine('Access-Control-Allow-Origin'));
 
         // Assert that db record is created
         $clientDbRow = $this->findLastInsertedTableRow('client');
