@@ -36,10 +36,13 @@
     "phpstan/phpstan": "^0.12.81",
     "jetbrains/phpstorm-attributes": "^1.0",
     "friendsofphp/php-cs-fixer": "^3",
-    "odan/phinx-migrations-generator": "^5.6"
+    "odan/phinx-migrations-generator": "^5"
   },
   "scripts": {
-    "schema:generate": "php bin/console.php DatabaseSqlSchemaGenerator generateSqlSchema",
+    "schema:generate": [
+      "php bin/console.php DatabaseSqlSchemaGenerator generateSqlSchema",
+      "@add-migrations-to-git"
+    ],
     "test": "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always",
     "test:coverage": "vendor/bin/phpunit --coverage-clover=coverage.xml",
     "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
@@ -47,9 +50,11 @@
     "migration:create": "phinx create -c config/phinx.php --ansi",
     "migration:generate": [
       "phinx-migrations generate --overwrite -c config/phinx.php --ansi",
-      "@schema:generate"
+      "@schema:generate",
+      "@add-migrations-to-git"
     ],
-    "migrate": "phinx migrate -c config/phinx.php --ansi -vvv"
+    "migrate": "phinx migrate -c config/phinx.php --ansi -vvv",
+    "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*"
   },
   "name": "samuelgfeller/slim-example-project",
   "description": "Example project with SlimPHP"

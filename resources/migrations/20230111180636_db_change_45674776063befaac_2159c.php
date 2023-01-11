@@ -2,7 +2,7 @@
 
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
+class DbChange45674776063befaac2159c extends Phinx\Migration\AbstractMigration
 {
     public function change()
     {
@@ -53,12 +53,12 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('updated_at', 'datetime', [
                 'null' => false,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'hidden',
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => false,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'updated_at',
             ])
             ->addColumn('deleted_at', 'datetime', [
@@ -233,12 +233,12 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('updated_at', 'datetime', [
                 'null' => false,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'assigned_at',
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => false,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'updated_at',
             ])
             ->addColumn('deleted_at', 'datetime', [
@@ -371,12 +371,12 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('updated_at', 'datetime', [
                 'null' => true,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'password_hash',
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => true,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'updated_at',
             ])
             ->addColumn('deleted_at', 'datetime', [
@@ -439,7 +439,7 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('datetime', 'datetime', [
                 'null' => false,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'data',
             ])
             ->addColumn('ip_address', 'string', [
@@ -507,7 +507,7 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => true,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'is_login',
             ])
             ->addIndex(['created_at'], [
@@ -580,7 +580,7 @@ class DbChange149593897863b82b8bd2d32 extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => true,
-                'default' => 'current_timestamp()',
+                'default' => 'CURRENT_TIMESTAMP',
                 'after' => 'used_at',
             ])
             ->addColumn('deleted_at', 'datetime', [

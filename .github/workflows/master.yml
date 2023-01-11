@@ -75,6 +75,7 @@ jobs:
             docs/**
             tests/**
             config/env.prod.php
+            public/assets/favicon.ico
 
       - name: Executing care-point database migrations
         uses: appleboy/ssh-action@v0.1.6
