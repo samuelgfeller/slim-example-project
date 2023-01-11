@@ -39,18 +39,19 @@ a.currently-editable {
 
     background: rgb(234, 234, 234);
     color: #000000;
-    padding: 10px 20px;
+    padding: 13px 25px;
 
     /*font-weight: 500;*/
     border: none;
     /*padding: 8px 20px;*/
     margin: 15px 0 0;
-    border-radius: 4444px;
+    border-radius: 14px;
     cursor: pointer;
-    font-size: 100%;
+    font-size: 18px;
     box-shadow: 2px 3px 11px #ccc;
     text-decoration: none; /* For when <a> is used as button */
     display: inline-block; /* For when <a> is used as button and when icon is used */
+    letter-spacing: 0.5px;
 }
 
 .btn:hover {
@@ -75,24 +76,45 @@ a.currently-editable {
 }
 
 .btn-red {
-    /*background: #ff8d81;*/
+    background: #ff8d81;
     /*border: 1px solid #b2180e;*/
 }
 
 .btn-red:hover {
-    background-color: #ff9b9b;
+    background-color: #f87f74;
     /*border: 2px solid tomato;*/
     /*background: initial;*/
 }
 
 .btn-red:focus {
-    background: #ec6969;
+    background: #de6e5f;
 }
+.btn-orange {
+    background: #ffc081;
+    /*border: 1px solid #b2180e;*/
+}
+
+.btn-orange:hover {
+    background-color: #f6af6e;
+    /*border: 2px solid tomato;*/
+    /*background: initial;*/
+}
+
+.btn-orange:focus {
+    background: #e59a56;
+}
+
+
 
 .icon-btn {
     width: 18px;
     float: left;
     margin-right: 0.5em;
+}
+
+.modal-btn {
+    padding: 12px 20px;
+    border-radius: 99px;
 }
 
 .discrete-text {
