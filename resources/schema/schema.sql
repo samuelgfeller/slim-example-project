@@ -17,17 +17,15 @@ CREATE TABLE `client` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_client_user` (`user_id`),
-  KEY `FK_client_status` (`client_status_id`) USING BTREE,
-  CONSTRAINT `FK_client_status` FOREIGN KEY (`client_status_id`) REFERENCES `client_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_client_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Advisors help and consult clients';
+  KEY `FK_client_status` (`client_status_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Advisors help and consult clients';
 
 CREATE TABLE `client_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `deleted_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Client status';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Client status';
 
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -41,31 +39,29 @@ CREATE TABLE `note` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK__user` (`user_id`),
-  KEY `FK_note_client` (`client_id`),
-  CONSTRAINT `FK__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_note_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `FK_note_client` (`client_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `module` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'module where action takes place',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `phinxlog` (
   `version` bigint(20) NOT NULL,
-  `migration_name` varchar(100) DEFAULT NULL,
+  `migration_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_time` timestamp NULL DEFAULT NULL,
   `end_time` timestamp NULL DEFAULT NULL,
   `breakpoint` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `surname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `surname` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_role_id` int(11) NOT NULL DEFAULT 0,
   `status` enum('active','locked','unverified','suspended') COLLATE utf8mb4_unicode_ci DEFAULT 'unverified',
   `email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -74,9 +70,8 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_user_user_role` (`user_role_id`),
-  CONSTRAINT `FK_user_user_role` FOREIGN KEY (`user_role_id`) REFERENCES `user_role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `FK_user_user_role` (`user_role_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_activity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -89,44 +84,41 @@ CREATE TABLE `user_activity` (
   `ip_address` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_activity_user_id_fk` (`user_id`),
-  CONSTRAINT `user_activity_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `user_activity_user_id_fk` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_filter_setting` (
   `user_id` int(11) NOT NULL,
   `filter_id` varchar(100) CHARACTER SET latin1 NOT NULL,
   `module` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`filter_id`,`module`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_request` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ip_address` int(11) unsigned DEFAULT NULL,
-  `sent_email` tinyint(3) NOT NULL DEFAULT 0,
+  `sent_email` tinyint(4) NOT NULL DEFAULT 0,
   `is_login` enum('success','failure') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `created_at_index` (`created_at`),
   KEY `request_track_idx_is_login` (`is_login`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `hierarchy` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_role_to_permission` (
   `user_role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL,
   PRIMARY KEY (`user_role_id`,`permission_id`),
-  KEY `user_role_to_permission_permission_null_fk` (`permission_id`),
-  CONSTRAINT `user_role_to_permission_permission_null_fk` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
-  CONSTRAINT `user_role_to_permission_user_role_null_fk` FOREIGN KEY (`user_role_id`) REFERENCES `user_role` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `user_role_to_permission_permission_null_fk` (`permission_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_verification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -137,6 +129,5 @@ CREATE TABLE `user_verification` (
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK__user_table` (`user_id`),
-  CONSTRAINT `FK__user_table` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `FK__user_table` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

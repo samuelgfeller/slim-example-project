@@ -54,7 +54,9 @@
       "@add-migrations-to-git"
     ],
     "migrate": "phinx migrate -c config/phinx.php --ansi -vvv",
-    "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*"
+    "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",
+    "seed:minimal": "php vendor/bin/phinx seed:run -c config/phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s UserSeeder",
+    "seed": "php vendor/bin/phinx seed:run -c config/phinx.php"
   },
   "name": "samuelgfeller/slim-example-project",
   "description": "Example project with SlimPHP"

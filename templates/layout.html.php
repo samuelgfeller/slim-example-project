@@ -115,10 +115,9 @@ echo $this->fetch(
 
     <footer>
         <address>Made with <img src="assets/general/general-img/heart-icon.svg" alt="heart icon" class="footer-icon"> by
-            <a
-                    href="https://samuel-gfeller.ch" class="no-style-a" target="_blank">
+            <a href="https://samuel-gfeller.ch" class="no-style-a" target="_blank" rel="noopener">
                 Samuel Gfeller <img src="assets/general/general-img/github-icon.svg" alt="github icon" id="github-icon"
-                                    rel="noopener" class="footer-icon"></a></address>
+                                    class="footer-icon"></a></address>
     </footer>
 
 </div>
