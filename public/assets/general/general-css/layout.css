@@ -42,7 +42,7 @@ especially elements from the layout.html.php */
         flex: 1 0 auto;
         border-radius: 20px;
     }
-    main * :not(h1):not(h2):not(h3):not(a:not(.no-style-a)){
+    main *:where(:not(h1):not(h2):not(h3):not(a:not(.no-style-a))){
         color: #2e3e50;
     }
     .no-style-a, .no-style-a:hover {

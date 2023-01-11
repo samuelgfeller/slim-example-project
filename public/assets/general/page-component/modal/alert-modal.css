@@ -61,7 +61,7 @@
 
     /* Enhance borders */
     #alert-modal-footer .btn {
-        /*font-size: 1.1em;*/
+        line-height: 1em;
         /*border-width: 2px;*/
     }
     #alert-modal-cancel-btn{

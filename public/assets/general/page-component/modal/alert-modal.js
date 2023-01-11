@@ -37,8 +37,8 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
         '<p>' + info + '</p>' +
         '</div>' +
         '<div id="alert-modal-footer">' +
-        '<button class="btn" id="alert-modal-cancel-btn">Cancel</button>' +
-        '<button class="btn btn-red" id="alert-modal-confirm-btn">' + btnString + '<span style="color: tomato">&nbsp ⬤ </span></button>' +
+        '<button class="btn modal-btn" id="alert-modal-cancel-btn">Cancel</button>' +
+        '<button class="btn modal-btn btn-red" id="alert-modal-confirm-btn">' + btnString + '</button>' +
         '</div>' +
         '</div>' +
         '</div>';

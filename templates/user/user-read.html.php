@@ -112,7 +112,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <h3 class="label-h3">Password</h3>
-                <button class="btn" id="change-password-btn"
+                <button class="btn btn-orange" id="change-password-btn"
                         data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
                             Privilege::UPDATE
                         ) ? 'false' : 'true' ?>">Change password
@@ -128,7 +128,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
         </p>
         <?php
         if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
-            <button class="btn" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
+            <button class="btn btn-red" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
                 <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
                 Delete <?= $isOwnProfile ? 'profile' : 'user' ?>
             </button>

@@ -74,15 +74,20 @@ class PasswordChanger
         // Check if password strings are valid
         $this->userValidator->validatePasswords([$password1, $password2], true);
 
-        if (!$this->userAuthorizationChecker->isGrantedToUpdate(
-            ['password_without_verification' => 'value'],
-            $userId
-        ) &&
-            // Test password correctness only if user is allowed to change password hash as it's indicated to the user
+        // If old password is provided and user is allowed to update password, test password correctness
+        if ($oldPassword &&
             $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
             // Verify old password; throws validation exception if not correct old password
             $this->userValidator->checkIfPasswordIsCorrect($oldPassword, 'old_password', $userId);
+        } // Else if old password is set, check if granted to update without verification. If not, user not allowed to
+        // change password
+        elseif (!$oldPassword && (!$this->userAuthorizationChecker->isGrantedToUpdate(
+            ['password_without_verification' => 'value'],
+            $userId,
+        ) || !$this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId))
+        ) {
+            throw new ForbiddenException('Not granted to update password without verification.');
         }
 
         // Calls service function to check if authorized and change password

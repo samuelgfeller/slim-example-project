@@ -89,12 +89,6 @@
         margin-top: 15px;
         margin-bottom: 5px;
     }
-    #delete-user-btn{
-        background: #ffcccc;
-    }
-    #delete-user-btn:hover{
-        background: #ffadad;
-    }
 }
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
