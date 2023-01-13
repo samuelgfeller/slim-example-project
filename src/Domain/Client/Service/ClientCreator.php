@@ -29,9 +29,9 @@ class ClientCreator
      *
      * @param array $clientValues
      *
-     * @return int insert id
-     *
      * @throws ForbiddenException|\JsonException
+     *
+     * @return int insert id
      */
     public function createClient(array $clientValues): int
     {

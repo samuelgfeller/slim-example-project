@@ -1,9 +1,9 @@
 <?php
 /**
- * Environment specific configuration values.
+ * Production specific configuration values.
  *
- * Make sure env.php file is added to .gitignore and ideally place the env.php outside
- * the project root directory, to protect against overwriting at deployment.
+ * For these settings to be taken into account in production,
+ * $_ENV['APP_ENV'] must be set to "prod" in the env.php file of the productive server.
  *
  * How to set values
  * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];

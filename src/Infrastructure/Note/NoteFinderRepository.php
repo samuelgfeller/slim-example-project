@@ -67,9 +67,9 @@ class NoteFinderRepository
      *
      * @param int $id
      *
-     * @return NoteResultData
      * @throws \Exception
      *
+     * @return NoteResultData
      */
     public function findNoteWithUserById(int $id): NoteResultData
     {
@@ -91,9 +91,9 @@ class NoteFinderRepository
      *
      * @param int $id
      *
-     * @return array
      * @throws PersistenceRecordNotFoundException
      *
+     * @return array
      */
     public function getNoteById(int $id): array
     {
@@ -148,9 +148,8 @@ class NoteFinderRepository
         $concatName = $query->func()->concat([
             $query->func()->coalesce(['user.first_name' => 'identifier', '']),
             ' ',
-            $query->func()->coalesce(['user.surname' => 'identifier', ''])
+            $query->func()->coalesce(['user.surname' => 'identifier', '']),
         ]);
-
 
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
             ->join(['user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id']])

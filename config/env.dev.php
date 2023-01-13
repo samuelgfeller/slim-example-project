@@ -1,18 +1,14 @@
 <?php
 /**
- * Environment specific configuration values.
- *
- * Make sure env.php file is added to .gitignore and ideally place the env.php outside
- * the project root directory, to protect against overwriting at deployment.
+ * Development specific configuration values.
  *
  * How to set values
- * Each key and value should be added in defaults.php as well to serve as template
  * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  * good $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
  * It's mandatory to set every key individually and not remap the entire array
  */
 
-// Set false to simulate production
+// Set false to show production error pages
 $settings['dev'] = true;
 
 // Version `null` or string. When null, all query param versions from js imports are removed
