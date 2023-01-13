@@ -29,9 +29,9 @@ class ClientCreator
      *
      * @param array $clientValues
      *
-     * @throws ForbiddenException
-     *
      * @return int insert id
+     *
+     * @throws ForbiddenException|\JsonException
      */
     public function createClient(array $clientValues): int
     {
@@ -59,13 +59,7 @@ class ClientCreator
                         'user_id' => $client->userId,
                         'is_main' => 1,
                     ];
-                    $mainNoteId = $this->noteCreator->createNote($mainNoteValues);
-                    $this->userActivityManager->addUserActivity(
-                        UserActivity::CREATED,
-                        'note',
-                        $mainNoteId,
-                        $mainNoteValues
-                    );
+                    $this->noteCreator->createNote($mainNoteValues);
                 }
 
                 return $clientId;

@@ -124,6 +124,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         if (!empty($clientData->clientMessage)) {
             $clientMessageNote = new NoteResultData();
             $clientMessageNote->message = $clientData->clientMessage;
+            // The "userFullName" has to be the client itself as it's his client_message that is being displayed as note
             $clientMessageNote->userFullName = $clientData->firstName . ' ' . $clientData->lastName;
             $clientMessageNote->createdAt = $clientData->createdAt;
             // Always READ privilege as same as client read right and this request is for client read
