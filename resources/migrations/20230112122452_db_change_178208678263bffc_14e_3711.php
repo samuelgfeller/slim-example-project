@@ -2,7 +2,7 @@
 
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class DbChange45674776063befaac2159c extends Phinx\Migration\AbstractMigration
+class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
 {
     public function change()
     {
@@ -329,14 +329,16 @@ class DbChange45674776063befaac2159c extends Phinx\Migration\AbstractMigration
                 'identity' => 'enable',
             ])
             ->addColumn('first_name', 'string', [
-                'null' => false,
+                'null' => true,
+                'default' => null,
                 'limit' => 100,
                 'collation' => 'utf8mb4_unicode_ci',
                 'encoding' => 'utf8mb4',
                 'after' => 'id',
             ])
             ->addColumn('surname', 'string', [
-                'null' => false,
+                'null' => true,
+                'default' => null,
                 'limit' => 100,
                 'collation' => 'utf8mb4_unicode_ci',
                 'encoding' => 'utf8mb4',

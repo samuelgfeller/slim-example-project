@@ -49,7 +49,7 @@ userBtn?.addEventListener('click', () => {
 function submitUserDropdownChange() {
     // "this" is the select element
     // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, `users/${userId}`);
+    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, true, false);
 }
 
 // Display all edit icons if touch screen

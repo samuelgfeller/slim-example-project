@@ -66,5 +66,5 @@ function submitUserCardDropdownChange() {
     // Search upwards the closest user-card that contains the data-user-id attribute
     let userId = this.closest('.user-card').dataset.userId;
 
-    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`);
+    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, true, false);
 }

@@ -89,7 +89,7 @@ if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
 function submitClientDropdownChange() {
     // "this" is the select element
     // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, `clients/${clientId}`);
+    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, true, false);
 }
 
 function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {

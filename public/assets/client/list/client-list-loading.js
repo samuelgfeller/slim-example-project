@@ -178,5 +178,5 @@ function submitClientCardDropdownChange() {
     let clientId = this.closest('.client-profile-card').dataset.clientId;
 
     // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`);
+    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, true, false);
 }
