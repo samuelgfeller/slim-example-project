@@ -248,8 +248,7 @@ When the client makes a request and the body has not the right syntax (e.g. wron
 the server should respond with 400 Bad Request.
 
 Test function, provider and assertions:
-**[Malformed request body provider and test function example](#malformed-request-body-provider-and-test-function-example)**
-.
+**[Malformed request body provider and test function example](#malformed-request-body-provider-and-test-function-example).**
 
 ## Test and assert JSON response when unauthenticated
 

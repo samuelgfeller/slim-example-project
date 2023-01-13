@@ -22,7 +22,7 @@ class UserRoleSeeder extends AbstractSeed
             ['id' => 4, 'name' => 'newcomer', 'hierarchy' => 4],
         ];
 
-        $table = $this->table('user_role');        $table->truncate();
+        $table = $this->table('user_role');
 
         $table->insert($userRoleData)->saveData();
     }

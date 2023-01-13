@@ -7,14 +7,15 @@ class UserSeeder extends AbstractSeed
 {
 
     /**
-     * Dependencies for this seeder.
-     * Seeders returned by this function are executed before this one is.
+     * Retrieve the dependencies for this seeder.
+     * The seeders returned by this function will be executed before this one.
      *
      * @return string[]
      */
     public function getDependencies(): array
     {
         return [
+            'AdminUserSeeder',
             'UserRoleSeeder',
         ];
     }
@@ -31,17 +32,36 @@ class UserSeeder extends AbstractSeed
     {
         $userData = [
             [
-                'first_name' => 'Admin',
-                'surname' => null,
-                'user_role_id' => 1,
+                'id' => 2,
+                'first_name' => 'Manager',
+                'surname' => 'Advisor',
+                'user_role_id' => 2,
                 'status' => 'active',
-                'email' => 'admin@admin.com',
+                'email' => 'managing@advisor.com',
                 'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
             ],
+            [
+                'id' => 3,
+                'first_name' => 'Advisor',
+                'surname' => 'User',
+                'user_role_id' => 3,
+                'status' => 'active',
+                'email' => 'advisor@user.com',
+                'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
+            ],
+            [
+                'id' => 4,
+                'first_name' => 'Newcomer',
+                'surname' => 'User',
+                'user_role_id' => 4,
+                'status' => 'active',
+                'email' => 'newcomer@user.com',
+                'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
+            ],
+
         ];
 
         $table = $this->table('user');
-        $table->truncate();
         $table->insert($userData)->saveData();
     }
 }

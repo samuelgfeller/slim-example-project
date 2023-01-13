@@ -10,8 +10,6 @@
     "ext-pdo": "*",
     "ext-json": "*",
     "cakephp/database": "^4",
-    "symfony/polyfill-uuid": "^1.20",
-    "cakephp/chronos": "^2.0",
     "odan/session": "^5.0",
     "slim/php-view": "^3.0",
     "selective/basepath": "^2.0",
@@ -59,7 +57,7 @@
     ],
     "migrate": "phinx migrate -c config/phinx.php --ansi -vvv",
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",
-    "seed:minimal": "php vendor/bin/phinx seed:run -c config/phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s UserSeeder",
+    "seed:minimal": "php vendor/bin/phinx seed:run -c config/phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
     "seed": "php vendor/bin/phinx seed:run -c config/phinx.php"
   }
 }

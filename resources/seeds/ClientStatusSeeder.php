@@ -22,7 +22,7 @@ class ClientStatusSeeder extends AbstractSeed
             ['name' => 'Cannot help'],
         ];
 
-        $table = $this->table('client_status');        $table->truncate();
+        $table = $this->table('client_status');
 
         $table->insert($clientStatusData)->saveData();
     }

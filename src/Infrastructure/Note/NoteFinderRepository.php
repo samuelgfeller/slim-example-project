@@ -145,8 +145,12 @@ class NoteFinderRepository
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
-        $concatName = $query->func()
-            ->coalesce(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+        $concatName = $query->func()->concat([
+            $query->func()->coalesce(['user.first_name' => 'identifier', '']),
+            ' ',
+            $query->func()->coalesce(['user.surname' => 'identifier', ''])
+        ]);
+
 
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
             ->join(['user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id']])
