@@ -4,10 +4,15 @@ Lightweight example project of a backend and frontend done with the [Slim](https
 micro-framework.
 It can be used as a template when creating new projects or just serve as inspiration.
 
+### [Demo](https://demo.slim-example-project.samuel-gfeller.ch/)
+Username: admin@admin.com  
+Password: 12345678  
+The database is reset every 30 minutes.
+
 Please be aware that this app contains a significant amount of content, resulting in a number of 
 subjective decisions being made during its development.   
-I was inspired by [odan/slim4-skeleton](https://odan.github.io/slim4-skeleton/) and  
-[slimphp/Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) projects, and did my 
+Inspirations were [odan/slim4-skeleton](https://odan.github.io/slim4-skeleton/) 
+and [slimphp/Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) projects, and I did my 
 best adhering to the
 [SOLID](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design)
 principles. 
