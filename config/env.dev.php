@@ -11,10 +11,6 @@
 // Set false to show production error pages
 $settings['dev'] = true;
 
-// Version `null` or string. When null, all query param versions from js imports are removed
-// $settings['deployment']['version'] = random_int(0, 100);
-$settings['deployment']['version'] = 0.1;
-
 error_reporting(E_ALL);
 // In case error is not caught by error handler (below)
 ini_set('display_errors', $settings['dev'] ? '1' : '0');

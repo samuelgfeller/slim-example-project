@@ -1,8 +1,8 @@
-import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.1";
-import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.1";
-import {initFilterChipEventListeners} from "../general/page-component/filter-chip/filter-chip.js?v=0.1";
-import {loadUserActivities} from "../user/read/user-activity/activity-main.js?v=0.1";
-import {submitUpdate} from "../general/ajax/submit-update-data.js?v=0.1";
+import {fetchAndLoadClients} from "../client/list/client-list-loading.js?v=0.2.0";
+import {fetchAndLoadClientNotes} from "../client/note/client-read-note-loading.js?v=0.2.0";
+import {initFilterChipEventListeners} from "../general/page-component/filter-chip/filter-chip.js?v=0.2.0";
+import {loadUserActivities} from "../user/read/user-activity/activity-main.js?v=0.2.0";
+import {submitUpdate} from "../general/ajax/submit-update-data.js?v=0.2.0";
 
 // Toggle enable / disable panel
 const panelToggleButtons = document.getElementsByClassName('dashboard-panel-toggle-btn');

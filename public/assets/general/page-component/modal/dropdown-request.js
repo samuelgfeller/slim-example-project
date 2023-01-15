@@ -1,5 +1,5 @@
-import {basePath} from "../../general-js/config.js?v=0.1";
-import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.1";
+import {basePath} from "../../general-js/config.js?v=0.2.0";
+import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.2.0";
 
 /**
  * @param {string} moduleRoute name of the module for the route preceding "/dropdown-options"

@@ -27,8 +27,9 @@ $settings['root'] = dirname(__DIR__);
 $settings['dev'] = false;
 
 $settings['deployment'] = [
-    // When JsImportVersionAdder enabled `null` removes all query param versions from js imports
-    'version' => '0.1',
+    // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
+    // $settings['deployment']['version'] = random_int(0, 100);
+    'version' => '0.2.0',
     'assetsPath' => __DIR__ . '/../public/assets',
 ];
 
