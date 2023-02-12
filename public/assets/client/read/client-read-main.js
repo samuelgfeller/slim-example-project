@@ -113,3 +113,5 @@ function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {
             break;
     }
 }
+
+// debug
