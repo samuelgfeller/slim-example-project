@@ -1,5 +1,5 @@
-import {createModal} from "../../general/page-component/modal/modal.js?v=0.2.0";
-import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.2.0";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.1.0";
+import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.1.0";
 
 /**
  * Create and display modal box to change password

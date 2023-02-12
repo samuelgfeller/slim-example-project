@@ -1,8 +1,8 @@
-import {displayClientCreateModal} from "./client-create-modal.html.js?v=0.2.0";
-import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.2.0";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.2.0";
-import {displayValidationErrorMessage} from "../../general/validation/form-validation.js?v=0.2.0";
-import {fetchAndLoadClients} from "../list/client-list-loading.js?v=0.2.0";
+import {displayClientCreateModal} from "./client-create-modal.html.js?v=0.1.0";
+import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.1.0";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.1.0";
+import {displayValidationErrorMessage} from "../../general/validation/form-validation.js?v=0.1.0";
+import {fetchAndLoadClients} from "../list/client-list-loading.js?v=0.1.0";
 
 // Init event listeners if button is present
 document.getElementById('create-client-btn')?.addEventListener('click', displayClientCreateModal);

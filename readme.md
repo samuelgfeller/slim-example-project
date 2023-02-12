@@ -1,7 +1,7 @@
 # Slim example project
 
 Lightweight example project of a backend and frontend done with the [Slim](https://www.slimframework.com/)
-micro-framework.
+micro-framework.  
 It can be used as a template when creating new projects or just serve as inspiration.
 
 ### [Demo](https://demo.slim-example-project.samuel-gfeller.ch/)
@@ -41,7 +41,8 @@ feature to quickly create a repository with the code of this project.
 Checkout this repository in your preferred IDE before proceeding.
 
 ### 2. Set up the database
-Rename the file `config/env.example.php` to `env.php` and fill in your database credentials.  
+After opening the project in your IDE, rename the file `config/env.example.php` to `env.php` 
+and fill in your database credentials.  
 
 Then, create your database and update the `config/env.dev.php` file with the name of your 
 database, like this:
@@ -80,7 +81,8 @@ composer seed:minimal
 
 **Deployment**   
 If you are not planning on 
-deploying your app at this time, delete or comment out the contents of the `master.yml` file.  
+deploying your app at this time, delete or comment out the contents of the 
+`.github/workflows/master.yml` file.  
   
 To deploy your app, update the `.github/workflows/master.yml` file according to your needs and 
 add your server's credentials to GitHub's 
@@ -89,8 +91,8 @@ add your server's credentials to GitHub's
 **Build testing**   
 To run the project's tests automatically when pushing, update the 
 `.github/workflows/develop.yml` file.   
-Replace the matrix value "test-database" `slim_example_project_test` with the name of 
-your test database as specified in `config/env.test.php`.
+**Replace the matrix value "test-database" `slim_example_project_test` with the name of 
+your test database** as specified in `config/env.test.php`.
 If you are not using SonarCloud, remove the "SonarCloud Scan" step from the workflow.
 
 ### Done!
@@ -102,8 +104,12 @@ directory and share it on a version control such as GitHub.
 
 
 ## Functionalities
-It will grow into a usable application for non-profit organizations that need a platform to manage the people they
-are helping.  
+The goal of this project is to provide a comprehensive set of versatile features that can 
+serve as examples for learning or be adapted for other use cases when building new 
+applications.   
+It is currently designed for non-profit organizations or foundations that require a 
+platform for managing the peoples they're helping and maintaining a record of communication 
+through notes.  
 This project is done in collaboration with the foundation Retter in der Not.
 
 * Authentication (login)
@@ -115,6 +121,7 @@ This project is done in collaboration with the foundation Retter in der Not.
   captcha) - [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/security-concept.md)
 * [Custom error handler](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/error-handling.md)
 * Integration testing with fixtures and data providers 
+* Database migrations
 
 ## Technologies
 
@@ -122,7 +129,7 @@ This project is done in collaboration with the foundation Retter in der Not.
 
 #### Languages & libraries
 
-Mainly **Vanilla JS** to be as "native" as possible and E6 JavaScript supports a lot
+Mainly **Vanilla JS** to be as "native" as possible and E6 JavaScript supports a lot.
 
 #### Template renderer: **[slimphp/PHP-View](https://github.com/slimphp/PHP-View)**
 

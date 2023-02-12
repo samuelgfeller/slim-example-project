@@ -1,5 +1,5 @@
 // Init vars
-import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.2.0";
+import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.1.0";
 
 let password1Input, password2Inp;
 

@@ -1,8 +1,8 @@
-import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.2.0";
-import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.2.0";
-import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.2.0";
-import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.2.0";
-import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.2.0";
+import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.1.0";
+import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.1.0";
+import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.1.0";
+import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.1.0";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.1.0";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is

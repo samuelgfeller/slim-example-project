@@ -1,17 +1,17 @@
-import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.2.0";
+import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.1.0";
 import {
     displayClientProfileCardLoadingPlaceholder,
     removeClientCardContentPlaceholder
-} from "./client-list-content-placeholder.js?v=0.2.0";
-import {fetchData} from "../../general/ajax/fetch-data.js?v=0.2.0";
+} from "./client-list-content-placeholder.js?v=0.1.0";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=0.1.0";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
-} from "../../general/event-handler/open-link-on-html-element.js?v=0.2.0";
+} from "../../general/event-handler/open-link-on-html-element.js?v=0.1.0";
 import {
     triggerClickOnHtmlElementEnterKeypress
-} from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.2.0";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.2.0";
+} from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.1.0";
+import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.1.0";
 
 // When searching clients a request is made on each keyup and we want to show only the final result to the user,
 // not a flickering between content placeholders, the result of the first typed key, then the second and so on.

@@ -1,7 +1,7 @@
-import {getFormData, toggleEnableDisableForm} from "./modal-form.js?v=0.2.0";
-import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.2.0";
-import {closeModal} from "./modal.js?v=0.2.0";
-import {basePath} from "../../general-js/config.js?v=0.2.0";
+import {getFormData, toggleEnableDisableForm} from "./modal-form.js?v=0.1.0";
+import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.1.0";
+import {closeModal} from "./modal.js?v=0.1.0";
+import {basePath} from "../../general-js/config.js?v=0.1.0";
 
 /**
  * Check form validity, disable form, submit modal form and close it on success
