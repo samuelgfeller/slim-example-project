@@ -1,7 +1,7 @@
-import {createModal} from "../../general/page-component/modal/modal.js?v=0.1.0";
-import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.1.0";
-import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/template/template-util.js?v=0.1.0";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.1.0";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.2.1";
+import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.2.1";
+import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/template/template-util.js?v=0.2.1";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.2.1";
 
 /**
  * Create and display modal box to create a new client

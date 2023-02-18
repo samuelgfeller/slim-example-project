@@ -1,5 +1,5 @@
-import {basePath} from "../general-js/config.js?v=0.1.0";
-import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handler.js?v=0.1.0";
+import {basePath} from "../general-js/config.js?v=0.2.1";
+import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handler.js?v=0.2.1";
 
 
 /**

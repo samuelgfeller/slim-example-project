@@ -1,8 +1,8 @@
-import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.1.0";
-import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.1.0";
-import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.1.0";
-import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.1.0";
-import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.1.0";
+import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.2.1";
+import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.2.1";
+import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.2.1";
+import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.2.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.2.1";
 
 
 // To display the checkmark loader only when the user expects that his content is saved we have to know if he/she is
@@ -46,7 +46,6 @@ export function initNotesEventListeners() {
 let textareaInputPauseTimeoutId;
 
 export function addTextareaInputEventListener(textarea) {
-    let noteId = textarea.dataset.noteId;
     // Remove focus when ctrl + enter is pressed
     textarea.addEventListener('keypress', function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
@@ -57,7 +56,9 @@ export function addTextareaInputEventListener(textarea) {
             // input pause and this level of optimisation is not needed for this project
         }
     });
-    textarea.addEventListener('input', function () {
+    textarea.addEventListener('input', function saveNoteEventFunction() {
+        // Get most recent noteId dataset value (it changes from 'new-note' to the actual id when the note is new)
+        let noteId = textarea.dataset.noteId;
         userIsTypingOnNoteId = noteId;
         // Hide loader if there was one
         hideCheckmarkLoader(textarea.parentNode.querySelector('.circle-loader'), 'New input');
@@ -68,12 +69,11 @@ export function addTextareaInputEventListener(textarea) {
         clearTimeout(textareaInputPauseTimeoutId);
         textareaInputPauseTimeoutId = setTimeout(function () {
             // Runs 1 second after the last change
-            // console.log(textarea.checkValidity());
             if (textarea.checkValidity() !== false) {
                 if (noteId === 'new-note') {
                     insertNewNoteToDb(textarea);
                 } else if (noteId === 'new-main-note') {
-                    insertNewNoteToDb(textarea, true)
+                    insertNewNoteToDb(textarea, true);
                 } else {
                     // Call function to save note passing textarea as "this" and noteId as argument
                     saveNoteChangeToDb.call(textarea, noteId);
