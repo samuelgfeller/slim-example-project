@@ -90,7 +90,7 @@ class UserAuthorizationChecker
         ?array $userRoleHierarchies = null,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            // Values passed as arguments if called inside this class
+            // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
             if ($authenticatedUserRoleData === null) {
                 $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
             }

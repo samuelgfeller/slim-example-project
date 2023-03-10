@@ -51,6 +51,41 @@ class ClientCreateProvider
     }
 
     /**
+     * @return \array[][]
+     */
+    public function clientCreationDropdownOptionsCases(): array
+    {
+        // Set users with different roles
+        $managingAdvisorAttributes = ['first_name' => 'Manager', 'user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttributes = ['first_name' => 'Advisor', 'user_role_id' => UserRole::ADVISOR];
+        $newcomerAttributes = ['first_name' => 'Newcomer', 'user_role_id' => UserRole::NEWCOMER];
+
+        // Newcomer must not receive any available user
+        // Advisor is allowed to create client but only assign it to himself or leave user_id empty
+        // Managing advisor and higher should receive all available users
+        return [
+            // "owner" means from the perspective of the authenticated user
+            [ // ? Newcomer - not allowed so nothing should be returned
+                'authenticated_user' => $newcomerAttributes,
+                'other_user' => $advisorAttributes,
+                'expected_user_names' => [],
+            ],
+            [ // ? Advisor - should return only himself
+                'authenticated_user' => $advisorAttributes,
+                'other_user' => $newcomerAttributes,
+                // id not relevant only name
+                'expected_user_names' => [$advisorAttributes['first_name']],
+            ],
+            [ // ? Managing advisor - should return all available users
+                'authenticated_user' => $managingAdvisorAttributes,
+                'other_user' => $newcomerAttributes,
+                // All available users are authenticated manager advisor and newcomer as the "other" user
+                'expected_user_names' => [$managingAdvisorAttributes['first_name'], $newcomerAttributes['first_name']],
+            ],
+        ];
+    }
+
+    /**
      * Client creation authorization
      * Provides combination of different user roles with expected result.
      * This tests the rules in ClientAuthorizationChecker.
@@ -90,6 +125,11 @@ class ClientCreateProvider
             ],
             [ // ? Advisor owner - allowed
                 'user_linked_to_client' => $advisorAttributes,
+                'authenticated_user' => $advisorAttributes,
+                'expected_result' => $authorizedResult,
+            ],
+            [ // ? Advisor - client assigned to no one - allowed
+                'user_linked_to_client' => null,
                 'authenticated_user' => $advisorAttributes,
                 'expected_result' => $authorizedResult,
             ],

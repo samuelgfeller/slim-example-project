@@ -14,6 +14,8 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -49,6 +51,8 @@ class ClientUpdateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
+     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
@@ -159,6 +163,8 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     *
      * @return void
      */
     public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
@@ -223,6 +229,8 @@ class ClientUpdateActionTest extends TestCase
      * Test that if user makes update request but the content has not changed
      * compared to what's in the database, the response contains the warning.
      *
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     *
      * @return void
      */
     public function testClientSubmitUpdateActionUnchangedContent(): void
@@ -265,6 +273,8 @@ class ClientUpdateActionTest extends TestCase
 
     /**
      * Test client modification with malformed request body.
+     *
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */

@@ -4,7 +4,6 @@ namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use App\Domain\Client\Service\ClientUtilFinder;
 use App\Domain\User\Service\UserUtilFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +15,6 @@ class UserListDropdownOptionsAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param ClientUtilFinder $clientUtilFinder
      * @param UserUtilFinder $userUtilFinder
      */
     public function __construct(

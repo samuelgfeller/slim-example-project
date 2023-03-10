@@ -64,7 +64,7 @@ export function displayUserCreateModal() {
 
 /**
  * Render loaded dropdown options and radio buttons to create modal form
- * Hardcoded default user role 4 newcomer and status unverified
+ * hardcoded default user role 4 newcomer and status unverified
  *
  * @param dropdownOptions
  */

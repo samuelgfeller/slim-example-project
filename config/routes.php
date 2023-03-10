@@ -111,11 +111,11 @@ return function (App $app) {
             ->setName('client-read-page');
 
         $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
-        // Client create and update form are rendered by the client and need to have the dropdown options
+        // Client create form is rendered by the client and needs to have the available dropdown options
         $group->get(
             '/dropdown-options',
-            \App\Application\Actions\Client\Ajax\ClientListDropdownOptionsAction::class
-        )->setName('client-list-dropdown');
+            \App\Application\Actions\Client\Ajax\ClientCreateDropdownOptionsAction::class
+        )->setName('client-create-dropdown');
         /* For api response action:
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
          https://stackoverflow.com/a/19287394/9013718 */

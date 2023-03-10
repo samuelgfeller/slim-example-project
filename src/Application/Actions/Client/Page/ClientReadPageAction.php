@@ -44,7 +44,7 @@ final class ClientReadPageAction
         array $args
     ): ResponseInterface {
         $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id'], false);
-        $dropdownValues = $this->clientUtilFinder->findClientDropdownValues();
+        $dropdownValues = $this->clientUtilFinder->findClientDropdownValues($clientAggregate->userId);
 
         return $this->responder->render(
             $response,

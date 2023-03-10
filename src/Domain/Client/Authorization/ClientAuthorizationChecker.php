@@ -5,6 +5,7 @@ namespace App\Domain\Client\Authorization;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
@@ -46,12 +47,12 @@ class ClientAuthorizationChecker
             // Newcomer is not allowed to do anything
             // If hierarchy number is greater or equals newcomer it means that user is not allowed
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
-                // Advisor may create clients but can't assign them to someone other than himself
-                // If $client is null (not provided), advisor is authorized (used to check if create btn should be displayed)
-                if ($client === null || $client->userId === $loggedInUserId ||
-                    // managing advisor can link user to someone else
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
-                    // If at least advisor and client user id is authenticated user, or it's a managing_advisor -> granted
+                // Advisor may create clients but can only assign them to himself or leave it unassigned.
+                // If $client is null (not provided), advisor is authorized (being used to check if create btn should
+                // be displayed in template)
+                if ($client === null || $this->isGrantedToAssignUserToClient($client->userId)) {
+                    // If authenticated user is at least advisor and client user id is himself, or it's a
+                    // managing_advisor (logic in isGrantedToAssignUserToClient) -> granted to create
                     return true;
                 }
             }
@@ -65,11 +66,51 @@ class ClientAuthorizationChecker
     }
 
     /**
+     * Check if authenticated user is allowed to assign user to client
+     * (client id not needed as the same rules applies for new clients and all existing clients)
+     * In own function to be used to filter dropdown options for frontend.
+     *
+     * @param int|null $assignedUserId
+     * @param UserRoleData|null $authenticatedUserRoleData optional so that it can be called outside this class
+     * @param array|null $userRoleHierarchies optional so that it can be called outside this class
+     *
+     * @return bool|void
+     */
+    public function isGrantedToAssignUserToClient(
+        ?int $assignedUserId,
+        ?UserRoleData $authenticatedUserRoleData = null,
+        ?array $userRoleHierarchies = null
+    ) {
+        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+            // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
+            if ($authenticatedUserRoleData === null) {
+                $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+            }
+            if ($userRoleHierarchies === null) {
+                /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+                $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            }
+
+            // If hierarchy number is greater or equals advisor it means that user may create client
+            if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
+                // Advisor may create clients but can only assign them to himself or leave it unassigned
+                if ($assignedUserId === $loggedInUserId || $assignedUserId === null ||
+                    // managing advisor can link user to someone else
+                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
+                    // If authenticated user is at least advisor and client user id is authenticated user himself,
+                    // null (unassigned) or authenticated user is managing_advisor -> granted to assign
+                    return true;
+                }
+            }
+        }
+    }
+
+    /**
      * Logic to check if logged-in user is granted to update client.
      *
      * @param array $clientDataToUpdate validated array with as key the column to
-     * update and value the new value. There may be one or multiple entries,
-     * depending on what the user wants to update
+     * update and value the new value (or fictive "value").
+     * There may be one or multiple entries, depending on what the user wants to update.
      * @param int|null $ownerId user_id linked to client
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      *
@@ -130,11 +171,14 @@ class ClientAuthorizationChecker
                     }
                 }
                 // Things that only managing_advisor and higher privileged are allowed to do
-                if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
-                    if (array_key_exists('user_id', $clientDataToUpdate)) {
-                        $grantedUpdateKeys[] = 'user_id';
-                    }
+                if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']
+                    // isGrantedToAssignUserToClient can NOT be used as it expects a real user_id which is not provided
+                    // in the case where user_id value is the string "value" from (ClientAuthGetter) to check if
+                    // the authenticated user is allowed to change assigned user (html <select> enabled/disabled)
+                    && array_key_exists('user_id', $clientDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'user_id';
                 }
+
                 // If there is an undelete request on client, the same authorization rules than deletion are valid
                 if (array_key_exists('deleted_at', $clientDataToUpdate) && $this->isGrantedToDelete($ownerId, $log)) {
                     $grantedUpdateKeys[] = 'deleted_at';
@@ -191,6 +235,28 @@ class ClientAuthorizationChecker
     }
 
     /**
+     * Instead of isGrantedToListClient this function checks
+     * with isGrantedToReadClient and removes clients that
+     * authenticated user may not see.
+     *
+     * @param ClientResultData[] $clients
+     *
+     * @return ClientResultData[]
+     */
+    public function removeNonAuthorizedClientsFromList(array $clients): array
+    {
+        $authorizedClients = [];
+        foreach ($clients as $client) {
+            // Check if authenticated user is allowed to read each client and if yes, add it to the return array
+            if ($this->isGrantedToRead($client->userId)) {
+                $authorizedClients[] = $client;
+            }
+        }
+
+        return $authorizedClients;
+    }
+
+    /**
      * Check if authenticated user is allowed to read client.
      *
      * @param int|null $ownerId
@@ -229,27 +295,5 @@ class ClientAuthorizationChecker
         }
 
         return false;
-    }
-
-    /**
-     * Instead of isGrantedToListClient this function checks
-     * with isGrantedToReadClient and removes clients that
-     * authenticated user may not see.
-     *
-     * @param ClientResultData[] $clients
-     *
-     * @return ClientResultData[]
-     */
-    public function removeNonAuthorizedClientsFromList(array $clients): array
-    {
-        $authorizedClients = [];
-        foreach ($clients as $client) {
-            // Check if authenticated user is allowed to read each client and if yes, add it to the return array
-            if ($this->isGrantedToRead($client->userId)) {
-                $authorizedClients[] = $client;
-            }
-        }
-
-        return $authorizedClients;
     }
 }

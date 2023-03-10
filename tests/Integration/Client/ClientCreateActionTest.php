@@ -13,6 +13,8 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -41,14 +43,16 @@ class ClientCreateActionTest extends TestCase
      *
      * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationUsersAndExpectedResultProvider()
      *
-     * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+     * @param array|null $userLinkedToClientRow client owner attributes containing the user_role_id or null if none
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     *
+     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
-        array $userLinkedToClientRow,
+        ?array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $expectedResult
     ): void {
@@ -118,7 +122,7 @@ class ClientCreateActionTest extends TestCase
             // Note user activity entry
             // Add other note values
             $noteValues['client_id'] = $clientDbRow['id'];
-            $noteValues['user_id'] = $userLinkedToClientRow['id'];
+            $noteValues['user_id'] = $authenticatedUserRow['id'];
             $noteValues['is_main'] = 1;
             $this->assertTableRow(
                 [
@@ -146,6 +150,8 @@ class ClientCreateActionTest extends TestCase
      *
      * @param array $requestBody
      * @param array $jsonResponse
+     *
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
@@ -189,7 +195,7 @@ class ClientCreateActionTest extends TestCase
      */
     public function testClientSubmitCreateActionUnauthenticated(): void
     {
-        // Create request (no body needed as it shouldn't be interpreted anyway)
+        // Create request (body not needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
         $redirectAfterLoginRouteName = 'client-list-page';
@@ -214,6 +220,8 @@ class ClientCreateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::malformedRequestBodyCases()
      *
      * @param array $requestBody
+     *
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */

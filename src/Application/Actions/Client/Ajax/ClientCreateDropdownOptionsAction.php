@@ -9,7 +9,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ClientListDropdownOptionsAction
+class ClientCreateDropdownOptionsAction
 {
     /**
      * The constructor.

@@ -9,38 +9,6 @@ use App\Test\Fixture\UserFixture;
 trait AuthorizationTestTrait
 {
     /**
-     * Adds the correct user role id to given attributes containing
-     * UserRole enum case.
-     *
-     * @param array $userAttr
-     *
-     * @return array with all user attributes including of course user_role_id if set
-     */
-    protected function addUserRoleId(array $userAttr): array
-    {
-        // If user role is provided and is instance of UserRole, replace array key with the actual id
-        if ($userAttr['user_role_id'] ?? '' instanceof UserRole) {
-            $userAttr['user_role_id'] = $this->getUserRoleIdByEnum($userAttr['user_role_id']);
-        }
-
-        return $userAttr;
-    }
-
-    /**
-     * Returns user role id from given Enum case.
-     *
-     * @param UserRole $userRole
-     *
-     * @return int
-     */
-    protected function getUserRoleIdByEnum(UserRole $userRole): int
-    {
-        $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
-
-        return $userRoleFinderRepository->findUserRoleIdByName($userRole->value);
-    }
-
-    /**
      * Change array of UserRole Enum cases to expected availableUserRoles
      * array from the server with id and capitalized role name [{id} => {Role name}].
      *
@@ -60,6 +28,23 @@ trait AuthorizationTestTrait
     }
 
     /**
+     * Returns user role id from given Enum case.
+     *
+     * @param UserRole $userRole
+     *
+     * @return int
+     */
+    protected function getUserRoleIdByEnum(UserRole $userRole): int
+    {
+        $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
+
+        return $userRoleFinderRepository->findUserRoleIdByName($userRole->value);
+    }
+
+    /**
+     * If both user arguments are different, it inserts both users; if same only one
+     * and then populate the given arguments by reference with the newly inserted
+     * user attributes. More infos below.
      * Takes tested and authenticated user as reference in the form of attributes
      * like ['user_role_id' => UserRole::Advisor, 'first_name' => 'John']
      * where the UserRole enum is replaced by the actual user role id and
@@ -68,10 +53,10 @@ trait AuthorizationTestTrait
      * variables where the function was called will change values.
      * That's why no return value is needed.
      *
-     * @param array $userAttr user attributes reference that will be changed into the inserted user data
+     * @param array|null $userAttr user attributes reference that will be changed into the inserted user data
      * @param array $authenticatedUserAttr user attributes reference that will be changed to the inserted user data
      */
-    protected function insertUserFixturesWithAttributes(array &$userAttr, array &$authenticatedUserAttr): void
+    protected function insertUserFixturesWithAttributes(?array &$userAttr, array &$authenticatedUserAttr): void
     {
         $authenticatedUserAttrOriginal = $authenticatedUserAttr;
         // Insert authenticated user and user linked to resource with given attributes containing the user role
@@ -81,6 +66,9 @@ trait AuthorizationTestTrait
         );
         if ($authenticatedUserAttrOriginal === $userAttr) {
             $userAttr = $authenticatedUserAttr;
+        } // If userAttr is null, change array to contain array key "id" prevent the need of null checking later
+        elseif ($userAttr === null) {
+            $userAttr['id'] = null;
         } else {
             // If authenticated user and owner user is not the same, insert owner
             $userAttr = $this->insertFixturesWithAttributes(
@@ -88,5 +76,23 @@ trait AuthorizationTestTrait
                 UserFixture::class
             );
         }
+    }
+
+    /**
+     * Adds the correct user role id to given attributes containing
+     * UserRole enum case.
+     *
+     * @param array $userAttr
+     *
+     * @return array with all user attributes including of course user_role_id if set
+     */
+    protected function addUserRoleId(array $userAttr): array
+    {
+        // If user role is provided and is instance of UserRole, replace array key with the actual id
+        if ($userAttr['user_role_id'] ?? '' instanceof UserRole) {
+            $userAttr['user_role_id'] = $this->getUserRoleIdByEnum($userAttr['user_role_id']);
+        }
+
+        return $userAttr;
     }
 }

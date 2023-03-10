@@ -11,6 +11,8 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -35,7 +37,7 @@ class ApiClientCreateActionTest extends TestCase
      * Client creation from api endpoint with valid data.
      * Test CORS headers.
      *
-     * @throws \JsonException
+     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */

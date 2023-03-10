@@ -10,6 +10,8 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
@@ -29,6 +31,9 @@ class ClientReadPageActionTest extends TestCase
 
     /**
      * Normal page action while being authenticated.
+     *
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      *
      * @return void
      */
