@@ -41,6 +41,11 @@ class ClientFinderWithFilter
                 throw new InvalidClientFilterException('Invalid filter format "user".');
             }
         }
+        // Filter: assigned user is deleted
+        if (isset($params['deleted-assigned-user']) && (int)$params['deleted-assigned-user'] === 1) {
+            // Add to filter params if date greater than given date and user_id is not null
+            $filterParams['user.deleted_at IS NOT'] = null;
+        }
         // Filter: include deleted records
         if (isset($params['include-deleted']) && (int)$params['include-deleted'] === 1) {
             unset($filterParams['deleted_at']);

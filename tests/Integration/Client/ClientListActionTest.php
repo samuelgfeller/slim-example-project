@@ -53,8 +53,8 @@ class ClientListActionTest extends TestCase
     /**
      * Normal page action while having an active session.
      *
-     * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return void
      */
@@ -106,8 +106,8 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
-     * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return void
      */
@@ -143,7 +143,12 @@ class ClientListActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Filter fixture records with given row filter params
-        $clientRows = $this->findTableRowsWhere('client', $expectedClientsWhereString);
+        $clientRows = $this->findTableRowsWhere(
+            'client',
+            $expectedClientsWhereString,
+            null,
+            'left join user on user.id = client.user_id'
+        );
 
         // Create expected array based on fixture records
         $expected['clients'] = [];
@@ -206,8 +211,8 @@ class ClientListActionTest extends TestCase
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return void
      */

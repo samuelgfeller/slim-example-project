@@ -50,15 +50,17 @@ trait DatabaseExtensionTestTrait
      * @param string $table Table name
      * @param string $whereString
      * @param array|null $fields The array of fields
+     * @param string $joinString
      *
      * @return array[] array or rows
      */
     protected function findTableRowsWhere(
         string $table,
         string $whereString,
-        array $fields = null
+        array $fields = null,
+        string $joinString = '',
     ): array {
-        $sql = "SELECT * FROM `$table` WHERE $whereString;";
+        $sql = "SELECT $table.* FROM `$table` $joinString WHERE $whereString;";
         $statement = $this->createPreparedStatement($sql);
         $statement->execute();
 

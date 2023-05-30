@@ -242,7 +242,7 @@ final class Responder
      */
     public function respondWithJson(
         ResponseInterface $response,
-        $data = null,
+        mixed $data = null,
         int $status = 200
     ): ResponseInterface {
         $response->getBody()->write((string)json_encode($data, JSON_THROW_ON_ERROR));

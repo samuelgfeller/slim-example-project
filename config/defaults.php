@@ -91,6 +91,8 @@ $settings['db'] = [
     'quoteIdentifiers' => true,
     // Disable query logging
     'log' => false,
+    // Turn off persistent connections
+    'persistent' => false,
     // PDO options
     'flags' => [
         // Turn off persistent connections

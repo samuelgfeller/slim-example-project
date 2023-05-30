@@ -3,8 +3,10 @@
 namespace App\Application\Actions\User\Page;
 
 use App\Application\Responder\Responder;
+use App\Domain\User\Authorization\UserAuthorizationChecker;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpForbiddenException;
 
 /**
  * Action.
@@ -15,9 +17,11 @@ final class UserListPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
+     * @param privatereadonlyUserAuthorizationChecker $userAuthorizationChecker
      */
     public function __construct(
         private readonly Responder $responder,
+        private readonly UserAuthorizationChecker $userAuthorizationChecker,
     ) {
     }
 
@@ -28,8 +32,8 @@ final class UserListPageAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
-     * @throws \JsonException
      * @throws \Throwable
+     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */
@@ -38,6 +42,10 @@ final class UserListPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        return $this->responder->render($response, 'user/user-list.html.php');
+        if ($this->userAuthorizationChecker->isGrantedToRead()) {
+            return $this->responder->render($response, 'user/user-list.html.php');
+        }
+
+        throw new HttpForbiddenException($request, 'Not allowed to see this page.');
     }
 }

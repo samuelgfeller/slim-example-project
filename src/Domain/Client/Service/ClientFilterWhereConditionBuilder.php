@@ -66,6 +66,7 @@ class ClientFilterWhereConditionBuilder
             unset($filterParams['name']);
         }
 
+        // Populate $queryBuilderWhereArray with other filter params than name
         foreach ($filterParams as $column => $value) {
             // If multiple values are given for a filter setting, separate by OR
             if (is_array($value)) {
@@ -91,7 +92,7 @@ class ClientFilterWhereConditionBuilder
 
     /**
      * Change column and value to valid cakephp query builder
-     * conditions for the client list request.
+     * conditions for the client list request (e.g. IS NULL).
      *
      * @param string $column column reference
      * @param string|int|array|null $value value reference
@@ -108,6 +109,11 @@ class ClientFilterWhereConditionBuilder
         if ($value === null && !str_contains($column, ' IS')) {
             $is = ' IS'; // To be added right after column
         }
-        $column = "$this->columnPrefix$column$is";
+        // Add column prefix (table name) only if there is not already a dot (.) in the column name
+        // This would break if a database column name contains a dot
+        if (!str_contains($column, '.')) {
+            $column = "$this->columnPrefix$column";
+        }
+        $column = "$column$is";
     }
 }

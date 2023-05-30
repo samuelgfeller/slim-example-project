@@ -274,13 +274,13 @@ class UserAuthorizationChecker
     /**
      * Check if authenticated user is allowed to read user.
      *
-     * @param int $userIdToRead
+     * @param int|null $userIdToRead null when check for all users
      * @param bool $log log if forbidden (expected false when function is called for privilege setting)
      *
      * @return bool
      */
     public function isGrantedToRead(
-        int $userIdToRead,
+        int|null $userIdToRead = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {

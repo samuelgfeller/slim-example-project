@@ -104,6 +104,15 @@ class ClientListFilterChipProvider
                 ]);
             }
         }
+        $allClientFilters['deleted_assigned_user'] = new FilterData([
+            'name' => 'Deleted assigned user',
+            'paramName' => 'deleted-assigned-user',
+            'paramValue' => '1',
+            'category' => 'Other user',
+            'authorized' => $this->authorizationChecker->isAuthorizedByRole(
+                UserRole::ADVISOR
+            ),
+        ]);
 
         return $allClientFilters;
     }
