@@ -69,14 +69,14 @@ class PasswordChanger
         string $password1,
         string $password2,
         int $userId,
-        ?string $oldPassword = null
+        string $oldPassword = null
     ): bool {
         // Check if password strings are valid
         $this->userValidator->validatePasswords([$password1, $password2], true);
 
         // If old password is provided and user is allowed to update password, test password correctness
-        if ($oldPassword &&
-            $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
+        if ($oldPassword
+            && $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
             // Verify old password; throws validation exception if not correct old password
             $this->userValidator->checkIfPasswordIsCorrect($oldPassword, 'old_password', $userId);

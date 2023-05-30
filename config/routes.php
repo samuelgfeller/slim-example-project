@@ -148,11 +148,11 @@ return function (App $app) {
             ->setName('note-submit-delete');
     })->add(UserAuthenticationMiddleware::class);
 
-//    $app->get( '/favicon.ico', function ($request, $response) {
-//        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');
-//
-//        return $response;
-//    });
+    //    $app->get( '/favicon.ico', function ($request, $response) {
+    //        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');
+    //
+    //        return $response;
+    //    });
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match

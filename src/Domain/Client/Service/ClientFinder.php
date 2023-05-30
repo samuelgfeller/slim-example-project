@@ -109,8 +109,8 @@ class ClientFinder
     public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultData
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
-        if ($clientResultAggregate->id &&
-            $this->clientAuthorizationChecker->isGrantedToRead(
+        if ($clientResultAggregate->id
+            && $this->clientAuthorizationChecker->isGrantedToRead(
                 $clientResultAggregate->userId,
                 $clientResultAggregate->deletedAt
             )
@@ -171,7 +171,7 @@ class ClientFinder
     {
         $clientResultCollection = new ClientResultDataCollection();
         $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsByUserId($userId);
-//        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
+        //        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
         return $clientResultCollection;
     }
 }

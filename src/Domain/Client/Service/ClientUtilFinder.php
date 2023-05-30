@@ -25,7 +25,7 @@ class ClientUtilFinder
      *
      * @return ClientDropdownValuesData
      */
-    public function findClientDropdownValues(?int $alreadyAssignedUserId = null): ClientDropdownValuesData
+    public function findClientDropdownValues(int $alreadyAssignedUserId = null): ClientDropdownValuesData
     {
         $allUsers = $this->userFinderRepository->findAllUsers();
         // Filter users that authenticated user is authorized to assign to the client that is being created.
@@ -34,9 +34,9 @@ class ClientUtilFinder
         foreach ($allUsers as $userData) {
             if (// If the user is already assigned to client the value is added so that it's displayed in the dropdown
                 // for it to be visible in GUI even if select is greyed out
-                ($alreadyAssignedUserId !== null && $userData->id === $alreadyAssignedUserId) ||
+                ($alreadyAssignedUserId !== null && $userData->id === $alreadyAssignedUserId)
                 // Check if authenticated user is allowed to assign the currently iterating user to a client
-                $this->clientAuthorizationChecker->isGrantedToAssignUserToClient($userData->id)
+                || $this->clientAuthorizationChecker->isGrantedToAssignUserToClient($userData->id)
             ) {
                 $grantedAssignableUsers[] = $userData;
             }

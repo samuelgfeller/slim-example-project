@@ -269,7 +269,7 @@ class DefaultErrorHandler
         return trim(substr($string, strrpos($string, $lastChar) + 1));
 
         // alternative https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
-//        $path = explode('\\', __CLASS__);
-//        return array_pop($path);
+        //        $path = explode('\\', __CLASS__);
+        //        return array_pop($path);
     }
 }

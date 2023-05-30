@@ -35,10 +35,10 @@ final class AccountUnlockTokenVerifier
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
         // Verify given token with token in database
         if (
-            $verification->token !== null &&
-            $verification->usedAt === null &&
-            $verification->expiresAt > time() &&
-            true === password_verify($token, $verification->token)
+            $verification->token !== null
+            && $verification->usedAt === null
+            && $verification->expiresAt > time()
+            && true === password_verify($token, $verification->token)
         ) {
             $userStatus = $this->userFinder->findUserById($verification->userId)->status;
 

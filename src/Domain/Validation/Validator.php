@@ -168,15 +168,15 @@ final class Validator
             // $now is not changed with ->sub as its immutable
             $oldestAge = $now->sub(new \DateInterval('P130Y'));
             // If age in the future or older than the oldest age -> invalid
-            if ($birthdate->getTimestamp() > $now->getTimestamp() ||
-                $birthdate->getTimestamp() < $oldestAge->getTimestamp()) {
+            if ($birthdate->getTimestamp() > $now->getTimestamp()
+                || $birthdate->getTimestamp() < $oldestAge->getTimestamp()) {
                 $validationResult->setError('birthdate', 'Invalid birthdate');
             }
-        // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
-        // There are cases where client submits data in different format than Y-m-d so this check was removed
-        // if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
+            // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
+            // There are cases where client submits data in different format than Y-m-d so this check was removed
+            // if ($birthdateUserInput !== null && $birthdate->format('Y-m-d') !== $birthdateUserInput) {
             //     $validationResult->setError('birthdate', 'Invalid birthdate. Instance not same as input');
-        // }
+            // }
         } elseif (true === $required) {
             // If it is null and required
             $validationResult->setError('birthdate', 'Birthdate is required');
@@ -273,9 +273,9 @@ final class Validator
             if (!is_a($value, $enum, true) && !is_a($enum::tryFrom($value), $enum, true)) {
                 $validationResult->setError($fieldName, $fieldName . ' not existing');
             }
-        // Check if given user status is one of the enum cases
-        // if (!in_array($value, $enum::values(), true)) {
-        // }
+            // Check if given user status is one of the enum cases
+            // if (!in_array($value, $enum::values(), true)) {
+            // }
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError($fieldName, $fieldName . ' is required');

@@ -33,8 +33,8 @@ final class VerificationTokenVerifier
 
         // Verify given token with token in database
         if (
-            ($verification->token !== null) && $verification->usedAt === null && $verification->expiresAt > time() &&
-            true === password_verify($token, $verification->token)
+            ($verification->token !== null) && $verification->usedAt === null && $verification->expiresAt > time()
+            && true === password_verify($token, $verification->token)
         ) {
             // Mark token as being used
             $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);

@@ -30,8 +30,8 @@ class ClientAuthorizationGetter
             return Privilege::DELETE;
         }
         // Value does not matter as keys are relevant
-        if ($column !== null &&
-            $this->clientAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
+        if ($column !== null
+            && $this->clientAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
         ) {
             return Privilege::UPDATE;
         }

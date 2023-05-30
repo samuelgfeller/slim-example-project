@@ -47,8 +47,8 @@ class UserAuthorizationChecker
             // Managing advisor may change users
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 // Managing advisors can do everything with users except setting a role higher than advisor
-                if ($userData->userRoleId !== null &&
-                    $this->userRoleIsGranted(
+                if ($userData->userRoleId !== null
+                    && $this->userRoleIsGranted(
                         $userData->userRoleId,
                         null,
                         $authenticatedUserRoleData,
@@ -86,8 +86,8 @@ class UserAuthorizationChecker
     public function userRoleIsGranted(
         int $userRoleId,
         ?int $userRoleIdOfUserToMutate,
-        ?UserRoleData $authenticatedUserRoleData = null,
-        ?array $userRoleHierarchies = null,
+        UserRoleData $authenticatedUserRoleData = null,
+        array $userRoleHierarchies = null,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
@@ -107,11 +107,11 @@ class UserAuthorizationChecker
             }
 
             if ( // Managing advisor can only attribute roles with lower or equal privilege than advisor
-                $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value] &&
-                $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value] &&
+                $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
+                && $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value]
                 // And managing advisor may only change advisors or newcomers
-                ($userRoleIdOfUserToMutate === null ||
-                    $userRoleHierarchiesById[$userRoleIdOfUserToMutate] >=
+                && ($userRoleIdOfUserToMutate === null
+                    || $userRoleHierarchiesById[$userRoleIdOfUserToMutate] >=
                     $userRoleHierarchies[UserRole::ADVISOR->value])
             ) {
                 return true;
@@ -155,9 +155,8 @@ class UserAuthorizationChecker
                         // and that the user to change is has no role higher than advisor
                         && $userToUpdateRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
                     // or it's an admin which is allowed to change users with role
-                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value])
-                || // or user edits his own profile
-                $loggedInUserId === (int)$userIdToUpdate
+                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADMIN->value]) // or user edits his own profile
+                || $loggedInUserId === (int)$userIdToUpdate
             ) {
                 // Managing advisor cannot change other managing advisors or admins but admins can change themselves and everyone else
 
@@ -199,13 +198,13 @@ class UserAuthorizationChecker
                     // There is a special case with passwords where the user can change his own password, but he needs to
                     // provide the old password. If password_without_verification is given as $userDataToUpdate it means
                     // that the authenticated user can change the password without the old password.
-                    if (array_key_exists('password_without_verification', $userDataToUpdate) &&
+                    if (array_key_exists('password_without_verification', $userDataToUpdate)
                         // If user want to change his own password, the old password is required regardless of role
                         // so that nobody can change his password if the computer is left unattended and logged-in
                         // https://security.stackexchange.com/a/24292 - to change other passwords it would be best if
                         // the authenticated managing_advisor / admin password is asked instead of the old user password
                         // but this is too much for this project.
-                        $loggedInUserId !== (int)$userIdToUpdate) {
+                        && $loggedInUserId !== (int)$userIdToUpdate) {
                         $grantedUpdateKeys[] = 'password_without_verification';
                     }
                 }

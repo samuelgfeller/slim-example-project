@@ -72,8 +72,8 @@ trait AppTestTrait
         // Disable xdebug.start_with_request (when already disabled, delay is approx 200ms for 80 tests)
         // shell_exec(__DIR__ . '/../../resources/scripts/1_disable_autostart_minimized_shortcut.lnk');
         // $_ENV['AUTO_XDEBUG_DISABLED'] = true;
-//            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
-//         }
+        //            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
+        //         }
     }
 
     /**

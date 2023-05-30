@@ -15,6 +15,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpForbiddenException;
 
 class UserListPageActionTest extends TestCase
 {
@@ -26,6 +27,31 @@ class UserListPageActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
+     * Page action while being authenticated but not allowed to see the page.
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     *
+     * @return void
+     */
+    public function testUserListPageActionAuthenticatedUnauthorized(): void
+    {
+        // Insert authenticated but unauthorized user newcomer
+        $userRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
+            UserFixture::class
+        );
+
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $request = $this->createRequest('GET', $this->urlFor('user-list-page'));
+
+        $this->expectException(HttpForbiddenException::class);
+        $response = $this->app->handle($request);
+    }
+
+    /**
      * Normal page action while being authenticated.
      *
      * @throws ContainerExceptionInterface
@@ -33,11 +59,11 @@ class UserListPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageActionAuthenticated(): void
+    public function testUserListPageActionAuthenticatedAuthorized(): void
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userRow = $this->insertFixturesWithAttributes(
-            $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
             UserFixture::class
         );
 
@@ -57,7 +83,7 @@ class UserListPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListPageActionUnauthenticated(): void
+    public function testUserListPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
         $requestRoute = $this->urlFor('client-list-page');

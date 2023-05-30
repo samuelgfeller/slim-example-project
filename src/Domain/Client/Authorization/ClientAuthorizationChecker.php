@@ -35,7 +35,7 @@ class ClientAuthorizationChecker
      *
      * @return bool
      */
-    public function isGrantedToCreate(?ClientData $client = null): bool
+    public function isGrantedToCreate(ClientData $client = null): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -78,8 +78,8 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToAssignUserToClient(
         ?int $assignedUserId,
-        ?UserRoleData $authenticatedUserRoleData = null,
-        ?array $userRoleHierarchies = null
+        UserRoleData $authenticatedUserRoleData = null,
+        array $userRoleHierarchies = null
     ) {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
@@ -94,9 +94,9 @@ class ClientAuthorizationChecker
             // If hierarchy number is greater or equals advisor it means that user may create client
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
                 // Advisor may create clients but can only assign them to himself or leave it unassigned
-                if ($assignedUserId === $loggedInUserId || $assignedUserId === null ||
+                if ($assignedUserId === $loggedInUserId || $assignedUserId === null
                     // managing advisor can link user to someone else
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
+                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                     // If authenticated user is at least advisor and client user id is authenticated user himself,
                     // null (unassigned) or authenticated user is managing_advisor -> granted to assign
                     return true;

@@ -33,9 +33,9 @@ class NoteAuthorizationChecker
      */
     public function isGrantedToRead(
         int $isMain = 0,
-        ?int $noteOwnerId = null,
-        ?int $clientOwnerId = null,
-        ?int $hidden = null,
+        int $noteOwnerId = null,
+        int $clientOwnerId = null,
+        int $hidden = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -45,12 +45,12 @@ class NoteAuthorizationChecker
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes
-            if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) &&
-                (
-                    in_array($hidden, [null, 0], true) || // When hidden is not null or 0, user has to be advisor to read note
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value] ||
+            if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
+                && (
+                    in_array($hidden, [null, 0], true) // When hidden is not null or 0, user has to be advisor to read note
+                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]
                     // If authenticated user is client owner or note owner -> granted to read hidden notes
-                    $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
+                    || $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
                 )
             ) {
                 return true;
@@ -74,7 +74,7 @@ class NoteAuthorizationChecker
      *
      * @return bool
      */
-    public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
+    public function isGrantedToCreate(int $isMain = 0, int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -82,10 +82,10 @@ class NoteAuthorizationChecker
             );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
-            if (($isMain === 0 && // newcomers may see create notes for any client
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]) ||
-                ($isMain === 1 && // only advisors and higher may create main notes
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])) {
+            if (($isMain === 0 // newcomers may see create notes for any client
+                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
+                || ($isMain === 1 // only advisors and higher may create main notes
+                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])) {
                 return true;
             }
         }
@@ -111,8 +111,8 @@ class NoteAuthorizationChecker
      */
     public function isGrantedToUpdate(
         int $isMain,
-        ?int $noteOwnerId = null,
-        ?int $clientOwnerId = null,
+        int $noteOwnerId = null,
+        int $clientOwnerId = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -123,11 +123,11 @@ class NoteAuthorizationChecker
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
-            if (($isMain === 0 && ($loggedInUserId === $noteOwnerId ||
-                        $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value])) ||
+            if (($isMain === 0 && ($loggedInUserId === $noteOwnerId
+                        || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]))
                 // If it's a main note, advisors and higher may edit it and $clientOwnerId could be relevant here
-                ($isMain === 1 && // Should be identical to client update basic info authorization
-                    $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])
+                || ($isMain === 1 // Should be identical to client update basic info authorization
+                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])
             ) {
                 return true;
             }
@@ -154,8 +154,8 @@ class NoteAuthorizationChecker
      * @return bool
      */
     public function isGrantedToDelete(
-        ?int $noteOwnerId = null,
-        ?int $clientOwnerId = null,
+        int $noteOwnerId = null,
+        int $clientOwnerId = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -166,8 +166,8 @@ class NoteAuthorizationChecker
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
-            if ($loggedInUserId === $noteOwnerId ||
-                $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
+            if ($loggedInUserId === $noteOwnerId
+                || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 return true;
             }
         }

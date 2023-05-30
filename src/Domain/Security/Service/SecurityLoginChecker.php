@@ -85,10 +85,10 @@ class SecurityLoginChecker
         foreach ($this->securitySettings['login_throttle_rule'] as $requestLimit => $delay) {
             // Check that there aren't more login successes or failures than tolerated
             if (
-                ($ipStats->loginFailures >= $requestLimit && $ipStats->loginFailures !== 0) ||
-                ($throttleSuccess && $ipStats->loginSuccesses >= $requestLimit && $ipStats->loginSuccesses !== 0) ||
-                ($userStats->loginFailures >= $requestLimit && $userStats->loginFailures !== 0) ||
-                ($throttleSuccess && $userStats->loginSuccesses >= $requestLimit && $userStats->loginSuccesses !== 0)
+                ($ipStats->loginFailures >= $requestLimit && $ipStats->loginFailures !== 0)
+                || ($throttleSuccess && $ipStats->loginSuccesses >= $requestLimit && $ipStats->loginSuccesses !== 0)
+                || ($userStats->loginFailures >= $requestLimit && $userStats->loginFailures !== 0)
+                || ($throttleSuccess && $userStats->loginSuccesses >= $requestLimit && $userStats->loginSuccesses !== 0)
             ) {
                 // If truthy means: too many ip fails OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user

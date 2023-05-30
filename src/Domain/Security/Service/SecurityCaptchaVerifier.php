@@ -32,8 +32,8 @@ class SecurityCaptchaVerifier
             urlencode($this->googleSettings['recaptcha']) . '&response=' . urlencode($reCaptchaResponse);
         $verificationResponse = file_get_contents($url);
         if (
-            $verificationResponse !== false &&
-            json_decode($verificationResponse, true, 512, JSON_THROW_ON_ERROR)['success']
+            $verificationResponse !== false
+            && json_decode($verificationResponse, true, 512, JSON_THROW_ON_ERROR)['success']
         ) {
             return true;
         }
