@@ -178,10 +178,11 @@ class NoteFinderRepository
         $query = $this->queryFactory->newQuery()->from('note');
 
         $concatUserName = $query->func()->concat(
-            ['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']
+            // Not very sexy to put IFNULL function there but with "identifier", cake interprets the string literally
+            ['IFNULL(user.first_name, "")' => 'identifier', ' ', 'IFNULL(user.surname, "")' => 'identifier']
         );
         $concatClientName = $query->func()->concat(
-            ['client.first_name' => 'identifier', ' ', 'client.last_name' => 'identifier']
+            ['IFNULL(client.first_name, "")' => 'identifier', ' ', 'IFNULL(client.last_name, "")' => 'identifier']
         );
 
         $query->select(
@@ -194,6 +195,7 @@ class NoteFinderRepository
             ->leftJoin('client', ['note.client_id = client.id'])
             ->andWhere(['note.deleted_at IS' => null])
             ->orderDesc('note.updated_at')->limit($notesAmount);
+
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteResultData::class);

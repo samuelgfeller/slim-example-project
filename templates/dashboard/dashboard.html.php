@@ -8,7 +8,9 @@
 
 $this->setLayout('layout.html.php');
 $this->addAttribute('css', [
+    'assets/client/read/client-read.css',
     'assets/general/page-component/content-placeholder/content-placeholder.css',
+    'assets/general/page-component/content-placeholder/client-read-note-placeholder.css',
     'assets/client/list/client-list-loading-placeholder.css',
     'assets/client/list/client-list.css', // For clients
     'assets/general/page-component/contenteditable/contenteditable.css', // For notes

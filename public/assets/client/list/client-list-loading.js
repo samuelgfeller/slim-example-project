@@ -65,6 +65,8 @@ export function fetchAndLoadClients(
                     ?.addEventListener('change', submitClientCardDropdownChange);
             }
         }
+    }).catch(error => {
+        console.error(error);
     });
 
 }
@@ -81,8 +83,8 @@ export function fetchAndLoadClientsEventHandler() {
 
 
 /**
- *  Fetch clients with active filter chips and name search if present
- *  then load clients into DOM
+ * Fetch clients with active filter chips and name search if present
+ * then load clients into DOM
  * @return {Promise} load clients ajax promise
  * @param {URLSearchParams} searchParams custom filter params that are not from filter chip and won't be
  * saved in user_filter_setting database table

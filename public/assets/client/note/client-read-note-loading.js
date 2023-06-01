@@ -16,6 +16,7 @@ import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v
  */
 export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), noteWrapperId = null) {
 
+    console.log(noteWrapperId);
     displayClientNoteLoadingPlaceholder(noteWrapperId);
 
     let redirectIfUnauthenticatedUrl = '';

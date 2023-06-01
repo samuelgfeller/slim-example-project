@@ -3,7 +3,6 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authorization\UnauthorizedException;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
@@ -55,20 +54,6 @@ final class NoteListFetchAction
                     'message' => $invalidNoteFilterException->getMessage(),
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
-            );
-        } // If user requests its own notes he has to be logged in
-        catch (UnauthorizedException $unauthorizedException) {
-            // Respond with status code 401 Unauthorized which is caught in the Ajax call
-            return $this->responder->respondWithJson(
-                $response,
-                [
-                    'loginUrl' => $this->responder->urlFor(
-                        'login-page',
-                        [],
-                        ['redirect' => $this->responder->urlFor('client-list-assigned-to-me-page')]
-                    ),
-                ],
-                401
             );
         }
 

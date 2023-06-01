@@ -234,52 +234,6 @@
         box-shadow: none;
     }
 
-    .client-note-loading-placeholder {
-        width: 100%;
-        min-width: 232px;
-        border-radius: 30px;
-        margin-bottom: 30px;
-    }
-
-    .client-note-upper-placeholder-container {
-        display: grid;
-        grid-template-columns: minmax(0, 190px) minmax(0, 130px);
-        grid-template-rows: auto;
-        justify-content: space-between;
-        margin: 0 20px 0 20px;
-        gap: 25px;
-        /*justify-items: end;*/
-    }
-
-    /* Target only first divs with >*/
-    .client-note-upper-placeholder-container > div {
-        height: 18px;
-    }
-
-    .client-note-upper-placeholder-container .moving-loading-placeholder-part-wrapper {
-        /* Lighten up the background color of this line as the background is white */
-        background-color: rgb(238, 238, 238);
-    }
-
-    .client-note-lower-placeholder-container {
-        /* Prevent the margin from parent and child to collapse https://stackoverflow.com/a/1939980/9013718 */
-        overflow: hidden;
-        margin-top: 10px;
-        height: 85px;
-        width: 100%;
-        background: rgb(245, 245, 245);
-        border-radius: 30px;
-    }
-
-    .client-note-first-text-line-placeholder {
-        width: 80%;
-        margin-top: 18px;
-    }
-
-    .client-note-second-text-line-placeholder {
-        width: 50%;
-        margin-top: 10px;
-    }
 }
 
 /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */

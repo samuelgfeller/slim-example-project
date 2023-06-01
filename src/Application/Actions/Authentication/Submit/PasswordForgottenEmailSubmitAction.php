@@ -83,7 +83,7 @@ final class PasswordForgottenEmailSubmitAction
                     $request->getQueryParams(),
                 );
             }
-            $flash->add('success', 'Password recovery email is sent <b>if you have an account</b>.<br>' .
+            $flash->add('success', 'Password recovery email is sent if an account is found.<br>' .
             'Please check your inbox and the spam folder if needed.');
 
             return $this->responder->redirectToRouteName($response, 'login-page');

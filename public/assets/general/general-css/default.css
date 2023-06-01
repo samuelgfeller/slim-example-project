@@ -131,12 +131,13 @@ a:hover:not(a.currently-editable):not(#nav-container a) {
     /* Track */
     ::-webkit-scrollbar-track {
         border-radius: 20px;
-        background: #dcdcdc;
+        background: #fafafa;
+        margin: 5px;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #a1a1a1;
+        background: #8B8B8B;
         border-radius: 20px;
     }
 }

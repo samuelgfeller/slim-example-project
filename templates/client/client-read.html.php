@@ -20,6 +20,7 @@ $this->addAttribute('css', [
     'assets/general/page-component/loader/animated-checkmark.css',
     'assets/general/page-component/button/plus-button.css',
     'assets/general/page-component/content-placeholder/content-placeholder.css',
+    'assets/general/page-component/content-placeholder/client-read-note-placeholder.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
     // page specific css has to come last to overwrite other styles
     'assets/client/note/client-note.css',
