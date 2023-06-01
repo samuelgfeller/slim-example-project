@@ -69,6 +69,106 @@ class NoteProvider
     }
 
     /**
+     * Note filter test provider
+     *
+     * @return array[]
+     */
+    public function noteListWithFilterProvider(): array
+    {
+        // Users linked to notes to insert (authenticated user not relevant for this test, he is inserted in test case)
+        $usersToInsert = [
+            ['id' => 10],
+            ['id' => 11],
+            ['id' => 12],
+        ];
+
+        $sqlDateTime = (new \DateTime())->format('Y-m-d H:i:s');
+
+        // Client to insert (client status is inserted automatically in test case)
+        $clientToInsert = ['id' => 1, 'first_name' => 'Max'];
+
+        // Notes to insert
+        $notesToInsert = [
+            // Belong to user 11 and client 1
+            ['user_id' => 11, 'client_id' => 1, 'is_main' => 0, 'message' => 'belongs to user 11 and client 1'],
+            ['user_id' => 11, 'client_id' => 1, 'is_main' => 0, 'message' => 'also user 11 and client 1'],
+            // Main note
+            ['user_id' => 11, 'client_id' => 1, 'is_main' => 1, 'message' => 'main note user 11 and client 1'],
+            [// Belongs to user 11 and client 1 but is deleted
+                'user_id' => 11,
+                'client_id' => 1,
+                'is_main' => 0,
+                'deleted_at' => $sqlDateTime,
+                'message' => 'deleted c1 u11'
+            ],
+            // Belongs to user 12 and client 1
+            ['user_id' => 12, 'client_id' => 1, 'is_main' => 0, 'message' => 'client 1 user 12'],
+        ];
+
+        return [
+            // * Filter "client_id"
+            [ // client 1 (not tested with other clients)
+                'get_params' => ['client_id' => 1],
+                // Expected where string to search in the note table
+                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 AND client_id = 1',
+                'user_to_insert' => $usersToInsert,
+                'client_to_insert' => $clientToInsert,
+                'notes_to_insert' => $notesToInsert,
+            ],
+            // * Filter "most-recent"
+            [ // most-recent value is the amount recent notes that should be returned
+                'get_params' => ['most-recent' => 3],
+                // Expected where string to search in the note table (order and desc added in the where string
+                // may break and has to be adapted if DatabaseExtensionTestTrait->findTableRowsWhere() changes)
+                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 ORDER BY updated_at DESC LIMIT 3',
+                'user_to_insert' => $usersToInsert,
+                'client_to_insert' => $clientToInsert,
+                'notes_to_insert' => $notesToInsert,
+            ],
+            // * Filter "user_id"
+            [ // user 2
+                'get_params' => ['user' => 11],
+                // Expected where string to search in the note table
+                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 AND user_id = 11',
+                'user_to_insert' => $usersToInsert,
+                'client_to_insert' => $clientToInsert,
+                'notes_to_insert' => $notesToInsert,
+            ],
+
+        ];
+    }
+
+    /**
+     * Note list filters require the value to be in a specific format
+     * (e.g. numeric) otherwise an exception should be thrown. This is
+     * tested here.
+     *
+     * @return array
+     */
+    public function invalidNoteListFilterProvider(): array
+    {
+        $exceptionMessage = 'Value has to be numeric.';
+        return [
+            [
+                'get_params' => ['client_id' => ''],
+                'exception_message' => $exceptionMessage,
+            ],
+            [
+                'get_params' => ['client_id' => 'abc'],
+                'exception_message' => $exceptionMessage,
+            ],
+            [
+                'get_params' => ['most-recent' => 'abc'],
+                'exception_message' => $exceptionMessage,
+            ],
+            [
+                'get_params' => ['user' => 'abc'],
+                'exception_message' => $exceptionMessage,
+            ],
+        ];
+    }
+
+    /**
      * Provides logged-in user and user linked to note along the expected result
      * As the permissions are a lot more simple than for client for instance,
      * Create Update Delete cases are all in this function.

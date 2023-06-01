@@ -37,9 +37,9 @@ class NoteFinder
      *
      * @return NoteResultData[]
      */
-    public function findAllNotesFromUser(int $userId): array
+    public function findAllNotesExceptMainFromUser(int $userId): array
     {
-        $allNotes = $this->noteFinderRepository->findAllNotesByUserId($userId);
+        $allNotes = $this->noteFinderRepository->findAllNotesExceptMainByUserId($userId);
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes);
 
         return $allNotes;
@@ -91,7 +91,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
-     * Return all notes which are linked to the given user.
+     * Returns $notesAmount most recent notes
      *
      * @param int $notesAmount
      *

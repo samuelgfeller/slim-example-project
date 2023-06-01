@@ -128,6 +128,108 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
+     * Test note list action with filter
+     *
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteListWithFilterProvider()
+     *
+     * @return void
+     */
+    public function testNoteListFilter(
+        array $filterQueryParams,
+        string $expectedNotesWhereString,
+        array $usersAttrToInsert,
+        array $clientAttrToInsert,
+        array $notesAttrToInsert,
+    ): void {
+        // Authenticated user role not relevant here, and it should not cause issues (authorization tested above)
+        $loggedInUserId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
+            UserFixture::class
+        )['id'];
+
+        // Insert users without specific user role
+        $users = $this->insertFixturesWithAttributes($usersAttrToInsert, UserFixture::class);
+        // Insert client status and client
+        $statusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientAttrToInsert['client_status_id'] = $statusId;
+        $clientId = $this->insertFixturesWithAttributes($clientAttrToInsert, ClientFixture::class)['id'];
+        $notes = $this->insertFixturesWithAttributes($notesAttrToInsert, NoteFixture::class);
+
+        // Add session
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+
+        $request = $this->createJsonRequest(
+            'GET',
+            $this->urlFor('note-list')
+        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+        ->withQueryParams($filterQueryParams);
+
+        $response = $this->app->handle($request);
+
+        // Assert status code
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Filter inserted records with given row filter params
+        $noteRows = $this->findTableRowsWhere('note', $expectedNotesWhereString);
+
+        // Create expected array based on fixture records
+        $expected = [];
+        foreach ($noteRows as $noteRow) {
+            // Add clients to expected array
+            $expected[] = [
+                // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
+                'id' => $noteRow['id'],
+                'clientId' => $noteRow['client_id'],
+                'hidden' => $noteRow['hidden'],
+                'message' => $noteRow['message'],
+                'userId' => $noteRow['user_id'],
+            ];
+        }
+
+        // Get response json data
+        $responseJson = $this->getJsonData($response);
+        // Remove keys from response json that are not asserted in this test
+        foreach ($responseJson as $key => $noteFromResponse) {
+            // Replace notes from response array with the same values except keys that are not in the expected array
+            // $expected[0] is taken as an example of which keys should be kept in $noteFromResponse
+            $responseJson[$key] = array_intersect_key($noteFromResponse, $expected[0] ?? []);
+        }
+        // Assert equals without taking the order of the array elements in account
+        self::assertEqualsCanonicalizing($expected, $responseJson);
+    }
+
+    /**
+     * Note list filters require the value to be in a specific format
+     * (e.g. numeric) otherwise an exception should be thrown. This is
+     * tested here.
+     *
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteListFilterProvider()
+     *
+     * @return void
+     */
+    public function testNoteListFilterInvalid(
+        array $filterQueryParams,
+        string $exceptionMessage,
+    ): void {
+        $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+
+        $request = $this->createJsonRequest(
+            'GET',
+            $this->urlFor('note-list')
+        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
+        ->withQueryParams($filterQueryParams);
+
+        $response = $this->app->handle($request);
+
+        // Assert response HTTP status code: 422
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        $message = $this->getJsonData($response)['message'];
+        self::assertSame($exceptionMessage, $message);
+    }
+
+    /**
      * Test when note-list request is made from client-read page
      * without being authenticated.
      *

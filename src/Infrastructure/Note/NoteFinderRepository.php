@@ -109,13 +109,13 @@ class NoteFinderRepository
     }
 
     /**
-     * Return all notes which are linked to the given user.
+     * Return all notes which are linked to the given user except the main note.
      *
      * @param int $userId
      *
      * @return NoteResultData[]
      */
-    public function findAllNotesByUserId(int $userId): array
+    public function findAllNotesExceptMainByUserId(int $userId): array
     {
         $query = $this->queryFactory->newQuery()->from('note');
 
@@ -126,6 +126,7 @@ class NoteFinderRepository
             ->andWhere([
                 // Not unsafe as it's not an expression and thus escaped by querybuilder
                 'note.user_id' => $userId,
+                'note.is_main' => 0,
                 'note.deleted_at IS' => null,
             ]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
@@ -167,7 +168,7 @@ class NoteFinderRepository
     }
 
     /**
-     * Return all notes which are linked to the given user.
+     * Returns $notesAmount most recent notes
      *
      * @param int $notesAmount
      *
@@ -193,7 +194,7 @@ class NoteFinderRepository
         )
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
             ->leftJoin('client', ['note.client_id = client.id'])
-            ->andWhere(['note.deleted_at IS' => null])
+            ->andWhere(['note.deleted_at IS' => null, 'note.is_main' => 0])
             ->orderDesc('note.updated_at')->limit($notesAmount);
 
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];

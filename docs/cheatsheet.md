@@ -5,6 +5,15 @@ Testing cheatsheet: testing/testing-cheatsheet.md
 // this is temporary and only so that PHPStorm knows that it's a path and to open the file with mouse wheel click
 require 'C:\xampp\htdocs\slim-example-project\docs\testing\testing-cheatsheet.md'
 ```
+
+## Database migrations
+* After changing the database before testing the schema.sql has to be update `composer schema:generate`.
+* When satisfied with the changes and ready to commit, new migration files have to be generated
+`composer migration:generate` before being pushed to the version control.
+* When pulling from the remote and other devs made database changes, `composer migrate` has to be executed. 
+Then (as it's a database change), run `composer schema:generate` to update the schema.sql (for testing).
+* After deploying `composer migrate` has to be executed on the remote server to update the database.
+
 ## Making Ajax requests
 ### GET request
 ```js

@@ -4,7 +4,7 @@ return array (
   'database' => 
   array (
     'default_character_set_name' => 'utf8mb4',
-    'default_collation_name' => 'utf8mb4_unicode_ci',
+    'default_collation_name' => 'utf8mb4_general_ci',
   ),
   'tables' => 
   array (
@@ -183,7 +183,7 @@ return array (
           'COLLATION_NAME' => NULL,
           'COLUMN_TYPE' => 'datetime',
           'COLUMN_KEY' => '',
-          'EXTRA' => 'on update current_timestamp()',
+          'EXTRA' => '',
           'PRIVILEGES' => 'select,insert,update,references',
           'COLUMN_COMMENT' => '',
           'IS_GENERATED' => 'NEVER',
@@ -295,7 +295,29 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => NULL,
+      'foreign_keys' => 
+      array (
+        'note_client_id_fk' => 
+        array (
+          'TABLE_NAME' => 'note',
+          'COLUMN_NAME' => 'client_id',
+          'CONSTRAINT_NAME' => 'note_client_id_fk',
+          'REFERENCED_TABLE_NAME' => 'client',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+        'note_user_id_fk' => 
+        array (
+          'TABLE_NAME' => 'note',
+          'COLUMN_NAME' => 'user_id',
+          'CONSTRAINT_NAME' => 'note_user_id_fk',
+          'REFERENCED_TABLE_NAME' => 'user',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+      ),
     ),
     'user_filter_setting' => 
     array (
@@ -888,7 +910,7 @@ return array (
           'COLLATION_NAME' => NULL,
           'COLUMN_TYPE' => 'datetime',
           'COLUMN_KEY' => '',
-          'EXTRA' => 'on update current_timestamp()',
+          'EXTRA' => '',
           'PRIVILEGES' => 'select,insert,update,references',
           'COLUMN_COMMENT' => '',
           'IS_GENERATED' => 'NEVER',
@@ -1000,7 +1022,29 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => NULL,
+      'foreign_keys' => 
+      array (
+        'client_client_status__fk' => 
+        array (
+          'TABLE_NAME' => 'client',
+          'COLUMN_NAME' => 'client_status_id',
+          'CONSTRAINT_NAME' => 'client_client_status__fk',
+          'REFERENCED_TABLE_NAME' => 'client_status',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+        'client_user_id_fk' => 
+        array (
+          'TABLE_NAME' => 'client',
+          'COLUMN_NAME' => 'user_id',
+          'CONSTRAINT_NAME' => 'client_user_id_fk',
+          'REFERENCED_TABLE_NAME' => 'user',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+      ),
     ),
     'client_status' => 
     array (
@@ -1576,7 +1620,7 @@ return array (
           'COLLATION_NAME' => NULL,
           'COLUMN_TYPE' => 'datetime',
           'COLUMN_KEY' => '',
-          'EXTRA' => 'on update current_timestamp()',
+          'EXTRA' => '',
           'PRIVILEGES' => 'select,insert,update,references',
           'COLUMN_COMMENT' => '',
           'IS_GENERATED' => 'NEVER',
@@ -1670,7 +1714,19 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => NULL,
+      'foreign_keys' => 
+      array (
+        'user_user_role_id_fk' => 
+        array (
+          'TABLE_NAME' => 'user',
+          'COLUMN_NAME' => 'user_role_id',
+          'CONSTRAINT_NAME' => 'user_user_role_id_fk',
+          'REFERENCED_TABLE_NAME' => 'user_role',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+      ),
     ),
     'user_activity' => 
     array (
@@ -1941,7 +1997,19 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => NULL,
+      'foreign_keys' => 
+      array (
+        'user_activity_user_id_fk' => 
+        array (
+          'TABLE_NAME' => 'user_activity',
+          'COLUMN_NAME' => 'user_id',
+          'CONSTRAINT_NAME' => 'user_activity_user_id_fk',
+          'REFERENCED_TABLE_NAME' => 'user',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+      ),
     ),
     'user_request' => 
     array (
@@ -2499,7 +2567,19 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => NULL,
+      'foreign_keys' => 
+      array (
+        'user_verification_user_id_fk' => 
+        array (
+          'TABLE_NAME' => 'user_verification',
+          'COLUMN_NAME' => 'user_id',
+          'CONSTRAINT_NAME' => 'user_verification_user_id_fk',
+          'REFERENCED_TABLE_NAME' => 'user',
+          'REFERENCED_COLUMN_NAME' => 'id',
+          'UPDATE_RULE' => 'RESTRICT',
+          'DELETE_RULE' => 'RESTRICT',
+        ),
+      ),
     ),
   ),
 );

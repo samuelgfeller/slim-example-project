@@ -82,7 +82,7 @@ class DashboardPanelProvider
                 'title' => 'New notes',
                 'panelId' => 'new-notes-panel',
                 'panelClass' => 'note-panel',
-                'panelHtmlContent' => '<data data-param-name="most-recent" data-param-value="1" value=""></data>
+                'panelHtmlContent' => '<data data-param-name="most-recent" data-param-value="10" value=""></data>
                                                 <div id="note-wrapper-most-recent" class="client-note-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::MANAGING_ADVISOR),
             ]),
