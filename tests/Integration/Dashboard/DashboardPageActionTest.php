@@ -13,7 +13,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
-class DashboardPageAction extends TestCase
+class DashboardPageActionTest extends TestCase
 {
     use AppTestTrait;
     use HttpTestTrait;

@@ -13,7 +13,7 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
-class DashboardTogglePanelAction extends TestCase
+class DashboardTogglePanelActionTest extends TestCase
 {
     use AppTestTrait;
     use DatabaseTestTrait;
