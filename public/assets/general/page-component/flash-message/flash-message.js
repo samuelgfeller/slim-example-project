@@ -107,6 +107,8 @@ export function showFlashMessage(flash) {
         setTimeout(() => {
             slideFlashOut.call(flash);
         }, flashMessageTimeBeforeSlideOut);
+    }).catch((error) => {
+        console.error(error);
     });
 }
 

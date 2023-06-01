@@ -15,12 +15,14 @@ use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
+use Slim\Exception\HttpBadRequestException;
 
 /**
  * Test that the link sent to a locked user to unblock his account
  * works correctly and safely. Covered in this test:
  *  - Unlock account with valid token with redirect (status active, redirect, auto login)
  *  - Attempt to unlock account with used, invalid and expired token.
+ *  - Attempt to unlock account that is already active
  */
 class AccountUnlockActionTest extends TestCase
 {
@@ -175,5 +177,19 @@ class AccountUnlockActionTest extends TestCase
         $session = $this->container->get(SessionInterface::class);
         // Assert that user is not logged in (would also make sense to auth user if unlock token is valid)
         self::assertNull($session->get('user_id'));
+    }
+
+    /**
+     * Test that correct error is thrown if request body is malformed
+     */
+    public function testAccountUnlockActionMalformedBody(): void
+    {
+        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification'));
+
+        // Bad Request (400) means that the client sent the request wrongly; it's a client error
+        $this->expectException(HttpBadRequestException::class);
+        $this->expectExceptionMessage('Query params malformed.');
+
+        $response = $this->app->handle($request);
     }
 }

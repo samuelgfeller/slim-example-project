@@ -80,15 +80,6 @@ final class UserSubmitCreateAction
                     $response,
                     ['status' => 'error', 'message' => 'Email error. Please contact an administrator.']
                 );
-                $response = $response->withStatus(500);
-                $this->responder->addPhpViewAttribute('formError', true);
-
-                return $this->responder->render(
-                    $response,
-                    'authentication/register.html.php',
-                    // Provide same query params passed to register page to be added again to the submit request
-                    ['queryParams' => $request->getQueryParams()]
-                );
             } catch (SecurityException $se) {
                 if (PHP_SAPI === 'cli') {
                     // If script is called from commandline (e.g. testing) throw error instead of rendering page
