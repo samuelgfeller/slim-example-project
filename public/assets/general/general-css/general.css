@@ -120,14 +120,14 @@ a.currently-editable {
 .discrete-text {
     text-decoration: none;
     /*font-style: italic;*/
-    color: var(--layout-lighter-text-color);
+    color: var(--grey-secondary-text-color);
     font-size: 14px;
     margin-top: 10px;
     display: inline-block;
 }
 
 .discrete-text:hover {
-    color: #000000;
+    color: var(--primary-text-color);
     /*font-weight: 500;*/
     text-decoration: none !important;
 }
@@ -219,10 +219,6 @@ a.currently-editable {
 
 .main-color-discrete-text {
     color: #576381;
-}
-
-.discrete-text {
-    color: #5e5e5e;
 }
 
 [data-deleted="1"] {

@@ -23,18 +23,13 @@ inspiration when creating new content placeholder*/
     height: 18px;
 }
 
-.client-note-upper-placeholder-container .moving-loading-placeholder-part-wrapper {
-    /* Lighten up the background color of this line as the background is white */
-    background-color: rgb(238, 238, 238);
-}
-
 .client-note-lower-placeholder-container {
     /* Prevent the margin from parent and child to collapse https://stackoverflow.com/a/1939980/9013718 */
     overflow: hidden;
     margin-top: 10px;
     height: 85px;
     width: 100%;
-    background: rgb(245, 245, 245);
+    background: var(--background-light-accent-color);
     border-radius: 30px;
 }
 

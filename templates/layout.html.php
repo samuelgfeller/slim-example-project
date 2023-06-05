@@ -31,29 +31,36 @@
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',
     ];
-$layoutJs = [
-    'assets/general/dark-mode/dark-mode.js',
-    'assets/navbar/navbar.js',
-];
-$layoutJsModules = [
-    'assets/general/general-js/default.js',
-];
+    $layoutJs = [
+        'assets/general/dark-mode/dark-mode.js',
+        'assets/navbar/navbar.js',
+    ];
+    $layoutJsModules = [
+        'assets/general/general-js/default.js',
+    ];
 
-// fetch() includes another template into the current template
-// Include template which contains HTML to include assets
-echo $this->fetch(
-    'layout/assets.html.php', // Merge layout assets and from sub templates
-    [
-        'stylesheets' => array_merge($layoutCss, $css ?? []),
-        'scripts' => array_merge($layoutJs, $js ?? []),
-        // The type="module" allows the use of import and export inside a JS file.
-        'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
-    ]
-);
-?>
+    // fetch() includes another template into the current template
+    // Include template which contains HTML to include assets
+    echo $this->fetch(
+        'layout/assets.html.php', // Merge layout assets and from sub templates
+        [
+            'stylesheets' => array_merge($layoutCss, $css ?? []),
+            'scripts' => array_merge($layoutJs, $js ?? []),
+            // The type="module" allows the use of import and export inside a JS file.
+            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
+        ]
+    );
+    ?>
 
     <title><?= $title ?></title>
-    <script src="https://code.iconify.design/1/1.0.4/iconify.min.js">   </script>
+    <script>
+        // If a theme is set in localstorage, add it immediately to the html element before everything is done loading
+        const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+        if (theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+    </script>
+    <script src="https://code.iconify.design/1/1.0.4/iconify.min.js"></script>
 </head>
 <body>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
@@ -89,7 +96,7 @@ echo $this->fetch(
             </a>
             <a href="<?= $route->urlFor('client-list-page') ?>"
                 <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
-                'class="is-active"' : '' ?>>
+                    'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/people.svg" alt="Non-assigned">
                 <img src="assets/navbar/img/people-filled.svg" alt="People">
                 <span class="nav-span">Clients</span>
@@ -101,7 +108,7 @@ echo $this->fetch(
                 <span class="nav-span">Profile</span>
             </a>
             <?php
-        if ($userListAuthorization === true) { ?>
+            if ($userListAuthorization === true) { ?>
                 <a href="<?= $route->urlFor('user-list-page') ?>"
                     <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/users.svg" alt="Users">
@@ -109,7 +116,7 @@ echo $this->fetch(
                     <span class="nav-span">Users</span>
                 </a>
                 <?php
-        } ?>
+            } ?>
             <a href="<?= $route->urlFor('logout') ?>"
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/logout.svg" alt="Logout">

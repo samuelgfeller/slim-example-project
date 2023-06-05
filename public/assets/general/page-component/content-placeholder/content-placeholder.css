@@ -1,8 +1,25 @@
+:root {
+    --content-placeholder-moving-part-colors: rgba(251, 251, 251, .05),
+    rgba(251, 251, 251, .3),
+    rgba(251, 251, 251, .6),
+    rgba(251, 251, 251, .3),
+    rgba(251, 251, 251, .05);
+}
+
+[data-theme="dark"] {
+    --content-placeholder-moving-part-colors: rgba(100, 100, 100, .05),
+    rgba(100, 100, 100, .3),
+    rgba(100, 100, 100, .6),
+    rgba(100, 100, 100, .3),
+    rgba(100, 100, 100, .05);
+}
+
+
 .moving-loading-placeholder-part-wrapper {
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(231, 231, 231);
+    background-color: var(--background-accent-2-color);
     z-index: 8;
     overflow: hidden;
     border-radius: 5px;
@@ -13,12 +30,13 @@
     left: -45%;
     height: 100%;
     width: 45%;
-    background-image: linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
+    background-image: linear-gradient(to left,
+    var(--content-placeholder-moving-part-colors));
     animation: loading 1s infinite;
     z-index: 9;
 }
 
-.text-line-content-placeholder{
+.text-line-content-placeholder {
     height: 18px;
     margin-left: 25px;
     margin-right: 25px;

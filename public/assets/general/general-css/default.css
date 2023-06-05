@@ -3,6 +3,7 @@
     /* Colors */
     --primary-color: #2e3e50;
     --background-color: white;
+    --background-light-accent-color: #f5f5f5;
     --background-accent-color: #efefef;
     --background-accent-2-color: #e8e8e8;
     --background-accent-3-color: #d5d5d5;
@@ -40,6 +41,7 @@
     /* Colors */
     --primary-color: #4f6b8a;
     --background-color: #101213;
+    --background-light-accent-color: #1f2425;
     --background-accent-color: #1f2425;
     --background-accent-2-color: #2c343d;
     --background-accent-3-color: #323a44;
