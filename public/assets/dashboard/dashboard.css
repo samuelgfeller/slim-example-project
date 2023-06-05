@@ -9,8 +9,8 @@
         align-items: center;
         gap: 0.5em;
         padding: 7px 15px;
-        background: #f1f1f1;
-        border: 3px solid #d5d5d5;
+        background: var(--background-accent-color);
+        border: 3px solid var(--border-accent-2-color);
         border-radius: 20px;
         cursor: pointer;
         margin-bottom: 10px;

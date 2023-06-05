@@ -166,7 +166,10 @@ a.currently-editable {
     border-radius: 99px;
     padding: 5px;
     border: 1.5px solid var(--primary-color);
-    background: var(--background-color);
+    background: var(--background-accent-color);
+}
+.default-select:disabled{
+    filter: grayscale(1) brightness(85%);
 }
 
 .bigger-select {
@@ -198,6 +201,7 @@ a.currently-editable {
 
 .default-icon-container div img, .default-icon {
     height: 20px;
+    filter: var(--primary-color-filter);
 }
 
 /*disable resize on auto-resize-textareas*/

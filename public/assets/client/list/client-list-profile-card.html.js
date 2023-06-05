@@ -28,14 +28,16 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
         ${// Display location icon and content if not empty 
             client.location !== null && client.location !== '' ?
                 `<div>
-                     <img src="assets/general/general-img/personal-data-icons/location-icon.svg" class="profile-card-content-icon" alt="location">
+                     <img src="assets/general/general-img/personal-data-icons/location-icon.svg" 
+                            class="profile-card-content-icon default-icon" alt="location">
                      <span>${escapeHtml(client.location)}</span>
                  </div>` : ''
         }
         ${// Display location icon and content if not empty 
             client.phone !== null && client.phone !== '' ?
                 `<div>
-                     <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" class="profile-card-content-icon" alt="phone">
+                     <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" 
+                            class="profile-card-content-icon default-icon" alt="phone">
                      <span>${escapeHtml(client.phone)}</span>
                  </div>` : ''
         }

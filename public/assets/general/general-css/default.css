@@ -4,17 +4,28 @@
     --primary-color: #2e3e50;
     --background-color: white;
     --background-accent-color: #efefef;
+    --background-accent-2-color: #e8e8e8;
+    --background-accent-3-color: #d5d5d5;
+    --border-accent-2-color: #d5d5d5;
+    --accent-color-when-dark: white;
     /* Text */
     --primary-text-color: #2e3e50;
     --secondary-text-color: rgba(46, 62, 80, 0.80);
+    --grey-secondary-text-color: #575757;
     --title-color: black;
     --black-text-color: black;
-    /* Values */
+    /* Filters */
     /* Styles the black svg icons to the primary color #2e3e50 */
     --primary-color-filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);
+    --primary-color-accent-filter: var(--primary-color-filter); /* Accent only needed for dark mode */
+    --invert-when-dark-filter: none;
+    --accent-2-filter: invert(17%) sepia(9%) saturate(1712%) hue-rotate(170deg) brightness(92%) contrast(94%);
+    /* Other values */
     --default-box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
-
-
+    /* Hover */
+    --hover-box-shadow-color: rgba(46, 66, 80, 0.12);
+    --hover-box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
+    --hover-background-color: rgba(46, 62, 80, 0.1);
 
 
     --layout-light-color: #b6e9ff;
@@ -30,18 +41,27 @@
     --primary-color: #4f6b8a;
     --background-color: #101213;
     --background-accent-color: #1f2425;
+    --background-accent-2-color: #2c343d;
+    --background-accent-3-color: #323a44;
+    --border-accent-2-color: #3c4143;
+    --accent-color-when-dark: var(--background-accent-color);
     /* Text */
     --primary-text-color: #c3cad0;
     --secondary-text-color: #919fac;
+    --grey-secondary-text-color: #acb1c2;
     --title-color: #c3cad0;
     --black-text-color: white;
-    /* Values */
+    /* Filters */
     /* Styles the black svg icons to a color similar to the primary color */
-    --primary-color-filter: invert(38%) sepia(10%) saturate(1591%) hue-rotate(171deg) brightness(140%) contrast(85%);
+    --primary-color-filter: invert(45%) sepia(10%) saturate(1191%) hue-rotate(171deg) brightness(100%) contrast(100%);
+    --primary-color-accent-filter: invert(38%) sepia(10%) saturate(1591%) hue-rotate(171deg) brightness(140%) contrast(85%);
+    --invert-when-dark-filter: invert(90%);
+    --accent-2-filter: invert(38%) sepia(6%) saturate(1000%) hue-rotate(180deg) brightness(110%) contrast(80%);
+    /* Other values */
     --default-box-shadow: 0 2px 15px rgba(74, 91, 114, 0.5);
     /* Hover */
     --hover-box-shadow: 0 2px 5px rgba(201, 232, 255, 0.12);
-    --hover-background-color: rgba(255, 255, 255, 0.07);
+    --hover-background-color: #212325;
 }
 
 /* Default styles for common HTML elements (tag name as selectors) */
@@ -60,7 +80,7 @@ body, html {
     /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
     font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
     /*letter-spacing: 2px;*/
-    transition: background-color 250ms, color 250ms;
+    transition: background-color 250ms, color 250ms, border-color 250ms;
 }
 
 a {

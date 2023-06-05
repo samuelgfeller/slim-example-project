@@ -13,7 +13,7 @@
     .panel-header {
         /*background: rgba(0, 0, 0, 0.20);*/
         /*background: #e0e2e5;*/
-        background: rgba(46, 62, 80, 0.2);
+        background: var(--background-accent-3-color);
         /*border-top: 8px solid red;*/
         overflow: hidden;
         border-radius: 32px 32px 0 0;
@@ -28,7 +28,7 @@
         margin-bottom: 0;
         /*padding: 12px 20px 20px 20px;*/
         padding: 20px;
-        color: #2e3e50;
+        color: var(--primary-text-color);
         font-size: 1.5em;
         font-weight: 600;
         display: inline-block;
@@ -38,7 +38,7 @@
         padding: 7px;
         height: auto;
         overflow: hidden;
-        background: rgba(46, 62, 80, 0.10);
+        background: var(--background-accent-color);
         border-radius: 0 0 30px 30px;
         /*border: 8px solid rgba(46, 62, 80, 0.2);*/
         /*border-top: none;*/
@@ -73,6 +73,7 @@
         margin-right: 20px;
         padding: 9px 9px;
         transform: rotateZ(180deg);
+        filter: var(--invert-when-dark-filter);
     }
 
     .panel-container.collapsed .toggle-panel-icon {

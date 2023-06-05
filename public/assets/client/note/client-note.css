@@ -1,3 +1,9 @@
+:root {
+    --hidden-text-shadow-color: rgba(0,0,0, 0.7);
+}
+[data-theme="dark"] {
+    --hidden-text-shadow-color: rgba(255,255,255, 0.7);
+}
 /*Client notes CSS mainly for client read page but also dashboard note panels*/
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
@@ -82,7 +88,7 @@
 
     .hidden-note-message {
         color: transparent !important; /*Important otherwise overridden by main * color*/
-        text-shadow: 0 0 7px rgb(0 0 0 / 50%);
+        text-shadow: 0 0 7px var(--hidden-text-shadow-color);
         cursor: default;
         user-select: none;
     }

@@ -2,12 +2,16 @@
     --vigilance-moderate: 0 0 5px 4px rgb(224, 211, 69);
     --vigilance-caution: 0 0 5px 4px rgb(238, 170, 93);
     --vigilance-extra-caution: 0 0 5px 4px rgb(236, 124, 86);
+    --add-personal-info-icon-background: transparent;
+    --add-personal-info-icon-box-shadow: 0 0px 9px rgba(46, 66, 80, 0.12);
 }
 
 [data-theme="dark"] {
     --vigilance-moderate: 0 0 5px 4px rgb(189, 177, 44);
     --vigilance-caution: 0 0 5px 4px rgb(178, 127, 18);
     --vigilance-extra-caution: 0 0 5px 4px rgb(169, 62, 26);
+    --add-personal-info-icon-background: var(--background-accent-color);
+    --add-personal-info-icon-box-shadow: 0 0px 9px rgba(123, 197, 255, 0.12);
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -176,9 +180,8 @@
 
     /*Increase icon size*/
     #client-personal-info-flex-container a img, #client-personal-info-flex-container > div img, .personal-info-icon {
+        /*Filter and height set in general .default-icon but width needs to be exactly 20px here*/
         width: 20px;
-        height: 20px;
-        filter: var(--primary-color-filter);
     }
 
     #client-personal-info-flex-container a {
@@ -199,7 +202,8 @@
         /*margin-left: 13px;*/
         padding: 6px;
         border-radius: 30px;
-        box-shadow: 0 0px 9px rgba(46, 66, 80, 0.12);
+        box-shadow: var(--add-personal-info-icon-box-shadow);
+        background: var(--add-personal-info-icon-background);
         /*border: 1px solid #d5d5d5;*/
         height: 45px;
         margin-top: 10px;

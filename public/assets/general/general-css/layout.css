@@ -60,7 +60,7 @@ especially elements from the layout.html.php */
         flex: none;
         /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
         flex-shrink: 0;
-        background: #f6f6f6;
+        background: var(--background-accent-color);
         padding: 10px;
         text-align: center;
         color: #9b9b9b;

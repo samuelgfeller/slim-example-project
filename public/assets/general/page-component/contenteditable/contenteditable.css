@@ -41,7 +41,7 @@
         border: 1px solid black; /* The actual color is set by the filter*/
         /* The filter here is so that the background is always correct (even if there is no filter otherwise) */
         /*filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);*/
-        filter: var(--primary-color-filter);
+        filter: var(--primary-color-accent-filter);
         /*background: rgba(68, 64, 21, 0.18); !* This is a recreation of this color #d8dee8; with the filter *!*/
         background: rgba(93, 87, 29, 0.18); /* This is a recreation of this color #d8dee8; with the filter */
         right: -7px;

@@ -8,7 +8,7 @@
         background: transparent;
         padding: 3px 10px 3px 10px;
         border-radius: 99px;
-        border: 1px solid #d5d5d5;
+        border: 1px solid var(--border-accent-2-color);
         height: 35px; /* 35 minus top and bottom border */
         margin-top: 5px;
         cursor: pointer;
@@ -29,8 +29,9 @@
         padding: 10px;
         border-radius: 30px;
         /*border: 1px solid darkgrey;*/
-        background: white;
+        background: var(--accent-color-when-dark);
         box-shadow:0 2px 10px rgba(0, 0, 0, 0.19);
+        /*box-shadow:0 2px 10px rgba(0, 0, 0, 1);*/
         max-width: 480px;
         position: absolute;
         margin-top: 10px;
@@ -43,7 +44,7 @@
     }
     .active-filter-chips-div button:focus {
         /*background: transparent;*/
-        background: #efefef;
+        background: var(--background-accent-2-color);
     }
 
     .filter-chip{
@@ -53,7 +54,7 @@
         font-size: 14px;
         font-weight: 500;
         margin: 5px 5px;
-        background: #efefef;
+        background: var(--background-accent-2-color);
         /*display: inline-block;*/
         display: inline-flex;
         align-items: center;
@@ -66,8 +67,7 @@
     }
     /* Has to be in a span for the close button and label being centered both */
     .filter-chip span{
-        color: #575757;
-
+        color: var(--grey-secondary-text-color);
         font-weight: 500;
         font-size: 14px;
     }
@@ -75,12 +75,12 @@
         cursor: pointer;
     }
     .filter-chip-active {
-        background: #e0e0e0;
+        background: var(--background-accent-3-color);
         /*border: none;*/
     }
     .filter-chip-active::after{
         content: '×';
-        color: #7c7c7c;
+        color: var(--secondary-text-color);
         font-size: 22px;
         padding: 0 3px 3px 11px; /* 3px padding bottom to compensate non center alignment of lowercase letters */
         font-weight: 400;

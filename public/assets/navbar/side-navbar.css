@@ -1,11 +1,9 @@
 :root {
     --nav-icon-scale: 85%; /*Percentage*/
     --nav-background-color: white;
-    --nav-icon-filter: none;
 }
 [data-theme="dark"] {
     --nav-background-color: #282e31;
-    --nav-icon-filter: invert(90%);
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -24,11 +22,11 @@
         /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);*/
         box-shadow: var(--default-box-shadow);
         margin-left: 15px;
-        transition: max-width .5s ease-out;
+        transition: max-width .5s ease-out, background-color 250ms;
         white-space: nowrap;
         overflow: hidden;
         z-index: 99;
-        background: var(--nav-background-color);
+        background-color: var(--nav-background-color);
         position: fixed;
         bottom: 100px;
     }
@@ -55,7 +53,7 @@
     }
 
     nav a:hover {
-        background: rgba(0, 0, 0, .05);
+        background: var(--hover-background-color);
         font-weight: normal;
     }
 
@@ -63,7 +61,7 @@
     nav a img {
         width: 30px;
         vertical-align: middle;
-        filter: var(--nav-icon-filter);
+        filter: var(--invert-when-dark-filter);
     }
 
     /* Toggle hover image */
