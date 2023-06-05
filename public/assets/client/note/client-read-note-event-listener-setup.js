@@ -91,7 +91,7 @@ export function toggleReadOnlyAndBtnAboveNote(textarea) {
     if (textarea.dataset.editable === '1') {
         // Get delete btn with note label to show it on textarea focus
         let buttonsAboveNote = [];
-        if (!textarea.classList.contains('main-textarea') && textarea.id !== 'new-note') {
+        if (!textarea.classList.contains('main-note-textarea') && textarea.id !== 'new-note') {
             buttonsAboveNote = document.querySelectorAll(`label[data-note-id="${textarea.dataset.noteId}"] .btn-above-note`);
         }
 

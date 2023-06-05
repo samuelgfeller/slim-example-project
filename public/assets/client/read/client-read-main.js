@@ -94,22 +94,18 @@ function submitClientDropdownChange() {
 
 function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {
     let mainNote = document.querySelector('#main-note-textarea-div textarea');
+    mainNote.classList.remove('vigilance-moderate', 'vigilance-caution', 'vigilance-extra-caution');
     switch (vigilanceLevel) {
         case 'moderate':
-            mainNote.style.boxShadow = '0 0 10px 5px rgb(227, 193, 28)';
-            // mainNote.style.borderColor = 'rgb(227, 193, 28)';
+            mainNote.classList.add('vigilance-moderate');
             break;
         case 'caution':
-            mainNote.style.boxShadow = '0 0 10px 5px rgb(232, 136, 26)';
-            // mainNote.style.borderColor = 'rgb(232, 136, 26)';
+            mainNote.classList.add('vigilance-caution');
             break;
         case 'extra_caution':
-            // mainNote.style.borderColor = 'rgb(224, 77, 29)';
-            mainNote.style.boxShadow = '0 0 10px 5px rgb(224, 77, 29)';
+            mainNote.classList.add('vigilance-extra-caution');
             break;
         default:
-            // mainNote.style.borderColor = '#2e3e50';
-            mainNote.style.boxShadow = 'none';
             break;
     }
 }

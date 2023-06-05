@@ -1,3 +1,49 @@
+/* Dark mode */
+:root {
+    /* Colors */
+    --primary-color: #2e3e50;
+    --background-color: white;
+    --background-accent-color: #efefef;
+    /* Text */
+    --primary-text-color: #2e3e50;
+    --secondary-text-color: rgba(46, 62, 80, 0.80);
+    --title-color: black;
+    --black-text-color: black;
+    /* Values */
+    /* Styles the black svg icons to the primary color #2e3e50 */
+    --primary-color-filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);
+    --default-box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
+
+
+
+
+    --layout-light-color: #b6e9ff;
+    --layout-lighter-text-color: #65818d; /* When text should not be full black but a little lighter, perfect for hovers as well */
+    --layout-darker-main-color: #3f87a6; /* When text should not be full black but a little lighter, perfect for hovers as well */
+    /*    button hover color, text color */
+    --layout-main-button-color: whitesmoke;
+    --layout-main-button-hover-color: #e7e7e7;
+}
+
+[data-theme="dark"] {
+    /* Colors */
+    --primary-color: #4f6b8a;
+    --background-color: #101213;
+    --background-accent-color: #1f2425;
+    /* Text */
+    --primary-text-color: #c3cad0;
+    --secondary-text-color: #919fac;
+    --title-color: #c3cad0;
+    --black-text-color: white;
+    /* Values */
+    /* Styles the black svg icons to a color similar to the primary color */
+    --primary-color-filter: invert(38%) sepia(10%) saturate(1591%) hue-rotate(171deg) brightness(140%) contrast(85%);
+    --default-box-shadow: 0 2px 15px rgba(74, 91, 114, 0.5);
+    /* Hover */
+    --hover-box-shadow: 0 2px 5px rgba(201, 232, 255, 0.12);
+    --hover-background-color: rgba(255, 255, 255, 0.07);
+}
+
 /* Default styles for common HTML elements (tag name as selectors) */
 body, html {
     min-height: 100vh;
@@ -14,6 +60,7 @@ body, html {
     /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
     font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
     /*letter-spacing: 2px;*/
+    transition: background-color 250ms, color 250ms;
 }
 
 a {
@@ -21,7 +68,7 @@ a {
 }
 
 h2, h1, h3 {
-    color: black;
+    color: var(--title-color);
     /*text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);*/
     font-family: SF-Pro Display, Helvetica, sans-serif;
     font-weight: bold;
@@ -91,6 +138,7 @@ a:hover:not(a.currently-editable):not(#nav-container a) {
     src: url(../general-font/SF-Pro/SF-Pro-Display-Heavy.otf);
     font-weight: 800;
 }
+
 @font-face {
     font-family: SF-Pro Display;
     src: url(../general-font/SF-Pro/SF-Pro-Display-Bold.otf);

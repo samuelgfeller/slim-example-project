@@ -1,17 +1,11 @@
 /* This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
 especially elements from the layout.html.php */
-:root {
-    --layout-main-color: #2e3e50;
-    --layout-light-color: #b6e9ff;
-    --layout-lighter-text-color: #65818d; /* When text should not be full black but a little lighter, perfect for hovers as well */
-    --layout-darker-main-color:  #3f87a6; /* When text should not be full black but a little lighter, perfect for hovers as well */
-    /*    button hover color, text color */
-    --layout-main-button-color: whitesmoke;
-    --layout-main-button-hover-color: #e7e7e7;
-}
 
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
+    body {
+        background: var(--background-color);
+    }
     #wrapper{
         display: flex;
         flex-direction: column;
@@ -43,7 +37,7 @@ especially elements from the layout.html.php */
         border-radius: 20px;
     }
     main *:where(:not(h1):not(h2):not(h3):not(a:not(.no-style-a))){
-        color: #2e3e50;
+        color: var(--primary-text-color);
     }
     .no-style-a, .no-style-a:hover {
         font-weight: normal;

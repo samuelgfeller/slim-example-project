@@ -38,8 +38,12 @@
         width: 20px;
         padding: 2px;
         border-radius: 99px;
-        border: 1px solid #2e3e50;
-        background: #d8dee8;
+        border: 1px solid black; /* The actual color is set by the filter*/
+        /* The filter here is so that the background is always correct (even if there is no filter otherwise) */
+        /*filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);*/
+        filter: var(--primary-color-filter);
+        /*background: rgba(68, 64, 21, 0.18); !* This is a recreation of this color #d8dee8; with the filter *!*/
+        background: rgba(93, 87, 29, 0.18); /* This is a recreation of this color #d8dee8; with the filter */
         right: -7px;
         top: -3px;
         z-index: 1;
@@ -55,14 +59,14 @@
     .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
         outline: 3px solid #2e3e50;
         border-radius: 10px;
-        background: #f1f1f1;
+        background: var(--background-accent-color);
     }
 
     /* Display outline on span element */
     .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"]{
         outline: 2px solid #2e3e50;
         border-radius: 5px;
-        background: #f1f1f1;
+        background: var(--background-accent-color);
     }
 
     .contenteditable-placeholder[contenteditable=true]:empty:before {

@@ -168,7 +168,7 @@ class NoteFinderRepository
     }
 
     /**
-     * Returns $notesAmount most recent notes
+     * Returns $notesAmount most recent notes.
      *
      * @param int $notesAmount
      *

@@ -1,5 +1,11 @@
 :root {
     --nav-icon-scale: 85%; /*Percentage*/
+    --nav-background-color: white;
+    --nav-icon-filter: none;
+}
+[data-theme="dark"] {
+    --nav-background-color: #282e31;
+    --nav-icon-filter: invert(90%);
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -15,14 +21,14 @@
         display: inline-block;
         max-width: 0; /* 0 on mobile, 80px on desktop for icons */
         border-radius: 32px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
-        margin-top: 50px;
+        /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);*/
+        box-shadow: var(--default-box-shadow);
         margin-left: 15px;
         transition: max-width .5s ease-out;
         white-space: nowrap;
         overflow: hidden;
         z-index: 99;
-        background: white;
+        background: var(--nav-background-color);
         position: fixed;
         bottom: 100px;
     }
@@ -57,6 +63,7 @@
     nav a img {
         width: 30px;
         vertical-align: middle;
+        filter: var(--nav-icon-filter);
     }
 
     /* Toggle hover image */
@@ -180,7 +187,9 @@
     #nav-burger-icon {
         display: none;
     }
-
+    #nav-container{
+        margin-top: 50px;
+    }
     nav {
         display: inline-block;
         position: relative;
@@ -195,6 +204,7 @@
         height: 0;
         position: absolute;
         overflow: hidden;
+        color: var(--black-text-color);
     }
     nav:hover {
         max-width: 230px;

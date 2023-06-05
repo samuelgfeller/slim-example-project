@@ -1,0 +1,93 @@
+:root {
+    --dark-mode-toggle-size: 0.2;
+}
+
+#dark-mode-switch-container{
+  margin: 7px 15px;
+  cursor: pointer;
+}
+
+#dark-mode-toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+#dark-mode-toggle-slot {
+  position: relative;
+  height: 2.1em;
+  width: 4em;
+  border: 1px solid #e4e7ec;
+  border-radius: 2em;
+  background-color: white;
+  /*box-shadow: 0px 2px 5px white;*/
+  transition: background-color 250ms, border-color 250ms;
+}
+
+#dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot {
+  border-color: var(--background-accent-color);
+  background-color: var(--background-accent-color);
+}
+
+#dark-mode-toggle-button {
+  transform: translate(2.35em, 0.35em);
+  position: absolute;
+  height: 1.3em;
+  width: 1.3em;
+  border-radius: 50%;
+  background-color: #ffeccf;
+  box-shadow: inset 0px 0px 0px 0.15em #ffbb52;
+  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+#dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-toggle-button {
+  background-color: #3f495b;
+  box-shadow: inset 0px 0px 0px 0.15em var(--primary-text-color);
+  transform: translate(0.35em, 0.35em);
+}
+
+#dark-mode-sun-icon {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  color: #ffbb52;
+}
+
+#dark-mode-sun-icon-wrapper {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  opacity: 1;
+  transform: translate(0.4em, 0.4em) rotate(15deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+#dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-sun-icon-wrapper {
+  opacity: 0;
+  transform: translate(0.6em, 0.4em) rotate(0deg);
+}
+
+#dark-mode-moon-icon {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  color: var(--primary-text-color);
+}
+
+#dark-mode-moon-icon-wrapper {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  opacity: 0;
+  transform: translate(2.2em, 0.4em) rotate(0deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+}
+
+#dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-moon-icon-wrapper {
+  opacity: 1;
+  transform: translate(2.4em, 0.4em) rotate(-15deg);
+}

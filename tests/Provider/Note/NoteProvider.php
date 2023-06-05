@@ -69,7 +69,7 @@ class NoteProvider
     }
 
     /**
-     * Note filter test provider
+     * Note filter test provider.
      *
      * @return array[]
      */
@@ -99,7 +99,7 @@ class NoteProvider
                 'client_id' => 1,
                 'is_main' => 0,
                 'deleted_at' => $sqlDateTime,
-                'message' => 'deleted c1 u11'
+                'message' => 'deleted c1 u11',
             ],
             // Belongs to user 12 and client 1
             ['user_id' => 12, 'client_id' => 1, 'is_main' => 0, 'message' => 'client 1 user 12'],
@@ -134,7 +134,6 @@ class NoteProvider
                 'client_to_insert' => $clientToInsert,
                 'notes_to_insert' => $notesToInsert,
             ],
-
         ];
     }
 
@@ -148,6 +147,7 @@ class NoteProvider
     public function invalidNoteListFilterProvider(): array
     {
         $exceptionMessage = 'Value has to be numeric.';
+
         return [
             [
                 'get_params' => ['client_id' => ''],

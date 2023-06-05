@@ -91,7 +91,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
-     * Returns $notesAmount most recent notes
+     * Returns $notesAmount most recent notes.
      *
      * @param int $notesAmount
      *

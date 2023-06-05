@@ -24,7 +24,7 @@
         max-width: 450px;
         border-radius: 50px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border: 5px solid var(--layout-main-color);
+        border: 5px solid var(--primary-color);
         font-size: 1.1em;
         text-align: center;
         background-color: #f2f2f2;
@@ -48,7 +48,7 @@
     #alert-modal-body h3 {
         margin-top: 5px;
         margin-bottom: 10px;
-        color: var(--layout-main-color);
+        color: var(--primary-text-color);
     }
 
     /* Modal Footer */

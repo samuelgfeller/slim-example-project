@@ -128,9 +128,15 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
-     * Test note list action with filter
+     * Test note list action with filter.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::noteListWithFilterProvider()
+     *
+     * @param array $filterQueryParams
+     * @param string $expectedNotesWhereString
+     * @param array $usersAttrToInsert
+     * @param array $clientAttrToInsert
+     * @param array $notesAttrToInsert
      *
      * @return void
      */
@@ -204,6 +210,9 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      * tested here.
      *
      * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteListFilterProvider()
+     *
+     * @param array $filterQueryParams
+     * @param string $exceptionMessage
      *
      * @return void
      */

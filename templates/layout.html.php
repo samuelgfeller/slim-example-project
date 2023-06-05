@@ -27,10 +27,12 @@
         'assets/general/general-css/general.css',
         'assets/general/general-css/default.css',
         'assets/general/general-css/layout.css',
+        'assets/general/dark-mode/dark-mode-switch.css',
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',
     ];
 $layoutJs = [
+    'assets/general/dark-mode/dark-mode.js',
     'assets/navbar/navbar.js',
 ];
 $layoutJsModules = [
@@ -51,6 +53,7 @@ echo $this->fetch(
 ?>
 
     <title><?= $title ?></title>
+    <script src="https://code.iconify.design/1/1.0.4/iconify.min.js">   </script>
 </head>
 <body>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
@@ -61,6 +64,21 @@ echo $this->fetch(
         <span>Slim Example Project</span>
     </header>
     <?= $this->fetch('layout/flash-messages.html.php') ?>
+
+    <!-- Light Dark mode switch-->
+    <label id="dark-mode-switch-container">
+        <input id='dark-mode-toggle-checkbox' type='checkbox'>
+        <div id='dark-mode-toggle-slot'>
+            <div id='dark-mode-sun-icon-wrapper'>
+                <div class="iconify" id="dark-mode-sun-icon" data-icon="feather-sun" data-inline="false"></div>
+            </div>
+            <div id="dark-mode-toggle-button"></div>
+            <div id='dark-mode-moon-icon-wrapper'>
+                <div class="iconify" id="dark-mode-moon-icon" data-icon="feather-moon" data-inline="false"></div>
+            </div>
+        </div>
+    </label>
+    <!-- Navbar -->
     <aside id="nav-container">
         <nav>
             <a href="<?= $route->urlFor('home-page') ?>"

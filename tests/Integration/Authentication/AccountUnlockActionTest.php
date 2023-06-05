@@ -22,7 +22,7 @@ use Slim\Exception\HttpBadRequestException;
  * works correctly and safely. Covered in this test:
  *  - Unlock account with valid token with redirect (status active, redirect, auto login)
  *  - Attempt to unlock account with used, invalid and expired token.
- *  - Attempt to unlock account that is already active
+ *  - Attempt to unlock account that is already active.
  */
 class AccountUnlockActionTest extends TestCase
 {
@@ -180,7 +180,7 @@ class AccountUnlockActionTest extends TestCase
     }
 
     /**
-     * Test that correct error is thrown if request body is malformed
+     * Test that correct error is thrown if request body is malformed.
      */
     public function testAccountUnlockActionMalformedBody(): void
     {

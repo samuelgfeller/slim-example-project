@@ -29,9 +29,10 @@ class UserFetchActivityActionTest extends TestCase
     /**
      * Test that when fetching user activity an array is returned.
      *
-     * @return void
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testUserListActivityFetchAction(): void
     {
@@ -63,9 +64,10 @@ class UserFetchActivityActionTest extends TestCase
      * Test that when fetching user activity without query params
      * an empty array is returned.
      *
-     * @return void
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testUserListActivityFetchActionWithoutQueryParams(): void
     {

@@ -23,6 +23,7 @@ class UserFilterHandlerRepository
             ->where(['user_id' => $userId, 'module' => $userFilterModule]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $filterIds = array_column($resultRows, 'filter_id');
+
         return $filterIds;
     }
 

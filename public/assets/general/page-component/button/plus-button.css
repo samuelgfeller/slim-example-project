@@ -1,7 +1,10 @@
 :root{
-    --btnColor: #660066;
-    /*#660066*/
+    --plus-btn-background: rgba(46, 62, 80, 0.6)
 }
+[data-theme="dark"] {
+    --plus-btn-background: rgba(71, 95, 122, 0.6);
+}
+
 
 .plus-btn {
     vertical-align: middle;
@@ -12,7 +15,7 @@
     display: inline-block;
     /*bottom: 50px;*/
     /*right: 30px;*/
-    background: rgba(46, 62, 80, 0.6);;
+    background: var(--plus-btn-background);
     /*box-shadow: 0 0 10px 0 rgba(0, 110, 181,0.3);*/
     border-radius: 999px;
 }
