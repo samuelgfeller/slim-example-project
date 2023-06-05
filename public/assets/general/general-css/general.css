@@ -37,8 +37,8 @@ a.currently-editable {
     /*background-color: var(--layout-main-button-color);*/
     /*background-color: #e1ecf9; light blueish*/
 
-    background: rgb(234, 234, 234);
-    color: #000000;
+    background: var(--btn-color);
+    color: black;
     padding: 13px 25px;
 
     /*font-weight: 500;*/
@@ -48,62 +48,64 @@ a.currently-editable {
     border-radius: 14px;
     cursor: pointer;
     font-size: 18px;
-    box-shadow: 2px 3px 11px #ccc;
+    box-shadow: 2px 3px 11px rgba(0, 0, 0, 0.2);
     text-decoration: none; /* For when <a> is used as button */
     display: inline-block; /* For when <a> is used as button and when icon is used */
     letter-spacing: 0.5px;
+    transition: filter 250ms;
 }
 
 .btn:hover {
     /* Example: alert modal box cancel button or change password in profile */
     /*background: var(--layout-main-button-hover-color);*/
     /*background: #a2bad7;*/
-    box-shadow: 0 0 10px #c0c0c0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     font-weight: normal !important; /* For when <a> to behave as button */
-    background-color: rgb(203 203 203);
-
+    filter: brightness(90%);
 }
 
 .btn:focus {
-    /*background: #7d97b5;*/
-    background-color: rgb(183, 183, 183);
+    outline: 1px solid var(--primary-color);
 }
 
 .btn:disabled {
-    background: whitesmoke;
+    background: var(--background-accent-2-color);
     color: grey;
     cursor: default;
 }
 
 .btn-red {
-    background: #ff8d81;
+    background-color: var(--btn-red-color);
     /*border: 1px solid #b2180e;*/
 }
 
 .btn-red:hover {
-    background-color: #f87f74;
+    background-color: var(--btn-red-color);
+    filter: brightness(95%) saturate(130%);
+    /*background-color: #f87f74;*/
     /*border: 2px solid tomato;*/
     /*background: initial;*/
 }
 
 .btn-red:focus {
-    background: #de6e5f;
+    background-color: var(--btn-red-color);
+    filter: brightness(90%) saturate(140%);
+    /*background: #de6e5f;*/
 }
+
 .btn-orange {
-    background: #ffc081;
-    /*border: 1px solid #b2180e;*/
+    background-color: var(--btn-orange-color);
 }
 
 .btn-orange:hover {
-    background-color: #f6af6e;
-    /*border: 2px solid tomato;*/
-    /*background: initial;*/
+    background-color: var(--btn-orange-color);
+    filter: brightness(95%) saturate(130%);
 }
 
 .btn-orange:focus {
-    background: #e59a56;
+    background-color: var(--btn-orange-color);
+    filter: brightness(90%) saturate(140%);
 }
-
 
 
 .icon-btn {
@@ -133,11 +135,7 @@ a.currently-editable {
 }
 
 .secondary-text {
-    color: var(--layout-lighter-text-color);
-}
-
-.layout-color-text {
-    color: var(--layout-lighter-text-color);
+    color: var(--secondary-text-color);
 }
 
 .display-newlines {
@@ -168,7 +166,8 @@ a.currently-editable {
     border: 1.5px solid var(--primary-color);
     background: var(--background-accent-color);
 }
-.default-select:disabled{
+
+.default-select:disabled {
     filter: grayscale(1) brightness(85%);
 }
 
@@ -233,8 +232,9 @@ a.currently-editable {
 .vertical-middle {
     vertical-align: middle;
 }
+
 .vertical-middle h1, .vertical-middle h2 {
-    display:inline-block;
+    display: inline-block;
     vertical-align: middle;
 }
 
@@ -242,7 +242,8 @@ a.currently-editable {
 .collapsible-button {
     cursor: pointer;
 }
-.collapsible-content{
+
+.collapsible-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -250,4 +251,21 @@ a.currently-editable {
 
 @media (min-width: 961px) {
 
+    /*Scrollbar*/
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        border-radius: 20px;
+        background: var(--background-light-accent-color);
+        margin: 5px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: var(--background-accent-3-color);
+        border-radius: 20px;
+    }
 }

@@ -42,7 +42,6 @@
         /* The filter here is so that the background is always correct (even if there is no filter otherwise) */
         /*filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);*/
         filter: var(--primary-color-accent-filter);
-        /*background: rgba(68, 64, 21, 0.18); !* This is a recreation of this color #d8dee8; with the filter *!*/
         background: rgba(93, 87, 29, 0.18); /* This is a recreation of this color #d8dee8; with the filter */
         right: -7px;
         top: -3px;
@@ -57,14 +56,14 @@
         have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
     /* Display outline on h1 when hover on edit icon and when contenteditable is true */
     .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
-        outline: 3px solid #2e3e50;
+        outline: 3px solid var(--primary-color);
         border-radius: 10px;
         background: var(--background-accent-color);
     }
 
     /* Display outline on span element */
     .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"]{
-        outline: 2px solid #2e3e50;
+        outline: 2px solid var(--primary-color);
         border-radius: 5px;
         background: var(--background-accent-color);
     }

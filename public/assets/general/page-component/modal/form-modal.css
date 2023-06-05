@@ -18,14 +18,14 @@
     /* Modal Content */
     #modal-box {
         position: relative;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: var(--background-accent-1-color);
         margin: auto;
         padding: 2px 18px 30px 18px;
         border-radius: 33px;
         /*border: 2px solid black;*/
         width: 95%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid var(--border-accent-2-color);
         animation-name: fade-in-modal;
         animation-duration: 0.4s;
         max-width: 900px;

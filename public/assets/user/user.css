@@ -44,7 +44,7 @@
 
     /* --- User activity report --- */
     #user-activity-container {
-        border: 8px solid #e0e2e5;
+        border: 8px solid var(--background-accent-3-color);
         border-radius: 30px;
         /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
         max-width: 100%;
@@ -57,25 +57,25 @@
     }
 
     #user-activity-container a {
-        background: #ebecef;
+        background: var(--background-accent-2-color);
         padding: 2px;
         border-radius: 5px;
-        color: #2e3e50;
+        color: var(--primary-text-color);
     }
 
     #user-activity-container a:hover {
         /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
          of the :not() selectors */
         text-decoration: none !important;
-        background: #d0d2de;
+        background: var(--background-accent-3-color);
     }
 
     #user-activity-header h2 {
         margin-top: 0;
         margin-bottom: 0;
         padding: 12px 30px 20px 30px;
-        color: #2e3e50;
-        background: #e0e2e5;
+        color: var(--primary-text-color);
+        background: var(--background-accent-3-color);
         font-size: 1.7em;
     }
 
