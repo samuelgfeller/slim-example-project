@@ -1,7 +1,7 @@
 /* Source: https://stackoverflow.com/a/53123267/9013718 https://codepen.io/scottloway/pen/zqoLyQ */
 :root{
     --animated-checkmark-factor: 0.25;
-    --animated-checkmark-color: #2e3e50;
+    --animated-checkmark-color: var(--primary-color);
     /*--animated-checkmark-bright-color: #eef0f1;*/
     --animated-checkmark-bright-color: transparent;
 }

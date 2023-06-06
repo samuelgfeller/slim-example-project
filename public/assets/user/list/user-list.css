@@ -11,7 +11,7 @@
         margin-top: 30px;
     }
     .user-card{
-        background: #ececec;
+        background: var(--background-accent-2-color);
         border-radius: 30px;
         padding: 0 20px 20px 20px;
         box-shadow: 0 4px 8px 0 rgb(0 0 0 / 10%), 0 6px 20px 0 rgb(0 0 0 / 10%);

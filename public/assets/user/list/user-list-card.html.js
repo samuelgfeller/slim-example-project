@@ -13,7 +13,7 @@ export function getUserCardHtml(user, statuses) {
     <div class="card-content">
         <h3>${user.firstName !== null ? user.firstName : ''} ${user.surname !== null ? user.surname : ''}</h3>
         <div class="card-icon-and-span-div">
-            <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="card-icon" alt="email">
+            <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="card-icon default-icon" alt="email">
             <a href="mailto:${escapeHtml(user.email)}">${escapeHtml(user.email)}</a>
         </div>
         <div class="user-card-dropdown-flexbox">

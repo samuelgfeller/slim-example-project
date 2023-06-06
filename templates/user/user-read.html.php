@@ -21,11 +21,16 @@ $this->addAttribute('css', [
     'assets/general/page-component/modal/alert-modal.css',
     'assets/general/page-component/modal/form-modal.css',
     // profile.css has to come last to overwrite other styles
+    'assets/general/dark-mode/dark-mode-switch.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
     'assets/user/user.css',
 ]);
 
-$this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',]);
+
+$this->addAttribute(
+    'jsModules',
+    ['assets/user/read/user-read-update-main.js', 'assets/general/dark-mode/dark-mode.js',]
+);
 
 // Store client id on the page in <data> element for js to read it
 ?>
@@ -76,7 +81,7 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                         echo "<option value='$userStatus->value' $selected>" .
                             ucfirst($userStatus->value) . "</option>";
                     }
-                    ?>
+?>
                 </select>
             </div>
 
@@ -86,11 +91,11 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
                     <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                     <?php
-                    foreach ($user->availableUserRoles as $id => $userRole) {
-                        $selected = $id === $user->userRoleId ? 'selected' : '';
-                        echo "<option value='$id' $selected>" . $userRole . "</option>";
-                    }
-                    ?>
+foreach ($user->availableUserRoles as $id => $userRole) {
+    $selected = $id === $user->userRoleId ? 'selected' : '';
+    echo "<option value='$id' $selected>" . $userRole . "</option>";
+}
+?>
                 </select>
             </div>
         </div>
@@ -99,7 +104,8 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
         <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                <img src="assets/general/general-img/material-edit-icon.svg" class="contenteditable-edit-icon cursor-pointer"
+                <img src="assets/general/general-img/material-edit-icon.svg"
+                     class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-email-btn">
                 <?php
@@ -120,6 +126,22 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
                 <?php
             } ?>
         </div>
+        <div>
+            <h3 class="label-h3">Dark mode</h3>
+            <label id="dark-mode-switch-container">
+                <input id='dark-mode-toggle-checkbox' type='checkbox'>
+                <div id='dark-mode-toggle-slot'>
+                    <div id='dark-mode-sun-icon-wrapper'>
+                        <!--<div class="iconify" id="dark-mode-sun-icon" data-icon="feather-sun" data-inline="false"></div>-->
+                        <img src="assets/general/dark-mode/sun-icon.svg" alt="sun" id="dark-mode-sun-icon">
+                    </div>
+                    <div id="dark-mode-toggle-button"></div>
+                    <div id='dark-mode-moon-icon-wrapper'>
+                        <img src="assets/general/dark-mode/moon-icon.svg" alt="sun" id="dark-mode-moon-icon">
+                    </div>
+                </div>
+            </label>
+        </div>
 
         <h3 class="label-h3">Metadata</h3>
         <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
@@ -136,12 +158,12 @@ $this->addAttribute('jsModules', ['assets/user/read/user-read-update-main.js',])
         } ?>
     </div>
 
-        <div id="user-activity-container">
-            <div id="user-activity-header">
-                <h2>User activity</h2>
-            </div>
-            <div id="user-activity-content">
-
-            </div>
+    <div id="user-activity-container">
+        <div id="user-activity-header">
+            <h2>User activity</h2>
         </div>
+        <div id="user-activity-content">
+
+        </div>
+    </div>
 </div>

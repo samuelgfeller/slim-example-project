@@ -1,3 +1,15 @@
+:root{
+    --flash-success-background-color: #bee8c2;
+    --flash-error-background-color: #fabfb5;
+    --flash-info-background-color: #bde4ee;
+    --flash-warning-background-color: #f8d9af;
+}
+[data-theme="dark"] {
+    --flash-success-background-color: #7ec585;
+    --flash-error-background-color: #c97e71;
+    --flash-info-background-color: #78b6c5;
+    --flash-warning-background-color: #c29860;
+}
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     #flash-container {
@@ -180,19 +192,19 @@
     }
 
     .flash.success {
-        background: #bee8c2;
+        background: var(--flash-success-background-color);
     }
 
     .flash.error {
-        background: #fabfb5;
+        background: var(--flash-error-background-color);
     }
 
     .flash.info {
-        background: #bde4ee;
+        background: var(--flash-info-background-color);
     }
 
     .flash.warning {
-        background: #f8d9af;
+        background: var(--flash-warning-background-color);
     }
 
     .flash.success .flash-fig {

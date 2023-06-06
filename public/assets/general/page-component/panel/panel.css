@@ -51,17 +51,17 @@
     }
 
     .panel-content a {
-        background: #ebecef;
+        background: var(--background-accent-2-color);
         padding: 2px;
         border-radius: 5px;
-        color: #2e3e50;
     }
 
     .panel-content a:hover {
         /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
          of the :not() selectors */
         text-decoration: none !important;
-        background: #d0d2de;
+        background: none;
+        /*background: #d0d2de;*/
     }
 
     /*Open / close toggle arrow*/
@@ -91,6 +91,10 @@
     .panel-container.collapsed .panel-header {
         /*Make all borders rounded when collapsed*/
         border-radius: 32px;
+    }
+    /*Make note visible by adding more accent*/
+    .dashboard-panel-container .client-note-wrapper textarea{
+        background-color: var(--background-accent-2-color);
     }
 }
 

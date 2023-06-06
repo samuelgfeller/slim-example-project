@@ -7,11 +7,11 @@
 }
 
 [data-theme="dark"] {
-    --content-placeholder-moving-part-colors: rgba(100, 100, 100, .05),
-    rgba(100, 100, 100, .3),
-    rgba(100, 100, 100, .6),
-    rgba(100, 100, 100, .3),
-    rgba(100, 100, 100, .05);
+    --content-placeholder-moving-part-colors: rgba(80, 80, 80, .05),
+    rgba(80, 80, 80, .3),
+    rgba(80, 80, 80, 0.6),
+    rgba(80, 80, 80, .3),
+    rgba(80, 80, 80, .05);
 }
 
 

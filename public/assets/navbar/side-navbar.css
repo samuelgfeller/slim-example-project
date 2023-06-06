@@ -19,8 +19,7 @@
         display: inline-block;
         max-width: 0; /* 0 on mobile, 80px on desktop for icons */
         border-radius: 32px;
-        /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);*/
-        box-shadow: var(--default-box-shadow);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         margin-left: 15px;
         transition: max-width .5s ease-out, background-color 250ms;
         white-space: nowrap;

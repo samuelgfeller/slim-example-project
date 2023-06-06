@@ -7,7 +7,7 @@
         padding: 25px;
         border-radius: 30px;
         /* Change card to look good for preloading */
-        background: #f8f8f8;
+        background: var(--background-light-accent-color)
     }
 
     /*Name*/
