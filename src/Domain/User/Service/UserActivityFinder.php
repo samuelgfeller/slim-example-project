@@ -76,7 +76,7 @@ class UserActivityFinder
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {
                 $userRow = $this->userFinderRepository->findUserById($userActivity->userId);
-                $userActivity->timeAndActionName = '<span style="color: black">' . $userRow['first_name'] . ' '
+                $userActivity->timeAndActionName = '<span style="color: var(--black-text-color)">' . $userRow['first_name'] . ' '
                     . $userRow['surname'] . '</span> • ' .
                     $userActivity->timeAndActionName;
             }

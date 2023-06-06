@@ -72,7 +72,7 @@ especially elements from the layout.html.php */
         color: #9B9B9B;
     }
     footer a:hover{
-        color: black;
+        color: var(--grey-secondary-text-color);
     }
     .footer-icon{
         width: 1em;

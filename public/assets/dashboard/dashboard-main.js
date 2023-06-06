@@ -107,7 +107,7 @@ if (userPanel) {
         let userActivityFilterParam = new URLSearchParams();
         const paramsData = userPanel?.querySelectorAll('.filter-chip-active span');
         for (const paramData of paramsData) {
-            // Add [] to param name so that its
+            // Add [] to param name so that it can be read as an array
             userActivityFilterParam.append(paramData.dataset.paramName + '[]', paramData.dataset.paramValue);
             // Add filter id to filterIds param
             userActivityFilterParam.append('filterIds[]', paramData.dataset.filterId);

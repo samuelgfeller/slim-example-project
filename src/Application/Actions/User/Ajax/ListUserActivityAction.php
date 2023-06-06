@@ -34,9 +34,9 @@ class ListUserActivityAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
+     * @return ResponseInterface The response
      * @throws \JsonException
      *
-     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -49,11 +49,14 @@ class ListUserActivityAction
 
         $userResultDataArray = $this->userActivityFinder->findUserActivityReport($userIds);
 
-        // Filter ids have to be saved too
-        $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
-            $queryParams['filterIds'] ?? null,
-            FilterModule::DASHBOARD_USER_ACTIVITY
-        );
+        // Filter ids have to be saved too but only if there are query params
+        // otherwise the saved dashboard filter settings are deleted when loading user read
+        if (isset($queryParams['filterIds'])) {
+            $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
+                $queryParams['filterIds'],
+                FilterModule::DASHBOARD_USER_ACTIVITY
+            );
+        }
 
         return $this->responder->respondWithJson($response, $userResultDataArray);
     }
