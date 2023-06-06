@@ -129,7 +129,7 @@
         /* Important needed as specificity is higher when setting the non-disabled value */
         background-color: var(--background-accent-2-color) !important;
         color: grey;
-    }New n
+    }
 
     .form-input-div select, .form-select {
         border: none;
