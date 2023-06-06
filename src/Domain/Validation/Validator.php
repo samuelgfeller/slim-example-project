@@ -254,7 +254,7 @@ final class Validator
      * @template Enum
      *
      * @param \BackedEnum|string|null $value enum case or backed string value
-     * @param class-string $enum
+     * @param class-string $enum e.g. UserRole::class
      * @param string $fieldName
      * @param ValidationResult $validationResult
      * @param bool $required

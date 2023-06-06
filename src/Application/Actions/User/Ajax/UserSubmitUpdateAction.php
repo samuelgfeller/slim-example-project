@@ -60,6 +60,9 @@ final class UserSubmitUpdateAction
             'email',
             'status',
             'user_role_id',
+            'theme',
+            // When adding a new field also add it in updateUser(), validateUserUpdate(), isGrantedToUpdate(),
+            // UserFinderRepository->fields and don't forget testing
         ])) {
             try {
                 $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);

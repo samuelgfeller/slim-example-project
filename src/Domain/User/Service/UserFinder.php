@@ -56,14 +56,11 @@ class UserFinder
     /**
      * @param string|int $id
      *
-     * @throws \Exception
-     *
      * @return UserData
      */
     public function findUserById(string|int $id): UserData
     {
         // Find user in database and return object
-        // $notRestricted true as values are safe as they come from the database. It's not a user input.
         return new UserData($this->userFinderRepository->findUserById((int)$id));
     }
 

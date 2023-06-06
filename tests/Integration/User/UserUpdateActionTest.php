@@ -21,7 +21,7 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
 
 /**
- * Integration testing user update Process.
+ * Integration testing user update.
  */
 class UserUpdateActionTest extends TestCase
 {

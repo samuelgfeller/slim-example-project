@@ -81,7 +81,7 @@ $this->addAttribute(
                         echo "<option value='$userStatus->value' $selected>" .
                             ucfirst($userStatus->value) . "</option>";
                     }
-?>
+                    ?>
                 </select>
             </div>
 
@@ -91,11 +91,11 @@ $this->addAttribute(
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
                     <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                     <?php
-foreach ($user->availableUserRoles as $id => $userRole) {
-    $selected = $id === $user->userRoleId ? 'selected' : '';
-    echo "<option value='$id' $selected>" . $userRole . "</option>";
-}
-?>
+                    foreach ($user->availableUserRoles as $id => $userRole) {
+                        $selected = $id === $user->userRoleId ? 'selected' : '';
+                        echo "<option value='$id' $selected>" . $userRole . "</option>";
+                    }
+                    ?>
                 </select>
             </div>
         </div>
@@ -126,23 +126,26 @@ foreach ($user->availableUserRoles as $id => $userRole) {
                 <?php
             } ?>
         </div>
-        <div>
-            <h3 class="label-h3">Dark mode</h3>
-            <label id="dark-mode-switch-container">
-                <input id='dark-mode-toggle-checkbox' type='checkbox'>
-                <div id='dark-mode-toggle-slot'>
-                    <div id='dark-mode-sun-icon-wrapper'>
-                        <!--<div class="iconify" id="dark-mode-sun-icon" data-icon="feather-sun" data-inline="false"></div>-->
-                        <img src="assets/general/dark-mode/sun-icon.svg" alt="sun" id="dark-mode-sun-icon">
+        <?php
+        if ($isOwnProfile === true) { ?>
+            <div>
+                <h3 class="label-h3">Dark mode</h3>
+                <label id="dark-mode-switch-container">
+                    <input id='dark-mode-toggle-checkbox' type='checkbox'>
+                    <div id='dark-mode-toggle-slot'>
+                        <div id='dark-mode-sun-icon-wrapper'>
+                            <!--<div class="iconify" id="dark-mode-sun-icon" data-icon="feather-sun" data-inline="false"></div>-->
+                            <img src="assets/general/dark-mode/sun-icon.svg" alt="sun" id="dark-mode-sun-icon">
+                        </div>
+                        <div id="dark-mode-toggle-button"></div>
+                        <div id='dark-mode-moon-icon-wrapper'>
+                            <img src="assets/general/dark-mode/moon-icon.svg" alt="sun" id="dark-mode-moon-icon">
+                        </div>
                     </div>
-                    <div id="dark-mode-toggle-button"></div>
-                    <div id='dark-mode-moon-icon-wrapper'>
-                        <img src="assets/general/dark-mode/moon-icon.svg" alt="sun" id="dark-mode-moon-icon">
-                    </div>
-                </div>
-            </label>
-        </div>
-
+                </label>
+            </div>
+            <?php
+        } ?>
         <h3 class="label-h3">Metadata</h3>
         <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
             <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>

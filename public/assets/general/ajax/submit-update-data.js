@@ -8,7 +8,7 @@ import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handle
  * On success validation errors are removed and response content returned
  *
  * @param {object} formFieldsAndValues {field: value} e.g. {[input.name]: input.value}
- * @param {string} route after base path
+ * @param {string} route after base path e.g. clients/1
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
  * If true, the redirect url is the same as the given route
  *

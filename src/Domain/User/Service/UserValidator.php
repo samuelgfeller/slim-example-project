@@ -4,6 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Enum\UserTheme;
 use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\Validator;
@@ -52,6 +53,14 @@ class UserValidator
         }
         if (array_key_exists('status', $userValues)) {
             $this->validateUserStatus($userValues['status'], $validationResult, true);
+        }
+        if (array_key_exists('theme', $userValues)) {
+            $this->validator->validateBackedEnum(
+                $userValues['theme'],
+                UserTheme::class,
+                'theme',
+                $validationResult
+            );
         }
         if (array_key_exists('user_role_id', $userValues)) {
             $this->validateUserRoleId($userValues['user_role_id'], $validationResult, true);

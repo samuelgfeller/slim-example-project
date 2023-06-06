@@ -3,6 +3,7 @@
 namespace App\Domain\User\Data;
 
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Enum\UserTheme;
 
 /**
  * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
@@ -21,6 +22,7 @@ class UserData implements \JsonSerializable
     public ?string $password2;
     public ?string $passwordHash;
     public ?UserStatus $status = null;
+    public ?UserTheme $theme = null;
     public ?int $userRoleId = null;
     public ?\DateTimeImmutable $updatedAt;
     public ?\DateTimeImmutable $createdAt;
@@ -30,8 +32,6 @@ class UserData implements \JsonSerializable
      * User constructor.
      *
      * @param array $userData
-     *
-     * @throws \Exception
      */
     public function __construct(array $userData = [])
     {
@@ -43,6 +43,7 @@ class UserData implements \JsonSerializable
         $this->password = $userData['password'] ?? null;
         $this->password2 = $userData['password2'] ?? null;
         $this->passwordHash = $userData['password_hash'] ?? null;
+        $this->theme = $userData['theme'] ?? null ? UserTheme::tryFrom($userData['theme']) : null;
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
         $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;

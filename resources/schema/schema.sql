@@ -70,6 +70,7 @@ CREATE TABLE `user` (
   `status` enum('active','locked','unverified','suspended') DEFAULT 'unverified',
   `email` varchar(254) NOT NULL,
   `password_hash` varchar(300) NOT NULL,
+  `theme` enum('light','dark') DEFAULT 'light',
   `updated_at` datetime DEFAULT current_timestamp(),
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

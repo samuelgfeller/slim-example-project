@@ -9,6 +9,7 @@ use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -26,6 +27,7 @@ final class LoginSubmitAction
         private readonly LoginVerifier $loginVerifier,
         private readonly SessionInterface $session,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
+        private readonly UserFinder $userFinder,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login');
     }
@@ -57,12 +59,22 @@ final class LoginSubmitAction
                 // Add success message to flash
                 $flash->add('success', 'Login successful');
 
-                // After register and login success, check if user should be redirected
-                if (isset($queryParams['redirect'])) {
-                    return $this->responder->redirectToUrl($response, $request->getQueryParams()['redirect']);
+                // Check if user has enabled dark mode and if yes populate var
+                $themeQueryParams = [];
+                if ($theme = $this->userFinder->findUserById($userId)->theme) {
+                    $themeQueryParams['theme'] = $theme->value;
                 }
 
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                // After register and login success, check if user should be redirected
+                if (isset($queryParams['redirect'])) {
+                    return $this->responder->redirectToUrl(
+                        $response,
+                        $request->getQueryParams()['redirect'],
+                        $themeQueryParams
+                    );
+                }
+
+                return $this->responder->redirectToRouteName($response, 'home-page', [], $themeQueryParams);
             } catch (ValidationException $ve) {
                 return $this->responder->renderOnValidationError(
                     $response,

@@ -1,4 +1,7 @@
 // Get the toggle switch element
+import {submitUpdate} from "../ajax/submit-update-data.js?v=0.2.1";
+import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=0.2.1";
+
 const toggleSwitch = document.querySelector('#dark-mode-toggle-checkbox');
 
 // Retrieve the current theme from localStorage
@@ -6,7 +9,7 @@ const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme
 
 // Set the theme based on the stored value from localStorage
 if (currentTheme) {
-    // Set the data-theme attribute on the root element
+    // Set the data-theme attribute on the html element
     document.documentElement.setAttribute('data-theme', currentTheme);
 
     // Check the toggle switch if the current theme is 'dark'
@@ -18,31 +21,30 @@ if (currentTheme) {
 // Add event listener to the toggle switch for theme switching
 toggleSwitch.addEventListener('change', switchTheme, false);
 
-// Set the theme on initial load if there is a stored value in localStorage
-if (currentTheme) {
-    // Set the data-theme attribute on the root element
-    document.documentElement.setAttribute('data-theme', currentTheme);
-
-    // If the current theme is 'dark', set the data-theme attribute to 'dark'
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }
-}
-
 /**
  * Handle theme switching with localstorage
  *
  * @param e
  */
 function switchTheme(e) {
+    let theme;
     // Check the current theme and switch to the opposite theme
     if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
+        theme = 'light';
     } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
+        theme = 'dark';
     }
+    // Set html data-attribute and local storage entry
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+
+    // Make ajax call to change value in database
+    let userId = document.getElementById('user-id').value;
+    submitUpdate({theme: theme}, `users/${userId}`, true)
+        .then(r => {})
+        .catch(r => {
+            displayFlashMessage('error', 'Failed to change the theme in the database.')
+        });
 }
 
 

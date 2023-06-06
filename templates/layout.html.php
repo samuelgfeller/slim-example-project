@@ -52,9 +52,16 @@
 
     <title><?= $title ?></title>
     <script>
-        // If a theme is set in localstorage, add it immediately to the <html> element before everything is done loading
-        const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : 'light';
-        document.documentElement.setAttribute('data-theme', theme);
+        // Add the theme immediately to the <html> element before everything is done loading
+        const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+        // Get the theme provided from the server via query param (only after login)
+        const themeParam = new URLSearchParams(window.location.search).get('theme');
+        // Finally add the theme to the <html> element
+        document.documentElement.setAttribute('data-theme', themeParam ?? theme ?? 'light');
+        // If a theme from the database is provided and not the same with localStorage, replace it
+        if (themeParam && themeParam !== theme) {
+            localStorage.setItem('theme', themeParam);
+        }
     </script>
 </head>
 <body>

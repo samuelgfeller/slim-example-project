@@ -13,7 +13,7 @@ class UserUpdateProvider
     /**
      * @return array[]
      */
-    public function userUpdateAuthorizationCases(): array
+    public static function userUpdateAuthorizationCases(): array
     {
         // Set different user role attributes
         $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -41,6 +41,7 @@ class UserUpdateProvider
             'first_name' => 'NewFirstName',
             'surname' => 'NewLastName',
             'email' => 'new.email@test.ch',
+            'theme' => 'dark',
             // Password hash change tested in UserChangePasswordActionTest
         ];
         // To avoid testing each column separately for each user role, the most basic change is taken to test
@@ -111,7 +112,7 @@ class UserUpdateProvider
      *
      * @return array
      */
-    public function invalidUserUpdateCases(): array
+    public static function invalidUserUpdateCases(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
@@ -123,6 +124,7 @@ class UserUpdateProvider
                     'email' => 'new.email@tes$t.ch',
                     'status' => 'non-existing',
                     'user_role_id' => 99,
+                    'theme' => 'invalid',
                 ],
                 'json_response' => [
                     'status' => 'error',
@@ -134,6 +136,7 @@ class UserUpdateProvider
                             ['field' => 'surname', 'message' => 'Minimum length is 2'],
                             ['field' => 'email', 'message' => 'Invalid email address'],
                             ['field' => 'status', 'message' => 'Status not existing'],
+                            ['field' => 'theme', 'message' => 'theme not existing'],
                             ['field' => 'user_role', 'message' => 'User role not existing'],
                         ],
                     ],

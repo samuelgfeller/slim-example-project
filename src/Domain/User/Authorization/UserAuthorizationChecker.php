@@ -177,6 +177,11 @@ class UserAuthorizationChecker
                 if (array_key_exists('password_hash', $userDataToUpdate)) {
                     $grantedUpdateKeys[] = 'password_hash';
                 }
+                if (array_key_exists('theme', $userDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'theme';
+                }
+                // If new basic data fiel is added, add it to provider userUpdateAuthorizationCases() $basicDataChanges
+                // and invalid value to provider invalidUserUpdateCases()
 
                 // Things that only managing_advisor and higher privileged are allowed to do with users (and not if own profile)
                 // If user is managing advisor we know by the parent if-statement that the user to change has not higher

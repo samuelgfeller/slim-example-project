@@ -44,11 +44,11 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'uri' => $request->getUri(),
             'basePath' => $this->app->getBasePath(),
             'route' => $this->app->getRouteCollector()->getRouteParser(),
-            'currRouteName' => RouteContext::fromRequest($request)->getRoute()->getName(),
+            'currRouteName' => RouteContext::fromRequest($request)->getRoute()?->getName(),
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
-            // Check if granted to read user that is different from the logged in one (+1)
+            // Check if granted to read user that is different then the authenticated user itself (+1)
             'userListAuthorization' => $this->userAuthorizationChecker->isGrantedToRead(
                 ($this->session->get('user_id') ?? 1) + 1
             ),

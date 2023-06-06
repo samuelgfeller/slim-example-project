@@ -48,7 +48,7 @@ function saveUserValueAndDisableContentEditable(field) {
     submitUpdate(
         {[field.dataset.name]: field.textContent.trim()},
         `users/${userId}`,
-        `users/${userId}`
+        true
     ).then(responseJson => {
         // Field disabled before save request and re enabled on error
     }).catch(responseJson => {
