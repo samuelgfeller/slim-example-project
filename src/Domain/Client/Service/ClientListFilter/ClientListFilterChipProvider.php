@@ -53,21 +53,21 @@ class ClientListFilterChipProvider
         $allClientFilters = [
             // Category
             'unassigned' => new FilterData([
-                'name' => 'Unassigned',
+                'name' => __('Unassigned'),
                 'paramName' => 'user',
                 'paramValue' => null,
                 'category' => null,
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             'assigned_to_me' => new FilterData([
-                'name' => 'Assigned to me',
+                'name' => __('Assigned to me'),
                 'paramName' => 'user',
                 'paramValue' => $loggedInUserId,
                 'category' => null,
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             'deleted' => new FilterData([
-                'name' => 'Deleted',
+                'name' => __('Deleted'),
                 'paramName' => 'deleted',
                 'paramValue' => 1,
                 'category' => null,
@@ -80,7 +80,7 @@ class ClientListFilterChipProvider
         $clientStatuses = $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName();
         foreach ($clientStatuses as $id => $name) {
             $allClientFilters["status_$id"] = new FilterData([
-                'name' => $name,
+                'name' => __($name),
                 'paramName' => 'status',
                 'paramValue' => $id,
                 'category' => 'Status',
@@ -96,7 +96,7 @@ class ClientListFilterChipProvider
             // All users except authenticated user as there is already a filter "Assigned to me"
             if ($userId !== $loggedInUserId) {
                 $allClientFilters["user_$userId"] = new FilterData([
-                    'name' => "Assigned to $name",
+                    'name' => __('Assigned to') . ' ' . $name,
                     'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => 'Other user',
@@ -105,7 +105,7 @@ class ClientListFilterChipProvider
             }
         }
         $allClientFilters['deleted_assigned_user'] = new FilterData([
-            'name' => 'Deleted assigned user',
+            'name' => __('Deleted assigned user'),
             'paramName' => 'deleted-assigned-user',
             'paramValue' => '1',
             'category' => 'Other user',

@@ -17,6 +17,22 @@ enum UserRole: string
      */
     public function roleNameForDropdown(): string
     {
-        return ucfirst(str_replace('_', ' ', $this->value));
+        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
+        return __(ucfirst(str_replace('_', ' ', $this->value)));
+    }
+
+    /**
+     * Setup keys that should be translated used by the function above.
+     *
+     * @return array
+     */
+    public static function getTranslatedValues(): array
+    {
+        return [
+            __('Newcomer'),
+            __('Advisor'),
+            __('Managing advisor'),
+            __('Admin'),
+        ];
     }
 }

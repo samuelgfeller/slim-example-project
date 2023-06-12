@@ -56,7 +56,7 @@ final class UserReadPageAction
             return $this->responder->render($response, 'user/user-read.html.php', [
                 'user' => $this->userFinder->findUserReadResult($userId),
                 'isOwnProfile' => $userId === $authenticatedUserId,
-                'userStatuses' => UserStatus::cases(),
+                'userStatuses' => UserStatus::getTranslatedCases(),
             ]);
         } catch (ForbiddenException $forbiddenException) {
             throw new HttpForbiddenException($request, $forbiddenException->getMessage());

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
 "POT-Creation-Date: 2023-06-12 16:18+0200\n"
-"PO-Revision-Date: 2023-06-12 16:19+0200\n"
+"PO-Revision-Date: 2023-06-12 16:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -37,11 +37,11 @@ msgstr "Mässig"
 
 #: src/Domain/Client/Enum/ClientVigilanceLevel.php:27
 msgid "Caution"
-msgstr ""
+msgstr "Vorsicht"
 
 #: src/Domain/Client/Enum/ClientVigilanceLevel.php:28
 msgid "Extra caution"
-msgstr ""
+msgstr "Besondere Vorsicht"
 
 #: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:56
 msgid "Unassigned"
@@ -85,35 +85,35 @@ msgstr "Kürzlich zugewiesene Kunden"
 
 #: src/Domain/User/Enum/UserRole.php:32
 msgid "Newcomer"
-msgstr ""
+msgstr "Neubenutzer"
 
 #: src/Domain/User/Enum/UserRole.php:33
 msgid "Advisor"
-msgstr ""
+msgstr "Sachbearbeitung"
 
 #: src/Domain/User/Enum/UserRole.php:34
 msgid "Managing advisor"
-msgstr ""
+msgstr "Leitung Beratung"
 
 #: src/Domain/User/Enum/UserRole.php:35
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: src/Domain/User/Enum/UserStatus.php:32
 msgid "Unverified"
-msgstr ""
+msgstr "Unüberprüft"
 
 #: src/Domain/User/Enum/UserStatus.php:33
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: src/Domain/User/Enum/UserStatus.php:34
 msgid "Locked"
-msgstr ""
+msgstr "Gesperrt"
 
 #: src/Domain/User/Enum/UserStatus.php:35
 msgid "Suspended"
-msgstr ""
+msgstr "Suspendiert"
 
 #: templates/client/clients-list.html.php:40
 msgid "Clients"

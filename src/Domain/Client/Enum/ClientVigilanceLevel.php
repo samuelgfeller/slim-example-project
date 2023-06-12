@@ -13,6 +13,23 @@ enum ClientVigilanceLevel: string
     case EXTRA_CAUTION = 'extra_caution';
 
     /**
+     * Calling the translation function __() for each enum value
+     * so that poedit recognizes them to be translated.
+     * When using the enum values, __() will work as it's
+     * setup here and translations are in the .mo files.
+     *
+     * @return array
+     */
+    public static function getTranslatedValues(): array
+    {
+        return [
+            __('Moderate'),
+            __('Caution'),
+            __('Extra caution'),
+        ];
+    }
+
+    /**
      * All letters lowercase except first capital letter
      * and replaces underscores with spaces.
      *
@@ -24,6 +41,7 @@ enum ClientVigilanceLevel: string
      */
     public function prettyName(): string
     {
-        return str_replace('_', ' ', ucfirst(mb_strtolower($this->value)));
+        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
+        return __(str_replace('_', ' ', ucfirst(mb_strtolower($this->value))));
     }
 }

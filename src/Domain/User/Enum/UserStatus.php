@@ -18,4 +18,21 @@ enum UserStatus: string
     case Suspended = 'suspended'; // User suspended, account holder not allowed to login even via email
 
     // UserStatus::toArray() returns array for dropdown
+
+    /**
+     * Each enum case has to be in the function below with
+     * called by the translation function __() so that poedit
+     * recognizes the strings to translate.
+     *
+     * @return array
+     */
+    public static function getTranslatedCases(): array
+    {
+        return [
+            __('Unverified'),
+            __('Active'),
+            __('Locked'),
+            __('Suspended'),
+        ];
+    }
 }

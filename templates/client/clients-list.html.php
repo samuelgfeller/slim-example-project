@@ -37,14 +37,14 @@ $this->addAttribute(
 
 ?>
 <div class="vertical-center">
-    <h1>Clients</h1>
+    <h1><?= __('Clients') ?></h1>
     <?php
     if ($clientCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
         <div class="plus-btn" id="create-client-btn"></div>
         <?php
     } ?>
 </div>
-<input autocomplete="none" id="name-search-input" type="search" placeholder="Search by name">
+<input autocomplete="none" id="name-search-input" type="search" placeholder="<?= __('Search by name') ?>">
 <div class="filter-chip-container">
     <div id="active-client-filter-chips-div" class="active-filter-chips-div">
         <button id="add-filter-btn">+ Filter</button>
@@ -63,7 +63,7 @@ $this->addAttribute(
 
     </div>
     <div id="available-filter-div">
-        <span id="no-more-available-filters-span">No more filters</span>
+        <span id="no-more-available-filters-span"><?= __('No more filters') ?></span>
         <?php
         foreach ($clientListFilters['inactive'] as $filterCategory => $filtersInCategory) {
             echo $filterCategory ?

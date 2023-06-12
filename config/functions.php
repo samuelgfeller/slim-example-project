@@ -66,7 +66,7 @@ function set_language(string $locale, string $domain = 'messages'): void
     $directory = __DIR__ . '/../resources/translations';
     // Set locale information
     $localeHyphen = str_replace('_', '-', $locale);
-    echo setlocale(LC_ALL, $locale, $localeHyphen);
+    setlocale(LC_ALL, $locale, $localeHyphen);
     // Check for existing mo file (optional)
     $file = sprintf('%s/%s/LC_MESSAGES/%s_%s.mo', $directory, $locale, $domain, $locale);
     if ($locale !== 'en_US' && !file_exists($file)) {
