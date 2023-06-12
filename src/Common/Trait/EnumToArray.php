@@ -12,6 +12,12 @@ trait EnumToArray
         return array_column(self::cases(), 'name');
     }
 
+    public static function translatedNames(): array
+    {
+        // Run the translation function __() over each name
+        return array_map('__', self::names());
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
@@ -21,6 +27,13 @@ trait EnumToArray
     {
         return array_combine(self::values(), self::names());
     }
+
+    public static function toTranslatedNamesArray(): array
+    {
+        // Returns enum cases with value as key and translated name as value
+        return array_combine(self::values(), self::translatedNames());
+    }
+
 
     public static function toArrayWithPrettyNames(): array
     {

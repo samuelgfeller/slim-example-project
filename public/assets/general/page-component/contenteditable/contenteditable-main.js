@@ -1,4 +1,4 @@
-import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.2.1";
+import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.3.1";
 
 /**
  * Make field value editable

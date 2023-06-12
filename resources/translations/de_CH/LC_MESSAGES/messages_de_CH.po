@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
 "POT-Creation-Date: 2023-06-12 18:45+0200\n"
-"PO-Revision-Date: 2023-06-12 19:01+0200\n"
+"PO-Revision-Date: 2023-06-12 19:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -155,7 +155,7 @@ msgstr "Sachbearbeitung"
 
 #: src/Domain/User/Enum/UserRole.php:26
 msgid "Managing advisor"
-msgstr "Leitung Beratung"
+msgstr "Leitung Bearbeitung"
 
 #: src/Domain/User/Enum/UserRole.php:27
 msgid "Admin"

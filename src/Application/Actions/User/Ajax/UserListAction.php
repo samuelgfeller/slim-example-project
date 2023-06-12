@@ -47,7 +47,7 @@ final class UserListAction
 
         return $this->responder->respondWithJson($response, [
             'userResultDataArray' => $userResultDataArray,
-            'statuses' => UserStatus::toArray(),
+            'statuses' => UserStatus::toTranslatedNamesArray(),
         ]);
     }
 }

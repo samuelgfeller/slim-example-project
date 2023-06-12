@@ -1,12 +1,12 @@
-import {getNoteHtml} from "./client-read-template-note.html.js?v=0.2.1";
+import {getNoteHtml} from "./client-read-template-note.html.js?v=0.3.1";
 import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
-} from "./client-read-note-loading-placeholder.js?v=0.2.1";
-import {fetchData} from "../../general/ajax/fetch-data.js?v=0.2.1";
-import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.2.1";
-import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.2.1";
-import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.2.1";
+} from "./client-read-note-loading-placeholder.js?v=0.3.1";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=0.3.1";
+import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.3.1";
+import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.3.1";
+import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.3.1";
 
 /**
  * Loading notes into dom

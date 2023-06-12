@@ -66,7 +66,7 @@ class UserListActionTest extends TestCase
         // Init expected response array general format
         $expectedResponseArray = [
             'userResultDataArray' => [],
-            'statuses' => UserStatus::toArray(),
+            'statuses' => UserStatus::toTranslatedNamesArray(),
         ];
 
         // Add response array of authenticated user to expected userResultDataArray

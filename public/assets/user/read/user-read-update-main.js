@@ -1,11 +1,11 @@
-import {makeUserFieldEditable} from "./user-update-contenteditable.js?v=0.2.1";
-import {displayChangePasswordModal} from "../update/change-password-modal.html.js?v=0.2.1";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.2.1";
-import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.2.1";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.2.1";
-import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.2.1";
-import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.2.1";
-import {loadUserActivities} from "./user-activity/activity-main.js?v=0.2.1";
+import {makeUserFieldEditable} from "./user-update-contenteditable.js?v=0.3.1";
+import {displayChangePasswordModal} from "../update/change-password-modal.html.js?v=0.3.1";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.3.1";
+import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.3.1";
+import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.3.1";
+import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.3.1";
+import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.3.1";
+import {loadUserActivities} from "./user-activity/activity-main.js?v=0.3.1";
 
 const userId = document.getElementById('user-id').value;
 

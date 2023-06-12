@@ -1,5 +1,5 @@
-import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.2.1";
-import {escapeHtml} from "../../general/general-js/functions.js?v=0.2.1";
+import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.3.1";
+import {escapeHtml} from "../../general/general-js/functions.js?v=0.3.1";
 
 /**
  * HTML code for client profile card

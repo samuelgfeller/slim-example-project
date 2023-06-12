@@ -1,12 +1,12 @@
-import {createModal} from "../../general/page-component/modal/modal.js?v=0.2.1";
-import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.2.1";
-import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.2.1";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.2.1";
-import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.2.1";
-import {__} from "../../general/general-js/functions.js";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.3.1";
+import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.3.1";
+import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.3.1";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.3.1";
+import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.3.1";
+import {__} from "../../general/general-js/functions.js?v=0.3.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
 
-
+// List of words that are used in modal box and need to be translated
 let wordsToTranslate = [
     __('First name'),
     __('Last name'),
@@ -16,64 +16,71 @@ let wordsToTranslate = [
     __('Status'),
     __('User role')
 ];
-let translatedWords = fetchTranslations(wordsToTranslate);
-console.log(translatedWords);
+// Init variable
+let translatedWords = wordsToTranslate;
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translatedWords = response;
+});
 
 /**
- * Create and display modal box to create a new client
+ * Create and display modal box to create a new client.
+ * In order for the modal box to be translated, the fetchTranslations()
+ * must be done loading when calling this function.
  */
 export function displayUserCreateModal() {
     let header = '<h2>Create user</h2>';
     let body = `<div>
 <form action="javascript:void(0);" class="wide-modal-form" id="create-user-modal-form">
         <div class="form-input-div">
-            <label for="first-name-input">First name</label>
+            <label for="first-name-input">${translatedWords['First name'] ?? 'First name'}</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
         <div class="form-input-div">
-            <label for="last-name-input">Last name</label>
+            <label for="last-name-input">${translatedWords['Last name'] ?? 'Last name'}</label>
             <input type="text" name="surname" id="last-name-input" placeholder="Zimmer" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
         <div class="form-input-div">
-            <label for="email-input">E-Mail</label>
+            <label for="email-input">${translatedWords['E-Mail'] ?? 'E-Mail'}</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required>
         </div>
         <div class="form-input-div" id="password1-input-div">
-            <label for="password1-input">New password</label>
+            <label for="password1-input">${translatedWords['New password'] ?? 'New password'}</label>
             <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-div">
-            <label for="password2-input">Repeat new password</label>
+            <label for="password2-input">${translatedWords['Repeat new password'] ?? 'Repeat new password'}</label>
             <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-div">
-            <label for="user-status-select">Status</label>
+            <label for="user-status-select">${translatedWords['Status'] ?? 'Status'}</label>
             <select name="status" class="form-select" id="user-status-select" required>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
         <div class="form-input-div">
-            <label for="user-role-select">User role</label>
+            <label for="user-role-select">${translatedWords['User role'] ?? 'User role'}</label>
             <select name="user_role_id" id="user-role-select" class="form-select" required>
             <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
     </div>`;
-    let footer = `<button type="button" id="user-create-submit-btn" class="submit-btn modal-submit-btn">Create user
+    let footer = `<button type="button" id="user-create-submit-btn" class="submit-btn modal-submit-btn">
+${translatedWords['Create user'] ?? 'Create user'}
     </button></form>
     <div class="clearfix">
     </div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', '<div id="create-user-div"></div>');
     let container = document.getElementById('create-user-div');
     createModal(header, body, footer, container, true);
-    // Load dropdown options into client create modal
+// Load dropdown options into client create modal
     requestDropdownOptions('users').then((dropdownOptions) => {
         addUserDropdownOptionsToCreateModal(dropdownOptions);
     });
-    // Display password as unsafe if breached and disable submit btn if passwords don't match
+// Display password as unsafe if breached and disable submit btn if passwords don't match
     addPasswordStrengthCheck();
 }
 
