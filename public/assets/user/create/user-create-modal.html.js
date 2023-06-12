@@ -3,6 +3,21 @@ import {requestDropdownOptions} from "../../general/page-component/modal/dropdow
 import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.2.1";
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.2.1";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.2.1";
+import {__} from "../../general/general-js/functions.js";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js";
+
+
+let wordsToTranslate = [
+    __('First name'),
+    __('Last name'),
+    __('E-Mail'),
+    __('New password'),
+    __('Repeat new password'),
+    __('Status'),
+    __('User role')
+];
+let translatedWords = fetchTranslations(wordsToTranslate);
+console.log(translatedWords);
 
 /**
  * Create and display modal box to create a new client

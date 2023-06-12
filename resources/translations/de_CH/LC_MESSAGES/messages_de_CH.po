@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-12 18:22+0200\n"
-"PO-Revision-Date: 2023-06-12 18:22+0200\n"
+"POT-Creation-Date: 2023-06-12 18:45+0200\n"
+"PO-Revision-Date: 2023-06-12 19:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -128,6 +128,22 @@ msgstr "Weiblich"
 #: src/Domain/General/Enum/SexOption.php:30
 msgid "Other"
 msgstr "Sonstiges"
+
+#: src/Domain/User/Enum/UserActivity.php:23
+msgid "created"
+msgstr "erstellt"
+
+#: src/Domain/User/Enum/UserActivity.php:24
+msgid "updated"
+msgstr "ändert"
+
+#: src/Domain/User/Enum/UserActivity.php:25
+msgid "deleted"
+msgstr "löscht"
+
+#: src/Domain/User/Enum/UserActivity.php:26
+msgid "read"
+msgstr "liest"
 
 #: src/Domain/User/Enum/UserRole.php:24
 msgid "Newcomer"
