@@ -11,18 +11,10 @@ enum UserRole: string
     case ADMIN = 'admin';
 
     /**
-     * Removes underscore and adds capital first letter.
-     *
-     * @return string
-     */
-    public function roleNameForDropdown(): string
-    {
-        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
-        return __(ucfirst(str_replace('_', ' ', $this->value)));
-    }
-
-    /**
-     * Setup keys that should be translated used by the function above.
+     * Calling the translation function __() for each enum value
+     * so that poedit recognizes them to be translated.
+     * When using the enum values, __() will work as it's
+     * setup here and translations are in the .mo files.
      *
      * @return array
      */
@@ -34,5 +26,16 @@ enum UserRole: string
             __('Managing advisor'),
             __('Admin'),
         ];
+    }
+
+    /**
+     * Removes underscore and adds capital first letter.
+     *
+     * @return string
+     */
+    public function roleNameForDropdown(): string
+    {
+        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
+        return __(ucfirst(str_replace('_', ' ', $this->value)));
     }
 }

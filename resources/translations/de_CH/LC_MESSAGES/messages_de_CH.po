@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-12 16:18+0200\n"
-"PO-Revision-Date: 2023-06-12 16:21+0200\n"
+"POT-Creation-Date: 2023-06-12 17:07+0200\n"
+"PO-Revision-Date: 2023-06-12 17:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -72,6 +72,7 @@ msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Mir zugewiesene Kunden &nbsp; - &nbsp; nicht abgeschlossen"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
+#: templates/user/user-read.html.php:166
 msgid "User activity"
 msgstr "Benutzeraktivität"
 
@@ -82,6 +83,18 @@ msgstr "Neue Notizen"
 #: src/Domain/Dashboard/DashboardPanelProvider.php:90
 msgid "Recently assigned clients"
 msgstr "Kürzlich zugewiesene Kunden"
+
+#: src/Domain/General/Enum/SexOption.php:28
+msgid "Male"
+msgstr "Männlich"
+
+#: src/Domain/General/Enum/SexOption.php:29
+msgid "Female"
+msgstr "Weiblich"
+
+#: src/Domain/General/Enum/SexOption.php:30
+msgid "Other"
+msgstr "Sonstiges"
 
 #: src/Domain/User/Enum/UserRole.php:32
 msgid "Newcomer"
@@ -115,6 +128,10 @@ msgstr "Gesperrt"
 msgid "Suspended"
 msgstr "Suspendiert"
 
+#: templates/client/client-read.html.php:109
+msgid "New main note"
+msgstr "Neue Hauptnotiz"
+
 #: templates/client/clients-list.html.php:40
 msgid "Clients"
 msgstr "Klienten"
@@ -130,3 +147,51 @@ msgstr "Keine Filter mehr"
 #: templates/dashboard/dashboard.html.php:30
 msgid "Dashboard"
 msgstr "Dashboard"
+
+#: templates/user/user-list.html.php:30
+msgid "Users"
+msgstr "Benutzer"
+
+#: templates/user/user-read.html.php:73
+msgid "Status"
+msgstr "Status"
+
+#: templates/user/user-read.html.php:90
+msgid "User role"
+msgstr "Benutzerrolle"
+
+#: templates/user/user-read.html.php:103
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: templates/user/user-read.html.php:120
+msgid "Password"
+msgstr "Passwort"
+
+#: templates/user/user-read.html.php:124
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: templates/user/user-read.html.php:132
+msgid "Dark mode"
+msgstr "Dunkelmodus"
+
+#: templates/user/user-read.html.php:149
+msgid "Metadata"
+msgstr "Metadaten"
+
+#: templates/user/user-read.html.php:151
+msgid "Created"
+msgstr "Erstellt"
+
+#: templates/user/user-read.html.php:152
+msgid "Updated"
+msgstr "Geändert"
+
+#: templates/user/user-read.html.php:158
+msgid "Delete profile"
+msgstr "Profil löschen"
+
+#: templates/user/user-read.html.php:158
+msgid "Delete user"
+msgstr "Benutzer löschen"

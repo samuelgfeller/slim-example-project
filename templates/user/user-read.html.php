@@ -70,7 +70,7 @@ $this->addAttribute(
         <div id="user-dropdown-container">
             <!-- Status select options-->
             <div>
-                <label for="user-status" class="bigger-select-label">Status</label>
+                <label for="user-status" class="bigger-select-label"><?= __('Status') ?></label>
                 <select name="status" class="default-select bigger-select" id="user-status"
                     <?= $user->statusPrivilege->hasPrivilege(Privilege::UPDATE)
                         ? '' : 'disabled' ?>>
@@ -79,7 +79,7 @@ $this->addAttribute(
                     foreach ($userStatuses as $userStatus) {
                         $selected = $userStatus === $user->status ? 'selected' : '';
                         echo "<option value='$userStatus->value' $selected>" .
-                            ucfirst($userStatus->value) . "</option>";
+                            __(ucfirst($userStatus->value)) . "</option>";
                     }
                     ?>
                 </select>
@@ -87,7 +87,7 @@ $this->addAttribute(
 
             <!-- Assigned user select options-->
             <div>
-                <label for="user-role-select" class="bigger-select-label">User role</label>
+                <label for="user-role-select" class="bigger-select-label"><?= __('User role') ?> </label>
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
                     <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                     <?php
@@ -100,7 +100,7 @@ $this->addAttribute(
             </div>
         </div>
 
-        <h3 class="label-h3">E-Mail</h3>
+        <h3 class="label-h3"><?= __('E-Mail') ?></h3>
         <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -117,11 +117,11 @@ $this->addAttribute(
         <div>
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
-                <h3 class="label-h3">Password</h3>
+                <h3 class="label-h3"><?= __('Password') ?></h3>
                 <button class="btn btn-orange" id="change-password-btn"
                         data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
                             Privilege::UPDATE
-                        ) ? 'false' : 'true' ?>">Change password
+                        ) ? 'false' : 'true' ?>"><?= __('Change password') ?>
                 </button>
                 <?php
             } ?>
@@ -129,7 +129,7 @@ $this->addAttribute(
         <?php
         if ($isOwnProfile === true) { ?>
             <div>
-                <h3 class="label-h3">Dark mode</h3>
+                <h3 class="label-h3"><?= __('Dark mode') ?></h3>
                 <label id="dark-mode-switch-container">
                     <input id='dark-mode-toggle-checkbox' type='checkbox'>
                     <div id='dark-mode-toggle-slot'>
@@ -146,16 +146,16 @@ $this->addAttribute(
             </div>
             <?php
         } ?>
-        <h3 class="label-h3">Metadata</h3>
+        <h3 class="label-h3"><?= __('Metadata') ?></h3>
         <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
-            <b>Created:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
-            <b>Updated:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?>
+            <b><?= __('Created') ?>:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>
+            <b><?= __('Updated') ?>:</b> <?= $user->updatedAt->format('d. F Y • H:i:s') ?>
         </p>
         <?php
         if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
             <button class="btn btn-red" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
                 <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
-                Delete <?= $isOwnProfile ? 'profile' : 'user' ?>
+                <?= $isOwnProfile ? __('Delete profile') : __('Delete user') ?>
             </button>
             <?php
         } ?>
@@ -163,10 +163,9 @@ $this->addAttribute(
 
     <div id="user-activity-container">
         <div id="user-activity-header">
-            <h2>User activity</h2>
+            <h2><?= __('User activity') ?></h2>
         </div>
         <div id="user-activity-content">
-
         </div>
     </div>
 </div>

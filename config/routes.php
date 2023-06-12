@@ -110,7 +110,7 @@ return function (App $app) {
         $group->get('/{client_id:[0-9]+}', \App\Application\Actions\Client\Page\ClientReadPageAction::class)
             ->setName('client-read-page');
 
-        $group->get('', \App\Application\Actions\Client\Ajax\ClientListAction::class)->setName('client-list');
+        $group->get('', \App\Application\Actions\Client\Ajax\ClientFetchListAction::class)->setName('client-list');
         // Client create form is rendered by the client and needs to have the available dropdown options
         $group->get(
             '/dropdown-options',

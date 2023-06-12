@@ -17,7 +17,7 @@ class ClientStatusSeeder extends AbstractSeed
     {
         $clientStatusData = [
             ['name' => 'Action pending'],
-            ['name' => 'In progress'],
+            ['name' => 'Helped'],
             ['name' => 'In care'],
             ['name' => 'Cannot help'],
         ];

@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Post list all and own action.
  */
-final class ClientListAction
+final class ClientFetchListAction
 {
     /**
      * The constructor.

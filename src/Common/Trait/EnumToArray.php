@@ -39,7 +39,8 @@ trait EnumToArray
     {
         $prettyNames = [];
         foreach ($names as $name) {
-            $prettyNames[] = str_replace('_', ' ', ucfirst(mb_strtolower($name)));
+            // String is a key in the enum function getTranslatedValues so __() knows how to translate
+            $prettyNames[] = __(str_replace('_', ' ', ucfirst(mb_strtolower($name))));
         }
 
         return $prettyNames;

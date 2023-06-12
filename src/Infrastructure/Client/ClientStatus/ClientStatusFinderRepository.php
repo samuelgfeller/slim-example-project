@@ -50,7 +50,8 @@ class ClientStatusFinderRepository
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $statuses = [];
         foreach ($resultRows as $resultRow) {
-            $statuses[(int)$resultRow['id']] = $resultRow['name'];
+            // Translation key is created in ClientStatus enum
+            $statuses[(int)$resultRow['id']] = __($resultRow['name']);
         }
 
         return $statuses;

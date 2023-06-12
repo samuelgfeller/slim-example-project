@@ -27,7 +27,7 @@ $this->addAttribute(
 
 ?>
 <div class="vertical-center">
-    <h1>Users</h1>
+    <h1><?= __('Users') ?></h1>
     <div class="plus-btn" id="create-user-btn"></div>
 </div>
 

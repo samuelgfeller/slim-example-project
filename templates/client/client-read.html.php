@@ -106,7 +106,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                   data-editable="<?= $clientAggregate->mainNoteData
                       ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
-                  placeholder="New main note"
+                  placeholder="<?= __('New main note') ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-note">
             <div class="checkmark draw"></div>
