@@ -10,10 +10,16 @@
  * @var bool $userListAuthorization if user is allowed to read other users
  */
 
+/* Set locale to Dutch */
+
+/* Output: vrijdag 22 december 1978 */
+echo strftime("%A %e %B %Y", mktime(0, 0, 0, 12, 22, 1978));
+
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= str_replace('_', '-', setlocale(LC_ALL, 0)) ?>">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
     <base href="<?= $basePath ?>/"/>

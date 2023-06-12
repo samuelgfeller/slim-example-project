@@ -52,7 +52,7 @@ class DashboardPanelProvider
         return [
             // Category
             new DashboardData([
-                'title' => 'Unassigned clients',
+                'title' => __('Unassigned clients'),
                 'panelId' => 'unassigned-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="user" data-param-value="" value=""></data>
@@ -60,7 +60,7 @@ class DashboardPanelProvider
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             new DashboardData([
-                'title' => 'Clients assigned to me &nbsp; — &nbsp;  action pending',
+                'title' => __('Clients assigned to me &nbsp; — &nbsp;  action pending'),
                 'panelId' => 'assigned-to-me-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="user" data-param-value="' . $loggedInUserId . '" value=""></data>
@@ -69,7 +69,7 @@ class DashboardPanelProvider
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             new DashboardData([
-                'title' => 'User activity',
+                'title' => __('User activity'),
                 'panelId' => 'user-activity-panel',
                 'panelClass' => null,
                 'panelHtmlContent' => $this->userFilterChipProvider->getUserFilterChipsHtml() .
@@ -79,7 +79,7 @@ class DashboardPanelProvider
                 ),
             ]),
             new DashboardData([
-                'title' => 'New notes',
+                'title' => __('New notes'),
                 'panelId' => 'new-notes-panel',
                 'panelClass' => 'note-panel',
                 'panelHtmlContent' => '<data data-param-name="most-recent" data-param-value="10" value=""></data>
@@ -87,7 +87,7 @@ class DashboardPanelProvider
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::MANAGING_ADVISOR),
             ]),
             new DashboardData([
-                'title' => 'Recently assigned clients',
+                'title' => __('Recently assigned clients'),
                 'panelId' => 'recently-assigned-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>

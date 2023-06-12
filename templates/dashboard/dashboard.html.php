@@ -27,9 +27,18 @@ $this->addAttribute('jsModules', [
 ]);
 ?>
 
-<h1>Dashboard</h1>
-
+<h1><?= _('Dashboard') ?></h1>
+<h1><?= __('Water') ?></h1>
 <div id="dashboard-panel-toggle-buttons-div">
+    <?php
+
+    // $locales = ResourceBundle::getLocales('');
+    // print_r($locales);
+    // set_language('de');
+
+    // setlocale(LC_ALL, 'de_ch');
+    var_dump(setlocale(LC_ALL, 0));
+    ?>
     <?php
     foreach ($dashboards as $dashboard) {
         $checked = in_array($dashboard->panelId, $enabledDashboards, true) ? 'checked' : '';

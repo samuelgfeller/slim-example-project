@@ -16,7 +16,8 @@
     "symfony/mailer": "^5.3",
     "nyholm/psr7": "^1.5",
     "fig/http-message-util": "^1.1",
-    "nyholm/psr7-server": "^1.0"
+    "nyholm/psr7-server": "^1.0",
+    "ext-gettext": "*"
   },
   "autoload": {
     "psr-4": {
