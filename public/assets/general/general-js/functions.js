@@ -55,3 +55,12 @@ export function removeSpecialChars(string, upperCase = false){
     }
     return outputString;
 }
+
+/**
+ *
+ * @param {string}string
+ * @returns {string}
+ */
+export function __(string){
+    return string;
+}

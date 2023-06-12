@@ -72,7 +72,7 @@ class UserActivityFinder
             }
             // Add the time and action name
             $userActivity->timeAndActionName = $userActivity->datetime->format('H:i') . ': ' .
-                ucfirst($userActivity->action->value);
+                ucfirst(__($userActivity->action->value));
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {
                 $userRow = $this->userFinderRepository->findUserById($userActivity->userId);

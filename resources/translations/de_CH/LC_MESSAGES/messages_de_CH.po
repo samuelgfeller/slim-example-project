@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-12 17:07+0200\n"
-"PO-Revision-Date: 2023-06-12 17:10+0200\n"
+"POT-Creation-Date: 2023-06-12 18:22+0200\n"
+"PO-Revision-Date: 2023-06-12 18:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -14,6 +14,39 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: src\n"
 "X-Poedit-SearchPath-1: templates\n"
+"X-Poedit-SearchPath-2: public\n"
+
+#: public/assets/user/create/user-create-main.js:9
+msgid "First name"
+msgstr "Vorname"
+
+#: public/assets/user/create/user-create-main.js:10
+msgid "Last name"
+msgstr "Nachname"
+
+#: public/assets/user/create/user-create-main.js:11
+#: templates/user/user-read.html.php:103
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: public/assets/user/create/user-create-main.js:12
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: public/assets/user/create/user-create-main.js:13
+msgid "Repeat new password"
+msgstr "Passwort wiederholen"
+
+#: public/assets/user/create/user-create-main.js:14
+#: templates/client/client-read.html.php:69
+#: templates/user/user-read.html.php:73
+msgid "Status"
+msgstr "Status"
+
+#: public/assets/user/create/user-create-main.js:15
+#: templates/user/user-read.html.php:90
+msgid "User role"
+msgstr "Benutzerrolle"
 
 #: src/Domain/Client/Enum/ClientStatus.php:23
 msgid "Action pending"
@@ -96,19 +129,19 @@ msgstr "Weiblich"
 msgid "Other"
 msgstr "Sonstiges"
 
-#: src/Domain/User/Enum/UserRole.php:32
+#: src/Domain/User/Enum/UserRole.php:24
 msgid "Newcomer"
 msgstr "Neubenutzer"
 
-#: src/Domain/User/Enum/UserRole.php:33
+#: src/Domain/User/Enum/UserRole.php:25
 msgid "Advisor"
 msgstr "Sachbearbeitung"
 
-#: src/Domain/User/Enum/UserRole.php:34
+#: src/Domain/User/Enum/UserRole.php:26
 msgid "Managing advisor"
 msgstr "Leitung Beratung"
 
-#: src/Domain/User/Enum/UserRole.php:35
+#: src/Domain/User/Enum/UserRole.php:27
 msgid "Admin"
 msgstr "Admin"
 
@@ -127,6 +160,10 @@ msgstr "Gesperrt"
 #: src/Domain/User/Enum/UserStatus.php:35
 msgid "Suspended"
 msgstr "Suspendiert"
+
+#: templates/client/client-read.html.php:86
+msgid "Helper"
+msgstr "Helfer"
 
 #: templates/client/client-read.html.php:109
 msgid "New main note"
@@ -152,18 +189,6 @@ msgstr "Dashboard"
 msgid "Users"
 msgstr "Benutzer"
 
-#: templates/user/user-read.html.php:73
-msgid "Status"
-msgstr "Status"
-
-#: templates/user/user-read.html.php:90
-msgid "User role"
-msgstr "Benutzerrolle"
-
-#: templates/user/user-read.html.php:103
-msgid "E-Mail"
-msgstr "E-Mail"
-
 #: templates/user/user-read.html.php:120
 msgid "Password"
 msgstr "Passwort"
@@ -174,7 +199,7 @@ msgstr "Passwort ändern"
 
 #: templates/user/user-read.html.php:132
 msgid "Dark mode"
-msgstr "Dunkelmodus"
+msgstr "Nachtmodus"
 
 #: templates/user/user-read.html.php:149
 msgid "Metadata"

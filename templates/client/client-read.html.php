@@ -66,7 +66,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="status-and-assigned-user-select-container">
         <!-- Status select options-->
         <div>
-            <label for="client-status" class="bigger-select-label">Status</label>
+            <label for="client-status" class="bigger-select-label"><?= __('Status') ?></label>
             <select name="client_status_id" class="default-select bigger-select"
                 <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
                     ? '' : 'disabled' ?>>
@@ -83,7 +83,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
         <!-- Assigned user select options-->
         <div>
-            <label for="assigned-user-select" class="bigger-select-label">Helper</label>
+            <label for="assigned-user-select" class="bigger-select-label"><?= __('Helper') ?></label>
             <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
                 <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                 <option value=""></option>

@@ -26,7 +26,7 @@ enum UserStatus: string
      *
      * @return array
      */
-    public static function getTranslatedCases(): array
+    public static function getTranslatedValues(): array
     {
         return [
             __('Unverified'),

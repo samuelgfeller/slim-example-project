@@ -59,22 +59,23 @@ return function (App $app) {
         \App\Application\Actions\Authentication\Submit\PasswordForgottenEmailSubmitAction::class
     )->setName('password-forgotten-email-submit');
     // Set new password page when forgotten
-    $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetPageAction::class)->setName(
-        'password-reset-page'
-    );
+    $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetPageAction::class)
+        ->setName('password-reset-page');
     // Submit new password (reset-password hardcoded in login-main.js)
     $app->post(
         '/reset-password',
         \App\Application\Actions\Authentication\Submit\PasswordResetSubmitAction::class
-    )->setName(
-        'password-reset-submit'
-    );
+    )->setName('password-reset-submit');
 
     // Submit new password when authenticated (post and not put as form submit)
     $app->put(
         '/change-password/{user_id:[0-9]+}',
         \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class
     )->setName('change-password-submit')->add(UserAuthenticationMiddleware::class);
+
+    $app->get('/translate', \App\Application\Actions\Common\TranslateAction::class)
+        ->add(UserAuthenticationMiddleware::class)
+        ->setName('translate');
 
     $app->group('/users', function (RouteCollectorProxy $group) {
         // $group->options('', PreflightAction::class); // Allow preflight requests

@@ -14,7 +14,7 @@
 
 /* Output: vrijdag 22 december 1978 */
 echo strftime("%A %e %B %Y", mktime(0, 0, 0, 12, 22, 1978));
-
+echo setlocale(LC_ALL, 0);
 
 ?>
 
