@@ -7,6 +7,8 @@ import {fetchData} from "../../general/ajax/fetch-data.js?v=0.3.1";
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.3.1";
 import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.3.1";
 import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.3.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
+import {__} from "../../general/general-js/functions.js?v=0.3.1";
 
 /**
  * Loading notes into dom
@@ -44,6 +46,13 @@ export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), not
 }
 
 
+// Get translation for no notes found
+let noNotesFound = __('No notes were found');
+// Fetch translations and replace str var (fetch done automatically at page loading when imported)
+fetchTranslations([noNotesFound]).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    noNotesFound = response[[noNotesFound]] ?? noNotesFound;
+});
 /**
  * Add note to page
  *
@@ -56,7 +65,7 @@ export function addNotesToDom(notes, wrapperId = null) {
     // If no results, tell user so
     if (notes.length === 0) {
         // document.getElementById('client-activity-personal-info-container').insertAdjacentHTML('afterend', '<br><p id="no-notes-info">No notes were found.</p>')
-        noteContainer.insertAdjacentHTML('beforeend', '<p id="no-notes-info">No notes were found.</p>')
+        noteContainer.insertAdjacentHTML('beforeend', `<p id="no-notes-info">${noNotesFound}.</p>`)
     }
 
     // Loop over notes and add to DOM
@@ -66,7 +75,7 @@ export function addNotesToDom(notes, wrapperId = null) {
         // If wrapperId is provided and note client name is in response it means that it is not called from
         // client read page and there should be a link to the correct client read page
         if (wrapperId && note.clientFullName) {
-            noteHtml = `<a href="clients/${note.clientId}#note-${note.id}-container">Client ${note.clientFullName}</a>` + noteHtml;
+            noteHtml = `<a href="clients/${note.clientId}#note-${note.id}-container">${note.clientFullName}</a>` + noteHtml;
         }
         // Add to DOM
         noteContainer.insertAdjacentHTML('beforeend', noteHtml);

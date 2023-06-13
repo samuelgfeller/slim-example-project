@@ -8,6 +8,7 @@ import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [
+    __('Create user'),
     __('First name'),
     __('Last name'),
     __('E-Mail'),
@@ -17,7 +18,8 @@ let wordsToTranslate = [
     __('User role')
 ];
 // Init variable
-let translatedWords = wordsToTranslate;
+let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translatedWords var
 fetchTranslations(wordsToTranslate).then(response => {
     // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
     translatedWords = response;
@@ -29,47 +31,47 @@ fetchTranslations(wordsToTranslate).then(response => {
  * must be done loading when calling this function.
  */
 export function displayUserCreateModal() {
-    let header = '<h2>Create user</h2>';
+    let header = `<h2>${translatedWords['Create user']}</h2>`;
     let body = `<div>
 <form action="javascript:void(0);" class="wide-modal-form" id="create-user-modal-form">
         <div class="form-input-div">
-            <label for="first-name-input">${translatedWords['First name'] ?? 'First name'}</label>
+            <label for="first-name-input">${translatedWords['First name']}</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
         <div class="form-input-div">
-            <label for="last-name-input">${translatedWords['Last name'] ?? 'Last name'}</label>
+            <label for="last-name-input">${translatedWords['Last name']}</label>
             <input type="text" name="surname" id="last-name-input" placeholder="Zimmer" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
         <div class="form-input-div">
-            <label for="email-input">${translatedWords['E-Mail'] ?? 'E-Mail'}</label>
+            <label for="email-input">${translatedWords['E-Mail']}</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required>
         </div>
         <div class="form-input-div" id="password1-input-div">
-            <label for="password1-input">${translatedWords['New password'] ?? 'New password'}</label>
+            <label for="password1-input">${translatedWords['New password']}</label>
             <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-div">
-            <label for="password2-input">${translatedWords['Repeat new password'] ?? 'Repeat new password'}</label>
+            <label for="password2-input">${translatedWords['Repeat new password']}</label>
             <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
         </div>
         <div class="form-input-div">
-            <label for="user-status-select">${translatedWords['Status'] ?? 'Status'}</label>
+            <label for="user-status-select">${translatedWords['Status']}</label>
             <select name="status" class="form-select" id="user-status-select" required>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
         <div class="form-input-div">
-            <label for="user-role-select">${translatedWords['User role'] ?? 'User role'}</label>
+            <label for="user-role-select">${translatedWords['User role']}</label>
             <select name="user_role_id" id="user-role-select" class="form-select" required>
             <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
     </div>`;
     let footer = `<button type="button" id="user-create-submit-btn" class="submit-btn modal-submit-btn">
-${translatedWords['Create user'] ?? 'Create user'}
+${translatedWords['Create user']}
     </button></form>
     <div class="clearfix">
     </div>`;

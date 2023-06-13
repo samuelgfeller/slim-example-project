@@ -5,6 +5,7 @@ namespace App\Domain\User\Service;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Infrastructure\User\UserActivityRepository;
 use App\Infrastructure\User\UserFinderRepository;
+use IntlDateFormatter;
 use InvalidArgumentException;
 use RuntimeException;
 use Slim\Interfaces\RouteParserInterface;
@@ -59,6 +60,8 @@ class UserActivityFinder
         $userActivities = $this->userActivityRepository->findUserActivities($grantedUserIds);
         // Group user activities by date
         $groupedActivitiesByDate = [];
+        // Init date formatter that is needed to display the date with the correct language
+        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         foreach ($userActivities as $userActivity) {
             try {
                 // Generate read url. The route name HAS to be in the following format: "[table_name]-read-page"
@@ -80,8 +83,8 @@ class UserActivityFinder
                     . $userRow['surname'] . '</span> • ' .
                     $userActivity->timeAndActionName;
             }
-
-            $groupedActivitiesByDate[$userActivity->datetime->format('d. F Y')][] = $userActivity;
+            $formattedDate = $dateFormatter->format($userActivity->datetime);
+            $groupedActivitiesByDate[$formattedDate][] = $userActivity;
         }
 
         return $groupedActivitiesByDate;

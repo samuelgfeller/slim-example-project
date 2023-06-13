@@ -6,6 +6,8 @@ import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change
 import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.3.1";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.3.1";
 import {loadUserActivities} from "./user-activity/activity-main.js?v=0.3.1";
+import {__} from "../../general/general-js/functions.js?v=0.3.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
 
 const userId = document.getElementById('user-id').value;
 
@@ -23,14 +25,29 @@ document.querySelector('select[name="status"]:not([disabled])')
 document.querySelector('select[name="user_role_id"]:not([disabled])')
     ?.addEventListener('change', submitUserDropdownChange);
 
+// Get translations for user update / delete
+let wordsToTranslate = [
+    __('Are you sure that you want to delete this user?'),
+    __('Are you sure that you want to delete your profile?'),
+    __('You will be logged out and not be able to log in again.'),
+    __('Successfully changed password.'),
+];
+// Init variable
+let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translatedWords var
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translatedWords = response;
+});
+
 // Delete button with null safe as it doesn't exist when not privileged
 const userBtn = document.querySelector('#delete-user-btn');
 userBtn?.addEventListener('click', () => {
-    let title = 'Are you sure that you want to delete this user?';
+    let title = translatedWords['Are you sure that you want to delete this user?'];
     let info = '';
     if(userBtn.dataset.isOwnProfile === '1'){
-        title = 'Are you sure that you want to delete your profile?';
-        info = 'You will be logged out and not be able to log in again.'
+        title = translatedWords['Are you sure that you want to delete your profile?'];
+        info = translatedWords['You will be logged out and not be able to log in again.'];
     }
     createAlertModal(title, info, () => {
         submitDelete(`users/${userId}`, true).then(() => {
@@ -70,7 +87,7 @@ document.addEventListener('click', e => {
         let userId = document.getElementById('user-id').value;
         submitModalForm('change-password-modal-form', `change-password/${userId}`, 'PUT', `users/${userId}`)
             .then(() => {
-                displayFlashMessage('success', 'Successfully changed password.');
+                displayFlashMessage('success', translatedWords['Successfully changed password.']);
             });
     }
 });

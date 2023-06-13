@@ -1,5 +1,7 @@
 // Init vars
 import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.3.1";
+import {fetchTranslations} from "../general/ajax/fetch-translation-data.js?v=0.3.1";
+import {__} from "../general/general-js/functions.js?v=0.3.1";
 
 let password1Input, password2Inp;
 
@@ -85,13 +87,17 @@ function makeHIBPRequest(passwordHash) {
     });
 }
 
-/**
- * Add warning for the user below input field
- */
+// Add translated warning for the user below input field
+let str = __('This password is known to have been leaked and is unsafe to use');
+// Fetch translations and replace str var (fetch done automatically at page loading when imported)
+fetchTranslations([str]).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    str = response[[str]] ?? str;
+});
 function showWarning() {
     if (null === document.getElementById('pwned-password-warning')) {
-        password1Input.insertAdjacentHTML('afterend', '<span class="input-warning content-below-input" ' +
-            'id="pwned-password-warning">This password is known to have been leaked and is unsafe to use</span>');
+        password1Input.insertAdjacentHTML('afterend', `<span class="input-warning content-below-input"
+            id="pwned-password-warning">${str}</span>`);
     }
 }
 

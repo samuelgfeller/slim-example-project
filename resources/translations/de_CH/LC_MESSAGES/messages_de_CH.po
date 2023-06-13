@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-12 18:45+0200\n"
-"PO-Revision-Date: 2023-06-12 19:09+0200\n"
+"POT-Creation-Date: 2023-06-13 11:35+0200\n"
+"PO-Revision-Date: 2023-06-13 11:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -16,37 +16,116 @@ msgstr ""
 "X-Poedit-SearchPath-1: templates\n"
 "X-Poedit-SearchPath-2: public\n"
 
-#: public/assets/user/create/user-create-main.js:9
+#: public/assets/authentication/password-strength-checker.js:91
+msgid "This password is known to have been leaked and is unsafe to use"
+msgstr "Dieses Passwort ist von hacker bekannt, es sollte nicht verwendet werden"
+
+#: public/assets/client/create/client-create-main.js:14
+msgid "Please fill out either the first name or last name"
+msgstr "Bitte geben Sie entweder den Vornamen oder den Nachnamen ein"
+
+#: public/assets/client/create/client-create-main.js:15
+msgid "Client created successfully."
+msgstr "Klient erfolgreich erfasst."
+
+#: public/assets/client/create/client-create-modal.html.js:10
+msgid "Create client"
+msgstr "Klient erfassen"
+
+#: public/assets/client/create/client-create-modal.html.js:11
+#: public/assets/user/create/user-create-modal.html.js:12
 msgid "First name"
 msgstr "Vorname"
 
-#: public/assets/user/create/user-create-main.js:10
+#: public/assets/client/create/client-create-modal.html.js:12
+#: public/assets/user/create/user-create-modal.html.js:13
 msgid "Last name"
 msgstr "Nachname"
 
-#: public/assets/user/create/user-create-main.js:11
+#: public/assets/client/create/client-create-modal.html.js:13
+msgid "Birthdate"
+msgstr "Geburtsdatum"
+
+#: public/assets/client/create/client-create-modal.html.js:14
+msgid "Location"
+msgstr "Standort"
+
+#: public/assets/client/create/client-create-modal.html.js:15
+msgid "Main note"
+msgstr "Hauptnotiz"
+
+#: public/assets/client/create/client-create-modal.html.js:16
+msgid "Sex"
+msgstr "Geschlecht"
+
+#: public/assets/client/create/client-create-modal.html.js:17
+msgid "Phone number"
+msgstr "Telefonnummer"
+
+#: public/assets/client/create/client-create-modal.html.js:18
+#: public/assets/user/create/user-create-modal.html.js:14
 #: templates/user/user-read.html.php:103
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: public/assets/user/create/user-create-main.js:12
-msgid "New password"
-msgstr "Neues Passwort"
+#: public/assets/client/create/client-create-modal.html.js:19
+msgid "Assigned user"
+msgstr "Zugewiesen an"
 
-#: public/assets/user/create/user-create-main.js:13
-msgid "Repeat new password"
-msgstr "Passwort wiederholen"
-
-#: public/assets/user/create/user-create-main.js:14
+#: public/assets/client/create/client-create-modal.html.js:20
+#: public/assets/user/create/user-create-modal.html.js:17
 #: templates/client/client-read.html.php:69
 #: templates/user/user-read.html.php:73
 msgid "Status"
 msgstr "Status"
 
-#: public/assets/user/create/user-create-main.js:15
+#: public/assets/client/note/client-read-note-loading.js:50
+msgid "No notes were found"
+msgstr "Keine Notizen gefunden"
+
+#: public/assets/user/create/user-create-modal.html.js:11
+msgid "Create user"
+msgstr "Benutzer erstellen"
+
+#: public/assets/user/create/user-create-modal.html.js:15
+#: public/assets/user/update/change-password-modal.html.js:10
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: public/assets/user/create/user-create-modal.html.js:16
+#: public/assets/user/update/change-password-modal.html.js:11
+msgid "Repeat new password"
+msgstr "Passwort wiederholen"
+
+#: public/assets/user/create/user-create-modal.html.js:18
 #: templates/user/user-read.html.php:90
 msgid "User role"
 msgstr "Benutzerrolle"
+
+#: public/assets/user/read/user-read-update-main.js:30
+msgid "Are you sure that you want to delete this user?"
+msgstr "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?"
+
+#: public/assets/user/read/user-read-update-main.js:31
+msgid "Are you sure that you want to delete your profile?"
+msgstr "Sind Sie sicher, dass Sie Ihr Profil löschen möchten?"
+
+#: public/assets/user/read/user-read-update-main.js:32
+msgid "You will be logged out and not be able to log in again."
+msgstr "Sie werden dann abgemeldet und können sich nicht mehr anmelden."
+
+#: public/assets/user/read/user-read-update-main.js:33
+msgid "Successfully changed password."
+msgstr "Passwort erfolgreich geändert."
+
+#: public/assets/user/update/change-password-modal.html.js:8
+#: templates/user/user-read.html.php:124
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: public/assets/user/update/change-password-modal.html.js:9
+msgid "Old password"
+msgstr "Altes Passwort"
 
 #: src/Domain/Client/Enum/ClientStatus.php:23
 msgid "Action pending"
@@ -185,7 +264,7 @@ msgstr "Helfer"
 msgid "New main note"
 msgstr "Neue Hauptnotiz"
 
-#: templates/client/clients-list.html.php:40
+#: templates/client/clients-list.html.php:40 templates/layout.html.php:97
 msgid "Clients"
 msgstr "Klienten"
 
@@ -197,21 +276,25 @@ msgstr "Nach Namen suchen"
 msgid "No more filters"
 msgstr "Keine Filter mehr"
 
-#: templates/dashboard/dashboard.html.php:30
+#: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:90
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/user/user-list.html.php:30
+#: templates/layout.html.php:103
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/layout.html.php:111 templates/user/user-list.html.php:30
 msgid "Users"
 msgstr "Benutzer"
+
+#: templates/layout.html.php:119
+msgid "Logout"
+msgstr "Ausloggen"
 
 #: templates/user/user-read.html.php:120
 msgid "Password"
 msgstr "Passwort"
-
-#: templates/user/user-read.html.php:124
-msgid "Change password"
-msgstr "Passwort ändern"
 
 #: templates/user/user-read.html.php:132
 msgid "Dark mode"

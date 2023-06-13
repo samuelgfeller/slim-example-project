@@ -1,5 +1,22 @@
 import {createModal} from "../../general/page-component/modal/modal.js?v=0.3.1";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.3.1";
+import {__} from "../../general/general-js/functions.js?v=0.3.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
+
+// List of words that are used in modal box and need to be translated
+let wordsToTranslate = [
+    __('Change password'),
+    __('Old password'),
+    __('New password'),
+    __('Repeat new password'),
+];
+// Init variable
+let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translatedWords var
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translatedWords = response;
+});
 
 /**
  * Create and display modal box to change password
@@ -9,27 +26,28 @@ export function displayChangePasswordModal() {
     let oldPasswordRequested = document.getElementById('change-password-btn').dataset.oldPasswordRequested;
 
     // Construct modal
-    let header = '<h2>Change password</h2>';
+    let header = `<h2>${translatedWords['Change password']}</h2>`;
     let body = `<div>
 <form action="javascript:void(0);" class="one-row-modal-form" id="change-password-modal-form">
     ${// Ask for old password if requested
         oldPasswordRequested !== 'false' ?
             `<div class="form-input-div">
-                    <label for="old-password-inp">Old password</label>
+                    <label for="old-password-inp">${translatedWords['Old password']}</label>
                     <input type="password" name="old_password" id="old-password-inp" minlength="3" required 
                     class="form-input">
                 </div>` : ''
     }
     <div class="form-input-div" id="password1-input-div">
-    <label for="password1-input">New password</label>
+    <label for="password1-input">${translatedWords['New password']}</label>
     <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
     </div>
     <div class="form-input-div">
-    <label for="password2-input">Repeat new password</label>
+    <label for="password2-input">${translatedWords['Repeat new password']}</label>
     <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
     </div>
     </div>`;
-    let footer = `<input type="submit" id="change-password-submit-btn" class="submit-btn modal-submit-btn" value="Change password">
+    let footer = `<input type="submit" id="change-password-submit-btn" class="submit-btn modal-submit-btn" 
+value="${translatedWords['Change password']}">
     <form>
     <div class="clearfix">
     </div>`

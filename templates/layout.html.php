@@ -87,20 +87,20 @@ echo setlocale(LC_ALL, 0);
                 <?= $currRouteName === 'home-page' ? 'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/gallery-tiles.svg" alt="Dashboard">
                 <img src="assets/navbar/img/gallery-tiles-half-filled.svg" alt="Dashboard">
-                <span class="nav-span">Dashboard</span>
+                <span class="nav-span"><?= __('Dashboard') ?></span>
             </a>
             <a href="<?= $route->urlFor('client-list-page') ?>"
                 <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
                     'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/people.svg" alt="Non-assigned">
                 <img src="assets/navbar/img/people-filled.svg" alt="People">
-                <span class="nav-span">Clients</span>
+                <span class="nav-span"><?= __('Clients') ?></span>
             </a>
             <a href="<?= $route->urlFor('profile-page') ?>"
                 <?= $currRouteName === 'profile-page' ? 'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/user-icon.svg" alt="Profile">
                 <img src="assets/navbar/img/user-icon-filled.svg" alt="Profile">
-                <span class="nav-span">Profile</span>
+                <span class="nav-span"><?= __('Profile') ?></span>
             </a>
             <?php
             if ($userListAuthorization === true) { ?>
@@ -108,7 +108,7 @@ echo setlocale(LC_ALL, 0);
                     <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/users.svg" alt="Users">
                     <img src="assets/navbar/img/users-filled.svg" alt="Users">
-                    <span class="nav-span">Users</span>
+                    <span class="nav-span"><?= __('Users') ?></span>
                 </a>
                 <?php
             } ?>
@@ -116,7 +116,7 @@ echo setlocale(LC_ALL, 0);
                 <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                 <img src="assets/navbar/img/logout.svg" alt="Logout">
                 <img src="assets/navbar/img/logout-filled.svg" alt="Logout">
-                <span class="nav-span">Logout</span>
+                <span class="nav-span"><?= __('Logout') ?></span>
             </a>
         </nav>
         <div id="nav-mobile-toggle-icon">

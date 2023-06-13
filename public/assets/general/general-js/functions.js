@@ -57,6 +57,8 @@ export function removeSpecialChars(string, upperCase = false){
 }
 
 /**
+ * Empty function returning the argument value.
+ * Function used so that Poedit knows that a string has to be translated.
  *
  * @param {string}string
  * @returns {string}
