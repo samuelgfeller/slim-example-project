@@ -1,0 +1,275 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: slim-example-project\n"
+"POT-Creation-Date: 2023-06-14 18:45+0200\n"
+"PO-Revision-Date: 2023-06-14 19:15+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.1\n"
+"X-Poedit-Basepath: ../../../..\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: templates\n"
+
+#: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:60
+msgid "Login successful"
+msgstr "Connexion réussie"
+
+#: src/Application/Actions/User/Ajax/UserSubmitCreateAction.php:81
+msgid "Email error. Please contact an administrator."
+msgstr "Erreur d'envoi de l'email. Veuillez contacter un administrateur."
+
+#: src/Domain/Client/Enum/ClientStatus.php:23
+msgid "Action pending"
+msgstr "Action en suspens"
+
+#: src/Domain/Client/Enum/ClientStatus.php:24
+msgid "In care"
+msgstr "En soins"
+
+#: src/Domain/Client/Enum/ClientStatus.php:25
+msgid "Helped"
+msgstr "Aidé"
+
+#: src/Domain/Client/Enum/ClientStatus.php:26
+msgid "Cannot help"
+msgstr "Impossible d'aider"
+
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:26
+msgid "Moderate"
+msgstr "Modéré"
+
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:27
+msgid "Caution"
+msgstr "Attention"
+
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:28
+msgid "Extra caution"
+msgstr "Précautions supplémentaires"
+
+#: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:56
+msgid "Unassigned"
+msgstr "Non assigné"
+
+#: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:63
+msgid "Assigned to me"
+msgstr "Assigné à moi"
+
+#: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:70
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:99
+msgid "Assigned to"
+msgstr "Assigné à"
+
+#: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:108
+msgid "Deleted assigned user"
+msgstr "Utilisateur assigné supprimé"
+
+#: src/Domain/Dashboard/DashboardPanelProvider.php:55
+msgid "Unassigned clients"
+msgstr "Clients non assignés"
+
+#: src/Domain/Dashboard/DashboardPanelProvider.php:63
+msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
+msgstr "Clients assigné à moi - action en suspens"
+
+#: src/Domain/Dashboard/DashboardPanelProvider.php:72
+#: templates/user/user-read.html.php:183
+msgid "User activity"
+msgstr "Activité des utilisateurs"
+
+#: src/Domain/Dashboard/DashboardPanelProvider.php:82
+msgid "New notes"
+msgstr "Nouvelles notes"
+
+#: src/Domain/Dashboard/DashboardPanelProvider.php:90
+msgid "Recently assigned clients"
+msgstr "Clients récemment assignés"
+
+#: src/Domain/General/Enum/SexOption.php:28
+msgid "Male"
+msgstr "Homme"
+
+#: src/Domain/General/Enum/SexOption.php:29
+msgid "Female"
+msgstr "Femme"
+
+#: src/Domain/General/Enum/SexOption.php:30
+msgid "Other"
+msgstr "Autre"
+
+#: src/Domain/User/Enum/UserActivity.php:23
+msgid "created"
+msgstr "créé"
+
+#: src/Domain/User/Enum/UserActivity.php:24
+msgid "updated"
+msgstr "modifié"
+
+#: src/Domain/User/Enum/UserActivity.php:25
+msgid "deleted"
+msgstr "supprimé"
+
+#: src/Domain/User/Enum/UserActivity.php:26
+msgid "read"
+msgstr "lu"
+
+#: src/Domain/User/Enum/UserRole.php:24
+msgid "Newcomer"
+msgstr "Nouveau venu"
+
+#: src/Domain/User/Enum/UserRole.php:25
+msgid "Advisor"
+msgstr "Conseiller"
+
+#: src/Domain/User/Enum/UserRole.php:26
+msgid "Managing advisor"
+msgstr "Conseiller en chef"
+
+#: src/Domain/User/Enum/UserRole.php:27
+msgid "Admin"
+msgstr "Admin"
+
+#: src/Domain/User/Enum/UserStatus.php:32
+msgid "Unverified"
+msgstr "Non vérifié"
+
+#: src/Domain/User/Enum/UserStatus.php:33
+msgid "Active"
+msgstr "Actif"
+
+#: src/Domain/User/Enum/UserStatus.php:34
+msgid "Locked"
+msgstr "Bloqué"
+
+#: src/Domain/User/Enum/UserStatus.php:35
+msgid "Suspended"
+msgstr "Suspendu"
+
+#: src/Domain/User/Service/UserValidator.php:185
+msgid "Passwords do not match"
+msgstr "Les mots de passe ne correspondent pas"
+
+#: src/Domain/User/Service/UserValidator.php:216
+msgid "Incorrect password"
+msgstr "Mot de passe incorrect"
+
+#: src/Domain/User/Service/UserValidator.php:222
+#: src/Domain/User/Service/UserValidator.php:248
+#: src/Domain/User/Service/UserValidator.php:274
+#: src/Domain/User/Service/UserValidator.php:303
+msgid "is required"
+msgstr "est requis"
+
+#: src/Domain/User/Service/UserValidator.php:248
+#: templates/authentication/login.html.php:75
+#: templates/user/user-read.html.php:120
+msgid "Password"
+msgstr "Mot de passe"
+
+#: src/Domain/User/Service/UserValidator.php:274
+#: templates/user/user-read.html.php:90
+msgid "User role"
+msgstr "Rôle utilisateur"
+
+#: src/Domain/User/Service/UserValidator.php:299
+msgid "Status not existing"
+msgstr "Statut non existant"
+
+#: src/Domain/User/Service/UserValidator.php:303
+#: templates/client/client-read.html.php:69
+#: templates/user/user-read.html.php:73
+msgid "Status"
+msgstr "Statut"
+
+#: templates/authentication/login.html.php:62
+#: templates/user/user-read.html.php:103
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: templates/authentication/login.html.php:68
+#: templates/authentication/login.html.php:84
+msgid "Login"
+msgstr "Login"
+
+#: templates/authentication/login.html.php:79
+msgid "Password forgotten"
+msgstr "Mot de passe oublié"
+
+#: templates/authentication/login.html.php:85
+msgid "Request password"
+msgstr "Recevoir un password"
+
+#: templates/client/client-read.html.php:86
+msgid "Helper"
+msgstr "Assistant"
+
+#: templates/client/client-read.html.php:109
+msgid "New main note"
+msgstr "Nouvelle note principale"
+
+#: templates/client/clients-list.html.php:40 templates/layout.html.php:92
+msgid "Clients"
+msgstr "Clients"
+
+#: templates/client/clients-list.html.php:47
+msgid "Search by name"
+msgstr "Recherche par nom"
+
+#: templates/client/clients-list.html.php:66
+msgid "No more filters"
+msgstr "Plus de filtres"
+
+#: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:85
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: templates/layout.html.php:98
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/layout.html.php:106 templates/user/user-list.html.php:30
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: templates/layout.html.php:114
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/user/user-read.html.php:124
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
+#: templates/user/user-read.html.php:132
+msgid "Dark mode"
+msgstr "Mode sombre"
+
+#: templates/user/user-read.html.php:152
+msgid "Language"
+msgstr "Langue"
+
+#: templates/user/user-read.html.php:166
+msgid "Metadata"
+msgstr "Métadonnées"
+
+#: templates/user/user-read.html.php:168
+msgid "Created"
+msgstr "Créé"
+
+#: templates/user/user-read.html.php:169
+msgid "Updated"
+msgstr "Modifié"
+
+#: templates/user/user-read.html.php:175
+msgid "Delete profile"
+msgstr "Supprimer le profil"
+
+#: templates/user/user-read.html.php:175
+msgid "Delete user"
+msgstr "Supprimer utilisateur"
