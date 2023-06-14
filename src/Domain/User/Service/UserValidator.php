@@ -3,6 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 use App\Domain\Validation\ValidationException;
@@ -62,6 +63,15 @@ class UserValidator
                 $validationResult
             );
         }
+        if (array_key_exists('language', $userValues)) {
+            $this->validator->validateBackedEnum(
+                $userValues['language'],
+                UserLang::class,
+                'language',
+                $validationResult
+            );
+        }
+
         if (array_key_exists('user_role_id', $userValues)) {
             $this->validateUserRoleId($userValues['user_role_id'], $validationResult, true);
         }
@@ -93,6 +103,12 @@ class UserValidator
         $this->validator->validateName($user->surname, 'surname', $validationResult, true);
         $this->validator->validateEmail($user->email, $validationResult, true);
         $this->validateUserStatus($user->status, $validationResult, true);
+        $this->validator->validateBackedEnum(
+            $user->language,
+            UserLang::class,
+            'language',
+            $validationResult
+        );
         $this->validateUserRoleId($user->userRoleId, $validationResult, true);
         $this->validatePasswords([$user->password, $user->password2], true, $validationResult);
 
@@ -166,7 +182,7 @@ class UserValidator
             new ValidationResult('There is a validation error with the passwords.');
 
         if ($passwords[0] !== $passwords[1]) {
-            $validationResult->setError('password2', 'Passwords do not match');
+            $validationResult->setError('password2', __('Passwords do not match'));
         }
 
         $this->validatePassword($passwords[0], $validationResult, $required);
@@ -197,13 +213,13 @@ class UserValidator
             $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
             // If password is not correct
             if (!password_verify($password, $dbUser->passwordHash)) {
-                $validationResult->setError($field, 'Incorrect password');
+                $validationResult->setError($field, __('Incorrect password'));
             }
         } else {
             $validationResult->setError(
                 $field,
-                str_replace('_', ' ', ucfirst($field))
-                . ' required'
+                __(str_replace('_', ' ', ucfirst($field)))
+                . ' ' . __('is required')
             );
         }
         $this->validator->throwOnError($validationResult);
@@ -229,7 +245,7 @@ class UserValidator
             $this->validator->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required
-            $validationResult->setError($fieldName, 'Password is required');
+            $validationResult->setError($fieldName, __('Password') . ' ' . __('is required'));
         }
     }
 
@@ -253,7 +269,10 @@ class UserValidator
             $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required, false);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('user_role_id', 'User role is required');
+            $validationResult->setError(
+                'user_role_id',
+                __('User role') . ' ' . __('is required')
+            );
         }
     }
 
@@ -277,11 +296,11 @@ class UserValidator
             }
             // Check if given user status is one of the enum cases
             if (!in_array($value, UserStatus::values(), true)) {
-                $validationResult->setError('status', 'Status not existing');
+                $validationResult->setError('status', __('Status not existing'));
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('status', 'Status is required');
+            $validationResult->setError('status', __('Status') . ' ' . __('is required'));
         }
     }
 }

@@ -34,7 +34,6 @@ trait EnumToArray
         return array_combine(self::values(), self::translatedNames());
     }
 
-
     public static function toArrayWithPrettyNames(): array
     {
         return array_combine(self::values(), self::prettifyNames(self::names()));

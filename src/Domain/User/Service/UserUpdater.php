@@ -53,6 +53,7 @@ final class UserUpdater
                     'status',
                     'user_role_id',
                     'theme',
+                    'language',
                 ], true)) {
                     $validUpdateData[$column] = $value;
                 } else {

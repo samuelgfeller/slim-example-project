@@ -47,11 +47,12 @@ function __(string $message, ...$context): string
     if (!empty($context)) {
         $translated = vsprintf($translated, $context);
     }
+
     return $translated;
 }
 
 /**
- * Set locale
+ * Set locale.
  *
  * @param string $locale The locale (en_US)
  * @param string $domain The text domain (messages)

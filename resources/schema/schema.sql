@@ -71,6 +71,7 @@ CREATE TABLE `user` (
   `email` varchar(254) NOT NULL,
   `password_hash` varchar(300) NOT NULL,
   `theme` enum('light','dark') DEFAULT 'light',
+  `language` enum('en_US','de_CH','fr_CH') DEFAULT 'en_US',
   `updated_at` datetime DEFAULT current_timestamp(),
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

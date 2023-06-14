@@ -28,9 +28,9 @@ final class TranslateAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
-     * @return ResponseInterface The response
      * @throws \JsonException
      *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -44,6 +44,7 @@ final class TranslateAction
                 $translatedStrings[$string] = __($string);
             }
         }
+
         return $this->responder->respondWithJson($response, $translatedStrings);
     }
 }

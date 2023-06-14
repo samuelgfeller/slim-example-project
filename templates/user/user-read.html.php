@@ -145,7 +145,24 @@ $this->addAttribute(
                 </label>
             </div>
             <?php
-        } ?>
+        }
+        $lang = $user->language?->value;
+        ?>
+        <div id="language-switch-div">
+            <h3 class="label-h3"><?= __('Language') ?></h3>
+            <label class="form-radio-input">
+                <input type="radio" name="language" value="en_US" <?= $lang === 'en_US' ? 'checked' : '' ?>>
+                English
+            </label>
+            <label class="form-radio-input">
+                <input type="radio" name="language" value="de_CH" <?= $lang === 'de_CH' ? 'checked' : '' ?>>
+                Deutsch
+            </label>
+            <label class="form-radio-input">
+                <input type="radio" name="language" value="fr_CH" <?= $lang === 'fr_CH' ? 'checked' : '' ?>>
+                Français
+            </label>
+        </div>
         <h3 class="label-h3"><?= __('Metadata') ?></h3>
         <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
             <b><?= __('Created') ?>:</b> <?= $user->createdAt->format('d. F Y • H:i:s') ?><br>

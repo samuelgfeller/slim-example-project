@@ -11,7 +11,7 @@ import {
 import {
     triggerClickOnHtmlElementEnterKeypress
 } from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.3.1";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.3.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
 
 /**
  * Load user list into DOM
@@ -66,5 +66,7 @@ function submitUserCardDropdownChange() {
     // Search upwards the closest user-card that contains the data-user-id attribute
     let userId = this.closest('.user-card').dataset.userId;
 
-    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, true, false);
+    submitUpdate({[this.name]: this.value}, `users/${userId}`, true)
+        .then(r => {
+        });
 }

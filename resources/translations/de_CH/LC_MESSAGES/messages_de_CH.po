@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-13 11:35+0200\n"
-"PO-Revision-Date: 2023-06-13 11:39+0200\n"
+"POT-Creation-Date: 2023-06-13 12:01+0200\n"
+"PO-Revision-Date: 2023-06-13 12:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -79,6 +79,10 @@ msgstr "Zugewiesen an"
 msgid "Status"
 msgstr "Status"
 
+#: public/assets/client/create/client-create-modal.html.js:21
+msgid "Main note about client."
+msgstr "Hauptnotiz über Klient."
+
 #: public/assets/client/note/client-read-note-loading.js:50
 msgid "No notes were found"
 msgstr "Keine Notizen gefunden"
@@ -112,7 +116,7 @@ msgstr "Sind Sie sicher, dass Sie Ihr Profil löschen möchten?"
 
 #: public/assets/user/read/user-read-update-main.js:32
 msgid "You will be logged out and not be able to log in again."
-msgstr "Sie werden dann abgemeldet und können sich nicht mehr anmelden."
+msgstr "Sie werden abgemeldet und können sich nicht mehr anmelden."
 
 #: public/assets/user/read/user-read-update-main.js:33
 msgid "Successfully changed password."

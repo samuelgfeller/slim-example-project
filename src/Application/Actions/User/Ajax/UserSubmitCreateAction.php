@@ -51,7 +51,7 @@ final class UserSubmitCreateAction
             'user_role_id',
             'password',
             'password2',
-        ], ['g-recaptcha-response'])) {
+        ], ['g-recaptcha-response', 'language'])) {
             // Populate $captcha var if reCAPTCHA response is given
             $captcha = $userValues['g-recaptcha-response'] ?? null;
 
@@ -78,7 +78,7 @@ final class UserSubmitCreateAction
 
                 return $this->responder->respondWithJson(
                     $response,
-                    ['status' => 'error', 'message' => 'Email error. Please contact an administrator.']
+                    ['status' => 'error', 'message' => __('Email error. Please contact an administrator.')]
                 );
             } catch (SecurityException $se) {
                 if (PHP_SAPI === 'cli') {

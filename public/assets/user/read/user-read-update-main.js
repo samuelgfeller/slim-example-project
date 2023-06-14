@@ -2,12 +2,12 @@ import {makeUserFieldEditable} from "./user-update-contenteditable.js?v=0.3.1";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js?v=0.3.1";
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.3.1";
 import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.3.1";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.3.1";
 import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.3.1";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.3.1";
 import {loadUserActivities} from "./user-activity/activity-main.js?v=0.3.1";
 import {__} from "../../general/general-js/functions.js?v=0.3.1";
 import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
 
 const userId = document.getElementById('user-id').value;
 
@@ -24,6 +24,19 @@ document.querySelector('select[name="status"]:not([disabled])')
 // User role dropdown change
 document.querySelector('select[name="user_role_id"]:not([disabled])')
     ?.addEventListener('change', submitUserDropdownChange);
+// User language radio buttons
+const langRadioButtons = document.querySelectorAll('input[name="language"]');
+langRadioButtons.forEach((radio) => {
+    radio.addEventListener('change', (e) => {
+        submitUpdate({[radio.name]: radio.value}, `users/${userId}`, true)
+            .then(r => {
+                // Reload page if user changed its own language
+                if (userBtn.dataset.isOwnProfile === '1') {
+                    location.reload();
+                }
+            });
+    });
+});
 
 // Get translations for user update / delete
 let wordsToTranslate = [
@@ -45,15 +58,15 @@ const userBtn = document.querySelector('#delete-user-btn');
 userBtn?.addEventListener('click', () => {
     let title = translatedWords['Are you sure that you want to delete this user?'];
     let info = '';
-    if(userBtn.dataset.isOwnProfile === '1'){
+    if (userBtn.dataset.isOwnProfile === '1') {
         title = translatedWords['Are you sure that you want to delete your profile?'];
         info = translatedWords['You will be logged out and not be able to log in again.'];
     }
     createAlertModal(title, info, () => {
         submitDelete(`users/${userId}`, true).then(() => {
-            if(userBtn.dataset.isOwnProfile === '1'){
+            if (userBtn.dataset.isOwnProfile === '1') {
                 location.href = `login`;
-            }else {
+            } else {
                 location.href = `users/list`;
             }
         });
@@ -65,8 +78,10 @@ userBtn?.addEventListener('click', () => {
  */
 function submitUserDropdownChange() {
     // "this" is the select element
-    // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `users/${userId}`, true, false);
+    // Submit field change
+    submitUpdate({[this.name]: this.value}, `users/${userId}`, true)
+        .then(r => {
+        });
 }
 
 // Display all edit icons if touch screen

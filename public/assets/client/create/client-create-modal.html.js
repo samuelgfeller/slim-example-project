@@ -17,7 +17,8 @@ let wordsToTranslate = [
     __('Phone number'),
     __('E-Mail'),
     __('Assigned user'),
-    __('Status')
+    __('Status'),
+    __('Main note about client.')
 ];
 // Set translated words to have the string as key to have the same format then what the server returns
 let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
@@ -57,10 +58,10 @@ export function displayClientCreateModal() {
             <label for="create-message-textarea" class="form-label">${translatedWords['Main note']}</label>
             <!-- Name has to be "message" as it's the name used in note validation -->
             <textarea rows="4" cols="50" name="message" id="create-message-textarea"
-                      placeholder="Your message here." minlength="0" maxlength="500"></textarea>
+                      placeholder="${translatedWords['Main note about client.']}" minlength="0" maxlength="500"></textarea>
         </div>
         <div class="form-input-div" id="client-sex-input-group-div">
-            <label>Sex</label><br>
+            <label>${translatedWords['Sex']}</label><br>
             <!-- Sex radio buttons are added after modal load below in addClientDropdownOptionsToCreateModal() -->
         </div>
         <div class="form-input-div">

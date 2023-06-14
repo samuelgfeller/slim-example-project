@@ -1,7 +1,6 @@
 import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.3.1";
 import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.3.1";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.3.1";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.3.1";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.3.1";
 import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.3.1";
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
@@ -89,7 +88,9 @@ if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
 function submitClientDropdownChange() {
     // "this" is the select element
     // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, true, false);
+    submitUpdate({[this.name]: this.value}, `clients/${clientId}`, true)
+        .then(r => {
+        });
 }
 
 function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {

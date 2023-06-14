@@ -1,6 +1,6 @@
 import {createModal} from "../../general/page-component/modal/modal.js?v=0.3.1";
 import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.3.1";
-import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.3.1";
+import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/template/template-util.js?v=0.3.1";
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.3.1";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.3.1";
 import {__} from "../../general/general-js/functions.js?v=0.3.1";
@@ -12,6 +12,7 @@ let wordsToTranslate = [
     __('First name'),
     __('Last name'),
     __('E-Mail'),
+    __('Language'),
     __('New password'),
     __('Repeat new password'),
     __('Status'),
@@ -48,6 +49,10 @@ export function displayUserCreateModal() {
             <label for="email-input">${translatedWords['E-Mail']}</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required>
+        </div>
+        <div class="form-input-div" id="user-lang-input-group-div">
+            <label>${translatedWords['Language']}</label><br>
+            <!-- Radio buttons are added after modal load below in addUserDropdownOptionsToCreateModal() -->
         </div>
         <div class="form-input-div" id="password1-input-div">
             <label for="password1-input">${translatedWords['New password']}</label>
@@ -93,11 +98,16 @@ ${translatedWords['Create user']}
  * @param dropdownOptions
  */
 function addUserDropdownOptionsToCreateModal(dropdownOptions) {
-    if (dropdownOptions.hasOwnProperty('userRoles') && dropdownOptions.hasOwnProperty('statuses')) {
+    if (dropdownOptions.hasOwnProperty('userRoles')
+        && dropdownOptions.hasOwnProperty('statuses')
+        && dropdownOptions.hasOwnProperty('languages')
+    ) {
         let userRoleOptions = getDropdownAsHtmlOptions(dropdownOptions.userRoles, 4);
         document.getElementById('user-role-select').insertAdjacentHTML("beforeend", userRoleOptions);
         let statusOptions = getDropdownAsHtmlOptions(dropdownOptions.statuses, 'unverified');
         document.getElementById('user-status-select').insertAdjacentHTML('beforeend', statusOptions);
+        let languageRadioButtons = getRadioButtonsAsHtml(dropdownOptions.languages, 'language');
+        document.getElementById('user-lang-input-group-div').insertAdjacentHTML('beforeend', languageRadioButtons);
     } else {
         displayFlashMessage('error', 'Something went wrong while loading dropdown options.')
     }

@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Data;
 
+use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 
@@ -23,6 +24,7 @@ class UserData implements \JsonSerializable
     public ?string $passwordHash;
     public ?UserStatus $status = null;
     public ?UserTheme $theme = null;
+    public ?UserLang $language = null;
     public ?int $userRoleId = null;
     public ?\DateTimeImmutable $updatedAt;
     public ?\DateTimeImmutable $createdAt;
@@ -44,6 +46,7 @@ class UserData implements \JsonSerializable
         $this->password2 = $userData['password2'] ?? null;
         $this->passwordHash = $userData['password_hash'] ?? null;
         $this->theme = $userData['theme'] ?? null ? UserTheme::tryFrom($userData['theme']) : null;
+        $this->language = $userData['language'] ?? null ? UserLang::tryFrom($userData['language']) : null;
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
         $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;
@@ -79,6 +82,8 @@ class UserData implements \JsonSerializable
             'password_hash' => $this->passwordHash,
             'user_role_id' => $this->userRoleId,
             'status' => $this->status->value,
+            'theme' => $this->theme?->value,
+            'language' => $this->language?->value,
         ];
     }
 

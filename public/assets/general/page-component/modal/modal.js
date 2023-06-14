@@ -5,11 +5,18 @@ document.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'close-modal') {
         closeModal();
     }
-    // Hide modal when anywhere in the window is clicked except the modal area itself
+});
+// Hide modal only if user did both mousedown and mouseup outside the modal. This is to prevent
+// the modal closing when doing mousedown to select text from an input field and going off the modal border
+document.addEventListener('mousedown', function (e) {
     if (e.target && e.target === document.getElementById('modal')) {
-        closeModal();
+        document.addEventListener('mouseup', function mouseUpListener(e) {
+            // Hide modal when anywhere in the window is clicked except the modal area itself
+            closeModal();
+            document.removeEventListener('mouseup', mouseUpListener);
+        });
     }
-})
+});
 
 /**
  * Create and show modal with given content

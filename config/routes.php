@@ -84,9 +84,9 @@ return function (App $app) {
         $group->get('', \App\Application\Actions\User\Ajax\UserListAction::class)
             ->setName('user-list');
 
-        $group // User list dropdown options
-        ->get('/dropdown-options', \App\Application\Actions\User\Ajax\UserListDropdownOptionsAction::class)
-            ->setName('user-list-dropdown');
+        $group // User dropdown options
+        ->get('/dropdown-options', \App\Application\Actions\User\Ajax\UserFetchDropdownOptionsAction::class)
+            ->setName('user-dropdown-options');
 
         $group->get('/activity', \App\Application\Actions\User\Ajax\ListUserActivityAction::class)
             ->setName('user-get-activity');

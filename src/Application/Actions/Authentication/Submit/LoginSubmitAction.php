@@ -57,7 +57,7 @@ final class LoginSubmitAction
                 $this->session->set('user_id', $userId);
 
                 // Add success message to flash
-                $flash->add('success', 'Login successful');
+                $flash->add('success', __('Login successful'));
 
                 // Check if user has enabled dark mode and if yes populate var
                 $themeQueryParams = [];

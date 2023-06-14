@@ -61,6 +61,7 @@ final class UserSubmitUpdateAction
             'status',
             'user_role_id',
             'theme',
+            'language',
             // When adding a new field also add it in updateUser(), validateUserUpdate(), isGrantedToUpdate(),
             // UserFinderRepository->fields and don't forget testing
         ])) {

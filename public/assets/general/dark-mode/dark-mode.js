@@ -7,19 +7,22 @@ const toggleSwitch = document.querySelector('#dark-mode-toggle-checkbox');
 // Retrieve the current theme from localStorage
 const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
 
-// Set the theme based on the stored value from localStorage
-if (currentTheme) {
-    // Set the data-theme attribute on the html element
-    document.documentElement.setAttribute('data-theme', currentTheme);
+if (toggleSwitch) {
+    // Add event listener to the toggle switch for theme switching
+    toggleSwitch.addEventListener('change', switchTheme, false);
 
-    // Check the toggle switch if the current theme is 'dark'
-    if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
+    // Set the theme based on the stored value from localStorage
+    if (currentTheme) {
+        // Set the data-theme attribute on the html element
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        // Check the toggle switch if the current theme is 'dark'
+        if (currentTheme === 'dark') {
+            toggleSwitch.checked = true;
+        }
     }
 }
 
-// Add event listener to the toggle switch for theme switching
-toggleSwitch.addEventListener('change', switchTheme, false);
 
 /**
  * Handle theme switching with localstorage
@@ -41,7 +44,8 @@ function switchTheme(e) {
     // Make ajax call to change value in database
     let userId = document.getElementById('user-id').value;
     submitUpdate({theme: theme}, `users/${userId}`, true)
-        .then(r => {})
+        .then(r => {
+        })
         .catch(r => {
             displayFlashMessage('error', 'Failed to change the theme in the database.')
         });

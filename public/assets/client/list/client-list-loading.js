@@ -11,7 +11,7 @@ import {
 import {
     triggerClickOnHtmlElementEnterKeypress
 } from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.3.1";
-import {submitFieldChangeWithFlash} from "../../general/ajax/submit-field-change-with-flash.js?v=0.3.1";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
 
 // When searching clients a request is made on each keyup and we want to show only the final result to the user,
 // not a flickering between content placeholders, the result of the first typed key, then the second and so on.
@@ -179,6 +179,8 @@ function submitClientCardDropdownChange() {
     // Search upwards the closest user-card that contains the data-user-id attribute
     let clientId = this.closest('.client-profile-card').dataset.clientId;
 
-    // Submit field change with flash message indicating that change was successful
-    submitFieldChangeWithFlash(this.name, this.value, `clients/${clientId}`, true, false);
+    // Submit field change
+    submitUpdate({[this.name]: this.value}, `clients/${clientId}`, true)
+        .then(r => {
+        });
 }

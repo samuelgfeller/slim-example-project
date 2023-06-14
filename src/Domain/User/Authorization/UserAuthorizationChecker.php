@@ -180,6 +180,9 @@ class UserAuthorizationChecker
                 if (array_key_exists('theme', $userDataToUpdate)) {
                     $grantedUpdateKeys[] = 'theme';
                 }
+                if (array_key_exists('language', $userDataToUpdate)) {
+                    $grantedUpdateKeys[] = 'language';
+                }
                 // If new basic data fiel is added, add it to provider userUpdateAuthorizationCases() $basicDataChanges
                 // and invalid value to provider invalidUserUpdateCases()
 

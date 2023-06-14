@@ -3,6 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Authorization\UserAuthorizationGetter;
+use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 
 class UserUtilFinder
@@ -22,6 +23,7 @@ class UserUtilFinder
         return [
             'userRoles' => $this->userAuthorizationGetter->getAuthorizedUserRoles(),
             'statuses' => UserStatus::toTranslatedNamesArray(),
+            'languages' => UserLang::toArray(),
         ];
     }
 }

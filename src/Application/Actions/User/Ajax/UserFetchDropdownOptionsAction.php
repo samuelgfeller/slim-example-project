@@ -9,7 +9,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UserListDropdownOptionsAction
+class UserFetchDropdownOptionsAction
 {
     /**
      * The constructor.
@@ -24,7 +24,7 @@ class UserListDropdownOptionsAction
     }
 
     /**
-     * Client list all and own Action.
+     * Action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response

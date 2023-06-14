@@ -20,6 +20,7 @@ class UserFinderRepository
         'updated_at',
         'created_at',
         'theme',
+        'language',
     ];
 
     public function __construct(
