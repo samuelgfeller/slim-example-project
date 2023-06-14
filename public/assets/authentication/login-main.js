@@ -21,7 +21,7 @@ passwordForgottenBtn.addEventListener('click', () => {
     passwordInputDiv.classList.add('input-div-collapsed');
     // Remove name from input to prevent it from being submitted
     passwordInput.removeAttribute('name');
-    submitBtn.value = 'Request password';
+    submitBtn.value = submitBtn.dataset.requestPasswordLabel ?? 'Request password';
     form.action = 'password-forgotten';
     logInBtn.style.maxHeight = logInBtn.scrollHeight + 'px';
 });

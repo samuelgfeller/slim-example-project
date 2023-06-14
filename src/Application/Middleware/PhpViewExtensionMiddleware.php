@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\App;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
@@ -27,6 +28,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         private readonly JsImportVersionAdder $jsImportVersionAdder,
         Settings $settings,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly RouteParserInterface $routeParser
     ) {
         $this->publicSettings = $settings->get('public');
         $this->devSetting = $settings->get('dev');
@@ -43,7 +45,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'version' => $this->appVersion,
             'uri' => $request->getUri(),
             'basePath' => $this->app->getBasePath(),
-            'route' => $this->app->getRouteCollector()->getRouteParser(),
+            'route' => $this->routeParser,
             'currRouteName' => RouteContext::fromRequest($request)->getRoute()?->getName(),
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address

@@ -4,8 +4,6 @@ use DI\ContainerBuilder;
 use Slim\App;
 
 require __DIR__ . '/../vendor/autoload.php';
-set_language('de_CH');
-// setlocale(LC_ALL, 'de-DE');
 
 // Instantiate DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();

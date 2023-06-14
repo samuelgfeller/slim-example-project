@@ -83,7 +83,7 @@ class UserActivityFinder
                     . $userRow['surname'] . '</span> • ' .
                     $userActivity->timeAndActionName;
             }
-            $formattedDate = $dateFormatter->format($userActivity->datetime);
+            $formattedDate = ucfirst($dateFormatter->format($userActivity->datetime));
             $groupedActivitiesByDate[$formattedDate][] = $userActivity;
         }
 
