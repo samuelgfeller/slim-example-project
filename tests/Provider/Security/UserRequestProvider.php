@@ -71,7 +71,7 @@ class UserRequestProvider
      *
      * @return array[]
      */
-    public function individualLoginThrottlingTestCases(): array
+    public static function individualLoginThrottlingTestCases(): array
     {
         // Values for logins (L)
         [$firstL, $secondL, $thirdL] = array_keys($this->userLoginThrottle);
@@ -182,7 +182,7 @@ class UserRequestProvider
      *
      * @return array[]
      */
-    public function individualEmailThrottlingTestCases(): array
+    public static function individualEmailThrottlingTestCases(): array
     {
         // Values for emails (E)
         [$firstE, $secondE, $thirdE] = array_keys($this->userEmailRequestThrottle);
@@ -249,7 +249,7 @@ class UserRequestProvider
      *
      * @return array[]
      */
-    public function globalEmailStatsProvider(): array
+    public static function globalEmailStatsProvider(): array
     {
         return [
             [

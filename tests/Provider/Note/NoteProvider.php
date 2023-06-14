@@ -16,7 +16,7 @@ class NoteProvider
      *
      * @return array[]
      */
-    public function noteListUserAttributesAndExpectedResultProvider(): array
+    public static function noteListUserAttributesAndExpectedResultProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorRow = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -73,7 +73,7 @@ class NoteProvider
      *
      * @return array[]
      */
-    public function noteListWithFilterProvider(): array
+    public static function noteListWithFilterProvider(): array
     {
         // Users linked to notes to insert (authenticated user not relevant for this test, he is inserted in test case)
         $usersToInsert = [
@@ -144,7 +144,7 @@ class NoteProvider
      *
      * @return array
      */
-    public function invalidNoteListFilterProvider(): array
+    public static function invalidNoteListFilterProvider(): array
     {
         $exceptionMessage = 'Value has to be numeric.';
 
@@ -185,7 +185,7 @@ class NoteProvider
      *                  }
      *           }
      */
-    public function noteCUDUserAttributesAndExpectedResultProvider(): array
+    public static function noteCUDUserAttributesAndExpectedResultProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -313,7 +313,7 @@ class NoteProvider
      *
      * @return array
      */
-    public function clientCreationInvalidNoteAndExpectedResponseProvider(): array
+    public static function clientCreationInvalidNoteAndExpectedResponseProvider(): array
     {
         return [
             [
@@ -379,7 +379,7 @@ class NoteProvider
      *
      * @return array
      */
-    public function provideInvalidNoteAndExpectedResponseDataForUpdate(): array
+    public static function provideInvalidNoteAndExpectedResponseDataForUpdate(): array
     {
         return [
             [
@@ -422,7 +422,7 @@ class NoteProvider
      *
      * @return array
      */
-    public function provideNoteMalformedRequestBodyForCreation(): array
+    public static function provideNoteMalformedRequestBodyForCreation(): array
     {
         return [
             [
@@ -476,7 +476,7 @@ class NoteProvider
      *
      * @return array
      */
-    public function provideMalformedNoteRequestBodyForUpdate(): array
+    public static function provideMalformedNoteRequestBodyForUpdate(): array
     {
         return [
             [

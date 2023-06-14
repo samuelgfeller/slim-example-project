@@ -42,6 +42,7 @@ class UserUpdateProvider
             'surname' => 'NewLastName',
             'email' => 'new.email@test.ch',
             'theme' => 'dark',
+            'language' => 'de_CH',
             // Password hash change tested in UserChangePasswordActionTest
         ];
         // To avoid testing each column separately for each user role, the most basic change is taken to test

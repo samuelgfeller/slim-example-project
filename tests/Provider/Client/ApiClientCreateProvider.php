@@ -10,7 +10,7 @@ class ApiClientCreateProvider
      *
      * @return array
      */
-    public function invalidApiClientCreationValues(): array
+    public static function invalidApiClientCreationValues(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
@@ -125,7 +125,7 @@ class ApiClientCreateProvider
      *
      * @return array[]
      */
-    public function malformedRequestBodyCases(): array
+    public static function malformedRequestBodyCases(): array
     {
         return [
             [

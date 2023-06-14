@@ -17,7 +17,7 @@ class ClientUpdateProvider
      *
      * @return array[]
      */
-    public function clientUpdateUsersAndExpectedResultProvider(): array
+    public static function clientUpdateUsersAndExpectedResultProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -119,7 +119,7 @@ class ClientUpdateProvider
      *
      * @return array
      */
-    public function invalidClientUpdateValuesAndExpectedResponseProvider(): array
+    public static function invalidClientUpdateValuesAndExpectedResponseProvider(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [

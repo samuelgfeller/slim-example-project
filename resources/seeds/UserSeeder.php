@@ -37,6 +37,7 @@ class UserSeeder extends AbstractSeed
                 'surname' => 'Advisor',
                 'user_role_id' => 2,
                 'status' => 'active',
+                'language' => 'en_US',
                 'email' => 'managing@advisor.com',
                 'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
             ],
@@ -46,6 +47,7 @@ class UserSeeder extends AbstractSeed
                 'surname' => 'User',
                 'user_role_id' => 3,
                 'status' => 'active',
+                'language' => 'de_CH',
                 'email' => 'advisor@user.com',
                 'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
             ],
@@ -55,6 +57,7 @@ class UserSeeder extends AbstractSeed
                 'surname' => 'User',
                 'user_role_id' => 4,
                 'status' => 'active',
+                'language' => 'fr_CH',
                 'email' => 'newcomer@user.com',
                 'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
             ],

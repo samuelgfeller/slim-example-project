@@ -12,7 +12,7 @@ class UserReadProvider
      * Only status code can be asserted as expected result as page is rendered
      * by the server, and we can't test a rendered template.
      */
-    public function userReadAuthorizationCases(): array
+    public static function userReadAuthorizationCases(): array
     {
         // Set different user role attributes
         $adminAttr = ['user_role_id' => UserRole::ADMIN];

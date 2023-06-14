@@ -12,7 +12,7 @@ class AuthenticationProvider
      *
      * @return array
      */
-    public function registerExistingUserStatusAndEmailCases(): array
+    public static function registerExistingUserStatusAndEmailCases(): array
     {
         return [
             [
@@ -35,7 +35,7 @@ class AuthenticationProvider
      *
      * @return array
      */
-    public function nonActiveAuthenticationRequestCases(): array
+    public static function nonActiveAuthenticationRequestCases(): array
     {
         return [
             [
@@ -59,7 +59,7 @@ class AuthenticationProvider
      *
      * @return array
      */
-    public function authenticationSecurityCases(): array
+    public static function authenticationSecurityCases(): array
     {
         return [
             [
@@ -78,7 +78,7 @@ class AuthenticationProvider
      *
      * @return string[][][]
      */
-    public function invalidLoginCredentialsProvider(): array
+    public static function invalidLoginCredentialsProvider(): array
     {
         return [
             [
@@ -118,7 +118,7 @@ class AuthenticationProvider
      *
      * @return array[]
      */
-    public function malformedPasswordResetRequestBodyProvider(): array
+    public static function malformedPasswordResetRequestBodyProvider(): array
     {
         return [
             [

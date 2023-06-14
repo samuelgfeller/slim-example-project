@@ -64,7 +64,7 @@ class UserCreator
             $userRow = $user->toArrayForDatabase();
             $user->id = $this->userCreatorRepository->insertUser($userRow);
             // remove passwords from user row before they are inserted into activity (also id because not relevant)
-            unset($userRow['password'], $userRow['password2'], $userRow['password_hash'], $userRow['id']);
+            unset($userRow['password'], $userRow['password2'], $userRow['password_hash'], $userRow['id'], $userRow['theme']);
             $this->userActivityManager->addUserActivity(UserActivity::CREATED, 'user', $user->id, $userRow);
 
             // Create and insert token if unverified

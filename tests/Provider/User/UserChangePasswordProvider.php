@@ -16,7 +16,7 @@ class UserChangePasswordProvider
      *
      * @return array[]
      */
-    public function userPasswordChangeAuthorizationCases(): array
+    public static function userPasswordChangeAuthorizationCases(): array
     {
         // Password hash to verify old password - 12345678 is used in test function
         $passwordHash = password_hash('12345678', PASSWORD_DEFAULT);
@@ -94,7 +94,7 @@ class UserChangePasswordProvider
      *
      * @return array
      */
-    public function invalidPasswordChangeCases(): array
+    public static function invalidPasswordChangeCases(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
@@ -145,7 +145,7 @@ class UserChangePasswordProvider
      *
      * @return array[]
      */
-    public function malformedPasswordChangeRequestCases(): array
+    public static function malformedPasswordChangeRequestCases(): array
     {
         return [
             [

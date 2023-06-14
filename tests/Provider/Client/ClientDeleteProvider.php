@@ -13,7 +13,7 @@ class ClientDeleteProvider
     /**
      * @return array[]
      */
-    public function clientDeleteUsersAndExpectedResultProvider(): array
+    public static function clientDeleteUsersAndExpectedResultProvider(): array
     {
         // Get users with different roles
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];

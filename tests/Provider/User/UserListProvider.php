@@ -12,7 +12,7 @@ class UserListProvider
      * Different combinations of user logged-in users and owner user requesting to fetch users.
      * One authenticated user and one other is tested at a time is tested for clarity and simplicity.
      */
-    public function userListAuthorizationCases(): array
+    public static function userListAuthorizationCases(): array
     {
         // Set different user role attributes. The following function is needed in the test function to add user role id
         // $this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);

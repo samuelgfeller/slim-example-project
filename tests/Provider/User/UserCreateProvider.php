@@ -14,7 +14,7 @@ class UserCreateProvider
     /**
      * @return array[]
      */
-    public function userCreateAuthorizationCases(): array
+    public static function userCreateAuthorizationCases(): array
     {
         // Set different user role attributes
         $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -73,7 +73,7 @@ class UserCreateProvider
      *
      * @return array
      */
-    public function invalidUserCreateCases(): array
+    public static function invalidUserCreateCases(): array
     {
         /** Same values as @see UserUpdateProvider::invalidUserUpdateCases() but with password and password2 */
         // Including as many values as possible that trigger validation errors in each case
@@ -171,7 +171,7 @@ class UserCreateProvider
      *
      * @return array[]
      */
-    public function malformedRequestBodyCases(): array
+    public static function malformedRequestBodyCases(): array
     {
         return [
             [

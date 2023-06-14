@@ -15,7 +15,7 @@ class ClientCreateProvider
      *
      * @return array[]
      */
-    public function malformedRequestBodyCases(): array
+    public static function malformedRequestBodyCases(): array
     {
         return [
             [
@@ -53,7 +53,7 @@ class ClientCreateProvider
     /**
      * @return \array[][]
      */
-    public function clientCreationDropdownOptionsCases(): array
+    public static function clientCreationDropdownOptionsCases(): array
     {
         // Set users with different roles
         $managingAdvisorAttributes = ['first_name' => 'Manager', 'user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -92,7 +92,7 @@ class ClientCreateProvider
      *
      * @return array[]
      */
-    public function clientCreationUsersAndExpectedResultProvider(): array
+    public static function clientCreationUsersAndExpectedResultProvider(): array
     {
         // Get users with different roles
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -153,7 +153,7 @@ class ClientCreateProvider
      *
      * @return array
      */
-    public function invalidClientCreationValuesAndExpectedResponseProvider(): array
+    public static function invalidClientCreationValuesAndExpectedResponseProvider(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [

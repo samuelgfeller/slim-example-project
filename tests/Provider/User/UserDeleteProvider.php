@@ -10,7 +10,7 @@ class UserDeleteProvider
     /**
      * @return array[]
      */
-    public function userDeleteAuthorizationCases(): array
+    public static function userDeleteAuthorizationCases(): array
     {
         // Get users with different roles
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];

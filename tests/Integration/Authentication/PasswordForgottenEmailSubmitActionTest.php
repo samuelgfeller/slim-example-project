@@ -127,9 +127,8 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
      */
     public function testPasswordForgottenEmailSubmitInvalidData(): void
     {
-        // Insert user id 2 role: user
-        $userRow = (new UserFixture())->records[1];
-        $this->insertFixture('user', $userRow);
+        // Insert user
+        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
 
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);

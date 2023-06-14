@@ -11,7 +11,7 @@ class ClientListProvider
      *
      * @return array GET params with valid filter values
      */
-    public function clientListFilterCases(): array
+    public static function clientListFilterCases(): array
     {
         // ID does not matter as long as it's not used as default value by the fixtures
         $newcomerAttributes = ['id' => 42, 'user_role_id' => UserRole::NEWCOMER];
@@ -166,7 +166,7 @@ class ClientListProvider
      *
      * @return array
      */
-    public function clientListInvalidFilterCases(): array
+    public static function clientListInvalidFilterCases(): array
     {
         return [
             // Invalid "user" filter

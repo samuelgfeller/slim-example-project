@@ -66,6 +66,7 @@ class UserCreateActionTest extends TestCase
             'password2' => '12345678',
             'user_role_id' => $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value),
             'status' => 'unverified',
+            'language' => 'en_US',
         ];
 
         $request = $this->createJsonRequest(
