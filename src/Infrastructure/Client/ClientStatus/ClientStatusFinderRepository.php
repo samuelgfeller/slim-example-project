@@ -37,9 +37,11 @@ class ClientStatusFinderRepository
      * Return all client statuses with as key the id and value the name.
      * Used for dropdowns.
      *
+     * @param bool $withoutTranslation
+     *
      * @return array{id: string, name: string}
      */
-    public function findAllClientStatusesMappedByIdName(): array
+    public function findAllClientStatusesMappedByIdName(bool $withoutTranslation = false): array
     {
         $query = $this->queryFactory->newQuery()->from('client_status');
 
@@ -50,8 +52,10 @@ class ClientStatusFinderRepository
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $statuses = [];
         foreach ($resultRows as $resultRow) {
+            // If status is required without the translation provide value directly from db
             // Translation key is created in ClientStatus enum
-            $statuses[(int)$resultRow['id']] = __($resultRow['name']);
+            $statusName = $withoutTranslation ? $resultRow['name'] : __($resultRow['name']);
+            $statuses[(int)$resultRow['id']] = $statusName;
         }
 
         return $statuses;

@@ -44,7 +44,7 @@ class DashboardPanelProvider
     private function getDashboards(): array
     {
         $statusesMappedByNameId = array_flip(
-            $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName()
+            $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName(true)
         );
         $loggedInUserId = $this->session->get('user_id');
 
