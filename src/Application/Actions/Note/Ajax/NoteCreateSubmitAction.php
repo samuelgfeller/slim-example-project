@@ -10,6 +10,7 @@ use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
+use IntlDateFormatter;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -85,15 +86,14 @@ final class NoteCreateSubmitAction
 
                 if (0 !== $insertId) {
                     $user = $this->userFinder->findUserById($loggedInUserId);
+                    $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
                     // camelCase according to Google recommendation
                     return $this->responder->respondWithJson($response, [
                         'status' => 'success',
                         'data' => [
                             'userFullName' => $user->firstName . ' ' . $user->surname,
                             'noteId' => $insertId,
-                            'createdDateFormatted' => $noteDataFromDb->createdAt->format(
-                                'd. F Y • H:i'
-                            ),
+                            'createdDateFormatted' => $dateFormatter->format($noteDataFromDb->createdAt),
                         ],
                     ], 201);
                 }

@@ -13,6 +13,7 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use IntlDateFormatter;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -38,18 +39,6 @@ class NoteCreateActionTest extends TestCase
     use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
-
-    /**
-     * Returns the given $dateTime in the default note format.
-     *
-     * @param string $dateTime
-     *
-     * @return string
-     */
-    private function dateTimeToClientReadNoteFormat(string $dateTime): string
-    {
-        return (new \DateTime($dateTime))->format('d. F Y • H:i');
-    }
 
     /**
      * Test main note and normal note update on client-read page while being authenticated
@@ -119,6 +108,7 @@ class NoteCreateActionTest extends TestCase
             'user_activity',
             (int)$this->findLastInsertedTableRow('user_activity')['id']
         );
+        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
 
         // Assert response
         $expectedResponseJson = [
@@ -126,7 +116,7 @@ class NoteCreateActionTest extends TestCase
             'data' => [
                 'userFullName' => $authenticatedUserRow['first_name'] . ' ' . $authenticatedUserRow['surname'],
                 'noteId' => $noteDbRow['id'],
-                'createdDateFormatted' => $this->dateTimeToClientReadNoteFormat($noteDbRow['created_at']),
+                'createdDateFormatted' => $dateFormatter->format(new \DateTime($noteDbRow['created_at'])),
             ],
         ];
         $this->assertJsonData($expectedResponseJson, $response);

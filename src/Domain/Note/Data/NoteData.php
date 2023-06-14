@@ -4,6 +4,7 @@ namespace App\Domain\Note\Data;
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\User\Data\UserData;
+use IntlDateFormatter;
 
 class NoteData implements \JsonSerializable
 {
@@ -77,6 +78,8 @@ class NoteData implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
+        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+
         return [
             'id' => $this->id,
             'userId' => $this->userId,
@@ -84,10 +87,8 @@ class NoteData implements \JsonSerializable
             'message' => $this->message,
             // 'isMain' => $this->isMain,
             'hidden' => $this->hidden,
-            // F is the full month name in english
-            'createdAt' => $this->createdAt?->format('d. F Y • H:i'),
-            'updatedAt' => $this->updatedAt?->format('d. F Y • H:i'),
-            // 'deletedAt' => $this->deletedAt?->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt ? $dateFormatter->format($this->createdAt) : null,
+            'updatedAt' => $this->createdAt ? $dateFormatter->format($this->updatedAt) : null,
         ];
     }
 }

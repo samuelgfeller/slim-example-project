@@ -13,6 +13,7 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use IntlDateFormatter;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
@@ -104,6 +105,8 @@ amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy e
 ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
 et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 
+        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+
         $expectedResponseArray[] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
             'id' => $noteData['id'],
@@ -114,8 +117,8 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
                 substr($loremIpsum, 0, mb_strlen($noteData['message'])) : $noteData['message'],
             'hidden' => $noteHidden,
             // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
-            'createdAt' => (new \DateTime($noteData['created_at']))->format('d. F Y • H:i'),
-            'updatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
+            'createdAt' => $dateFormatter->format(new \DateTime($noteData['created_at'])),
+            'updatedAt' => $dateFormatter->format(new \DateTime($noteData['updated_at'])),
             'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
             'clientFullName' => null,
             // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)

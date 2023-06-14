@@ -4,8 +4,8 @@ export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
     const {id, createdAt, privilege, hidden, userFullName, message, isClientMessage} = note;
 
-    // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED
-    // IN client-read-create-note.js AS WELL (addNewNoteTextarea, populateNewNoteDomAttributes)
+    // ANY NOTE HTML THAT IS CHANGED BELOW HAS TO ADAPTED IN client-read-create-note.js AS WELL
+    // (addNewNoteTextarea, populateNewNoteDomAttributes)
     return `<div id="note-${id}-container" 
               class="note-container ${hidden === 1 || hidden === '1' ? 'hidden-note' : ''}">
                 <label for="note-${id}" data-note-id="${id}" class="bigger-select-label textarea-label">
