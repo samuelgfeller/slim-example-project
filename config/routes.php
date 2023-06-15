@@ -165,8 +165,9 @@ return function (App $app) {
         function ($request, $response) use ($app) {
             throw new HttpNotFoundException(
                 $request,
-                'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.
-            <br>Basepath: "' . $app->getBasePath() . '"'
+                'Route "<code>' . $request->getUri()->getHost() . $request->getUri()->getPath() .
+                '</code>" not found.'
+            // <br>Basepath: "' . $app->getBasePath() . '"'
             );
         }
     );

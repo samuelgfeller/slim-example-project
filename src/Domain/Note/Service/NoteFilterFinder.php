@@ -4,13 +4,11 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
-use Odan\Session\SessionInterface;
 
 class NoteFilterFinder
 {
     public function __construct(
         private readonly NoteFinder $noteFinder,
-        private readonly SessionInterface $session,
     ) {
     }
 

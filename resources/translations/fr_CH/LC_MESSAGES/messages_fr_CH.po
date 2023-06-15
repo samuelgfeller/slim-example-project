@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-14 18:45+0200\n"
-"PO-Revision-Date: 2023-06-14 19:15+0200\n"
+"POT-Creation-Date: 2023-06-14 20:07+0200\n"
+"PO-Revision-Date: 2023-06-14 20:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -14,6 +14,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: src\n"
 "X-Poedit-SearchPath-1: templates\n"
+"X-Poedit-SearchPath-2: public/assets\n"
 
 #: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:60
 msgid "Login successful"
@@ -80,7 +81,7 @@ msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Clients assigné à moi - action en suspens"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
-#: templates/user/user-read.html.php:183
+#: templates/user/user-read.html.php:191
 msgid "User activity"
 msgstr "Activité des utilisateurs"
 
@@ -258,18 +259,18 @@ msgstr "Langue"
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: templates/user/user-read.html.php:168
+#: templates/user/user-read.html.php:176
 msgid "Created"
 msgstr "Créé"
 
-#: templates/user/user-read.html.php:169
+#: templates/user/user-read.html.php:177
 msgid "Updated"
 msgstr "Modifié"
 
-#: templates/user/user-read.html.php:175
+#: templates/user/user-read.html.php:183
 msgid "Delete profile"
 msgstr "Supprimer le profil"
 
-#: templates/user/user-read.html.php:175
+#: templates/user/user-read.html.php:183
 msgid "Delete user"
 msgstr "Supprimer utilisateur"

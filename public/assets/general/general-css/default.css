@@ -115,7 +115,7 @@ a {
     text-decoration: none;
 }
 
-a:hover:not(a.currently-editable):not(#nav-container a) {
+a:hover:not(a.currently-editable):not(#nav-container a):not(a.btn) {
     /*text-shadow: 0 0 1px black;*/
     /*font-weight: bold;*/
     /*text-decoration: none;*/

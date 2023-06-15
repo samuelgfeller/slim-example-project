@@ -62,6 +62,7 @@ a.currently-editable {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     font-weight: normal !important; /* For when <a> to behave as button */
     filter: brightness(90%);
+    text-decoration: none; /* For when <a> is used as button */
 }
 
 .btn:focus {
