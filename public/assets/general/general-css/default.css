@@ -7,7 +7,7 @@
     --background-accent-color: #efefef;
     --background-accent-1-color: #eaeaea;
     --background-accent-2-color: #e7e7e7;
-    --background-accent-3-color: #d5d5d5;
+    --background-accent-3-color: #dcdcdc;
     --border-accent-2-color: #d5d5d5;
     --accent-color-when-dark: white;
     --translucent-background: rgba(255, 255, 255, 0.8);
@@ -39,8 +39,9 @@
     /* Background colors */
     --background-color: #101213;
     --background-accent-color: #1f2425;
-    --background-light-accent-color: var(--background-accent-color);
     --background-accent-1-color: #262b31;
+    /* Accent 1 mainly for the client card header to be visible even on accent background */
+    --background-light-accent-color: var(--background-accent-1-color);
     --background-accent-2-color: #2c343d;
     --background-accent-3-color: #323a44;
     --background-accent-4-color: #3c4652;
