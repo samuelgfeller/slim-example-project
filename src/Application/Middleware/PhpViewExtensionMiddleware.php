@@ -5,6 +5,7 @@ namespace App\Application\Middleware;
 use App\Common\JsImportVersionAdder;
 use App\Domain\Settings;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
+use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,6 +40,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
+        // The following has to work even with no connection to mysql to display the error page (layout needs those attr)
         $this->phpRenderer->setAttributes([
             'title' => 'Slim Example Project',
             'dev' => $this->devSetting,
@@ -50,11 +52,17 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
-            // Check if granted to read user that is different then the authenticated user itself (+1)
-            'userListAuthorization' => $this->userAuthorizationChecker->isGrantedToRead(
-                ($this->session->get('user_id') ?? 1) + 1
-            ),
         ]);
+        try {
+            // Check if granted to read user that is different then the authenticated user itself (+1)
+            // this determines if the nav point "users" is visible in the layout
+            $this->phpRenderer->addAttribute(
+                'userListAuthorization',
+                $this->userAuthorizationChecker->isGrantedToRead(($this->session->get('user_id') ?? 1) + 1)
+            );
+        } catch (DatabaseException $databaseException) {
+            // Mysql connection not working
+        }
 
         // Add version number to js imports
         $this->jsImportVersionAdder->addVersionToJsImports();

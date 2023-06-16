@@ -98,7 +98,7 @@
                 <span class="nav-span"><?= __('Profile') ?></span>
             </a>
             <?php
-            if ($userListAuthorization === true) { ?>
+            if (isset($userListAuthorization) && $userListAuthorization === true) { ?>
                 <a href="<?= $route->urlFor('user-list-page') ?>"
                     <?= in_array($currRouteName, ['user-list-page', 'user-read-page']) ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/users.svg" alt="Users">

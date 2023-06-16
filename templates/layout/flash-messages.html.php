@@ -6,8 +6,8 @@
 
 <aside id="flash-container">
     <?php
-    //    Display errors if there are some
-    foreach ($flash->all() as $key => $flashCategory) {
+    // Display errors if there are some
+    foreach ($flash?->all() ?? [] as $key => $flashCategory) {
         foreach ($flashCategory as $msg) { ?>
             <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
                 <figure class="flash-fig" draggable="false">

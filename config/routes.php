@@ -162,12 +162,12 @@ return function (App $app) {
     $app->map(
         ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
         '/{routes:.+}',
-        function ($request, $response) use ($app) {
+        function ($request, $response) {
             throw new HttpNotFoundException(
                 $request,
                 'Route "<code>' . $request->getUri()->getHost() . $request->getUri()->getPath() .
                 '</code>" not found.'
-            // <br>Basepath: "' . $app->getBasePath() . '"'
+                // <br>Basepath: "' . $app->getBasePath() . '"'
             );
         }
     );

@@ -57,7 +57,7 @@ $this->addAttribute('js', ['assets/error/error.js']);
 
     </section>
     <section id="error-btn-section">
-        <a href="<?= $route->urlFor('home-page') ?>" class="btn">Go back home</a>
+        <a href="<?= $route?->urlFor('home-page') ?>" class="btn">Go back home</a>
         <a href="mailto:<?= $config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch' ?>" class="btn">
             Report the issue</a>
     </section>
