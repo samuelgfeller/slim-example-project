@@ -4,7 +4,7 @@ import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handle
 
 /**
  * Send PUT update request.
- * Fail handled by handleFail() method which supports forms
+ * Fail handled by handleFail() method that supports forms
  * On success validation errors are removed and response content returned
  *
  * @param {object} formFieldsAndValues {field: value} e.g. {[input.name]: input.value}

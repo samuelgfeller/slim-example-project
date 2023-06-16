@@ -151,7 +151,6 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
     deleteNoteBtn.addEventListener('click', () => {
         let noteId = deleteNoteBtn.closest('label').dataset.noteId;
         let title = 'Are you sure that you want to delete this note?';
-        let info = 'Once the note is deleted, it can only be recovered by a database administrator.';
         createAlertModal(title, '', () => {
             deleteNoteRequestToDb(noteId, document.getElementById(
                 'note-' + noteId + '-container'

@@ -3,12 +3,14 @@
     --flash-error-background-color: #fabfb5;
     --flash-info-background-color: #bde4ee;
     --flash-warning-background-color: #f8d9af;
+    --flash-message-brightness: 100%;
 }
 [data-theme="dark"] {
-    --flash-success-background-color: #7ec585;
-    --flash-error-background-color: #c97e71;
-    --flash-info-background-color: #78b6c5;
-    --flash-warning-background-color: #c29860;
+    --flash-success-background-color: #619366;
+    --flash-error-background-color: #a4685e;
+    --flash-info-background-color: #5e929d;
+    --flash-warning-background-color: #a48252;
+    --flash-message-brightness: 70%;
 }
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
@@ -250,21 +252,25 @@
     .flash.success h3:before {
         content: 'YAY! Success!';
         color: #28a548;
+        filter: brightness(var(--flash-message-brightness));
     }
 
     .flash.error h3:before {
         content: 'OOPS! Error...';
         color: #ae4931;
+        filter: brightness(var(--flash-message-brightness));
     }
 
     .flash.info h3:before {
         content: 'Information.';
         color: #008fa2;
+        filter: brightness(var(--flash-message-brightness));
     }
 
     .flash.warning h3:before {
         content: 'Caution!';
         color: #bc6500;
+        filter: brightness(var(--flash-message-brightness));
     }
 }
 

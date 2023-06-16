@@ -14,11 +14,11 @@ let wordsToTranslate = [
     __('Please fill out either the first name or last name'),
     __('Client created successfully.'),
 ];
-let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace str var (fetch done automatically at page loading when imported)
 fetchTranslations(wordsToTranslate).then(response => {
     // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
-    translatedWords = response;
+    translated = response;
 });
 // Submit form on create button click
 document.addEventListener('click', e => {
@@ -31,13 +31,13 @@ document.addEventListener('click', e => {
         ) {
             displayValidationErrorMessage(
                 'first_name',
-                translatedWords['Please fill out either the first name or last name']
+                translated['Please fill out either the first name or last name']
             );
             return;
         }
         // Submit modal form and execute promise "then()" only if available (nothing is returned on validation error)
         submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
-            displayFlashMessage('success', translatedWords['Client created successfully.']);
+            displayFlashMessage('success', translated['Client created successfully.']);
             fetchAndLoadClients();
         })
     }

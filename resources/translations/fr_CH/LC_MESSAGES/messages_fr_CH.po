@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-14 20:07+0200\n"
-"PO-Revision-Date: 2023-06-14 20:07+0200\n"
+"POT-Creation-Date: 2023-06-16 18:43+0200\n"
+"PO-Revision-Date: 2023-06-16 18:43+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -15,6 +15,149 @@ msgstr ""
 "X-Poedit-SearchPath-0: src\n"
 "X-Poedit-SearchPath-1: templates\n"
 "X-Poedit-SearchPath-2: public/assets\n"
+
+#: public/assets/authentication/password-strength-checker.js:91
+msgid "This password is known to have been leaked and is unsafe to use"
+msgstr "Ce mot de passe est connu des hackeurs et n'est pas sûr"
+
+#: public/assets/client/create/client-create-main.js:14
+msgid "Please fill out either the first name or last name"
+msgstr "Veuillez indiquer soit le prénom, soit le nom de famille"
+
+#: public/assets/client/create/client-create-main.js:15
+msgid "Client created successfully."
+msgstr "Le client a été créé."
+
+#: public/assets/client/create/client-create-modal.html.js:10
+msgid "Create client"
+msgstr "Créer client"
+
+#: public/assets/client/create/client-create-modal.html.js:11
+#: public/assets/user/create/user-create-modal.html.js:12
+msgid "First name"
+msgstr "Prénom"
+
+#: public/assets/client/create/client-create-modal.html.js:12
+#: public/assets/user/create/user-create-modal.html.js:13
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: public/assets/client/create/client-create-modal.html.js:13
+msgid "Birthdate"
+msgstr "Date de naissance"
+
+#: public/assets/client/create/client-create-modal.html.js:14
+msgid "Location"
+msgstr "Lieu de résidence"
+
+#: public/assets/client/create/client-create-modal.html.js:15
+msgid "Main note"
+msgstr "Note principale"
+
+#: public/assets/client/create/client-create-modal.html.js:16
+msgid "Sex"
+msgstr "Sexe"
+
+#: public/assets/client/create/client-create-modal.html.js:17
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+#: public/assets/client/create/client-create-modal.html.js:18
+#: public/assets/user/create/user-create-modal.html.js:14
+#: templates/authentication/login.html.php:62
+#: templates/user/user-read.html.php:103
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: public/assets/client/create/client-create-modal.html.js:19
+msgid "Assigned user"
+msgstr "Utilisateur assigné"
+
+#: public/assets/client/create/client-create-modal.html.js:20
+#: public/assets/user/create/user-create-modal.html.js:18
+#: src/Domain/User/Service/UserValidator.php:303
+#: templates/client/client-read.html.php:69
+#: templates/user/user-read.html.php:73
+msgid "Status"
+msgstr "Statut"
+
+#: public/assets/client/create/client-create-modal.html.js:21
+msgid "Main note about client."
+msgstr "Note principale sur le client."
+
+#: public/assets/client/note/client-read-note-loading.js:50
+msgid "No notes were found"
+msgstr "Aucune note n'a été trouvée"
+
+#: public/assets/client/read/client-read-main.js:49
+msgid "Are you sure that you want to delete this client?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce client ?"
+
+#: public/assets/client/read/client-read-main.js:50
+msgid "Are you sure that you want to restore this client?"
+msgstr "Êtes-vous sûr de vouloir restaurer ce client ?"
+
+#: public/assets/client/read/client-read-main.js:51
+msgid "Yes undelete"
+msgstr "Oui, resaurer"
+
+#: public/assets/general/page-component/modal/alert-modal.js:24
+msgid "Yes delete"
+msgstr "Oui, supprimer"
+
+#: public/assets/general/page-component/modal/alert-modal.js:25
+msgid "Cancel"
+msgstr "Annuler"
+
+#: public/assets/user/create/user-create-modal.html.js:11
+msgid "Create user"
+msgstr "Créer utilisateur"
+
+#: public/assets/user/create/user-create-modal.html.js:15
+#: templates/user/user-read.html.php:152
+msgid "Language"
+msgstr "Langue"
+
+#: public/assets/user/create/user-create-modal.html.js:16
+#: public/assets/user/update/change-password-modal.html.js:10
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: public/assets/user/create/user-create-modal.html.js:17
+#: public/assets/user/update/change-password-modal.html.js:11
+msgid "Repeat new password"
+msgstr "Répéter mot de passe"
+
+#: public/assets/user/create/user-create-modal.html.js:19
+#: src/Domain/User/Service/UserValidator.php:274
+#: templates/user/user-read.html.php:90
+msgid "User role"
+msgstr "Rôle utilisateur"
+
+#: public/assets/user/read/user-read-update-main.js:43
+msgid "Are you sure that you want to delete this user?"
+msgstr "Voulez-vous vraiment supprimer cet utilisateur?"
+
+#: public/assets/user/read/user-read-update-main.js:44
+msgid "Are you sure that you want to delete your profile?"
+msgstr "Êtes-vous sûr de vouloir supprimer votre profil ?"
+
+#: public/assets/user/read/user-read-update-main.js:45
+msgid "You will be logged out and not be able to log in again."
+msgstr "Vous serez déconnecté et ne pourrez plus vous connecter."
+
+#: public/assets/user/read/user-read-update-main.js:46
+msgid "Successfully changed password."
+msgstr "Modification du mot de passe réussie."
+
+#: public/assets/user/update/change-password-modal.html.js:8
+#: templates/user/user-read.html.php:124
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
+#: public/assets/user/update/change-password-modal.html.js:9
+msgid "Old password"
+msgstr "Ancien mot de passe"
 
 #: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:60
 msgid "Login successful"
@@ -83,7 +226,7 @@ msgstr "Clients assigné à moi - action en suspens"
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
 #: templates/user/user-read.html.php:191
 msgid "User activity"
-msgstr "Activité des utilisateurs"
+msgstr "Activité utilisateur"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:82
 msgid "New notes"
@@ -174,25 +317,9 @@ msgstr "est requis"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: src/Domain/User/Service/UserValidator.php:274
-#: templates/user/user-read.html.php:90
-msgid "User role"
-msgstr "Rôle utilisateur"
-
 #: src/Domain/User/Service/UserValidator.php:299
 msgid "Status not existing"
 msgstr "Statut non existant"
-
-#: src/Domain/User/Service/UserValidator.php:303
-#: templates/client/client-read.html.php:69
-#: templates/user/user-read.html.php:73
-msgid "Status"
-msgstr "Statut"
-
-#: templates/authentication/login.html.php:62
-#: templates/user/user-read.html.php:103
-msgid "E-Mail"
-msgstr "E-Mail"
 
 #: templates/authentication/login.html.php:68
 #: templates/authentication/login.html.php:84
@@ -215,6 +342,10 @@ msgstr "Assistant"
 msgid "New main note"
 msgstr "Nouvelle note principale"
 
+#: templates/client/client-read.html.php:121
+msgid "Notes"
+msgstr "Notes"
+
 #: templates/client/clients-list.html.php:40 templates/layout.html.php:92
 msgid "Clients"
 msgstr "Clients"
@@ -231,6 +362,10 @@ msgstr "Plus de filtres"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
+#: templates/error/error-page.html.php:54
+msgid "Please explain what you did prior to the error happening."
+msgstr "Qu'avez vous fait précisément avant que l'erreur ne se produise?"
+
 #: templates/layout.html.php:98
 msgid "Profile"
 msgstr "Profil"
@@ -243,17 +378,9 @@ msgstr "Utilisateurs"
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/user/user-read.html.php:124
-msgid "Change password"
-msgstr "Modifier le mot de passe"
-
 #: templates/user/user-read.html.php:132
 msgid "Dark mode"
 msgstr "Mode sombre"
-
-#: templates/user/user-read.html.php:152
-msgid "Language"
-msgstr "Langue"
 
 #: templates/user/user-read.html.php:166
 msgid "Metadata"

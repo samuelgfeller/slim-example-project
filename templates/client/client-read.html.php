@@ -118,7 +118,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 <div id="client-activity-personal-info-container">
     <div id="client-note-wrapper" class="client-note-wrapper" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
         <div class="vertical-center" id="activity-header">
-            <h2>Aktivität</h2>
+            <h2><?= __('Notes') ?></h2>
             <?php
             if ($clientAggregate->noteCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
                 <div class="plus-btn" id="create-note-btn"></div>

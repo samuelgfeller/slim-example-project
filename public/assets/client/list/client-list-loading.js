@@ -180,7 +180,7 @@ function submitClientCardDropdownChange() {
     let clientId = this.closest('.client-profile-card').dataset.clientId;
 
     // Submit field change
-    submitUpdate({[this.name]: this.value}, `clients/${clientId}`, true)
-        .then(r => {
-        });
+    submitUpdate({[this.name]: this.value}, `clients/${clientId}`, true).then(r => {
+    }).catch(e => {
+    });
 }

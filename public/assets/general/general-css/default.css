@@ -38,14 +38,15 @@
     --primary-color: #4f6b8a;
     /* Background colors */
     --background-color: #101213;
-    --background-light-accent-color: #1f2425;
     --background-accent-color: #1f2425;
+    --background-light-accent-color: var(--background-accent-color);
     --background-accent-1-color: #262b31;
     --background-accent-2-color: #2c343d;
     --background-accent-3-color: #323a44;
     --background-accent-4-color: #3c4652;
     --border-accent-2-color: #3c4143;
     --accent-color-when-dark: var(--background-accent-color);
+    --accent-color-2-when-dark: var(--background-accent-1-color);
     /* Text */
     --primary-text-color: #c3cad0;
     --secondary-text-color: #919fac;

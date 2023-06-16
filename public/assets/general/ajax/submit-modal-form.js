@@ -1,1 +1,1 @@
-// In general/js/modal/modal-submit-request.js"
+/** @link /assets/general/page-component/modal/modal-submit-request.js */

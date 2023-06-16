@@ -6,6 +6,8 @@ import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.3.1"
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
 import {fetchAndLoadClientNotes} from "../note/client-read-note-loading.js?v=0.3.1";
 import {addNewNoteTextarea} from "../note/client-read-create-note.js?v=0.3.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
+import {__} from "../../general/general-js/functions.js?v=0.3.1";
 
 const clientId = document.getElementById('client-id').value;
 
@@ -41,9 +43,23 @@ const vigilanceLevelEditBtn = document.querySelector('#edit-vigilance-level-btn'
 vigilanceLevelEditBtn?.addEventListener('click', () => {
     makeFieldSelectValueEditable.call(vigilanceLevelEditBtn).then(changeMainNoteBorderAccordingToVigilanceLevel);
 });
+
+// Retrieve needed translations for deletion
+let wordsToTranslate = [
+    __('Are you sure that you want to delete this client?'),
+    __('Are you sure that you want to restore this client?'),
+    __('Yes undelete'),
+];
+// Init translated var by populating it with english values as a default so that all keys are surely existing
+let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translated var
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translated = response;
+});
 // Delete button
 document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
-    let title = 'Are you sure that you want to delete this client?';
+    let title = translated['Are you sure that you want to delete this client?'];
     createAlertModal(title, '', () => {
         submitDelete(`clients/${clientId}`, true).then(() => {
             location.href = `clients/list`;
@@ -52,13 +68,13 @@ document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
 });
 // Restore / undelete button
 document.querySelector('#undelete-client-btn')?.addEventListener('click', () => {
-    let title = 'Are you sure that you want to restore this client?';
+    let title = translated['Are you sure that you want to restore this client?'];
     createAlertModal(title, '', () => {
         submitUpdate({'deleted_at': null}, `clients/${clientId}`,
             `clients/${clientId}`).then(() => {
             location.reload();
         });
-    }, 'Yes undelete');
+    }, translated['Yes undelete']);
 });
 
 

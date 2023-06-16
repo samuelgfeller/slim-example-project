@@ -49,6 +49,9 @@ $this->addAttribute('js', ['assets/error/error.js']);
 <br>Please try again and then contact me.';
                 break;
         }
+        $emailSubject = strip_tags(str_replace('"', '', $errorMessage['exceptionMessage']))
+            ?? $errorMessage['statusCode'] . ' ' . $title;
+        $emailBody = __('Please explain what you did prior to the error happening.');
         ?>
         <h2 id="error-reason-phrase">OOPS! <?= html($title) ?></h2>
         <p id="error-message"><?= $message /* Not escape with html() because $message is safe and has html tags */ ?></p>
@@ -58,7 +61,8 @@ $this->addAttribute('js', ['assets/error/error.js']);
     </section>
     <section id="error-btn-section">
         <a href="<?= $route?->urlFor('home-page') ?>" class="btn">Go back home</a>
-        <a href="mailto:<?= $config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch' ?>" class="btn">
+        <a href="mailto:<?= ($config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch')
+        . '?subject=' . $emailSubject . '&body=' . $emailBody ?>" target="_blank" class="btn">
             Report the issue</a>
     </section>
 </section>

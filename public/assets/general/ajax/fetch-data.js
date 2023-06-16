@@ -4,7 +4,7 @@ import {basePath} from "../general-js/config.js?v=0.3.1";
 /**
  * Sends a GET request and returns result in promise
  *
- * @param {string} route without base path and trailing slash. Query params have to be added with ?param=value
+ * @param {string} route only the part after base path ('users/1'). Query params have to be added with ?param=value
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
  * If true, the redirect url is the same as the given route
  * @return {Promise<JSON>}

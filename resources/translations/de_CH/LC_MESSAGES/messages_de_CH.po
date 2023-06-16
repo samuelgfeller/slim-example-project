@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-14 18:56+0200\n"
-"PO-Revision-Date: 2023-06-14 18:56+0200\n"
+"POT-Creation-Date: 2023-06-16 18:20+0200\n"
+"PO-Revision-Date: 2023-06-16 18:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -88,6 +88,26 @@ msgstr "Hauptnotiz über Klient."
 #: public/assets/client/note/client-read-note-loading.js:50
 msgid "No notes were found"
 msgstr "Keine Notizen gefunden"
+
+#: public/assets/client/read/client-read-main.js:49
+msgid "Are you sure that you want to delete this client?"
+msgstr "Sind Sie sicher, dass Sie diesen Klient löschen möchten?"
+
+#: public/assets/client/read/client-read-main.js:50
+msgid "Are you sure that you want to restore this client?"
+msgstr "Sind Sie sicher, dass Sie diesen Klient wiederherstellen wollen?"
+
+#: public/assets/client/read/client-read-main.js:51
+msgid "Yes undelete"
+msgstr "Ja wiederherstellen"
+
+#: public/assets/general/page-component/modal/alert-modal.js:24
+msgid "Yes delete"
+msgstr "Ja löschen"
+
+#: public/assets/general/page-component/modal/alert-modal.js:25
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: public/assets/user/create/user-create-modal.html.js:11
 msgid "Create user"
@@ -204,7 +224,7 @@ msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Mir zugewiesene Kunden &nbsp; - &nbsp; nicht abgeschlossen"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
-#: templates/user/user-read.html.php:183
+#: templates/user/user-read.html.php:191
 msgid "User activity"
 msgstr "Benutzeraktivität"
 
@@ -322,6 +342,10 @@ msgstr "Helfer"
 msgid "New main note"
 msgstr "Neue Hauptnotiz"
 
+#: templates/client/client-read.html.php:121
+msgid "Notes"
+msgstr "Notizen"
+
 #: templates/client/clients-list.html.php:40 templates/layout.html.php:92
 msgid "Clients"
 msgstr "Klienten"
@@ -337,6 +361,10 @@ msgstr "Keine Filter mehr"
 #: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:85
 msgid "Dashboard"
 msgstr "Dashboard"
+
+#: templates/error/error-page.html.php:54
+msgid "Please explain what you did prior to the error happening."
+msgstr "Bitte erklären Sie, was Sie vor dem Auftreten des Fehlers getan haben."
 
 #: templates/layout.html.php:98
 msgid "Profile"
@@ -358,18 +386,18 @@ msgstr "Nachtmodus"
 msgid "Metadata"
 msgstr "Metadaten"
 
-#: templates/user/user-read.html.php:168
+#: templates/user/user-read.html.php:176
 msgid "Created"
 msgstr "Erstellt"
 
-#: templates/user/user-read.html.php:169
+#: templates/user/user-read.html.php:177
 msgid "Updated"
 msgstr "Geändert"
 
-#: templates/user/user-read.html.php:175
+#: templates/user/user-read.html.php:183
 msgid "Delete profile"
 msgstr "Profil löschen"
 
-#: templates/user/user-read.html.php:175
+#: templates/user/user-read.html.php:183
 msgid "Delete user"
 msgstr "Benutzer löschen"

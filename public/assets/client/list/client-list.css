@@ -71,7 +71,7 @@
         /*More padding on the right side for mobile because of the age circle top right of the avatar*/
         padding: 20px 20px 5px 20px;
         /*background: #d7b9b9;*/
-        background: var(--accent-color-when-dark);
+        background: var(--background-light-accent-color);
         /*width: 100%;*/
     }
 
@@ -113,7 +113,7 @@
 
     .profile-card-content {
         padding: 0 20px 20px 20px;
-        background: var(--background-accent-2-color);
+        background: var(--background-accent-3-color);
         width: 100%;
         /*position: relative; makes outline hidden behind content which is unwanted */
         font-size: 16px;

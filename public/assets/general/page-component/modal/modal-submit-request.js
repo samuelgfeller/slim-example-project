@@ -4,14 +4,13 @@ import {closeModal} from "./modal.js?v=0.3.1";
 import {basePath} from "../../general-js/config.js?v=0.3.1";
 
 /**
- * Check form validity, disable form, submit modal form and close it on success
+ * Retrieves form data, checks form validity, disables form, submits modal form and closes it on success
  *
  * @param {string} modalFormId
  * @param {string} moduleRoute POST module route like "users" or "clients"
  * @param {string} httpMethod POST or PUT
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
- * If true, the redirect url is the same as the given route. If redirect route is the same as the
- * location of the page the user was when submitting the modal form, it's not needed. Example: "users/1"
+ * If true, the redirect url is the same as the given route.
  * @return void|Promise
  */
 export function submitModalForm(

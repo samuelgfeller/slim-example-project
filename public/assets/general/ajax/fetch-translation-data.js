@@ -11,7 +11,6 @@ export function fetchTranslations(wordsToTranslate) {
     wordsToTranslate.forEach((value) => {
         params.append('strings[]', value);
     });
-    let translatedWords;
     return fetchData(`translate?${params.toString()}`).then(responseJSON => {
         return responseJSON;
     }).catch();

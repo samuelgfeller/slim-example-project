@@ -21,73 +21,73 @@ let wordsToTranslate = [
     __('Main note about client.')
 ];
 // Set translated words to have the string as key to have the same format then what the server returns
-let translatedWords = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
-// Fetch translations and replace translatedWords var
+let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translated var
 fetchTranslations(wordsToTranslate).then(response => {
     // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
-    translatedWords = response;
+    translated = response;
 });
 
 /**
  * Create and display modal box to create a new client
  */
 export function displayClientCreateModal() {
-    let header = `<h2>${translatedWords['Create client']}</h2>`;
+    let header = `<h2>${translated['Create client']}</h2>`;
     let body = `<div>
 <form action="javascript:void(0);" class="wide-modal-form" id="create-client-modal-form">
         <div class="form-input-div">
-            <label for="first-name-input">${translatedWords['First name']}</label>
+            <label for="first-name-input">${translated['First name']}</label>
             <input type="text" name="first_name" id="first-name-input" placeholder="Hans" class="form-input" 
             minlength="2" maxlength="100">
         </div>
         <div class="form-input-div">
-            <label for="last-name-input">${translatedWords['Last name']}</label>
+            <label for="last-name-input">${translated['Last name']}</label>
             <input type="text" name="last_name" id="last-name-input" placeholder="Zimmer" class="form-input" 
             minlength="2" maxlength="100">
         </div>
         <div class="form-input-div">
-            <label for="birthdate-input">${translatedWords['Birthdate']}</label>
+            <label for="birthdate-input">${translated['Birthdate']}</label>
             <input type="date" name="birthdate" id="birthdate-input" placeholder="15.03.2000">
         </div>
         <div class="form-input-div">
-            <label for="location-input">${translatedWords['Location']}</label>
+            <label for="location-input">${translated['Location']}</label>
             <input type="text" placeholder="Basel" id="location-input" name="location" minlength="2" 
             maxlength="100">
         </div>
         <div class="form-input-div double-width-form-input-div">
-            <label for="create-message-textarea" class="form-label">${translatedWords['Main note']}</label>
+            <label for="create-message-textarea" class="form-label">${translated['Main note']}</label>
             <!-- Name has to be "message" as it's the name used in note validation -->
             <textarea rows="4" cols="50" name="message" id="create-message-textarea"
-                      placeholder="${translatedWords['Main note about client.']}" minlength="0" maxlength="500"></textarea>
+                      placeholder="${translated['Main note about client.']}" minlength="0" maxlength="500"></textarea>
         </div>
         <div class="form-input-div" id="client-sex-input-group-div">
-            <label>${translatedWords['Sex']}</label><br>
+            <label>${translated['Sex']}</label><br>
             <!-- Sex radio buttons are added after modal load below in addClientDropdownOptionsToCreateModal() -->
         </div>
         <div class="form-input-div">
-            <label for="phone-input">${translatedWords['Phone number']}</label>
+            <label for="phone-input">${translated['Phone number']}</label>
             <input type="text" name="phone" id="phone-input" placeholder="061 422 32 11" minlength="3" maxlength="20">
         </div>
         <div class="form-input-div">
-            <label for="email-input">${translatedWords['E-Mail']}</label>
+            <label for="email-input">${translated['E-Mail']}</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" maxlength="254">
         </div>
         <div class="form-input-div">
-            <label for="assigned-user-select">${translatedWords['Assigned user']}</label>
+            <label for="assigned-user-select">${translated['Assigned user']}</label>
             <select name="user_id" id="assigned-user-select">
             <option value=""></option>
                 <!-- Dropdown options loaded afterwards -->
             </select>
         </div>
         <div class="form-input-div">
-            <label for="client-status-select">${translatedWords['Status']}</label>
+            <label for="client-status-select">${translated['Status']}</label>
     <select name="client_status_id" id="client-status-select">
     <!-- Dropdown options loaded afterwards -->
     </select>
     </div>
     </div>`;
     let footer = `<button type="button" id="client-create-submit-btn" class="submit-btn">
-${translatedWords['Create client']}
+${translated['Create client']}
     </button></form>
     <div class="clearfix">
     </div>`;

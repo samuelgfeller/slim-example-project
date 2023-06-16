@@ -169,7 +169,8 @@ a.currently-editable {
 }
 
 .default-select:disabled {
-    filter: grayscale(1) brightness(85%);
+    filter: grayscale(0.7) brightness(95%);
+    color: var(--black-text-color);
 }
 
 .bigger-select {
