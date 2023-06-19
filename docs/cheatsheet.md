@@ -131,19 +131,20 @@ submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
 <details>
   <summary><h2>Translations in JS modules</h2></summary>
 
-Translations are done in the backend by PHP `gettext()` function. In Javascript we have 2 issues.  
-First one is that the .po editor knows that specific strings that only exist in the JS files have to be translated
-and fetches them with the Poedit function "Update from code" and second is to actually receive the translated string.
+Translations are done in the backend by PHP `gettext()` function. 
 
-Poedit recognizes all strings that are an argument for the function `__()` to be translated meaning it's
-enough to call the dummy function `__()` with the strings to translate and adding the public dir to a source path
-in Poedit: Translation -> Properties -> Source paths -> add `public`.
+To access them via Javascript we can make an Ajax request that loads in the background while the page loads. 
+This obviously adds a delay for the availability of the translated words so this method should only be used 
+with "secondary" things that are not visible on the page on load. It works for things like modal boxes that 
+are displayed only after a user action is being made. There is most probably enough time for the Ajax request 
+to be done loading before the content is needed.
 
-To get the translated words it's a bit more complicated though. Currently, this is done via an Ajax request
-that loads in the background while the page is getting loaded. This obviously adds a delay for the availability of
-the translated words so this method should only be used with "secondary" things that are not visible on the
-page on load. It works for things like modal boxes that are displayed only after a user action is made as there is most
-probably enough time for the Ajax request to be done loading before the action is being made and the content is needed.
+Another aspect to take into account is that the `.po` editor fetches only the strings that are an argument 
+for the function `__()` to be translated meaning it's enough to call the dummy function `__()` with the 
+strings for them to be recognized by the editor.    
+If not done already, the public dir has to be added as a source path in Poedit: 
+`Translation -> Properties -> Source paths -> add -> public/`.  
+Now the button "Update from code" should work.
 
 ```js
 import {__} from "../../general-js/functions.js";
@@ -156,15 +157,16 @@ let wordsToTranslate = [
     __('New password'),
     __('Repeat new password'),
 ];
-// Init translated var by populating it with english values as a default so that all keys are surely existing
+// Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace translated var
 fetchTranslations(wordsToTranslate).then(response => {
     // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
     translated = response;
 });
-
-// USAGE
+```
+#### Usage
+```js
 export function displayUserCreateModal() {
     // Using translated string "Change password"
     let header = `<h2>${translated['Change password']}</h2>`;
@@ -173,6 +175,6 @@ export function displayUserCreateModal() {
 ```
 
 After adding a new string that calls the function `__()`, the string has to be translated to all available
-languages in Poedit.
+languages in Poedit (obviously).
 
 </details>

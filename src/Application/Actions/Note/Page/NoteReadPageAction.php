@@ -52,7 +52,7 @@ final class NoteReadPageAction
         }
         $flash = $this->session->getFlash();
         // If not existing note, inform user
-        $flash->add('error', 'The note was not not found.');
+        $flash->add('error', __('The note was not not found.'));
         // When note does not exist link to client list page
         return $this->responder->redirectToRouteName($response, 'client-list-page');
     }

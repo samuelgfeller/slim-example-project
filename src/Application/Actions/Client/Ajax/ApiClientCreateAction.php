@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientCreatorFromClientSubmit;
 use App\Domain\Validation\ValidationException;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
@@ -21,7 +20,6 @@ final class ApiClientCreateAction
      *
      * @param Responder $responder The responder
      * @param ClientCreatorFromClientSubmit $clientCreatorFromClientSubmit
-     * @param SessionInterface $session
      * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
      */
     public function __construct(

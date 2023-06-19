@@ -75,7 +75,7 @@ final class PasswordForgottenEmailSubmitAction
                     ['email' => $userValues['email']]
                 );
             } catch (TransportExceptionInterface $transportException) {
-                $flash->add('error', 'There was an error when sending the email.');
+                $flash->add('error', __('There was an error when sending the email.'));
 
                 return $this->responder->render(
                     $response,
@@ -83,13 +83,13 @@ final class PasswordForgottenEmailSubmitAction
                     $request->getQueryParams(),
                 );
             }
-            $flash->add('success', 'Password recovery email is sent if an account is found.<br>' .
-            'Please check your inbox and the spam folder if needed.');
+            $flash->add('success', __("Password recovery email is sent to you.<br>
+Please also check the spam folder if you don't see it in the inbox."));
 
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
 
-        $flash->add('error', 'Malformed request body syntax');
+        $flash->add('error', __('Malformed request body syntax. Please contact an administrator'));
         $this->logger->error('POST request body malformed: ' . json_encode($userValues));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
         throw new HttpBadRequestException($request, 'Request body malformed.');

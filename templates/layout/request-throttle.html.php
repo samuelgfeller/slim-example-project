@@ -8,18 +8,17 @@
 <?php
 if (isset($throttleDelay)) { ?>
     <div class="error-div-below-form">
-        <?php // Display throttle message if there is not already a formErrorMessage
-        if (is_numeric($throttleDelay) && !isset($formErrorMessage)) { ?>
-            <strong class="err-msg" id="throttle-delay-msg">Please wait <span
-                        class="throttle-time-span"><?= $throttleDelay ?></span>
-                seconds before trying again</strong>
         <?php
-        } elseif ($throttleDelay === 'captcha') {
-
-            if (!isset($formErrorMessage)){ ?>
-                <strong class="err-msg" id="throttle-delay-msg">Please fill out the captcha and try again</strong>
+        // Display throttle message if there is not already a formErrorMessage
+        if (!isset($formErrorMessage)) {
+            $userThrottleMessage = is_numeric($throttleDelay) ?
+                sprintf(__('wait %s'), '<span class="throttle-time-span">' . $throttleDelay . '</span>s')
+                : __('fill out the captcha');
+            ?>
+            <strong class="err-msg" id="throttle-delay-msg">Please <?= $userThrottleMessage ?> and try again.</strong>
             <?php
-            } ?>
+        }
+        if ($throttleDelay === 'captcha') { ?>
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
             <script>
                 // Display captcha

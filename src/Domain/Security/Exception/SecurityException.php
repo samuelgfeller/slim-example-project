@@ -32,15 +32,18 @@ class SecurityException extends \RuntimeException
 
     public function getPublicMessage(): string
     {
+        $userThrottleMessage = is_numeric($this->remainingDelay) ?
+            sprintf(__('wait %s'), '<span class="throttle-time-span">' . $this->remainingDelay . '</span>s')
+            : __('fill out the captcha');
+
         return match ($this->getSecurityType()) {
-            SecurityType::USER_LOGIN, SecurityType::USER_EMAIL => 'It looks like you are doing this too much. <br> Please ' .
-                (is_numeric(
-                    $this->remainingDelay
-                ) ? 'wait <span class="throttle-time-span">' . $this->remainingDelay . '</span>s'
-                    : 'fill out the captcha') .
-                ' and try again.',
-            SecurityType::GLOBAL_LOGIN, SecurityType::GLOBAL_EMAIL => 'The site is under a too high request load ' .
-                'therefore a general throttling is in place. Please fill out the captcha and try again.',
+            SecurityType::USER_LOGIN, SecurityType::USER_EMAIL => sprintf(
+                __('It looks like you are doing this too much.<br> Please %s and try again.', $userThrottleMessage)
+            ),
+            SecurityType::GLOBAL_LOGIN, SecurityType::GLOBAL_EMAIL => __(
+                'The site is under a too high request load. 
+            <br> Therefore a general throttling is in place. Please fill out the captcha and try again.'
+            ),
             default => 'Please wait or fill out the captcha and repeat the action.',
         };
     }

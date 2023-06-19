@@ -7,6 +7,7 @@ use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
 use App\Infrastructure\Security\LoginRequestFinderRepository;
+use App\Test\Unit\Security\SecurityLoginCheckerTest;
 
 class SecurityLoginChecker
 {
@@ -113,8 +114,8 @@ class SecurityLoginChecker
                 //             ->format('H:i:s') . "\n" . 'Security exception: ' .
                 //         $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
                 //     "\n---- \n";
-
-                $errMsg = 'Exceeded maximum of tolerated login requests.'; // Change in SecurityServiceTest as well
+                /** Asserted in @see SecurityLoginCheckerTest (public message is defferent) */
+                $errMsg = 'Exceeded maximum of tolerated login requests';
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
@@ -122,8 +123,7 @@ class SecurityLoginChecker
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
-                    $errMsg .= ' because of captcha';
-                    // If delay not int, it means that 'captcha' is the delay
+                    $errMsg .= ' with captcha';
                     throw new SecurityException($delay, SecurityType::USER_LOGIN, $errMsg);
                 }
             }

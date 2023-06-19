@@ -48,7 +48,7 @@ class UserValidator
                 ['email' => $userValues['email'], 'id !=' => $userId],
                 'user'
             )) {
-                $validationResult->setError('email', 'User with this email already exists');
+                $validationResult->setError('email', __('User with this email already exists'));
             }
             $this->validator->validateEmail($userValues['email'], $validationResult, true);
         }
@@ -245,7 +245,7 @@ class UserValidator
             $this->validator->validateLengthMin($password, $fieldName, $validationResult, 3);
         } elseif (true === $required) {
             // If password is required
-            $validationResult->setError($fieldName, __('Password') . ' ' . __('is required'));
+            $validationResult->setError($fieldName, __('Required'));
         }
     }
 
@@ -269,10 +269,7 @@ class UserValidator
             $this->validator->validateExistence((int)$value, 'user_role', $validationResult, $required, false);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError(
-                'user_role_id',
-                __('User role') . ' ' . __('is required')
-            );
+            $validationResult->setError('user_role_id', __('Required'));
         }
     }
 
@@ -296,11 +293,11 @@ class UserValidator
             }
             // Check if given user status is one of the enum cases
             if (!in_array($value, UserStatus::values(), true)) {
-                $validationResult->setError('status', __('Status not existing'));
+                $validationResult->setError('status', __('Invalid option'));
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('status', __('Status') . ' ' . __('is required'));
+            $validationResult->setError('status', __('Required'));
         }
     }
 }

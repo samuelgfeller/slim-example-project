@@ -47,7 +47,7 @@ $this->addAttribute(
 <input autocomplete="none" id="name-search-input" type="search" placeholder="<?= __('Search by name') ?>">
 <div class="filter-chip-container">
     <div id="active-client-filter-chips-div" class="active-filter-chips-div">
-        <button id="add-filter-btn">+ Filter</button>
+        <button id="add-filter-btn">+ <?= __('Filter') ?></button>
         <?php
         foreach ($clientListFilters['active'] as $filterCategory => $filtersInCategory) {
             /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */

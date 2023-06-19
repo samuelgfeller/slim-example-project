@@ -7,12 +7,12 @@
  * @var array $config public configuration values
  */
 ?>
-Hello <?= $user->getFullName() ?> <br>
+Guten Tag <?= $user->getFullName() ?> <br>
 <br>
-<?php /** Following sentence asserted at @see LoginSubmitActionTest */?>
-If you just tried to log in, please take note that your account is suspended. <br>
-Please <b><a href="mailto:<?= $config['email']['main_contact_address'] ?>">contact us</a></b> if you wish to activate
-your account. <br>
+Wenn Sie gerade versucht haben, sich einzuloggen, beachten Sie bitte, dass Ihr Konto gesperrt ist. <br>
+Bitte <b><a href="mailto:<?= $config['email']['main_contact_address'] ?>">kontaktieren Sie uns</a></b> wenn Sie Ihr Konto
+aktivieren möchten.
+
 <br>
-Kind regards <br><br>
+Freundliche Grüsse <br><br>
 <?= $config['email']['main_sender_name'] ?>

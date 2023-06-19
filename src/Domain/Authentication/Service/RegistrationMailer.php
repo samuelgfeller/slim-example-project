@@ -2,6 +2,7 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Common\LocaleHelper;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Mailer;
@@ -25,10 +26,12 @@ class RegistrationMailer
      * RegistrationMailer constructor.
      *
      * @param Mailer $mailer email sender and helper
+     * @param LocaleHelper $localeHelper
      * @param Settings $settings
      */
     public function __construct(
         private readonly Mailer $mailer,
+        private readonly LocaleHelper $localeHelper,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
@@ -51,13 +54,14 @@ class RegistrationMailer
     public function sendRegisterVerificationToken(UserData $user, array $queryParams): void
     {
         // Send verification mail
-        $this->email->subject('Account created')
-        ->html(
-            $this->mailer->getContentFromTemplate(
-                'authentication/email/new-account.email.php',
-                ['user' => $user, 'queryParams' => $queryParams]
-            )
-        )->to(new Address($user->email, $user->getFullName()));
+        $this->email->subject(__('Account created'))
+            ->html(
+                $this->mailer->getContentFromTemplate(
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'new-account.email.php',
+                    ['user' => $user, 'queryParams' => $queryParams]
+                )
+            )->to(new Address($user->email, $user->getFullName()));
         // Send email
         $this->mailer->send($this->email);
     }

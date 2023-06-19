@@ -89,7 +89,7 @@ final class LoginSubmitAction
                     $e->getUserEmail() . '"'
                 );
                 $this->responder->addPhpViewAttribute('formError', true);
-                $this->responder->addPhpViewAttribute('formErrorMessage', 'Invalid credentials. Please try again.');
+                $this->responder->addPhpViewAttribute('formErrorMessage', __('Invalid credentials. Please try again.'));
 
                 return $this->responder->render(
                     $response->withStatus(401),
@@ -124,7 +124,7 @@ final class LoginSubmitAction
                 );
             }
         }
-        $flash->add('error', 'Malformed request body syntax');
+        $flash->add('error', __('Malformed request body syntax. Please contact an administrator'));
         // Prevent to log passwords
         unset($submitValues['password']);
         $this->logger->error('POST request body malformed: ' . json_encode($submitValues));

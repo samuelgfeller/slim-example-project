@@ -24,7 +24,7 @@ let wordsToTranslate = [
     __('Yes delete'),
     __('Cancel'),
 ];
-// Init translated var by populating it with english values as a default so that all keys are surely existing
+// Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace translated var
 fetchTranslations(wordsToTranslate).then(response => {

@@ -17,7 +17,7 @@ $this->setLayout('');
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= setlocale(LC_ALL, 0) ?>">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
     <base href="<?= $basePath ?>/"/>
@@ -49,7 +49,7 @@ $this->setLayout('');
 </head>
 <body>
 
-<h2>Reset password</h2>
+<h2><?= __('Reset password') ?></h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
 <div class="page-form-container <?= isset($formError) ? ' invalid-input' : '' ?>">
@@ -69,7 +69,7 @@ $this->setLayout('');
         <div class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($passwordErr = get_field_error(($validation ?? []), 'password')) ||
         $passwordsErr ? ' input-group-error' : '' ?>">
-            <label for="password1-input">Password</label>
+            <label for="password1-input"><?= __('Password') ?></label>
             <input type="password" name="password" id="password1-input" minlength="3" required>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
         </div>
@@ -78,7 +78,7 @@ $this->setLayout('');
         <div class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
         $passwordsErr ? ' input-group-error' : '' ?>">
-            <label for="password2-input">Repeat password</label>
+            <label for="password2-input"><?= __('Repeat password') ?></label>
             <input type="password" name="password2" id="password2-input" minlength="3" required>
             <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
         </div>
@@ -87,10 +87,10 @@ $this->setLayout('');
 
         <input type="hidden" name="token" value="<?= $token ?? null ?>">
         <input type="hidden" name="id" value="<?= $id ?? null ?>">
-        <a href="login" class="discrete-text content-below-input cursor-pointer">Login</a>
-        <input type="submit" id="password-reset-submit-btn" class="submit-btn" value="Set new password">
+        <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
+        <input type="submit" id="password-reset-submit-btn" class="submit-btn" value="<?= __('Set new password') ?>">
+        <?= $this->fetch('layout/request-throttle.html.php') ?>
     </form>
-    <?= $this->fetch('layout/request-throttle.html.php') ?>
 </div>
 
 </body>

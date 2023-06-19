@@ -58,7 +58,7 @@ final class DashboardTogglePanelAction
             return $this->responder->respondWithJson($response, ['success' => true]);
         }
         $flash = $this->session->getFlash();
-        $flash->add('error', 'Malformed request body syntax. Please contact an administrator');
+        $flash->add('error', __('Malformed request body syntax. Please contact an administrator.'));
         // Caught in error handler which displays error page
         throw new HttpBadRequestException($request, 'Request body malformed.');
     }

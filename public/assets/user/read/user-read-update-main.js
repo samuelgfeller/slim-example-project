@@ -45,7 +45,7 @@ let wordsToTranslate = [
     __('You will be logged out and not be able to log in again.'),
     __('Successfully changed password.'),
 ];
-// Init variable
+// Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace translated var
 fetchTranslations(wordsToTranslate).then(response => {

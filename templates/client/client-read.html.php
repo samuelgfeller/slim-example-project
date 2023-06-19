@@ -130,10 +130,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="client-personal-info-container">
         <div id="client-personal-info-flex-container" style="<?= $clientAggregate->birthdate || $clientAggregate->sex ||
         $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
-            <!-- Toggle edit icons on mobile -->
-            <img src="assets/general/general-img/material-edit-icon.svg"
-                 class="contenteditable-edit-icon cursor-pointer" alt="Edit"
-                 id="toggle-personal-info-edit-icons">
+            <!-- Toggle edit icons on mobile if user has privilege to update something -->
+            <?php
+            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                <img src="assets/general/general-img/material-edit-icon.svg"
+                     class="contenteditable-edit-icon cursor-pointer" alt="Edit"
+                     id="toggle-personal-info-edit-icons">
+                <?php
+            } ?>
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->

@@ -144,11 +144,11 @@ class ClientUpdateProvider
                         'errors' => [
                             0 => [
                                 'field' => 'client_status',
-                                'message' => 'Client status not existing',
+                                'message' => 'Invalid option',
                             ],
                             1 => [
                                 'field' => 'user',
-                                'message' => 'User not existing',
+                                'message' => 'Invalid option',
                             ],
                             2 => [
                                 'field' => 'first_name',
@@ -160,11 +160,11 @@ class ClientUpdateProvider
                             ],
                             4 => [
                                 'field' => 'email',
-                                'message' => 'Invalid email address',
+                                'message' => 'Invalid value',
                             ],
                             5 => [
                                 'field' => 'birthdate',
-                                'message' => 'Invalid birthdate',
+                                'message' => 'Invalid value',
                             ],
                             6 => [
                                 'field' => 'location',
@@ -176,7 +176,7 @@ class ClientUpdateProvider
                             ],
                             8 => [
                                 'field' => 'sex',
-                                'message' => 'Invalid sex value given.',
+                                'message' => 'Invalid option',
                             ],
                         ],
                     ],
@@ -205,11 +205,11 @@ class ClientUpdateProvider
                         'errors' => [
                             0 => [
                                 'field' => 'client_status',
-                                'message' => 'Client status not existing',
+                                'message' => 'Invalid option',
                             ],
                             1 => [
                                 'field' => 'user',
-                                'message' => 'User not existing',
+                                'message' => 'Invalid option',
                             ],
                             2 => [
                                 'field' => 'first_name',
@@ -221,7 +221,7 @@ class ClientUpdateProvider
                             ],
                             4 => [
                                 'field' => 'birthdate',
-                                'message' => 'Invalid birthdate',
+                                'message' => 'Invalid value',
                             ],
                             5 => [
                                 'field' => 'location',

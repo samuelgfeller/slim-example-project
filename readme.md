@@ -4,11 +4,6 @@ Lightweight example project of a backend and frontend done with the [Slim](https
 micro-framework.  
 It can be used as a template when creating new projects or just serve as inspiration.
 
-### [Demo](https://demo.slim-example-project.samuel-gfeller.ch/)
-Username: admin@admin.com  
-Password: 12345678  
-The database is reset every 30 minutes.
-
 Please be aware that this app contains a significant amount of content, resulting in a number of 
 subjective decisions being made during its development.   
 Inspirations were [odan/slim4-skeleton](https://odan.github.io/slim4-skeleton/) 
@@ -19,6 +14,16 @@ principles.
 
 If you notice any mistakes or have any suggestions, please let me know in the 
 [feedback issue](https://github.com/samuelgfeller/slim-example-project/issues/1).
+
+<details>
+  <summary><h2>View demo</h2></summary>
+
+Link: [demo.slim-example-project.samuel-gfeller.ch](https://demo.slim-example-project.samuel-gfeller.ch)  
+Usernames: admin@admin.com, managing@advisor.com, advisor@user.com, newcomer@user.com  
+Password: 12345678  
+The database is reset every 30 minutes.
+
+</details>
 
 <details>
   <summary><h2>Installation guide</h2></summary>

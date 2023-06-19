@@ -50,7 +50,7 @@ let wordsToTranslate = [
     __('Are you sure that you want to restore this client?'),
     __('Yes undelete'),
 ];
-// Init translated var by populating it with english values as a default so that all keys are surely existing
+// Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace translated var
 fetchTranslations(wordsToTranslate).then(response => {
@@ -88,7 +88,7 @@ personalInfoEditIconsToggle.addEventListener('click', () => {
     }
 })
 
-// Display toggle if screen is touch device https://stackoverflow.com/a/13470899/9013718
+// Display toggle btn if screen is touch device https://stackoverflow.com/a/13470899/9013718
 if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
     personalInfoEditIconsToggle.style.display = 'inline-block';
     // Increase right padding to not overlap edit icons

@@ -40,7 +40,11 @@ final class RegisterVerifySubmitAction
 
                 $flash->add(
                     'success',
-                    'Congratulations!<br>Your account has been  verified! <br><b>You are now logged in.</b>'
+                    sprintf(
+                        __('Congratulations!<br>Your account has been %s! <br><b>%s</b>'),
+                        __('verified'),
+                        __('You are now logged in.'),
+                    )
                 );
                 // Log user in
                 // Clear all session data and regenerate session ID
@@ -54,7 +58,7 @@ final class RegisterVerifySubmitAction
 
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
-                $flash->add('error', 'Invalid or expired link. Please login in to receive a new mail.');
+                $flash->add('error', __('Invalid or expired link. Please <b>log in</b> to receive a new link.'));
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
                 // Redirect to login page with redirect query param if set
@@ -63,13 +67,13 @@ final class RegisterVerifySubmitAction
                 // Check if already logged in
                 if ($this->session->get('user_id') === null) {
                     // If not logged in, redirect to login page with correct further redirect query param
-                    $flash->add('info', 'You are already verified. Please log in.');
+                    $flash->add('info', __('You are already verified. Please log in.'));
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
                     return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
                 }
                 // Already logged in
-                $flash->add('info', 'You are now logged in.');
+                $flash->add('info', __('You are now logged in.'));
 
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
@@ -79,7 +83,7 @@ final class RegisterVerifySubmitAction
             }
         }
 
-        $flash->add('error', 'Please click on the link you received via email.');
+        $flash->add('error', __('Token not found. Please click on the link you received via email.'));
         // Prevent to log passwords
         $this->logger->error('GET request malformed: ' . json_encode($queryParams));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error

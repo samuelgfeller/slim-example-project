@@ -58,7 +58,7 @@ class RegisterTokenVerifierTest extends TestCase
         );
 
         $this->expectException(UserAlreadyVerifiedException::class);
-        $this->expectExceptionMessage('User has not status "' . UserStatus::Unverified->value . '"');
+        $this->expectExceptionMessage('User status is not "' . UserStatus::Unverified->value . '"');
 
         // Call function under test
         $this->container->get(RegisterTokenVerifier::class)->getUserIdIfRegisterTokenIsValid(

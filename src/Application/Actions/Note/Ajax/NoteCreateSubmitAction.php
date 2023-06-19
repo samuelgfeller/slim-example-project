@@ -78,7 +78,7 @@ final class NoteCreateSubmitAction
                         $response,
                         [// Response content asserted in ClientReadCaseProvider.php
                             'status' => 'error',
-                            'message' => 'Not allowed to create note.',
+                            'message' => __(sprintf('Not allowed to create %s', __('note'))),
                         ],
                         StatusCodeInterface::STATUS_FORBIDDEN
                     );
@@ -86,7 +86,11 @@ final class NoteCreateSubmitAction
 
                 if (0 !== $insertId) {
                     $user = $this->userFinder->findUserById($loggedInUserId);
-                    $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+                    $dateFormatter = new IntlDateFormatter(
+                        setlocale(LC_ALL, 0),
+                        IntlDateFormatter::LONG,
+                        IntlDateFormatter::SHORT
+                    );
                     // camelCase according to Google recommendation
                     return $this->responder->respondWithJson($response, [
                         'status' => 'success',

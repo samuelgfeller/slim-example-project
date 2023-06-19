@@ -28,7 +28,7 @@ final class LogoutPageAction
         $this->session->start();
         $this->session->regenerateId();
         // Add flash message to inform user of the success
-        $this->session->getFlash()->add('success', 'Logged out successfully.');
+        $this->session->getFlash()->add('success', __('Logged out successfully.'));
 
         return $this->responder->redirectToRouteName($response, 'login-page');
     }

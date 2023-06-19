@@ -32,14 +32,14 @@ $settings['deployment'] = [
     'assetsPath' => __DIR__ . '/../public/assets',
 ];
 
-// Error handler
-$settings['error'] = [
-    // Should be set to false in production
-    'display_error_details' => false,
-    // Should be set to false for unit tests
-    'log_errors' => true,
-    // Display error details in error log
-    'log_error_details' => true,
+$settings['locale'] = [
+    // Available languages format: ['language code' => 'locale code']
+    'available' => [
+        'en' => 'en_US',
+        'de' => 'de_CH',
+        'fr' => 'fr_CH',
+    ],
+    'default' => 'en_US',
 ];
 
 // Security
@@ -75,6 +75,16 @@ $settings['security'] = [
     // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
     'global_monthly_email_threshold' => 1000,
     // optional
+];
+
+// Error handler
+$settings['error'] = [
+    // Should be set to false in production
+    'display_error_details' => false,
+    // Should be set to false for unit tests
+    'log_errors' => true,
+    // Display error details in error log
+    'log_error_details' => true,
 ];
 
 // Secret values are overwritten in env.php

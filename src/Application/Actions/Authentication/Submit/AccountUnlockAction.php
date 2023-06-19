@@ -47,7 +47,11 @@ final class AccountUnlockAction
                 if (isset($queryParams['redirect'])) {
                     $flash->add(
                         'success',
-                        'Congratulations! <br>Your account has been unlocked! <br><b>You are now logged in.</b>'
+                        sprintf(
+                            __('Congratulations!<br>Your account has been %s! <br><b>%s</b>'),
+                            __('unlocked'),
+                            __('You are now logged in.'),
+                        )
                     );
 
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
@@ -57,7 +61,7 @@ final class AccountUnlockAction
             } catch (InvalidTokenException $ite) {
                 $flash->add(
                     'error',
-                    'Invalid or expired link. Please <b>log in</b> to receive a new link.'
+                    __('Invalid or expired link. Please <b>log in</b> to receive a new link.')
                 );
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
@@ -79,7 +83,7 @@ final class AccountUnlockAction
             }
         }
 
-        $flash->add('error', 'Please click on the link you received via email.');
+        $flash->add('error', __('Token not found. Please click on the link you received via email.'));
         // Prevent to log passwords
         $this->logger->error('GET request malformed: ' . json_encode($queryParams));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error

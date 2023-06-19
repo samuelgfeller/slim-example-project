@@ -63,7 +63,7 @@ final class ClientDeleteAction
 
                 if ($deleted) {
                     // Add flash here as user gets redirected to client list after deletion
-                    $flash->add('success', 'Successfully deleted client.');
+                    $flash->add('success', __('Successfully deleted client.'));
 
                     return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
                 }

@@ -66,14 +66,19 @@ class PasswordResetSubmitAction
                     $parsedBody['token']
                 );
 
-                $flash->add('success', 'Successfully changed password. <b>You are now logged in.</b>');
+                $flash->add(
+                    'success',
+                    sprintf(__('Successfully changed password. <b>%s</b>'), __('You are now logged in.'))
+                );
 
                 return $this->responder->redirectToRouteName($response, 'profile-page');
             } catch (InvalidTokenException $ite) {
                 $this->responder->addPhpViewAttribute(
                     'formErrorMessage',
-                    '<b>Invalid, used or expired link. <br> Please request a new link below and make sure to click on ' .
-                    'the most recent email we sent to you</a>.</b>'
+                    __(
+                        '<b>Invalid, used or expired link. <br> Please request a new link below and make 
+sure to click on the most recent email we send you</a>.</b>'
+                    )
                 );
                 // Pre-fill email input field for more user comfort. The usefulness of this specific situation may be
                 // questionable but this is here to serve as inspiration. My goal is a program user LOVE to use.
@@ -101,7 +106,7 @@ class PasswordResetSubmitAction
             }
         }
 
-        $flash->add('error', 'Please click on the link you received via email.');
+        $flash->add('error', __('Token not found. Please click on the link you received via email.'));
         // Prevent to log passwords
         $this->logger->error(
             'Password change request malformed: ' . json_encode($parsedBody, JSON_THROW_ON_ERROR)

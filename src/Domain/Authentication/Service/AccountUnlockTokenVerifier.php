@@ -45,7 +45,7 @@ final class AccountUnlockTokenVerifier
             // Check if user is locked at all
             if (UserStatus::Locked !== $userStatus) {
                 // User is not locked anymore but token not verified so VERY IMPORTANT to not log user in hence the exception
-                throw new UserAlreadyVerifiedException('User account not locked.');
+                throw new UserAlreadyVerifiedException(__('User account not locked.'));
             }
 
             // Change user status to active

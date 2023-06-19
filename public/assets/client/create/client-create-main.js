@@ -14,6 +14,7 @@ let wordsToTranslate = [
     __('Please fill out either the first name or last name'),
     __('Client created successfully.'),
 ];
+// Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
 // Fetch translations and replace str var (fetch done automatically at page loading when imported)
 fetchTranslations(wordsToTranslate).then(response => {

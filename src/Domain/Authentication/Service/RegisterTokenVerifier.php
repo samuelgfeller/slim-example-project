@@ -39,7 +39,7 @@ final class RegisterTokenVerifier
         if (UserStatus::Unverified !== $userStatus) {
             // User is not unverified anymore, that means that user already clicked on the link
             throw new UserAlreadyVerifiedException(
-                'User has not status "' . UserStatus::Unverified->value . '"'
+                sprintf('User status is not "%s"', UserStatus::Unverified->value)
             );
         }
         // Check that verification has token in the database and token is not used

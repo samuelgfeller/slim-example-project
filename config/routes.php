@@ -58,7 +58,7 @@ return function (App $app) {
         '/password-forgotten',
         \App\Application\Actions\Authentication\Submit\PasswordForgottenEmailSubmitAction::class
     )->setName('password-forgotten-email-submit');
-    // Set new password page when forgotten
+    // Set new password page after clicking on email link with token
     $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetPageAction::class)
         ->setName('password-reset-page');
     // Submit new password (reset-password hardcoded in login-main.js)
@@ -73,8 +73,8 @@ return function (App $app) {
         \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class
     )->setName('change-password-submit')->add(UserAuthenticationMiddleware::class);
 
+    // Without UserAuthenticationMiddleware as translations are also needed for non-protected pages such as password reset
     $app->get('/translate', \App\Application\Actions\Common\TranslateAction::class)
-        ->add(UserAuthenticationMiddleware::class)
         ->setName('translate');
 
     $app->group('/users', function (RouteCollectorProxy $group) {

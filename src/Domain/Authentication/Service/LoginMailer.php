@@ -2,6 +2,7 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Common\LocaleHelper;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Mailer;
@@ -20,10 +21,12 @@ class LoginMailer
      * LoginMailer constructor.
      *
      * @param Mailer $mailer email sender and helper
+     * @param LocaleHelper $localeHelper
      * @param Settings $settings
      */
     public function __construct(
         private readonly Mailer $mailer,
+        private readonly LocaleHelper $localeHelper,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
@@ -46,10 +49,11 @@ class LoginMailer
     public function sendInfoToUnverifiedUser(UserData $user, array $queryParamsWithToken): void
     {
         // Send verification mail
-        $this->email->subject('You tried to login but are unverified')
+        $this->email->subject(__('Login failed because your account is unverified'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/login-but-unverified.email.php',
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'login-but-unverified.email.php',
                     ['user' => $user, 'queryParams' => $queryParamsWithToken]
                 )
             )->to(new Address($user->email, $user->getFullName()));
@@ -67,10 +71,11 @@ class LoginMailer
     public function sendInfoToSuspendedUser(UserData $user): void
     {
         // Send verification mail
-        $this->email->subject('You tried to login but are suspended')
+        $this->email->subject(__('Login failed because your account is suspended'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/login-but-suspended.email.php',
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'login-but-suspended.email.php',
                     ['user' => $user]
                 )
             )->to(new Address($user->email, $user->getFullName()));
@@ -89,10 +94,11 @@ class LoginMailer
     public function sendInfoToLockedUser(UserData $user, array $queryParamsWithToken): void
     {
         // Send verification mail
-        $this->email->subject('You tried to login but are locked')
+        $this->email->subject(__('Login failed because your account is locked'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/login-but-locked.email.php',
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'login-but-locked.email.php',
                     ['user' => $user, 'queryParams' => $queryParamsWithToken]
                 )
             )->to(new Address($user->email, $user->getFullName()));

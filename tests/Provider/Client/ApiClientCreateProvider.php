@@ -42,11 +42,11 @@ class ApiClientCreateProvider
                             ],
                             2 => [
                                 'field' => 'email',
-                                'message' => 'Invalid email address',
+                                'message' => 'Invalid value',
                             ],
                             3 => [
                                 'field' => 'birthdate',
-                                'message' => 'Invalid birthdate',
+                                'message' => 'Invalid value',
                             ],
                             4 => [
                                 'field' => 'location',
@@ -58,7 +58,7 @@ class ApiClientCreateProvider
                             ],
                             6 => [
                                 'field' => 'sex',
-                                'message' => 'Invalid sex value given.',
+                                'message' => 'Invalid option',
                             ],
                             7 => [
                                 'field' => 'client_message',
@@ -95,11 +95,11 @@ class ApiClientCreateProvider
                             ],
                             2 => [
                                 'field' => 'email',
-                                'message' => 'Invalid email address',
+                                'message' => 'Invalid value',
                             ],
                             3 => [
                                 'field' => 'birthdate',
-                                'message' => 'Invalid birthdate',
+                                'message' => 'Invalid value',
                             ],
                             4 => [
                                 'field' => 'location',

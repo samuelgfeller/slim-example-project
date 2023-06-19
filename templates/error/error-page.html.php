@@ -22,31 +22,39 @@ $this->addAttribute('js', ['assets/error/error.js']);
         switch ($errorMessage['statusCode']) {
             case 404:
                 $title = 'Page not found';
-                $message = 'Looks like you\'ve ventured into uncharted territory. Please report the issue!';
+                $message = __("Looks like you've ventured into uncharted territory. Please report the issue!");
                 break;
             case 403:
                 $title = 'Access forbidden';
-                $message = 'You are not allowed to access this page. Please report the issue if you think this is 
-                an error.';
+                $message = __(
+                    'You are not allowed to access this page. Please report the issue if you think this is 
+                an error.'
+                );
                 break;
             case 400:
                 $title = 'The request is invalid';
-                $message = 'There is something wrong with the request syntax. Please report the issue';
+                $message = __('There is something wrong with the request syntax. Please report the issue');
                 break;
             case 422:
                 $title = 'Validation failed.';
-                $message = 'The server could not interpret the data it received. Please try again with valid data and
-                report the issue if it persists.';
+                $message = __(
+                    'The server could not interpret the data it received. Please try again with valid data and
+                report the issue if it persists.'
+                );
                 break;
             case 500:
                 $title = 'Internal Server Error.';
-                $message = 'It\'s not your fault! The server has an internal error. <br> Please try again and 
-                    report the issue if the problem persists.';
+                $message = __(
+                    'It\'s not your fault! The server has an internal error. <br> Please try again and 
+                    report the issue if the problem persists.'
+                );
                 break;
             default:
                 $title = 'An error occurred.';
-                $message = 'While it\'s unfortunate that an error exists, the silver lining is that it can be rectified! 
-<br>Please try again and then contact me.';
+                $message = __(
+                    'While it\'s unfortunate that an error exists, the silver lining is that it can be rectified! 
+<br>Please try again and then contact me.'
+                );
                 break;
         }
         $emailSubject = strip_tags(str_replace('"', '', $errorMessage['exceptionMessage']))
@@ -60,10 +68,10 @@ $this->addAttribute('js', ['assets/error/error.js']);
 
     </section>
     <section id="error-btn-section">
-        <a href="<?= $route?->urlFor('home-page') ?>" class="btn">Go back home</a>
+        <a href="<?= $route?->urlFor('home-page') ?>" class="btn"><?= __('Go back home') ?></a>
         <a href="mailto:<?= ($config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch')
         . '?subject=' . $emailSubject . '&body=' . $emailBody ?>" target="_blank" class="btn">
-            Report the issue</a>
+            <?= __('Report the issue') ?></a>
     </section>
 </section>
 

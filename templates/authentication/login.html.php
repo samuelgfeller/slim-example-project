@@ -83,8 +83,8 @@ $this->setLayout('');
         <div class="g-recaptcha" id="recaptcha" data-sitekey="6LcctKoaAAAAAAcqzzgz-19OULxNxtwNPPS35DOU"></div>
         <input type="submit" class="submit-btn" id="submitBtnLogin" value="<?= __('Login') ?>"
                data-request-password-label="<?= __('Request password') ?>">
+        <?= $this->fetch('layout/request-throttle.html.php') ?>
     </form>
-    <?= $this->fetch('layout/request-throttle.html.php') ?>
 </div>
 
 </body>

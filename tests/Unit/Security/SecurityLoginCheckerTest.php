@@ -82,14 +82,14 @@ class SecurityLoginCheckerTest extends TestCase
 
         // Assert
         $this->expectException(SecurityException::class);
-        $this->expectExceptionMessage('Exceeded maximum of tolerated login requests.');
+        $this->expectExceptionMessage('Exceeded maximum of tolerated login requests');
 
         // In try catch to assert exception attributes
         try {
             $securityService->performLoginSecurityCheck('email.does@not-matter.com', null, true);
         } catch (SecurityException $se) {
             self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
-            $delayMessage = 'Remaining delay not matching expected.';
+            $delayMessage = 'Remaining delay not matching expected';
             self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1, $delayMessage);
             // Throw exception as expectException is set up to assert that exception is thrown
             throw $se;

@@ -71,7 +71,7 @@ final class NoteDeleteSubmitAction
                 );
                 $flash = $this->session->getFlash();
                 // If not deleted, inform user
-                $flash->add('warning', 'The note was not deleted');
+                $flash->add('warning', __('The note was not deleted'));
 
                 return $response->withAddedHeader('Warning', 'The note was not deleted');
             } catch (NotAllowedException $notAllowedException) {

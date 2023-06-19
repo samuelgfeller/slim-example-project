@@ -1,5 +1,21 @@
 import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.3.1";
 import {displayFlashMessage} from "../../page-component/flash-message/flash-message.js?v=0.3.1";
+import {__} from "../../general-js/functions.js?v=0.3.1";
+import {fetchTranslations} from "../fetch-translation-data.js?v=0.3.1";
+
+// List of words that are used in modal box and need to be translated
+let wordsToTranslate = [
+    __('Access denied please log in and try again'),
+    __('Forbidden. Not allowed to access this area or function'),
+    __('Please try again and report the error to an administrator'),
+];
+// Init translated var by populating it with english values as a default so that all keys are surely existing
+let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translated var
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translated = response;
+});
 
 /**
  * If a request fails this function can be called which gives the user
@@ -14,7 +30,7 @@ export function handleFail(xhr, domFieldId = null) {
 
     if (xhr.status === 401) {
         // Overwriting general error message to unauthorized
-        errorMsg += '<br>Access denied please log in and try again.';
+        errorMsg += `<br>${translated['Access denied please log in and try again']}.`;
         let responseData = JSON.parse(xhr.responseText);
         // If login url is provided by the server, redirect client to it
         if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
@@ -23,11 +39,11 @@ export function handleFail(xhr, domFieldId = null) {
     }
 
     if (xhr.status === 403) {
-        errorMsg += '<br>Forbidden. Not allowed to access this area or function.';
+        errorMsg += `<br>${translated['Forbidden. Not allowed to access this area or function']}.`;
     }
 
     if (xhr.status === 500) {
-        errorMsg += '<br>Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me</a>.';
+        errorMsg += `<br>${translated['Please try again and report the error to an administrator']}.`;
     }
 
     // If validation error ignore the default message and create specific one

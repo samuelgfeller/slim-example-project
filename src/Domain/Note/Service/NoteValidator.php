@@ -107,7 +107,7 @@ class NoteValidator
             $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('message', 'Message is required.');
+            $validationResult->setError('message', __('Required'));
         }
     }
 
@@ -124,8 +124,8 @@ class NoteValidator
         $exists = $this->noteValidatorRepository->mainNoteAlreadyExistsForClient($clientId);
         if ($exists === true) {
             $validationResult->setError('is_main', 'Main note exists already');
-
-            $this->logger->debug('Attempt to create main note but it already exists. Client: ' . $clientId);
+            // Log error as this should not be possible if frontend behaves correctly
+            $this->logger->error('Attempt to create main note but it already exists. Client: ' . $clientId);
         }
     }
 }

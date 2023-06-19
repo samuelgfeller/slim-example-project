@@ -135,10 +135,10 @@ class UserUpdateProvider
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Minimum length is 2'],
                             ['field' => 'surname', 'message' => 'Minimum length is 2'],
-                            ['field' => 'email', 'message' => 'Invalid email address'],
-                            ['field' => 'status', 'message' => 'Status not existing'],
-                            ['field' => 'theme', 'message' => 'theme not existing'],
-                            ['field' => 'user_role', 'message' => 'User role not existing'],
+                            ['field' => 'email', 'message' => 'Invalid value'],
+                            ['field' => 'status', 'message' => 'Invalid option'],
+                            ['field' => 'theme', 'message' => 'Invalid option'],
+                            ['field' => 'user_role', 'message' => 'Invalid option'],
                         ],
                     ],
                 ],
@@ -158,7 +158,7 @@ class UserUpdateProvider
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Maximum length is 100'],
                             ['field' => 'surname', 'message' => 'Maximum length is 100'],
-                            ['field' => 'email', 'message' => 'Invalid email address'],
+                            ['field' => 'email', 'message' => 'Invalid value'],
                         ],
                     ],
                 ],

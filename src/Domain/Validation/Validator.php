@@ -64,7 +64,7 @@ final class Validator
         int $length = 3
     ): void {
         if (strlen(trim((string)$value)) < $length) {
-            $validationResult->setError($fieldName, sprintf('Minimum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf(__('Minimum length is %s'), $length));
         }
     }
 
@@ -83,7 +83,7 @@ final class Validator
         int $length = 255
     ): void {
         if (mb_strlen(trim((string)$value)) > $length) {
-            $validationResult->setError($fieldName, sprintf('Maximum length is %s', $length));
+            $validationResult->setError($fieldName, sprintf(__('Maximum length is %s'), $length));
         }
     }
 
@@ -106,7 +106,7 @@ final class Validator
             $this->validateLengthMin($name, $fieldName, $validationResult, 2);
         } // elseif only executed if previous "if" is falsy
         elseif (true === $required) {
-            $validationResult->setError($fieldName, 'Name is required');
+            $validationResult->setError($fieldName, __('Required'));
         }
     }
 
@@ -126,11 +126,11 @@ final class Validator
         if (null !== $email && '' !== $email) {
             // reversed, if true -> error
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $validationResult->setError('email', 'Invalid email address');
+                $validationResult->setError('email', __('Invalid value'));
             }
-        } elseif (true === $required && (null === $email || '' === $email)) {
+        } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError('email', 'Email is required');
+            $validationResult->setError('email', __('Required'));
         }
     }
 
@@ -159,7 +159,7 @@ final class Validator
             } elseif (!$birthdate instanceof \DateTimeImmutable) {
                 // Birthdate is not null, not a string with valid date and also not an instance of the custom
                 // DateTimeImmutable format (from the data object) it means that its invalid
-                $validationResult->setError('birthdate', 'Invalid birthdate');
+                $validationResult->setError('birthdate', __('Invalid value'));
 
                 return;
             }
@@ -170,7 +170,7 @@ final class Validator
             // If age in the future or older than the oldest age -> invalid
             if ($birthdate->getTimestamp() > $now->getTimestamp()
                 || $birthdate->getTimestamp() < $oldestAge->getTimestamp()) {
-                $validationResult->setError('birthdate', 'Invalid birthdate');
+                $validationResult->setError('birthdate', __('Invalid value'));
             }
             // Validate that date in object is the same as what the user submitted https://stackoverflow.com/a/19271434/9013718
             // There are cases where client submits data in different format than Y-m-d so this check was removed
@@ -179,7 +179,7 @@ final class Validator
             // }
         } elseif (true === $required) {
             // If it is null and required
-            $validationResult->setError('birthdate', 'Birthdate is required');
+            $validationResult->setError('birthdate', __('Required'));
         }
     }
 
@@ -208,17 +208,13 @@ final class Validator
             if (!$exists) {
                 $validationResult->setError(
                     $table,
-                    ucfirst(str_replace('_', ' ', $table)) .
-                    ' not existing'
+                    __('Invalid option')
                 );
 
                 $this->logger->debug("Checked for $table id $rowId but it didn\'t exist in validation");
             }
         } elseif (true === $required) {
-            $validationResult->setError(
-                $table . '_id',
-                ucfirst(str_replace('_', ' ', $table)) . ' is required'
-            );
+            $validationResult->setError($table . '_id', __('Required'));
         }
     }
 
@@ -240,11 +236,11 @@ final class Validator
     ): void {
         if (null !== $numericValue && '' !== $numericValue) {
             if (is_numeric($numericValue) === false) {
-                $validationResult->setError($fieldName, 'Value should be numeric but wasn\'t.');
+                $validationResult->setError($fieldName, __('Value should be numeric.'));
             }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError($fieldName, 'Field is required');
+            $validationResult->setError($fieldName, __('Required'));
         }
     }
 
@@ -271,14 +267,14 @@ final class Validator
         if (null !== $value && '' !== $value) {
             // If $value is already an enum case, it means that its valid
             if (!is_a($value, $enum, true) && !is_a($enum::tryFrom($value), $enum, true)) {
-                $validationResult->setError($fieldName, $fieldName . ' not existing');
+                $validationResult->setError($fieldName, __('Invalid option'));
             }
             // Check if given user status is one of the enum cases
             // if (!in_array($value, $enum::values(), true)) {
             // }
         } elseif (true === $required) {
             // If it is null or empty string and required
-            $validationResult->setError($fieldName, $fieldName . ' is required');
+            $validationResult->setError($fieldName, __('Required'));
         }
     }
 }

@@ -6,19 +6,16 @@
  * @var \App\Domain\User\Data\UserData $user object
  * @var array $config public configuration values
  */
-
 ?>
-Hello <?= $user->getFullName() ?> <br>
+Bonjour <?= $user->getFullName() ?> <br>
 <br>
-<?php
-/** Following sentence asserted @see \App\Test\Integration\User\PasswordForgottenEmailSubmitActionTest */ ?>
-If you recently requested to reset your password, click the link below to do so. <br>
+Si vous avez récemment demandé à réinitialiser votre mot de passe, cliquez sur le lien ci-dessous. <br>
 <br>
 <b><a href="<?= $route->fullUrlFor($uri, 'password-reset-submit', [], $queryParams) ?>">
-        Create new password</a></b>.
+        Créer un nouveau mot de passe</a></b>.
 <br><br>
 
-The link will expire in 2 hours. <br>
+Ce lien expirera dans 2 heures. <br>
 <br>
-Best regards <br><br>
+Meilleures salutations <br><br>
 <?= $config['email']['main_sender_name'] ?>

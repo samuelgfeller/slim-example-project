@@ -3,6 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\Responder;
+use App\Domain\Settings;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,23 +19,21 @@ use UnexpectedValueException;
  */
 final class LocaleMiddleware implements MiddlewareInterface
 {
+    private array $localeSettings;
+
     public function __construct(
         protected readonly SessionInterface $session,
         protected readonly Responder $responder,
         protected readonly UserFinder $userFinder,
+        Settings $settings
     ) {
+        $this->localeSettings = $settings->get('locale');
     }
 
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        $supportedLanguages = [
-            'en' => 'en_US',
-            'de' => 'de_CH',
-            'fr' => 'fr_CH',
-        ];
-
         // Get authenticated user id from session
         $loggedInUserId = $this->session->get('user_id');
         // If there is an authenticated user, find its language from the database
@@ -50,7 +49,9 @@ final class LocaleMiddleware implements MiddlewareInterface
         $browserLangShort = explode('-', $language)[0];
 
         // Set the language to the userLang if available and else to the browser language
-        $actualLocale = $this->setLanguage($supportedLanguages[$userLangShort ?? $browserLangShort] ?? 'en_US');
+        $actualLocale = $this->setLanguage(
+            $this->localeSettings['available'][$userLangShort ?? $browserLangShort] ?? $this->localeSettings['default']
+        );
 
         return $handler->handle($request);
     }

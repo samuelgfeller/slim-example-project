@@ -41,8 +41,11 @@ final class LoginPageAction
             $flash = $this->session->getFlash();
             $flash->add(
                 'info',
-                'You are already logged-in.<br>Would you like to <a href="' . $this->responder->urlFor('logout') .
-                '">logout</a>?'
+                sprintf(
+                    __('You are already logged-in.<br>Would you like to %slogout%s?'),
+                    '<a href="' . $this->responder->urlFor('logout') . '">',
+                    '</a>'
+                )
             );
             // If redirect param set, redirect to this url
             if (isset($queryParams['redirect'])) {

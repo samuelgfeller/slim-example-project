@@ -7,7 +7,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class JsImportVersionAdder
+final class JsImportVersionAdder
 {
     private null|string $version;
     private string $assetsPath;

@@ -55,7 +55,7 @@ class PasswordResetPageAction
         $this->logger->error('GET request malformed: ' . json_encode($queryParams));
 
         return $this->responder->render($response, 'authentication/reset-password.html.php', [
-            'formErrorMessage' => 'Token not found. Please click on the link you received via email.',
+            'formErrorMessage' => __('Token not found. Please click on the link you received via email.'),
         ]);
     }
 }

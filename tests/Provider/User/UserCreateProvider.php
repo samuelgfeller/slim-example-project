@@ -97,11 +97,11 @@ class UserCreateProvider
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Minimum length is 2'],
                             ['field' => 'surname', 'message' => 'Minimum length is 2'],
-                            ['field' => 'email', 'message' => 'Invalid email address'],
+                            ['field' => 'email', 'message' => 'Invalid value'],
                             // Technically the better error would be that the status is not existing but an UserData object
                             // instance is created that puts "null" if status is not existing before being passed to the validator
-                            ['field' => 'status', 'message' => 'Status is required'],
-                            ['field' => 'user_role', 'message' => 'User role not existing'],
+                            ['field' => 'status', 'message' => 'Required'],
+                            ['field' => 'user_role', 'message' => 'Invalid option'],
                             ['field' => 'password2', 'message' => 'Passwords do not match'],
                             ['field' => 'password', 'message' => 'Minimum length is 3'],
                             ['field' => 'password2', 'message' => 'Minimum length is 3'],
@@ -129,7 +129,7 @@ class UserCreateProvider
                         'errors' => [
                             ['field' => 'first_name', 'message' => 'Maximum length is 100'],
                             ['field' => 'surname', 'message' => 'Maximum length is 100'],
-                            ['field' => 'email', 'message' => 'Invalid email address'],
+                            ['field' => 'email', 'message' => 'Invalid value'],
                         ],
                     ],
                 ],
@@ -152,13 +152,13 @@ class UserCreateProvider
                     'data' => [
                         'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
-                            ['field' => 'first_name', 'message' => 'Name is required'],
-                            ['field' => 'surname', 'message' => 'Name is required'],
-                            ['field' => 'email', 'message' => 'Email is required'],
-                            ['field' => 'status', 'message' => 'Status is required'],
-                            ['field' => 'user_role_id', 'message' => 'User role is required'],
-                            ['field' => 'password', 'message' => 'Password is required'],
-                            ['field' => 'password2', 'message' => 'Password is required'],
+                            ['field' => 'first_name', 'message' => 'Required'],
+                            ['field' => 'surname', 'message' => 'Required'],
+                            ['field' => 'email', 'message' => 'Required'],
+                            ['field' => 'status', 'message' => 'Required'],
+                            ['field' => 'user_role_id', 'message' => 'Required'],
+                            ['field' => 'password', 'message' => 'Required'],
+                            ['field' => 'password2', 'message' => 'Required'],
                         ],
                     ],
                 ],
