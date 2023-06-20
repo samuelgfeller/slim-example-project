@@ -57,7 +57,7 @@ class RegistrationMailer
         $this->email->subject(__('Account created'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath($user->language) .
                     'new-account.email.php',
                     ['user' => $user, 'queryParams' => $queryParams]
                 )
