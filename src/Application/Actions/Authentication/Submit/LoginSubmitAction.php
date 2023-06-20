@@ -124,7 +124,7 @@ final class LoginSubmitAction
                 );
             }
         }
-        $flash->add('error', __('Malformed request body syntax. Please contact an administrator'));
+        $flash->add('error', __('Malformed request body syntax. Please contact an administrator.'));
         // Prevent to log passwords
         unset($submitValues['password']);
         $this->logger->error('POST request body malformed: ' . json_encode($submitValues));

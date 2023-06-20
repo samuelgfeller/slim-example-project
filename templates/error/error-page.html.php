@@ -33,7 +33,7 @@ $this->addAttribute('js', ['assets/error/error.js']);
                 break;
             case 400:
                 $title = 'The request is invalid';
-                $message = __('There is something wrong with the request syntax. Please report the issue');
+                $message = __('There is something wrong with the request syntax. Please report the issue.');
                 break;
             case 422:
                 $title = 'Validation failed.';
@@ -53,7 +53,7 @@ $this->addAttribute('js', ['assets/error/error.js']);
                 $title = 'An error occurred.';
                 $message = __(
                     'While it\'s unfortunate that an error exists, the silver lining is that it can be rectified! 
-<br>Please try again and then contact me.'
+<br>Please try again and then contact us.'
                 );
                 break;
         }

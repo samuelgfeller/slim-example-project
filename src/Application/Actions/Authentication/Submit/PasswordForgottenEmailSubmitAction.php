@@ -89,7 +89,7 @@ Please also check the spam folder if you don't see it in the inbox."));
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
 
-        $flash->add('error', __('Malformed request body syntax. Please contact an administrator'));
+        $flash->add('error', __('Malformed request body syntax. Please contact an administrator.'));
         $this->logger->error('POST request body malformed: ' . json_encode($userValues));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
         throw new HttpBadRequestException($request, 'Request body malformed.');
