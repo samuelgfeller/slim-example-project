@@ -9,11 +9,11 @@
 ?>
 Bonjour <?= $user->getFullName() ?> <br>
 <br>
-Your account has been created. <br>
+Votre compte a été créé. <br>
 <br>
-Pour vérifier que cette adresse e-mail vous appartient, veuillez cliquer sur le lien suivant :<br>
+Pour vérifier que cette adresse mail vous appartient, veuillez cliquer sur le lien suivant :<br>
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>">Vérifier le compte</a>
-</b>.
+</b>
 <br><br>
 Ce lien expirera dans 2 heures. Pour recevoir un nouveau lien, essayez de vous connecter.<br>
 <br>

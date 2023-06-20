@@ -44,8 +44,8 @@ class UserCreator
     {
         $user = new UserData($userValues);
 
+        // Has to be done before validation to not reveal potential sensitive infos such as from the validation messages
         // Check if authenticated user is authorized to create user with the given data
-        // Has to be at the top to not reveal potential sensitive infos such as from the validation
         if ($this->userAuthorizationChecker->isGrantedToCreate($user)) {
             // Validate entries coming from client
             $this->userValidator->validateUserCreation($user);

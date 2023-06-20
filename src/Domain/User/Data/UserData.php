@@ -47,6 +47,8 @@ class UserData implements \JsonSerializable
         $this->passwordHash = $userData['password_hash'] ?? null;
         $this->theme = $userData['theme'] ?? null ? UserTheme::tryFrom($userData['theme']) : null;
         $this->language = $userData['language'] ?? null ? UserLang::tryFrom($userData['language']) : null;
+        // It may be useful to surround the datetime values with try catch in the user data constructor as object
+        // can be created before validation
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
         $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;

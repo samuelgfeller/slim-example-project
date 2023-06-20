@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-20 14:24+0200\n"
-"PO-Revision-Date: 2023-06-20 14:25+0200\n"
+"POT-Creation-Date: 2023-06-20 20:06+0200\n"
+"PO-Revision-Date: 2023-06-20 20:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -66,7 +66,7 @@ msgstr "Telefonnummer"
 #: public/assets/client/create/client-create-modal.html.js:18
 #: public/assets/user/create/user-create-modal.html.js:14
 #: templates/authentication/login.html.php:62
-#: templates/user/user-read.html.php:103
+#: templates/user/user-read.html.php:104
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -77,7 +77,7 @@ msgstr "Zugewiesen an"
 #: public/assets/client/create/client-create-modal.html.js:20
 #: public/assets/user/create/user-create-modal.html.js:18
 #: templates/client/client-read.html.php:69
-#: templates/user/user-read.html.php:73
+#: templates/user/user-read.html.php:74
 msgid "Status"
 msgstr "Status"
 
@@ -125,12 +125,16 @@ msgstr "Ja löschen"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: public/assets/user/create/user-create-main.js:10
+msgid "User created successfully."
+msgstr "Benutzer erfolgreich erfasst."
+
 #: public/assets/user/create/user-create-modal.html.js:11
 msgid "Create user"
 msgstr "Benutzer erstellen"
 
 #: public/assets/user/create/user-create-modal.html.js:15
-#: templates/user/user-read.html.php:152
+#: templates/user/user-read.html.php:153
 msgid "Language"
 msgstr "Sprache"
 
@@ -145,28 +149,28 @@ msgid "Repeat new password"
 msgstr "Passwort wiederholen"
 
 #: public/assets/user/create/user-create-modal.html.js:19
-#: templates/user/user-read.html.php:90
+#: templates/user/user-read.html.php:91
 msgid "User role"
 msgstr "Benutzerrolle"
 
-#: public/assets/user/read/user-read-update-main.js:43
+#: public/assets/user/read/user-read-update-main.js:44
 msgid "Are you sure that you want to delete this user?"
 msgstr "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?"
 
-#: public/assets/user/read/user-read-update-main.js:44
+#: public/assets/user/read/user-read-update-main.js:45
 msgid "Are you sure that you want to delete your profile?"
 msgstr "Sind Sie sicher, dass Sie Ihr Profil löschen möchten?"
 
-#: public/assets/user/read/user-read-update-main.js:45
+#: public/assets/user/read/user-read-update-main.js:46
 msgid "You will be logged out and not be able to log in again."
 msgstr "Sie werden abgemeldet und können sich nicht mehr anmelden."
 
-#: public/assets/user/read/user-read-update-main.js:46
+#: public/assets/user/read/user-read-update-main.js:47
 msgid "Successfully changed password."
 msgstr "Passwort erfolgreich geändert."
 
 #: public/assets/user/update/change-password-modal.html.js:8
-#: templates/user/user-read.html.php:124
+#: templates/user/user-read.html.php:125
 msgid "Change password"
 msgstr "Passwort ändern"
 
@@ -225,17 +229,17 @@ msgid "Invalid credentials. Please try again."
 msgstr "Ungültige Anmeldedaten. Bitte versuchen Sie es erneut."
 
 #: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:127
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:92
+#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:101
 #: src/Application/Actions/Dashboard/DashboardTogglePanelAction.php:61
 msgid "Malformed request body syntax. Please contact an administrator."
 msgstr ""
 "Fehlerhafte Syntax der Anfrage. Bitte kontaktieren Sie einen Administrator."
 
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:78
+#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:82
 msgid "There was an error when sending the email."
 msgstr "Beim Senden der E-Mail ist ein Fehler aufgetreten."
 
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:86
+#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:93
 msgid ""
 "Password recovery email is sent to you.<br>\n"
 "Please also check the spam folder if you don't see it in the inbox."
@@ -286,6 +290,10 @@ msgstr "Die Notiz wurde nicht gefunden."
 #: src/Application/Actions/User/Ajax/UserSubmitCreateAction.php:81
 msgid "Email error. Please contact an administrator."
 msgstr "E-Mail-Fehler. Bitte kontaktieren Sie einen Administrator."
+
+#: src/Application/Actions/User/Ajax/UserSubmitDeleteAction.php:65
+msgid "Successfully deleted user."
+msgstr "Benutzer erfolgreich gelöscht."
 
 #: src/Domain/Authentication/Service/AccountUnlockTokenVerifier.php:48
 msgid "User account not locked."
@@ -355,29 +363,29 @@ msgstr "Zugewiesen an"
 msgid "Deleted assigned user"
 msgstr "Zugewiesener Benutzer gelöscht"
 
-#: src/Domain/Client/Service/ClientValidator.php:141
-#: src/Domain/Client/Service/ClientValidator.php:164
-#: src/Domain/Client/Service/ClientValidator.php:184
-#: src/Domain/Client/Service/ClientValidator.php:204
-#: src/Domain/Client/Service/ClientValidator.php:225
-#: src/Domain/Client/Service/ClientValidator.php:245
+#: src/Domain/Client/Service/ClientValidator.php:144
+#: src/Domain/Client/Service/ClientValidator.php:167
+#: src/Domain/Client/Service/ClientValidator.php:187
+#: src/Domain/Client/Service/ClientValidator.php:207
+#: src/Domain/Client/Service/ClientValidator.php:228
+#: src/Domain/Client/Service/ClientValidator.php:248
 #: src/Domain/Note/Service/NoteValidator.php:110
 #: src/Domain/User/Service/UserValidator.php:248
 #: src/Domain/User/Service/UserValidator.php:272
 #: src/Domain/User/Service/UserValidator.php:300
 #: src/Domain/Validation/Validator.php:109
 #: src/Domain/Validation/Validator.php:133
-#: src/Domain/Validation/Validator.php:182
-#: src/Domain/Validation/Validator.php:217
-#: src/Domain/Validation/Validator.php:243
-#: src/Domain/Validation/Validator.php:277
+#: src/Domain/Validation/Validator.php:178
+#: src/Domain/Validation/Validator.php:213
+#: src/Domain/Validation/Validator.php:239
+#: src/Domain/Validation/Validator.php:273
 msgid "Required"
 msgstr "Pflichtfeld"
 
-#: src/Domain/Client/Service/ClientValidator.php:221
+#: src/Domain/Client/Service/ClientValidator.php:224
 #: src/Domain/User/Service/UserValidator.php:296
-#: src/Domain/Validation/Validator.php:211
-#: src/Domain/Validation/Validator.php:270
+#: src/Domain/Validation/Validator.php:207
+#: src/Domain/Validation/Validator.php:266
 msgid "Invalid option"
 msgstr "Ungültige Option"
 
@@ -390,7 +398,7 @@ msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Mir zugewiesene Kunden &nbsp; - &nbsp; nicht abgeschlossen"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
-#: templates/user/user-read.html.php:191
+#: templates/user/user-read.html.php:192
 msgid "User activity"
 msgstr "Benutzeraktivität"
 
@@ -517,24 +525,24 @@ msgid "Maximum length is %s"
 msgstr "Die maximale Länge beträgt %s"
 
 #: src/Domain/Validation/Validator.php:129
-#: src/Domain/Validation/Validator.php:162
-#: src/Domain/Validation/Validator.php:173
+#: src/Domain/Validation/Validator.php:158
+#: src/Domain/Validation/Validator.php:169
 msgid "Invalid value"
 msgstr "Ungültiger Wert"
 
-#: src/Domain/Validation/Validator.php:239
+#: src/Domain/Validation/Validator.php:235
 msgid "Value should be numeric."
 msgstr "Der Wert sollte numerisch sein."
 
 #: templates/authentication/login.html.php:68
 #: templates/authentication/login.html.php:84
-#: templates/authentication/reset-password.html.php:90
+#: templates/authentication/reset-password.html.php:86
 msgid "Login"
 msgstr "Anmelden"
 
 #: templates/authentication/login.html.php:75
 #: templates/authentication/reset-password.html.php:72
-#: templates/user/user-read.html.php:120
+#: templates/user/user-read.html.php:121
 msgid "Password"
 msgstr "Passwort"
 
@@ -667,27 +675,27 @@ msgstr "Benutzer"
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: templates/user/user-read.html.php:132
+#: templates/user/user-read.html.php:133
 msgid "Dark mode"
 msgstr "Nachtmodus"
 
-#: templates/user/user-read.html.php:166
+#: templates/user/user-read.html.php:167
 msgid "Metadata"
 msgstr "Metadaten"
 
-#: templates/user/user-read.html.php:176
+#: templates/user/user-read.html.php:177
 msgid "Created"
 msgstr "Erstellt"
 
-#: templates/user/user-read.html.php:177
+#: templates/user/user-read.html.php:178
 msgid "Updated"
 msgstr "Geändert"
 
-#: templates/user/user-read.html.php:183
+#: templates/user/user-read.html.php:184
 msgid "Delete profile"
 msgstr "Profil löschen"
 
-#: templates/user/user-read.html.php:183
+#: templates/user/user-read.html.php:184
 msgid "Delete user"
 msgstr "Benutzer löschen"
 

@@ -151,7 +151,7 @@
         /*padding: 6px 6px;*/
         width: fit-content;
         min-width: 160px;
-        max-width: 250px;
+        /*max-width: 250px;*/
         float: right;
         color: var(--black-text-color);
         border-radius: 99px;
@@ -162,6 +162,7 @@
         border: none;
         cursor: pointer;
         font-size: 100%;
+        white-space: normal; /* Break when not enough space */
     }
 
     .modal-form input[type=submit]:hover:enabled, .submit-btn:hover:enabled {

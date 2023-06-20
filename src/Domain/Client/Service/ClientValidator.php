@@ -2,7 +2,6 @@
 
 namespace App\Domain\Client\Service;
 
-use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\ValidationResult;
@@ -28,38 +27,41 @@ class ClientValidator
 
     /**
      * Validate client creation.
+     * Validate client values as array and not object to prevent exception on
+     * invalid data such as datetime is used in the constructor.
+     * * All keys that may not be in the request body (malformedRequestBodyChecker - optional keys)
+     * * such radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null
      *
-     * @param ClientData $client
-     * @param string|null $birthdateValue
+     * @param array $clientValues
      */
-    public function validateClientCreation(ClientData $client, null|string $birthdateValue = null): void
+    public function validateClientCreation(array $clientValues): void
     {
         // Exact validation error tested in ClientCreateActionTest
         $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
 
-        $this->validateClientStatusId($client->clientStatusId, $validationResult, true);
+        $this->validateClientStatusId($clientValues['client_status_id'], $validationResult, true);
 
         // User id should not be required when client is created from authenticated area and public portal
-        $this->validateUserId($client->userId, $validationResult, false);
+        $this->validateUserId($clientValues['user_id'], $validationResult, false);
 
         // First and last name not required in case advisor only knows either first or last name
-        $this->validator->validateName($client->firstName, 'first_name', $validationResult, false);
-        $this->validator->validateName($client->lastName, 'last_name', $validationResult, false);
+        $this->validator->validateName($clientValues['first_name'], 'first_name', $validationResult, false);
+        $this->validator->validateName($clientValues['last_name'], 'last_name', $validationResult, false);
 
-        $this->validator->validateEmail($client->email, $validationResult, false);
+        $this->validator->validateEmail($clientValues['email'], $validationResult, false);
         // With birthdate original user input value as it's transformed into a DateTimeImmutable when object gets populated
-        $this->validator->validateBirthdate($client->birthdate, $validationResult, false, $birthdateValue);
+        $this->validator->validateBirthdate($clientValues['birthdate'], $validationResult, false);
 
-        $this->validateLocation($client->location, $validationResult, false);
+        $this->validateLocation($clientValues['location'], $validationResult, false);
 
-        $this->validatePhone($client->phone, $validationResult, false);
+        $this->validatePhone($clientValues['phone'], $validationResult, false);
 
-        $this->validateSex($client->sex, $validationResult, false);
+        $this->validateSex($clientValues['sex'] ?? null, $validationResult, false);
 
-        $this->validateClientMessage($client->clientMessage, $validationResult, false);
+        $this->validateClientMessage($clientValues['client_message'] ?? null, $validationResult, false);
 
         $this->validator->validateBackedEnum(
-            $client->vigilanceLevel,
+            $clientValues['vigilance_level'] ?? null,
             ClientVigilanceLevel::class,
             'vigilance_level',
             $validationResult,

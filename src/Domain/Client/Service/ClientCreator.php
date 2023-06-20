@@ -37,9 +37,10 @@ class ClientCreator
      */
     public function createClient(array $clientValues): int
     {
+        // Validate entire client values before object creation to prevent exception on invalid data such as datetime
+        $this->clientValidator->validateClientCreation($clientValues);
+
         $client = new ClientData($clientValues);
-        // Validate entire client object resulting of user input values excluding main note
-        $this->clientValidator->validateClientCreation($client, $clientValues['birthdate'] ?? null);
 
         if ($this->clientAuthorizationChecker->isGrantedToCreate($client)) {
             // Insert client

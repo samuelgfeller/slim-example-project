@@ -77,18 +77,18 @@ $this->setLayout('');
         <!--   Password 2     -->
         <div class="form-input-div <?= //If there is an error on a specific field, echo error class
         ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
-        $passwordsErr ? ' input-group-error' : '' ?>">
+        $passwordsErr ? ' input-group-error' : '' ?>" style="margin-bottom: 0;">
             <label for="password2-input"><?= __('Repeat password') ?></label>
             <input type="password" name="password2" id="password2-input" minlength="3" required>
             <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
         </div>
-
         <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
+        <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
 
         <input type="hidden" name="token" value="<?= $token ?? null ?>">
         <input type="hidden" name="id" value="<?= $id ?? null ?>">
-        <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
-        <input type="submit" id="password-reset-submit-btn" class="submit-btn" value="<?= __('Set new password') ?>">
+        <input type="submit" id="password-reset-submit-btn" class="submit-btn" style="margin-top: 20px"
+               value="<?= __('Set new password') ?>">
         <?= $this->fetch('layout/request-throttle.html.php') ?>
     </form>
 </div>

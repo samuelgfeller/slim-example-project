@@ -140,15 +140,11 @@ final class Validator
      * @param \DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
      * @param bool $required
-     * @param string|null $birthdateUserInput
-     *
-     * @throws \Exception
      */
     public function validateBirthdate(
         \DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
-        bool $required = false,
-        null|string $birthdateUserInput = null,
+        bool $required = false
     ): void {
         // Validate that date user input is valid data
         if (null !== $birthdate && '' !== $birthdate) {
@@ -207,7 +203,7 @@ final class Validator
             );
             if (!$exists) {
                 $validationResult->setError(
-                    $table,
+                    $table . '_id',
                     __('Invalid option')
                 );
 

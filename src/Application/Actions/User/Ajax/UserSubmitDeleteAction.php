@@ -62,7 +62,7 @@ final class UserSubmitDeleteAction
                 } else {
                     $this->session->getFlash()->add(
                         'success',
-                        'Successfully deleted user.'
+                        __('Successfully deleted user.')
                     );
                 }
 

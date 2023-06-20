@@ -146,13 +146,6 @@ function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) 
 function addClientsToDom(clients, allUsers, allStatuses, clientWrapperId = null) {
     let clientContainer = document.getElementById(clientWrapperId ?? 'client-wrapper');
 
-    // Remove no clients text if it exists
-    document.getElementById('no-clients')?.remove();
-    // If no results, tell user so
-    if (clients.length === 0) {
-        clientContainer.insertAdjacentHTML('afterend', '<p id="no-clients">No clients found.</p>');
-    }
-
     // Loop over clients and add to DOM
     for (const client of clients) {
         // Client card HTML

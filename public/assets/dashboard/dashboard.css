@@ -91,6 +91,9 @@
 
 
 @media (min-width: 641px) {
+    :root {
+        --card-placeholder-scale: 0.7;
+    }
     /*Switch between full width clients in panel to smallest width for side to side panels*/
     .panel-content .client-wrapper .client-profile-card {
         width: min-content;
@@ -121,6 +124,10 @@
     .dashboard-panel-container {
         grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
     }
+    /*.client-profile-card-loading-placeholder{*/
+    /*    transform: scale(70%);*/
+    /*    width: 100px;*/
+    /*}*/
 }
 
 @media (min-width: 700px) {
