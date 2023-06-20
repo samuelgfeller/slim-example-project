@@ -35,6 +35,7 @@ $this->addAttribute(
 // Store client id on the page in <data> element for js to read it
 ?>
 <data id="user-id" value="<?= $user->id ?>"></data>
+<data id="is-own-profile" value="<?= $isOwnProfile ? '1' : '0' ?>"></data>
 
 <div id="user-page-content-flexbox">
     <div id="user-profile-content">
@@ -178,7 +179,7 @@ foreach ($user->availableUserRoles as $id => $userRole) {
         </p>
         <?php
         if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
-            <button class="btn btn-red" id="delete-user-btn" data-is-own-profile="<?= $isOwnProfile ? '1' : '0' ?>">
+            <button class="btn btn-red" id="delete-user-btn">
                 <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
                 <?= $isOwnProfile ? __('Delete profile') : __('Delete user') ?>
             </button>

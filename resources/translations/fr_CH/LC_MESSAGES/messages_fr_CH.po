@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
 "POT-Creation-Date: 2023-06-20 14:26+0200\n"
-"PO-Revision-Date: 2023-06-20 14:40+0200\n"
+"PO-Revision-Date: 2023-06-20 18:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -186,8 +186,7 @@ msgstr "Déconnexion réussie."
 #: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:86
 msgid "Token not found. Please click on the link you received via email."
 msgstr ""
-"Token non trouvé. Veuillez cliquer sur le lien que vous avez reçu par "
-"courriel."
+"Token non trouvé. Veuillez cliquer sur le lien que vous avez reçu par email."
 
 #: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:51
 #: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:44
@@ -238,9 +237,9 @@ msgid ""
 "Password recovery email is sent to you.<br>\n"
 "Please also check the spam folder if you don't see it in the inbox."
 msgstr ""
-"Le mail de récupération du mot de passe vous est envoyé.\n"
-"Veuillez également vérifier le dossier spam si vous ne le voyez pas dans la "
-"boîte de réception."
+"Le mail de récupération du mot de passe vous a été envoyé.\n"
+"Veuillez vérifier le dossier spam si vous ne le voyez pas dans la boîte de "
+"réception."
 
 #: src/Application/Actions/Authentication/Submit/PasswordResetSubmitAction.php:71
 #, php-format
@@ -543,11 +542,11 @@ msgstr "Mot de passe oublié"
 
 #: templates/authentication/login.html.php:85
 msgid "Request password"
-msgstr "Recevoir un password"
+msgstr "Recevoir mot de passe"
 
 #: templates/authentication/reset-password.html.php:52
 msgid "Reset password"
-msgstr "Réinitialiser le mot de passe"
+msgstr "Réinitialiser mot de passe"
 
 #: templates/authentication/reset-password.html.php:81
 msgid "Repeat password"
@@ -555,7 +554,7 @@ msgstr "Répéter le mot de passe"
 
 #: templates/authentication/reset-password.html.php:91
 msgid "Set new password"
-msgstr "Définir un nouveau mot de passe"
+msgstr "Enregistrer"
 
 #: templates/client/client-read.html.php:86
 msgid "Helper"

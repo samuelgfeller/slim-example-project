@@ -10,6 +10,7 @@ import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.3.1";
 
 const userId = document.getElementById('user-id').value;
+const isOwnProfile = document.getElementById('is-own-profile').value;
 
 loadUserActivities(`user=${userId}`);
 
@@ -31,7 +32,7 @@ langRadioButtons.forEach((radio) => {
         submitUpdate({[radio.name]: radio.value}, `users/${userId}`, true)
             .then(r => {
                 // Reload page if user changed its own language
-                if (userBtn.dataset.isOwnProfile === '1') {
+                if (isOwnProfile === '1') {
                     location.reload();
                 }
             });
@@ -54,17 +55,17 @@ fetchTranslations(wordsToTranslate).then(response => {
 });
 
 // Delete button with null safe as it doesn't exist when not privileged
-const userBtn = document.querySelector('#delete-user-btn');
-userBtn?.addEventListener('click', () => {
+const userDeleteBtn = document.querySelector('#delete-user-btn');
+userDeleteBtn?.addEventListener('click', () => {
     let title = translated['Are you sure that you want to delete this user?'];
     let info = '';
-    if (userBtn.dataset.isOwnProfile === '1') {
+    if (isOwnProfile === '1') {
         title = translated['Are you sure that you want to delete your profile?'];
         info = translated['You will be logged out and not be able to log in again.'];
     }
     createAlertModal(title, info, () => {
         submitDelete(`users/${userId}`, true).then(() => {
-            if (userBtn.dataset.isOwnProfile === '1') {
+            if (isOwnProfile === '1') {
                 location.href = `login`;
             } else {
                 location.href = `users/list`;

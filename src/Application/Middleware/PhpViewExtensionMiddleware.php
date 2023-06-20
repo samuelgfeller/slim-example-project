@@ -53,15 +53,17 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
         ]);
-        try {
-            // Check if granted to read user that is different then the authenticated user itself (+1)
-            // this determines if the nav point "users" is visible in the layout
-            $this->phpRenderer->addAttribute(
-                'userListAuthorization',
-                $this->userAuthorizationChecker->isGrantedToRead(($this->session->get('user_id') ?? 1) + 1)
-            );
-        } catch (DatabaseException $databaseException) {
-            // Mysql connection not working
+        // Check if granted to read user that is different then the authenticated user itself (+1)
+        // this determines if the nav point "users" is visible in the layout
+        if ($loggedInUserId = $this->session->get('user_id')) {
+            try {
+                $this->phpRenderer->addAttribute(
+                    'userListAuthorization',
+                    $this->userAuthorizationChecker->isGrantedToRead($loggedInUserId + 1, false)
+                );
+            } catch (DatabaseException $databaseException) {
+                // Mysql connection not working
+            }
         }
 
         // Add version number to js imports

@@ -101,7 +101,7 @@ class UserFilterChipProvider
                     'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => null,
-                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity($userId),
+                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity($userId, false),
                 ]);
             }
         }

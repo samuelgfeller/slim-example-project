@@ -2,6 +2,7 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Common\LocaleHelper;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
@@ -37,6 +38,7 @@ class PasswordRecoveryEmailSender
         private readonly VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
         private readonly SecurityEmailChecker $securityEmailChecker,
+        private readonly LocaleHelper $localeHelper,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object
@@ -72,7 +74,8 @@ class PasswordRecoveryEmailSender
             // Send verification mail
             $this->email->subject('Reset password')->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/password-reset.email.php',
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'password-reset.email.php',
                     ['user' => $dbUser, 'queryParams' => $queryParamsWithToken]
                 )
             )->to(new Address($dbUser->email, $dbUser->getFullName()));

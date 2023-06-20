@@ -15,7 +15,7 @@ Dies kann bedeuten, dass jemand wiederholt versucht hat, sich mit einem falschen
 
 Sie können Ihr Konto freischalten, indem Sie auf den folgenden Link klicken:
 <b><a href="<?= $route->fullUrlFor($uri, 'account-unlock-verification', [], $queryParams) ?>">
-        Konto verifizieren</a></b>.
+        Konto verifizieren</a></b>
 <br><br>
 
 Der Link wird in 2 Stunden ablaufen. <br>

@@ -1,4 +1,5 @@
-*.ttf     -text
-*.eot     -text
-*.woff    -text
-*.woff2   -text
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.otf binary

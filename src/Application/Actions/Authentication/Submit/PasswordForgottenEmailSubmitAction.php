@@ -43,9 +43,9 @@ final class PasswordForgottenEmailSubmitAction
      * @param ServerRequest $request
      * @param Response $response
      *
+     * @return Response
      * @throws \Throwable
      *
-     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -58,6 +58,10 @@ final class PasswordForgottenEmailSubmitAction
                 $this->passwordRecoveryEmailSender->sendPasswordRecoveryEmail($userValues);
             } catch (DomainRecordNotFoundException $domainRecordNotFoundException) {
                 // User was not found. Do nothing special as it would be a security flaw to say that user doesn't exist
+                $this->logger->info(
+                    'User with email ' . $userValues['email'] . ' tried to request password
+                reset link but account doesn\'t exist'
+                );
             } catch (ValidationException $validationException) {
                 // Form error messages set in function below
                 return $this->responder->renderOnValidationError(
@@ -83,8 +87,13 @@ final class PasswordForgottenEmailSubmitAction
                     $request->getQueryParams(),
                 );
             }
-            $flash->add('success', __("Password recovery email is sent to you.<br>
-Please also check the spam folder if you don't see it in the inbox."));
+            $flash->add(
+                'success',
+                __(
+                    "Password recovery email is sent to you.<br>
+Please also check the spam folder if you don't see it in the inbox."
+                )
+            );
 
             return $this->responder->redirectToRouteName($response, 'login-page');
         }
