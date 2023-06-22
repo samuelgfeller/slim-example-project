@@ -26,13 +26,16 @@ final class LocaleHelper
         $codeset = 'UTF-8';
         // Current path src/Application/Middleware
         $directory = __DIR__ . '/../../../resources/translations';
-        // Set locale information
+        // If locale has hyphen instead of underscore, replace it
+        $locale = str_replace('-', '_', $locale);
+        // Get locale with hyphen as alternative if server doesn't have the one with underscore (windows)
         $localeHyphen = str_replace('_', '-', $locale);
+        // Set locale information
         $setLocaleResult = setlocale(LC_ALL, $locale, $localeHyphen);
         // Check for existing mo file (optional)
         $file = sprintf('%s/%s/LC_MESSAGES/%s_%s.mo', $directory, $locale, $domain, $locale);
         if ($locale !== 'en_US' && !file_exists($file)) {
-            throw new UnexpectedValueException(sprintf('File not found: %s', $file));
+            throw new \UnexpectedValueException(sprintf('File not found: %s', $file));
         }
         // Generate new text domain
         $textDomain = sprintf('%s_%s', $domain, $locale);
