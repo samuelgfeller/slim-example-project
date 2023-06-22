@@ -79,7 +79,7 @@ class LoginVerifier
 
                 // If status not active, create exception object
                 $unableToLoginException = new UnableToLoginStatusNotActiveException(
-                    'Unable to login at the moment, please check your email inbox for a more detailed message.'
+                    __('Unable to login at the moment, please check your email inbox for a more detailed message.')
                 );
                 try {
                     // Change language to the one the user selected in settings (in case it differs from browser lang)

@@ -7,7 +7,7 @@ import {__} from "../../general/general-js/functions.js?v=0.3.1";
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [
-    __('User created successfully.'),
+    __('User created successfully'),
 ];
 // Init translated var by populating it with english values as a default so that all keys are existing
 let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
@@ -28,7 +28,7 @@ document.addEventListener('click', e => {
             if (response.status === 'error') {
                 displayFlashMessage('error', response.message);
             } else {
-                displayFlashMessage('success', translated['User created successfully.']);
+                displayFlashMessage('success', translated['User created successfully']);
             }
             loadUserList();
         })

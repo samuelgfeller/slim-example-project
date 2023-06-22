@@ -30,6 +30,7 @@ class PasswordRecoveryEmailSender
      * @param VerificationTokenCreator $verificationTokenCreator
      * @param Settings $settings
      * @param SecurityEmailChecker $securityEmailChecker
+     * @param LocaleHelper $localeHelper
      */
     public function __construct(
         private readonly Mailer $mailer,

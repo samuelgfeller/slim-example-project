@@ -40,6 +40,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
+        $loggedInUserId = $this->session->get('user_id');
         // The following has to work even with no connection to mysql to display the error page (layout needs those attr)
         $this->phpRenderer->setAttributes([
             'title' => 'Slim Example Project',
@@ -52,10 +53,11 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'flash' => $this->session->getFlash(),
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
+            'authenticatedUser' => $loggedInUserId,
         ]);
         // Check if granted to read user that is different then the authenticated user itself (+1)
         // this determines if the nav point "users" is visible in the layout
-        if ($loggedInUserId = $this->session->get('user_id')) {
+        if ($loggedInUserId) {
             try {
                 $this->phpRenderer->addAttribute(
                     'userListAuthorization',

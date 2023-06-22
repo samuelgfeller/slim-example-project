@@ -32,8 +32,8 @@ final class UserListPageAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
-     * @throws \Throwable
      * @throws \JsonException
+     * @throws \Throwable
      *
      * @return ResponseInterface The response
      */

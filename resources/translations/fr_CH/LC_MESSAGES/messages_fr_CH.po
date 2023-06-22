@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-20 20:06+0200\n"
-"PO-Revision-Date: 2023-06-20 20:07+0200\n"
+"POT-Creation-Date: 2023-06-22 15:43+0200\n"
+"PO-Revision-Date: 2023-06-22 15:43+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -114,6 +114,34 @@ msgid "Please try again and report the error to an administrator"
 msgstr ""
 "Bitte versuchen Sie es erneut und melden Sie den Fehler einem Administrator"
 
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:69
+#: src/Domain/Client/Service/ClientValidator.php:143
+#: src/Domain/Client/Service/ClientValidator.php:166
+#: src/Domain/Client/Service/ClientValidator.php:186
+#: src/Domain/Client/Service/ClientValidator.php:206
+#: src/Domain/Client/Service/ClientValidator.php:227
+#: src/Domain/Client/Service/ClientValidator.php:247
+#: src/Domain/Note/Service/NoteValidator.php:110
+#: src/Domain/User/Service/UserValidator.php:248
+#: src/Domain/User/Service/UserValidator.php:272
+#: src/Domain/User/Service/UserValidator.php:300
+#: src/Domain/Validation/Validator.php:109
+#: src/Domain/Validation/Validator.php:133
+#: src/Domain/Validation/Validator.php:178
+#: src/Domain/Validation/Validator.php:213
+#: src/Domain/Validation/Validator.php:239
+#: src/Domain/Validation/Validator.php:273
+msgid "Required"
+msgstr "Champ requis"
+
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:70
+msgid "Minimum length is"
+msgstr "Longueur minimale est de"
+
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:71
+msgid "Maximum length is"
+msgstr "Longueur maximale est de"
+
 #: public/assets/general/page-component/modal/alert-modal.js:24
 msgid "Yes delete"
 msgstr "Oui, supprimer"
@@ -123,8 +151,8 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: public/assets/user/create/user-create-main.js:10
-msgid "User created successfully."
-msgstr "L'utilisateur a été créé."
+msgid "User created successfully"
+msgstr "L'utilisateur a été créé"
 
 #: public/assets/user/create/user-create-modal.html.js:11
 msgid "Create user"
@@ -308,7 +336,15 @@ msgstr "La connexion a échoué car votre compte est suspendu"
 msgid "Login failed because your account is locked"
 msgstr "La connexion a échoué car votre compte est bloqué"
 
-#: src/Domain/Authentication/Service/RegistrationMailer.php:57
+#: src/Domain/Authentication/Service/LoginVerifier.php:82
+msgid ""
+"Unable to login at the moment, please check your email inbox for a more "
+"detailed message."
+msgstr ""
+"Impossible de se connecter pour le moment, veuillez vérifier votre boîte de "
+"réception pour un message plus détaillé."
+
+#: src/Domain/Authentication/Service/RegistrationMailer.php:61
 msgid "Account created"
 msgstr "Compte créé"
 
@@ -360,26 +396,7 @@ msgstr "Assigné à"
 msgid "Deleted assigned user"
 msgstr "Utilisateur assigné supprimé"
 
-#: src/Domain/Client/Service/ClientValidator.php:144
-#: src/Domain/Client/Service/ClientValidator.php:167
-#: src/Domain/Client/Service/ClientValidator.php:187
-#: src/Domain/Client/Service/ClientValidator.php:207
-#: src/Domain/Client/Service/ClientValidator.php:228
-#: src/Domain/Client/Service/ClientValidator.php:248
-#: src/Domain/Note/Service/NoteValidator.php:110
-#: src/Domain/User/Service/UserValidator.php:248
-#: src/Domain/User/Service/UserValidator.php:272
-#: src/Domain/User/Service/UserValidator.php:300
-#: src/Domain/Validation/Validator.php:109
-#: src/Domain/Validation/Validator.php:133
-#: src/Domain/Validation/Validator.php:178
-#: src/Domain/Validation/Validator.php:213
-#: src/Domain/Validation/Validator.php:239
-#: src/Domain/Validation/Validator.php:273
-msgid "Required"
-msgstr "Champ requis"
-
-#: src/Domain/Client/Service/ClientValidator.php:224
+#: src/Domain/Client/Service/ClientValidator.php:223
 #: src/Domain/User/Service/UserValidator.php:296
 #: src/Domain/Validation/Validator.php:207
 #: src/Domain/Validation/Validator.php:266

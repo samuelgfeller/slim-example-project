@@ -37,9 +37,9 @@ class ApiClientCreateActionTest extends TestCase
      * Client creation from api endpoint with valid data.
      * Test CORS headers.
      *
-     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testApiClientSubmitCreateAction(): void
     {

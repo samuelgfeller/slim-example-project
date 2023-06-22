@@ -43,9 +43,9 @@ final class PasswordForgottenEmailSubmitAction
      * @param ServerRequest $request
      * @param Response $response
      *
-     * @return Response
      * @throws \Throwable
      *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {

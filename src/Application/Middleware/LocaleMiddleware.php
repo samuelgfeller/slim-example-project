@@ -17,7 +17,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class LocaleMiddleware implements MiddlewareInterface
 {
-
     public function __construct(
         private readonly SessionInterface $session,
         private readonly UserFinder $userFinder,

@@ -30,7 +30,7 @@ class ClientValidator
      * Validate client values as array and not object to prevent exception on
      * invalid data such as datetime is used in the constructor.
      * * All keys that may not be in the request body (malformedRequestBodyChecker - optional keys)
-     * * such radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null
+     * * such radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null.
      *
      * @param array $clientValues
      */
