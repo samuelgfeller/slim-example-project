@@ -2,9 +2,7 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Responder\Responder;
 use App\Common\LocaleHelper;
-use App\Domain\Settings;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -19,16 +17,12 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class LocaleMiddleware implements MiddlewareInterface
 {
-    private array $localeSettings;
 
     public function __construct(
         private readonly SessionInterface $session,
-        private readonly Responder $responder,
         private readonly UserFinder $userFinder,
         private readonly LocaleHelper $localeHelper,
-        Settings $settings
     ) {
-        $this->localeSettings = $settings->get('locale');
     }
 
     public function process(
@@ -50,9 +44,7 @@ final class LocaleMiddleware implements MiddlewareInterface
         $browserLangShort = explode('-', $language)[0];
 
         // Set the language to the userLang if available and else to the browser language
-        $actualLocale = $this->localeHelper->setLanguage(
-            $this->localeSettings['available'][$userLangShort ?? $browserLangShort] ?? $this->localeSettings['default']
-        );
+        $actualLocale = $this->localeHelper->setLanguage($userLangShort ?? $browserLangShort ?? null);
 
         return $handler->handle($request);
     }

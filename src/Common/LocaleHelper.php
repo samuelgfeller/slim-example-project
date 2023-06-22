@@ -6,30 +6,35 @@ use App\Domain\Settings;
 
 final class LocaleHelper
 {
-    private array $availableLocales;
+    private array $localeSettings;
 
     public function __construct(Settings $settings)
     {
-        $this->availableLocales = $settings->get('locale')['available'];
+        $this->localeSettings = $settings->get('locale');
     }
 
     /**
      * Set the locale to the given lang code and bind text domain for gettext translations.
      *
-     * @param string $locale The locale (e.g. 'en_US')
+     * @param string|null $locale The locale or language code (e.g. 'en_US' or 'en')
      * @param string $domain The text domain (e.g. 'messages')
      *
      * @return false|string
      */
-    public function setLanguage(string $locale, string $domain = 'messages'): bool|string
+    public function setLanguage(?string $locale, string $domain = 'messages'): bool|string
     {
         $codeset = 'UTF-8';
         // Current path src/Application/Middleware
         $directory = __DIR__ . '/../../resources/translations';
         // If locale has hyphen instead of underscore, replace it
         $locale = str_replace('-', '_', $locale);
+        // Get language code from locale
+        $langCode = explode('_', $locale)[0];
+        // Get the available locale or the default one
+        $locale = $this->localeSettings['available'][$langCode] ?? $this->localeSettings['default'] ?? 'en_US';
         // Get locale with hyphen as alternative if server doesn't have the one with underscore (windows)
         $localeHyphen = str_replace('_', '-', $locale);
+
         // Set locale information
         $setLocaleResult = setlocale(LC_ALL, $locale, $localeHyphen);
         // Check for existing mo file (optional)
@@ -59,7 +64,7 @@ final class LocaleHelper
         // Get the key of the current locale
         $localeCode = setlocale(LC_ALL, 0);
         // Available locales keys are language codes ('en', 'de') and values are locale codes ('en_US', 'de_CH')
-        $langCode = array_search($localeCode, $this->availableLocales, true) ?: '';
+        $langCode = array_search($localeCode, $this->localeSettings['available'], true) ?: '';
         // If language code is 'en' return empty string as default email templates are in english and not in a sub folder
         // If language code is not empty, add a slash to complete the path it will be inserted into
         return $langCode === 'en' || $langCode === '' ? '' : $langCode . '/';
