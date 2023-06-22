@@ -3,6 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\Responder;
+use App\Common\LocaleHelper;
 use App\Domain\Settings;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
@@ -10,7 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use UnexpectedValueException;
 
 /**
  * User auth verification middleware.
@@ -22,9 +22,10 @@ final class LocaleMiddleware implements MiddlewareInterface
     private array $localeSettings;
 
     public function __construct(
-        protected readonly SessionInterface $session,
-        protected readonly Responder $responder,
-        protected readonly UserFinder $userFinder,
+        private readonly SessionInterface $session,
+        private readonly Responder $responder,
+        private readonly UserFinder $userFinder,
+        private readonly LocaleHelper $localeHelper,
         Settings $settings
     ) {
         $this->localeSettings = $settings->get('locale');
@@ -49,42 +50,10 @@ final class LocaleMiddleware implements MiddlewareInterface
         $browserLangShort = explode('-', $language)[0];
 
         // Set the language to the userLang if available and else to the browser language
-        $actualLocale = $this->setLanguage(
+        $actualLocale = $this->localeHelper->setLanguage(
             $this->localeSettings['available'][$userLangShort ?? $browserLangShort] ?? $this->localeSettings['default']
         );
 
         return $handler->handle($request);
-    }
-
-    /**
-     * Set the locale to the given lang code and bind text domain for gettext translations.
-     *
-     * @param string $locale The locale (e.g. 'en_US')
-     * @param string $domain The text domain (e.g. 'messages')
-     *
-     * @return false|string
-     */
-    private function setLanguage(string $locale, string $domain = 'messages'): bool|string
-    {
-        $codeset = 'UTF-8';
-        // Current path src/Application/Middleware
-        $directory = __DIR__ . '/../../../resources/translations';
-        // Set locale information
-        $localeHyphen = str_replace('_', '-', $locale);
-        $setLocaleResult = setlocale(LC_ALL, $locale, $localeHyphen);
-        // Check for existing mo file (optional)
-        $file = sprintf('%s/%s/LC_MESSAGES/%s_%s.mo', $directory, $locale, $domain, $locale);
-        if ($locale !== 'en_US' && !file_exists($file)) {
-            throw new UnexpectedValueException(sprintf('File not found: %s', $file));
-        }
-        // Generate new text domain
-        $textDomain = sprintf('%s_%s', $domain, $locale);
-        // Set base directory for all locales
-        bindtextdomain($textDomain, $directory);
-        // Set domain codeset
-        bind_textdomain_codeset($textDomain, $codeset);
-        textdomain($textDomain);
-
-        return $setLocaleResult;
     }
 }

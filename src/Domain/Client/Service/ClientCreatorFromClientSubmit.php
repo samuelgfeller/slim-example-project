@@ -2,7 +2,6 @@
 
 namespace App\Domain\Client\Service;
 
-use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Enum\ClientStatus;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
@@ -25,29 +24,28 @@ class ClientCreatorFromClientSubmit
      *
      * @param array $clientValues
      *
+     * @return int
      * @throws \Exception
      *
-     * @return int
      */
     public function createClientFromClientSubmit(array $clientValues): int
     {
-        $client = new ClientData($clientValues);
         // Add default client status (action pending)
-        $client->clientStatusId = $this->clientStatusFinderRepository->findClientStatusByName(
+        $clientValues['client_status_id'] = $this->clientStatusFinderRepository->findClientStatusByName(
             ClientStatus::ACTION_PENDING
         );
 
         // Validate client object resulting of user input values excluding main note
-        $this->clientValidator->validateClientCreation($client, $clientValues['birthdate'] ?? null);
+        $this->clientValidator->validateClientCreation($clientValues);
 
         // Insert client
-        $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
+        $clientId = $this->clientCreatorRepository->insertClient($clientValues);
         // Insert user activity
         $clientInsertActivityId = $this->userActivityManager->addUserActivity(
             UserActivity::CREATED,
             'client',
             $clientId,
-            $client->toArrayForDatabase(),
+            $clientValues,
         );
 
         return $clientId;

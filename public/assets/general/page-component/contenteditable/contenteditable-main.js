@@ -1,4 +1,6 @@
 import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.3.1";
+import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.3.1";
+import {__} from "../../general-js/functions.js?v=0.3.1";
 
 /**
  * Make field value editable
@@ -62,6 +64,20 @@ export function disableEditableField(field) {
     saveIcon?.remove();
 }
 
+// List of words that are used in contenteditable validation that need to be translated
+let wordsToTranslate = [
+    __('Required'),
+    __('Minimum length is'),
+    __('Maximum length is'),
+];
+// Init translated var by populating it with english values as a default so that all keys are existing
+let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
+// Fetch translations and replace translated var
+fetchTranslations(wordsToTranslate).then(response => {
+    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
+    translated = response;
+});
+
 /**
  * Frontend validation of contenteditable field
  * and request to update value if valid.
@@ -75,21 +91,21 @@ export function contentEditableFieldValueIsValid(field) {
 
     let required = field.dataset.required;
     if (required !== undefined && required === 'true' && textContent.length === 0) {
-        displayValidationErrorMessage(fieldName, 'Required field');
+        displayValidationErrorMessage(fieldName, translated['Required']);
         return false;
     }
 
     // Check that length is either 0 or more than given minlength (0 is checked with required above)
     let minLength = field.dataset.minlength;
     if (minLength !== undefined && (textContent.length < parseInt(minLength) && textContent.length !== 0)) {
-        displayValidationErrorMessage(fieldName, 'Minimum length is ' + minLength);
+        displayValidationErrorMessage(fieldName, translated['Minimum length is'] + ' ' + minLength);
         return false;
     }
 
     // Check that length is either 0 or more than given maxlength
     let maxLength = field.dataset.maxlength;
     if (maxLength !== undefined && (textContent.length > parseInt(maxLength) && textContent.length !== 0)) {
-        displayValidationErrorMessage(fieldName, 'Maximum length is ' + maxLength);
+        displayValidationErrorMessage(fieldName, translated['Maximum length is'] + ' ' + maxLength);
         return false;
     }
 

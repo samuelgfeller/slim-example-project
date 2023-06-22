@@ -37,9 +37,9 @@ class ApiClientCreateActionTest extends TestCase
      * Client creation from api endpoint with valid data.
      * Test CORS headers.
      *
+     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testApiClientSubmitCreateAction(): void
     {
@@ -90,10 +90,7 @@ class ApiClientCreateActionTest extends TestCase
                 // I don't find it very pretty to re-create the array for a correct json as that would have to be
                 // updated each time the function changes. If it becomes annoying: remove the key "data" from assertion.
                 'data' => json_encode(
-                    array_merge(
-                        $clientCreationValues,
-                        ['vigilance_level' => null, 'user_id' => null, 'client_status_id' => $clientStatusId],
-                    ),
+                    array_merge($clientCreationValues, ['client_status_id' => $clientStatusId]),
                     JSON_THROW_ON_ERROR
                 ),
             ],

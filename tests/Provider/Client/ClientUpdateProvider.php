@@ -143,11 +143,11 @@ class ClientUpdateProvider
                         'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
                             0 => [
-                                'field' => 'client_status',
+                                'field' => 'client_status_id',
                                 'message' => 'Invalid option',
                             ],
                             1 => [
-                                'field' => 'user',
+                                'field' => 'user_id',
                                 'message' => 'Invalid option',
                             ],
                             2 => [
@@ -204,11 +204,11 @@ class ClientUpdateProvider
                         'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
                             0 => [
-                                'field' => 'client_status',
+                                'field' => 'client_status_id',
                                 'message' => 'Invalid option',
                             ],
                             1 => [
-                                'field' => 'user',
+                                'field' => 'user_id',
                                 'message' => 'Invalid option',
                             ],
                             2 => [

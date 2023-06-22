@@ -74,9 +74,9 @@ class UserActivityFinder
                 $userActivity->pageUrl = null;
             }
             // Add the time and action name
-            $actionVal = $userActivity->action->value;
+            $actionVal = __($userActivity->action->value);
             // ucfirst does not work for non english chars. Below is an equivalent that also works for german chars.
-            $ucFirstActionValue = __(mb_strtoupper(mb_substr($actionVal, 0, 1)) . mb_substr($actionVal, 1));
+            $ucFirstActionValue = mb_strtoupper(mb_substr($actionVal, 0, 1)) . mb_substr($actionVal, 1);
             $userActivity->timeAndActionName = $userActivity->datetime->format('H:i') . ': ' . $ucFirstActionValue;
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {

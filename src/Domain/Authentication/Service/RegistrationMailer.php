@@ -53,16 +53,23 @@ class RegistrationMailer
      */
     public function sendRegisterVerificationToken(UserData $user, array $queryParams): void
     {
+        // Change language to one the user is being registered with
+        $originalLocale = setlocale(LC_ALL, 0);
+        $this->localeHelper->setLanguage($user->language->value);
+
         // Send verification mail
         $this->email->subject(__('Account created'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath($user->language) .
+                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'new-account.email.php',
                     ['user' => $user, 'queryParams' => $queryParams]
                 )
             )->to(new Address($user->email, $user->getFullName()));
         // Send email
         $this->mailer->send($this->email);
+
+        // Reset locale
+        $this->localeHelper->setLanguage($originalLocale);
     }
 }

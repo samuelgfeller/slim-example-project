@@ -101,7 +101,7 @@ class UserCreateProvider
                             // Technically the better error would be that the status is not existing but an UserData object
                             // instance is created that puts "null" if status is not existing before being passed to the validator
                             ['field' => 'status', 'message' => 'Required'],
-                            ['field' => 'user_role', 'message' => 'Invalid option'],
+                            ['field' => 'user_role_id', 'message' => 'Invalid option'],
                             ['field' => 'password2', 'message' => 'Passwords do not match'],
                             ['field' => 'password', 'message' => 'Minimum length is 3'],
                             ['field' => 'password2', 'message' => 'Minimum length is 3'],

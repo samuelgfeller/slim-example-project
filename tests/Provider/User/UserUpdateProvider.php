@@ -138,7 +138,7 @@ class UserUpdateProvider
                             ['field' => 'email', 'message' => 'Invalid value'],
                             ['field' => 'status', 'message' => 'Invalid option'],
                             ['field' => 'theme', 'message' => 'Invalid option'],
-                            ['field' => 'user_role', 'message' => 'Invalid option'],
+                            ['field' => 'user_role_id', 'message' => 'Invalid option'],
                         ],
                     ],
                 ],
