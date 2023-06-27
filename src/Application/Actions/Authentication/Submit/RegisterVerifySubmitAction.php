@@ -58,7 +58,7 @@ final class RegisterVerifySubmitAction
 
                 return $this->responder->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
-                $flash->add('error', __('Invalid or expired link. Please <b>log in</b> to receive a new link.'));
+                $flash->add('error', __('Invalid or expired link. Please log in to receive a new link.'));
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
                 // Redirect to login page with redirect query param if set
