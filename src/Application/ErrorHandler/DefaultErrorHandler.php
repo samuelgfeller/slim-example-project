@@ -161,7 +161,9 @@ class DefaultErrorHandler
         string $reasonPhrase = null
     ): string {
         // Init variables
-        $error = '';
+        $error = '<!DOCTYPE html><html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>';
 
         $file = $exception->getFile();
         $line = $exception->getLine();
@@ -199,10 +201,10 @@ class DefaultErrorHandler
             $firstChunk,
             $lastWord,
             $line
-        ); // close title div
+        );
 
         $error .= sprintf('<div id="trace-div" class="%s"><table>', $errorCssClass); // opened trace div / opened table
-        $error .= '<tr><th id="num-th">#</th><th>Function</th><th>Location</th></tr>';
+        $error .= '<tr class="non-vendor"><th id="num-th">#</th><th>Function</th><th>Location</th></tr>';
         foreach ($trace as $key => $t) {
             // Sometimes class, type, file and line not set e.g. pdfRenderer when var undefined in template
             $t['class'] = $t['class'] ?? '';
@@ -211,18 +213,29 @@ class DefaultErrorHandler
             $t['line'] = $t['line'] ?? '';
             // remove everything from file path before the last \
             $fileWithoutPath = $this->removeEverythingBeforeChar($t['file']);
-            // remove everything from class before late \
+            // remove everything from class before last \
             $classWithoutPath = $this->removeEverythingBeforeChar($t['class']);
-            // if file path has not vendor in it, a css class is added to indicate it because it's more relevant
-            $nonVendorClass = !strpos($t['file'], 'vendor') ? 'non-vendor' : '';
+            // if file path contains "vendor", a css class is added to highlight it
+            $nonVendorFileClass = !str_contains($t['file'], 'vendor') ? 'non-vendor' : '';
+            // if file and class path don't contain vendor, add "non-vendor" class to add highlight on class
+            $classIsVendor = str_contains($t['class'], 'vendor');
+            $nonVendorClassClass = !empty($nonVendorFileClass) && !$classIsVendor ? 'non-vendor' : '';
+            // Get function arguments
+            $args = [];
+            foreach ($t['args'] as $argument) {
+                $args[] = $this->getTraceArgumentAsString($argument);
+            }
+            $args = implode(', ', $args);
             // adding html
             $error .= sprintf(
-                '<tr><td>%s</td><td class="function-td %s">%s</td><td class="%s">%s</td></tr>',
+                '<tr><td class="%s">%s</td><td class="function-td %s">%s</td><td class="%s">%s</td></tr>',
+                $nonVendorFileClass,
                 $key,
-                $nonVendorClass,
-                '...\\' . $classWithoutPath . $t['type'] . $t['function'] . '(...)', // only last 85 chars
-                $nonVendorClass,
-                '...\\' . $fileWithoutPath . ':<span class="lineSpan">' . $t['line'] . '</span>',
+                $nonVendorClassClass,
+                $classWithoutPath . $t['type'] . $t['function'] . "(<i style='color: #395186'>$args</i>)",
+                // only last 85 chars
+                $nonVendorFileClass,
+                $fileWithoutPath . ':<span class="lineSpan">' . $t['line'] . '</span>',
             );
         }
         $error .= '</table></div>'; // close table
@@ -237,29 +250,36 @@ class DefaultErrorHandler
             #title-div.warning { background: orange; box-shadow: 0 0 17px orange;}
             #title-div.error { background: tomato; box-shadow: 0 0 17px tomato;}
             #first-path-chunk{ font-size: 0.7em; }
-            #trace-div{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
+            #trace-div{ width: 80%; margin: auto auto 40px; min-width: 350px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
             #trace-div.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
             #trace-div.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
             #trace-div h2{ margin-top: 0; padding-top: 19px; text-align: center; }
-            #trace-div table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
+            #trace-div table{ border-collapse: collapse;   width: 100%; overflow-x: auto; }
             #trace-div table td, #trace-div table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
-            #trace-div table tr td:first-child, #trace-div table tr th:first-child { padding-left: 20px; }
+            #trace-div table tr td:nth-child(3) { min-width: 100px; }
             #num-th { font-size: 2em; color: #a46856; margin-right: 50px;}
-            .non-vendor{ font-weight: bold; } 
+            .non-vendor{ font-weight: bold; font-size: 1.2em;} 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
+            .is-vendor{ font-weight: normal;} 
             #exception-name { float: right}
+            /* When screen smaller than 1000px */
             @media screen and (max-width: 1000px) {
                 #trace-div { font-size: 0.8em; }
                 #title-div h1 { font-size: 1.6em; }
             }
+            /* When screen smaller than 810px */
             @media screen and (max-width: 810px) {
                 #trace-div table { font-size: 1.1em; }
-                #title-div { box-sizing: border-box; margin-left: 0; margin-right: 0; width: 100%; }
+                #title-div {box-sizing: border-box; margin-left: 0; margin-right: 0; width: 100%; }
+            }
+            /* When screen bigger than 810px */
+            @media screen and (min-width: 810px) {
+                #trace-div table tr td:first-child, #trace-div table tr th:first-child { padding-left: 20px; }
             }
             
             </style>';
-        $error .= '</body>'; // close body
+        $error .= '</body></html>'; // close body
 
         return $error;
     }
@@ -271,5 +291,45 @@ class DefaultErrorHandler
         // alternative https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
         //        $path = explode('\\', __CLASS__);
         //        return array_pop($path);
+    }
+
+    /**
+     * The stack trace contains called functions with function arguments
+     * that can be of any type (objects, arrays, strings or null).
+     * This function returns such an argument as string.
+     *
+     * @param mixed $argument
+     *
+     * @return string
+     */
+    private function getTraceArgumentAsString(mixed $argument): string
+    {
+        if ($argument === null) {
+            $formatted = 'NULL';
+        } elseif (is_string($argument)) {
+            if (strlen($argument) > 15) {
+                $argument = substr($argument, 0, 15) . '...';
+            }
+            $formatted = '"' . $argument . '"';
+        } elseif (is_object($argument)) {
+            $formatted = get_class($argument);
+            $nonVendor = str_starts_with($formatted, 'App');
+            // Only keep last part of class string
+            if (strlen($formatted) > 15) {
+                $formatted = trim(substr($formatted, strrpos($formatted, '\\') + 1));
+            }
+            $formatted = $nonVendor ? "<b>Object($formatted)</b>" : "Object($formatted)";
+        } elseif (is_array($argument)) {
+            // Convert each array element to string recursively
+            $elements = array_map(function ($element) {
+                return $this->getTraceArgumentAsString($element);
+            }, $argument);
+
+            return '[' . implode(', ', $elements) . ']';
+        } else {
+            $formatted = (string)$argument;
+        }
+
+        return $formatted;
     }
 }

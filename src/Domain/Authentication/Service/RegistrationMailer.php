@@ -57,7 +57,7 @@ class RegistrationMailer
         $originalLocale = setlocale(LC_ALL, 0);
         $this->localeHelper->setLanguage($user->language->value);
 
-        // Send verification mail
+        // Send verification mail in the language that was selected for the user
         $this->email->subject(__('Account created'))
             ->html(
                 $this->mailer->getContentFromTemplate(

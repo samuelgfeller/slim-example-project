@@ -136,7 +136,7 @@ Translations are done in the backend by PHP `gettext()` function.
 To access them via Javascript we can make an Ajax request that loads in the background while the page loads. 
 This obviously adds a delay for the availability of the translated words so this method should only be used 
 with "secondary" things that are not visible on the page on load. It works for things like modal boxes that 
-are displayed only after a user action is being made. There is most probably enough time for the Ajax request 
+are displayed only after a user action is being made. There is most probably enough time for the Ajax request
 to be done loading before the content is needed.
 
 Another aspect to take into account is that the `.po` editor fetches only the strings that are an argument 
