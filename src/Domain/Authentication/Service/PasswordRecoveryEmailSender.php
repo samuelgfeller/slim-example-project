@@ -72,8 +72,12 @@ class PasswordRecoveryEmailSender
             // Create verification token, so he doesn't have to register again
             $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($dbUser);
 
+            // Change language to one the user chose in settings
+            $originalLocale = setlocale(LC_ALL, 0);
+            $this->localeHelper->setLanguage($dbUser->language->value);
+
             // Send verification mail
-            $this->email->subject('Reset password')->html(
+            $this->email->subject(__('Reset password'))->html(
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'password-reset.email.php',
@@ -82,6 +86,8 @@ class PasswordRecoveryEmailSender
             )->to(new Address($dbUser->email, $dbUser->getFullName()));
             // Send email
             $this->mailer->send($this->email);
+            // Reset locale
+            $this->localeHelper->setLanguage($originalLocale);
             // User activity entry is done when user verification token is created
             return;
         }

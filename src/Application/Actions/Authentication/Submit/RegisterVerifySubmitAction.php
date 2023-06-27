@@ -73,7 +73,14 @@ final class RegisterVerifySubmitAction
                     return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
                 }
                 // Already logged in
-                $flash->add('info', __('You are now logged in.'));
+                $flash->add(
+                    'info',
+                    sprintf(
+                        __('You are already logged-in.<br>Would you like to %slogout%s?'),
+                        '<a href="' . $this->responder->urlFor('logout') . '">',
+                        '</a>'
+                    )
+                );
 
                 if (isset($queryParams['redirect'])) {
                     return $this->responder->redirectToUrl($response, $queryParams['redirect']);
