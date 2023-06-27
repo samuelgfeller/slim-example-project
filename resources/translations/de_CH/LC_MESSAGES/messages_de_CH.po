@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2023-06-22 15:43+0200\n"
-"PO-Revision-Date: 2023-06-22 15:43+0200\n"
+"POT-Creation-Date: 2023-06-27 18:54+0200\n"
+"PO-Revision-Date: 2023-06-27 18:54+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: src\n"
@@ -242,7 +242,6 @@ msgid "You are now logged in."
 msgstr "Sie sind jetzt eingeloggt."
 
 #: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:64
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:61
 msgid "Invalid or expired link. Please <b>log in</b> to receive a new link."
 msgstr ""
 "Ungültiger oder abgelaufener Link. Bitte <b>melden Sie sich an</b>, um einen "
@@ -294,6 +293,12 @@ msgstr ""
 #: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:45
 msgid "verified"
 msgstr "verifiziert"
+
+#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:61
+msgid "Invalid or expired link. Please log in to receive a new link."
+msgstr ""
+"Ungültiger oder abgelaufener Link. Bitte melden Sie sich an, um einen neuen "
+"Link zu erhalten."
 
 #: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:70
 msgid "You are already verified. Please log in."
@@ -595,7 +600,7 @@ msgstr "Neue Hauptnotiz"
 msgid "Notes"
 msgstr "Notizen"
 
-#: templates/client/clients-list.html.php:40 templates/layout.html.php:92
+#: templates/client/clients-list.html.php:40 templates/layout.html.php:96
 msgid "Clients"
 msgstr "Klienten"
 
@@ -611,7 +616,7 @@ msgstr "Filter"
 msgid "No more filters"
 msgstr "Keine Filter mehr"
 
-#: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:85
+#: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:89
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -680,15 +685,15 @@ msgstr "Zur homepage gehen"
 msgid "Report the issue"
 msgstr "Problem melden"
 
-#: templates/layout.html.php:98
+#: templates/layout.html.php:102
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/layout.html.php:106 templates/user/user-list.html.php:30
+#: templates/layout.html.php:111 templates/user/user-list.html.php:30
 msgid "Users"
 msgstr "Benutzer"
 
-#: templates/layout.html.php:114
+#: templates/layout.html.php:119
 msgid "Logout"
 msgstr "Ausloggen"
 
