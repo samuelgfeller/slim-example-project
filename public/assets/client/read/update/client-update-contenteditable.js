@@ -31,12 +31,15 @@ export function makeClientFieldEditable() {
     // Lock min-width for the container to not shrink during editing
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
 
-    // Field element is usually the field element but there are special cases like when the parent is <a> and content span
+    // fieldElement is usually the html tag of the field but there are special cases like when the parent is <a>
+    // in which case the link opening has to be disabled and the field var has to be populated with the right span
     if (fieldElement === 'a-span') {
         field = fieldContainer.querySelector('span');
         let a = fieldContainer.closest('a');
         // Add class to prevent :focus css rule. It is removed in saveClientValue()
         a.classList.add('currently-editable');
+        // Disable link draggable so the user can select text while modifying it
+        a.setAttribute('draggable', 'false');
         // Add event listener that prevents the link opening in direct function call as anonymous functions can't be removed
         a.addEventListener('click', preventLinkOpening);
     }
@@ -44,6 +47,9 @@ export function makeClientFieldEditable() {
     // Remove age addition from birthdate span to edit the date
     if (field.dataset.name === 'birthdate') {
         field.querySelector('#age-sub-span')?.remove();
+    }
+    if (field.dataset.name === 'email') {
+        field.innerHTML = field.innerHTML.replace('<br>', '');
     }
 
     makeFieldEditable(field);
@@ -92,7 +98,7 @@ function saveClientValueAndDisableContentEditable(field) {
         // Reset min width of personal info container
         document.querySelector('#client-personal-info-flex-container').style.minWidth = null;
         let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + field.dataset.name + '"]');
-        // If success true and submit value was empty string, remove it from client personal infos box but not if header
+        // If success true and submit value was empty string, remove it from client personal infos box except if header
         if ((submitValue === '' || submitValue === 'NULL') && fieldContainer.dataset.hideIfEmpty === 'true') {
             // Select dropdown container hidden in client-update-dropdown.js
             addIconToAvailableDiv(availableIcon, fieldContainer.parentNode)
@@ -102,6 +108,8 @@ function saveClientValueAndDisableContentEditable(field) {
                 // Search upwards the closest span
                 let a = fieldContainer.closest('a');
                 a.classList.remove('currently-editable');
+                // Re-enable draggable on link
+                a.setAttribute('draggable', 'true');
                 a.removeEventListener('click', preventLinkOpening);
             }
 
@@ -122,6 +130,7 @@ function saveClientValueAndDisableContentEditable(field) {
             // Add email to link when field changed
             if (field.dataset.name === 'email') {
                 field.closest('a').href = `mailto:${submitValue}`;
+                field.innerHTML = field.innerHTML.replace(/@/g, "<br>@");
             }
             // Add phone number to link when field changed
             if (field.dataset.name === 'phone') {

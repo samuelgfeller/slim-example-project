@@ -4,6 +4,7 @@ namespace App\Domain\Validation;
 
 use App\Domain\Factory\LoggerFactory;
 use App\Infrastructure\Validation\ResourceExistenceCheckerRepository;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -144,19 +145,26 @@ final class Validator
     public function validateBirthdate(
         \DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
-        bool $required = false
+        bool $required = false,
+        string $format = 'd.m.Y'
     ): void {
         // Validate that date user input is valid data
         if (null !== $birthdate && '' !== $birthdate) {
-            // If $birthdate is string, determine if string is a date https://stackoverflow.com/a/24401462/9013718
-            if (is_string($birthdate) === true && !empty($birthdate) && (bool)strtotime($birthdate)) {
-                // If birthdate is string, change it to DateTimeImmutable object for validation
-                $birthdate = new \DateTimeImmutable($birthdate);
-            } elseif (!$birthdate instanceof \DateTimeImmutable) {
+            // strtotime($birthdate) can't be used for date validation as time values are also correct (e.g. 13.13.1)
+            if (is_string($birthdate) === true && !empty($birthdate)) {
+                // If birthdate is string, create DateTimeImmutable object for validation
+                $birthdateObj = DateTimeImmutable::createFromFormat($format, $birthdate);
+                // Allow default format Y-m-d as well (client creation via API submit)
+                if (false === $birthdateObj || array_sum($birthdateObj->getLastErrors())){
+                    // Try with default format and original value
+                    $birthdateObj = DateTimeImmutable::createFromFormat('Y-m-d', $birthdate);
+                }
+                $birthdate = $birthdateObj;
+            }
+            if (!($birthdate instanceof \DateTimeImmutable) || array_sum($birthdate->getLastErrors())) {
                 // Birthdate is not null, not a string with valid date and also not an instance of the custom
                 // DateTimeImmutable format (from the data object) it means that its invalid
-                $validationResult->setError('birthdate', __('Invalid value'));
-
+                $validationResult->setError('birthdate', __('Invalid value dd.mm.YYYY'));
                 return;
             }
 

@@ -3,6 +3,7 @@
     #full-header-edit-icon-container {
         margin-bottom: 25px;
     }
+
     #full-header-edit-icon-container h1 {
         display: inline-block;
         /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
@@ -11,9 +12,11 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
-    #full-header-edit-icon-container[data-deleted="1"] h1{
+
+    #full-header-edit-icon-container[data-deleted="1"] h1 {
         color: orangered;
     }
+
     /*Clear float*/
     #full-header-edit-icon-container::after {
         content: "";
@@ -25,6 +28,7 @@
     .partial-header-edit-icon-div {
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
+
     .contenteditable-field-container {
         position: relative;
         display: inline-block;
@@ -62,7 +66,7 @@
     }
 
     /* Display outline on span element */
-    .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"]{
+    .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"] {
         outline: 2px solid var(--primary-color);
         border-radius: 5px;
         background: var(--background-accent-color);
@@ -70,6 +74,7 @@
 
     .contenteditable-placeholder[contenteditable=true]:empty:before {
         content: attr(data-placeholder);
+        color: gray;
     }
 }
 
