@@ -48,9 +48,9 @@ class ChangePasswordSubmitAction
      * @param Response $response
      * @param array $args
      *
+     * @return Response
      * @throws \JsonException
      *
-     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response, array $args): Response
     {
@@ -86,7 +86,7 @@ class ChangePasswordSubmitAction
             }
         }
 
-        $flash->add('error', 'There is something wrong with the application.');
+        $flash->add('error', 'There is something wrong with the request body.');
         // Prevent to log passwords
         $this->logger->error(
             'Password change request malformed. Array keys: ' . json_encode(

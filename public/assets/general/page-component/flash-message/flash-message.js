@@ -149,6 +149,8 @@ export function slideFlashOut() {
     // Remove flash from dom as it's not needed anymore after slide out animation is done
     setTimeout(() => {
         flash.remove();
+        // Reset flash message slide in delay after it slid out
+        displayFlashMessageDelay = 0;
     }, mobileSlideOutAnimationTime);
 }
 

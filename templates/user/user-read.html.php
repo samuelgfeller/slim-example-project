@@ -82,7 +82,7 @@ $this->addAttribute(
                         echo "<option value='$userStatus->value' $selected>" .
                             __(ucfirst($userStatus->value)) . "</option>";
                     }
-?>
+                    ?>
                 </select>
             </div>
 
@@ -92,11 +92,11 @@ $this->addAttribute(
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
                     <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
                     <?php
-foreach ($user->availableUserRoles as $id => $userRole) {
-    $selected = $id === $user->userRoleId ? 'selected' : '';
-    echo "<option value='$id' $selected>" . $userRole . "</option>";
-}
-?>
+                    foreach ($user->availableUserRoles as $id => $userRole) {
+                        $selected = $id === $user->userRoleId ? 'selected' : '';
+                        echo "<option value='$id' $selected>" . $userRole . "</option>";
+                    }
+                    ?>
                 </select>
             </div>
         </div>
@@ -114,7 +114,6 @@ foreach ($user->availableUserRoles as $id => $userRole) {
             <span spellcheck="false" data-name="email" data-maxlength="254"
             ><?= !empty($user->email) ? html($user->email) : '&nbsp;' ?></span>
         </div>
-
         <div>
             <?php
             if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
@@ -148,7 +147,7 @@ foreach ($user->availableUserRoles as $id => $userRole) {
             <?php
         }
         $lang = $user->language?->value;
-?>
+        ?>
         <div id="language-switch-div">
             <h3 class="label-h3"><?= __('Language') ?></h3>
             <label class="form-radio-input">
