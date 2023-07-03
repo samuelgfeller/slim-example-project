@@ -141,6 +141,7 @@ final class Validator
      * @param \DateTimeImmutable|string|null $birthdate
      * @param ValidationResult $validationResult
      * @param bool $required
+     * @param string $format
      */
     public function validateBirthdate(
         \DateTimeImmutable|string|null $birthdate,
@@ -155,7 +156,7 @@ final class Validator
                 // If birthdate is string, create DateTimeImmutable object for validation
                 $birthdateObj = DateTimeImmutable::createFromFormat($format, $birthdate);
                 // Allow default format Y-m-d as well (client creation via API submit)
-                if (false === $birthdateObj || array_sum($birthdateObj->getLastErrors())){
+                if (false === $birthdateObj || array_sum($birthdateObj->getLastErrors())) {
                     // Try with default format and original value
                     $birthdateObj = DateTimeImmutable::createFromFormat('Y-m-d', $birthdate);
                 }
@@ -165,6 +166,7 @@ final class Validator
                 // Birthdate is not null, not a string with valid date and also not an instance of the custom
                 // DateTimeImmutable format (from the data object) it means that its invalid
                 $validationResult->setError('birthdate', __('Invalid value dd.mm.YYYY'));
+
                 return;
             }
 
