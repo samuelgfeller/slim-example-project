@@ -31,8 +31,10 @@ document.querySelector('select[name="user_id"]:not([disabled])')
 
 // Edit client main values event listeners
 // First and last name
+document.querySelector('h1[data-name="first_name"]')?.addEventListener('dblclick', makeClientFieldEditable);
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeClientFieldEditable);
+document.querySelector('h1[data-name="last_name"]')?.addEventListener('dblclick', makeClientFieldEditable);
 // Personal info
 document.querySelector('#edit-location-btn')?.addEventListener('click', makeClientFieldEditable);
 document.querySelector('#edit-phone-btn')?.addEventListener('click', makeClientFieldEditable);

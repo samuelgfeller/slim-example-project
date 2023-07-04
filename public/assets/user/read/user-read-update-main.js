@@ -16,8 +16,11 @@ loadUserActivities(`user=${userId}`);
 
 // Null safe operator as edit icon doesn't exist if not privileged
 document.querySelector('#edit-first-name-btn')?.addEventListener('click', makeUserFieldEditable);
+document.querySelector('h1[data-name="first_name"]')?.addEventListener('dblclick', makeUserFieldEditable);
 document.querySelector('#edit-last-name-btn')?.addEventListener('click', makeUserFieldEditable);
+document.querySelector('h1[data-name="surname"]')?.addEventListener('dblclick', makeUserFieldEditable);
 document.querySelector('#edit-email-btn')?.addEventListener('click', makeUserFieldEditable);
+document.querySelector('[data-name="email"]')?.addEventListener('dblclick', makeUserFieldEditable);
 
 // User status dropdown change
 document.querySelector('select[name="status"]:not([disabled])')
