@@ -1,5 +1,5 @@
 # Error handling 
-![Error page](https://i.imgur.com/9KIW0Qq.png) 
+![Error page](https://i.imgur.com/YNfd6Ab.png) 
 
 ## Configuration
 ### Default values
