@@ -1,5 +1,5 @@
 # Error handling 
-![Error page](https://i.imgur.com/9KIW0Qq.png) 
+![Error page](https://i.imgur.com/YNfd6Ab.png) 
 
 ## Configuration
 ### Default values
@@ -315,16 +315,16 @@ CSS. E.g. paths in the stack trace that don't contain the word `vender` are emph
 they are much more relevant to me. I also like to make a distinction from a warning / notice 
 and I do that with the color red and orange. 
 
-File: `src/Application/Handler/DefaultErrorHandler.php` (most up to date version can be
-found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/src/Application/Handler/DefaultErrorHandler.php))
+File: `src/Application/ErrorHandler/DefaultErrorHandler.php` (most up to date version can be
+found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/src/Application/ErrorHandler/DefaultErrorHandler.php))
 ```php
 <?php
 
-namespace App\Application\Handler;
+namespace App\Application\ErrorHandler;
 
-use App\Domain\Exceptions\ValidationException;
 use App\Domain\Factory\LoggerFactory;
-use InvalidArgumentException;
+use App\Domain\Validation\ValidationException;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -338,19 +338,6 @@ use Throwable;
  */
 class DefaultErrorHandler
 {
-    /**
-     * @var PhpRenderer
-     */
-    private PhpRenderer $phpRenderer;
-
-    /**
-     * @var ResponseFactoryInterface
-     */
-    private ResponseFactoryInterface $responseFactory;
-
-    /**
-     * @var LoggerInterface
-     */
     private LoggerInterface $logger;
 
     /**
@@ -361,12 +348,10 @@ class DefaultErrorHandler
      * @param LoggerFactory $logger Logger
      */
     public function __construct(
-        PhpRenderer $phpRenderer,
-        ResponseFactoryInterface $responseFactory,
+        private readonly PhpRenderer $phpRenderer,
+        private readonly ResponseFactoryInterface $responseFactory,
         LoggerFactory $logger
     ) {
-        $this->phpRenderer = $phpRenderer;
-        $this->responseFactory = $responseFactory;
         $this->logger = $logger->addFileHandler('error.log')->createInstance('error');
     }
 
@@ -378,8 +363,9 @@ class DefaultErrorHandler
      * @param bool $displayErrorDetails Show error details
      * @param bool $logErrors Log errors
      *
-     * @return ResponseInterface The response
      * @throws Throwable
+     *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -405,9 +391,17 @@ class DefaultErrorHandler
                 )
             );
         }
-        
+
         // Error output if script is called via cli (e.g. testing)
         if (PHP_SAPI === 'cli') {
+            // If the column is not found and the request is coming from the command line, it probably means
+            // that the database and code was changed and `composer migration:generate` and `composer schema:generate`
+            // were not executed after the change.
+            if ($exception instanceof \PDOException
+                && str_contains($exception->getMessage(), 'Column not found')
+            ) {
+                echo "Column not existing. Try running `composer schema:generate` in the console and run tests again. \n";
+            }
             // The exception is thrown to have the standard behaviour (important for testing)
             throw $exception;
         }
@@ -420,9 +414,14 @@ class DefaultErrorHandler
         if ($displayErrorDetails === true) {
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
-            // Layout removed in error detail template
         } else {
-            $errorMessage = ['statusCode' => $statusCode, 'reasonPhrase' => $reasonPhrase];
+            // If its a HttpException it's safe to show the error message to the user (used for custom )
+            $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
+            $errorMessage = [
+                'exceptionMessage' => $exceptionMessage,
+                'statusCode' => $statusCode,
+                'reasonPhrase' => $reasonPhrase,
+            ];
             $errorTemplate = 'error/error-page.html.php';
         }
 
@@ -433,7 +432,7 @@ class DefaultErrorHandler
         $response = $this->phpRenderer->render(
             $response,
             $errorTemplate,
-            ['errorMessage' => $errorMessage,]
+            ['errorMessage' => $errorMessage]
         );
 
         return $response->withStatus($statusCode);
@@ -449,37 +448,31 @@ class DefaultErrorHandler
     private function getHttpStatusCode(Throwable $exception): int
     {
         // Detect status code
-        $statusCode = 500;
+        $statusCode = StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR; // 500
 
         if ($exception instanceof HttpException) {
             $statusCode = (int)$exception->getCode();
         }
 
-        if ($exception instanceof \DomainException || $exception instanceof InvalidArgumentException) {
-            // Bad request
-            $statusCode = 400;
-        }
-
         if ($exception instanceof ValidationException) {
-            // Unprocessable Entity
-            $statusCode = 422;
+            $statusCode = StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY; // 422
         }
 
         $file = basename($exception->getFile());
         if ($file === 'CallableResolver.php') {
-            $statusCode = 404;
+            $statusCode = StatusCodeInterface::STATUS_NOT_FOUND; // 404
         }
 
         return $statusCode;
     }
 
     /**
-     * Build HTML with exception content and styling
+     * Build HTML with exception content and styling.
      *
      * @param Throwable $exception Error
-     *
      * @param int|null $statusCode
      * @param string|null $reasonPhrase
+     *
      * @return string The full error message
      */
     private function getExceptionDetailsAsHtml(
@@ -488,13 +481,14 @@ class DefaultErrorHandler
         string $reasonPhrase = null
     ): string {
         // Init variables
-        $error = '';
+        $error = '<!DOCTYPE html><html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>';
 
         $file = $exception->getFile();
         $line = $exception->getLine();
         $message = $exception->getMessage();
         $trace = $exception->getTrace();
-
 
         // Check if it is a warning message or error
         $errorCssClass = $exception instanceof \ErrorException ? 'warning' : 'error';
@@ -527,10 +521,10 @@ class DefaultErrorHandler
             $firstChunk,
             $lastWord,
             $line
-        ); // close title div
+        );
 
         $error .= sprintf('<div id="trace-div" class="%s"><table>', $errorCssClass); // opened trace div / opened table
-        $error .= '<tr><th id="num-th">#</th><th>Function</th><th>Location</th></tr>';
+        $error .= '<tr class="non-vendor"><th id="num-th">#</th><th>Function</th><th>Location</th></tr>';
         foreach ($trace as $key => $t) {
             // Sometimes class, type, file and line not set e.g. pdfRenderer when var undefined in template
             $t['class'] = $t['class'] ?? '';
@@ -539,24 +533,36 @@ class DefaultErrorHandler
             $t['line'] = $t['line'] ?? '';
             // remove everything from file path before the last \
             $fileWithoutPath = $this->removeEverythingBeforeChar($t['file']);
-            // remove everything from class before late \
+            // remove everything from class before last \
             $classWithoutPath = $this->removeEverythingBeforeChar($t['class']);
-            // if file path has not vendor in it, a css class is added to indicate it because it's more relevant
-            $nonVendorClass = !strpos($t['file'], 'vendor') ? 'non-vendor' : '';
+            // if file path contains "vendor", a css class is added to highlight it
+            $nonVendorFileClass = !str_contains($t['file'], 'vendor') ? 'non-vendor' : '';
+            // if file and class path don't contain vendor, add "non-vendor" class to add highlight on class
+            $classIsVendor = str_contains($t['class'], 'vendor');
+            $nonVendorClassClass = !empty($nonVendorFileClass) && !$classIsVendor ? 'non-vendor' : '';
+            // Get function arguments
+            $args = [];
+            foreach ($t['args'] as $argument) {
+                $args[] = $this->getTraceArgumentAsString($argument);
+            }
+            $args = implode(', ', $args);
             // adding html
             $error .= sprintf(
-                '<tr><td>%s</td><td class="function-td %s">%s</td><td class="%s">%s</td></tr>',
+                '<tr><td class="%s">%s</td><td class="function-td %s">%s</td><td class="%s">%s</td></tr>',
+                $nonVendorFileClass,
                 $key,
-                $nonVendorClass,
-                '...\\' . $classWithoutPath . $t['type'] . $t['function'] . '(...)', // only last 85 chars
-                $nonVendorClass,
-                '...\\' . $fileWithoutPath . ':<span class="lineSpan">' . $t['line'] . '</span>',
+                $nonVendorClassClass,
+                $classWithoutPath . $t['type'] . $t['function'] . "(<i style='color: #395186'>$args</i>)",
+                // only last 85 chars
+                $nonVendorFileClass,
+                $fileWithoutPath . ':<span class="lineSpan">' . $t['line'] . '</span>',
             );
         }
         $error .= '</table></div>'; // close table
         $error .= '<style>
-            @font-face { font-family: CenturyGothic; src: url(assets/general/fonts/CenturyGothic.ttf); }
-            body { margin: 0; background: #ffd9d0; font-family: "CenturyGothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap");
+            * { white-space: break-spaces; overflow-wrap: anywhere; }
+            body { margin: 0; background: #ffd9d0; font-family: "Poppins", Geneva, AppleGothic, sans-serif; }
             body.warning { background: #ffead0; }
             body.error { background: #ffd9d0; }
             #title-div{ padding: 5px 10%; color: black; margin:30px; background: tomato; border-radius: 0 35px; box-shadow: 0 0 17px tomato; }
@@ -564,29 +570,36 @@ class DefaultErrorHandler
             #title-div.warning { background: orange; box-shadow: 0 0 17px orange;}
             #title-div.error { background: tomato; box-shadow: 0 0 17px tomato;}
             #first-path-chunk{ font-size: 0.7em; }
-            #trace-div{ width: 80%; margin: auto auto 40px; min-width: 688px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
+            #trace-div{ width: 80%; margin: auto auto 40px; min-width: 350px; padding: 20px; background: #ff9e88; border-radius: 0 35px;
                  box-shadow: 0 0 10px #ff856e; }
             #trace-div.warning { background: #ffc588; box-shadow: 0 0 10px #ffad6e; }
             #trace-div.error { background: #ff9e88; box-shadow: 0 0 10px #ff856e; }
             #trace-div h2{ margin-top: 0; padding-top: 19px; text-align: center; }
-            #trace-div table{ border-collapse: collapse;  font-size: 1.2em; width: 100%; overflow-x: auto; }
+            #trace-div table{ border-collapse: collapse;   width: 100%; overflow-x: auto; }
             #trace-div table td, #trace-div table th{  /*border-top: 6px solid red;*/ padding: 8px; text-align: left;}
-            #trace-div table tr td:first-child, #trace-div table tr th:first-child { padding-left: 20px; }
+            #trace-div table tr td:nth-child(3) { min-width: 100px; }
             #num-th { font-size: 2em; color: #a46856; margin-right: 50px;}
-            .non-vendor{ font-weight: bold; } 
+            .non-vendor{ font-weight: bold; font-size: 1.2em;} 
             .non-vendor .lineSpan{ font-weight: bold; color: #b00000;font-size: 1.3em; } 
+            .is-vendor{ font-weight: normal;} 
             #exception-name { float: right}
+            /* When screen smaller than 1000px */
             @media screen and (max-width: 1000px) {
                 #trace-div { font-size: 0.8em; }
                 #title-div h1 { font-size: 1.6em; }
             }
+            /* When screen smaller than 810px */
             @media screen and (max-width: 810px) {
                 #trace-div table { font-size: 1.1em; }
-                #title-div { box-sizing: border-box; margin-left: 0; margin-right: 0; width: 100%; }
+                #title-div {box-sizing: border-box; margin-left: 0; margin-right: 0; width: 100%; }
+            }
+            /* When screen bigger than 810px */
+            @media screen and (min-width: 810px) {
+                #trace-div table tr td:first-child, #trace-div table tr th:first-child { padding-left: 20px; }
             }
             
             </style>';
-        $error .= '</body>'; // close body
+        $error .= '</body></html>'; // close body
 
         return $error;
     }
@@ -596,8 +609,48 @@ class DefaultErrorHandler
         return trim(substr($string, strrpos($string, $lastChar) + 1));
 
         // alternative https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
-//        $path = explode('\\', __CLASS__);
-//        return array_pop($path);
+        //        $path = explode('\\', __CLASS__);
+        //        return array_pop($path);
+    }
+
+    /**
+     * The stack trace contains called functions with function arguments
+     * that can be of any type (objects, arrays, strings or null).
+     * This function returns such an argument as string.
+     *
+     * @param mixed $argument
+     *
+     * @return string
+     */
+    private function getTraceArgumentAsString(mixed $argument): string
+    {
+        if ($argument === null) {
+            $formatted = 'NULL';
+        } elseif (is_string($argument)) {
+            if (strlen($argument) > 15) {
+                $argument = substr($argument, 0, 15) . '...';
+            }
+            $formatted = '"' . $argument . '"';
+        } elseif (is_object($argument)) {
+            $formatted = get_class($argument);
+            $nonVendor = str_starts_with($formatted, 'App');
+            // Only keep last part of class string
+            if (strlen($formatted) > 15) {
+                $formatted = trim(substr($formatted, strrpos($formatted, '\\') + 1));
+            }
+            $formatted = $nonVendor ? "<b>Object($formatted)</b>" : "Object($formatted)";
+        } elseif (is_array($argument)) {
+            // Convert each array element to string recursively
+            $elements = array_map(function ($element) {
+                return $this->getTraceArgumentAsString($element);
+            }, $argument);
+
+            return '[' . implode(', ', $elements) . ']';
+        } else {
+            $formatted = (string)$argument;
+        }
+
+        return $formatted;
     }
 }
 ```
