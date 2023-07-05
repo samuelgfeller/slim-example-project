@@ -16,7 +16,7 @@ final class JsImportVersionAdder
     {
         $deploymentSettings = $settings->get('deployment');
         $this->version = $deploymentSettings['version'];
-        $this->assetsPath = $deploymentSettings['assetsPath'];
+        $this->assetsPath = $deploymentSettings['assets_path'];
     }
 
     /**

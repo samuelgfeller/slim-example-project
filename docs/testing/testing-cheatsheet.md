@@ -12,7 +12,8 @@ will come to mind naturally and the list can be extended.
 
 ### What to test
 
-This is a big question I have no answer to yet. For me the following useful tests come to mind:
+Each project has different components and priorities, so I don't think there is a general rule of
+what makes sense to be tested but the following test cases come to my mind:
 
 * Page actions
     * Authenticated page load

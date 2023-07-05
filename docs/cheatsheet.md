@@ -13,6 +13,12 @@
 </details>
 
 <details>
+  <summary><h2>New version release</h2></summary>
+
+1. Update the version in the config file: `defaults.php` 
+</details>
+
+<details>
   <summary><h2>Ajax requests</h2></summary>
 
 ### Fetch data: GET request

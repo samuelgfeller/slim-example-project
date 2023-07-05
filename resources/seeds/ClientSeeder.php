@@ -33,7 +33,9 @@ class ClientSeeder extends AbstractSeed
      */
     public function run(): void
     {
-        $oneWeekAgo = (new \DateTime())->sub(new \DateInterval('P08D'))->format('Y-m-d H:i:s');
+        $now = new DateTime();
+        $oneDayAgo = $now->sub(new \DateInterval('P01D'))->format('Y-m-d H:i:s');
+        $oneWeekAgo = $now->sub(new \DateInterval('P08D'))->format('Y-m-d H:i:s');
 
         $data = [
             [
@@ -48,7 +50,7 @@ class ClientSeeder extends AbstractSeed
                 'client_message' => 'I have been struggling with addiction to drugs for a long time and I need help' .
                     ' to overcome it.',
                 'vigilance_level' => null,
-                'user_id' => 2,
+                'user_id' => null,
                 'client_status_id' => 2,
                 'assigned_at' => null,
                 'created_at' => $oneWeekAgo,
@@ -66,8 +68,8 @@ class ClientSeeder extends AbstractSeed
                     'stable employment. I am running out of options and I am in need of assistance to find a job.',
                 'vigilance_level' => null,
                 'user_id' => 1,
-                'client_status_id' => 3,
-                'assigned_at' => null,
+                'client_status_id' => 1,
+                'assigned_at' => $oneDayAgo,
                 'created_at' => $oneWeekAgo,
             ],
             [
@@ -83,7 +85,7 @@ class ClientSeeder extends AbstractSeed
                 'vigilance_level' => null,
                 'user_id' => 2,
                 'client_status_id' => 2,
-                'assigned_at' => null,
+                'assigned_at' => $oneDayAgo,
                 'created_at' => $oneWeekAgo,
             ],
             [
@@ -99,7 +101,7 @@ class ClientSeeder extends AbstractSeed
                 'vigilance_level' => null,
                 'user_id' => 3,
                 'client_status_id' => 2,
-                'assigned_at' => null,
+                'assigned_at' => $oneDayAgo,
                 'created_at' => $oneWeekAgo,
             ],
             [
@@ -116,7 +118,7 @@ class ClientSeeder extends AbstractSeed
                 'vigilance_level' => null,
                 'user_id' => 4,
                 'client_status_id' => 2,
-                'assigned_at' => null,
+                'assigned_at' => $oneDayAgo,
                 'created_at' => $oneWeekAgo,
             ],
             [
@@ -130,7 +132,7 @@ class ClientSeeder extends AbstractSeed
                 'sex' => 'F',
                 'client_message' => null,
                 'vigilance_level' => null,
-                'user_id' => 4,
+                'user_id' => null,
                 'client_status_id' => 2,
                 'assigned_at' => null,
                 'created_at' => $oneWeekAgo,
@@ -146,7 +148,7 @@ class ClientSeeder extends AbstractSeed
                 'sex' => 'M',
                 'client_message' => null,
                 'vigilance_level' => null,
-                'user_id' => 3,
+                'user_id' => null,
                 'client_status_id' => 2,
                 'assigned_at' => null,
                 'created_at' => $oneWeekAgo,

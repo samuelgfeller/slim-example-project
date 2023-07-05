@@ -54,7 +54,7 @@
 
     <title><?= $title ?></title>
     <script>
-        // Add the theme immediately to the <html> element before everything is done loading
+        // Add the theme immediately to the <html> element before everything is done loading to prevent delay
         const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
         // Get the theme provided from the server via query param (only after login)
         const themeParam = new URLSearchParams(window.location.search).get('theme');

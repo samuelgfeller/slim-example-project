@@ -57,7 +57,8 @@ class NoteSeeder extends AbstractSeed
                 'created_at' => $oneWeekAgo,
             ],
 
-            // 2 Royce Obanion 1 I have been looking for a job for months now and I can't seem to find any stable employment. I am running out of options and I am in need of assistance to find a job.
+            // 2 Royce Obanion 1 I have been looking for a job for months now and I can't seem to find any stable employment.
+            // I am running out of options and I am in need of assistance to find a job.
             [
                 'id' => 3,
                 'user_id' => 1,

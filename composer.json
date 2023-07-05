@@ -15,8 +15,8 @@
     "selective/basepath": "^2.0",
     "symfony/mailer": "^5.3",
     "nyholm/psr7": "^1.5",
+    "nyholm/psr7-server": "^1",
     "fig/http-message-util": "^1.1",
-    "nyholm/psr7-server": "^1.0",
     "ext-gettext": "*",
     "ext-intl": "*"
   },
@@ -54,8 +54,7 @@
     "migration:create": "phinx create -c config/phinx.php --ansi",
     "migration:generate": [
       "phinx-migrations generate --overwrite -c config/phinx.php --ansi",
-      "@schema:generate",
-      "@add-migrations-to-git"
+      "@schema:generate"
     ],
     "migrate": "phinx migrate -c config/phinx.php --ansi -vvv",
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",

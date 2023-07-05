@@ -17,4 +17,6 @@
 // Error handler. More controlled than ini
 $settings['error']['display_error_details'] = false;
 
+$settings['deployment']['update_imports_version'] = false;
+
 $settings['db']['database'] = 'samuelgfeller_demo_slim_example_project';

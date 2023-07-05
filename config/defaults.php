@@ -29,7 +29,9 @@ $settings['dev'] = false;
 $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
     'version' => '0.3.1',
-    'assetsPath' => __DIR__ . '/../public/assets',
+    // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
+    'update_imports_version' => true, // Disable in prod
+    'assets_path' => __DIR__ . '/../public/assets',
 ];
 
 $settings['locale'] = [

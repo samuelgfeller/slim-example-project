@@ -20,7 +20,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
 {
     private array $publicSettings;
     private bool $devSetting;
-    private string $appVersion;
+    private array $deploymentSettings;
 
     public function __construct(
         private readonly App $app,
@@ -33,7 +33,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
     ) {
         $this->publicSettings = $settings->get('public');
         $this->devSetting = $settings->get('dev');
-        $this->appVersion = $settings->get('deployment')['version'];
+        $this->deploymentSettings = $settings->get('deployment');
     }
 
     public function process(
@@ -45,7 +45,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         $this->phpRenderer->setAttributes([
             'title' => 'Slim Example Project',
             'dev' => $this->devSetting,
-            'version' => $this->appVersion,
+            'version' => $this->deploymentSettings['version'],
             'uri' => $request->getUri(),
             'basePath' => $this->app->getBasePath(),
             'route' => $this->routeParser,
@@ -69,7 +69,9 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         }
 
         // Add version number to js imports
-        $this->jsImportVersionAdder->addVersionToJsImports();
+        if($this->deploymentSettings['update_imports_version'] === true) {
+            $this->jsImportVersionAdder->addVersionToJsImports();
+        }
 
         return $handler->handle($request);
     }

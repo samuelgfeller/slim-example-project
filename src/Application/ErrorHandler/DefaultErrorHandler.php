@@ -240,9 +240,9 @@ class DefaultErrorHandler
         }
         $error .= '</table></div>'; // close table
         $error .= '<style>
-            @font-face { font-family: CenturyGothic; src: url(assets/general/general-font/CenturyGothic.ttf); }
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap");
             * { white-space: break-spaces; overflow-wrap: anywhere; }
-            body { margin: 0; background: #ffd9d0; font-family: "CenturyGothic", CenturyGothic, Geneva, AppleGothic, sans-serif; }
+            body { margin: 0; background: #ffd9d0; font-family: "Poppins", Geneva, AppleGothic, sans-serif; }
             body.warning { background: #ffead0; }
             body.error { background: #ffd9d0; }
             #title-div{ padding: 5px 10%; color: black; margin:30px; background: tomato; border-radius: 0 35px; box-shadow: 0 0 17px tomato; }

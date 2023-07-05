@@ -18,7 +18,7 @@ ini_set('display_errors', $settings['dev'] ? '1' : '0');
 // Error handler. More controlled than ini
 $settings['error']['display_error_details'] = $settings['dev'];
 
-$settings['deployment']['assetsPath'] = __DIR__ . '/../public/assets';
+$settings['deployment']['assets_path'] = __DIR__ . '/../public/assets';
 
 // Database
 $settings['db']['database'] = 'slim_example_project';
