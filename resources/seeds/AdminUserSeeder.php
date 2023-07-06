@@ -32,10 +32,10 @@ class AdminUserSeeder extends AbstractSeed
         $userData = [
             [
                 'first_name' => 'Admin',
-                'surname' => null,
+                'surname' => 'Admin',
                 'user_role_id' => 1,
                 'status' => 'active',
-                'email' => 'admin@admin.com',
+                'email' => 'admin@user.com',
                 'password_hash' => '$2y$10$bHOxtOEs/vBsVnzDLqP3oexZp2yi9aO.DvIloFo0/UZAksMn.VBKm', // password: 12345678
             ],
         ];

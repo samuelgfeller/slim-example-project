@@ -1,10 +1,11 @@
 name: 🚀 Deployment
+
+# Only trigger, when the build workflow succeeded
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+  workflow_run:
+    workflows: [ "🧪 Build test" ]
+    types:
+      - completed
 
 jobs:
   run:
@@ -49,7 +50,7 @@ jobs:
             .git*/**
             docs/**
             tests/**
-            
+
       - name: Executing database migrations
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -58,7 +59,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
-          script: | 
+          script: |
             cd ${{ secrets.DEMO_PROJECT_ROOT }}
             chmod +x vendor/bin/phinx 
             composer migrate
@@ -86,6 +87,6 @@ jobs:
           passphrase: ${{ secrets.CARE_POINT_SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.CARE_POINT_SSH_PORT }}
           script: |
-           cd ${{ secrets.CARE_POINT_PROJECT_ROOT }}
-           chmod +x vendor/bin/phinx
-           composer migrate
+            cd ${{ secrets.CARE_POINT_PROJECT_ROOT }}
+            chmod +x vendor/bin/phinx
+            composer migrate
