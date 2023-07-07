@@ -23,6 +23,7 @@ return (new Config())
             'concat_space' => ['spacing' => 'one'],
             'compact_nullable_typehint' => true,
             'declare_equal_normalize' => ['space' => 'single'],
+            'declare_strict_types' => false,
             'increment_style' => ['style' => 'post'],
             'list_syntax' => ['syntax' => 'short'],
             'echo_tag_syntax' => ['format' => 'long'],
