@@ -1,14 +1,15 @@
 name: 🚀 Deployment
 
-# Only trigger, when the build workflow succeeded
+# Only trigger, when the build workflow is done
 on:
   workflow_run:
     workflows: [ "🧪 Build test" ]
     types:
       - completed
-
 jobs:
   run:
+    # Run job only on success of the build test workflow
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     name: Deploy PHP application
     steps:
