@@ -29,7 +29,7 @@ build:
     neo4j: false
     rabbitmq: false
     variables:
-      APP_ENV: 'github'
+      APP_ENV: 'scrutinizer'
   nodes:
     analysis:
       tests:
