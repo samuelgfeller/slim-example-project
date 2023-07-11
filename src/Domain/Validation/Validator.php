@@ -119,7 +119,7 @@ final class Validator
      * @param ValidationResult $validationResult
      */
     public function validateEmail(
-        string|null $email,
+        ?string $email,
         ValidationResult $validationResult,
         bool $required = false,
     ): void {
@@ -144,7 +144,7 @@ final class Validator
      * @param string $format
      */
     public function validateBirthdate(
-        \DateTimeImmutable|string|null $birthdate,
+        DateTimeImmutable|string|null $birthdate,
         ValidationResult $validationResult,
         bool $required = false,
         string $format = 'd.m.Y'

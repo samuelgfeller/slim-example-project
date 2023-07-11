@@ -17,8 +17,8 @@ class ClientDropdownValuesData
     public ?array $vigilanceLevel;
 
     public function __construct(
-        array $statuses = null,
-        array $users = null,
+        ?array $statuses = null,
+        ?array $users = null,
     ) {
         $this->statuses = $statuses;
         $this->users = $users;

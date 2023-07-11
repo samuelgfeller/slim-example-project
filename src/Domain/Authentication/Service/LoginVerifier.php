@@ -47,7 +47,7 @@ class LoginVerifier
      */
     public function getUserIdIfAllowedToLogin(
         array $userLoginValues,
-        string|null $captcha = null,
+        ?string $captcha = null,
         array $queryParams = []
     ): int {
         // Validate entries coming from client

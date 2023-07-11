@@ -20,8 +20,8 @@ date_default_timezone_set('Europe/Zurich');
 // Init settings var
 $settings = [];
 
-// Path settings
-$settings['root'] = dirname(__DIR__);
+// Project root dir
+$settings['root_dir'] = dirname(__DIR__, 2);
 
 // Simulate prod env
 $settings['dev'] = false;
@@ -31,7 +31,7 @@ $settings['deployment'] = [
     'version' => '0.3.1',
     // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
     'update_imports_version' => true, // Disable in prod
-    'assets_path' => __DIR__ . '/../public/assets',
+    'assets_path' => __DIR__ . '/../../public/assets',
 ];
 
 $settings['locale'] = [
@@ -125,24 +125,24 @@ $settings['api'] = [
 // Phinx database migrations settings
 $settings['phinx'] = [
     'paths' => [
-        'migrations' => $settings['root'] . '/resources/migrations',
-        'seeds' => $settings['root'] . '/resources/seeds',
+        'migrations' => $settings['root_dir'] . '/resources/migrations',
+        'seeds' => $settings['root_dir'] . '/resources/seeds',
     ],
     // Fix "Invalid migration file" error if schema.php is in migrations
-    'schema_file' => $settings['root'] . '/resources/schema/schema.php',
+    'schema_file' => $settings['root_dir'] . '/resources/schema/schema.php',
     'default_migration_prefix' => 'db_change_',
     'generate_migration_name' => true,
     'environments' => [
         'default_migration_table' => 'phinxlog',
         'default_environment' => 'local',
-        'local' => [/*Environment specifics such as db creds are added in phinx.php*/],
+        'local' => [/* Environment specifics such as db creds are added in phinx.php */],
     ],
 ];
 
 // Template renderer settings
 $settings['renderer'] = [
     // Template path
-    'path' => __DIR__ . '/../templates',
+    'path' => $settings['root_dir'] . '/templates',
 ];
 
 // Session
@@ -153,7 +153,7 @@ $settings['session'] = [
 
 $settings['logger'] = [
     'name' => 'app',
-    'path' => __DIR__ . '/../logs',
+    'path' => $settings['root_dir'] . '/logs',
     'filename' => 'app.log',
     'level' => \Monolog\Logger::DEBUG,
     'file_permission' => 0775,

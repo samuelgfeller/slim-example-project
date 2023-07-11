@@ -170,7 +170,7 @@ class UserChangePasswordActionTest extends TestCase
      *
      * @param array|null $malformedRequestBody null for the case that request body is null
      */
-    public function testChangePasswordSubmitActionMalformedBody(null|array $malformedRequestBody): void
+    public function testChangePasswordSubmitActionMalformedBody(?array $malformedRequestBody): void
     {
         // Action class should directly return error so only logged-in user has to be inserted
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

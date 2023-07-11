@@ -151,7 +151,7 @@ final class Responder
         string $template,
         ValidationException $validationException,
         array $queryParams = [],
-        array $preloadValues = null,
+        ?array $preloadValues = null,
     ): ?ResponseInterface {
         // $this->phpRenderer->addAttribute('formErrorMessage', $validationException->getMessage());
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
@@ -184,7 +184,7 @@ final class Responder
         ResponseInterface $response,
         int|string $remainingDelay,
         string $template,
-        array $preloadValues = null,
+        ?array $preloadValues = null,
         array $queryParams = []
     ): ResponseInterface {
         $this->phpRenderer->addAttribute('throttleDelay', $remainingDelay);
@@ -215,7 +215,7 @@ final class Responder
         string $template,
         SecurityException $securityException,
         array $queryParams = [],
-        array $preloadValues = null,
+        ?array $preloadValues = null,
     ): ResponseInterface {
         $this->phpRenderer->addAttribute('throttleDelay', $securityException->getRemainingDelay());
         $this->phpRenderer->addAttribute('formErrorMessage', $securityException->getPublicMessage());

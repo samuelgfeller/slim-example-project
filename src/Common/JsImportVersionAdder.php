@@ -9,7 +9,7 @@ use RecursiveIteratorIterator;
 
 final class JsImportVersionAdder
 {
-    private null|string $version;
+    private ?string $version;
     private string $assetsPath;
 
     public function __construct(Settings $settings)

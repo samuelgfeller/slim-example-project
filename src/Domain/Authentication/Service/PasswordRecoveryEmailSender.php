@@ -58,7 +58,7 @@ class PasswordRecoveryEmailSender
      *
      * @throws ValidationException|TransportExceptionInterface|\JsonException
      */
-    public function sendPasswordRecoveryEmail(array $userValues, string|null $captcha = null): void
+    public function sendPasswordRecoveryEmail(array $userValues, ?string $captcha = null): void
     {
         $email = $userValues['email'];
         $this->userValidator->validatePasswordResetEmail($email);

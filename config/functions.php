@@ -7,7 +7,7 @@
  *
  * @return string The html encoded string
  */
-function html(string $text = null): string
+function html(?string $text = null): string
 {
     return htmlspecialchars($text ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
@@ -20,7 +20,7 @@ function html(string $text = null): string
  *
  * @return string|null
  */
-function get_field_error(array $validation, string $field): string|null
+function get_field_error(array $validation, string $field): ?string
 {
     if ($validation !== []) {
         $key = array_search($field, array_column($validation['errors'], 'field'), false);

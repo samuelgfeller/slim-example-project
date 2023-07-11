@@ -59,7 +59,7 @@ trait AppTestTrait
             }
 
             // Create tables, truncate old ones
-            $this->setUpDatabase($container->get('settings')['root'] . '/resources/schema/schema.sql');
+            $this->setUpDatabase($container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
             // Always insert user roles so that it doesn't have to be done inside each test function that uses users
             $this->insertFixtures([UserRoleFixture::class]);
         }

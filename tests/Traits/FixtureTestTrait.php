@@ -199,13 +199,13 @@ trait FixtureTestTrait
      *
      * @return array
      */
-//    public function getFixtureRowsWithValueKey(string $key, string $class): array
-//    {
-//        $fixture = new $class();
-//        $resultRows = [];
-//        foreach ($fixture->records as $record) {
-//            $resultRows[$record[$key]] = $record;
-//        }
-//        return $resultRows;
-//    }
+    //    public function getFixtureRowsWithValueKey(string $key, string $class): array
+    //    {
+    //        $fixture = new $class();
+    //        $resultRows = [];
+    //        foreach ($fixture->records as $record) {
+    //            $resultRows[$record[$key]] = $record;
+    //        }
+    //        return $resultRows;
+    //    }
 }

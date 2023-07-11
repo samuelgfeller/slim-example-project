@@ -183,7 +183,7 @@ class PasswordResetSubmitActionTest extends TestCase
      * @param array|null $malformedBody null for the case that request body is null
      * @param string $message
      */
-    public function testChangePasswordMalformedBody(null|array $malformedBody, string $message): void
+    public function testChangePasswordMalformedBody(?array $malformedBody, string $message): void
     {
         // Insert user id 2 role: user
         $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);

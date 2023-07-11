@@ -23,7 +23,7 @@ class ClientAuthorizationGetter
      *
      * @return Privilege
      */
-    public function getMutationPrivilegeForClientColumn(?int $clientOwnerId, string $column = null): Privilege
+    public function getMutationPrivilegeForClientColumn(?int $clientOwnerId, ?string $column = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->clientAuthorizationChecker->isGrantedToDelete($clientOwnerId, false)) {

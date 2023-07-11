@@ -25,7 +25,7 @@ class ClientUtilFinder
      *
      * @return ClientDropdownValuesData
      */
-    public function findClientDropdownValues(int $alreadyAssignedUserId = null): ClientDropdownValuesData
+    public function findClientDropdownValues(?int $alreadyAssignedUserId = null): ClientDropdownValuesData
     {
         $allUsers = $this->userFinderRepository->findAllUsers();
         // Filter users that authenticated user is authorized to assign to the client that is being created.

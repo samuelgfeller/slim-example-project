@@ -40,7 +40,7 @@ class UserCreator
      *
      * @return int|bool insert id, false if user already exists
      */
-    public function createUser(array $userValues, string|null $captcha = null, array $queryParams = []): bool|int
+    public function createUser(array $userValues, ?string $captcha = null, array $queryParams = []): bool|int
     {
         $user = new UserData($userValues);
 

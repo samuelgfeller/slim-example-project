@@ -28,7 +28,7 @@ class NoteUpdater
      *
      * @return bool if update was successful
      */
-    public function updateNote(int $noteId, null|array $noteValues): bool
+    public function updateNote(int $noteId, ?array $noteValues): bool
     {
         // Init object for validation
         $note = new NoteData($noteValues);

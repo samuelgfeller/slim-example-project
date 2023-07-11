@@ -33,9 +33,9 @@ class NoteAuthorizationChecker
      */
     public function isGrantedToRead(
         int $isMain = 0,
-        int $noteOwnerId = null,
-        int $clientOwnerId = null,
-        int $hidden = null,
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
+        ?int $hidden = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -74,7 +74,7 @@ class NoteAuthorizationChecker
      *
      * @return bool
      */
-    public function isGrantedToCreate(int $isMain = 0, int $clientOwnerId = null, bool $log = true): bool
+    public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -111,8 +111,8 @@ class NoteAuthorizationChecker
      */
     public function isGrantedToUpdate(
         int $isMain,
-        int $noteOwnerId = null,
-        int $clientOwnerId = null,
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -154,8 +154,8 @@ class NoteAuthorizationChecker
      * @return bool
      */
     public function isGrantedToDelete(
-        int $noteOwnerId = null,
-        int $clientOwnerId = null,
+        ?int $noteOwnerId = null,
+        ?int $clientOwnerId = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {

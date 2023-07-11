@@ -42,7 +42,7 @@ class SecurityLoginChecker
      * @param string $email
      * @param string|null $reCaptchaResponse
      */
-    public function performLoginSecurityCheck(string $email, string|null $reCaptchaResponse = null): void
+    public function performLoginSecurityCheck(string $email, ?string $reCaptchaResponse = null): void
     {
         if ($this->securitySettings['throttle_login'] === true) {
             // reCAPTCHA verification

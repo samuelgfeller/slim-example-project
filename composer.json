@@ -52,14 +52,14 @@
     "test:coverage": "vendor/bin/phpunit --coverage-clover=coverage.xml",
     "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
     "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi --verbose",
-    "migration:create": "phinx create -c config/phinx.php --ansi",
+    "migration:create": "phinx create -c config/local/env.phinx.php --ansi",
     "migration:generate": [
-      "phinx-migrations generate --overwrite -c config/phinx.php --ansi",
+      "phinx-migrations generate --overwrite -c config/local/env.phinx.php --ansi",
       "@schema:generate"
     ],
-    "migrate": "phinx migrate -c config/phinx.php --ansi -vvv",
+    "migrate": "phinx migrate -c config/local/env.phinx.php --ansi -vvv",
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",
-    "seed:minimal": "php vendor/bin/phinx seed:run -c config/phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
-    "seed": "php vendor/bin/phinx seed:run -c config/phinx.php"
+    "seed:minimal": "php vendor/bin/phinx seed:run -c config/local/env.phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
+    "seed": "php vendor/bin/phinx seed:run -c config/local/env.phinx.php"
   }
 }

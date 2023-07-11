@@ -13,7 +13,7 @@ class ClientFilterWhereConditionBuilder
     ) {
     }
 
-// In the select query there are multiple joins. This is the alias for the client table.
+    // In the select query there are multiple joins. This is the alias for the client table.
 
     /**
      * Build cakephp query builder where array with filter params.

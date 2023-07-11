@@ -109,7 +109,7 @@ return [
     'DatabaseSqlSchemaGenerator' => function (ContainerInterface $container) {
         return new \App\Common\Database\DatabaseSqlSchemaGenerator(
             $container->get(PDO::class),
-            $container->get('settings')['root']
+            $container->get('settings')['root_dir']
         );
     },
     Settings::class => function (ContainerInterface $container) {

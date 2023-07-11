@@ -58,8 +58,8 @@ class NoteFinder
      */
     private function setNotePrivilegeAndRemoveMessageOfHidden(
         array $notes,
-        int $clientOwnerId = null,
-        int $clientId = null
+        ?int $clientOwnerId = null,
+        ?int $clientId = null
     ): void {
         $randomText = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
 invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 

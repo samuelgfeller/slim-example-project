@@ -49,7 +49,7 @@ class NoteAuthorizationGetter
      *
      * @return Privilege
      */
-    public function getNotePrivilege(int $noteOwnerId, int $clientOwnerId = null, int $hidden = null): Privilege
+    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->noteAuthorizationChecker->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {

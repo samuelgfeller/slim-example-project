@@ -22,6 +22,8 @@ return (new Config())
             'cast_spaces' => ['space' => 'none'],
             'concat_space' => ['spacing' => 'one'],
             'compact_nullable_typehint' => true,
+            'nullable_type_declaration' => true,
+            'nullable_type_declaration_for_default_null_value' => true,
             'declare_equal_normalize' => ['space' => 'single'],
             'declare_strict_types' => false,
             'increment_style' => ['style' => 'post'],

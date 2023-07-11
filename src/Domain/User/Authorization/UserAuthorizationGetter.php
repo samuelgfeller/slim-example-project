@@ -49,7 +49,7 @@ class UserAuthorizationGetter
      *
      * @return array
      */
-    public function getAuthorizedUserRoles(int $attributedUserRoleId = null): array
+    public function getAuthorizedUserRoles(?int $attributedUserRoleId = null): array
     {
         $allUserRoles = $this->userRoleFinderRepository->findAllUserRolesForDropdown();
         // Available user roles for dropdown and privilege
@@ -76,7 +76,7 @@ class UserAuthorizationGetter
      *
      * @return Privilege
      */
-    public function getMutationPrivilegeForUserColumn(int $userId, string $column = null): Privilege
+    public function getMutationPrivilegeForUserColumn(int $userId, ?string $column = null): Privilege
     {
         // Usually I'd check first against the highest privilege and if allowed, directly return otherwise continue down the chain
         // But some authorizations are limited per column, so when a column is provided, the update privilege is checked first

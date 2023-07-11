@@ -69,7 +69,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         }
 
         // Add version number to js imports
-        if($this->deploymentSettings['update_imports_version'] === true) {
+        if ($this->deploymentSettings['update_imports_version'] === true) {
             $this->jsImportVersionAdder->addVersionToJsImports();
         }
 

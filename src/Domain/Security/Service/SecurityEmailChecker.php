@@ -41,7 +41,7 @@ class SecurityEmailChecker
      * @param string $email
      * @param string|null $reCaptchaResponse
      */
-    public function performEmailAbuseCheck(string $email, string|null $reCaptchaResponse = null): void
+    public function performEmailAbuseCheck(string $email, ?string $reCaptchaResponse = null): void
     {
         if ($this->securitySettings['throttle_user_email'] === true) {
             $validCaptcha = false;

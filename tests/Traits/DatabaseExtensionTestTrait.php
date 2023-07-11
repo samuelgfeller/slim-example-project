@@ -26,7 +26,7 @@ trait DatabaseExtensionTestTrait
         string $table,
         string $whereColumn,
         mixed $whereValue,
-        array $fields = null
+        ?array $fields = null
     ): array {
         $sql = sprintf('SELECT * FROM `%s` WHERE `%s` = :whereValue', $table, $whereColumn);
         $statement = $this->createPreparedStatement($sql);
@@ -57,7 +57,7 @@ trait DatabaseExtensionTestTrait
     protected function findTableRowsWhere(
         string $table,
         string $whereString,
-        array $fields = null,
+        ?array $fields = null,
         string $joinString = '',
     ): array {
         $sql = "SELECT $table.* FROM `$table` $joinString WHERE $whereString;";
@@ -109,7 +109,7 @@ trait DatabaseExtensionTestTrait
         string $table,
         string $whereColumn,
         mixed $whereValue,
-        array $fields = null,
+        ?array $fields = null,
         string $message = ''
     ): void {
         $rows = $this->findTableRowsByColumn($table, $whereColumn, $whereValue, $fields ?: array_keys($expectedRow));

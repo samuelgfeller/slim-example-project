@@ -54,7 +54,7 @@ class LoggerFactory
      *
      * @return LoggerFactory The logger factory
      */
-    public function addFileHandler(string $filename, int $level = null): self
+    public function addFileHandler(string $filename, ?int $level = null): self
     {
         $filename = sprintf('%s/%s', $this->path, $filename);
 
@@ -85,7 +85,7 @@ class LoggerFactory
      *
      * @return self The instance
      */
-    public function addConsoleHandler(int $level = null): self
+    public function addConsoleHandler(?int $level = null): self
     {
         $streamHandler = new StreamHandler('php://stdout', $level ?? $this->level);
         $streamHandler->setFormatter(new LineFormatter(null, null, false, true));

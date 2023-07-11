@@ -31,7 +31,7 @@ class NoteData implements \JsonSerializable
      *
      * @throws \Exception
      */
-    public function __construct(array $noteResultData = null)
+    public function __construct(?array $noteResultData = null)
     {
         $this->id = $noteResultData['id'] ?? null;
         $this->userId = $noteResultData['user_id'] ?? null;

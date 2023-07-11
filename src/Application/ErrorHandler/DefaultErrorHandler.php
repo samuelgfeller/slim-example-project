@@ -157,8 +157,8 @@ class DefaultErrorHandler
      */
     private function getExceptionDetailsAsHtml(
         Throwable $exception,
-        int $statusCode = null,
-        string $reasonPhrase = null
+        ?int $statusCode = null,
+        ?string $reasonPhrase = null
     ): string {
         // Init variables
         $error = '<!DOCTYPE html><html><head>

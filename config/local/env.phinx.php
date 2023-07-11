@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 use Slim\App;
 
 /** @var App $app */
-$app = require __DIR__ . '/bootstrap.php';
+$app = require __DIR__ . '/../bootstrap.php';
 
 Configure::write('App.namespace', 'App');
 

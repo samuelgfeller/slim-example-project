@@ -12,7 +12,7 @@ final class CorsMiddlewareException extends RuntimeException
         private readonly ResponseInterface $response,
         string $message,
         int $code = 500,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
     }

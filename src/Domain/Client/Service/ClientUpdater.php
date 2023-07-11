@@ -35,7 +35,7 @@ class ClientUpdater
      *
      * @return array update infos containing status and optionally other
      */
-    public function updateClient(int $clientId, null|array $clientValues, int $loggedInUserId): array
+    public function updateClient(int $clientId, ?array $clientValues, int $loggedInUserId): array
     {
         // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
         $this->clientValidator->validateClientUpdate($clientValues);

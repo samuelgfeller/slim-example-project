@@ -35,7 +35,7 @@ class UserFilterHandlerRepository
      *
      * @return bool
      */
-    public function deleteFilterSettingFromUser(int|string $userId, string $userFilterModule = null): bool
+    public function deleteFilterSettingFromUser(int|string $userId, ?string $userFilterModule = null): bool
     {
         $moduleWhere = $userFilterModule ? ['module' => $userFilterModule] : [];
         $query = $this->queryFactory->newQuery()->delete('user_filter_setting')

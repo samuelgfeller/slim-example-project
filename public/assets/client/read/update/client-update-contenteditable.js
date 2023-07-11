@@ -26,10 +26,13 @@ export function makeClientFieldEditable() {
     let field = this.parentNode.querySelector(fieldElement);
 
     // Show personal info container if hidden because it was previously empty
-    showPersonalInfoContainerIfHidden();
+    if (fieldElement !== 'h1') {
+        showPersonalInfoContainerIfHidden();
+    }
 
     // Lock min-width for the container to not shrink during editing
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
+
 
     // fieldElement is usually the html tag of the field but there are special cases like when the parent is <a>
     // in which case the link opening has to be disabled and the field var has to be populated with the right span

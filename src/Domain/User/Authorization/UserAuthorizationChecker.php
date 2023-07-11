@@ -86,8 +86,8 @@ class UserAuthorizationChecker
     public function userRoleIsGranted(
         int $userRoleId,
         ?int $userRoleIdOfUserToMutate,
-        UserRoleData $authenticatedUserRoleData = null,
-        array $userRoleHierarchies = null,
+        ?UserRoleData $authenticatedUserRoleData = null,
+        ?array $userRoleHierarchies = null,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
@@ -287,7 +287,7 @@ class UserAuthorizationChecker
      * @return bool
      */
     public function isGrantedToRead(
-        int|null $userIdToRead = null,
+        ?int $userIdToRead = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {

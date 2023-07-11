@@ -69,7 +69,7 @@ class PasswordChanger
         string $password1,
         string $password2,
         int $userId,
-        string $oldPassword = null
+        ?string $oldPassword = null
     ): bool {
         // Check if password strings are valid
         $this->userValidator->validatePasswords([$password1, $password2], true);

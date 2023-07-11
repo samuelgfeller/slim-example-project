@@ -173,7 +173,7 @@ class UserValidator
      * @param bool $required
      * @param ValidationResult|null $validationResult
      */
-    public function validatePasswords(array $passwords, bool $required, ValidationResult $validationResult = null): void
+    public function validatePasswords(array $passwords, bool $required, ?ValidationResult $validationResult = null): void
     {
         // Keep value to throw exception if validationResult not given
         $validationResultIsGiven = (bool)$validationResult;

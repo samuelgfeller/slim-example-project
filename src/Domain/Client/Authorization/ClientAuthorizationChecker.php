@@ -35,7 +35,7 @@ class ClientAuthorizationChecker
      *
      * @return bool
      */
-    public function isGrantedToCreate(ClientData $client = null): bool
+    public function isGrantedToCreate(?ClientData $client = null): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
@@ -78,8 +78,8 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToAssignUserToClient(
         ?int $assignedUserId,
-        UserRoleData $authenticatedUserRoleData = null,
-        array $userRoleHierarchies = null
+        ?UserRoleData $authenticatedUserRoleData = null,
+        ?array $userRoleHierarchies = null
     ) {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
