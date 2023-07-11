@@ -21,25 +21,25 @@ class ClientListProvider
         // To test for multiple results, at least 2 clients are inserted for each filter
         $clientsToInsert = [
             // Unassigned
-            ['user_id' => null, 'first_name' => 'First'],
-            ['user_id' => null, 'first_name' => 'Second'],
+            ['id' => 1, 'user_id' => null, 'first_name' => 'First'],
+            ['id' => 2, 'user_id' => null, 'first_name' => 'Second'],
             // Assigned to me (user id hardcoded - they must be provided in 'users_to_insert' with this id as attribute)
-            ['user_id' => 42, 'first_name' => 'Third'],
-            ['user_id' => 42, 'client_status_id' => 68, 'first_name' => 'Fourth'],
+            ['id' => 3, 'user_id' => 42, 'first_name' => 'Third'],
+            ['id' => 4, 'user_id' => 42, 'client_status_id' => 68, 'first_name' => 'Fourth'],
             // Deleted
-            ['deleted_at' => $sqlDateTime, 'first_name' => 'Fifth'],
+            ['id' => 5, 'deleted_at' => $sqlDateTime, 'first_name' => 'Fifth'],
             // Deleted, linked to other user and status 68
-            ['deleted_at' => $sqlDateTime, 'user_id' => 43, 'client_status_id' => 68, 'first_name' => 'Seventh'],
+            ['id' => 7, 'deleted_at' => $sqlDateTime, 'user_id' => 43, 'client_status_id' => 68, 'first_name' => 'Seventh'],
             // Assigned to other user than the authenticated one
-            ['user_id' => 43, 'first_name' => 'Eighth'],
-            ['user_id' => 43, 'first_name' => 'Ninth'],
+            ['id' => 8, 'user_id' => 43, 'first_name' => 'Eighth'],
+            ['id' => 9, 'user_id' => 43, 'first_name' => 'Ninth'],
             // Assigned to status
-            ['client_status_id' => 68, 'first_name' => 'Tenth'],
-            ['client_status_id' => 69, 'first_name' => 'Twelfth'], // Assigned to other status
+            ['id' => 10, 'client_status_id' => 68, 'first_name' => 'Tenth'],
+            ['id' => 12, 'client_status_id' => 69, 'first_name' => 'Twelfth'], // Assigned to other status
             // Assigned to status 68, user 42 and deleted
-            ['client_status_id' => 68, 'deleted_at' => $sqlDateTime, 'user_id' => 42, 'first_name' => 'Eleventh'],
+            ['id' => 11, 'client_status_id' => 68, 'deleted_at' => $sqlDateTime, 'user_id' => 42, 'first_name' => 'Eleventh'],
             // Assigned to deleted user
-            ['user_id' => 44, 'first_name' => 'Assigned to deleted user'],
+            ['id' => 13, 'user_id' => 44, 'first_name' => 'Assigned to deleted user'],
         ];
         // ! Users to insert attributes. Has to at least contain all 'user_id' from the clients to insert array
         $usersToInsert = [
@@ -94,8 +94,8 @@ class ClientListProvider
                 'statuses_to_insert' => $clientStatusesToInsert,
             ],
             // * Test filter "deleted"
-            [ // Test user filter "unassigned" and "assigned to me" together
-                'get_params' => ['deleted' => 1], // Query params for "unassigned"
+            [ // Test filter deleted
+                'get_params' => ['deleted' => 1], // Query params for "deleted"
                 'expected_clients_where_string' => 'client.deleted_at IS NOT NULL',
                 // Managing advisor needed for the deleted filter.
                 'authenticated_user' => ['id' => 42, 'user_role_id' => UserRole::MANAGING_ADVISOR],
