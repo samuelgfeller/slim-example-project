@@ -135,7 +135,7 @@ $settings['phinx'] = [
     'environments' => [
         'default_migration_table' => 'phinxlog',
         'default_environment' => 'local',
-        'local' => [],
+        'local' => [/*Environment specifics such as db creds are added in phinx.php*/],
     ],
 ];
 

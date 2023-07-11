@@ -39,7 +39,7 @@ build:
     before:
       - composer self-update
       - composer install --no-interaction --prefer-dist --no-progress
-      - mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
+      - mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
   tests:
     before:
       - command: composer test:coverage
