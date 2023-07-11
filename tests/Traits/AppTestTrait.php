@@ -93,9 +93,11 @@ trait AppTestTrait
     {
         if (method_exists($this, 'setUpDatabase')) {
             $connection = $this->container->get(Connection::class);
+            $connection->rollback();
             $connection->disconnect();
             $container = $this->container->get(App::class)->getContainer();
             $container->set(Connection::class, null);
+            $container->set(\PDO::class, null);
         }
     }
 }
