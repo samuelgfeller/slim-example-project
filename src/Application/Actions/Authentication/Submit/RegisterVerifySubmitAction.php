@@ -23,7 +23,7 @@ final class RegisterVerifySubmitAction
         private readonly SessionInterface $session,
         private readonly RegisterTokenVerifier $registerTokenVerifier
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-verify-register');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-verify-register');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response

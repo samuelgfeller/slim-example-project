@@ -32,7 +32,7 @@ final class UserSubmitUpdateAction
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $loggerFactory
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-update-action');
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-update-action');
     }
 
     /**

@@ -33,7 +33,7 @@ final class ClientDeleteAction
         private readonly SessionInterface $session,
         LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('client-delete');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('client-delete');
     }
 
     /**

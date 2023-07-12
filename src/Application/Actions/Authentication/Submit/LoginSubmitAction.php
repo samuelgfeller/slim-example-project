@@ -29,7 +29,7 @@ final class LoginSubmitAction
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         private readonly UserFinder $userFinder,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response

@@ -17,7 +17,7 @@ class NoteAuthorizationChecker
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         LoggerFactory $loggerFactory
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('note-authorization');
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('note-authorization');
     }
 
     /**

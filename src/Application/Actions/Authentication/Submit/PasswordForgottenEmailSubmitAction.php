@@ -36,7 +36,7 @@ final class PasswordForgottenEmailSubmitAction
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-login');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login');
     }
 
     /**

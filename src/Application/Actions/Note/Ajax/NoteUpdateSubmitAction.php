@@ -35,7 +35,7 @@ final class NoteUpdateSubmitAction
         LoggerFactory $logger,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('note-update');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('note-update');
     }
 
     /**

@@ -32,7 +32,7 @@ class DefaultErrorHandler
         private readonly ResponseFactoryInterface $responseFactory,
         LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('error');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('error');
     }
 
     /**

@@ -22,7 +22,7 @@ class ClientValidator
         LoggerFactory $logger,
         private readonly Validator $validator,
     ) {
-        $logger->addFileHandler('error.log')->createInstance('post-validation');
+        $logger->addFileHandler('error.log')->createLogger('post-validation');
     }
 
     /**

@@ -35,7 +35,7 @@ final class NoteDeleteSubmitAction
         private readonly SessionInterface $session,
         LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('note-delete');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('note-delete');
     }
 
     /**

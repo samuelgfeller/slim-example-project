@@ -23,7 +23,7 @@ class ClientUpdater
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly UserActivityManager $userActivityManager,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('post-service');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('post-service');
     }
 
     /**

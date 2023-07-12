@@ -27,7 +27,7 @@ final class Validator
         LoggerFactory $logger,
     ) {
         // Not LoggerFactory since the instance is created in child class. AppValidation is never instantiated
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('input-validation');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('input-validation');
     }
 
     /**

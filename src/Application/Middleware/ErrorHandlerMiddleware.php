@@ -35,7 +35,7 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
         $this->displayErrorDetails = $displayErrorDetails;
         $this->logErrors = $logErrors;
         $this->logger = $logger->addFileHandler('error.log')
-            ->createInstance('nonfatal-error');
+            ->createLogger('nonfatal-error');
     }
 
     /**

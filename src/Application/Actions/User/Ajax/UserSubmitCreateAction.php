@@ -28,7 +28,7 @@ final class UserSubmitCreateAction
         private readonly SessionInterface $session,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-create-action');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('user-create-action');
     }
 
     /**

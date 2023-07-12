@@ -155,7 +155,7 @@ $settings['logger'] = [
     'name' => 'app',
     'path' => $settings['root_dir'] . '/logs',
     'filename' => 'app.log',
-    'level' => \Monolog\Logger::DEBUG,
+    'level' => \Monolog\Level::Debug,
     'file_permission' => 0775,
 ];
 

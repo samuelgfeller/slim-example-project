@@ -34,7 +34,7 @@ class PasswordResetSubmitAction
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $loggerFactory
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('user-service');
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-service');
     }
 
     /**

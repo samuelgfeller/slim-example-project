@@ -29,7 +29,7 @@ class NoteValidator
         private readonly Validator $validator,
         private readonly LoggerFactory $loggerFactory,
     ) {
-        $this->logger = $this->loggerFactory->addFileHandler('error.log')->createInstance('note-validation');
+        $this->logger = $this->loggerFactory->addFileHandler('error.log')->createLogger('note-validation');
     }
 
     /**

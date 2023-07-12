@@ -38,7 +38,7 @@ final class ClientUpdateAction
         LoggerFactory $logger,
         private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('client-update');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('client-update');
     }
 
     /**

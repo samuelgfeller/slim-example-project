@@ -23,7 +23,7 @@ final class AccountUnlockAction
         private readonly SessionInterface $session,
         private readonly AccountUnlockTokenVerifier $accountUnlockTokenVerifier
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('auth-unlock-account');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-unlock-account');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response

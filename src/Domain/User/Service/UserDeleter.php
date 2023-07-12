@@ -28,7 +28,7 @@ class UserDeleter
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserActivityManager $userActivityManager,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-delete');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('user-delete');
     }
 
     /**

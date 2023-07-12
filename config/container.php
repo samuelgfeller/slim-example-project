@@ -75,7 +75,7 @@ return [
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);
 
-        $logger = $container->get(LoggerFactory::class)->addFileHandler('error.log')->createInstance(
+        $logger = $container->get(LoggerFactory::class)->addFileHandler('error.log')->createLogger(
             'default-errorhandler'
         );
 

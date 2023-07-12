@@ -24,7 +24,7 @@ class ClientAuthorizationChecker
         private readonly SessionInterface $session,
         LoggerFactory $loggerFactory
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('client-authorization');
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('client-authorization');
     }
 
     /**

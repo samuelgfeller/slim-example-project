@@ -5,6 +5,7 @@ namespace App\Domain\Factory;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
@@ -16,12 +17,12 @@ class LoggerFactory
 {
     private string $path;
 
-    private int $level;
+    private Level $level;
 
     public function __construct(array $settings)
     {
         $this->path = (string)$settings['path'];
-        $this->level = (int)$settings['level'];
+        $this->level = $settings['level'] ?? Level::Debug;
     }
 
     private array $handler = [];
@@ -33,7 +34,7 @@ class LoggerFactory
      *
      * @return LoggerInterface The logger factory
      */
-    public function createInstance(string $name): LoggerInterface
+    public function createLogger(string $name): LoggerInterface
     {
         $logger = new Logger($name);
 
@@ -50,11 +51,11 @@ class LoggerFactory
      * Add rotating file logger handler.
      *
      * @param string $filename The filename
-     * @param int|null $level The level (optional)
+     * @param Level|null $level The level (optional)
      *
      * @return LoggerFactory The logger factory
      */
-    public function addFileHandler(string $filename, ?int $level = null): self
+    public function addFileHandler(string $filename, ?Level $level = null): self
     {
         $filename = sprintf('%s/%s', $this->path, $filename);
 
@@ -68,7 +69,7 @@ class LoggerFactory
 
         // The last "true" here tells monolog to remove empty []'s
         $rotatingFileHandler->setFormatter(
-            new LineFormatter(null, null, false, true)
+            new LineFormatter(null, 'Y-m-d H:i:s', false, true)
         );
 
         $this->handler[] = $rotatingFileHandler;
@@ -79,15 +80,13 @@ class LoggerFactory
     /**
      * Add a console logger.
      *
-     * @param int|null $level The level (optional)
-     *
-     * @throws \Exception
+     * @param Level|null $level The level (optional)
      *
      * @return self The instance
      */
-    public function addConsoleHandler(?int $level = null): self
+    public function addConsoleHandler(?Level $level = null): self
     {
-        $streamHandler = new StreamHandler('php://stdout', $level ?? $this->level);
+        $streamHandler = new StreamHandler('php://output', $level ?? $this->level);
         $streamHandler->setFormatter(new LineFormatter(null, null, false, true));
 
         $this->handler[] = $streamHandler;

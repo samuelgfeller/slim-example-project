@@ -21,7 +21,7 @@ final class UserUpdater
         private readonly UserActivityManager $userActivityManager,
         LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('user-service');
+        $this->logger = $logger->addFileHandler('error.log')->createLogger('user-service');
     }
 
     /**

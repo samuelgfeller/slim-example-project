@@ -25,7 +25,7 @@ class PasswordChanger
         private readonly UserActivityManager $userActivityManager,
         LoggerFactory $loggerFactory
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createInstance('password-changer');
+        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('password-changer');
     }
 
     /**
