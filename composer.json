@@ -13,7 +13,7 @@
     "odan/session": "^6",
     "slim/php-view": "^3.0",
     "selective/basepath": "^2.0",
-    "symfony/mailer": "^5.3",
+    "symfony/mailer": "^6",
     "nyholm/psr7": "^1.5",
     "nyholm/psr7-server": "^1",
     "fig/http-message-util": "^1.1",
