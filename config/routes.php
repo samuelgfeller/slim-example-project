@@ -166,7 +166,7 @@ return function (App $app) {
                 $request,
                 'Route "<code>' . $request->getUri()->getHost() . $request->getUri()->getPath() .
                 '</code>" not found.'
-            // <br>Basepath: "' . $app->getBasePath() . '"'
+                // <br>Basepath: "' . $app->getBasePath() . '"'
             );
         }
     );

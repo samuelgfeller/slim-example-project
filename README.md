@@ -175,7 +175,6 @@ be addressed with the help of a middleware (`PhpViewExtensionMiddleware.php`).
 For the XSS protection, strings can be escaped anywhere in the project using the global function `html()`.
 
 </details>
-
 <details>
   <summary><h4>Asset management</h4></summary>
 
@@ -222,7 +221,6 @@ HTML `src` or `href` tag, but unfortunately, it does not apply when they are add
 PHP `addAttribute` function.   
 Until we can explicitly indicate to the IDE that a specific string represents a path, we have to manually 
 modify these paths when refactoring JS/CSS files.
-
 
 </details>
 

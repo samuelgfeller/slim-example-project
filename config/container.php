@@ -128,6 +128,7 @@ return [
     // Sessions
     SessionInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
+
         return new PhpSession((array)$settings['session']);
     },
 
