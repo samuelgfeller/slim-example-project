@@ -2,7 +2,6 @@
 
 use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\UserAuthenticationMiddleware;
-use Odan\Session\Middleware\SessionMiddleware;
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
@@ -39,7 +38,7 @@ return function (App $app) {
         'login-submit'
     );
     $app->get('/logout', \App\Application\Actions\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
-        SessionMiddleware::class
+        \Odan\Session\Middleware\SessionStartMiddleware::class
     );
 
     // Authentication - email verification - token
@@ -167,7 +166,7 @@ return function (App $app) {
                 $request,
                 'Route "<code>' . $request->getUri()->getHost() . $request->getUri()->getPath() .
                 '</code>" not found.'
-                // <br>Basepath: "' . $app->getBasePath() . '"'
+            // <br>Basepath: "' . $app->getBasePath() . '"'
             );
         }
     );

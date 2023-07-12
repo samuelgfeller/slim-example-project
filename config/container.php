@@ -6,7 +6,7 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\Settings;
 use Cake\Database\Connection;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Odan\Session\Middleware\SessionMiddleware;
+use Odan\Session\Middleware\SessionStartMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -128,14 +128,11 @@ return [
     // Sessions
     SessionInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
-        $session = new PhpSession();
-        $session->setOptions((array)$settings['session']);
-
-        return $session;
+        return new PhpSession((array)$settings['session']);
     },
 
-    SessionMiddleware::class => function (ContainerInterface $container) {
-        return new SessionMiddleware($container->get(SessionInterface::class));
+    SessionStartMiddleware::class => function (ContainerInterface $container) {
+        return new SessionStartMiddleware($container->get(SessionInterface::class));
     },
 
     BasePathMiddleware::class => function (ContainerInterface $container) {

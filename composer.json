@@ -6,11 +6,11 @@
   "require": {
     "slim/slim": "^4.7.1",
     "monolog/monolog": "^3",
-    "php-di/php-di": "^6.0",
+    "php-di/php-di": "^7.0",
     "ext-pdo": "*",
     "ext-json": "*",
     "cakephp/database": "^4",
-    "odan/session": "^5.0",
+    "odan/session": "^6",
     "slim/php-view": "^3.0",
     "selective/basepath": "^2.0",
     "symfony/mailer": "^5.3",

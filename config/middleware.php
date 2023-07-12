@@ -2,7 +2,7 @@
 
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
-use Odan\Session\Middleware\SessionMiddleware;
+use Odan\Session\Middleware\SessionStartMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
@@ -22,7 +22,7 @@ return function (App $app) {
 
     // Has to be after PhpViewExtensionMiddleware to be called before on request as session is used in php-view extension
     // LocaleMiddleware the same, session has to be established. All middlewares that need session must go above this line
-    $app->add(SessionMiddleware::class);
+    $app->add(SessionStartMiddleware::class);
 
     // Cors middleware has to be before routing so that it is performed after routing (LIFO)
     // $app->add(CorsMiddleware::class); // Middleware added in api group in routes.php
