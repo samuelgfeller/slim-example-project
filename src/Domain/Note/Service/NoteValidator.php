@@ -41,7 +41,7 @@ class NoteValidator
      */
     public function validateNoteCreation(NoteData $note): void
     {
-        // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
+        // Validation error message asserted via NoteProvider.php
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
         if ($note->isMain === 1) {
@@ -65,7 +65,7 @@ class NoteValidator
      */
     public function validateNoteUpdate(NoteData $note): void
     {
-        // Exact validation error tested in NoteCaseProvider.php::provideNoteCreateInvalidData()
+        // Validation error message asserted via NoteProvider.php
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
 
         if (null !== $note->message) {

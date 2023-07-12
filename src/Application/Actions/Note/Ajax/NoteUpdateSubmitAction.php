@@ -84,7 +84,7 @@ final class NoteUpdateSubmitAction
                     return $this->responder->respondWithJson(
                         $response,
                         [
-                            // Response content asserted in ClientReadCaseProvider.php
+                            // Response content asserted in NoteProvider.php
                             'status' => 'error',
                             'message' => 'Not allowed to change note.',
                         ],

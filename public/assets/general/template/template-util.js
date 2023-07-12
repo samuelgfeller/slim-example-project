@@ -5,7 +5,7 @@
  * @param {number|string} selectedKey optional selected key. If not found, no option is selected
  * @return {string}
  */
-import {escapeHtml} from "../general-js/functions.js?v=0.3.1";
+import {escapeHtml} from "../general-js/functions.js?v=0.4.0";
 
 /**
  * @param {Object} allEntries

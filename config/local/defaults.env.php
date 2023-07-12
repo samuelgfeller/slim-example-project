@@ -28,10 +28,10 @@ $settings['dev'] = false;
 
 $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
-    'version' => '0.3.1',
+    'version' => '0.4.0',
     // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
     'update_imports_version' => true, // Disable in prod
-    'assets_path' => __DIR__ . '/../../public/assets',
+    'assets_path' => $settings['root_dir'] . '/public/assets',
 ];
 
 $settings['locale'] = [
@@ -57,7 +57,7 @@ $settings['security'] = [
     // If 3600, the requests in the past hour will be evaluated and compared to the set thresholds below
     'timespan' => 3600,
     // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest
-    /** When changed, update @see UserRequestCaseProvider */
+    /** When changed, update @see UserRequestProvider */
     // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
     // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
     // login request, the next check will be at the beginning of the 5th
@@ -66,8 +66,7 @@ $settings['security'] = [
     // If login successes should be throttled the same way failures ars (if login_throttle is [4 => 10, 9 => 120, ...]
     // it means that after the 4th login success, each following success requests (in the given timespan) have to be in
     // a 10s interval. After 9 it's 120s and so on)
-    'throttle_login_success' => false,
-    // bool
+    'throttle_login_success' => false, // bool
 
     // Percentage of login requests that may be failures (threshold)
     'login_failure_percentage' => 20,

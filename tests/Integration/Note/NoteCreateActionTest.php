@@ -145,11 +145,8 @@ class NoteCreateActionTest extends TestCase
 
     /**
      * Test note creation on client-read page with invalid data.
-     * Fixture dependencies:
-     *   - 1 client
-     *   - 1 user linked to client.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::clientCreationInvalidNoteAndExpectedResponseProvider()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteCreationAndExpectedResponseProvider()
      *
      * @param array $invalidRequestBody
      * @param bool $existingMainNote
@@ -157,7 +154,7 @@ class NoteCreateActionTest extends TestCase
      *
      * @return void
      */
-    public function testNoteSubmitCreateActionInvalid(
+    public function testNoteCreateSubmitActionInvalid(
         array $invalidRequestBody,
         bool $existingMainNote,
         array $expectedResponseData

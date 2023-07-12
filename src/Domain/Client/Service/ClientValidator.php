@@ -29,14 +29,14 @@ class ClientValidator
      * Validate client creation.
      * Validate client values as array and not object to prevent exception on
      * invalid data such as datetime is used in the constructor.
-     * * All keys that may not be in the request body (malformedRequestBodyChecker - optional keys)
-     * * such radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null.
+     * *All keys that may not be in the request body (malformedRequestBodyChecker - optional keys)
+     * *such as radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null.
      *
      * @param array $clientValues
      */
     public function validateClientCreation(array $clientValues): void
     {
-        // Exact validation error tested in ClientCreateActionTest
+        // Validation error message asserted in ClientCreateActionTest
         $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
 
         $this->validateClientStatusId($clientValues['client_status_id'], $validationResult, true);
@@ -78,7 +78,7 @@ class ClientValidator
      */
     public function validateClientUpdate(array $clientValues): void
     {
-        // Exact validation error tested in PostCaseProvider.php::providePostCreateInvalidData()
+        // Validation error message asserted in ClientUpdateActionTest
         $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
 
         // Using array_key_exists instead of isset as isset returns false if value is null and key exists

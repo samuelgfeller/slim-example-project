@@ -1,4 +1,4 @@
-import {getUserCardLoadingPlaceholderHtml} from "./user-list-card.html.js?v=0.3.1";
+import {getUserCardLoadingPlaceholderHtml} from "./user-list-card.html.js?v=0.4.0";
 
 /**
  * Display content placeholders

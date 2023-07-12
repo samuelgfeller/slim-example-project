@@ -1,14 +1,14 @@
-import {getNoteHtml} from "./client-read-template-note.html.js?v=0.3.1";
+import {getNoteHtml} from "./client-read-template-note.html.js?v=0.4.0";
 import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
-} from "./client-read-note-loading-placeholder.js?v=0.3.1";
-import {fetchData} from "../../general/ajax/fetch-data.js?v=0.3.1";
-import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.3.1";
-import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.3.1";
-import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.3.1";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
-import {__} from "../../general/general-js/functions.js?v=0.3.1";
+} from "./client-read-note-loading-placeholder.js?v=0.4.0";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
+import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.4.0";
+import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
+import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.4.0";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
+import {__} from "../../general/general-js/functions.js?v=0.4.0";
 
 /**
  * Loading notes into dom

@@ -76,7 +76,7 @@ final class NoteCreateSubmitAction
                 } catch (ForbiddenException $forbiddenException) {
                     return $this->responder->respondWithJson(
                         $response,
-                        [// Response content asserted in ClientReadCaseProvider.php
+                        [
                             'status' => 'error',
                             'message' => __(sprintf('Not allowed to create %s', __('note'))),
                         ],

@@ -313,7 +313,7 @@ class NoteProvider
      *
      * @return array
      */
-    public static function clientCreationInvalidNoteAndExpectedResponseProvider(): array
+    public static function invalidNoteCreationAndExpectedResponseProvider(): array
     {
         return [
             [

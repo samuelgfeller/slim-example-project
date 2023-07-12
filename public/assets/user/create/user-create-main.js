@@ -1,9 +1,9 @@
-import {displayUserCreateModal} from "./user-create-modal.html.js?v=0.3.1";
-import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.3.1";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.3.1";
-import {loadUserList} from "../list/user-list-loading.js?v=0.3.1";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.3.1";
-import {__} from "../../general/general-js/functions.js?v=0.3.1";
+import {displayUserCreateModal} from "./user-create-modal.html.js?v=0.4.0";
+import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.4.0";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.4.0";
+import {loadUserList} from "../list/user-list-loading.js?v=0.4.0";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
+import {__} from "../../general/general-js/functions.js?v=0.4.0";
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [
