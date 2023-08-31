@@ -1,38 +1,76 @@
-## Installation via Composer
+In order to install and run this project, you need to have PHP, Composer, and a MariaDB or MySQL server 
+installed and running on your machine.
 
-**Step 1:** Create the project:
+### 1. Create project
 
+Navigate to the directory you want to create the project in and run 
+the following command, replacing `[project-name]` with the desired name for your project:
 ```bash
-composer create-project samuelgfeller/slim-example-project my-project
+composer create-project samuelgfeller/slim-example-project [project-name]
 ```
+This will create a new directory with the specified name and install all necessary dependencies.
 
-**Step 2:** Setup database
+Alternatively, you can use GitHub's 
+[Use this template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+feature to quickly create a repository with the code of this project. 
+Checkout this repository in your preferred IDE before proceeding.
 
-Create a new development database (you may change the db name if you update it in `env.php`)
+### 2. Set up the database
+After opening the project in your IDE, rename the file `config/local/env.example.php` to `env.php` 
+and fill in your database credentials.  
 
-```bash
-mysql -e 'CREATE DATABASE IF NOT EXISTS slim_example_project CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
-```
-
-Create a new database for integration tests
-
-```bash
-mysql -e 'CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
-```
-
-Create tables from `resources/schema/schema.sql`
-
-Add table entries (optional) `resources/fixtures/dev-fixtures.sql`
-
-**Step 3:** Configuration
-
-Rename the file: `app/env.dev-example.php` to `app/env.php`.
-
-Change the connection configuration in `config/env.php`:
-
+Then, create your database and update the `config/local/env.dev.php` file with the name of your 
+database, like this:
 ```php
-// Database
-$settings['db']['database'] = 'slim_example_project'; // Your db name
-$settings['db']['username'] = 'root';
-$settings['db']['password'] = '';
+$settings['db']['database'] = 'my_database_name';
 ```
+After that, create a separate test database and update the `config/local/env.test.php` file with its
+name. The name must contain the word "test" as a safety measure to prevent accidentally truncating 
+the development database:
+```php
+$settings['db']['database'] = 'my_database_name_test';
+```
+
+### 3. Run migrations
+Open the terminal in the project's root directory and run the following command to create the necessary 
+tables for the project:
+```bash
+composer migrate
+```
+
+### 4. Insert data
+You can choose to insert only the minimal amount of data required for the app to function, or also 
+include some dummy example data.
+
+To insert both minimal and dummy data, run:
+```bash
+composer seed
+```
+
+To insert only the minimal data, run:
+```bash
+composer seed:minimal
+```
+
+### 5. Update GitHub workflows
+
+**Deployment**   
+If you are not planning on 
+deploying your app at this time, delete or comment out the contents of the 
+`.github/workflows/master.yml` file.  
+  
+To deploy your app, update the `.github/workflows/master.yml` file according to your needs and 
+add your server's credentials to GitHub's 
+[Actions secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
+**Build testing**   
+To run the project's tests automatically when pushing, update the 
+`.github/workflows/develop.yml` file.   
+**Replace the matrix value "test-database" `slim_example_project_test` with the name of 
+your test database** as specified in `config/local/env.test.php`.
+If you are not using SonarCloud, remove the "SonarCloud Scan" step from the workflow.
+
+### Done!
+That's it! Your project should now be fully set up and ready to use.  
+You can serve it locally by running `php -S localhost:8080 -t public/` in the project's root 
+directory and share it on a version control such as GitHub.

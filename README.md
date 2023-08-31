@@ -36,7 +36,7 @@ feature to quickly create a repository with the code of this project.
 Checkout this repository in your preferred IDE before proceeding.
 
 ### 2. Set up the database
-After opening the project in your IDE, rename the file `config/local/nv.example.php` to `env.php` 
+After opening the project in your IDE, rename the file `config/local/env.example.php` to `env.php` 
 and fill in your database credentials.  
 
 Then, create your database and update the `config/local/env.dev.php` file with the name of your 
