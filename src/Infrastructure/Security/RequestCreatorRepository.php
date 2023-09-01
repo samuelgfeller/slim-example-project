@@ -21,6 +21,7 @@ class RequestCreatorRepository
      */
     public function insertEmailRequest(string $email, string $ip): string
     {
+        $ip = str_contains($ip, '::1') || empty($ip) ? null : $ip;
         $query = $this->queryFactory->newQuery();
 
         return $query->insert(['email', 'ip_address', 'sent_email', 'is_login', 'created_at'])
@@ -45,6 +46,7 @@ class RequestCreatorRepository
      */
     public function insertLoginRequest(string $email, string $ip, bool $success): string
     {
+        $ip = str_contains($ip, '::1') ? null : $ip;
         $query = $this->queryFactory->newQuery();
         $query->insert(['email', 'ip_address', 'sent_email', 'is_login', 'created_at'])->into('user_request')
             ->values([
