@@ -3,16 +3,15 @@
 namespace App\Domain\Security\Service;
 
 use App\Domain\Security\Data\RequestData;
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Settings;
-use App\Infrastructure\Security\EmailRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 
 class EmailRequestFinder
 {
     private array $securitySettings;
 
     public function __construct(
-        private readonly EmailRequestFinderRepository $emailRequestFinderRepository,
+        private readonly EmailLogFinderRepository $emailRequestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');
@@ -23,15 +22,14 @@ class EmailRequestFinder
      *
      * @param string $email
      *
-     * @return array{email_stats: RequestStatsData, ip_stats: RequestStatsData}
+     * @return int
      */
-    public function findEmailStats(string $email): array
+    public function findEmailAmountInSetTimespan(string $email): int
     {
         // This service should be called when retrieving ip stats as this class loads the settings it
         // Stats concerning given email in last timespan
-        return $this->emailRequestFinderRepository->getEmailRequestStatsFromEmailAndIp(
+        return $this->emailRequestFinderRepository->getLoggedEmailCountInTimespan(
             $email,
-            $_SERVER['REMOTE_ADDR'],
             $this->securitySettings['timespan']
         );
     }
@@ -43,11 +41,8 @@ class EmailRequestFinder
      *
      * @return RequestData
      */
-    public function findLatestEmailRequestFromUserOrIp(string $email): RequestData
+    public function findLatestEmailRequest(string $email): RequestData
     {
-        return $this->emailRequestFinderRepository->findLatestEmailRequestFromUserOrIp(
-            $email,
-            $_SERVER['REMOTE_ADDR']
-        );
+        return $this->emailRequestFinderRepository->findLatestEmailRequest($email);
     }
 }

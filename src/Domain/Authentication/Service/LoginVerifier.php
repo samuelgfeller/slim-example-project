@@ -11,7 +11,7 @@ use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
-use App\Infrastructure\Security\RequestCreatorRepository;
+use App\Infrastructure\SecurityLogging\AuthenticationLoggerRepository;
 use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportException;
 
@@ -23,7 +23,7 @@ class LoginVerifier
         private readonly UserValidator $userValidator,
         private readonly SecurityLoginChecker $loginSecurityChecker,
         private readonly UserFinderRepository $userFinderRepository,
-        private readonly RequestCreatorRepository $requestCreatorRepo,
+        private readonly AuthenticationLoggerRepository $authenticationLoggerRepository,
         private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
         private readonly UserActivityManager $userActivityManager,
         private readonly LocaleHelper $localeHelper,
@@ -64,7 +64,12 @@ class LoginVerifier
                 // If password correct and status active, log user in by
                 if ($dbUser->status === UserStatus::Active) {
                     // Insert login success request
-                    $this->requestCreatorRepo->insertLoginRequest($dbUser->email, $_SERVER['REMOTE_ADDR'], true);
+                    $this->authenticationLoggerRepository->logLoginRequest(
+                        $dbUser->email,
+                        $_SERVER['REMOTE_ADDR'],
+                        true,
+                        $dbUser->id
+                    );
 
                     $this->userActivityManager->addUserActivity(
                         UserActivity::READ,
@@ -128,7 +133,12 @@ class LoginVerifier
             }
         }
         // Password not correct or user not existing - insert login request for ip
-        $this->requestCreatorRepo->insertLoginRequest($userLoginValues['email'], $_SERVER['REMOTE_ADDR'], false);
+        $this->authenticationLoggerRepository->logLoginRequest(
+            $userLoginValues['email'],
+            $_SERVER['REMOTE_ADDR'],
+            false,
+            $dbUser->id
+        );
 
         // Perform second login request check to display the correct error message to the user if throttle is in place
         $this->loginSecurityChecker->performLoginSecurityCheck($userLoginValues['email'], $captcha);

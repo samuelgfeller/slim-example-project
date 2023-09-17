@@ -44,6 +44,7 @@
     "odan/phinx-migrations-generator": "^5"
   },
   "scripts": {
+    "stan": "phpstan analyse -c phpstan.neon --no-progress --ansi",
     "schema:generate": [
       "php bin/console.php DatabaseSqlSchemaGenerator generateSqlSchema",
       "@add-migrations-to-git"

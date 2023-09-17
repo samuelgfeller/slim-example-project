@@ -7,7 +7,7 @@ use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Infrastructure\Security\EmailRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -43,7 +43,7 @@ class SecurityEmailCheckerTest extends TestCase
     public function testPerformEmailAbuseCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
         // Preparation; making sure other security checks won't fail
-        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(EmailLogFinderRepository::class);
         // Very important to return stats otherwise global check fails
         $requestFinderRepository->method('getGlobalSentEmailAmount')->willReturn(0);
 
@@ -101,7 +101,7 @@ class SecurityEmailCheckerTest extends TestCase
         int $dailyEmailAmount,
         int $monthlyEmailAmount
     ): void {
-        $requestFinderRepository = $this->mock(EmailRequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(EmailLogFinderRepository::class);
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here

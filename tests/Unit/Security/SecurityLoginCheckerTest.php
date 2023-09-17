@@ -7,7 +7,7 @@ use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Infrastructure\Security\LoginRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -51,7 +51,7 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
     {
-        $loginRequestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
+        $loginRequestFinderRepository = $this->mock(LoginLogFinderRepository::class);
 
         // Very important to return stats otherwise global check fails
         $loginRequestFinderRepository->method('getGlobalLoginAmountStats')->willReturn(
@@ -104,7 +104,7 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheckGlobal(): void
     {
-        $requestFinderRepository = $this->mock(LoginRequestFinderRepository::class);
+        $requestFinderRepository = $this->mock(LoginLogFinderRepository::class);
 
         // Preparation; making sure other security checks won't fail
         // User stats should be 0 as global is tested here

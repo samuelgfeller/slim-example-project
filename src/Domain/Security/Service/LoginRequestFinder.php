@@ -5,14 +5,14 @@ namespace App\Domain\Security\Service;
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Settings;
-use App\Infrastructure\Security\LoginRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 
 class LoginRequestFinder
 {
     private array $securitySettings;
 
     public function __construct(
-        private readonly LoginRequestFinderRepository $loginRequestFinderRepository,
+        private readonly LoginLogFinderRepository $loginRequestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');

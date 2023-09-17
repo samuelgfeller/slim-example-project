@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Infrastructure\Security;
+namespace App\Infrastructure\SecurityLogging;
 
 use App\Domain\Security\Data\RequestData;
 use App\Domain\Security\Data\RequestStatsData;
 use App\Infrastructure\Factory\QueryFactory;
 
-class LoginRequestFinderRepository
+class LoginLogFinderRepository
 {
     public function __construct(
         private readonly QueryFactory $queryFactory

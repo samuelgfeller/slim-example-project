@@ -6,7 +6,7 @@ use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
-use App\Infrastructure\Security\LoginRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 use App\Test\Unit\Security\SecurityLoginCheckerTest;
 
 class SecurityLoginChecker
@@ -16,7 +16,7 @@ class SecurityLoginChecker
     public function __construct(
         private readonly SecurityCaptchaVerifier $captchaVerifier,
         private readonly LoginRequestFinder $loginRequestFinder,
-        private readonly LoginRequestFinderRepository $loginRequestFinderRepository,
+        private readonly LoginLogFinderRepository $loginRequestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');

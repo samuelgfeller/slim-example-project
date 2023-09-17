@@ -1,3 +1,5 @@
+# Installation guide
+
 In order to install and run this project, you need to have PHP, Composer, and a MariaDB or MySQL server 
 installed and running on your machine.
 

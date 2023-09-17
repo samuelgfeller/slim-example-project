@@ -2,7 +2,7 @@
 
 namespace App\Domain\Utility;
 
-use App\Infrastructure\Security\RequestCreatorRepository;
+use App\Infrastructure\SecurityLogging\EmailLoggerRepository;
 use Slim\Views\PhpRenderer;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -20,12 +20,12 @@ class Mailer
      *
      * @param MailerInterface $mailer
      * @param PhpRenderer $phpRenderer
-     * @param RequestCreatorRepository $requestCreatorRepository
+     * @param EmailLoggerRepository $emailLoggerRepository
      */
     public function __construct(
         private readonly MailerInterface $mailer,
         private readonly PhpRenderer $phpRenderer,
-        private readonly RequestCreatorRepository $requestCreatorRepository
+        private readonly EmailLoggerRepository $emailLoggerRepository,
     ) {
     }
 
@@ -56,14 +56,21 @@ class Mailer
      *
      * @param Email $email
      *
+     * @return void
      * @throws TransportExceptionInterface
      *
-     * @return void
      */
     public function send(Email $email): void
     {
         $this->mailer->send($email);
+        $cc = $email->getCc();
+        $bcc = $email->getBcc();
+
         // Insert that there was an email request for security checks
-        $this->requestCreatorRepository->insertEmailRequest($email->getTo()[0]->getAddress(), $_SERVER['REMOTE_ADDR']);
+        $this->emailLoggerRepository->logEmailRequest(
+            $email->getFrom()[0]->getAddress(),
+            $email->getTo()[0]->getAddress(),
+            $email->getSubject(),
+        );
     }
 }

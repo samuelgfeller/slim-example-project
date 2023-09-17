@@ -2,11 +2,10 @@
 
 namespace App\Domain\Security\Service;
 
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
-use App\Infrastructure\Security\EmailRequestFinderRepository;
+use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 
 class SecurityEmailChecker
 {
@@ -15,7 +14,7 @@ class SecurityEmailChecker
     public function __construct(
         private readonly SecurityCaptchaVerifier $captchaVerifier,
         private readonly EmailRequestFinder $emailRequestFinder,
-        private readonly EmailRequestFinderRepository $requestFinderRepository,
+        private readonly EmailLogFinderRepository $requestFinderRepository,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');
@@ -54,9 +53,9 @@ class SecurityEmailChecker
             }
             // If captcha is valid the other security checks don't have to be made
             if ($validCaptcha !== true) {
-                $stats = $this->emailRequestFinder->findEmailStats($email);
+                $emailsAmount = $this->emailRequestFinder->findEmailAmountInSetTimespan($email);
                 // Email checks (register, password recovery, other with email)
-                $this->performEmailRequestsCheck($stats['ip_stats'], $stats['email_stats'], $email);
+                $this->performEmailRequestsCheck($emailsAmount, $email);
                 // Global email check
                 $this->performGlobalEmailCheck();
             }
@@ -67,15 +66,12 @@ class SecurityEmailChecker
      * Make email abuse check for requests coming from same ip
      * or concerning the same email address.
      *
-     * @param RequestStatsData $ipStats email request summary from actual ip address
-     * @param RequestStatsData $userStats email request summary by concerning email / coming for same user
+     * @param int $emailsAmount amount of emails sent in the last timespan
      * @param string $email
      *
-     * @throws SecurityException
      */
     private function performEmailRequestsCheck(
-        RequestStatsData $ipStats,
-        RequestStatsData $userStats,
+        int $emailsAmount,
         string $email
     ): void {
         // Reverse order to compare fails the longest delay first and then go down from there
@@ -83,11 +79,9 @@ class SecurityEmailChecker
         // Fails on specific user or coming from specific IP
         foreach ($this->securitySettings['user_email_throttle_rule'] as $requestLimit => $delay) {
             // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
-            if (
-                $ipStats->sentEmails >= $requestLimit || $userStats->sentEmails >= $requestLimit
-            ) {
-                // Retrieve the latest email sent for specific email or coming from ip
-                $latestEmailRequestFromUser = $this->emailRequestFinder->findLatestEmailRequestFromUserOrIp($email);
+            if ($emailsAmount >= $requestLimit) {
+                // Retrieve the latest email sent
+                $latestEmailRequestFromUser = $this->emailRequestFinder->findLatestEmailRequest($email);
 
                 $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
