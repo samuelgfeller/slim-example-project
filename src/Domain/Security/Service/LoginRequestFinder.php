@@ -2,8 +2,6 @@
 
 namespace App\Domain\Security\Service;
 
-use App\Domain\Security\Data\RequestData;
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Settings;
 use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 
@@ -23,13 +21,15 @@ class LoginRequestFinder
      *
      * @param string $email
      *
-     * @return array{email_stats: RequestStatsData, ip_stats: RequestStatsData}
+     * @return array{
+     *     logins_by_email: array{successes: int, logins: int},
+     *     logins_by_ip: array{successes: int, logins: int},
+     * }
      */
-    public function findLoginStats(string $email): array
+    public function findLoginLogEntriesInTimeLimit(string $email): array
     {
-        // This service should be called when retrieving ip stats as this class loads the settings it
         // Stats concerning given email in last timespan
-        return $this->loginRequestFinderRepository->getLoginRequestStatsFromEmailAndIp(
+        return $this->loginRequestFinderRepository->getLoginLogsFromEmailAndIp(
             $email,
             $_SERVER['REMOTE_ADDR'],
             $this->securitySettings['timespan']
@@ -41,13 +41,17 @@ class LoginRequestFinder
      *
      * @param string $email
      *
-     * @return RequestData
+     * @return int
      */
-    public function findLatestLoginRequestFromEmailOrIp(string $email): RequestData
+    public function findLatestLoginRequestTimestamp(string $email): int
     {
-        return $this->loginRequestFinderRepository->findLatestLoginRequestFromUserOrIp(
+        $createdAt = $this->loginRequestFinderRepository->findLatestLoginRequestFromUserOrIp(
             $email,
             $_SERVER['REMOTE_ADDR']
         );
+        if ($createdAt) {
+            return (new \DateTime($createdAt))->format('U');
+        }
+        return 0;
     }
 }

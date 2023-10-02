@@ -2,8 +2,6 @@
 
 namespace App\Infrastructure\SecurityLogging;
 
-use App\Domain\Security\Data\RequestData;
-use App\Domain\Security\Data\RequestStatsData;
 use App\Infrastructure\Factory\QueryFactory;
 
 class LoginLogFinderRepository
@@ -20,21 +18,21 @@ class LoginLogFinderRepository
      * @param string $ip
      * @param int $seconds
      *
-     * @return array{email_stats: RequestStatsData, ip_stats: RequestStatsData}
+     * @return array{
+     *     logins_by_email: array{successes: int, failures: int},
+     *     logins_by_ip: array{successes: int, failures: int},
+     * }
      */
-    public function getLoginRequestStatsFromEmailAndIp(string $email, string $ip, int $seconds): array
+    public function getLoginLogsFromEmailAndIp(string $email, string $ip, int $seconds): array
     {
-        $stats = ['email_stats' => [], 'ip_stats' => []];
+        $stats = ['logins_by_ip' => [], 'logins_by_email' => []];
 
-        // Only return values if not empty string as it doesn't represent a user request
+        // Only return val34ues if not empty string as it doesn't represent a user request
         if ($email !== '') {
-            $stats['email_stats'] = $this->getLoginRequestStats(['email' => $email], $seconds);
+            $stats['logins_by_email'] = $this->getLoginRequestStats(['email' => $email], $seconds);
         }
         if ($ip !== '') {
-            $stats['ip_stats'] = $this->getLoginRequestStats(
-                ['ip_address' => $this->queryFactory->newQuery()->newExpr("INET_ATON('$ip')")],
-                $seconds
-            );
+            $stats['logins_by_ip'] = $this->getLoginRequestStats(['ip_address' => $ip], $seconds);
         }
 
         return $stats;
@@ -46,26 +44,29 @@ class LoginLogFinderRepository
      * @param array $whereEmailOrIpArr
      * @param int $seconds
      *
-     * @return RequestStatsData
+     * @return array{successes: int, failures: int}
      */
-    private function getLoginRequestStats(array $whereEmailOrIpArr, int $seconds): RequestStatsData
+    private function getLoginRequestStats(array $whereEmailOrIpArr, int $seconds): array
     {
         $query = $this->queryFactory->newQuery();
         $query->select(
             [
-                'login_failures' => $query->func()->sum('CASE WHEN is_login LIKE "failure" THEN 1 ELSE 0 END'),
-                'login_successes' => $query->func()->sum('CASE WHEN is_login LIKE "success" THEN 1 ELSE 0 END'),
+                'login_successes' => $query->func()->sum('is_success'),
+                'total_logins' => $query->func()->count('id'),
             ]
-        )->from('user_request')->where(
+        )->from('authentication_log')->where(
             [
                 // Return all between now and x amount of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
-                'is_login IS NOT' => null,
             ]
         )->andWhere($whereEmailOrIpArr)->bind(':sec', $seconds, 'integer');
-        $sql = $query->sql();
+        // $sql = $query->sql();
         // Only fetch and not fetchAll as result will be one row with the counts
-        return new RequestStatsData($query->execute()->fetch('assoc'));
+        $result = $query->execute()->fetch('assoc');
+        return [
+            'successes' => (int)$result['login_successes'],
+            'failures' => (int)$result['total_logins'] - (int)$result['login_successes']
+        ];
     }
 
     /**
@@ -74,21 +75,19 @@ class LoginLogFinderRepository
      * @param string $email
      * @param string $ip
      *
-     * @return RequestData
+     * @return string
      */
-    public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): RequestData
+    public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): string
     {
         $query = $this->queryFactory->newQuery();
-        $query->select('*')->from('user_request')->where(
+        $query->select('created_at')->from('authentication_log')->where(
             [
-                'is_login IS NOT' => null,
-                'OR' => ['email' => $email, 'ip_address' => $query->newExpr('INET_ATON(:ip)')],
-                // output: WHERE ((`is_login`) IS NOT NULL AND (`email` = :c0 OR `ip_address` = (INET_ATON(:ip))))
+                'OR' => ['email' => $email, 'ip_address' => $ip],
             ]
             // Order desc id instead of created at for testing as last request is preponed to simulate waiting
-        )->bind(':ip', $ip, 'string')->orderDesc('id')->limit(1);
+        )->orderDesc('id')->limit(1);
 
-        return new RequestData($query->execute()->fetch('assoc') ?: []);
+        return $query->execute()->fetch('assoc')['created_at'] ?? 0;
     }
 
     /**
@@ -104,16 +103,20 @@ class LoginLogFinderRepository
         $query = $this->queryFactory->newQuery();
         $query->select(
             [
-                'login_total' => $query->func()->count(1),
-                'login_failures' => $query->func()->sum('IF(is_login LIKE "failure", 1, 0)'),
+                'total_amount' => $query->func()->count(1),
+                'successes' => $query->func()->sum('is_success'),
             ]
-        )->from('user_request')->where(
+        )->from('authentication_log')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL 1 MONTH)'),
-                'is_login IS NOT' => null,
             ]
         );
 
-        return $query->execute()->fetch('assoc');
+        $result = $query->execute()->fetch('assoc');
+        return [
+            'total_amount' => (int)$result['total_amount'],
+            'successes' => (int)$result['successes'],
+            'failures' => (int)$result['total_amount'] - (int)$result['successes']
+        ];
     }
 }

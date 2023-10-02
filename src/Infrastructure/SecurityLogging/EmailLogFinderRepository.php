@@ -44,18 +44,18 @@ class EmailLogFinderRepository
      * Searches the latest email request concerning a specific email address.
      *
      * @param string $email
-     * @return array|mixed
+     * @return string|bool
      */
-    public function findLatestEmailRequest(string $email)
+    public function findLatestEmailRequest(string $email): bool|string
     {
         $query = $this->queryFactory->newQuery();
-        $query->select('*')->from('email_log')->where(
+        $query->select('created_at')->from('email_log')->where(
             [
                 'to_email' => $email,
             ]
         )->orderDesc('created_at')->limit(1);
 
-        return $query->execute()->fetch('assoc') ?: [];
+        return $query->execute()->fetch('assoc')['created_at'] ?: false;
     }
 
     /**
@@ -70,9 +70,9 @@ class EmailLogFinderRepository
         $query = $this->queryFactory->newQuery();
         $query->select(
             [
-                'sent_email_amount' => $query->func()->sum('sent_email'),
+                'sent_email_amount' => $query->func()->count('id'),
             ]
-        )->from('user_request')->where(
+        )->from('email_log')->where(
             [
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)'),
             ]

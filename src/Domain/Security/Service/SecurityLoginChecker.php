@@ -2,7 +2,6 @@
 
 namespace App\Domain\Security\Service;
 
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Settings;
@@ -56,8 +55,8 @@ class SecurityLoginChecker
             // If captcha is valid the other security checks don't have to be made
             if ($validCaptcha !== true) {
                 // Most strict. Very low limit on failed requests for specific email or coming from an ip
-                $stats = $this->loginRequestFinder->findLoginStats($email);
-                $this->performLoginCheck($stats['ip_stats'], $stats['email_stats'], $email);
+                $stats = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
+                $this->performLoginCheck($stats['logins_by_ip'], $stats['logins_by_email'], $email);
                 // Global login check
                 $this->performGlobalLoginCheck();
             }
@@ -73,11 +72,11 @@ class SecurityLoginChecker
      * If the user has 4 unsuccessful login attempts before throttling, he has also 4 successful login requests in
      * given timespan before experiencing the same throttling.
      *
-     * @param RequestStatsData $ipStats login request summary from actual ip address
-     * @param RequestStatsData $userStats login request summary by concerning email / coming for same user
+     * @param array{successes: int, failures: int} $loginsByIp login request from ip address
+     * @param array{successes: int, failures: int} $loginsByEmail login request coming from same email
      * @param string $email to get the latest request
      */
-    private function performLoginCheck(RequestStatsData $ipStats, RequestStatsData $userStats, string $email): void
+    private function performLoginCheck(array $loginsByIp, array $loginsByEmail, string $email): void
     {
         $throttleSuccess = $this->securitySettings['throttle_login_success'];
         // Reverse order to compare fails the longest delay first and then go down from there
@@ -86,40 +85,39 @@ class SecurityLoginChecker
         foreach ($this->securitySettings['login_throttle_rule'] as $requestLimit => $delay) {
             // Check that there aren't more login successes or failures than tolerated
             if (
-                ($ipStats->loginFailures >= $requestLimit && $ipStats->loginFailures !== 0)
-                || ($throttleSuccess && $ipStats->loginSuccesses >= $requestLimit && $ipStats->loginSuccesses !== 0)
-                || ($userStats->loginFailures >= $requestLimit && $userStats->loginFailures !== 0)
-                || ($throttleSuccess && $userStats->loginSuccesses >= $requestLimit && $userStats->loginSuccesses !== 0)
+                ($loginsByIp['failures'] >= $requestLimit && $loginsByIp['failures'] !== 0)
+                || ($throttleSuccess && $loginsByIp['successes'] >= $requestLimit && $loginsByIp['successes'] !== 0)
+                || ($loginsByEmail['failures'] >= $requestLimit && $loginsByEmail['failures'] !== 0)
+                || ($throttleSuccess && $loginsByEmail['successes'] >= $requestLimit && $loginsByEmail['successes'] !== 0)
             ) {
                 // If truthy means: too many ip fails OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user
 
                 // Retrieve the latest email sent for specific email or coming from ip
-                $latestLoginRequest = $this->loginRequestFinder->findLatestLoginRequestFromEmailOrIp($email);
+                $latestLoginTimestamp = $this->loginRequestFinder->findLatestLoginRequestTimestamp($email);
                 // created_at in seconds
-                $latestRequestTimestamp = (int)$latestLoginRequest->createdAt->format('U');
-                $actualTime = new \DateTime();
+                $currentTime = new \DateTime();
                 // Had issues when deploying the application and testing on github actions. date_default_timezone_set
                 // isn't taken into account according to https://stackoverflow.com/a/44193886/9013718 because
                 // time() and date() are timezone independent.
-                $actualTimestamp = (int)$actualTime->setTimezone(new \DateTimeZone('Europe/Zurich'))
+                $currentTimestamp = (int)$currentTime->setTimezone(new \DateTimeZone('Europe/Zurich'))
                     ->format('U');
 
                 // Uncomment to debug
-                // echo "\n" . 'Actual time: ' . $actualTime->format('H:i:s') . "\n" .
+                // echo "\n" . 'Actual time: ' . $currentTime->format('H:i:s') . "\n" .
                 //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
                 //     $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
                 //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
-                //         (new \DateTime())->setTimestamp($delay + $latestRequestTimestamp)
+                //         (new \DateTime())->setTimestamp($delay + $latestLoginTimestamp)
                 //             ->format('H:i:s') . "\n" . 'Security exception: ' .
-                //         $securityException = $actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp) : '') .
+                //         $securityException = $currentTimestamp < ($timeForNextLogin = $delay + $latestLoginTimestamp) : '') .
                 //     "\n---- \n";
                 /** Asserted in @see SecurityLoginCheckerTest (public message is defferent) */
                 $errMsg = 'Exceeded maximum of tolerated login requests';
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
-                    if ($actualTimestamp < ($timeForNextLogin = $delay + $latestRequestTimestamp)) {
-                        $remainingDelay = $timeForNextLogin - $actualTimestamp;
+                    if ($currentTimestamp < ($timeForNextLogin = $delay + $latestLoginTimestamp)) {
+                        $remainingDelay = $timeForNextLogin - $currentTimestamp;
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {
@@ -150,13 +148,13 @@ class SecurityLoginChecker
 
         // Calc allowed failure amount which is the given login_failure_percentage of the total login
         $failureThreshold = floor(
-            $loginAmountStats['login_total'] / 100 * $this->securitySettings['login_failure_percentage']
+            $loginAmountStats['total_amount'] / 100 * $this->securitySettings['login_failure_percentage']
         );
         // Actual failure amount have to be LESS than allowed failures amount (tested this way)
         // If there are not enough requests to be representative, the failureThreshold is increased to 20 meaning
         // at least 20 failed login attempts are allowed no matter the percentage
         // If percentage is 10, throttle begins at 200 login requests
-        if (!($loginAmountStats['login_failures'] < $failureThreshold) && $failureThreshold > 20) {
+        if (!($loginAmountStats['failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';
             throw new SecurityException('captcha', SecurityType::GLOBAL_LOGIN, $msg);

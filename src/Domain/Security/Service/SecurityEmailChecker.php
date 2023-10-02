@@ -80,16 +80,13 @@ class SecurityEmailChecker
         foreach ($this->securitySettings['user_email_throttle_rule'] as $requestLimit => $delay) {
             // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
             if ($emailsAmount >= $requestLimit) {
-                // Retrieve the latest email sent
-                $latestEmailRequestFromUser = $this->emailRequestFinder->findLatestEmailRequest($email);
+                // Retrieve the latest email sent created_at in seconds
+                $latestEmailTimestamp = $this->emailRequestFinder->findLastEmailRequestTimestamp($email);
 
                 $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
                 if (is_numeric($delay)) {
-                    // created_at in seconds
-                    $latest = (int)$latestEmailRequestFromUser->createdAt->format('U');
-
                     // Check that time is in the future by comparing actual time with forced delay + to the latest request
-                    if (time() < ($timeForNextRequest = $delay + $latest)) {
+                    if (time() < ($timeForNextRequest = $delay + $latestEmailTimestamp)) {
                         $remainingDelay = $timeForNextRequest - time();
                         throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);
                     }

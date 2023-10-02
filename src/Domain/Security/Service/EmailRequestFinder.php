@@ -2,7 +2,6 @@
 
 namespace App\Domain\Security\Service;
 
-use App\Domain\Security\Data\RequestData;
 use App\Domain\Settings;
 use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 
@@ -38,11 +37,14 @@ class EmailRequestFinder
      * Returns the very last EMAIL request from actual ip or given email.
      *
      * @param string $email
-     *
-     * @return RequestData
+     * @return int
      */
-    public function findLatestEmailRequest(string $email): RequestData
+    public function findLastEmailRequestTimestamp(string $email): int
     {
-        return $this->emailRequestFinderRepository->findLatestEmailRequest($email);
+        $createdAt = $this->emailRequestFinderRepository->findLatestEmailRequest($email);
+        if ($createdAt) {
+            return (new \DateTime($createdAt))->format('U');
+        }
+        return 0;
     }
 }
