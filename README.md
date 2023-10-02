@@ -18,7 +18,7 @@ External library dependencies are kept to a minimum to facilitate maintenance an
 <details>
   <summary><h2>Installation guide</h2></summary>
 
-In order to install and run this project, you need to have PHP, Composer, and a MariaDB or MySQL server 
+In order to install and run this project, you need to have PHP 8, Composer, and a MariaDB or MySQL server 
 installed and running on your machine.
 
 ### 1. Create project
@@ -36,7 +36,7 @@ feature to quickly create a repository with the code of this project.
 Checkout this repository in your preferred IDE before proceeding.
 
 ### 2. Set up the database
-After opening the project in your IDE, rename the file `config/local/env.example.php` to `env.php` 
+After opening the project in your IDE, copy the file `config/local/env.example.php` to `config/local/env.php` 
 and fill in your database credentials.  
 
 Then, create your database and update the `config/local/env.dev.php` file with the name of your 

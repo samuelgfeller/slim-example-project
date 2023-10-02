@@ -15,7 +15,7 @@
 <details>
   <summary><h2>New version release</h2></summary>
 
-1. Update the version in the config file: `defaults.php` 
+1. Update the version in the config file: `defaults.env.php` 
 </details>
 
 <details>

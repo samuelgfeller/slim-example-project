@@ -1,56 +1,53 @@
 # Configuration
-### Introduction
-The configuration techniques used in this project are greatly inspired by the configuration of 
-[odan/slim4-skeleton](https://odan.github.io/slim4-skeleton/configuration.html). 
 
-## Configuration
-There are different kinds of configurations with different visibility.   
+The installation guide is in the project 
+[readme.md](slim-example-project/blob/master/readme.md).
+
+There are different kinds of configurations with different visibility.
 
 ### Directory
-The configuration files are all located inside the directory `app/`  
+The framework main files are located inside the directory `config/`.   
+The project configuration values are inside `config/local/`.
 
 ### Default values
-The default and public config values are inside `app/defaults.php`.  
-This file can be pushed to the remote repository as it contains no secret values.   
-It should contain all keys even when values are an empty string to act as template 
-that will be overwritten in the secret file.
+The default and non-sensitive config values are inside `config/local/defaults.env.php`.  
+It should contain all keys even when values are null to act as template 
+that will be overwritten in the secret `env.php` file.
 
 ### Secret values
-Environment specific values are in `app/env.php`.    
-This file should be added to the `.gitignore` file to not be pushed accidentally.   
-It has security and efficiency (protects against overwriting at deployment) advantages to store the 
-`env.php` file right above the project directory. 
-In this case the file would be in `app/../../env.php`.
 
-### Env values for integration testing
-The environment values for integration testing like the database name are stored inside 
-`env.testing.php` which is included last in `settings.php` when `APP_ENV` is set to `'testing'`.
+Environment specific secret values are in `config/local/env.php`.    
+This file should be added to the `.gitignore` file to not be pushed accidentally.
 
-### Combination / final file
-`app/settings.php` is the main configuration file that will be used in the project since 
-it combines the default and env settings.   
+### Environment specific non-secret values
+#### Development
+Development env values are in the file `env.dev.php`. This file contains
+every non-secret configuration on the development machine such as
+error reporting and database name.
+When testing, this file won't be loaded so everything relevant for testing
+that is not in or different from `defaults.env.php` should also be to the
+`env.test.php` file.
+
+#### Production
+Production env values are in the file `config/local/env.prod.php`. This file contains
+every non-secret configuration on the production environment.  
+For the production config values to be loaded, the following line has to be in 
+the prod secret `env.php`:  
+```php
+$_ENV['APP_ENV'] = 'prod';
+```
+
+#### Testing
+The environment values for integration testing (e.g. database name) are stored inside 
+`config/local/env.test.php`.
+
+### Config values usage
+`config/settings.php` combines and returns all the relevant configuration 
+files values.  
+
 They are loaded in this order:  
-1. File `app/defaults.php`
-2. File `app/env.php` or `app/../../env.php`
-3. If the constant `APP_ENV` is defined, the environment specific file is loaded. 
-This is only used to apply the phpunit test settings. Defined in `tests/bootstrap.php`.
-
-
-### Different files for non-secret env specific values?
-To have the cleanest solution `env.php` would only contain secret values and non-secret 
-environment values like the database name or display error details bool would be stored in 
-`env.development.php` and `env.production.php` (`env.testing.php` is different and has to exist anyways). 
-They would then be included at the beginning of `env.php` with `require __DIR__ . '/env.development.php';`.  
-Now I decided to still store the env specific non-secret values `env.php` because:
-1. There are not enough of those values in question that I consider it really beneficial
-2. It adds some complexity since there are 2 more files in the `app/` directory, and it might be harder 
-to understand where which config values are stored.  
-
-Now there are some advantages I am missing out on like 
-* Being able to change for instance the database name without having to modify the remote `env.php` 
-simply by changing `env.production.php` and deploy it.
-* It's easier for example purposes. For this project I have to have `env.prod-example.php` and 
-`env.dev-example.php`. 
-
-*This is not a final decision though, and I might very well change my mind if for instance I need to give access 
-to env specific non secret values to some service (maybe github actions or a testing / linting tool).*
+1. File `config/local/defaults.env.php`
+2. File `config/local/env.php`
+3. Depending on  what `APP_ENV` is defined, the environment specific file is loaded
+   (if `APP_ENV` is "test", it will load `env.test.php`, if it is "dev" it'll load 
+   `env.dev.php` and if it's "prod", it'll load `env.prod.php`).
