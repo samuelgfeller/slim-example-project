@@ -1,3 +1,15 @@
+CREATE TABLE `authentication_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `email` varchar(254) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `is_success` tinyint(4) DEFAULT NULL,
+  `created_at` datetime DEFAULT curdate(),
+  PRIMARY KEY (`id`),
+  KEY `authentication_log_user_id_fk` (`user_id`),
+  CONSTRAINT `authentication_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `client` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(100) DEFAULT NULL,
@@ -28,6 +40,19 @@ CREATE TABLE `client_status` (
   `deleted_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Client status';
+
+CREATE TABLE `email_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `from_email` varchar(254) DEFAULT NULL,
+  `to_email` varchar(254) DEFAULT NULL,
+  `other_recipient` varchar(1000) DEFAULT NULL,
+  `subject` varchar(998) DEFAULT NULL,
+  `created_at` datetime DEFAULT curdate(),
+  PRIMARY KEY (`id`),
+  KEY `email_log_user_id_fk` (`user_id`),
+  CONSTRAINT `email_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

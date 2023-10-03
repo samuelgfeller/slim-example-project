@@ -55,8 +55,8 @@ class SecurityLoginChecker
             // If captcha is valid the other security checks don't have to be made
             if ($validCaptcha !== true) {
                 // Most strict. Very low limit on failed requests for specific email or coming from an ip
-                $stats = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
-                $this->performLoginCheck($stats['logins_by_ip'], $stats['logins_by_email'], $email);
+                $summary = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
+                $this->performLoginCheck($summary['logins_by_ip'], $summary['logins_by_email'], $email);
                 // Global login check
                 $this->performGlobalLoginCheck();
             }
@@ -104,9 +104,9 @@ class SecurityLoginChecker
                     ->format('U');
 
                 // Uncomment to debug
-                // echo "\n" . 'Actual time: ' . $currentTime->format('H:i:s') . "\n" .
-                //     'Latest login time (id: ' . $latestLoginRequest->id . '): ' .
-                //     $latestLoginRequest->createdAt->format('H:i:s') . "\n" .
+                // echo "\n" . 'Current time: ' . $currentTime->format('H:i:s') . "\n" .
+                //     'Latest login time: ' .
+                //     (new \DateTime($latestLoginTimestamp))->format('H:i:s') . "\n" .
                 //     'Delay: ' . $delay . "\n" . (is_numeric($delay) ? 'Time for next login: ' .
                 //         (new \DateTime())->setTimestamp($delay + $latestLoginTimestamp)
                 //             ->format('H:i:s') . "\n" . 'Security exception: ' .
@@ -143,18 +143,18 @@ class SecurityLoginChecker
      */
     private function performGlobalLoginCheck(): void
     {
-        // Cast all array values from string (what cake query builder returns) to int
-        $loginAmountStats = array_map('intval', $this->loginRequestFinderRepository->getGlobalLoginAmountStats());
+        // Making sure that values returned from repository are cast into integers
+        $loginAmountSummary = array_map('intval', $this->loginRequestFinderRepository->getGlobalLoginAmountSummary());
 
         // Calc allowed failure amount which is the given login_failure_percentage of the total login
         $failureThreshold = floor(
-            $loginAmountStats['total_amount'] / 100 * $this->securitySettings['login_failure_percentage']
+            $loginAmountSummary['total_amount'] / 100 * $this->securitySettings['login_failure_percentage']
         );
         // Actual failure amount have to be LESS than allowed failures amount (tested this way)
         // If there are not enough requests to be representative, the failureThreshold is increased to 20 meaning
         // at least 20 failed login attempts are allowed no matter the percentage
         // If percentage is 10, throttle begins at 200 login requests
-        if (!($loginAmountStats['failures'] < $failureThreshold) && $failureThreshold > 20) {
+        if (!($loginAmountSummary['failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest distributed brute force test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';
             throw new SecurityException('captcha', SecurityType::GLOBAL_LOGIN, $msg);

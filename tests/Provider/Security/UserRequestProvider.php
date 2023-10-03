@@ -2,8 +2,6 @@
 
 namespace App\Test\Provider\Security;
 
-use App\Domain\Security\Data\RequestStatsData;
-
 class UserRequestProvider
 {
     // Placed on top to easily change.
@@ -30,38 +28,35 @@ class UserRequestProvider
      * @param int|string $requestAmount
      * @param string $type
      *
-     * @return RequestStatsData
+     * @return array{
+     *     logins_by_email: array{successes: int, failures: int},
+     *     logins_by_ip: array{successes: int, failures: int},
+     * }
      */
-    private static function stats(int|string $requestAmount, string $type): RequestStatsData
+    private static function summary(int|string $requestAmount, string $type): array
     {
         if ($type === 'email') {
-            return new RequestStatsData([
+            return [ // todo change when email is refactored
                 'request_amount' => $requestAmount,
                 'sent_emails' => $requestAmount,
                 'login_failures' => 0,
                 'login_successes' => 0,
-            ]);
+            ];
         }
         // To test that exception is thrown for failure but also for success, they have to be tested each
         if ($type === 'loginF') {
-            return new RequestStatsData([
-                'request_amount' => $requestAmount,
-                'sent_emails' => 0,
-                'login_failures' => $requestAmount,
-                'login_successes' => 0,
-            ]);
+            return [
+                'logins_by_email' => ['successes' => 0, 'failures' => $requestAmount],
+                'logins_by_ip' => ['successes' => 0, 'failures' => $requestAmount]
+            ];
         }
         if ($type === 'loginS') {
-            return new RequestStatsData([
-                // One is added as
-                'request_amount' => $requestAmount,
-                'sent_emails' => 0,
-                'login_failures' => 0,
-                'login_successes' => $requestAmount,
-            ]);
+            return [
+                'logins_by_email' => ['successes' => $requestAmount, 'failures' => 0],
+                'logins_by_ip' => ['successes' => $requestAmount, 'failures' => 0]
+            ];
         }
-
-        return new RequestStatsData();
+        return [];
     }
 
     /**
@@ -82,95 +77,96 @@ class UserRequestProvider
             // ? First three are to test ip request stats
             // Failed or successful login requests coming from the same ip. Throttled same as rapid fire on user.
             [
-                // request limit not needed as it's expected that error is thrown and that only happens if limit reached
+                // ip test
                 'delay' => $firstDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($firstL, 'loginF'),
-                    'email_stats' => self::stats(0, 'loginF'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => $firstL]
                 ],
-            ],
-            [
-                'delay' => $secondDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($secondL, 'loginF'),
-                    'email_stats' => self::stats(0, 'loginF'),
-                ],
-            ],
-            [
-                'delay' => $thirdDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($thirdL, 'loginF'),
-                    'email_stats' => self::stats(0, 'loginF'),
-                ],
-            ],
 
-            // ? Next are to test login requests made on one user
-            [
-                'delay' => $firstDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginF'),
-                    'email_stats' => self::stats($firstL, 'loginF'),
+                [
+                    'delay' => $secondDelayL,
+                    'log_summary' => [
+                        'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                        'logins_by_ip' => ['successes' => 0, 'failures' => $secondL]
+                    ],
+                ],
+                [
+                    'delay' => $thirdDelayL,
+                    'log_summary' => [
+                        'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                        'logins_by_ip' => ['successes' => 0, 'failures' => $thirdL]
+                    ],
+                ],
+                // ? Next are to test login requests made on one user account
+                [
+                    // logins by email test
+                    'delay' => $firstDelayL,
+                    'log_summary' => [
+                        'logins_by_email' => ['successes' => 0, 'failures' => $firstL],
+                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    ],
+                ],
+                [
+                    'delay' => $secondDelayL,
+                    'log_summary' => [
+                        'logins_by_email' => ['successes' => 0, 'failures' => $secondL],
+                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    ],
+                ],
+                [
+                    'delay' => $thirdDelayL,
+                    'log_summary' => [
+                        'logins_by_email' => ['successes' => 0, 'failures' => $thirdL],
+                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    ],
                 ],
             ],
-            [
-                'delay' => $secondDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginF'),
-                    'email_stats' => self::stats($secondL, 'loginF'),
-                ],
-            ],
-            [
-                'delay' => $thirdDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginF'),
-                    'email_stats' => self::stats($thirdL, 'loginF'),
-                ],
-            ],
-            // ! LOGIN SUCCESS VALUES
+            // ! LOGIN SUCCESS VALUES (throttle on too many successful login requests)
             // ? First three are to test ip request stats
             [
                 // request limit not needed as it's expected that error is thrown and that only happens if limit reached
                 'delay' => $firstDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($firstL, 'loginS'),
-                    'email_stats' => self::stats(0, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $firstL, 'failures' => 0]
                 ],
             ],
             [
                 'delay' => $secondDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($secondL, 'loginS'),
-                    'email_stats' => self::stats(0, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $secondL, 'failures' => 0]
                 ],
             ],
             [
                 'delay' => $thirdDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats($thirdL, 'loginS'),
-                    'email_stats' => self::stats(0, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $thirdL, 'failures' => 0]
                 ],
             ],
 
             // ? Next are to test login requests made on one user
             [
                 'delay' => $firstDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginS'),
-                    'email_stats' => self::stats($firstL, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $firstL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
                 ],
             ],
             [
                 'delay' => $secondDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginS'),
-                    'email_stats' => self::stats($secondL, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $secondL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
                 ],
             ],
             [
                 'delay' => $thirdDelayL,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'loginS'),
-                    'email_stats' => self::stats($thirdL, 'loginS'),
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $thirdL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
                 ],
             ],
         ];
@@ -194,46 +190,46 @@ class UserRequestProvider
             [
                 // request limit not needed as it's expected that error is thrown and that only happens if limit reached
                 'delay' => $firstDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats($firstE, 'email'),
-                    'email_stats' => self::stats(0, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary($firstE, 'email'),
+                    'email_stats' => self::summary(0, 'email'),
                 ],
             ],
             [
                 'delay' => $secondDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats($secondE, 'email'),
-                    'email_stats' => self::stats(0, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary($secondE, 'email'),
+                    'email_stats' => self::summary(0, 'email'),
                 ],
             ],
             [
                 'delay' => $thirdDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats($thirdE, 'email'),
-                    'email_stats' => self::stats(0, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary($thirdE, 'email'),
+                    'email_stats' => self::summary(0, 'email'),
                 ],
             ],
 
             // ? Next are to test email requests made on one user
             [
                 'delay' => $firstDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'email'),
-                    'email_stats' => self::stats($firstE, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary(0, 'email'),
+                    'email_stats' => self::summary($firstE, 'email'),
                 ],
             ],
             [
                 'delay' => $secondDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'email'),
-                    'email_stats' => self::stats($secondE, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary(0, 'email'),
+                    'email_stats' => self::summary($secondE, 'email'),
                 ],
             ],
             [
                 'delay' => $thirdDelayE,
-                'request_stats' => [
-                    'ip_stats' => self::stats(0, 'email'),
-                    'email_stats' => self::stats($thirdE, 'email'),
+                'log_summary' => [
+                    'ip_stats' => self::summary(0, 'email'),
+                    'email_stats' => self::summary($thirdE, 'email'),
                 ],
             ],
         ];

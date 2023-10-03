@@ -23,19 +23,19 @@ class LoginLogFinderRepository
      *     logins_by_ip: array{successes: int, failures: int},
      * }
      */
-    public function getLoginLogsFromEmailAndIp(string $email, string $ip, int $seconds): array
+    public function getLoginSummaryFromEmailAndIp(string $email, string $ip, int $seconds): array
     {
-        $stats = ['logins_by_ip' => [], 'logins_by_email' => []];
+        $summary = ['logins_by_ip' => [], 'logins_by_email' => []];
 
         // Only return val34ues if not empty string as it doesn't represent a user request
         if ($email !== '') {
-            $stats['logins_by_email'] = $this->getLoginRequestStats(['email' => $email], $seconds);
+            $summary['logins_by_email'] = $this->getLoginRequestStats(['email' => $email], $seconds);
         }
         if ($ip !== '') {
-            $stats['logins_by_ip'] = $this->getLoginRequestStats(['ip_address' => $ip], $seconds);
+            $summary['logins_by_ip'] = $this->getLoginRequestStats(['ip_address' => $ip], $seconds);
         }
 
-        return $stats;
+        return $summary;
     }
 
     /**
@@ -77,7 +77,7 @@ class LoginLogFinderRepository
      *
      * @return string
      */
-    public function findLatestLoginRequestFromUserOrIp(string $email, string $ip): string
+    public function findLatestLoginTimestampFromUserOrIp(string $email, string $ip): string
     {
         $query = $this->queryFactory->newQuery();
         $query->select('created_at')->from('authentication_log')->where(
@@ -94,11 +94,12 @@ class LoginLogFinderRepository
      * Returns global login amount stats of last day.
      *
      * @return array{
-     *     login_total: array,
-     *     login_failures: array
+     *     total_amount: int,
+     *     successes: int,
+     *     failures: int
      * }
      */
-    public function getGlobalLoginAmountStats(): array
+    public function getGlobalLoginAmountSummary(): array
     {
         $query = $this->queryFactory->newQuery();
         $query->select(

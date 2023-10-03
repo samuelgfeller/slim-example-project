@@ -2,8 +2,6 @@
 
 namespace App\Test\Unit\Security;
 
-use App\Domain\Security\Data\RequestData;
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityLoginChecker;
@@ -44,39 +42,32 @@ class SecurityLoginCheckerTest extends TestCase
      * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualLoginThrottlingTestCases()
      *
      * @param int|string $delay
-     * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     * @param array{
+     *     logins_by_email: array{successes: int, failures: int},
+     *     logins_by_ip: array{successes: int, failures: int},
+     * } $ipAndEmailLogSummary
+     *
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
+    public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailLogSummary): void
     {
-        $loginRequestFinderRepository = $this->mock(LoginLogFinderRepository::class);
+        $loginLogFinderRepository = $this->mock(LoginLogFinderRepository::class);
 
-        // Very important to return stats otherwise global check fails
-        $loginRequestFinderRepository->method('getGlobalLoginAmountStats')->willReturn(
+        // Very important to return summary of requests otherwise global check fails
+        $loginLogFinderRepository->method('getGlobalLoginAmountSummary')->willReturn(
             ['login_total' => 21, 'login_failures' => 0] // 0 percent failures so global check won't fail
         );
 
         // Actual test
         // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
-        // email stats being empty and then vice versa
-        $loginRequestFinderRepository->method('getLoginRequestStatsFromEmailAndIp')->willReturn(
-            $ipAndEmailRequestStats
+        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn(
+            $ipAndEmailLogSummary
         );
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
-        $lastRequest = new RequestData(
-            [
-                'id' => 12,
-                'email' => 'email.does@not-matter.com',
-                'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-                'sent_email' => 1,
-                'is_login' => 'success', // Not relevant for individual login and email test
-                'created_at' => date('Y-m-d H:i:s'), // Current time so delay will be the original length
-            ]
-        );
-        $loginRequestFinderRepository->method('findLatestLoginRequestFromUserOrIp')->willReturn($lastRequest);
+        $loginLogFinderRepository->method('findLatestLoginTimestampFromUserOrIp')->willReturn(date('Y-m-d H:i:s'));
 
         $securityService = $this->container->get(SecurityLoginChecker::class);
 
@@ -104,30 +95,30 @@ class SecurityLoginCheckerTest extends TestCase
      */
     public function testPerformLoginSecurityCheckGlobal(): void
     {
-        $requestFinderRepository = $this->mock(LoginLogFinderRepository::class);
+        $loginLogFinderRepository = $this->mock(LoginLogFinderRepository::class);
 
-        // Preparation; making sure other security checks won't fail
-        // User stats should be 0 as global is tested here
-        $emptyStatsData = new RequestStatsData(
-            ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0]
-        );
-        $emptyEmailAndIpStats = [
-            'email_stats' => $emptyStatsData,
-            'ip_stats' => $emptyStatsData,
+        // We have to make sure other security checks won't fail when they're executed
+        // User summary should be 0 as global is tested here
+        $emptyLogSummary = [
+            'logins_by_email' => ['successes' => 0, 'failures' => 0],
+            'logins_by_ip' => ['successes' => 0, 'failures' => 0]
         ];
-        $requestFinderRepository->method('getLoginRequestStatsFromEmailAndIp')->willReturn($emptyEmailAndIpStats);
+        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($emptyLogSummary);
 
         // Actual test starts here
         // Login amount stats used to calculate threshold
         // This amount doesn't matter (could be other int as long as calculated threshold from it is more than 20)
-        $totalLogins = 1000; // If failure percentage is 20%, min val (for exception) is 105 as it gives a threshold of 21
+        // If failure percentage is 20%, min val (for exception to be thrown) is 105 as it results in a threshold of 21
+        // If failure percentage is 10%, the minimum value for an exception to be thrown is 210 (and 200 failures)
+        $totalLogins = 1000;
         $loginAmountStats = [
-            'login_total' => $totalLogins,
-            // Allowed failures amount have to be LESS than actual failures so this should trigger exception as its same
-            'login_failures' => $totalLogins / 100 *
-                $this->container->get('settings')['security']['login_failure_percentage'],
+            'total_amount' => $totalLogins,
+            // Failure amount threshold has to be less than actual failures, but we'll add 1 just in case
+            'failures' => ($totalLogins / 100 *
+                    $this->container->get('settings')['security']['login_failure_percentage']) + 1,
+            'successes' => 0, // Value doesn't matter if failures exceed or are equal the threshold
         ];
-        $requestFinderRepository->method('getGlobalLoginAmountStats')->willReturn($loginAmountStats);
+        $loginLogFinderRepository->method('getGlobalLoginAmountSummary')->willReturn($loginAmountStats);
 
         /** @var SecurityLoginChecker $securityService */
         $securityService = $this->container->get(SecurityLoginChecker::class);

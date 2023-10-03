@@ -100,7 +100,7 @@ class LoginSecurityTest extends TestCase
                         );
                         self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
 
-                        // ?Test that user can make a new request that is processed after having waited the delay
+                        // ? Test that user can make a new request that is processed after having waited the delay
                         // Below this request after waiting the delay is with WRONG credentials
                         if (is_numeric($delay)) {
                             // After waiting the delay, user is allowed to make new login request but if the credentials
@@ -108,7 +108,7 @@ class LoginSecurityTest extends TestCase
                             // security check** after the failed request in LoginVerifier.
                             // (This second security check is not done if request has correct credentials)
                             // Prepone last user request to simulate waiting
-                            $this->preponeLastUserRequestEntry($delay);
+                            $this->preponeLastAuthenticationLogEntry($delay);
                             try {
                                 // Request again with wrong credentials
                                 $this->app->handle($request);
@@ -120,7 +120,7 @@ class LoginSecurityTest extends TestCase
                                 // Expect exception, and we cant use $this->expectException(); as it finishes the test
                                 // Delete newly created login request as the request above created a new entry in
                                 // user_request, and the login stats would be falsified in the next iterations/tests
-                                $this->deleteLastUserRequestEntry();
+                                $this->deleteLastAuthenticationLog();
                             }
 
                             // * Assert that after waiting the delay, a successful request can be made with correct credentials
@@ -132,7 +132,7 @@ class LoginSecurityTest extends TestCase
                             $responseAfterWaiting = $this->app->handle($requestAfterWaitingDelay);
                             // Again delete the most recent user_request entry as the request above is also an "aside"
                             // test that should not influence login stats of the next iterations.
-                            $this->deleteLastUserRequestEntry();
+                            $this->deleteLastAuthenticationLog();
 
                             // Assert that user is logged in and redirected
                             self::assertSame(
@@ -146,7 +146,7 @@ class LoginSecurityTest extends TestCase
 
                             // Reset last login request so that it's correct for the next request as security check is
                             // done before the new `user_request` entry is made.
-                            $this->postponeLastUserRequestEntry($delay);
+                            $this->postponeLastAuthenticationLog($delay);
                         }
                     }
                     // If right threshold is reached and asserted, go out of nthLogin loop to test the next iteration
@@ -166,10 +166,10 @@ class LoginSecurityTest extends TestCase
      *
      * @return void
      */
-    private function preponeLastUserRequestEntry(int $seconds): void
+    private function preponeLastAuthenticationLogEntry(int $seconds): void
     {
         // Change row with the highest id
-        $query = "UPDATE user_request SET created_at = DATE_SUB(created_at, INTERVAL $seconds SECOND) ORDER BY id DESC LIMIT 1";
+        $query = "UPDATE authentication_log SET created_at = DATE_SUB(created_at, INTERVAL $seconds SECOND) ORDER BY id DESC LIMIT 1";
         $this->createQueryStatement($query);
     }
 
@@ -178,10 +178,10 @@ class LoginSecurityTest extends TestCase
      *
      * @return void
      */
-    private function deleteLastUserRequestEntry(): void
+    private function deleteLastAuthenticationLog(): void
     {
         // Change row with the highest id
-        $query = 'DELETE FROM user_request ORDER BY id DESC LIMIT 1';
+        $query = 'DELETE FROM authentication_log ORDER BY id DESC LIMIT 1';
         $this->createQueryStatement($query);
     }
 
@@ -193,7 +193,7 @@ class LoginSecurityTest extends TestCase
      *
      * @return void
      */
-    private function postponeLastUserRequestEntry(int $seconds): void
+    private function postponeLastAuthenticationLog(int $seconds): void
     {
         // Change row with the highest id
         $query = "UPDATE user_request SET created_at = DATE_SUB(created_at, INTERVAL $seconds SECOND) ORDER BY id DESC LIMIT 1";
@@ -292,7 +292,7 @@ class LoginSecurityTest extends TestCase
                         // If new delay after one more trial
                         if (is_numeric($delay)) {
                             // Prepone last request to simulate the new waiting delay caused from
-                            $this->preponeLastUserRequestEntry($delay);
+                            $this->preponeLastAuthenticationLogEntry($delay);
 
                             $requestAfterWaitingDelay = $this->createFormRequest(
                                 'POST',
