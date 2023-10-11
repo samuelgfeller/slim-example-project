@@ -2,8 +2,6 @@
 
 namespace App\Test\Unit\Security;
 
-use App\Domain\Security\Data\RequestData;
-use App\Domain\Security\Data\RequestStatsData;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Service\SecurityEmailChecker;
@@ -32,39 +30,28 @@ class SecurityEmailCheckerTest extends TestCase
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
      *
-     * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualEmailThrottlingTestCases()
+     * @dataProvider \App\Test\Provider\Security\EmailRequestProvider::individualEmailThrottlingTestCases()
      *
      * @param int|string $delay
-     * @param array{email_stats: RequestStatsData, ip_stats: RequestStatsData} $ipAndEmailRequestStats
+     * @param int $emailLogAmountInTimeSpan
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformEmailAbuseCheckIndividual(int|string $delay, array $ipAndEmailRequestStats): void
+    public function testPerformEmailAbuseCheckIndividual(int|string $delay, int $emailLogAmountInTimeSpan): void
     {
         // Preparation; making sure other security checks won't fail
         $requestFinderRepository = $this->mock(EmailLogFinderRepository::class);
-        // Very important to return stats otherwise global check fails
+        // Important to return stats otherwise global check fails
         $requestFinderRepository->method('getGlobalSentEmailAmount')->willReturn(0);
 
         // Actual test
         // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
         // email stats being empty and then vice versa
-        $requestFinderRepository->method('getEmailRequestStatsFromEmailAndIp')->willReturn($ipAndEmailRequestStats);
+        $requestFinderRepository->method('getLoggedEmailCountInTimespan')->willReturn($emailLogAmountInTimeSpan);
 
-        // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
-        $lastRequest = new RequestData(
-            [
-                'id' => 12,
-                'email' => 'email.does@not-matter.com',
-                'ip_address' => 2130706433, // 127.0.0.1 as unsigned int
-                'sent_email' => 1,
-                'is_login' => 'success', // Not relevant for login test
-                'created_at' => date('Y-m-d H:i:s'), // Current time so delay will be the original length
-            ]
-        );
-        // Relevant for email abuse tests
-        $requestFinderRepository->method('findLatestEmailRequestFromUserOrIp')->willReturn($lastRequest);
+        // Set return values for last email request (with current time so delay will be the original length)
+        $requestFinderRepository->method('findLatestEmailRequest')->willReturn(date('Y-m-d H:i:s'));
 
         $securityService = $this->container->get(SecurityEmailChecker::class);
 
@@ -90,7 +77,7 @@ class SecurityEmailCheckerTest extends TestCase
      *  - First iteration: email amount reaching DAILY threshold (and thus fail)
      *  - Second iteration: email amount reaching MONTHLY threshold (and thus fail).
      *
-     * @dataProvider \App\Test\Provider\Security\UserRequestProvider::globalEmailStatsProvider()
+     * @dataProvider \App\Test\Provider\Security\EmailRequestProvider::globalEmailStatsProvider()
      *
      * Values same as threshold as exception is thrown if it equals or is greater than threshold
      *
@@ -104,18 +91,9 @@ class SecurityEmailCheckerTest extends TestCase
         $requestFinderRepository = $this->mock(EmailLogFinderRepository::class);
 
         // Preparation; making sure other security checks won't fail
-        // User stats should be 0 as global is tested here
-        $emptyStatsData = new RequestStatsData(
-            ['request_amount' => 0, 'sent_emails' => 0, 'login_failures' => 0, 'login_successes' => 0]
-        );
-        $emptyEmailAndIpStats = [
-            'email_stats' => $emptyStatsData,
-            'ip_stats' => $emptyStatsData,
-        ];
-        $requestFinderRepository->method('getEmailRequestStatsFromEmailAndIp')
-            ->willReturn($emptyEmailAndIpStats);
+        // Logged email for user is set to 0 as global is tested here
+        $requestFinderRepository->method('getLoggedEmailCountInTimespan')->willReturn(0);
 
-        // Actual test starts here
         // In the first test iteration the provider sets the daily amount and leaves monthly blank
         // The second time this test is executed the provider sets monthly amount and leaves daily blank
         $requestFinderRepository->method('getGlobalSentEmailAmount')->willReturnOnConsecutiveCalls(
@@ -128,7 +106,7 @@ class SecurityEmailCheckerTest extends TestCase
         // Exception assertions
         $this->expectException(SecurityException::class);
         // For the daily amount test, $monthlyEmailAmount is the same as daily. If its more it means that this test
-        // iteration is about monthly amount
+        // iteration is for monthly amount
         if ($monthlyEmailAmount > $dailyEmailAmount) {
             $this->expectExceptionMessage('Maximum amount of unrestricted email sending monthly reached site-wide.');
         } // The least possible monthly values is the same as daily which is given by the provider for the daily test

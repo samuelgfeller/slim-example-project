@@ -2,9 +2,16 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Common\LocaleHelper;
+use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Security\Service\SecurityEmailChecker;
+use App\Domain\Settings;
 use App\Domain\User\Data\UserData;
+use App\Domain\User\Enum\UserStatus;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Logic on cases where user tries to log in but his status is not active
@@ -13,13 +20,87 @@ use Psr\Log\LoggerInterface;
 class LoginNonActiveUserHandler
 {
     private LoggerInterface $logger;
+    private string $mainContactEmail;
 
     public function __construct(
         private readonly VerificationTokenCreator $verificationTokenCreator,
         private readonly LoginMailer $loginMailer,
+        private readonly LocaleHelper $localeHelper,
+        private readonly SecurityEmailChecker $securityEmailChecker,
+        readonly Settings $settings,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login-non-active-status');
+        $this->mainContactEmail = $this->settings->get(
+            'public'
+        )['email']['main_contact_address'] ?? 'slim-example-project@samuel-gfeller.ch';
+    }
+
+    /**
+     * Handles the login attempt from a non-active user.
+     * Sends an email to the user with information and a link to activate his account.
+     *
+     * @param UserData $dbUser The user data from the database.
+     * @param array $queryParams The query parameters.
+     * @return void
+     * @throws TransportExceptionInterface If there is an exception while sending an email.
+     * @throws \RuntimeException If there is an invalid status in the database.
+     * @throws UnableToLoginStatusNotActiveException Thrown in all cases as the user status is not active.
+     */
+    public function handleLoginAttemptFromNonActiveUser(
+        UserData $dbUser,
+        array $queryParams,
+        ?string $captcha = null
+    ): void {
+        $this->securityEmailChecker->performEmailAbuseCheck($dbUser->email, $captcha);
+        // If status not active, create exception object
+        $unableToLoginException = new UnableToLoginStatusNotActiveException(
+            __('Unable to login at the moment, please check your email inbox for a more detailed message.')
+        );
+        try {
+            // Change language to the one the user selected in settings (in case it differs from browser lang)
+            $originalLocale = setlocale(LC_ALL, 0);
+            $this->localeHelper->setLanguage($dbUser->language->value);
+
+            if ($dbUser->status === UserStatus::Unverified) {
+                // Inform user via email that account is unverified, and he should click on the link in his inbox
+                $this->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
+                // Throw exception to display error message in form
+                throw $unableToLoginException;
+            }
+
+            if ($dbUser->status === UserStatus::Suspended) {
+                // Inform user (only via mail) that he is suspended
+                $this->handleSuspendedUserLoginAttempt($dbUser);
+                // Throw exception to display error message in form
+                throw $unableToLoginException;
+            }
+
+            if ($dbUser->status === UserStatus::Locked) {
+                // login fail and inform user (only via mail) that he is locked and provide unlock token
+                $this->handleLockedUserLoginAttempt($dbUser, $queryParams);
+                // Throw exception to display error message in form
+                throw $unableToLoginException;
+            }
+            // Reset locale if sending the mail was successful
+            $this->localeHelper->setLanguage($originalLocale);
+        } catch (TransportException $transportException) {
+            // If exception is thrown reset locale as well. If $unableToLoginException
+            $this->localeHelper->setLanguage($originalLocale);
+            // Exception while sending email
+            throw new UnableToLoginStatusNotActiveException(
+                'Unable to login at the moment and there was an error when sending an email to you.' .
+                "\n Please contact $this->mainContactEmail."
+            );
+        } // Catch exception to reset locale before throwing it again to be caught in the action
+        catch (UnableToLoginStatusNotActiveException $unableToLoginStatusNotActiveException) {
+            // Reset locale
+            $this->localeHelper->setLanguage($originalLocale);
+            throw $unableToLoginStatusNotActiveException;
+        }
+
+        // todo invalid status in db. Send email to admin to inform that there is something wrong with the user
+        throw new \RuntimeException('Invalid status');
     }
 
     /**
@@ -29,8 +110,9 @@ class LoginNonActiveUserHandler
      * @param array $queryParams
      *
      * @return void
+     * @throws TransportExceptionInterface
      */
-    public function handleUnverifiedUserLoginAttempt(UserData $user, array $queryParams = []): void
+    private function handleUnverifiedUserLoginAttempt(UserData $user, array $queryParams = []): void
     {
         // Create verification token, so he doesn't have to register again
         $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
@@ -46,8 +128,9 @@ class LoginNonActiveUserHandler
      * @param UserData $user
      *
      * @return void
+     * @throws TransportExceptionInterface
      */
-    public function handleSuspendedUserLoginAttempt(UserData $user): void
+    private function handleSuspendedUserLoginAttempt(UserData $user): void
     {
         // Send email to suspended user
         $this->loginMailer->sendInfoToSuspendedUser($user);
@@ -64,8 +147,9 @@ class LoginNonActiveUserHandler
      * @param array $queryParams existing query params like redirect
      *
      * @return void
+     * @throws TransportExceptionInterface
      */
-    public function handleLockedUserLoginAttempt(UserData $user, array $queryParams = []): void
+    private function handleLockedUserLoginAttempt(UserData $user, array $queryParams = []): void
     {
         // Create verification token to unlock account
         $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);

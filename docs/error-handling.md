@@ -3,9 +3,9 @@
 
 ## Configuration
 ### Default values
-The following configuration values are in `defaults.env.php` but can and should be changed
+The following configuration values are in `defaults.php` but can and should be changed
 in the environment specific config file.   
-File: `defaults.env.php` 
+File: `defaults.php` 
 ```php
 // Error handler
 $settings['error'] = [

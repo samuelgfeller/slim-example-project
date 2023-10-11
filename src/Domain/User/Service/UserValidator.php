@@ -124,7 +124,7 @@ class UserValidator
      *
      * @param array{email: string|null, password: string|null} $userLoginValues
      *
-     * @throws ValidationException|\JsonException
+     * @throws ValidationException
      *
      * @return ValidationResult
      */
@@ -146,8 +146,6 @@ class UserValidator
      * Validate email for password recovery.
      *
      * @param string|null $email
-     *
-     * @throws \JsonException
      *
      * @return ValidationResult
      */

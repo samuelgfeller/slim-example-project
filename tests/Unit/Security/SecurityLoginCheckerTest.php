@@ -39,7 +39,7 @@ class SecurityLoginCheckerTest extends TestCase
      * Data provider is very important in this test. It will call this function with all the different kinds of user
      * request amounts where an exception must be thrown.
      *
-     * @dataProvider \App\Test\Provider\Security\UserRequestProvider::individualLoginThrottlingTestCases()
+     * @dataProvider \App\Test\Provider\Security\LoginRequestProvider::individualLoginThrottlingTestCases()
      *
      * @param int|string $delay
      * @param array{
@@ -81,6 +81,7 @@ class SecurityLoginCheckerTest extends TestCase
         } catch (SecurityException $se) {
             self::assertSame(SecurityType::USER_LOGIN, $se->getSecurityType());
             $delayMessage = 'Remaining delay not matching expected';
+            // ? If tests fail, check that 'login_throttle_rule' at the top of provider matches the values in config
             self::assertEqualsWithDelta($delay, $se->getRemainingDelay(), 1, $delayMessage);
             // Throw exception as expectException is set up to assert that exception is thrown
             throw $se;

@@ -33,7 +33,7 @@ class SecurityCaptchaVerifier
         $verificationResponse = file_get_contents($url);
         if (
             $verificationResponse !== false
-            && json_decode($verificationResponse, true, 512, JSON_THROW_ON_ERROR)['success']
+            && json_decode($verificationResponse, true, 512, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR)['success']
         ) {
             return true;
         }

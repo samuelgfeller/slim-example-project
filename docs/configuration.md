@@ -10,7 +10,7 @@ The framework main files are located inside the directory `config/`.
 The project configuration values are inside `config/local/`.
 
 ### Default values
-The default and non-sensitive config values are inside `config/local/defaults.env.php`.  
+The default and non-sensitive config values are inside `config/local/defaults.php`.  
 It should contain all keys even when values are null to act as template 
 that will be overwritten in the secret `env.php` file.
 
@@ -25,7 +25,7 @@ Development env values are in the file `env.dev.php`. This file contains
 every non-secret configuration on the development machine such as
 error reporting and database name.
 When testing, this file won't be loaded so everything relevant for testing
-that is not in or different from `defaults.env.php` should also be to the
+that is not in or different from `defaults.php` should also be to the
 `env.test.php` file.
 
 #### Production
@@ -46,7 +46,7 @@ The environment values for integration testing (e.g. database name) are stored i
 files values.  
 
 They are loaded in this order:  
-1. File `config/local/defaults.env.php`
+1. File `config/local/defaults.php`
 2. File `config/local/env.php`
 3. Depending on  what `APP_ENV` is defined, the environment specific file is loaded
    (if `APP_ENV` is "test", it will load `env.test.php`, if it is "dev" it'll load 

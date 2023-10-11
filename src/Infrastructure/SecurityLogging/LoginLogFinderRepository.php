@@ -27,7 +27,7 @@ class LoginLogFinderRepository
     {
         $summary = ['logins_by_ip' => [], 'logins_by_email' => []];
 
-        // Only return val34ues if not empty string as it doesn't represent a user request
+        // Only return values if not empty string as it doesn't represent a user request
         if ($email !== '') {
             $summary['logins_by_email'] = $this->getLoginRequestStats(['email' => $email], $seconds);
         }

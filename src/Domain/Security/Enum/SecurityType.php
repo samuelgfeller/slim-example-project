@@ -9,5 +9,4 @@ enum SecurityType: string
     case GLOBAL_REQUESTS = 'global_requests';
     case USER_LOGIN = 'user_login'; // User or IP fail
     case USER_EMAIL = 'user_email';
-    case USER_REQUESTS = 'user_requests';
 }

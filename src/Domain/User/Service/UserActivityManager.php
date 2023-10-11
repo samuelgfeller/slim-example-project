@@ -24,8 +24,6 @@ class UserActivityManager
      * @param array|null $data
      * @param int|null $userId in case there is no session like on login
      *
-     * @throws \JsonException
-     *
      * @return int
      */
     public function addUserActivity(

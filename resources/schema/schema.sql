@@ -52,7 +52,7 @@ CREATE TABLE `email_log` (
   PRIMARY KEY (`id`),
   KEY `email_log_user_id_fk` (`user_id`),
   CONSTRAINT `email_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -126,18 +126,6 @@ CREATE TABLE `user_filter_setting` (
   `module` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`filter_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-
-CREATE TABLE `user_request` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(254) NOT NULL,
-  `ip_address` int(11) unsigned DEFAULT NULL,
-  `sent_email` tinyint(4) NOT NULL DEFAULT 0,
-  `is_login` enum('success','failure') DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `created_at_index` (`created_at`),
-  KEY `request_track_idx_is_login` (`is_login`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -44,21 +44,26 @@ class SecurityLoginChecker
     public function performLoginSecurityCheck(string $email, ?string $reCaptchaResponse = null): void
     {
         if ($this->securitySettings['throttle_login'] === true) {
-            // reCAPTCHA verification
-            $validCaptcha = false;
-            if ($reCaptchaResponse !== null) {
-                $validCaptcha = $this->captchaVerifier->verifyReCaptcha(
-                    $reCaptchaResponse,
-                    SecurityType::USER_LOGIN
-                );
-            }
-            // If captcha is valid the other security checks don't have to be made
-            if ($validCaptcha !== true) {
-                // Most strict. Very low limit on failed requests for specific email or coming from an ip
+            // Standard verification has to be done before captcha check as the captcha may be needed for email
+            // verification when email is sent to a non-active user for instance
+            try {
                 $summary = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
+                // Most strict. Very low limit on failed requests for specific user or coming from an ip
                 $this->performLoginCheck($summary['logins_by_ip'], $summary['logins_by_email'], $email);
                 // Global login check
                 $this->performGlobalLoginCheck();
+            } catch (SecurityException $securityException) {
+                // reCAPTCHA check done AFTER standard login checks as captcha can be verified only once, and it
+                // may be required later for the email verification (to send email to a non-active user)
+                if ($reCaptchaResponse !== null) {
+                    $this->captchaVerifier->verifyReCaptcha(
+                        $reCaptchaResponse,
+                        SecurityType::USER_LOGIN
+                    );
+                } else {
+                    // If security exception was thrown and reCaptcha response is null, throw exception
+                    throw $securityException;
+                }
             }
         }
     }

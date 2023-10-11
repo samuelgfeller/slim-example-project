@@ -47,7 +47,7 @@ class UserActivityData
             'action' => $this->action->value,
             'table' => $this->table,
             'row_id' => $this->rowId,
-            'data' => $this->data ? json_encode($this->data, JSON_THROW_ON_ERROR) : null,
+            'data' => $this->data ? json_encode($this->data, JSON_PARTIAL_OUTPUT_ON_ERROR) : null,
             // Datetime never needed for insert as it's done by the database
             'ip_address' => $this->ipAddress,
             'user_agent' => $this->userAgent,

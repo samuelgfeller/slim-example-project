@@ -35,7 +35,7 @@ final class Validator
      *
      * @param ValidationResult $validationResult
      *
-     * @throws ValidationException|\JsonException
+     * @throws ValidationException
      */
     public function throwOnError(ValidationResult $validationResult): void
     {
@@ -43,7 +43,7 @@ final class Validator
             $this->logger->notice(
                 'Validation failed: ' . $validationResult->getMessage() . "\n" . json_encode(
                     $validationResult->getErrors(),
-                    JSON_THROW_ON_ERROR
+                    JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
                 )
             );
             throw new ValidationException($validationResult);

@@ -66,7 +66,7 @@ class LoginSubmitActionTest extends TestCase
                 'action' => UserActivity::READ->value,
                 'table' => 'user',
                 'row_id' => $userRow['id'],
-                'data' => json_encode(['login'], JSON_THROW_ON_ERROR),
+                'data' => json_encode(['login'], JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR),
             ],
             'user_activity',
             (int)$this->findLastInsertedTableRow('user_activity')['id']

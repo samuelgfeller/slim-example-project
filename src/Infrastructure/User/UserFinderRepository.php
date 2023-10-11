@@ -87,8 +87,6 @@ class UserFinderRepository
      *
      * @param int $id
      *
-     * @throws \Exception
-     *
      * @return UserData
      */
     public function findUserByIdWithPasswordHash(int $id): UserData
@@ -109,8 +107,6 @@ class UserFinderRepository
      * Source: https://stackoverflow.com/a/1970001/9013718.
      *
      * @param string|null $email
-     *
-     * @throws \Exception
      *
      * @return UserData
      */

@@ -44,7 +44,7 @@ class EmailLogFinderRepository
      * Searches the latest email request concerning a specific email address.
      *
      * @param string $email
-     * @return string|bool
+     * @return string|bool datetime of last email request or false
      */
     public function findLatestEmailRequest(string $email): bool|string
     {
