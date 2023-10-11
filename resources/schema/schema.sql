@@ -4,7 +4,7 @@ CREATE TABLE `authentication_log` (
   `email` varchar(254) DEFAULT NULL,
   `ip_address` varchar(45) DEFAULT NULL,
   `is_success` tinyint(4) DEFAULT NULL,
-  `created_at` datetime DEFAULT curdate(),
+  `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `authentication_log_user_id_fk` (`user_id`),
   CONSTRAINT `authentication_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
@@ -48,7 +48,7 @@ CREATE TABLE `email_log` (
   `to_email` varchar(254) DEFAULT NULL,
   `other_recipient` varchar(1000) DEFAULT NULL,
   `subject` varchar(998) DEFAULT NULL,
-  `created_at` datetime DEFAULT curdate(),
+  `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `email_log_user_id_fk` (`user_id`),
   CONSTRAINT `email_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
