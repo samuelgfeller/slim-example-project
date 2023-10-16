@@ -15,12 +15,12 @@ class AuthenticationLoggerRepository
      * Insert new login request.
      *
      * @param string $email
-     * @param string $ip
+     * @param ?string $ip
      * @param bool $success whether login request was a successful login or not
      * @param int|null $userId
      * @return string
      */
-    public function logLoginRequest(string $email, string $ip, bool $success, ?int $userId = null): string
+    public function logLoginRequest(string $email, ?string $ip, bool $success, ?int $userId = null): string
     {
         $query = $this->queryFactory->newQuery();
         $query->insert(['email', 'ip_address', 'is_success', 'user_id', 'created_at'])

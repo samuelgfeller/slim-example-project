@@ -83,7 +83,6 @@ class SecurityLoginChecker
      */
     private function performLoginCheck(array $loginsByIp, array $loginsByEmail, string $email): void
     {
-        $throttleSuccess = $this->securitySettings['throttle_login_success'];
         // Reverse order to compare fails the longest delay first and then go down from there
         krsort($this->securitySettings['login_throttle_rule']);
         // Fails on specific user or coming from specific IP
@@ -91,9 +90,7 @@ class SecurityLoginChecker
             // Check that there aren't more login successes or failures than tolerated
             if (
                 ($loginsByIp['failures'] >= $requestLimit && $loginsByIp['failures'] !== 0)
-                || ($throttleSuccess && $loginsByIp['successes'] >= $requestLimit && $loginsByIp['successes'] !== 0)
                 || ($loginsByEmail['failures'] >= $requestLimit && $loginsByEmail['failures'] !== 0)
-                || ($throttleSuccess && $loginsByEmail['successes'] >= $requestLimit && $loginsByEmail['successes'] !== 0)
             ) {
                 // If truthy means: too many ip fails OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user

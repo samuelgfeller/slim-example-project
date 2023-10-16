@@ -2,6 +2,7 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\Enum\UserActivity;
@@ -22,8 +23,8 @@ class LoginVerifier
         private readonly AuthenticationLoggerRepository $authenticationLoggerRepository,
         private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
         private readonly UserActivityManager $userActivityManager,
+        private readonly UserNetworkSessionData $ipAddressData,
     ) {
-
     }
 
     /**
@@ -58,7 +59,7 @@ class LoginVerifier
                 // Insert login success request
                 $this->authenticationLoggerRepository->logLoginRequest(
                     $dbUser->email,
-                    $_SERVER['REMOTE_ADDR'],
+                    $this->ipAddressData->ipAddress,
                     true,
                     $dbUser->id
                 );
@@ -81,7 +82,7 @@ class LoginVerifier
         // Password not correct or user not existing - insert login request for ip
         $this->authenticationLoggerRepository->logLoginRequest(
             $userLoginValues['email'],
-            $_SERVER['REMOTE_ADDR'],
+            $this->ipAddressData->ipAddress,
             false,
             $dbUser->id
         );

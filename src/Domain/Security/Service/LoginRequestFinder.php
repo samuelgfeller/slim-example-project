@@ -2,6 +2,7 @@
 
 namespace App\Domain\Security\Service;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Settings;
 use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 
@@ -11,6 +12,7 @@ class LoginRequestFinder
 
     public function __construct(
         private readonly LoginLogFinderRepository $loginRequestFinderRepository,
+        private readonly UserNetworkSessionData $ipAddressData,
         Settings $settings
     ) {
         $this->securitySettings = $settings->get('security');
@@ -31,7 +33,7 @@ class LoginRequestFinder
         // Stats concerning given email in last timespan
         return $this->loginRequestFinderRepository->getLoginSummaryFromEmailAndIp(
             $email,
-            $_SERVER['REMOTE_ADDR'],
+            $this->ipAddressData->ipAddress,
             $this->securitySettings['timespan']
         );
     }
@@ -47,7 +49,7 @@ class LoginRequestFinder
     {
         $createdAt = $this->loginRequestFinderRepository->findLatestLoginTimestampFromUserOrIp(
             $email,
-            $_SERVER['REMOTE_ADDR']
+            $this->ipAddressData->ipAddress,
         );
         if ($createdAt) {
             return (new \DateTime($createdAt))->format('U');

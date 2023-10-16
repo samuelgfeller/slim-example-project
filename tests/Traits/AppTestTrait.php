@@ -64,9 +64,6 @@ trait AppTestTrait
             $this->insertFixtures([UserRoleFixture::class]);
         }
 
-        // Per default not set when script executed with cli and used at least in all security checks
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-
         // XDebug start_with_request produces errors when testing (SLE-102)
         // if (!isset($_ENV['AUTO_XDEBUG_DISABLED'])) {
         // Disable xdebug.start_with_request (when already disabled, delay is approx 200ms for 80 tests)

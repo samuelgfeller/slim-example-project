@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Service;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivity;
 use App\Infrastructure\User\UserActivityRepository;
@@ -12,6 +13,7 @@ class UserActivityManager
     public function __construct(
         private readonly UserActivityRepository $userActivityRepository,
         private readonly SessionInterface $session,
+        private readonly UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
 
@@ -34,9 +36,9 @@ class UserActivityManager
         ?int $userId = null,
     ): int {
         $userActivity = new UserActivityData();
-        $userActivity->ipAddress = $_SERVER['REMOTE_ADDR'];
-        $userActivity->userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        $userActivity->userId = $this->session->get('user_id') ?? $userId;
+        $userActivity->ipAddress = $this->userNetworkSessionData->ipAddress;
+        $userActivity->userAgent = $this->userNetworkSessionData->userAgent;
+        $userActivity->userId = $this->userNetworkSessionData->userId ?? $userId;
         $userActivity->action = $userActivityAction;
         $userActivity->table = $table;
         $userActivity->rowId = $rowId;

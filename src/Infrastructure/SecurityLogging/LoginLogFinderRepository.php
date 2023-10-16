@@ -23,16 +23,16 @@ class LoginLogFinderRepository
      *     logins_by_ip: array{successes: int, failures: int},
      * }
      */
-    public function getLoginSummaryFromEmailAndIp(string $email, string $ip, int $seconds): array
+    public function getLoginSummaryFromEmailAndIp(string $email, ?string $ip, int $seconds): array
     {
-        $summary = ['logins_by_ip' => [], 'logins_by_email' => []];
+        $summary = ['logins_by_ip' => ['successes' => 0, 'failures' => 0], 'logins_by_email' => []];
 
         // Only return values if not empty string as it doesn't represent a user request
         if ($email !== '') {
-            $summary['logins_by_email'] = $this->getLoginRequestStats(['email' => $email], $seconds);
+            $summary['logins_by_email'] = $this->getLoginRequestSummary(['email' => $email], $seconds);
         }
-        if ($ip !== '') {
-            $summary['logins_by_ip'] = $this->getLoginRequestStats(['ip_address' => $ip], $seconds);
+        if ($ip && $ip !== '') {
+            $summary['logins_by_ip'] = $this->getLoginRequestSummary(['ip_address' => $ip], $seconds);
         }
 
         return $summary;
@@ -46,7 +46,7 @@ class LoginLogFinderRepository
      *
      * @return array{successes: int, failures: int}
      */
-    private function getLoginRequestStats(array $whereEmailOrIpArr, int $seconds): array
+    private function getLoginRequestSummary(array $whereEmailOrIpArr, int $seconds): array
     {
         $query = $this->queryFactory->newQuery();
         $query->select(
