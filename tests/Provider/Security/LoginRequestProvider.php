@@ -11,7 +11,6 @@ class LoginRequestProvider
     // Change provider return values too if different from 3
     private const userLoginThrottle = [4 => 10, 9 => 120, 12 => 'captcha'];
 
-
     /**
      * Get request stats array populated with a specific amount
      * For global or user as $requestAmount is passed as argument.
@@ -38,15 +37,16 @@ class LoginRequestProvider
         if ($type === 'loginF') {
             return [
                 'logins_by_email' => ['successes' => 0, 'failures' => $requestAmount],
-                'logins_by_ip' => ['successes' => 0, 'failures' => $requestAmount]
+                'logins_by_ip' => ['successes' => 0, 'failures' => $requestAmount],
             ];
         }
         if ($type === 'loginS') {
             return [
                 'logins_by_email' => ['successes' => $requestAmount, 'failures' => 0],
-                'logins_by_ip' => ['successes' => $requestAmount, 'failures' => 0]
+                'logins_by_ip' => ['successes' => $requestAmount, 'failures' => 0],
             ];
         }
+
         return [];
     }
 
@@ -72,92 +72,44 @@ class LoginRequestProvider
                 'delay' => $firstDelayL,
                 'log_summary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => 0, 'failures' => $firstL]
-                ],
-
-                [
-                    'delay' => $secondDelayL,
-                    'log_summary' => [
-                        'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                        'logins_by_ip' => ['successes' => 0, 'failures' => $secondL]
-                    ],
-                ],
-                [
-                    'delay' => $thirdDelayL,
-                    'log_summary' => [
-                        'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                        'logins_by_ip' => ['successes' => 0, 'failures' => $thirdL]
-                    ],
-                ],
-                // ? Next are to test login requests made on one user account
-                [
-                    // logins by email test
-                    'delay' => $firstDelayL,
-                    'log_summary' => [
-                        'logins_by_email' => ['successes' => 0, 'failures' => $firstL],
-                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
-                    ],
-                ],
-                [
-                    'delay' => $secondDelayL,
-                    'log_summary' => [
-                        'logins_by_email' => ['successes' => 0, 'failures' => $secondL],
-                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
-                    ],
-                ],
-                [
-                    'delay' => $thirdDelayL,
-                    'log_summary' => [
-                        'logins_by_email' => ['successes' => 0, 'failures' => $thirdL],
-                        'logins_by_ip' => ['successes' => 0, 'failures' => 0]
-                    ],
-                ],
-            ],
-            // ! LOGIN SUCCESS VALUES (throttle on too many successful login requests)
-            // ? First three are to test ip request stats
-            [
-                // request limit not needed as it's expected that error is thrown and that only happens if limit reached
-                'delay' => $firstDelayL,
-                'log_summary' => [
-                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => $firstL, 'failures' => 0]
+                    'logins_by_ip' => ['successes' => 0, 'failures' => $firstL],
                 ],
             ],
             [
                 'delay' => $secondDelayL,
                 'log_summary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => $secondL, 'failures' => 0]
+                    'logins_by_ip' => ['successes' => 0, 'failures' => $secondL],
                 ],
             ],
             [
                 'delay' => $thirdDelayL,
                 'log_summary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => $thirdL, 'failures' => 0]
+                    'logins_by_ip' => ['successes' => 0, 'failures' => $thirdL],
                 ],
             ],
-
-            // ? Next are to test login requests made on one user
+            // ? Next are to test login requests made on one user account
             [
+                // logins by email test
                 'delay' => $firstDelayL,
                 'log_summary' => [
-                    'logins_by_email' => ['successes' => $firstL, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    'logins_by_email' => ['successes' => 0, 'failures' => $firstL],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
             ],
             [
                 'delay' => $secondDelayL,
                 'log_summary' => [
-                    'logins_by_email' => ['successes' => $secondL, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    'logins_by_email' => ['successes' => 0, 'failures' => $secondL],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
             ],
             [
                 'delay' => $thirdDelayL,
                 'log_summary' => [
-                    'logins_by_email' => ['successes' => $thirdL, 'failures' => 0],
-                    'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+                    'logins_by_email' => ['successes' => 0, 'failures' => $thirdL],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
             ],
         ];

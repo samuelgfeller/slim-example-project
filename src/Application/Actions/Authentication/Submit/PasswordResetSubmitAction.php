@@ -89,6 +89,7 @@ sure to click on the most recent email we send you</a>.</b>'
                 $this->logger->error(
                     'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
                 );
+
                 // Render password
                 return $this->responder->render($response, 'authentication/login.html.php');
             } catch (ValidationException $validationException) {

@@ -77,6 +77,7 @@ class UserFinderRepository
         $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
+
         // Empty array if not found
         return $query->execute()->fetch('assoc') ?: [];
     }
@@ -95,6 +96,7 @@ class UserFinderRepository
             ['deleted_at IS' => null, 'id' => $id]
         );
         $userRows = $query->execute()->fetch('assoc') ?: [];
+
         // Empty user object if not found
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
         return new UserData($userRows);

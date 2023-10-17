@@ -18,6 +18,7 @@ class AuthenticationLoggerRepository
      * @param ?string $ip
      * @param bool $success whether login request was a successful login or not
      * @param int|null $userId
+     *
      * @return string
      */
     public function logLoginRequest(string $email, ?string $ip, bool $success, ?int $userId = null): string

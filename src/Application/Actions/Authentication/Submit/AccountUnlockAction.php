@@ -65,6 +65,7 @@ final class AccountUnlockAction
                 );
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
+
                 // Redirect to login page with redirect query param if set
                 return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {

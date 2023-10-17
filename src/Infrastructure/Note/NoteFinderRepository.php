@@ -40,6 +40,7 @@ class NoteFinderRepository
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
             ->andWhere(['note.deleted_at IS' => null]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
@@ -81,6 +82,7 @@ class NoteFinderRepository
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
             ->andWhere(['note.id' => $id, 'note.deleted_at IS' => null]);
         $resultRows = $query->execute()->fetch('assoc') ?: [];
+
         // Instantiate UserNote DTO
         return new NoteResultData($resultRows);
     }
@@ -130,6 +132,7 @@ class NoteFinderRepository
                 'note.deleted_at IS' => null,
             ]);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
@@ -163,6 +166,7 @@ class NoteFinderRepository
                 ]
             )->orderDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
@@ -198,6 +202,7 @@ class NoteFinderRepository
             ->orderDesc('note.updated_at')->limit($notesAmount);
 
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Note objects with associated User info
         return $this->hydrator->hydrate($resultRows, NoteResultData::class);
     }
@@ -223,6 +228,7 @@ class NoteFinderRepository
                     'n.deleted_at IS' => null,
                 ]
             );
+
         // Return amount of notes
         return (int)$query->execute()->fetch('assoc')['amount'];
     }

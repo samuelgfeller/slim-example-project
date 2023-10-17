@@ -34,6 +34,7 @@ class MalformedRequestBodyChecker
                 return false;
             }
         }
+
         // Check that all required keys are set plus the additional ones if there were some
         return count($parsedBody ?? []) === $amount;
     }

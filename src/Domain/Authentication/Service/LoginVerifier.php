@@ -15,7 +15,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class LoginVerifier
 {
-
     public function __construct(
         private readonly UserValidator $userValidator,
         private readonly SecurityLoginChecker $loginSecurityChecker,
@@ -36,8 +35,9 @@ class LoginVerifier
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams
      *
-     * @return int id
      * @throws TransportExceptionInterface
+     *
+     * @return int id
      */
     public function getUserIdIfAllowedToLogin(
         array $userLoginValues,
@@ -71,6 +71,7 @@ class LoginVerifier
                     ['login'],
                     $dbUser->id
                 );
+
                 // Return id (not sure if it's better to regenerate session here in service or in action)
                 return $dbUser->id;
             }

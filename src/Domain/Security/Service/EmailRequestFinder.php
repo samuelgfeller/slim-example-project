@@ -37,6 +37,7 @@ class EmailRequestFinder
      * Returns the very last EMAIL request from actual ip or given email.
      *
      * @param string $email
+     *
      * @return int
      */
     public function findLastEmailRequestTimestamp(string $email): int
@@ -45,6 +46,7 @@ class EmailRequestFinder
         if ($createdAt) {
             return (new \DateTime($createdAt))->format('U');
         }
+
         return 0;
     }
 }

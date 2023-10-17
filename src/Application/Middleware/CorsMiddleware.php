@@ -85,6 +85,7 @@ final class CorsMiddleware implements MiddlewareInterface
 
             return $response;
         }
+
         // If no allowOrigin url, handle return response
         return $handler->handle($request);
     }

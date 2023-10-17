@@ -51,7 +51,6 @@ class LoginSubmitActionTest extends TestCase
 
         // Create request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginValues);
-
         $response = $this->app->handle($request);
 
         // Assert: 302 Found (redirect)
@@ -88,7 +87,6 @@ class LoginSubmitActionTest extends TestCase
 
         // Create request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $invalidCredentials);
-
         $response = $this->app->handle($request);
 
         // Assert: 401 Unauthorized

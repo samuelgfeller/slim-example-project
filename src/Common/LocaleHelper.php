@@ -65,6 +65,7 @@ final class LocaleHelper
         $localeCode = setlocale(LC_ALL, 0);
         // Available locales keys are language codes ('en', 'de') and values are locale codes ('en_US', 'de_CH')
         $langCode = array_search($localeCode, $this->localeSettings['available'], true) ?: '';
+
         // If language code is 'en' return empty string as default email templates are in english and not in a sub folder
         // If language code is not empty, add a slash to complete the path it will be inserted into
         return $langCode === 'en' || $langCode === '' ? '' : $langCode . '/';

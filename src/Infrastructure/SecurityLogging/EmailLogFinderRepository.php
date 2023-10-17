@@ -17,6 +17,7 @@ class EmailLogFinderRepository
      * @param string $email
      * @param int $seconds
      * Throws PersistenceRecordNotFoundException if entry not found
+     *
      * @return int
      */
     public function getLoggedEmailCountInTimespan(string $email, int $seconds): int
@@ -44,6 +45,7 @@ class EmailLogFinderRepository
      * Searches the latest email request concerning a specific email address.
      *
      * @param string $email
+     *
      * @return string|bool datetime of last email request or false
      */
     public function findLatestEmailRequest(string $email): bool|string
@@ -77,8 +79,6 @@ class EmailLogFinderRepository
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)'),
             ]
         )->bind(':days', $days, 'integer');
-        $val = (int)($query->execute()->fetch('assoc')['sent_email_amount'] ?? 0);
-
-        return $val;
+        return (int)($query->execute()->fetch('assoc')['sent_email_amount'] ?? 0);
     }
 }

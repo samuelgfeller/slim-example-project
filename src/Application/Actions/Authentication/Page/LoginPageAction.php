@@ -51,6 +51,7 @@ final class LoginPageAction
             if (isset($queryParams['redirect'])) {
                 return $this->responder->redirectToUrl($response, $queryParams['redirect']);
             }
+
             // Otherwise, go to home page
             return $this->responder->redirectToRouteName($response, 'home-page');
         }

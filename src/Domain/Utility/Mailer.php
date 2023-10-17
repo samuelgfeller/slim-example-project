@@ -2,6 +2,7 @@
 
 namespace App\Domain\Utility;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Infrastructure\SecurityLogging\EmailLoggerRepository;
 use Slim\Views\PhpRenderer;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -26,6 +27,7 @@ class Mailer
         private readonly MailerInterface $mailer,
         private readonly PhpRenderer $phpRenderer,
         private readonly EmailLoggerRepository $emailLoggerRepository,
+        private readonly UserNetworkSessionData $userNetworkSessionData
     ) {
     }
 
@@ -56,9 +58,9 @@ class Mailer
      *
      * @param Email $email
      *
-     * @return void
      * @throws TransportExceptionInterface
      *
+     * @return void
      */
     public function send(Email $email): void
     {
@@ -71,6 +73,7 @@ class Mailer
             $email->getFrom()[0]->getAddress(),
             $email->getTo()[0]->getAddress(),
             $email->getSubject(),
+            $this->userNetworkSessionData->userId
         );
     }
 }

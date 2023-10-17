@@ -91,6 +91,7 @@ final class NoteCreateSubmitAction
                         IntlDateFormatter::LONG,
                         IntlDateFormatter::SHORT
                     );
+
                     // camelCase according to Google recommendation
                     return $this->responder->respondWithJson($response, [
                         'status' => 'success',

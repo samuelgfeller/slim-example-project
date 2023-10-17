@@ -45,6 +45,7 @@ class NoteFilterFinder
                 // Exception message tested in NoteFilterProvider.php
                 throw new InvalidNoteFilterException('Value has to be numeric.');
             }
+
             // Get notes from user and return them
             return $this->noteFinder->findAllNotesExceptMainFromUser((int)$params['user']);
         }

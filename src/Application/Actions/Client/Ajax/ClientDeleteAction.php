@@ -81,6 +81,7 @@ final class ClientDeleteAction
                 $this->logger->notice(
                     '403 Forbidden, user ' . $loggedInUserId . ' tried to delete other client with id: ' . $clientId
                 );
+
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
                 return $this->responder->respondWithJson(
                     $response,

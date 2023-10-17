@@ -83,6 +83,7 @@ final class NoteDeleteSubmitAction
                 $this->logger->notice(
                     '403 Forbidden, user ' . $loggedInUserId . ' tried to delete other note with id: ' . $noteId
                 );
+
                 // Not throwing HttpForbiddenException as it's a json request and response should be json too
                 return $this->responder->respondWithJson(
                     $response,

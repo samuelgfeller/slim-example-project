@@ -15,7 +15,6 @@ class EmailRequestProvider
     // ! And  $settings['security']['global_monthly_email_threshold']
     private const globalMonthlyEmailThreshold = 1000;
 
-
     /**
      * Provides values for email abuse test concerning specific email or coming from ip.
      * Content are requests that exceed each email send limitation.

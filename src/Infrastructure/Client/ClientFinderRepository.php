@@ -82,6 +82,7 @@ class ClientFinderRepository
             ->where($whereArray);
         $sql = $query->sql();
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Post objects with associated User info
         return $this->hydrator->hydrate($resultRows, ClientResultData::class);
     }
@@ -135,6 +136,7 @@ class ClientFinderRepository
             );
 
         $resultRows = $query->execute()->fetch('assoc') ?: [];
+
         // Instantiate UserPost DTO
         return new ClientResultData($resultRows);
     }
@@ -158,6 +160,7 @@ class ClientFinderRepository
                 ['client.user_id' => $userId, 'client.deleted_at IS' => null]
             );
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
+
         // Convert to list of Post objects with aggregate
         return $this->hydrator->hydrate($resultRows, ClientResultData::class);
     }

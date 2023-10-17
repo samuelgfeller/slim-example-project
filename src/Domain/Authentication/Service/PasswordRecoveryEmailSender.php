@@ -88,6 +88,7 @@ class PasswordRecoveryEmailSender
             $this->mailer->send($this->email);
             // Reset locale
             $this->localeHelper->setLanguage($originalLocale);
+
             // User activity entry is done when user verification token is created
             return;
         }

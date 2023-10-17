@@ -47,7 +47,6 @@ class SecurityLoginCheckerTest extends TestCase
      *     logins_by_ip: array{successes: int, failures: int},
      * } $ipAndEmailLogSummary
      *
-     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -62,9 +61,7 @@ class SecurityLoginCheckerTest extends TestCase
 
         // Actual test
         // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
-        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn(
-            $ipAndEmailLogSummary
-        );
+        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($ipAndEmailLogSummary);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
         $loginLogFinderRepository->method('findLatestLoginTimestampFromUserOrIp')->willReturn(date('Y-m-d H:i:s'));
@@ -102,7 +99,7 @@ class SecurityLoginCheckerTest extends TestCase
         // User summary should be 0 as global is tested here
         $emptyLogSummary = [
             'logins_by_email' => ['successes' => 0, 'failures' => 0],
-            'logins_by_ip' => ['successes' => 0, 'failures' => 0]
+            'logins_by_ip' => ['successes' => 0, 'failures' => 0],
         ];
         $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($emptyLogSummary);
 

@@ -171,6 +171,7 @@ class ClientFinder
     {
         $clientResultCollection = new ClientResultDataCollection();
         $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsByUserId($userId);
+
         //        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
         return $clientResultCollection;
     }

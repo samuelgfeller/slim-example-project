@@ -40,12 +40,15 @@ class LoginNonActiveUserHandler
      * Handles the login attempt from a non-active user.
      * Sends an email to the user with information and a link to activate his account.
      *
-     * @param UserData $dbUser The user data from the database.
-     * @param array $queryParams The query parameters.
+     * @param UserData $dbUser the user data from the database
+     * @param array $queryParams the query parameters
+     * @param ?string $captcha
+     *
+     * @throws TransportExceptionInterface if there is an exception while sending an email
+     * @throws \RuntimeException if there is an invalid status in the database
+     * @throws UnableToLoginStatusNotActiveException thrown in all cases as the user status is not active
+     *
      * @return void
-     * @throws TransportExceptionInterface If there is an exception while sending an email.
-     * @throws \RuntimeException If there is an invalid status in the database.
-     * @throws UnableToLoginStatusNotActiveException Thrown in all cases as the user status is not active.
      */
     public function handleLoginAttemptFromNonActiveUser(
         UserData $dbUser,
@@ -109,8 +112,9 @@ class LoginNonActiveUserHandler
      * @param UserData $user
      * @param array $queryParams
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleUnverifiedUserLoginAttempt(UserData $user, array $queryParams = []): void
     {
@@ -127,8 +131,9 @@ class LoginNonActiveUserHandler
      *
      * @param UserData $user
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleSuspendedUserLoginAttempt(UserData $user): void
     {
@@ -146,8 +151,9 @@ class LoginNonActiveUserHandler
      * @param UserData $user
      * @param array $queryParams existing query params like redirect
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleLockedUserLoginAttempt(UserData $user, array $queryParams = []): void
     {

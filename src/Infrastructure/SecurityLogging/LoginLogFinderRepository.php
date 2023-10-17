@@ -63,9 +63,10 @@ class LoginLogFinderRepository
         // $sql = $query->sql();
         // Only fetch and not fetchAll as result will be one row with the counts
         $result = $query->execute()->fetch('assoc');
+
         return [
             'successes' => (int)$result['login_successes'],
-            'failures' => (int)$result['total_logins'] - (int)$result['login_successes']
+            'failures' => (int)$result['total_logins'] - (int)$result['login_successes'],
         ];
     }
 
@@ -73,19 +74,24 @@ class LoginLogFinderRepository
      * Searches the latest failed login request concerning a specific email address.
      *
      * @param string $email
-     * @param string $ip
+     * @param ?string $ip
      *
      * @return string
      */
-    public function findLatestLoginTimestampFromUserOrIp(string $email, string $ip): string
+    public function findLatestLoginTimestampFromUserOrIp(string $email, ?string $ip): string
     {
         $query = $this->queryFactory->newQuery();
-        $query->select('created_at')->from('authentication_log')->where(
-            [
-                'OR' => ['email' => $email, 'ip_address' => $ip],
-            ]
-            // Order desc id instead of created at for testing as last request is preponed to simulate waiting
-        )->orderDesc('id')->limit(1);
+        $query->select('created_at')->from('authentication_log');
+
+        // Check if $ip is not null before adding it to the query
+        if ($ip !== null) {
+            $query->where(['OR' => ['email' => $email, 'ip_address' => $ip]]);
+        } else {
+            $query->where(['email' => $email]);
+        }
+
+        // Order desc id instead of created at for testing as last request is preponed to simulate waiting
+        $query->orderDesc('id')->limit(1);
 
         return $query->execute()->fetch('assoc')['created_at'] ?? 0;
     }
@@ -114,10 +120,11 @@ class LoginLogFinderRepository
         );
 
         $result = $query->execute()->fetch('assoc');
+
         return [
             'total_amount' => (int)$result['total_amount'],
             'successes' => (int)$result['successes'],
-            'failures' => (int)$result['total_amount'] - (int)$result['successes']
+            'failures' => (int)$result['total_amount'] - (int)$result['successes'],
         ];
     }
 }

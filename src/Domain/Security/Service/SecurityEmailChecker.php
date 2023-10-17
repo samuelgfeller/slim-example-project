@@ -68,7 +68,6 @@ class SecurityEmailChecker
      *
      * @param int $emailsAmount amount of emails sent in the last timespan
      * @param string $email
-     *
      */
     private function performEmailRequestsCheck(
         int $emailsAmount,

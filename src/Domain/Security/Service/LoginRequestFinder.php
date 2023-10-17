@@ -54,6 +54,7 @@ class LoginRequestFinder
         if ($createdAt) {
             return (new \DateTime($createdAt))->format('U');
         }
+
         return 0;
     }
 }
