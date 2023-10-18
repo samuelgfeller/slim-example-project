@@ -18,7 +18,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('user_id', 'integer', [
                 'null' => false,
@@ -115,7 +115,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('name', 'string', [
                 'null' => false,
@@ -143,7 +143,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('first_name', 'string', [
                 'null' => true,
@@ -267,7 +267,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('name', 'string', [
                 'null' => false,
@@ -296,7 +296,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('action', 'string', [
                 'null' => false,
@@ -326,7 +326,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('first_name', 'string', [
                 'null' => true,
@@ -403,7 +403,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('user_id', 'integer', [
                 'null' => true,
@@ -478,7 +478,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
                 'signed' => false,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('email', 'string', [
                 'null' => false,
@@ -556,7 +556,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('id', 'integer', [
                 'null' => false,
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => 'enable',
+                'identity' => true,
             ])
             ->addColumn('user_id', 'integer', [
                 'null' => false,
