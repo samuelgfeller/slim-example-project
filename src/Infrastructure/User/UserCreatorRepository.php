@@ -20,6 +20,6 @@ class UserCreatorRepository
      */
     public function insertUser(array $userData): int
     {
-        return (int)$this->queryFactory->newInsert($userData)->into('user')->execute()->lastInsertId();
+        return (int)$this->queryFactory->insertQueryWithData($userData)->into('user')->execute()->lastInsertId();
     }
 }

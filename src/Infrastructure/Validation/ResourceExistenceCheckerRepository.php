@@ -27,7 +27,7 @@ class ResourceExistenceCheckerRepository
     public function rowExists(array $whereAttr, string $table, bool $excludingDeletedAt = true): bool
     {
         $deletedAtAttr = $excludingDeletedAt ? ['deleted_at IS' => null] : [];
-        $query = $this->queryFactory->newQuery()->from($table);
+        $query = $this->queryFactory->selectQuery()->from($table);
         $query->select(1)->where(array_merge($whereAttr, $deletedAtAttr));
         $row = $query->execute()->fetch();
 

@@ -63,12 +63,6 @@ jobs:
       - name: Set MySQL timezone to swiss time
         run: mysql -uroot -proot -e "SET GLOBAL time_zone = '+01:00';"
 
-      - name: Increase max allowed packet size
-        run: mysql -uroot -proot -e "SET GLOBAL max_allowed_packet=1073741824;"
-
-      - name: Increase max connections
-        run: mysql -uroot -proot -e "SET GLOBAL max_connections = 4096;"
-
       - name: Create database
         run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS ${{ matrix.test-database }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 

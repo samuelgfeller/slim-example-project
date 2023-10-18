@@ -57,7 +57,7 @@ class UserFinderRepository
      */
     public function findAllUserRows(): bool|array
     {
-        $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
+        $query = $this->queryFactory->selectQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null]
         );
 
@@ -74,7 +74,7 @@ class UserFinderRepository
      */
     public function findUserById(int $id): array
     {
-        $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->where(
+        $query = $this->queryFactory->selectQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
 
@@ -92,7 +92,7 @@ class UserFinderRepository
      */
     public function findUserByIdWithPasswordHash(int $id): UserData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->where(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $userRows = $query->execute()->fetch('assoc') ?: [];
@@ -114,7 +114,7 @@ class UserFinderRepository
      */
     public function findUserByEmail(?string $email): UserData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('user')->andWhere(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('user')->andWhere(
             ['deleted_at IS' => null, 'email' => $email]
         );
 
@@ -138,7 +138,7 @@ class UserFinderRepository
      */
     public function getUserById(int $id): UserData
     {
-        $query = $this->queryFactory->newQuery()->select($this->fields)->from('user')->andWhere(
+        $query = $this->queryFactory->selectQuery()->select($this->fields)->from('user')->andWhere(
             ['deleted_at IS' => null, 'id' => $id]
         );
 

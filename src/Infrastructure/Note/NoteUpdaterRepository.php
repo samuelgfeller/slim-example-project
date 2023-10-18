@@ -21,7 +21,7 @@ class NoteUpdaterRepository
      */
     public function updateNote(array $data, int $id): bool
     {
-        $query = $this->queryFactory->newQuery()->update('note')->set($data)->where(['id' => $id]);
+        $query = $this->queryFactory->updateQuery()->update('note')->set($data)->where(['id' => $id]);
 
         return $query->execute()->rowCount() > 0;
     }

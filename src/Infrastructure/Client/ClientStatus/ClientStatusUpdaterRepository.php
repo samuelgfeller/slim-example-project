@@ -21,7 +21,7 @@ class ClientStatusUpdaterRepository
      */
     public function changeClientStatus(int $clientId, array $clientStatusUpdateData): bool
     {
-        $query = $this->queryFactory->newQuery()->update('client_status')->set($clientStatusUpdateData)
+        $query = $this->queryFactory->updateQuery()->update('client_status')->set($clientStatusUpdateData)
             ->where(['id' => $clientId]);
 
         return $query->execute()->rowCount() > 0;

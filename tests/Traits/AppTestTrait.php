@@ -81,20 +81,19 @@ trait AppTestTrait
      *  - Cake\Database\Exception\MissingConnectionException:
      *        Connection to Mysql could not be established: SQLSTATE[08004] [1040] Too many connections.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @return void
      * @throws \Psr\Container\NotFoundExceptionInterface
      *
-     * @return void
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function tearDown(): void
     {
         if (method_exists($this, 'setUpDatabase')) {
             $connection = $this->container->get(Connection::class);
             $connection->rollback();
-            $connection->disconnect();
-            $container = $this->container->get(App::class)->getContainer();
-            $container->set(Connection::class, null);
-            $container->set(\PDO::class, null);
+            $connection->getDriver()->disconnect();
+            $this->container->set(Connection::class, null);
+            $this->container->set(\PDO::class, null);
         }
     }
 }

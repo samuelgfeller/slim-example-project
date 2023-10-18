@@ -23,7 +23,7 @@ class VerificationTokenFinderRepository
      */
     public function findUserVerification(int $id): UserVerificationData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('user_verification')->where(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('user_verification')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $userVerificationRow = $query->execute()->fetch('assoc') ?: [];
@@ -39,7 +39,7 @@ class VerificationTokenFinderRepository
      */
     public function getUserIdFromVerification(int $verificationId): int
     {
-        $query = $this->queryFactory->newQuery()->select(['user_id'])->from('user_verification')->where(
+        $query = $this->queryFactory->selectQuery()->select(['user_id'])->from('user_verification')->where(
             ['deleted_at IS' => null, 'id' => $verificationId]
         );
         // Cake query builder return value is string
@@ -63,7 +63,7 @@ class VerificationTokenFinderRepository
      */
     public function findUserDetailsByVerificationIncludingDeleted(int $verificationId): UserData
     {
-        $query = $this->queryFactory->newQuery()->from('user_verification');
+        $query = $this->queryFactory->selectQuery()->from('user_verification');
 
         $query->select(
             [

@@ -20,7 +20,7 @@ class NoteValidatorRepository
      */
     public function mainNoteAlreadyExistsForClient(int $clientId): bool
     {
-        $query = $this->queryFactory->newQuery()->select(['id'])->from('note')->where(
+        $query = $this->queryFactory->selectQuery()->select(['id'])->from('note')->where(
             ['deleted_at IS' => null, 'client_id' => $clientId, 'is_main' => 1]
         );
         $note = $query->execute()->fetch('assoc') ?: false;

@@ -66,7 +66,7 @@ class ClientFinderRepository
      */
     public function findClientsWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
-        $query = $this->queryFactory->newQuery()->from('client');
+        $query = $this->queryFactory->selectQuery()->from('client');
         $query->select(
             $this->clientListAggregateSelectFields
         )// Multiple joins doc: https://book.cakephp.org/4/en/orm/query-builder.html#adding-joins
@@ -97,7 +97,7 @@ class ClientFinderRepository
      */
     public function findClientById(string|int $id): ClientData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('client')->where(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('client')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $postRow = $query->execute()->fetch('assoc') ?: [];
@@ -114,7 +114,7 @@ class ClientFinderRepository
      */
     public function findClientAggregateByIdIncludingDeleted(int $id): ClientResultData
     {
-        $query = $this->queryFactory->newQuery()->from('client');
+        $query = $this->queryFactory->selectQuery()->from('client');
 
         $query->select($this->clientReadAggregateSelectFields)
             ->join([
@@ -150,7 +150,7 @@ class ClientFinderRepository
      */
     public function findAllClientsByUserId(int $userId): array
     {
-        $query = $this->queryFactory->newQuery()->from('client');
+        $query = $this->queryFactory->selectQuery()->from('client');
 
         $query->select(
             $this->clientListAggregateSelectFields

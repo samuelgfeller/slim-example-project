@@ -43,7 +43,7 @@ class ClientFilterWhereConditionBuilder
                     ],
                 ];
             }
-            $query = $this->queryFactory->newQuery();
+            $query = $this->queryFactory->selectQuery();
             // Name is always an AND condition
             $firstAndLastNameConcat = $query->newExpr()->like(
                 $query->func()->concat(

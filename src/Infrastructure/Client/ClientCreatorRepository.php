@@ -20,6 +20,6 @@ class ClientCreatorRepository
      */
     public function insertClient(array $data): int
     {
-        return (int)$this->queryFactory->newInsert($data)->into('client')->execute()->lastInsertId();
+        return (int)$this->queryFactory->insertQueryWithData($data)->into('client')->execute()->lastInsertId();
     }
 }

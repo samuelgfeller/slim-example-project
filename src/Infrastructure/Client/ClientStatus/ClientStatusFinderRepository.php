@@ -21,7 +21,7 @@ class ClientStatusFinderRepository
      */
     public function findClientStatusByName(ClientStatus $clientStatus): ?int
     {
-        $query = $this->queryFactory->newQuery()->from('client_status');
+        $query = $this->queryFactory->selectQuery()->from('client_status');
 
         $query->select(['id', 'name'])
             ->where(
@@ -43,7 +43,7 @@ class ClientStatusFinderRepository
      */
     public function findAllClientStatusesMappedByIdName(bool $withoutTranslation = false): array
     {
-        $query = $this->queryFactory->newQuery()->from('client_status');
+        $query = $this->queryFactory->selectQuery()->from('client_status');
 
         $query->select(['id', 'name'])
             ->andWhere(

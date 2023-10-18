@@ -34,7 +34,7 @@ class NoteFinderRepository
      */
     public function findAllNotesWithUsers(): array
     {
-        $query = $this->queryFactory->newQuery()->from('note');
+        $query = $this->queryFactory->selectQuery()->from('note');
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
@@ -55,7 +55,7 @@ class NoteFinderRepository
      */
     public function findNoteById(string|int $id): NoteData
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('note')->where(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('note')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $noteRow = $query->execute()->fetch('assoc') ?: [];
@@ -74,7 +74,7 @@ class NoteFinderRepository
      */
     public function findNoteWithUserById(int $id): NoteResultData
     {
-        $query = $this->queryFactory->newQuery()->from('note');
+        $query = $this->queryFactory->selectQuery()->from('note');
 
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
 
@@ -99,7 +99,7 @@ class NoteFinderRepository
      */
     public function getNoteById(int $id): array
     {
-        $query = $this->queryFactory->newQuery()->select(['*'])->from('note')->where(
+        $query = $this->queryFactory->selectQuery()->select(['*'])->from('note')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
         $entry = $query->execute()->fetch('assoc');
@@ -119,7 +119,7 @@ class NoteFinderRepository
      */
     public function findAllNotesExceptMainByUserId(int $userId): array
     {
-        $query = $this->queryFactory->newQuery()->from('note');
+        $query = $this->queryFactory->selectQuery()->from('note');
 
         $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
 
@@ -147,7 +147,7 @@ class NoteFinderRepository
      */
     public function findAllNotesExceptMainWithUserByClientId(int $clientId): array
     {
-        $query = $this->queryFactory->newQuery()->from('note');
+        $query = $this->queryFactory->selectQuery()->from('note');
 
         $concatName = $query->func()->concat([
             $query->func()->coalesce(['user.first_name' => 'identifier', '']),
@@ -164,7 +164,7 @@ class NoteFinderRepository
                     'note.is_main' => 0,
                     'note.deleted_at IS' => null,
                 ]
-            )->orderDesc('note.created_at');
+            )->orderByDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
 
         // Convert to list of Note objects with associated User info
@@ -180,7 +180,7 @@ class NoteFinderRepository
      */
     public function findMostRecentNotes(int $notesAmount): array
     {
-        $query = $this->queryFactory->newQuery()->from('note');
+        $query = $this->queryFactory->selectQuery()->from('note');
 
         $concatUserName = $query->func()->concat(
             // Not very sexy to put IFNULL function there but with "identifier", cake interprets the string literally
@@ -199,7 +199,7 @@ class NoteFinderRepository
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
             ->leftJoin('client', ['note.client_id = client.id'])
             ->andWhere(['note.deleted_at IS' => null, 'note.is_main' => 0])
-            ->orderDesc('note.updated_at')->limit($notesAmount);
+            ->orderByDesc('note.updated_at')->limit($notesAmount);
 
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
 
@@ -216,7 +216,7 @@ class NoteFinderRepository
      */
     public function findClientNotesAmount(int $clientId): int
     {
-        $query = $this->queryFactory->newQuery()->from('client');
+        $query = $this->queryFactory->selectQuery()->from('client');
 
         $query->select(['amount' => $query->func()->count('n.id')])
             ->join(['n' => ['table' => 'note', 'type' => 'LEFT', 'conditions' => 'n.client_id = client.id']])

@@ -20,7 +20,7 @@ class NoteDeleterRepository
      */
     public function deleteNote(int $id): bool
     {
-        $query = $this->queryFactory->newDelete('note')->where(['id' => $id]);
+        $query = $this->queryFactory->softDeleteQuery('note')->where(['id' => $id]);
 
         return $query->execute()->rowCount() > 0;
     }
@@ -34,7 +34,7 @@ class NoteDeleterRepository
      */
     public function deleteNotesFromClient(int $clientId): bool
     {
-        $query = $this->queryFactory->newDelete('note')->where(['client_id' => $clientId]);
+        $query = $this->queryFactory->softDeleteQuery('note')->where(['client_id' => $clientId]);
 
         return $query->execute()->rowCount() > 0;
     }

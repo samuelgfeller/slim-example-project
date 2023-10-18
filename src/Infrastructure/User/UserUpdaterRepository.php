@@ -23,7 +23,7 @@ class UserUpdaterRepository
      */
     public function updateUser(int $userId, array $userValues): bool
     {
-        $query = $this->queryFactory->newQuery()->update('user')->set($userValues)->where(['id' => $userId]);
+        $query = $this->queryFactory->updateQuery()->update('user')->set($userValues)->where(['id' => $userId]);
 
         return $query->execute()->rowCount() > 0;
     }
@@ -38,7 +38,7 @@ class UserUpdaterRepository
      */
     public function changeUserStatus(UserStatus $status, string $userId): bool
     {
-        $query = $this->queryFactory->newQuery()->update('user')->set(['status' => $status->value])->where(
+        $query = $this->queryFactory->updateQuery()->update('user')->set(['status' => $status->value])->where(
             ['id' => $userId]
         );
 
@@ -55,7 +55,7 @@ class UserUpdaterRepository
      */
     public function changeUserPassword(string $passwordHash, string $userId): bool
     {
-        $query = $this->queryFactory->newQuery()->update('user')->set(['password_hash' => $passwordHash])->where(
+        $query = $this->queryFactory->updateQuery()->update('user')->set(['password_hash' => $passwordHash])->where(
             ['id' => $userId]
         );
 

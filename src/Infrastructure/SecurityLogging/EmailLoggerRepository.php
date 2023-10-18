@@ -26,7 +26,7 @@ class EmailLoggerRepository
         string $subject,
         int|string|null $userId
     ): string {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->insertQuery();
 
         return $query->insert(['id', 'user_id', 'from_email', 'to_email', 'other_recipient', 'subject', 'created_at'])
             ->into('email_log')->values([

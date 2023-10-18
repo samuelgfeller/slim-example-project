@@ -20,7 +20,7 @@ class UserDeleterRepository
      */
     public function deleteUserById(int $userId): bool
     {
-        $query = $this->queryFactory->newDelete('user')->where(['id' => $userId]);
+        $query = $this->queryFactory->softDeleteQuery('user')->where(['id' => $userId]);
 
         return $query->execute()->rowCount() > 0;
     }

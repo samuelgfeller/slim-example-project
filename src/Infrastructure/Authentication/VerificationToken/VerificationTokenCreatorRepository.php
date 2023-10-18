@@ -20,6 +20,6 @@ class VerificationTokenCreatorRepository
      */
     public function insertUserVerification(array $data): int
     {
-        return (int)$this->queryFactory->newInsert($data)->into('user_verification')->execute()->lastInsertId();
+        return (int)$this->queryFactory->insertQueryWithData($data)->into('user_verification')->execute()->lastInsertId();
     }
 }

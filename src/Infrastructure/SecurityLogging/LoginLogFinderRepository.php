@@ -48,7 +48,7 @@ class LoginLogFinderRepository
      */
     private function getLoginRequestSummary(array $whereEmailOrIpArr, int $seconds): array
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select(
             [
                 'login_successes' => $query->func()->sum('is_success'),
@@ -80,7 +80,7 @@ class LoginLogFinderRepository
      */
     public function findLatestLoginTimestampFromUserOrIp(string $email, ?string $ip): string
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select('created_at')->from('authentication_log');
 
         // Check if $ip is not null before adding it to the query
@@ -91,7 +91,7 @@ class LoginLogFinderRepository
         }
 
         // Order desc id instead of created at for testing as last request is preponed to simulate waiting
-        $query->orderDesc('id')->limit(1);
+        $query->orderByDesc('id')->limit(1);
 
         return $query->execute()->fetch('assoc')['created_at'] ?? 0;
     }
@@ -107,7 +107,7 @@ class LoginLogFinderRepository
      */
     public function getGlobalLoginAmountSummary(): array
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select(
             [
                 'total_amount' => $query->func()->count(1),

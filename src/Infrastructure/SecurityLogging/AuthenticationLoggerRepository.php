@@ -23,7 +23,7 @@ class AuthenticationLoggerRepository
      */
     public function logLoginRequest(string $email, ?string $ip, bool $success, ?int $userId = null): string
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->insertQuery();
         $query->insert(['email', 'ip_address', 'is_success', 'user_id', 'created_at'])
             ->into('authentication_log')
             ->values([

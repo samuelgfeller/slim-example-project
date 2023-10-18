@@ -100,10 +100,13 @@ return [
         return new Connection($settings);
     },
     PDO::class => function (ContainerInterface $container) {
-        $connection = $container->get(Connection::class);
-        $connection->getDriver()->connect();
+        $driver = $container->get(Connection::class)->getDriver();
 
-        return $connection->getDriver()->getConnection();
+        $class = new ReflectionClass($driver);
+        $method = $class->getMethod('getPdo');
+        $method->setAccessible(true);
+
+        return $method->invoke($driver);
     },
     // Used by command line to generate `schema.sql` for integration testing
     'DatabaseSqlSchemaGenerator' => function (ContainerInterface $container) {

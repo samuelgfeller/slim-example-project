@@ -22,7 +22,7 @@ class EmailLogFinderRepository
      */
     public function getLoggedEmailCountInTimespan(string $email, int $seconds): int
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select(
             [
                 'email_amount' => $query->func()->count('id'),
@@ -50,12 +50,12 @@ class EmailLogFinderRepository
      */
     public function findLatestEmailRequest(string $email): bool|string
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select('created_at')->from('email_log')->where(
             [
                 'to_email' => $email,
             ]
-        )->orderDesc('created_at')->limit(1);
+        )->orderByDesc('created_at')->limit(1);
 
         return $query->execute()->fetch('assoc')['created_at'] ?: false;
     }
@@ -69,7 +69,7 @@ class EmailLogFinderRepository
      */
     public function getGlobalSentEmailAmount(int $days): int
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->selectQuery();
         $query->select(
             [
                 'sent_email_amount' => $query->func()->count('id'),

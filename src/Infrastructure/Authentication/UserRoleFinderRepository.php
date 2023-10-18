@@ -19,13 +19,13 @@ class UserRoleFinderRepository
      *
      * @param int $userId
      *
+     * @return int
      * @throws PersistenceRecordNotFoundException if entry not found
      *
-     * @return int
      */
     public function getRoleIdFromUser(int $userId): int
     {
-        $query = $this->queryFactory->newQuery()->select(['user_role_id'])->from('user')->where(
+        $query = $this->queryFactory->selectQuery()->select(['user_role_id'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $userId]
         );
         $roleId = $query->execute()->fetch('assoc')['user_role_id'];
@@ -45,7 +45,7 @@ class UserRoleFinderRepository
      */
     public function getUserRoleDataFromUser(int $userId): UserRoleData
     {
-        $query = $this->queryFactory->newQuery()
+        $query = $this->queryFactory->selectQuery()
             ->select(['user_role.id', 'user_role.name', 'user_role.hierarchy'])
             ->from('user')
             ->leftJoin('user_role', ['user.user_role_id = user_role.id'])
@@ -72,7 +72,7 @@ class UserRoleFinderRepository
      */
     public function getUserRolesHierarchies(bool $mappedById = false): array
     {
-        $query = $this->queryFactory->newQuery()->select(['id', 'name', 'hierarchy'])->from('user_role');
+        $query = $this->queryFactory->selectQuery()->select(['id', 'name', 'hierarchy'])->from('user_role');
         $resultRows = $query->execute()->fetchAll('assoc');
 
         $userRoles = [];
@@ -94,7 +94,7 @@ class UserRoleFinderRepository
      */
     public function findAllUserRolesForDropdown(): array
     {
-        $query = $this->queryFactory->newQuery()->from('user_role');
+        $query = $this->queryFactory->selectQuery()->from('user_role');
 
         $query->select(['id', 'name']);
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
@@ -115,7 +115,7 @@ class UserRoleFinderRepository
      */
     public function findUserRoleIdByName(string $roleName): ?int
     {
-        $query = $this->queryFactory->newQuery()->from('user_role');
+        $query = $this->queryFactory->selectQuery()->from('user_role');
 
         $query->select(['id'])->where(['name' => $roleName]);
         $resultRow = $query->execute()->fetch('assoc') ?: [];

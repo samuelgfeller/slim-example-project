@@ -20,6 +20,6 @@ class NoteCreatorRepository
      */
     public function insertNote(array $data): int
     {
-        return (int)$this->queryFactory->newInsert($data)->into('note')->execute()->lastInsertId();
+        return (int)$this->queryFactory->insertQueryWithData($data)->into('note')->execute()->lastInsertId();
     }
 }

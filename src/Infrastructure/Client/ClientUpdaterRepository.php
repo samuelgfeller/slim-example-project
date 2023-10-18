@@ -21,7 +21,7 @@ class ClientUpdaterRepository
      */
     public function updateClient(array $data, int $clientId): bool
     {
-        $query = $this->queryFactory->newQuery()->update('client')->set($data)->where(['id' => $clientId]);
+        $query = $this->queryFactory->updateQuery()->update('client')->set($data)->where(['id' => $clientId]);
 
         return $query->execute()->rowCount() > 0;
     }

@@ -20,7 +20,7 @@ class ClientDeleterRepository
      */
     public function deleteClient(int $id): bool
     {
-        $query = $this->queryFactory->newDelete('client')->where(['id' => $id]);
+        $query = $this->queryFactory->softDeleteQuery('client')->where(['id' => $id]);
 
         return $query->execute()->rowCount() > 0;
     }
@@ -34,7 +34,7 @@ class ClientDeleterRepository
      */
     public function hardDeleteClient(int $id): bool
     {
-        $query = $this->queryFactory->newQuery()->delete('client')->where(['id' => $id]);
+        $query = $this->queryFactory->hardDeleteQuery()->delete('client')->where(['id' => $id]);
 
         return $query->execute()->rowCount() > 0;
     }
@@ -48,7 +48,7 @@ class ClientDeleterRepository
      */
     public function deletePostsFromUser(int $userId): bool
     {
-        $query = $this->queryFactory->newDelete('post')->where(['user_id' => $userId]);
+        $query = $this->queryFactory->softDeleteQuery('post')->where(['user_id' => $userId]);
 
         return $query->execute()->rowCount() > 0;
     }

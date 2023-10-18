@@ -21,7 +21,7 @@ class VerificationTokenUpdaterRepository
      */
     public function updateUserVerificationRow(int $verificationId, array $updateRow): bool
     {
-        $query = $this->queryFactory->newQuery();
+        $query = $this->queryFactory->updateQuery();
         $query->update('user_verification')->set($updateRow)->where(
             ['id' => $verificationId]
         );

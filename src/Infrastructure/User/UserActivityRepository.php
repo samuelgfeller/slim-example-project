@@ -39,9 +39,9 @@ class UserActivityRepository
         if ($userIds === []) {
             return [];
         }
-        $query = $this->queryFactory->newQuery()->select('*')->from('user_activity')->where(
+        $query = $this->queryFactory->selectQuery()->select('*')->from('user_activity')->where(
             ['user_id IN' => $userIds]
-        )->orderDesc('datetime');
+        )->orderByDesc('datetime');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
 
         return $this->hydrator->hydrate($resultRows, UserActivityData::class);
@@ -56,7 +56,7 @@ class UserActivityRepository
      */
     public function insertUserActivity($userActivityRow): int
     {
-        return (int)$this->queryFactory->newInsert($userActivityRow)->into('user_activity')->execute()->lastInsertId();
+        return (int)$this->queryFactory->insertQueryWithData($userActivityRow)->into('user_activity')->execute()->lastInsertId();
     }
 
     /**
@@ -68,7 +68,7 @@ class UserActivityRepository
      */
     public function hardDeleteUserActivity(int $activityId): bool
     {
-        $query = $this->queryFactory->newQuery()->delete('user_activity')->where(['id' => $activityId]);
+        $query = $this->queryFactory->hardDeleteQuery()->delete('user_activity')->where(['id' => $activityId]);
 
         return $query->execute()->rowCount() > 0;
     }

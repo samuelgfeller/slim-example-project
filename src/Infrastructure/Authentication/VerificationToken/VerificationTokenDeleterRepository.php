@@ -20,7 +20,7 @@ class VerificationTokenDeleterRepository
      */
     public function deleteVerificationToken(int $userId): bool
     {
-        $query = $this->queryFactory->newDelete('user_verification')->where(['user_id' => $userId]);
+        $query = $this->queryFactory->softDeleteQuery('user_verification')->where(['user_id' => $userId]);
 
         return $query->execute()->rowCount() > 0;
     }
