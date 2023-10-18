@@ -19,9 +19,9 @@ class UserRoleFinderRepository
      *
      * @param int $userId
      *
-     * @return int
      * @throws PersistenceRecordNotFoundException if entry not found
      *
+     * @return int
      */
     public function getRoleIdFromUser(int $userId): int
     {

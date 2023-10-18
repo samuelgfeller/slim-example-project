@@ -17,7 +17,7 @@ use Slim\Exception\HttpBadRequestException;
 /**
  * Action.
  */
-final class NoteUpdateSubmitAction
+final class NoteUpdateAction
 {
     /**
      * The constructor.

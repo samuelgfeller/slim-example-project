@@ -17,7 +17,7 @@ final class UserListPageAction
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param privatereadonlyUserAuthorizationChecker $userAuthorizationChecker
+     * @param UserAuthorizationChecker $userAuthorizationChecker
      */
     public function __construct(
         private readonly Responder $responder,

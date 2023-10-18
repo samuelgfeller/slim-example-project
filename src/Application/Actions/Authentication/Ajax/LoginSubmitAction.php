@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Authentication\Submit;
+namespace App\Application\Actions\Authentication\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;

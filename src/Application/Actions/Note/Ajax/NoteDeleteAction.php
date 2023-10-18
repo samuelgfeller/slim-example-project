@@ -17,7 +17,7 @@ use Slim\Exception\HttpMethodNotAllowedException;
 /**
  * Action.
  */
-final class NoteDeleteSubmitAction
+final class NoteDeleteAction
 {
     protected LoggerInterface $logger;
 

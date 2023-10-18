@@ -14,7 +14,7 @@ use Slim\Exception\HttpBadRequestException;
 /**
  * Action.
  */
-final class DashboardTogglePanelAction
+final class DashboardTogglePanelProcessAction
 {
     /**
      * The constructor.

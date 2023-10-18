@@ -10,7 +10,7 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UserSubmitDeleteAction
+final class UserDeleteAction
 {
     /**
      * The constructor.

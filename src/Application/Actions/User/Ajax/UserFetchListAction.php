@@ -8,10 +8,7 @@ use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Post list all and own action.
- */
-final class UserListAction
+final class UserFetchListAction
 {
     /**
      * The constructor.
@@ -26,7 +23,7 @@ final class UserListAction
     }
 
     /**
-     * Client list all and own Action.
+     * User fetch list action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response

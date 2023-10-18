@@ -30,11 +30,11 @@ return function (App $app) {
         return $response;
     })->setName('test-post-request');
 
-    $app->put('/dashboard-toggle-panel', \App\Application\Actions\Dashboard\DashboardTogglePanelAction::class)
+    $app->put('/dashboard-toggle-panel', \App\Application\Actions\Dashboard\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
 
     $app->get('/login', \App\Application\Actions\Authentication\Page\LoginPageAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Actions\Authentication\Submit\LoginSubmitAction::class)->setName(
+    $app->post('/login', \App\Application\Actions\Authentication\Ajax\LoginSubmitAction::class)->setName(
         'login-submit'
     );
     $app->get('/logout', \App\Application\Actions\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
@@ -44,18 +44,18 @@ return function (App $app) {
     // Authentication - email verification - token
     $app->get(
         '/register-verification',
-        \App\Application\Actions\Authentication\Submit\RegisterVerifySubmitAction::class
+        \App\Application\Actions\Authentication\Ajax\RegisterVerifyProcessAction::class
     )->setName(
         'register-verification'
     );
 
-    $app->get('/unlock-account', \App\Application\Actions\Authentication\Submit\AccountUnlockAction::class)->setName(
+    $app->get('/unlock-account', \App\Application\Actions\Authentication\Ajax\AccountUnlockProcessAction::class)->setName(
         'account-unlock-verification'
     );
 
     $app->post(// Url password-forgotten hardcoded in login-main.js
         '/password-forgotten',
-        \App\Application\Actions\Authentication\Submit\PasswordForgottenEmailSubmitAction::class
+        \App\Application\Actions\Authentication\Ajax\PasswordForgottenEmailSubmitAction::class
     )->setName('password-forgotten-email-submit');
     // Set new password page after clicking on email link with token
     $app->get('/reset-password', \App\Application\Actions\Authentication\Page\PasswordResetPageAction::class)
@@ -63,13 +63,13 @@ return function (App $app) {
     // Submit new password (reset-password hardcoded in login-main.js)
     $app->post(
         '/reset-password',
-        \App\Application\Actions\Authentication\Submit\PasswordResetSubmitAction::class
+        \App\Application\Actions\Authentication\Ajax\NewPasswordResetSubmitAction::class
     )->setName('password-reset-submit');
 
     // Submit new password when authenticated (post and not put as form submit)
     $app->put(
         '/change-password/{user_id:[0-9]+}',
-        \App\Application\Actions\User\Ajax\ChangePasswordSubmitAction::class
+        \App\Application\Actions\User\Ajax\PasswordChangeSubmitAction::class
     )->setName('change-password-submit')->add(UserAuthenticationMiddleware::class);
 
     // Without UserAuthenticationMiddleware as translations are also needed for non-protected pages such as password reset
@@ -80,24 +80,24 @@ return function (App $app) {
         // $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('/list', \App\Application\Actions\User\Page\UserListPageAction::class)
             ->setName('user-list-page');
-        $group->get('', \App\Application\Actions\User\Ajax\UserListAction::class)
+        $group->get('', \App\Application\Actions\User\Ajax\UserFetchListAction::class)
             ->setName('user-list');
 
         $group // User dropdown options
-        ->get('/dropdown-options', \App\Application\Actions\User\Ajax\UserFetchDropdownOptionsAction::class)
+        ->get('/dropdown-options', \App\Application\Actions\User\Ajax\FetchDropdownOptionsForUserCreateAction::class)
             ->setName('user-dropdown-options');
 
-        $group->get('/activity', \App\Application\Actions\User\Ajax\ListUserActivityAction::class)
+        $group->get('/activity', \App\Application\Actions\User\Ajax\UserActivityFetchListAction::class)
             ->setName('user-get-activity');
 
-        $group->post('', \App\Application\Actions\User\Ajax\UserSubmitCreateAction::class)
+        $group->post('', \App\Application\Actions\User\Ajax\UserCreateAction::class)
             ->setName('user-create-submit');
         // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
         $group->get('/{user_id:[0-9]+}', \App\Application\Actions\User\Page\UserReadPageAction::class)
             ->setName('user-read-page');
-        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitUpdateAction::class)
+        $group->put('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserUpdateAction::class)
             ->setName('user-update-submit');
-        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserSubmitDeleteAction::class)
+        $group->delete('/{user_id:[0-9]+}', \App\Application\Actions\User\Ajax\UserDeleteAction::class)
             ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
@@ -114,7 +114,7 @@ return function (App $app) {
         // Client create form is rendered by the client and needs to have the available dropdown options
         $group->get(
             '/dropdown-options',
-            \App\Application\Actions\Client\Ajax\ClientCreateDropdownOptionsAction::class
+            \App\Application\Actions\Client\Ajax\FetchDropdownOptionsForClientCreateAction::class
         )->setName('client-create-dropdown');
         /* For api response action:
          json_encode transforms object with public attributes to camelCase which matches Google recommendation
@@ -135,16 +135,16 @@ return function (App $app) {
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
-        $group->get('', \App\Application\Actions\Note\Ajax\NoteListFetchAction::class)->setName('note-list');
+        $group->get('', \App\Application\Actions\Note\Ajax\NoteFetchListAction::class)->setName('note-list');
         $group->get('/{note_id:[0-9]+}', \App\Application\Actions\Note\Page\NoteReadPageAction::class)->setName(
             'note-read-page'
         );
-        $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateSubmitAction::class)->setName(
+        $group->post('', \App\Application\Actions\Note\Ajax\NoteCreateAction::class)->setName(
             'note-submit-creation'
         );
-        $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateSubmitAction::class)
+        $group->put('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteUpdateAction::class)
             ->setName('note-submit-modification');
-        $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteSubmitAction::class)
+        $group->delete('/{note_id:[0-9]+}', \App\Application\Actions\Note\Ajax\NoteDeleteAction::class)
             ->setName('note-submit-delete');
     })->add(UserAuthenticationMiddleware::class);
 

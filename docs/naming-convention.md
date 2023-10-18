@@ -41,6 +41,34 @@ There are three kinds of DTOs:
   * Collection of Data objects with optional additional attributes. MUST end with ResultDataCollection: 
     `ClientResultDataCollection`.
   
+## Actions
+1. **Use Case Specific**: The action name should clearly indicate the use case it handles.
+The name of the resource should be the first word and in singular form (first word to be able to
+find it better on a project wide search).  
+For example, if an action handles updating a client, it could be named `ClientUpdateAction.php`.
+2. **Request Type Specific**: The action name should also indicate the type of request it handles.    
+For example, for fetch requests, `Fetch` could be used in the action name like `ClientFetchAction.php`.   
+For actions that display a page, the word `Page` should be in the action name like `LoginPageAction.php`.   
+Alternatively the word "Show" can also be used as it makes clear that a page is rendered `ShowUserProfileAction.php`. 
+4. **Suffix with "Action"**: `Action` at the end of the action names indicates that 
+the class is an action.
+5. **Prefix with "Api"**: Only for Api requests add `Api` at the beginning of the action name
+to indicate that the request is made from another application via said interface.
+5. **Folder Structure**: Actions are organized into "Page" and "Ajax" folders based on whether they 
+handle page requests or Ajax requests.
+
+Based on these guidelines, here are some examples for different types of requests:
+
+- Show page actions: `LoginPageAction.php`, `UserProfilePageAction.php`, `ShowUserProfileAction.php`
+- Fetch collection of data: `ClientFetchListAction.php`, `NoteFetchListAction.php`
+- Read, get specific set of data: `ClientReadAction.php`, `UserReadAction.php`
+- Submit/Process requests: `LoginSubmitAction.php`, `PasswordForgottenSubmitEmailAction.php`, 
+`NewPasswordResetSubmitAction.php`, `AccountUnlockProcessAction.php`
+- Create requests: `ClientCreateAction.php`, `UserCreateAction.php`
+- Update requests: `ClientUpdateAction.php`, `NoteUpdateAction.php`
+- Delete requests: `ClientDeleteAction.php`, `NoteDeleteAction.php`
+- Api requests: `ApiClientCreateAction.php`,
+
 ## Templates
 * Follow [general files and folders](#General-files-and-folders) rules
 * View templates that are displayed to the user are in the module sub folder and must end

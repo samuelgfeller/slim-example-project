@@ -79,6 +79,7 @@ class EmailLogFinderRepository
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)'),
             ]
         )->bind(':days', $days, 'integer');
+
         return (int)($query->execute()->fetch('assoc')['sent_email_amount'] ?? 0);
     }
 }

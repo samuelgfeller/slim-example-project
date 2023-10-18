@@ -81,10 +81,10 @@ trait AppTestTrait
      *  - Cake\Database\Exception\MissingConnectionException:
      *        Connection to Mysql could not be established: SQLSTATE[08004] [1040] Too many connections.
      *
-     * @return void
      * @throws \Psr\Container\NotFoundExceptionInterface
-     *
      * @throws \Psr\Container\ContainerExceptionInterface
+     *
+     * @return void
      */
     protected function tearDown(): void
     {

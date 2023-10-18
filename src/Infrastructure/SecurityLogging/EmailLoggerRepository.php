@@ -17,6 +17,7 @@ class EmailLoggerRepository
      * @param string $fromEmail
      * @param string $toEmail
      * @param string $subject
+     * @param int|string|null $userId
      *
      * @return string
      */

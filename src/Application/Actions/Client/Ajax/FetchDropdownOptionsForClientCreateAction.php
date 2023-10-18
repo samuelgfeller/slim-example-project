@@ -1,33 +1,30 @@
 <?php
 
-namespace App\Application\Actions\Note\Ajax;
+namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Note\Exception\InvalidNoteFilterException;
-use App\Domain\Note\Service\NoteFilterFinder;
+use App\Domain\Client\Exception\InvalidClientFilterException;
+use App\Domain\Client\Service\ClientUtilFinder;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * List notes linked to user action.
- */
-final class NoteListFetchAction
+class FetchDropdownOptionsForClientCreateAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
-     * @param NoteFilterFinder $noteFilterFinder
+     * @param ClientUtilFinder $clientUtilFinder
      */
     public function __construct(
         private readonly Responder $responder,
-        private readonly NoteFilterFinder $noteFilterFinder,
+        private readonly ClientUtilFinder $clientUtilFinder,
     ) {
     }
 
     /**
-     * Note list all and own Action.
+     * Fetch dropdown options for client create form (lazy load).
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
@@ -43,20 +40,19 @@ final class NoteListFetchAction
         array $args
     ): ResponseInterface {
         try {
-            // Retrieve notes with given filter values (or none)
-            $filteredNotes = $this->noteFilterFinder->findNotesWithFilter($request->getQueryParams());
-        } catch (InvalidNoteFilterException $invalidNoteFilterException) {
+            $dropdownOptions = $this->clientUtilFinder->findClientDropdownValues();
+        } catch (InvalidClientFilterException $invalidClientFilterException) {
             return $this->responder->respondWithJson(
                 $response,
-                // Response format tested in NoteFilterProvider.php
+                // Response format tested in PostFilterProvider.php
                 [
                     'status' => 'error',
-                    'message' => $invalidNoteFilterException->getMessage(),
+                    'message' => $invalidClientFilterException->getMessage(),
                 ],
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
             );
         }
 
-        return $this->responder->respondWithJson($response, $filteredNotes);
+        return $this->responder->respondWithJson($response, $dropdownOptions);
     }
 }

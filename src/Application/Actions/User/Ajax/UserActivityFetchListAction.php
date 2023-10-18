@@ -6,18 +6,16 @@ use App\Application\Responder\Responder;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
 use App\Domain\User\Service\UserActivityFinder;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ListUserActivityAction
+class UserActivityFetchListAction
 {
     /**
      * The constructor.
      *
      * @param Responder $responder The responder
      * @param UserActivityFinder $userActivityFinder
-     * @param SessionInterface $session
      * @param FilterSettingSaver $filterSettingSaver
      */
     public function __construct(
@@ -28,7 +26,7 @@ class ListUserActivityAction
     }
 
     /**
-     * Client list all and own Action.
+     * Fetch list of user activity.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response

@@ -18,7 +18,7 @@ use Slim\Exception\HttpBadRequestException;
 /**
  * When user wants to change password being authenticated.
  */
-class ChangePasswordSubmitAction
+class PasswordChangeSubmitAction
 {
     private LoggerInterface $logger;
 

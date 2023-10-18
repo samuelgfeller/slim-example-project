@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Actions\Authentication\Submit;
+namespace App\Application\Actions\Authentication\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
-class PasswordResetSubmitAction
+class NewPasswordResetSubmitAction
 {
     private LoggerInterface $logger;
 

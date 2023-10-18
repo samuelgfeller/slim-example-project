@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
-final class UserSubmitUpdateAction
+final class UserUpdateAction
 {
     private LoggerInterface $logger;
 

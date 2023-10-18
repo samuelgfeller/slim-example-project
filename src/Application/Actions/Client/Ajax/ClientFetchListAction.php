@@ -10,9 +10,6 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Post list all and own action.
- */
 final class ClientFetchListAction
 {
     /**
@@ -28,7 +25,7 @@ final class ClientFetchListAction
     }
 
     /**
-     * Client list all and own Action.
+     * Client fetch list Action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response

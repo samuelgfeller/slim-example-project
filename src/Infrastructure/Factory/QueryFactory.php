@@ -56,7 +56,7 @@ final class QueryFactory
     /**
      * Returns an insert query instance.
      *
-     * @return InsertQuery The insert query object.
+     * @return InsertQuery the insert query object
      */
     public function insertQuery(): InsertQuery
     {
@@ -64,7 +64,7 @@ final class QueryFactory
     }
 
     /**
-     * Data is an assoc array of a row to insert where the key is the column name
+     * Data is an assoc array of a row to insert where the key is the column name.
      *
      * Usage:
      *     return (int)$this->queryFactory->insertQueryWithData($data)->into('user')->execute()->lastInsertId();.
@@ -94,18 +94,16 @@ final class QueryFactory
         return $this->connection->updateQuery()->update($fromTable)->set(['deleted_at' => date('Y-m-d H:i:s')]);
     }
 
-
     /**
      * Returns a delete query instance for hard deletion.
      *
-     * @return Query\DeleteQuery The delete query object.
+     * @return Query\DeleteQuery the delete query object
      */
     public function hardDeleteQuery(): Query\DeleteQuery
     {
         // Return the delete query object created by the connection.
         return $this->connection->deleteQuery();
     }
-
 
     /**
      * Data is an assoc array of rows to insert where the key is the column name

@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class UserSubmitCreateAction
+final class UserCreateAction
 {
     protected LoggerInterface $logger;
 
