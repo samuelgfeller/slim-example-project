@@ -17,7 +17,7 @@ class ClientUpdater
 
     public function __construct(
         private readonly ClientUpdaterRepository $clientUpdaterRepository,
-        private readonly ClientValidator $clientValidator,
+        private readonly ClientValidatorVanilla $clientValidator,
         private readonly ClientFinder $clientFinder,
         LoggerFactory $logger,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,

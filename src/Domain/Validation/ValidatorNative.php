@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 /**
  * User input validator.
  */
-final class Validator
+final class ValidatorNative
 {
     public LoggerInterface $logger;
 
@@ -206,6 +206,8 @@ final class Validator
         bool $excludingSoftDelete = true
     ): void {
         if (null !== $rowId && $rowId !== 0) {
+            // ! This should not be used anymore. The domain/service layer should NOT know about the table name
+            // Create a function xtableExists in the relevant repository
             $exists = $this->resourceExistenceCheckerRepository->rowExists(
                 ['id' => $rowId],
                 $table,

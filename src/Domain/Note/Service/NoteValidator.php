@@ -6,7 +6,7 @@ use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
-use App\Domain\Validation\Validator;
+use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\Note\NoteValidatorRepository;
 use Psr\Log\LoggerInterface;
 
@@ -21,12 +21,12 @@ class NoteValidator
      * NoteValidator constructor.
      *
      * @param NoteValidatorRepository $noteValidatorRepository
-     * @param Validator $validator
+     * @param ValidatorNative $validator
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         private readonly NoteValidatorRepository $noteValidatorRepository,
-        private readonly Validator $validator,
+        private readonly ValidatorNative $validator,
         private readonly LoggerFactory $loggerFactory,
     ) {
         $this->logger = $this->loggerFactory->addFileHandler('error.log')->createLogger('note-validation');

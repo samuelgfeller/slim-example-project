@@ -6,96 +6,24 @@ use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\ValidatorNative;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
-use Cake\Validation\Validator;
 
-class ClientValidator
+/**
+ * Client user input validator.
+ */
+class ClientValidatorVanilla
 {
+    /**
+     * PostValidator constructor.
+     *
+     * @param LoggerFactory $logger
+     * @param ValidatorNative $validator
+     */
     public function __construct(
         LoggerFactory $logger,
         private readonly ValidatorNative $validator,
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
     ) {
         $logger->addFileHandler('error.log')->createLogger('post-validation');
     }
-
-    public function validateClientCreation()
-    {
-        $validator = new Validator();
-
-        $validator
-            // Require presence indicates that the key is required in the request body
-            ->requirePresence('first_name')
-            ->minLength('first_name', 3, __('Minimum length is 3'))
-            ->maxLength('first_name', 100, __('Maximum length is 100'))
-            ->requirePresence('last_name')
-            ->minLength('last_name', 3, __('Minimum length is 3'))
-            ->maxLength('last_name', 100, __('Maximum length is 100'))
-            ->requirePresence('email')
-            ->email('email', false, __('Invalid e-mail'))
-            ->requirePresence('birthdate')
-            ->date('birthdate', ['ymd', 'mdy', 'dmy'], 'Invalid date value')
-            ->add('birthdate', 'validateNotInFuture', [
-                'rule' => function ($value, $context) {
-                    $today = new \DateTime();
-                    $birthdate = new \DateTime($value);
-
-                    return $birthdate <= $today;
-                },
-                'message' => __('Cannot be in the future')
-            ])
-            ->add('birthdate', 'validateOldestAge', [
-                'rule' => function ($value, $context) {
-                    $birthdate = new \DateTime($value);
-                    // check that birthdate is not older than 130 years
-                    $oldestBirthdate = new \DateTime('-130 years');
-                    return $birthdate >= $oldestBirthdate;
-                },
-                'message' => __('Cannot be older than 130 years')
-            ])
-            ->requirePresence('location')
-            ->minLength('location', 2, __('Minimum length is 2'))
-            ->maxLength('location', 100, __('Maximum length is 100'))
-            ->requirePresence('phone')
-            ->minLength('phone', 3, __('Minimum length is 3'))
-            ->maxLength('phone', 20, __('Maximum length is 20'))
-            // Sex should not have requirePresence as it's not required and the client won't send the key over if not set
-            ->inList('sex', ['M', 'F', 'O', ''], 'Invalid option')
-            // This is too complex and will have to be changed in the future. Enums are not ideal in general.
-            // No requirePresence for vigilance_level
-            ->add('vigilance_level', 'validateBackedEnum', [
-                'rule' => function ($value, $context) {
-                    return $this->isBackedEnum($value, ClientVigilanceLevel::class, 'vigilance_level');
-                },
-                'message' => __('Invalid option')
-            ])
-            ->requirePresence('client_message')
-            ->minLength('client_message', 3, __('Minimum length is 3'))
-            ->maxLength('client_message', 1000, __('Maximum length is 1000'))
-            ->requirePresence('client_status_id', true, __('Required'))
-            ->numeric('client_status_id', __('Invalid option format'))
-            ->add('client_status_id', 'valid', [
-                'rule' => function ($value, $context) {
-                    return $this->clientStatusFinderRepository->clientStatusExists((int)$value);
-                },
-                'message' => 'Invalid option'
-            ]);
-    }
-
-    /**
-     * Check if value is a specific backed enum case or string
-     * that can be converted into one.
-     *
-     * @param \BackedEnum|string|null $value
-     * @param string $enum
-     * @return bool
-     */
-    public function isBackedEnum(\BackedEnum|string|null $value, string $enum): bool
-    {
-        // If $value is already an enum case, it means that its valid otherwise try to convert it to enum case
-        return is_a($value, $enum, true) || is_a($enum::tryFrom($value), $enum, true);
-    }
-
 
     /**
      * Validate client creation.
@@ -106,7 +34,7 @@ class ClientValidator
      *
      * @param array $clientValues
      */
-    public function validateClientCreationOld(array $clientValues): void
+    public function validateClientCreation(array $clientValues): void
     {
         // Validation error message asserted in ClientCreateActionTest
         $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');

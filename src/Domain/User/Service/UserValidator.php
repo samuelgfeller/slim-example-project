@@ -8,7 +8,7 @@ use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
-use App\Domain\Validation\Validator;
+use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\User\UserFinderRepository;
 
 /**
@@ -17,7 +17,7 @@ use App\Infrastructure\User\UserFinderRepository;
 class UserValidator
 {
     public function __construct(
-        private readonly Validator $validator,
+        private readonly ValidatorNative $validator,
         private readonly UserFinderRepository $userFinderRepository,
     ) {
     }

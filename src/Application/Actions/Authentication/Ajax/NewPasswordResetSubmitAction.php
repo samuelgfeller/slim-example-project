@@ -18,15 +18,6 @@ class NewPasswordResetSubmitAction
 {
     private LoggerInterface $logger;
 
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder
-     * @param SessionInterface $session
-     * @param PasswordChanger $passwordChanger
-     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
-     * @param LoggerFactory $loggerFactory
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,

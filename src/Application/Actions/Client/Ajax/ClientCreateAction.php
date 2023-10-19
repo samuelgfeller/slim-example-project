@@ -41,21 +41,22 @@ final class ClientCreateAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
+     * @return ResponseInterface The response
      * @throws \JsonException
      *
-     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $clientValues = $request->getParsedBody();
+        $clientValues = $request->getParsedBody();
 
-            // If html form names change they have to be adapted in the data class attributes too (e.g. ClientData)
-            // Check that request body syntax is formatted right (tested in ClientCreateActionTest - malformedRequest)
-            if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($clientValues, [
+        // If html form names change they have to be adapted in the data class attributes too (e.g. ClientData)
+        // Check that request body syntax is formatted right (tested in ClientCreateActionTest - malformedRequest)
+        if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
+            $clientValues,
+            [
                 'client_status_id',
                 'user_id',
                 'first_name',
@@ -66,39 +67,36 @@ final class ClientCreateAction
                 'birthdate',
                 'email',
             ], // Html radio buttons and checkboxes are not sent over by the client if they are not set hence optional
-                ['sex', 'client_message', 'vigilance_level'])) {
-                try {
-                    $insertId = $this->clientCreator->createClient($clientValues);
-                } catch (ValidationException $exception) {
-                    return $this->responder->respondWithJsonOnValidationError(
-                        $exception->getValidationResult(),
-                        $response
-                    );
-                } catch (ForbiddenException $forbiddenException) {
-                    return $this->responder->respondWithJson(
-                        $response,
-                        [
-                            'status' => 'error',
-                            'message' => 'Not allowed to create client.',
-                        ],
-                        StatusCodeInterface::STATUS_FORBIDDEN
-                    );
-                }
-
-                if (0 !== $insertId) {
-                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
-                }
-                $response = $this->responder->respondWithJson($response, [
-                    'status' => 'warning',
-                    'message' => 'Client not created',
-                ]);
-
-                return $response->withAddedHeader('Warning', 'The post could not be created');
+            ['sex', 'client_message', 'vigilance_level']
+        )) {
+            try {
+                $insertId = $this->clientCreator->createClient($clientValues);
+            } catch (ValidationException $exception) {
+                return $this->responder->respondWithJsonOnValidationError(
+                    $exception->getValidationResult(),
+                    $response
+                );
+            } catch (ForbiddenException $forbiddenException) {
+                return $this->responder->respondWithJson(
+                    $response,
+                    [
+                        'status' => 'error',
+                        'message' => 'Not allowed to create client.',
+                    ],
+                    StatusCodeInterface::STATUS_FORBIDDEN
+                );
             }
-            throw new HttpBadRequestException($request, 'Request body malformed.');
-        }
 
-        // Handled by AuthenticationMiddleware
-        return $response;
+            if (0 !== $insertId) {
+                return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
+            }
+            $response = $this->responder->respondWithJson($response, [
+                'status' => 'warning',
+                'message' => 'Client not created',
+            ]);
+
+            return $response->withAddedHeader('Warning', 'The post could not be created');
+        }
+        throw new HttpBadRequestException($request, 'Request body malformed.');
     }
 }

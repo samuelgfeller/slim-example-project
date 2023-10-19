@@ -16,7 +16,7 @@ use Odan\Session\SessionInterface;
 class ClientCreator
 {
     public function __construct(
-        private readonly ClientValidator $clientValidator,
+        private readonly ClientValidatorVanilla $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly NoteCreator $noteCreator,

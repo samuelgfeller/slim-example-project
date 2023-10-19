@@ -11,7 +11,7 @@ use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 class ClientCreatorFromClientSubmit
 {
     public function __construct(
-        private readonly ClientValidator $clientValidator,
+        private readonly ClientValidatorVanilla $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly UserActivityManager $userActivityManager,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
