@@ -104,6 +104,7 @@ class SecurityLoginCheckerTest extends TestCase
         $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($emptyLogSummary);
 
         // Actual test starts here
+        // add a line for testing
         // Login amount stats used to calculate threshold
         // This amount doesn't matter (could be other int as long as calculated threshold from it is more than 20)
         // If failure percentage is 20%, min val (for exception to be thrown) is 105 as it results in a threshold of 21
