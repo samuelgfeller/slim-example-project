@@ -11,46 +11,6 @@ class ClientCreateProvider
     use FixtureTestTrait;
 
     /**
-     * Provide malformed request body for client creation.
-     *
-     * @return array[]
-     */
-    public static function malformedRequestBodyCases(): array
-    {
-        return [
-            [
-                // If any of the list except client_message is missing it's a bad request
-                'missing_first_name' => [
-                    'last_name' => 'value',
-                    'birthdate' => 'value',
-                    'location' => 'value',
-                    'phone' => 'value',
-                    'email' => 'value',
-                    'sex' => 'value',
-                    'client_message' => 'value',
-                    'user_id' => 'value',
-                    'client_status_id' => 'value',
-                    'message' => 'value', // main note
-                ],
-                'key_too_much_without_client_message' => [
-                    'first_name' => 'value',
-                    'last_name' => 'value',
-                    'birthdate' => 'value',
-                    'location' => 'value',
-                    'phone' => 'value',
-                    'email' => 'value',
-                    'sex' => 'value',
-                    // 'client_message' => 'value',
-                    'user_id' => 'value',
-                    'client_status_id' => 'value',
-                    'message' => 'value',
-                    'key_too_much' => 'value',
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @return \array[][]
      */
     public static function clientCreationDropdownOptionsCases(): array
@@ -92,7 +52,7 @@ class ClientCreateProvider
      *
      * @return array[]
      */
-    public static function clientCreationUsersAndExpectedResultProvider(): array
+    public static function clientCreationAuthorizationProvider(): array
     {
         // Get users with different roles
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -153,72 +113,64 @@ class ClientCreateProvider
      *
      * @return array
      */
-    public static function invalidClientCreationValuesAndExpectedResponseProvider(): array
+    public static function invalidClientCreationProvider(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
             [
-                // Most values too short
+                // Most values too short, birthdate too old and user_id has 2 validation error messages
                 'request_body' => [
                     'first_name' => 'T',
                     'last_name' => 'A',
-                    'birthdate' => '1850-01-01', // too old
+                    'birthdate' => '1850-01-01', // over 130 years old
                     'location' => 'L',
                     'phone' => '07',
                     'email' => 'test@test', // missing extension
                     'sex' => 'A', // invalid value
-                    'user_id' => '999', // non-existing user
-                    'client_status_id' => '999', // non-existing status
+                    'user_id' => 'a', // wrong format and non-existing user
+                    'client_status_id' => 'a', // wrong format and non-existing status
                     'message' => '', // valid vor now as note validation is done only if all client values are valid
                 ],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'client_status_id',
-                                'message' => 'Invalid option',
+                            'first_name' => [
+                                0 => 'Minimum length is 3',
                             ],
-                            1 => [
-                                'field' => 'user_id',
-                                'message' => 'Invalid option',
+                            'last_name' => [
+                                0 => 'Minimum length is 3',
                             ],
-                            2 => [
-                                'field' => 'first_name',
-                                'message' => 'Minimum length is 2',
+                            'email' => [
+                                0 => 'Invalid e-mail',
                             ],
-                            3 => [
-                                'field' => 'last_name',
-                                'message' => 'Minimum length is 2',
+                            'birthdate' => [
+                                0 => 'Cannot be older than 130 years',
                             ],
-                            4 => [
-                                'field' => 'email',
-                                'message' => 'Invalid value',
+                            'location' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            5 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'phone' => [
+                                0 => 'Minimum length is 3',
                             ],
-                            6 => [
-                                'field' => 'location',
-                                'message' => 'Minimum length is 2',
+                            'sex' => [
+                                0 => 'Invalid option',
                             ],
-                            7 => [
-                                'field' => 'phone',
-                                'message' => 'Minimum length is 3',
+                            'client_status_id' => [
+                                0 => 'Invalid option format',
+                                1 => 'Invalid option',
                             ],
-                            8 => [
-                                'field' => 'sex',
-                                'message' => 'Invalid option',
+                            'user_id' => [
+                                0 => 'Invalid option format',
+                                1 => 'Invalid option',
                             ],
                         ],
                     ],
                 ],
             ],
             [
-                // Most values too long
+                // Most values too long, birthdate in the future
                 'request_body' => [
                     'first_name' => str_repeat('i', 101), // 101 chars
                     'last_name' => str_repeat('i', 101),
@@ -237,41 +189,33 @@ class ClientCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'client_status_id',
-                                'message' => 'Invalid option',
+                            'first_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            1 => [
-                                'field' => 'user_id',
-                                'message' => 'Invalid option',
+                            'last_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            2 => [
-                                'field' => 'first_name',
-                                'message' => 'Maximum length is 100',
+                            'birthdate' => [
+                                0 => 'Cannot be in the future',
                             ],
-                            3 => [
-                                'field' => 'last_name',
-                                'message' => 'Maximum length is 100',
+                            'location' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            4 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'phone' => [
+                                0 => 'Maximum length is 20',
                             ],
-                            5 => [
-                                'field' => 'location',
-                                'message' => 'Maximum length is 100',
+                            'client_status_id' => [
+                                0 => 'Invalid option',
                             ],
-                            6 => [
-                                'field' => 'phone',
-                                'message' => 'Maximum length is 20',
+                            'user_id' => [
+                                0 => 'Invalid option',
                             ],
-                        ],
+                        ]
                     ],
                 ],
             ],
-            [ // Main note validation
+            [ // Main note validation when user creates a new client directly with a main note
                 // All client values valid but not main note message
                 'request_body' => [
                     'first_name' => 'Test',
@@ -289,14 +233,95 @@ class ClientCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Maximum length is 1000',
+                            'message' => [
+                                0 => 'Maximum length is 1000',
                             ],
                         ],
                     ],
+                ],
+            ],
+            [ // Keys missing, check for request body key presence (previously done via malformedBodyRequestChecker)
+                // Empty request body
+                'request_body' => [
+                ],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'first_name' => [
+                                0 => 'Key is required',
+                            ],
+                            'last_name' => [
+                                0 => 'Key is required',
+                            ],
+                            'email' => [
+                                0 => 'Key is required',
+                            ],
+                            'birthdate' => [
+                                0 => 'Key is required',
+                            ],
+                            'location' => [
+                                0 => 'Key is required',
+                            ],
+                            'phone' => [
+                                0 => 'Key is required',
+                            ],
+                            'client_status_id' => [
+                                0 => 'Key is required',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Returns combinations of valid client creation data to assert that
+     * validation doesn't fail.
+     * The reason for this test is that cakephp validation library treats null values
+     * as invalid when a validation method is set on a field.
+     * E.g. ->maxLength('first_name', 100) has the consequence that it expects
+     * a non-null value for the first_name. Without ->allowEmptyString('first_name')
+     * the validation would fail with "This field cannot be left empty".
+     * I did not expect this behaviour and ran into this when testing in the GUI so this test
+     * makes sense to me in order to not forget to always add ->allow[Whatever] when value is optional.
+     *
+     * @return array
+     */
+    public static function validClientCreationProvider(): array
+    {
+        return [
+            [
+                // Test with null values on all optional fields (either first_name or last_name has to be set)
+                'request_body' => [
+                    'first_name' => 'First name',
+                    'last_name' => null,
+                    'birthdate' => null,
+                    'location' => null,
+                    'phone' => null,
+                    'email' => null,
+                    'sex' => null,
+                    'user_id' => null,
+                    'client_status_id' => 'valid', // 'valid' replaced by inserted client status id in test function
+                    'message' => null,
+                ],
+            ],
+            [
+                // Test with empty string values on all optional fields (either first_name or last_name has to be set)
+                'request_body' => [
+                    'first_name' => '',
+                    'last_name' => '',
+                    'birthdate' => '',
+                    'location' => '',
+                    'phone' => '',
+                    'email' => '',
+                    'sex' => '',
+                    'user_id' => '',
+                    'client_status_id' => 'valid', // 'valid' replaced by inserted client status id in test function
+                    'message' => '',
                 ],
             ],
         ];

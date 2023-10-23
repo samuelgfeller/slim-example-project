@@ -10,7 +10,7 @@ use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -75,7 +75,7 @@ final class LoginSubmitAction
                 }
 
                 return $this->responder->redirectToRouteName($response, 'home-page', [], $themeQueryParams);
-            } catch (ValidationException $ve) {
+            } catch (ValidationExceptionOld $ve) {
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/login.html.php',

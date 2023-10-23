@@ -7,7 +7,7 @@ use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authentication\Service\PasswordChanger;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -71,7 +71,7 @@ class PasswordChangeSubmitAction
                 );
 
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
-            } catch (ValidationException $validationException) {
+            } catch (ValidationExceptionOld $validationException) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $validationException->getValidationResult(),
                     $response,

@@ -8,7 +8,7 @@ use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -62,7 +62,7 @@ final class PasswordForgottenEmailSubmitAction
                     'User with email ' . $userValues['email'] . ' tried to request password
                 reset link but account doesn\'t exist'
                 );
-            } catch (ValidationException $validationException) {
+            } catch (ValidationExceptionOld $validationException) {
                 // Form error messages set in function below
                 return $this->responder->renderOnValidationError(
                     $response,

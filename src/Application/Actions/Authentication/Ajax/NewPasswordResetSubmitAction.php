@@ -7,7 +7,7 @@ use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Service\PasswordChanger;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -83,7 +83,7 @@ sure to click on the most recent email we send you</a>.</b>'
 
                 // Render password
                 return $this->responder->render($response, 'authentication/login.html.php');
-            } catch (ValidationException $validationException) {
+            } catch (ValidationExceptionOld $validationException) {
                 $flash->add('error', $validationException->getMessage());
                 // Add token and id to php view attribute like PasswordResetAction does
                 $this->responder->addPhpViewAttribute('token', $parsedBody['token']);

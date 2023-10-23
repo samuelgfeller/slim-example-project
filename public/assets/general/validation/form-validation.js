@@ -13,7 +13,7 @@ export function displayValidationErrorMessage(fieldName, errorMessage, domFieldI
         field = document.querySelector(`[name="${fieldName}"]`);
     }
     if (field === null) {
-        // Contenteditable field
+        // Contenteditable field accessed with data-name
         field = document.querySelector(`[data-name="${fieldName}"]`);
     }
     // console.log(domFieldId, field);
@@ -29,6 +29,9 @@ export function displayValidationErrorMessage(fieldName, errorMessage, domFieldI
         }
         // Remove any existing message in case there was one
         // (this is an additional for when this function is called not from the handleFail() that removes previous error msg)
+        // If there are multiple error messages for a single field, the previous one is simply replaced by the newer one
+        // which isn't ideal but acceptable in this scope especially since its so rare and worst case would be that user
+        // has to submit form one more time to get the updated (other) error message (that he couldn't see before)
         field.parentNode.querySelector('strong.err-msg')?.remove();
         field.insertAdjacentHTML('afterend', `<strong class="err-msg">${errorMessage}</strong>`);
         let label = field.parentNode.querySelector('label');

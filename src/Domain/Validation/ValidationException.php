@@ -9,23 +9,12 @@ use RuntimeException;
  */
 class ValidationException extends RuntimeException
 {
-    /**
-     * ValidationException constructor.
-     *
-     * @param ValidationResult $validationResult
-     */
-    public function __construct(private readonly ValidationResult $validationResult)
-    {
-        parent::__construct($validationResult->getMessage());
-    }
+    public array $validationErrors = [];
 
-    /**
-     * Get the validation result.
-     *
-     * @return ValidationResult
-     */
-    public function getValidationResult(): ValidationResult
+    public function __construct(array $validationErrors, string $message = 'Validation error')
     {
-        return $this->validationResult;
+        parent::__construct($message);
+
+        $this->validationErrors = $validationErrors;
     }
 }

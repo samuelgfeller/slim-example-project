@@ -19,7 +19,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Client creation submit tests
@@ -41,15 +40,15 @@ class ClientCreateActionTest extends TestCase
     /**
      * Client creation with valid data.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationUsersAndExpectedResultProvider()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationAuthorizationProvider()
      *
      * @param array|null $userLinkedToClientRow client owner attributes containing the user_role_id or null if none
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
+     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
@@ -70,8 +69,6 @@ class ClientCreateActionTest extends TestCase
             'phone' => '+41 77 222 22 22',
             'email' => 'new-user@email.com',
             'sex' => 'M',
-            'client_message' => null,
-            'vigilance_level' => null,
             'user_id' => $userLinkedToClientRow['id'],
             'client_status_id' => $clientStatusId,
             'message' => 'Test main note.',
@@ -86,7 +83,8 @@ class ClientCreateActionTest extends TestCase
             $clientCreationValues
         );
         $response = $this->app->handle($request);
-        // Assert response status code: 201 Created
+
+        // Assert response status code: 201 Created or 403 Forbidden
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
         // If db record is expected to be created assert that
@@ -107,18 +105,25 @@ class ClientCreateActionTest extends TestCase
             $noteId = $this->findLastInsertedTableRow('note')['id'];
             $this->assertTableRowEquals($noteValues, 'note', $noteId);
 
-            // Assert user activity
-            // Add client_message to creation values as they are inserted in user_activity
+            // Assert user activity database row
+            $userActivityRow = $this->findTableRowsByColumn('user_activity', 'table', 'client')[0];
+            // Assert user activity row without json data
             $this->assertTableRowEquals(
-                [
-                    'action' => UserActivity::CREATED->value,
-                    'table' => 'client',
-                    'row_id' => $clientDbRow['id'],
-                    'data' => json_encode($clientCreationValues, JSON_THROW_ON_ERROR),
-                ],
+                ['action' => UserActivity::CREATED->value, 'table' => 'client', 'row_id' => $clientDbRow['id'],],
                 'user_activity',
-                (int)$this->findTableRowsByColumn('user_activity', 'table', 'client')[0]['id']
+                $userActivityRow['id']
             );
+            // Assert relevant user activity data
+            $decodedUserActivityDataFromDb = json_decode($userActivityRow['data'], true, 512, JSON_THROW_ON_ERROR);
+            // Done separately as we only want to test the relevant data for the creation, and we cannot control the order
+            self::assertEqualsCanonicalizing(
+                $clientCreationValues,
+                // We only want to test if the keys present in $clientCreationValues are in the decoded data from the
+                // userActivity database row thus removing any keys that are not present in $clientCreationValues
+                // with array_intersect_key.
+                array_intersect_key($decodedUserActivityDataFromDb, $clientCreationValues)
+            );
+
             // Note user activity entry
             // Add other note values
             $noteValues['client_id'] = $clientDbRow['id'];
@@ -144,16 +149,17 @@ class ClientCreateActionTest extends TestCase
     }
 
     /**
-     * Test client creation values validation.
+     * Test validation errors when user submits values that are invalid and when client
+     * doesn't send the required keys (previously done via malformed body checker).
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::invalidClientCreationValuesAndExpectedResponseProvider()
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::invalidClientCreationProvider()
      *
      * @param array $requestBody
      * @param array $jsonResponse
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -189,6 +195,58 @@ class ClientCreateActionTest extends TestCase
     }
 
     /**
+     * Tests that client creation is possible with only the required values set and the other
+     * set to null or an empty string.
+     *
+     * The reason for this test is that cakephp validation library treats null values
+     * as invalid when a validation method is set on a field.
+     * E.g. ->maxLength('first_name', 100) has the consequence that it expects
+     * a non-null value for the first_name. Without ->allowEmptyString('first_name')
+     * the validation would fail with "This field cannot be left empty".
+     * I did not expect this behaviour and ran into this when testing in the GUI so this test
+     * makes sense to me in order to not forget to always add ->allow[Whatever] when value is optional.
+     *
+     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::validClientCreationProvider()
+     *
+     * @param array $requestBody
+     *
+     * @return void
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     */
+    public function testClientSubmitCreateActionValid(array $requestBody): void
+    {
+        // Insert managing advisor user which is allowed to create clients
+        $userId = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
+            UserFixture::class
+        )['id'];
+        // Insert mandatory field client status id
+        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        // Add valid client status id to request body
+        $requestBody['client_status_id'] = $clientStatusId;
+
+        // Simulate session
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+
+        $request = $this->createJsonRequest(
+            'POST',
+            $this->urlFor('client-create-submit'),
+            $requestBody
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert 201 Created
+        self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
+
+        // No client should have been created
+        $this->assertTableRowCount(1, 'client');
+
+        $this->assertJsonData(['status' => 'success', 'data' => null,], $response);
+    }
+
+
+    /**
      * Client creation with valid data.
      *
      * @return void
@@ -212,38 +270,5 @@ class ClientCreateActionTest extends TestCase
         );
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
-    }
-
-    /**
-     * Test client creation with malformed request body.
-     *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::malformedRequestBodyCases()
-     *
-     * @param array $requestBody
-     *
-     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
-     *
-     * @return void
-     */
-    public function testClientSubmitCreateActionMalformedRequestBody(array $requestBody): void
-    {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
-
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
-
-        $request = $this->createJsonRequest(
-            'POST',
-            $this->urlFor('client-create-submit'),
-            $requestBody
-        );
-
-        // Bad Request (400) means that the client sent the request wrongly; it's a frontend error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
     }
 }

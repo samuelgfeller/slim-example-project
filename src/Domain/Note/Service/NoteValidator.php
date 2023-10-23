@@ -5,9 +5,11 @@ namespace App\Domain\Note\Service;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\Note\NoteValidatorRepository;
+use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,12 +23,12 @@ class NoteValidator
      * NoteValidator constructor.
      *
      * @param NoteValidatorRepository $noteValidatorRepository
-     * @param ValidatorNative $validator
+     * @param ValidatorNative $validatorNative
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         private readonly NoteValidatorRepository $noteValidatorRepository,
-        private readonly ValidatorNative $validator,
+        private readonly ValidatorNative $validatorNative,
         private readonly LoggerFactory $loggerFactory,
     ) {
         $this->logger = $this->loggerFactory->addFileHandler('error.log')->createLogger('note-validation');
@@ -35,11 +37,39 @@ class NoteValidator
     /**
      * Validate note creation.
      *
-     * @param NoteData $note
-     *
-     * @throws ValidationException
+     * @param array $noteValues
      */
-    public function validateNoteCreation(NoteData $note): void
+    public function validateNoteCreation(array $noteValues): void
+    {
+        $validator = new Validator();
+        $validator = $validator->requirePresence('message')
+            ->maxLength('message', 1000, __('Maximum length is 1000', 1000));
+
+        if ((int)$noteValues['is_main'] === 1) {
+            // If main note, the min length can be 0 as we can't delete it
+            $validator
+                ->add('is_main', 'mainNoteAlreadyExists', [
+                    'rule' => function ($value, $context) {
+                        $clientId = $context['data']['client_id'];
+                        // Log error as this should not be possible if frontend behaves correctly
+                        $this->logger->error('Attempt to create main note but it already exists. Client: ' . $clientId);
+                        return $this->noteValidatorRepository->mainNoteAlreadyExistsForClient($clientId) === false;
+                    },
+                    'message' => __('Main note already exists'),
+                ]);
+        } else {
+            // If not main note, min length is 4
+            $validator
+                ->minLength('message', 4, __('Minimum length is 4', 4));
+        }
+
+        $errors = $validator->validate($noteValues);
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+    }
+
+    public function validateNoteCreationOld(NoteData $note): void
     {
         // Validation error message asserted via NoteProvider.php
         $validationResult = new ValidationResult('There is something in the note data that couldn\'t be validated');
@@ -51,9 +81,9 @@ class NoteValidator
             $this->validateNoteMessage($note->message, $validationResult, false);
         }
         // It's a bit pointless to check user existence as user should always exist if he's logged in but here is how I'd do it
-        $this->validator->validateExistence($note->userId, 'user', $validationResult, true);
+        $this->validatorNative->validateExistence($note->userId, 'user', $validationResult, true);
 
-        $this->validator->throwOnError($validationResult);
+        $this->validatorNative->throwOnError($validationResult);
     }
 
     /**
@@ -61,7 +91,7 @@ class NoteValidator
      *
      * @param NoteData $note
      *
-     * @throws ValidationException
+     * @throws ValidationExceptionOld
      */
     public function validateNoteUpdate(NoteData $note): void
     {
@@ -78,10 +108,10 @@ class NoteValidator
         }
         if (null !== $note->hidden) {
             // Has to be either 0 or 1
-            $this->validator->validateNumeric($note->hidden, 'hidden', $validationResult);
+            $this->validatorNative->validateNumeric($note->hidden, 'hidden', $validationResult);
         }
 
-        $this->validator->throwOnError($validationResult);
+        $this->validatorNative->throwOnError($validationResult);
     }
 
     /**
@@ -103,8 +133,8 @@ class NoteValidator
     ): void {
         // Not test if empty string as user could submit note with empty string which has to be checked
         if (null !== $noteMsg) {
-            $this->validator->validateLengthMax($noteMsg, 'message', $validationResult, 1000);
-            $this->validator->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
+            $this->validatorNative->validateLengthMax($noteMsg, 'message', $validationResult, 1000);
+            $this->validatorNative->validateLengthMin($noteMsg, 'message', $validationResult, $minLength);
         } elseif (true === $required) {
             // If it is null or empty string and required
             $validationResult->setError('message', __('Required'));

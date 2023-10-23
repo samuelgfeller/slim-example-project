@@ -4,9 +4,11 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\Factory\LoggerFactory;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
+use App\Infrastructure\User\UserFinderRepository;
 use Cake\Validation\Validator;
 
 class ClientValidator
@@ -15,31 +17,47 @@ class ClientValidator
         LoggerFactory $logger,
         private readonly ValidatorNative $validator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
+        private readonly UserFinderRepository $userFinderRepository,
     ) {
         $logger->addFileHandler('error.log')->createLogger('post-validation');
     }
 
-    public function validateClientCreation()
+    /**
+     * Validate client creation and modification.
+     *
+     * @param array $clientCreationValues user submitted values
+     * @param bool $isCreateMode true when fields presence is required in values. For update, they're optional
+     *
+     * @throws ValidationException
+     */
+    public function validateClientValues(array $clientCreationValues, bool $isCreateMode = true): void
     {
         $validator = new Validator();
 
         $validator
             // Require presence indicates that the key is required in the request body
-            ->requirePresence('first_name')
+            // When second parameter "mode" is false, the fields presence is not required
+            ->requirePresence('first_name', $isCreateMode, __('Key is required'))
+            // Cake validation library automatically sets a rule that field cannot be null as soon as there is any
+            // validation rule set for the field. This is why we have to allow empty string (null is also allowed by it)
+            ->allowEmptyString('first_name')
             ->minLength('first_name', 3, __('Minimum length is 3'))
             ->maxLength('first_name', 100, __('Maximum length is 100'))
-            ->requirePresence('last_name')
+            ->requirePresence('last_name', $isCreateMode, __('Key is required'))
+            ->allowEmptyString('last_name')
             ->minLength('last_name', 3, __('Minimum length is 3'))
             ->maxLength('last_name', 100, __('Maximum length is 100'))
-            ->requirePresence('email')
+            ->requirePresence('email', $isCreateMode, __('Key is required'))
+            ->allowEmptyString('email')
             ->email('email', false, __('Invalid e-mail'))
-            ->requirePresence('birthdate')
-            ->date('birthdate', ['ymd', 'mdy', 'dmy'], 'Invalid date value')
+            ->requirePresence('birthdate', $isCreateMode, __('Key is required'))
+            ->allowEmptyDate('birthdate')
+            ->date('birthdate', ['ymd', 'mdy', 'dmy'], __('Invalid date value'))
             ->add('birthdate', 'validateNotInFuture', [
                 'rule' => function ($value, $context) {
                     $today = new \DateTime();
                     $birthdate = new \DateTime($value);
-
+                    // check that birthdate is not in the future
                     return $birthdate <= $today;
                 },
                 'message' => __('Cannot be in the future')
@@ -53,33 +71,58 @@ class ClientValidator
                 },
                 'message' => __('Cannot be older than 130 years')
             ])
-            ->requirePresence('location')
+            ->requirePresence('location', $isCreateMode, __('Key is required'))
+            ->allowEmptyString('location')
             ->minLength('location', 2, __('Minimum length is 2'))
             ->maxLength('location', 100, __('Maximum length is 100'))
-            ->requirePresence('phone')
+            ->requirePresence('phone', $isCreateMode, __('Key is required'))
+            ->allowEmptyString('phone')
             ->minLength('phone', 3, __('Minimum length is 3'))
             ->maxLength('phone', 20, __('Maximum length is 20'))
-            // Sex should not have requirePresence as it's not required and the client won't send the key over if not set
+            // Sex requirePresence false as it's not required and the browser won't send the key over if not set
+            ->requirePresence('sex', false)
+            ->allowEmptyString('sex')
             ->inList('sex', ['M', 'F', 'O', ''], 'Invalid option')
             // This is too complex and will have to be changed in the future. Enums are not ideal in general.
-            // No requirePresence for vigilance_level
-            ->add('vigilance_level', 'validateBackedEnum', [
+            // requirePresence false for vigilance_level as it doesn't even exist on the create form, only possible to update
+            ->requirePresence('vigilance_level', false)
+            ->allowEmptyString('vigilance_level')
+             ->add('vigilance_level', 'validateBackedEnum', [
                 'rule' => function ($value, $context) {
-                    return $this->isBackedEnum($value, ClientVigilanceLevel::class, 'vigilance_level');
+                    return $this->isBackedEnum($value, ClientVigilanceLevel::class);
                 },
                 'message' => __('Invalid option')
             ])
-            ->requirePresence('client_message')
+            // Client message presence is not required as it's only set if user submits the form via api
+            ->requirePresence('client_message', false)
+            ->allowEmptyString('client_message')
             ->minLength('client_message', 3, __('Minimum length is 3'))
             ->maxLength('client_message', 1000, __('Maximum length is 1000'))
-            ->requirePresence('client_status_id', true, __('Required'))
+            ->requirePresence('client_status_id', $isCreateMode, __('Key is required'))
+            ->notEmptyString('client_status_id', __('Required'))
             ->numeric('client_status_id', __('Invalid option format'))
-            ->add('client_status_id', 'valid', [
+            ->add('client_status_id', 'exists', [
                 'rule' => function ($value, $context) {
                     return $this->clientStatusFinderRepository->clientStatusExists((int)$value);
                 },
-                'message' => 'Invalid option'
-            ]);
+                'message' => __('Invalid option')
+            ])
+            // Presence not required as client can be created via form submit by another frontend that doesn't have user id
+            ->requirePresence('user_id', false)
+            ->allowEmptyString('user_id', __('Required'))
+            ->numeric('user_id', __('Invalid option format'))
+            ->add('user_id', 'exists', [
+                'rule' => function ($value, $context) {
+                    return !empty($this->userFinderRepository->findUserById((int)$value));
+                },
+                'message' => __('Invalid option')
+            ])
+        ;
+
+        $errors = $validator->validate($clientCreationValues);
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
     }
 
     /**
@@ -94,53 +137,6 @@ class ClientValidator
     {
         // If $value is already an enum case, it means that its valid otherwise try to convert it to enum case
         return is_a($value, $enum, true) || is_a($enum::tryFrom($value), $enum, true);
-    }
-
-
-    /**
-     * Validate client creation.
-     * Validate client values as array and not object to prevent exception on
-     * invalid data such as datetime is used in the constructor.
-     * *All keys that may not be in the request body (malformedRequestBodyChecker - optional keys)
-     * *such as radio buttons have to be accessed with null coalescing alternative: $values['key'] ?? null.
-     *
-     * @param array $clientValues
-     */
-    public function validateClientCreationOld(array $clientValues): void
-    {
-        // Validation error message asserted in ClientCreateActionTest
-        $validationResult = new ValidationResult('There is something in the client data that couldn\'t be validated');
-
-        $this->validateClientStatusId($clientValues['client_status_id'], $validationResult, true);
-
-        // User id should not be required when client is created from authenticated area and public portal
-        $this->validateUserId($clientValues['user_id'], $validationResult, false);
-
-        // First and last name not required in case advisor only knows either first or last name
-        $this->validator->validateName($clientValues['first_name'], 'first_name', $validationResult, false);
-        $this->validator->validateName($clientValues['last_name'], 'last_name', $validationResult, false);
-
-        $this->validator->validateEmail($clientValues['email'], $validationResult, false);
-        // With birthdate original user input value as it's transformed into a DateTimeImmutable when object gets populated
-        $this->validator->validateBirthdate($clientValues['birthdate'], $validationResult, false);
-
-        $this->validateLocation($clientValues['location'], $validationResult, false);
-
-        $this->validatePhone($clientValues['phone'], $validationResult, false);
-
-        $this->validateSex($clientValues['sex'] ?? null, $validationResult, false);
-
-        $this->validateClientMessage($clientValues['client_message'] ?? null, $validationResult, false);
-
-        $this->validator->validateBackedEnum(
-            $clientValues['vigilance_level'] ?? null,
-            ClientVigilanceLevel::class,
-            'vigilance_level',
-            $validationResult,
-            false
-        );
-
-        $this->validator->throwOnError($validationResult);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
-use App\Domain\Note\Data\NoteData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Note\NoteCreatorRepository;
@@ -33,12 +32,12 @@ class NoteCreator
     public function createNote(array $noteValues): int
     {
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $note = new NoteData($noteValues);
-            $note->userId = $loggedInUserId;
-            $this->noteValidator->validateNoteCreation($note);
+            $noteValues['user_id'] = $loggedInUserId;
+            // Throws exception if validation fails
+            $this->noteValidator->validateNoteCreation($noteValues);
 
             if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
-                $noteId = $this->noteCreatorRepository->insertNote($note->toArray());
+                $noteId = $this->noteCreatorRepository->insertNote($noteValues);
                 if (!empty($noteId)) {
                     $this->userActivityManager->addUserActivity(
                         UserActivity::CREATED,

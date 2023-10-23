@@ -65,7 +65,7 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
                             $this->logger->warning(
                                 "Warning [$severity] $message on line $line in file $file"
                             );
-                        } // If error is non fatal but not warning (default)
+                        } // If error is non-fatal but not warning (default)
                         else {
                             $this->logger->notice(
                                 "Notice [$severity] $message on line $line in file $file"

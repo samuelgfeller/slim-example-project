@@ -7,7 +7,7 @@ use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserUpdater;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -67,7 +67,7 @@ final class UserUpdateAction
         ])) {
             try {
                 $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
-            } catch (ValidationException $exception) {
+            } catch (ValidationExceptionOld $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),
                     $response

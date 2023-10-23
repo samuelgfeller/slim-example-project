@@ -1,7 +1,9 @@
 <?php
 
 use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\ForbiddenExceptionMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
+use App\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
@@ -37,7 +39,10 @@ return function (App $app) {
     // Has to be after Routing (called before on response)
     $app->add(BasePathMiddleware::class);
 
-    // Error middleware should be added last. It will not handle any exceptions/errors
+    // Error middlewares should be added last as they will be the first on the response (LIFO).
+    $app->add(ValidationExceptionMiddleware::class);
+    $app->add(ForbiddenExceptionMiddleware::class);
+
     $app->add(ErrorHandlerMiddleware::class);
     $app->add(ErrorMiddleware::class);
 };

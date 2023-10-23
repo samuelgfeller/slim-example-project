@@ -5,7 +5,7 @@ namespace App\Application\Actions\Client\Ajax;
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientCreatorFromClientSubmit;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
@@ -64,7 +64,7 @@ final class ApiClientCreateAction
         )) {
             try {
                 $insertId = $this->clientCreatorFromClientSubmit->createClientFromClientSubmit($clientValues);
-            } catch (ValidationException $exception) {
+            } catch (ValidationExceptionOld $exception) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $exception->getValidationResult(),
                     $response

@@ -32,8 +32,6 @@ class ClientData implements \JsonSerializable
      * Client Data constructor.
      *
      * @param array|null $clientData
-     *
-     * @throws \Exception
      */
     public function __construct(?array $clientData = [])
     {
@@ -48,8 +46,9 @@ class ClientData implements \JsonSerializable
         $this->clientMessage = $clientData['client_message'] ?? null;
         $this->vigilanceLevel = $clientData['vigilance_level'] ?? null ?
             ClientVigilanceLevel::tryFrom($clientData['vigilance_level']) : null;
-        $this->userId = $clientData['user_id'] ?? null;
-        $this->clientStatusId = $clientData['client_status_id'] ?? null;
+        // Cast to int if user id is set and not empty (null / empty string)
+        $this->userId = !empty($clientData['user_id']) ? (int)$clientData['user_id'] : null;
+        $this->clientStatusId = !empty($clientData['client_status_id']) ? (int)$clientData['client_status_id'] : null;
         $this->updatedAt = $clientData['updated_at'] ?? null ? new \DateTimeImmutable($clientData['updated_at']) : null;
         $this->createdAt = $clientData['created_at'] ?? null ? new \DateTimeImmutable($clientData['created_at']) : null;
         $this->deletedAt = $clientData['deleted_at'] ?? null ? new \DateTimeImmutable($clientData['deleted_at']) : null;

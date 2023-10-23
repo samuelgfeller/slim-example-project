@@ -51,20 +51,25 @@ export function handleFail(xhr, domFieldId = null) {
     if (xhr.status === 422) {
         if (xhr.getResponseHeader('Content-type') === 'application/json') {
             errorMsg = '';
-            let json = xhr.response;
-            let validationResponse = JSON.parse(json);
+            let validationResponse = JSON.parse(xhr.response);
+            const validationErrors = validationResponse.data.errors;
             removeValidationErrorMessages();
             // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
-            for (const error of validationResponse.data.errors) {
-                displayValidationErrorMessage(error.field, error.message, domFieldId);
+            for (const fieldName in validationErrors) {
+                const fieldMessages = validationErrors[fieldName];
+                // There may be the case that there are multiple error messages for a single field. In such case,
+                // the previous error message is simply replaced by the newer one which isn't ideal but acceptable in
+                // this scope especially since its so rare and the worst case would be that user has to submit form once
+                // more to get the updated (other) error message (that he couldn't see before)
+                displayValidationErrorMessage(fieldName, fieldMessages[0], domFieldId);
                 // Flash error message with details
-                errorMsg += error.message + '.<br>Field "<b>' + error.field.replace(/[^a-zA-Z0-9 ]/g, ' ')
+                errorMsg += fieldMessages[0] + '.<br>Field "<b>' + fieldName.replace(/[^a-zA-Z0-9 ]/g, ' ')
                     + '</b>".<br>';
             }
             noFlashMessage = true;
         } else {
             // Default error message when server returns 422 but not json
-            errorMsg = 'Validation error. Something could not have been validate on the server.';
+            errorMsg = 'Validation error. Something could not be validated on the server.';
         }
     }
 

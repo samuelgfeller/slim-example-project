@@ -8,7 +8,7 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Mailer;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -56,7 +56,7 @@ class PasswordRecoveryEmailSender
      * @param array $userValues
      * @param string|null|null $captcha
      *
-     * @throws ValidationException|TransportExceptionInterface|\JsonException
+     * @throws ValidationExceptionOld|TransportExceptionInterface|\JsonException
      */
     public function sendPasswordRecoveryEmail(array $userValues, ?string $captcha = null): void
     {

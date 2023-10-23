@@ -16,7 +16,7 @@ use Odan\Session\SessionInterface;
 class ClientCreator
 {
     public function __construct(
-        private readonly ClientValidatorVanilla $clientValidator,
+        private readonly ClientValidator $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly NoteCreator $noteCreator,
@@ -31,14 +31,13 @@ class ClientCreator
      *
      * @param array $clientValues
      *
-     * @throws ForbiddenException|\JsonException
+     * @throws ForbiddenException
      *
      * @return int insert id
      */
     public function createClient(array $clientValues): int
     {
-        // Validate entire client values before object creation to prevent exception on invalid data such as datetime
-        $this->clientValidator->validateClientCreation($clientValues);
+        $this->clientValidator->validateClientValues($clientValues, true);
 
         $client = new ClientData($clientValues);
 

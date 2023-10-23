@@ -7,7 +7,7 @@ use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Service\NoteUpdater;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -75,7 +75,7 @@ final class NoteUpdateAction
                     ]);
 
                     return $response->withAddedHeader('Warning', 'The note was not updated.');
-                } catch (ValidationException $exception) {
+                } catch (ValidationExceptionOld $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),
                         $response

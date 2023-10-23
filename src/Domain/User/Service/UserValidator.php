@@ -6,7 +6,7 @@ use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use App\Domain\Validation\ValidationResult;
 use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\User\UserFinderRepository;
@@ -87,9 +87,9 @@ class UserValidator
      *
      * @param UserData $user
      *
-     * @throws ValidationException|\JsonException
-     *
      * @return ValidationResult
+     *@throws ValidationExceptionOld|\JsonException
+     *
      */
     public function validateUserCreation(UserData $user): ValidationResult
     {
@@ -124,9 +124,9 @@ class UserValidator
      *
      * @param array{email: string|null, password: string|null} $userLoginValues
      *
-     * @throws ValidationException
-     *
      * @return ValidationResult
+     *@throws ValidationExceptionOld
+     *
      */
     public function validateUserLogin(array $userLoginValues): ValidationResult
     {

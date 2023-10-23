@@ -8,7 +8,7 @@ use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserCreator;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -67,7 +67,7 @@ final class UserCreateAction
                 }
 
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
-            } catch (ValidationException $validationException) {
+            } catch (ValidationExceptionOld $validationException) {
                 return $this->responder->respondWithJsonOnValidationError(
                     $validationException->getValidationResult(),
                     $response

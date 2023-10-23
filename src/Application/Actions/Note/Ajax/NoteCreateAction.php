@@ -8,7 +8,7 @@ use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\Validation\ValidationException;
+use App\Domain\Validation\ValidationExceptionOld;
 use Fig\Http\Message\StatusCodeInterface;
 use IntlDateFormatter;
 use Odan\Session\SessionInterface;
@@ -68,7 +68,7 @@ final class NoteCreateAction
                 try {
                     $insertId = $this->noteCreator->createNote($noteValues);
                     $noteDataFromDb = $this->noteFinder->findNote($insertId);
-                } catch (ValidationException $exception) {
+                } catch (ValidationExceptionOld $exception) {
                     return $this->responder->respondWithJsonOnValidationError(
                         $exception->getValidationResult(),
                         $response
