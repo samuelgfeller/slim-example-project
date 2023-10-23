@@ -119,7 +119,7 @@ class ClientUpdateProvider
      *
      * @return array
      */
-    public static function invalidClientUpdateValuesAndExpectedResponseProvider(): array
+    public static function invalidClientUpdateProvider(): array
     {
         // Including as many values as possible that trigger validation errors in each case
         return [
@@ -140,43 +140,33 @@ class ClientUpdateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'client_status_id',
-                                'message' => 'Invalid option',
+                            'first_name' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            1 => [
-                                'field' => 'user_id',
-                                'message' => 'Invalid option',
+                            'last_name' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            2 => [
-                                'field' => 'first_name',
-                                'message' => 'Minimum length is 2',
+                            'email' => [
+                                0 => 'Invalid email',
                             ],
-                            3 => [
-                                'field' => 'last_name',
-                                'message' => 'Minimum length is 2',
+                            'birthdate' => [
+                                0 => 'Cannot be older than 130 years',
                             ],
-                            4 => [
-                                'field' => 'email',
-                                'message' => 'Invalid value',
+                            'location' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            5 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'phone' => [
+                                0 => 'Minimum length is 3',
                             ],
-                            6 => [
-                                'field' => 'location',
-                                'message' => 'Minimum length is 2',
+                            'sex' => [
+                                0 => 'Invalid option',
                             ],
-                            7 => [
-                                'field' => 'phone',
-                                'message' => 'Minimum length is 3',
+                            'client_status_id' => [
+                                0 => 'Invalid option',
                             ],
-                            8 => [
-                                'field' => 'sex',
-                                'message' => 'Invalid option',
+                            'user_id' => [
+                                0 => 'Invalid option',
                             ],
                         ],
                     ],
@@ -201,35 +191,27 @@ class ClientUpdateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'client_status_id',
-                                'message' => 'Invalid option',
+                            'first_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            1 => [
-                                'field' => 'user_id',
-                                'message' => 'Invalid option',
+                            'last_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            2 => [
-                                'field' => 'first_name',
-                                'message' => 'Maximum length is 100',
+                            'birthdate' => [
+                                0 => 'Cannot be in the future',
                             ],
-                            3 => [
-                                'field' => 'last_name',
-                                'message' => 'Maximum length is 100',
+                            'location' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            4 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'phone' => [
+                                0 => 'Maximum length is 20',
                             ],
-                            5 => [
-                                'field' => 'location',
-                                'message' => 'Maximum length is 100',
+                            'client_status_id' => [
+                                0 => 'Invalid option',
                             ],
-                            6 => [
-                                'field' => 'phone',
-                                'message' => 'Maximum length is 20',
+                            'user_id' => [
+                                0 => 'Invalid option',
                             ],
                         ],
                     ],

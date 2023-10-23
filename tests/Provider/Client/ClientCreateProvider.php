@@ -137,13 +137,13 @@ class ClientCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [
-                                0 => 'Minimum length is 3',
+                                0 => 'Minimum length is 2',
                             ],
                             'last_name' => [
-                                0 => 'Minimum length is 3',
+                                0 => 'Minimum length is 2',
                             ],
                             'email' => [
-                                0 => 'Invalid e-mail',
+                                0 => 'Invalid email',
                             ],
                             'birthdate' => [
                                 0 => 'Cannot be older than 130 years',

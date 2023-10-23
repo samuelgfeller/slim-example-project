@@ -81,8 +81,8 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
      *    ],
      *    // ... and so on
      * ]
-     * But this makes it unnecessarily harder to test as the order of the array elements is not
-     * guaranteed in the response.
+     * But this makes it unnecessarily harder to test as the keys are incrementing integers and
+     * the order of the error array elements is not guaranteed in the browser request.
      *
      * @param array $validationErrors The cakephp validation errors
      * @return array The transformed result in the format documented above.

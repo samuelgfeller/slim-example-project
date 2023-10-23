@@ -17,7 +17,7 @@ class ClientUpdater
 
     public function __construct(
         private readonly ClientUpdaterRepository $clientUpdaterRepository,
-        private readonly ClientValidatorVanilla $clientValidator,
+        private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
         LoggerFactory $logger,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
@@ -31,14 +31,13 @@ class ClientUpdater
      *
      * @param int $clientId id of post being changed
      * @param array|null $clientValues values that user wants to change
-     * @param int $loggedInUserId
      *
      * @return array update infos containing status and optionally other
      */
-    public function updateClient(int $clientId, ?array $clientValues, int $loggedInUserId): array
+    public function updateClient(int $clientId, ?array $clientValues): array
     {
         // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
-        $this->clientValidator->validateClientUpdate($clientValues);
+        $this->clientValidator->validateClientValues($clientValues, false);
 
         // Find note in db to compare its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
@@ -104,11 +103,6 @@ class ClientUpdater
             ];
         }
 
-        // User does not have needed rights to access area or function
-        $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to update client with id: ' . $clientId .
-            ' but isn\'t allowed.'
-        );
         // Add activity entry with failed update attempt
         $this->userActivityManager->addUserActivity(
             UserActivity::UPDATED,
@@ -116,6 +110,6 @@ class ClientUpdater
             $clientId,
             array_merge(['status' => 'FAILED'], $clientValues)
         );
-        throw new ForbiddenException('Not allowed to change that client.');
+        throw new ForbiddenException('Not allowed to update client.');
     }
 }

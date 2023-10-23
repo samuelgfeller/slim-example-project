@@ -182,10 +182,11 @@ Hard-coding asset paths in templates is not recommended mainly because of the ve
 Since browsers cache assets to avoid repeated loading, when a JS or CSS file is updated, it is 
 important to signal the browser to fetch the latest version by appending a GET parameter to the 
 asset link (e.g. `?v=1.0.0`).  
-The version from the config file `default.php` key `['deployment']['version']` is used.
+
+In this project, the version from the config file `default.php` key `['deployment']['version']` is used.
 
 **Include JS and CSS files**  
-At the beginning of each template file, the list of required stylesheets, JS scripts and 
+At the top of each template file, the list of required stylesheets, JS scripts and 
 JS modules are added as attributes to the `PhpRenderer` (`$this` in the template file):  
 ```php
 // CSS
@@ -195,8 +196,7 @@ $this->addAttribute('js', ['assets/error/error.js',]);
 // JS module
 $this->addAttribute('jsModules', ['assets/general/dark-mode/dark-mode.js',]);  
 ```
-
-They are then added to the HTML in `layout.php` with the current version number. 
+They are then added to the HTML in `layout.php` with the current version number.
 
 **JS modules included via import**  
 One of the remarkable aspects of ES6 is the `import` statement, as it simplifies the utilization 
@@ -217,10 +217,7 @@ The base path is always the public directory.
 
 When an asset is refactored (renamed or moved), the path is automatically updated wherever the 
 IDE recognizes the asset path. This functionality works when linking to assets directly in the 
-HTML `src` or `href` tag, but unfortunately, it does not apply when they are added via the 
-PHP `addAttribute` function.   
-Until we can explicitly indicate to the IDE that a specific string represents a path, we have to manually 
-modify these paths when refactoring JS/CSS files.
+HTML `src` or `href` tag.
 
 </details>
 

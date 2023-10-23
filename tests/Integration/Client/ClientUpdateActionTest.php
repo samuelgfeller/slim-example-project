@@ -20,7 +20,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Client update integration test:
@@ -156,9 +155,9 @@ class ClientUpdateActionTest extends TestCase
     }
 
     /**
-     * Test client values validation.
+     * Test client validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::invalidClientUpdateValuesAndExpectedResponseProvider()
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::invalidClientUpdateProvider()
      *
      * @param array $requestBody
      * @param array $jsonResponse
@@ -269,35 +268,5 @@ class ClientUpdateActionTest extends TestCase
         );
 
         $this->assertTableRowEquals(['first_name' => $clientRow['first_name']], 'client', $clientRow['id']);
-    }
-
-    /**
-     * Test client modification with malformed request body.
-     *
-     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
-     *
-     * @return void
-     */
-    public function testClientSubmitUpdateActionMalformedRequest(): void
-    {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
-
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
-
-        $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('client-update-submit', ['client_id' => 1]),
-            // The update request can format the request body pretty freely as long as it doesn't contain a non-allowed key
-            // so to test only one invalid key is enough
-            ['non_existing_key' => 'value']
-        );
-        // 400 Bad Request means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
     }
 }

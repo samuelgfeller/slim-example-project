@@ -2,13 +2,13 @@
 
 namespace App\Domain\Client\Authorization;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,12 +18,14 @@ use Psr\Log\LoggerInterface;
 class ClientAuthorizationChecker
 {
     private LoggerInterface $logger;
+    private ?int $loggedInUserId = null;
 
     public function __construct(
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly SessionInterface $session,
+        private readonly UserNetworkSessionData $userNetworkSessionData,
         LoggerFactory $loggerFactory
     ) {
+        $this->loggedInUserId = $this->userNetworkSessionData->userId;
         $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('client-authorization');
     }
 
@@ -37,9 +39,9 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToCreate(?ClientData $client = null): bool
     {
-        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+        if ($this->loggedInUserId) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
-                $loggedInUserId
+                $this->loggedInUserId
             );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -59,7 +61,7 @@ class ClientAuthorizationChecker
         }
 
         $this->logger->notice(
-            'User ' . $loggedInUserId . ' tried to create client but isn\'t allowed.'
+            'User ' . $this->loggedInUserId . ' tried to create client but isn\'t allowed.'
         );
 
         return false;
@@ -81,10 +83,12 @@ class ClientAuthorizationChecker
         ?UserRoleData $authenticatedUserRoleData = null,
         ?array $userRoleHierarchies = null
     ) {
-        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+        if ($this->loggedInUserId) {
             // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
             if ($authenticatedUserRoleData === null) {
-                $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($loggedInUserId);
+                $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+                    $this->loggedInUserId
+                );
             }
             if ($userRoleHierarchies === null) {
                 /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
@@ -94,7 +98,7 @@ class ClientAuthorizationChecker
             // If hierarchy number is greater or equals advisor it means that user may create client
             if ($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]) {
                 // Advisor may create clients but can only assign them to himself or leave it unassigned
-                if ($assignedUserId === $loggedInUserId || $assignedUserId === null
+                if ($assignedUserId === $this->loggedInUserId || $assignedUserId === null
                     // managing advisor can link user to someone else
                     || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                     // If authenticated user is at least advisor and client user id is authenticated user himself,
@@ -119,9 +123,9 @@ class ClientAuthorizationChecker
     public function isGrantedToUpdate(array $clientDataToUpdate, ?int $ownerId, bool $log = true): bool
     {
         $grantedUpdateKeys = [];
-        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+        if ($this->loggedInUserId) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
-                $loggedInUserId
+                $this->loggedInUserId
             );
             /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
              * (lower hierarchy number means higher privilege) */
@@ -164,7 +168,8 @@ class ClientAuthorizationChecker
 
                 // Everything that owner and managing_advisor is permitted to do
                 // advisor may only edit client_status_id if he's owner | managing_advisor and higher is allowed
-                if ($loggedInUserId === $ownerId || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
+                if ($this->loggedInUserId === $ownerId
+                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies['managing_advisor']) {
                     // Check if client_status_id is among data to be changed if yes add it to $grantedUpdateKeys array
                     if (array_key_exists('client_status_id', $clientDataToUpdate)) {
                         $grantedUpdateKeys[] = 'client_status_id';
@@ -191,7 +196,7 @@ class ClientAuthorizationChecker
             if (!in_array($key, $grantedUpdateKeys, true)) {
                 if ($log === true) {
                     $this->logger->notice(
-                        'User ' . $loggedInUserId . ' tried to update client but isn\'t allowed to change' .
+                        'User ' . $this->loggedInUserId . ' tried to update client but isn\'t allowed to change' .
                         $key . ' to "' . $value . '".'
                     );
                 }
@@ -213,9 +218,9 @@ class ClientAuthorizationChecker
      */
     public function isGrantedToDelete(?int $ownerId, bool $log = true): bool
     {
-        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+        if ($this->loggedInUserId) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
-                $loggedInUserId
+                $this->loggedInUserId
             );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -227,7 +232,7 @@ class ClientAuthorizationChecker
         }
         if ($log === true) {
             $this->logger->notice(
-                'User ' . $loggedInUserId . ' tried to delete client but isn\'t allowed.'
+                'User ' . $this->loggedInUserId . ' tried to delete client but isn\'t allowed.'
             );
         }
 
@@ -270,9 +275,9 @@ class ClientAuthorizationChecker
         string|\DateTimeImmutable|null $deletedAt = null,
         bool $log = true
     ): bool {
-        if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
+        if ($this->loggedInUserId) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
-                $loggedInUserId
+                $this->loggedInUserId
             );
             /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
@@ -290,7 +295,7 @@ class ClientAuthorizationChecker
         }
         if ($log === true) {
             $this->logger->notice(
-                'User ' . $loggedInUserId . ' tried to read client but isn\'t allowed.'
+                'User ' . $this->loggedInUserId . ' tried to read client but isn\'t allowed.'
             );
         }
 
