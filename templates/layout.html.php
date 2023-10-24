@@ -6,7 +6,7 @@
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var string $currRouteName current route name
  * @var \Psr\Http\Message\UriInterface $uri
- * @var string $title
+ * @var array $config 'public' configuration values
  * @var bool $userListAuthorization if user is allowed to read other users
  * @var string|int|null $authenticatedUser logged in user id or null if not authenticated
  */
@@ -32,27 +32,23 @@
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',
     ];
-    $layoutJs = [
-        'assets/navbar/navbar.js',
-    ];
-    $layoutJsModules = [
-        'assets/general/general-js/default.js',
-    ];
+$layoutJs = ['assets/navbar/navbar.js',];
+$layoutJsModules = ['assets/general/general-js/default.js',];
 
-    // fetch() includes another template into the current template
-    // Include template which contains HTML to include assets
-    echo $this->fetch(
-        'layout/assets.html.php', // Merge layout assets and from sub templates
-        [
-            'stylesheets' => array_merge($layoutCss, $css ?? []),
-            'scripts' => array_merge($layoutJs, $js ?? []),
-            // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
-        ]
-    );
-    ?>
+// fetch() includes another template into the current template
+// Include template which contains HTML to include assets
+echo $this->fetch(
+    'layout/assets.html.php', // Merge layout assets and from sub templates
+    [
+        'stylesheets' => array_merge($layoutCss, $css ?? []),
+        'scripts' => array_merge($layoutJs, $js ?? []),
+        // The type="module" allows the use of import and export inside a JS file.
+        'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
+    ]
+);
+?>
 
-    <title><?= $title ?></title>
+    <title><?= $config['app_name'] ?></title>
     <script>
         // Add the theme immediately to the <html> element before everything is done loading to prevent delay
         const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
@@ -72,14 +68,14 @@
 <div id="wrapper">
     <header>
         <!-- Application name -->
-        <span>Slim Example Project</span>
+        <span><?= $config['app_name'] ?></span>
     </header>
     <?= $this->fetch('layout/flash-messages.html.php') ?>
 
     <!-- Navbar -->
     <?php
-    // Not displaying nav menu if user is not authenticated (error page outside protected area)
-    if ($authenticatedUser) { ?>
+// Not displaying nav menu if user is not authenticated (error page outside protected area)
+if ($authenticatedUser) { ?>
         <aside id="nav-container">
             <nav>
                 <a href="<?= $route->urlFor('home-page') ?>"
@@ -90,7 +86,7 @@
                 </a>
                 <a href="<?= $route->urlFor('client-list-page') ?>"
                     <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
-                        'class="is-active"' : '' ?>>
+                    'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/people.svg" alt="Non-assigned">
                     <img src="assets/navbar/img/people-filled.svg" alt="People">
                     <span class="nav-span"><?= __('Clients') ?></span>
@@ -102,16 +98,18 @@
                     <span class="nav-span"><?= __('Profile') ?></span>
                 </a>
                 <?php
-                if (isset($userListAuthorization) && $userListAuthorization === true) { ?>
+            if (isset($userListAuthorization) && $userListAuthorization === true) { ?>
                     <a href="<?= $route->urlFor('user-list-page') ?>"
-                        <?= in_array($currRouteName, ['user-list-page', 'user-read-page']
+                        <?= in_array(
+                            $currRouteName,
+                            ['user-list-page', 'user-read-page']
                         ) ? 'class="is-active"' : '' ?>>
                         <img src="assets/navbar/img/users.svg" alt="Users">
                         <img src="assets/navbar/img/users-filled.svg" alt="Users">
                         <span class="nav-span"><?= __('Users') ?></span>
                     </a>
                     <?php
-                } ?>
+            } ?>
                 <a href="<?= $route->urlFor('logout') ?>"
                     <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/logout.svg" alt="Logout">
@@ -129,7 +127,7 @@
             </div>
         </aside>
         <?php
-    } ?>
+} ?>
     <main>
         <?= $content ?>
         <?= $this->fetch('layout/request-throttle.html.php') ?>

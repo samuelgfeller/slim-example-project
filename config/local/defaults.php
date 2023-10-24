@@ -20,9 +20,6 @@ date_default_timezone_set('Europe/Zurich');
 // Init settings var
 $settings = [];
 
-// Project root dir
-$settings['root_dir'] = dirname(__DIR__, 2);
-
 // Simulate prod env
 $settings['dev'] = false;
 
@@ -33,6 +30,18 @@ $settings['deployment'] = [
     'update_imports_version' => true, // Disable in prod
     'assets_path' => $settings['root_dir'] . '/public/assets',
 ];
+
+$settings['public'] = [
+    'app_name' => 'Slim example Project',
+    'email' => [
+        'main_contact_address' => 'slim-example-project@samuel-gfeller.ch',
+        'main_sender_address' => 'no-reply@samuel-gfeller.ch',
+        'main_sender_name' => 'Slim example Project',
+    ],
+];
+
+// Project root dir
+$settings['root_dir'] = dirname(__DIR__, 2);
 
 $settings['locale'] = [
     // Available languages format: ['language code' => 'locale code']
@@ -166,14 +175,6 @@ $settings['smtp'] = [
 $settings['google'] = [
     // reCAPTCHA secret key
     'recaptcha' => 'secretKey',
-];
-
-$settings['public'] = [
-    'email' => [
-        'main_contact_address' => 'slim-example-project@samuel-gfeller.ch',
-        'main_sender_address' => 'no-reply@samuel-gfeller.ch',
-        'main_sender_name' => 'Slim example Project',
-    ],
 ];
 
 return $settings;

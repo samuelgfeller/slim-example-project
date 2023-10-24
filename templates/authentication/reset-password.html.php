@@ -10,6 +10,7 @@
  * @var string $token verification token
  * @var string $id verification id
  * @var string $basePath
+ * @var array $config 'public' configuration values
  */
 
 // Remove layout if there was a default
@@ -44,7 +45,7 @@ $this->setLayout('');
     );
     ?>
 
-    <title>Reset password - Slim Example Project</title>
+    <title>Reset password - <?= $config['app_name'] ?></title>
 
 </head>
 <body>

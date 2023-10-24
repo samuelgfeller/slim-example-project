@@ -43,7 +43,6 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         $loggedInUserId = $this->session->get('user_id');
         // The following has to work even with no connection to mysql to display the error page (layout needs those attr)
         $this->phpRenderer->setAttributes([
-            'title' => 'Slim Example Project',
             'dev' => $this->devSetting,
             'version' => $this->deploymentSettings['version'],
             'uri' => $request->getUri(),
