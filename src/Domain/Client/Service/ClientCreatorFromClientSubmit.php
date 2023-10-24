@@ -11,7 +11,7 @@ use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 class ClientCreatorFromClientSubmit
 {
     public function __construct(
-        private readonly ClientValidatorVanilla $clientValidator,
+        private readonly ClientValidator $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
         private readonly UserActivityManager $userActivityManager,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
@@ -36,7 +36,7 @@ class ClientCreatorFromClientSubmit
         );
 
         // Validate client object resulting of user input values excluding main note
-        $this->clientValidator->validateClientCreation($clientValues);
+        $this->clientValidator->validateClientValues($clientValues, true);
 
         // Insert client
         $clientId = $this->clientCreatorRepository->insertClient($clientValues);

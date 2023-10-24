@@ -17,7 +17,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Client creation from public page submit tests.
@@ -115,11 +114,11 @@ class ApiClientCreateActionTest extends TestCase
         array $requestBody,
         array $jsonResponse
     ): void {
-        // Insert required client status which is set by the service function
-        $clientStatusId = $this->insertFixturesWithAttributes(
+        // Insert action pending client status because it's needed by the service function
+        $this->insertFixturesWithAttributes(
             ['name' => ClientStatus::ACTION_PENDING->value],
             ClientStatusFixture::class
-        )['id'];
+        );
 
         $request = $this->createJsonRequest(
             'POST',
@@ -137,29 +136,4 @@ class ApiClientCreateActionTest extends TestCase
         $this->assertJsonData($jsonResponse, $response);
     }
 
-    /**
-     * Test client creation with malformed request body.
-     *
-     * @dataProvider \App\Test\Provider\Client\ApiClientCreateProvider::malformedRequestBodyCases()
-     *
-     * @param array $requestBody
-     *
-     * @return void
-     */
-    public function testApiClientSubmitCreateActionMalformedRequestBody(
-        array $requestBody
-    ): void {
-        $request = $this->createJsonRequest(
-            'POST',
-            $this->urlFor('api-client-create-submit'),
-            $requestBody
-        );
-
-        // Bad Request (400) means that the client sent the request wrongly; it's a frontend error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
-    }
 }

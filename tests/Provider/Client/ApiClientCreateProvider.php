@@ -30,39 +30,30 @@ class ApiClientCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'first_name',
-                                'message' => 'Minimum length is 2',
+                            'first_name' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            1 => [
-                                'field' => 'last_name',
-                                'message' => 'Minimum length is 2',
+                            'last_name' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            2 => [
-                                'field' => 'email',
-                                'message' => 'Invalid value',
+                            'email' => [
+                                0 => 'Invalid email',
                             ],
-                            3 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'birthdate' => [
+                                0 => 'Cannot be older than 130 years',
                             ],
-                            4 => [
-                                'field' => 'location',
-                                'message' => 'Minimum length is 2',
+                            'location' => [
+                                0 => 'Minimum length is 2',
                             ],
-                            5 => [
-                                'field' => 'phone',
-                                'message' => 'Minimum length is 3',
+                            'phone' => [
+                                0 => 'Minimum length is 3',
                             ],
-                            6 => [
-                                'field' => 'sex',
-                                'message' => 'Invalid option',
+                            'sex' => [
+                                0 => 'Invalid option',
                             ],
-                            7 => [
-                                'field' => 'client_message',
-                                'message' => 'Minimum length is 3',
+                            'client_message' => [
+                                0 => 'Minimum length is 3',
                             ],
                         ],
                     ],
@@ -83,35 +74,58 @@ class ApiClientCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the client data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'first_name',
-                                'message' => 'Maximum length is 100',
+                            'first_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            1 => [
-                                'field' => 'last_name',
-                                'message' => 'Maximum length is 100',
+                            'last_name' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            2 => [
-                                'field' => 'email',
-                                'message' => 'Invalid value',
+                            'email' => [
+                                0 => 'Invalid email',
                             ],
-                            3 => [
-                                'field' => 'birthdate',
-                                'message' => 'Invalid value',
+                            'birthdate' => [
+                                0 => 'Cannot be in the future',
                             ],
-                            4 => [
-                                'field' => 'location',
-                                'message' => 'Maximum length is 100',
+                            'location' => [
+                                0 => 'Maximum length is 100',
                             ],
-                            5 => [
-                                'field' => 'phone',
-                                'message' => 'Maximum length is 20',
+                            'phone' => [
+                                0 => 'Maximum length is 20',
                             ],
-                            6 => [
-                                'field' => 'client_message',
-                                'message' => 'Maximum length is 1000',
+                            'client_message' => [
+                                0 => 'Maximum length is 1000',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [ // Keys missing, check for request body key presence (previously done via malformedBodyRequestChecker)
+                // Empty request body
+                'request_body' => [
+                ],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'first_name' => [
+                                0 => 'Key is required',
+                            ],
+                            'last_name' => [
+                                0 => 'Key is required',
+                            ],
+                            'email' => [
+                                0 => 'Key is required',
+                            ],
+                            'birthdate' => [
+                                0 => 'Key is required',
+                            ],
+                            'location' => [
+                                0 => 'Key is required',
+                            ],
+                            'phone' => [
+                                0 => 'Key is required',
                             ],
                         ],
                     ],
