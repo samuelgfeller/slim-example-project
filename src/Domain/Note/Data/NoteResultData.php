@@ -19,16 +19,16 @@ class NoteResultData extends NoteData
     /**
      * Note constructor.
      *
-     * @param array $noteResultData
+     * @param array $noteValues
      *
      * @throws \Exception
      */
-    public function __construct(array $noteResultData = [])
+    public function __construct(array $noteValues = [])
     {
-        parent::__construct($noteResultData);
+        parent::__construct($noteValues);
 
-        $this->userFullName = $noteResultData['user_full_name'] ?? null;
-        $this->clientFullName = $noteResultData['client_full_name'] ?? null;
+        $this->userFullName = $noteValues['user_full_name'] ?? null;
+        $this->clientFullName = $noteValues['client_full_name'] ?? null;
     }
 
     public function jsonSerialize(): array

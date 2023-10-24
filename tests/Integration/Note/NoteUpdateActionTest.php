@@ -19,14 +19,12 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Test cases for client read note modification
  *  - Authenticated with different user roles
  *  - Unauthenticated
  *  - Invalid data (validation test)
- *  - Malformed request body.
  */
 class NoteUpdateActionTest extends TestCase
 {
@@ -43,7 +41,7 @@ class NoteUpdateActionTest extends TestCase
      * Test note modification on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCUDUserAttributesAndExpectedResultProvider()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCreateUpdateDeleteProvider()
      *
      * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -177,14 +175,14 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test note modification on client-read page with invalid data.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::provideInvalidNoteAndExpectedResponseDataForUpdate()
+     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteUpdateProvider()
      *
-     * @param string $invalidMessage
+     * @param array $requestBody
      * @param array $expectedResponseData
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionInvalid(string $invalidMessage, array $expectedResponseData): void
+    public function testNoteSubmitUpdateActionInvalid(array $requestBody, array $expectedResponseData): void
     {
         // Insert authorized user
         $userId = $this->insertFixturesWithAttributes(
@@ -211,7 +209,7 @@ class NoteUpdateActionTest extends TestCase
         $request = $this->createJsonRequest(
             'PUT',
             $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
-            ['message' => $invalidMessage]
+            $requestBody
         );
         $response = $this->app->handle($request);
 
@@ -220,35 +218,5 @@ class NoteUpdateActionTest extends TestCase
 
         // Assert json response data
         $this->assertJsonData($expectedResponseData, $response);
-    }
-
-    /**
-     * Test client read note modification with malformed request body.
-     *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::provideMalformedNoteRequestBodyForUpdate()
-     *
-     * @param array $malformedRequestBody
-     *
-     * @return void
-     */
-    public function testNoteSubmitUpdateActionMalformedRequest(array $malformedRequestBody): void
-    {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userData = $this->insertFixturesWithAttributes(['deleted_at' => null], UserFixture::class);
-
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
-
-        $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('note-submit-modification', ['note_id' => 1]),
-            $malformedRequestBody
-        );
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
     }
 }

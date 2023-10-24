@@ -241,7 +241,7 @@ class ClientCreateProvider
                     ],
                 ],
             ],
-            [ // Keys missing, check for request body key presence (previously done via malformedBodyRequestChecker)
+            [ // Check for request body key presence (previously done via malformedBodyRequestChecker)
                 // Empty request body
                 'request_body' => [
                 ],

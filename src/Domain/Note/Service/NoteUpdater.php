@@ -30,16 +30,15 @@ class NoteUpdater
      */
     public function updateNote(int $noteId, ?array $noteValues): bool
     {
-        // Init object for validation
-        $note = new NoteData($noteValues);
-
         // Find note in db
         $noteFromDb = $this->noteFinder->findNote($noteId);
-        // Add is_main to note object before validation as there is a difference
-        $note->isMain = $noteFromDb->isMain;
+        // Add is_main to note object before validation as there is a difference in validation
+        $noteValues['is_main'] = $noteFromDb->isMain;
 
         // Validate object
-        $this->noteValidator->validateNoteUpdate($note);
+        $this->noteValidator->validateNoteValues($noteValues, false);
+
+        $note = new NoteData($noteValues);
 
         if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain, $noteFromDb->userId)) {
             $updateData = [];

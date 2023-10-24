@@ -252,15 +252,6 @@ final class Responder
     }
 
     public function respondWithJsonOnValidationError(
-        array $validationErrors,
-        ResponseInterface $response
-    ): ?ResponseInterface {
-
-
-
-    }
-
-    public function respondWithJsonOnValidationErrorOld(
         ValidationResult $validationResult,
         ResponseInterface $response
     ): ?ResponseInterface {

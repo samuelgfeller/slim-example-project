@@ -169,9 +169,10 @@ class NoteProvider
     }
 
     /**
-     * Provides logged-in user and user linked to note along the expected result
+     * Provides logged-in user and user linked to note with the expected result.
      * As the permissions are a lot more simple than for client for instance,
-     * Create Update Delete cases are all in this function.
+     * Create Update Delete cases are all in this function but if it should
+     * get more complex, they should be split in different providers.
      *
      * @return array{
      *              array{
@@ -185,7 +186,7 @@ class NoteProvider
      *                  }
      *           }
      */
-    public static function noteCUDUserAttributesAndExpectedResultProvider(): array
+    public static function noteCreateUpdateDeleteProvider(): array
     {
         // Set different user role attributes
         $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
@@ -313,7 +314,7 @@ class NoteProvider
      *
      * @return array
      */
-    public static function invalidNoteCreationAndExpectedResponseProvider(): array
+    public static function invalidNoteCreationProvider(): array
     {
         return [
             [
@@ -324,11 +325,9 @@ class NoteProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'is_main',
-                                'message' => 'Main note exists already',
+                            'is_main' => [
+                                0 => 'Main note already exists',
                             ],
                         ],
                     ],
@@ -342,11 +341,9 @@ class NoteProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Minimum length is 4',
+                            'message' => [
+                                0 => 'Minimum length is 4',
                             ],
                         ],
                     ],
@@ -360,16 +357,36 @@ class NoteProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Maximum length is 1000',
+                            'message' => [
+                                0 => 'Maximum length is 1000',
                             ],
                         ],
                     ],
                 ],
             ],
+            [
+                // Check keys in request body (previously done via malformedBodyRequestChecker)
+                'request_body' => [],
+                'existing_main_note' => false,
+                'date' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'message' => [
+                                0 => 'Key is required',
+                            ],
+                            'is_main' => [
+                                0 => 'Key is required',
+                            ],
+                            'client_id' => [
+                                0 => 'Key is required',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -379,115 +396,52 @@ class NoteProvider
      *
      * @return array
      */
-    public static function provideInvalidNoteAndExpectedResponseDataForUpdate(): array
+    public static function invalidNoteUpdateProvider(): array
     {
         return [
             [
-                'message_too_short' => 'M',
+                // Message too short
+                'request_body' => ['message' => 'M'],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Minimum length is 4',
+                            'message' => [
+                                0 => 'Minimum length is 4',
                             ],
                         ],
                     ],
                 ],
             ],
             [
-                'message_too_long' => str_repeat('i', 1001),
+                // Message too long
+                'request_body' => ['message' => str_repeat('i', 1001)],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is something in the note data that couldn\'t be validated',
                         'errors' => [
-                            0 => [
-                                'field' => 'message',
-                                'message' => 'Maximum length is 1000',
+                            'message' => [
+                                0 => 'Maximum length is 1000',
                             ],
                         ],
                     ],
                 ],
             ],
-        ];
-    }
-
-    /**
-     * Provide malformed note creation request body.
-     *
-     * @return array
-     */
-    public static function provideNoteMalformedRequestBodyForCreation(): array
-    {
-        return [
             [
-                // Empty body
-                'requestBody' => [],
-            ],
-            [
-                // Body "null" (because both can happen )
-                'requestBody' => null,
-            ],
-            [
-                'requestBody' => [
-                    'message_wrong' => 'Message', // wrong message key name
-                    'client_id' => 1,
-                    'is_main' => 1,
-                ],
-            ],
-            [
-                'requestBody' => [
-                    'message' => 'Message',
-                    'client_id_wrong' => 1, // wrong client id
-                    'is_main' => 1,
-                ],
-            ],
-            [
-                'requestBody' => [
-                    'message' => 'Message',
-                    'client_id' => 1,
-                    'is_main_wrong' => 1, // wrong is_main
-                ],
-            ],
-            [
-                'requestBody' => [ // One key too much
-                    'message' => 'Message',
-                    'client_id' => 1,
-                    'is_main' => 1,
-                    'extra_key' => 1, // wrong is_main
-                ],
-            ],
-            [
-                'requestBody' => [ // Missing is_main
-                    'message' => 'Message',
-                    'client_id' => 1,
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Provide malformed note message request body.
-     *
-     * @return array
-     */
-    public static function provideMalformedNoteRequestBodyForUpdate(): array
-    {
-        return [
-            [
-                'wrong_key' => [
-                    'wrong_message_key' => 'Message',
-                ],
-            ],
-            [
-                'wrong_amount' => [
-                    'message' => 'Message',
-                    'second_key' => 'invalid',
+                // Missing message key
+                'request_body' => [],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'message' => [
+                                0 => 'Key is required',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];

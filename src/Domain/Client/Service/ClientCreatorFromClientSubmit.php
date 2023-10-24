@@ -24,8 +24,6 @@ class ClientCreatorFromClientSubmit
      *
      * @param array $clientValues
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public function createClientFromClientSubmit(array $clientValues): int

@@ -35,9 +35,6 @@ final class ApiClientCreateAction
      * @param array $args
      *
      * @return ResponseInterface The response
-     * @throws \Exception
-     *
-     * @throws \JsonException
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -51,11 +48,12 @@ final class ApiClientCreateAction
         if (0 !== $insertId) {
             return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
         }
+
         $response = $this->responder->respondWithJson($response, [
             'status' => 'warning',
             'message' => 'Client not created',
         ]);
 
-        return $response->withAddedHeader('Warning', 'The post could not be created');
+        return $response->withAddedHeader('Warning', 'The client could not be created');
     }
 }

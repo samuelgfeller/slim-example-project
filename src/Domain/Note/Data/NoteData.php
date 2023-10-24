@@ -24,27 +24,20 @@ class NoteData implements \JsonSerializable
     // User mutation rights from authenticated user
     public ?Privilege $privilege; // json_encode automatically takes $enum->value
 
-    /**
-     * Note constructor.
-     *
-     * @param array|null $noteResultData
-     *
-     * @throws \Exception
-     */
-    public function __construct(?array $noteResultData = null)
+    public function __construct(?array $noteValues = null)
     {
-        $this->id = $noteResultData['id'] ?? null;
-        $this->userId = $noteResultData['user_id'] ?? null;
-        $this->clientId = $noteResultData['client_id'] ?? null;
-        $this->message = $noteResultData['message'] ?? null;
-        $this->isMain = $noteResultData['is_main'] ?? null;
-        $this->hidden = $noteResultData['hidden'] ?? null;
-        $this->createdAt = $noteResultData['created_at'] ?? null
-            ? new \DateTimeImmutable($noteResultData['created_at']) : null;
-        $this->updatedAt = $noteResultData['updated_at'] ?? null
-            ? new \DateTimeImmutable($noteResultData['updated_at']) : null;
-        $this->deletedAt = $noteResultData['deleted_at'] ?? null
-            ? new \DateTimeImmutable($noteResultData['deleted_at']) : null;
+        $this->id = $noteValues['id'] ?? null;
+        $this->userId = $noteValues['user_id'] ?? null;
+        $this->clientId = $noteValues['client_id'] ?? null;
+        $this->message = $noteValues['message'] ?? null;
+        $this->isMain = $noteValues['is_main'] ?? null;
+        $this->hidden = $noteValues['hidden'] ?? null;
+        $this->createdAt = $noteValues['created_at'] ?? null
+            ? new \DateTimeImmutable($noteValues['created_at']) : null;
+        $this->updatedAt = $noteValues['updated_at'] ?? null
+            ? new \DateTimeImmutable($noteValues['updated_at']) : null;
+        $this->deletedAt = $noteValues['deleted_at'] ?? null
+            ? new \DateTimeImmutable($noteValues['deleted_at']) : null;
     }
 
     /**

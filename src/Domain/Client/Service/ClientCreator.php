@@ -27,7 +27,7 @@ class ClientCreator
     }
 
     /**
-     * Validate user input values and client.
+     * Validate input values and create client if authorized.
      *
      * @param array $clientValues
      *
