@@ -4,7 +4,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
-use App\Domain\Client\Exception\NotAllowedException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
@@ -45,8 +45,7 @@ class ClientUpdater
         if ($this->clientAuthorizationChecker->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
             $updateData = [];
             $responseData = null;
-            // Additional check (next to malformed body in action) to be sure that only columns that may be updated are
-            // in the final $updateData array
+            // Check to be sure that only columns that may be updated are in the final $updateData array
             foreach ($clientValues as $column => $value) {
                 // Check that keys are one of the database columns that may be updated
                 if (in_array($column, [
@@ -68,7 +67,7 @@ class ClientUpdater
                     }
                     $updateData[$column] = $value;
                 } else {
-                    throw new NotAllowedException('Not allowed to change client column ' . $column);
+                    throw new InvalidOperationException('Not allowed to change client column ' . $column);
                 }
             }
             // If birthdate is set, change the format to suit database

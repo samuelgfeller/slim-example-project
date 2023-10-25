@@ -3,7 +3,7 @@
 namespace App\Domain\Note\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Client\Exception\NotAllowedException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
@@ -31,10 +31,10 @@ class NoteDeleter
         // Find note in db to get its ownership
         $noteFromDb = $this->noteFinder->findNote($noteId);
 
-        // There is no option in GUI to delete main note
+        // There is no option in GUI to delete main note so this is an invalid operation
         if ($noteFromDb->isMain === 1) {
-            // Asserted in testClientReadNoteDeletion
-            throw new NotAllowedException('The main note cannot be deleted.');
+            // Asserted in note delete action test
+            throw new InvalidOperationException('The main note cannot be deleted.');
         }
 
         if ($this->noteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)) {
@@ -50,6 +50,6 @@ class NoteDeleter
 
             return $deleted;
         }
-        throw new ForbiddenException('You have to be admin or the note creator to update this note');
+        throw new ForbiddenException('Not allowed to delete note.');
     }
 }

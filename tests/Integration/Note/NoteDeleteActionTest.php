@@ -17,7 +17,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpMethodNotAllowedException;
 
 /**
  * Test cases for client read note deletion
@@ -130,12 +129,16 @@ class NoteDeleteActionTest extends TestCase
             $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
         );
 
-        // As deleting the main note is not a valid request the server throws an HttpMethodNotAllowed exception
-        $this->expectException(HttpMethodNotAllowedException::class);
-        $this->expectExceptionMessage('The main note cannot be deleted.');
-
         // Make request
-        $this->app->handle($mainNoteRequest);
+        $invalidOperationResponse = $this->app->handle($mainNoteRequest);
+
+        // As deleting the main note is not a valid request the server responds with a bad request exception
+        self::assertSame(StatusCodeInterface::STATUS_BAD_REQUEST, $invalidOperationResponse->getStatusCode());
+        // Assert that response contains correct error message
+        $this->assertJsonData(
+            ['status' => 'error', 'message' => 'The main note cannot be deleted.'],
+            $invalidOperationResponse
+        );
 
         // Database is not expected to change for the main note as there is no way to delete it from the frontend
         $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);

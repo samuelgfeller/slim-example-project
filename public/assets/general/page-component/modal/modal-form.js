@@ -6,11 +6,11 @@
  * @param form Form element
  * @return {{}}
  */
-export function getFormData(form){
+export function getFormData(form) {
     let formObject = {};
     let formData = new FormData(form);
-    for (let [key, value] of formData){
-        if (value === ''){
+    for (let [key, value] of formData) {
+        if (value === '') {
             value = null;
         }
         formObject[key] = value;

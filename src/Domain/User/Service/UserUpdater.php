@@ -3,7 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Client\Exception\NotAllowedException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
@@ -57,7 +57,7 @@ final class UserUpdater
                 ], true)) {
                     $validUpdateData[$column] = $value;
                 } else {
-                    throw new NotAllowedException('Not allowed to change client column ' . $column);
+                    throw new InvalidOperationException('Not allowed to change client column ' . $column);
                 }
             }
             $updated = $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);

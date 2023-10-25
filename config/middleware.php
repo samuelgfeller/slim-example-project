@@ -2,6 +2,7 @@
 
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\ForbiddenExceptionMiddleware;
+use App\Application\Middleware\InvalidOperationExceptionMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
@@ -42,6 +43,7 @@ return function (App $app) {
     // Error middlewares should be added last as they will be the first on the response (LIFO).
     $app->add(ValidationExceptionMiddleware::class);
     $app->add(ForbiddenExceptionMiddleware::class);
+    $app->add(InvalidOperationExceptionMiddleware::class);
 
     $app->add(ErrorHandlerMiddleware::class);
     $app->add(ErrorMiddleware::class);
