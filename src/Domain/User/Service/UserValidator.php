@@ -87,9 +87,9 @@ class UserValidator
      *
      * @param UserData $user
      *
-     * @return ValidationResult
      *@throws ValidationExceptionOld|\JsonException
      *
+     * @return ValidationResult
      */
     public function validateUserCreation(UserData $user): ValidationResult
     {
@@ -124,9 +124,9 @@ class UserValidator
      *
      * @param array{email: string|null, password: string|null} $userLoginValues
      *
-     * @return ValidationResult
      *@throws ValidationExceptionOld
      *
+     * @return ValidationResult
      */
     public function validateUserLogin(array $userLoginValues): ValidationResult
     {

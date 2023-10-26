@@ -54,19 +54,21 @@ class ClientValidator
                 'rule' => function ($value, $context) {
                     $today = new \DateTime();
                     $birthdate = new \DateTime($value);
+
                     // check that birthdate is not in the future
                     return $birthdate <= $today;
                 },
-                'message' => __('Cannot be in the future')
+                'message' => __('Cannot be in the future'),
             ])
             ->add('birthdate', 'validateOldestAge', [
                 'rule' => function ($value, $context) {
                     $birthdate = new \DateTime($value);
                     // check that birthdate is not older than 130 years
                     $oldestBirthdate = new \DateTime('-130 years');
+
                     return $birthdate >= $oldestBirthdate;
                 },
-                'message' => __('Cannot be older than 130 years')
+                'message' => __('Cannot be older than 130 years'),
             ])
             ->requirePresence('location', $isCreateMode, __('Key is required'))
             ->allowEmptyString('location')
@@ -85,11 +87,11 @@ class ClientValidator
             ->requirePresence('vigilance_level', false)
             ->allowEmptyString('vigilance_level')
              ->add('vigilance_level', 'validateBackedEnum', [
-                'rule' => function ($value, $context) {
-                    return $this->isBackedEnum($value, ClientVigilanceLevel::class);
-                },
-                'message' => __('Invalid option')
-            ])
+                 'rule' => function ($value, $context) {
+                     return $this->isBackedEnum($value, ClientVigilanceLevel::class);
+                 },
+                 'message' => __('Invalid option'),
+             ])
             // Client message presence is not required as it's only set if user submits the form via api
             ->requirePresence('client_message', false)
             ->allowEmptyString('client_message')
@@ -102,7 +104,7 @@ class ClientValidator
                 'rule' => function ($value, $context) {
                     return $this->clientStatusFinderRepository->clientStatusExists((int)$value);
                 },
-                'message' => __('Invalid option')
+                'message' => __('Invalid option'),
             ])
             // Presence not required as client can be created via form submit by another frontend that doesn't have user id
             ->requirePresence('user_id', false)
@@ -112,7 +114,7 @@ class ClientValidator
                 'rule' => function ($value, $context) {
                     return !empty($this->userFinderRepository->findUserById((int)$value));
                 },
-                'message' => __('Invalid option')
+                'message' => __('Invalid option'),
             ])
         ;
 
@@ -128,6 +130,7 @@ class ClientValidator
      *
      * @param \BackedEnum|string|null $value
      * @param string $enum
+     *
      * @return bool
      */
     public function isBackedEnum(\BackedEnum|string|null $value, string $enum): bool

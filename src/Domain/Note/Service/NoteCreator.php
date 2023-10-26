@@ -58,6 +58,7 @@ class NoteCreator
                 IntlDateFormatter::LONG,
                 IntlDateFormatter::SHORT
             );
+
             return [
                 'note_id' => $noteId,
                 'user_full_name' => $user->firstName . ' ' . $user->surname,

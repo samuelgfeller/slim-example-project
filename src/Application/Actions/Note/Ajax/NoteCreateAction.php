@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class NoteCreateAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly NoteCreator $noteCreator,

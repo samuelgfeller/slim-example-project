@@ -3,20 +3,16 @@
 namespace App\Application\Actions\Note\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Factory\LoggerFactory;
 use App\Domain\Note\Service\NoteUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class NoteUpdateAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly NoteUpdater $noteUpdater,
-        LoggerFactory $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('note-update');
     }
 
     /**

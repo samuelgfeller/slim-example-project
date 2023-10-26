@@ -38,7 +38,7 @@ $this->setLayout('');
             'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/login-main.js'],
         ]
     );
-    ?>
+?>
 
     <title>Login - <?= $config['app_name'] ?></title>
 
@@ -54,12 +54,12 @@ $this->setLayout('');
           id="login-form" class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
-            '</strong>' : '' ?>
+    isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+        '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
         <div class="form-input-div <?= //If there is an error on a specific field, echo error class
-        ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
+    ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
             <label for="email-input"><?= __('E-Mail') ?></label>
             <input type="email" name="email"
                    maxlength="254" id="email-input"
@@ -72,7 +72,7 @@ $this->setLayout('');
         <!-- ===== PASSWORD ===== -->
         <div id="password-input-div"
              class="form-input-div<?= //If there is an error on a specific field, echo error class
-             ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
+         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
             <label for="password-input"><?= __('Password') ?></label>
             <input type="password" id="password-input" name="password" minlength="3" required>
             <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
@@ -87,6 +87,5 @@ $this->setLayout('');
         <?= $this->fetch('layout/request-throttle.html.php') ?>
     </form>
 </div>
-
 </body>
 </html>

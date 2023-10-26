@@ -12,21 +12,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Action.
- */
 final class ClientDeleteAction
 {
     protected LoggerInterface $logger;
 
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientDeleter $clientDeleter
-     * @param SessionInterface $session
-     * @param LoggerFactory $logger
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientDeleter $clientDeleter,
@@ -42,8 +31,6 @@ final class ClientDeleteAction
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      * @param array $args
-     *
-     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */

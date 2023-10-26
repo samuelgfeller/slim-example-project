@@ -111,7 +111,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListAction(
+    public function testClientListWithFiltersAction(
         array $filterQueryParamsArr,
         string $expectedClientsWhereString,
         array $authenticatedUserAttributes,

@@ -8,18 +8,8 @@ use App\Domain\Client\Service\ClientUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class ClientReadPageAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientFinder $clientFinder
-     * @param ClientUtilFinder $clientUtilFinder
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientFinder $clientFinder,

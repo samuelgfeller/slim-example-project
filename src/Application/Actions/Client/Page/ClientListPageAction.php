@@ -9,18 +9,8 @@ use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class ClientListPageAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientListFilterChipProvider $clientListFilterChipGetter
-     * @param ClientAuthorizationChecker $clientAuthorizationChecker
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientListFilterChipProvider $clientListFilterChipGetter,
@@ -35,7 +25,6 @@ final class ClientListPageAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
-     * @throws \JsonException
      * @throws \Throwable
      *
      * @return ResponseInterface The response

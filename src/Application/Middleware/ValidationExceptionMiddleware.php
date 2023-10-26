@@ -11,7 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ValidationExceptionMiddleware implements MiddlewareInterface
 {
-
     public function __construct(
         private readonly Responder $responder,
     ) {
@@ -34,6 +33,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
                 'message' => $validationException->getMessage(),
                 'data' => ['errors' => $validationErrors],
             ];
+
             return $this->responder->respondWithJson($response, $responseData, 422);
         }
     }
@@ -85,7 +85,8 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
      * the order of the error array elements is not guaranteed in the browser request.
      *
      * @param array $validationErrors The cakephp validation errors
-     * @return array The transformed result in the format documented above.
+     *
+     * @return array the transformed result in the format documented above
      */
     private function transformCakephpValidationErrorsToOutputFormat(array $validationErrors): array
     {

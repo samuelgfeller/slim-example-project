@@ -3,7 +3,6 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Client\Service\ClientCreatorFromClientSubmit;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,17 +12,9 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class ApiClientCreateAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientCreatorFromClientSubmit $clientCreatorFromClientSubmit
-     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientCreatorFromClientSubmit $clientCreatorFromClientSubmit,
-        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
     }
 

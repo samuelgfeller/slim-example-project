@@ -42,7 +42,8 @@ class ClientData implements \JsonSerializable
         $this->location = $clientData['location'] ?? null;
         $this->phone = $clientData['phone'] ?? null;
         $this->email = $clientData['email'] ?? null;
-        $this->sex = $clientData['sex'] ?? null;
+        // Sex is validated to be either 'F', 'M', 'O', null or an empty string. If empty string, set to it null.
+        $this->sex = !empty($clientData['sex']) ? $clientData['sex'] : null;
         $this->clientMessage = $clientData['client_message'] ?? null;
         $this->vigilanceLevel = $clientData['vigilance_level'] ?? null ?
             ClientVigilanceLevel::tryFrom($clientData['vigilance_level']) : null;

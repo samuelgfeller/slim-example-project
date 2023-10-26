@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
 
 class InvalidOperationExceptionMiddleware implements MiddlewareInterface
 {
-
     private LoggerInterface $logger;
 
     public function __construct(

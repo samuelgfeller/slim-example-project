@@ -8,18 +8,8 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class NoteReadPageAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param NoteFinder $noteFinder
-     * @param SessionInterface $session
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly NoteFinder $noteFinder,

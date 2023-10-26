@@ -12,7 +12,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ForbiddenExceptionMiddleware implements MiddlewareInterface
 {
-
     public function __construct(
         private readonly Responder $responder,
     ) {

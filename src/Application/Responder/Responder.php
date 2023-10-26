@@ -48,9 +48,9 @@ final class Responder
      * @param string $template Template pathname relative to templates directory
      * @param array $data Associative array of template variables
      *
-     * @return ResponseInterface The response
      * @throws \Throwable
      *
+     * @return ResponseInterface The response
      */
     public function render(
         ResponseInterface $response,
@@ -142,9 +142,9 @@ final class Responder
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      * @param array|null $preloadValues
      *
-     * @return ResponseInterface|null
      * @throws \Throwable
      *
+     * @return ResponseInterface|null
      */
     public function renderOnValidationError(
         ResponseInterface $response,
@@ -176,9 +176,9 @@ final class Responder
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      *
-     * @return ResponseInterface
      * @throws \Throwable
      *
+     * @return ResponseInterface
      */
     public function respondWithThrottle(
         ResponseInterface $response,
@@ -206,9 +206,9 @@ final class Responder
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      *
-     * @return ResponseInterface
      * @throws \Throwable
      *
+     * @return ResponseInterface
      */
     public function respondWithFormThrottle(
         ResponseInterface $response,
@@ -263,5 +263,4 @@ final class Responder
 
         return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
     }
-
 }

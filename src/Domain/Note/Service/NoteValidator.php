@@ -59,6 +59,7 @@ class NoteValidator
                             $this->logger->error(
                                 'Attempt to create main note but it already exists. Client: ' . $clientId
                             );
+
                             return $this->noteValidatorRepository->mainNoteAlreadyExistsForClient($clientId) === false;
                         },
                         'message' => __('Main note already exists'),

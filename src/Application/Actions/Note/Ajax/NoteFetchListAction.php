@@ -9,17 +9,8 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * List notes linked to user action.
- */
 final class NoteFetchListAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param NoteFilterFinder $noteFilterFinder
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly NoteFilterFinder $noteFilterFinder,
@@ -27,13 +18,11 @@ final class NoteFetchListAction
     }
 
     /**
-     * Note list all and own Action.
+     * Fetch note list with given params action.
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      * @param array $args
-     *
-     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */

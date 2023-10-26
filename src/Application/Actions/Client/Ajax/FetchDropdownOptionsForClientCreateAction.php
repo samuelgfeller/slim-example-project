@@ -11,12 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FetchDropdownOptionsForClientCreateAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientUtilFinder $clientUtilFinder
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientUtilFinder $clientUtilFinder,
@@ -29,8 +23,6 @@ class FetchDropdownOptionsForClientCreateAction
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      * @param array $args
-     *
-     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */

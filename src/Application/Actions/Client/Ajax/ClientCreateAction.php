@@ -7,17 +7,8 @@ use App\Domain\Client\Service\ClientCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class ClientCreateAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param ClientCreator $clientCreator
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientCreator $clientCreator,
