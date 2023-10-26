@@ -25,7 +25,7 @@ use Selective\TestTrait\Traits\RouteTestTrait;
  * Test cases for client read note creation
  *  - Authenticated with different user roles
  *  - Unauthenticated
- *  - Invalid data (validation test)
+ *  - Invalid data (validation test).
  */
 class NoteCreateActionTest extends TestCase
 {

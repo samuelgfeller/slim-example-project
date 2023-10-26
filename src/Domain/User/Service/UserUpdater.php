@@ -36,8 +36,12 @@ final class UserUpdater
      */
     public function updateUser(int $userIdToChange, array $userValues): bool
     {
-        // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
-        $this->userValidator->validateUserUpdate($userIdToChange, $userValues);
+        // Add user id to user values as it's needed in the validator
+        $userValues['id'] = $userIdToChange;
+        $this->userValidator->validateUserValues($userValues, false);
+
+        // Unset id from $userValues as this array will be used to update the user and id won't be changed
+        unset($userValues['id']);
 
         // Check if it's admin or if it's its own user
         if ($this->userAuthorizationChecker->isGrantedToUpdate($userValues, $userIdToChange)) {
@@ -57,7 +61,7 @@ final class UserUpdater
                 ], true)) {
                     $validUpdateData[$column] = $value;
                 } else {
-                    throw new InvalidOperationException('Not allowed to change client column ' . $column);
+                    throw new InvalidOperationException('Not allowed to change user column ' . $column);
                 }
             }
             $updated = $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
@@ -77,6 +81,6 @@ final class UserUpdater
         $this->logger->notice(
             'User tried to update other user with id: ' . $userIdToChange
         );
-        throw new ForbiddenException('Not allowed to change that user');
+        throw new ForbiddenException('Not allowed to update user.');
     }
 }

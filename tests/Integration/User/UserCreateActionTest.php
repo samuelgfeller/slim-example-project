@@ -19,10 +19,9 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
- * Integration testing user update Process.
+ * Integration testing user creation.
  */
 class UserCreateActionTest extends TestCase
 {
@@ -166,7 +165,7 @@ class UserCreateActionTest extends TestCase
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
-        // Assert 200 OK
+        // Assert 422 Unprocessable Entity which means validation error
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         // Database must be unchanged - only 1 rows (authenticated user) expected in user table
         $this->assertTableRowCount(1, 'user');
@@ -174,33 +173,54 @@ class UserCreateActionTest extends TestCase
     }
 
     /**
-     * Test request with malformed body.
-     *
-     * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user and that means that
-     * there is an error with the client sending the request that has to be fixed.
-     *
-     * @dataProvider \App\Test\Provider\User\UserCreateProvider::malformedRequestBodyCases()
-     *
-     * @param array|null $requestBody request body may be null
+     * Test that user with same email as existing user cannot be created.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testUserSubmitCreateMalformedBody(?array $requestBody): void
+    public function testUserSubmitCreateEmailAlreadyExists(): void
     {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+        // Insert authenticated admin
+        $adminRow = $this->insertFixturesWithAttributes(
+            $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
+            UserFixture::class
+        );
+        // Simulate logged-in user with logged-in user id
+        $this->container->get(SessionInterface::class)->set('user_id', $adminRow['id']);
+
+        $existingEmail = 'email@address.com';
+        // Insert user with email that will be used in request to create a new one
+        $this->insertFixturesWithAttributes(['email' => $existingEmail], UserFixture::class);
+
         $request = $this->createJsonRequest(
             'POST',
             $this->urlFor('user-create-submit'),
-            $requestBody
+            [
+                'first_name' => 'New User',
+                'surname' => 'Same Email',
+                'email' => $existingEmail,
+                'password' => '12345678',
+                'password2' => '12345678',
+                'user_role_id' => 1,
+                'status' => 'unverified',
+                'language' => 'en_US',
+            ]
         );
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
+
+        $response = $this->app->handle($request);
+
+        // Assert 422 Unprocessable Entity Validation error
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        // Database must be unchanged - only 2 rows (authenticated user and other inserted user)
+        $this->assertTableRowCount(2, 'user');
+        $this->assertJsonData([
+            'status' => 'error',
+            'message' => 'Validation error',
+            'data' => [
+                'errors' => ['email' => ['Email already exists']]
+            ]
+        ], $response);
     }
 }

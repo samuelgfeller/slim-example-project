@@ -30,7 +30,7 @@ class UserCreator
     }
 
     /**
-     * Insert user in database.
+     * User creation logic.
      *
      * @param array $userValues
      * @param string|null $captcha user captcha response if filled out
@@ -42,14 +42,13 @@ class UserCreator
      */
     public function createUser(array $userValues, ?string $captcha = null, array $queryParams = []): bool|int
     {
-        $user = new UserData($userValues);
+        // Before validation, check if authenticated user is authorized to create user with the given data
+        if ($this->userAuthorizationChecker->isGrantedToCreate($userValues)) {
+            // * Validation has to be done AFTER authorization check
+            // to not reveal potential sensitive infos such as from the validation messages
+            $this->userValidator->validateUserValues($userValues);
 
-        // Has to be done before validation to not reveal potential sensitive infos such as from the validation messages
-        // Check if authenticated user is authorized to create user with the given data
-        if ($this->userAuthorizationChecker->isGrantedToCreate($user)) {
-            // Validate entries coming from client
-            $this->userValidator->validateUserCreation($user);
-
+            $user = new UserData($userValues);
             // Verify that user (concerned email) or ip address doesn't spam email sending
             $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
 

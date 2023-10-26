@@ -24,7 +24,6 @@ use Selective\TestTrait\Traits\RouteTestTrait;
  * Client creation submit tests
  *  - Normal client creation
  *  - With invalid values -> 422
- *  - With malformed request body -> Bad request exception.
  */
 class ClientCreateActionTest extends TestCase
 {
@@ -46,9 +45,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
@@ -109,7 +108,7 @@ class ClientCreateActionTest extends TestCase
             $userActivityRow = $this->findTableRowsByColumn('user_activity', 'table', 'client')[0];
             // Assert user activity row without json data
             $this->assertTableRowEquals(
-                ['action' => UserActivity::CREATED->value, 'table' => 'client', 'row_id' => $clientDbRow['id'],],
+                ['action' => UserActivity::CREATED->value, 'table' => 'client', 'row_id' => $clientDbRow['id']],
                 'user_activity',
                 $userActivityRow['id']
             );
@@ -157,9 +156,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -210,8 +209,9 @@ class ClientCreateActionTest extends TestCase
      *
      * @param array $requestBody
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {
@@ -242,9 +242,8 @@ class ClientCreateActionTest extends TestCase
         // No client should have been created
         $this->assertTableRowCount(1, 'client');
 
-        $this->assertJsonData(['status' => 'success', 'data' => null,], $response);
+        $this->assertJsonData(['status' => 'success', 'data' => null], $response);
     }
-
 
     /**
      * Client creation with valid data.

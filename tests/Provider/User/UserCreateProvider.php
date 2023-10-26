@@ -93,18 +93,13 @@ class UserCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
-                            ['field' => 'first_name', 'message' => 'Minimum length is 2'],
-                            ['field' => 'surname', 'message' => 'Minimum length is 2'],
-                            ['field' => 'email', 'message' => 'Invalid value'],
-                            // Technically the better error would be that the status is not existing but an UserData object
-                            // instance is created that puts "null" if status is not existing before being passed to the validator
-                            ['field' => 'status', 'message' => 'Required'],
-                            ['field' => 'user_role_id', 'message' => 'Invalid option'],
-                            ['field' => 'password2', 'message' => 'Passwords do not match'],
-                            ['field' => 'password', 'message' => 'Minimum length is 3'],
-                            ['field' => 'password2', 'message' => 'Minimum length is 3'],
+                            'first_name' => [0 => 'Minimum length is 2',],
+                            'surname' => [0 => 'Minimum length is 2',],
+                            'email' => [0 => 'Invalid email',],
+                            'status' => [0 => 'Invalid option',],
+                            'password' => [0 => 'Minimum length is 3',],
+                            'password2' => [0 => 'Minimum length is 3', 1 => 'Passwords do not match',],
                         ],
                     ],
                 ],
@@ -125,11 +120,10 @@ class UserCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
-                            ['field' => 'first_name', 'message' => 'Maximum length is 100'],
-                            ['field' => 'surname', 'message' => 'Maximum length is 100'],
-                            ['field' => 'email', 'message' => 'Invalid value'],
+                            'first_name' => [0 => 'Maximum length is 100',],
+                            'surname' => [0 => 'Maximum length is 100',],
+                            'email' => [0 => 'Invalid email',],
                         ],
                     ],
                 ],
@@ -150,19 +144,36 @@ class UserCreateProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error when trying to register a user',
                         'errors' => [
-                            ['field' => 'first_name', 'message' => 'Required'],
-                            ['field' => 'surname', 'message' => 'Required'],
-                            ['field' => 'email', 'message' => 'Required'],
-                            ['field' => 'status', 'message' => 'Required'],
-                            ['field' => 'user_role_id', 'message' => 'Required'],
-                            ['field' => 'password', 'message' => 'Required'],
-                            ['field' => 'password2', 'message' => 'Required'],
+                            'first_name' => [0 => 'Minimum length is 2',],
+                            'surname' => [0 => 'Minimum length is 2',],
+                            'email' => [0 => 'Invalid email',],
+                            'status' => [0 => 'Invalid option',],
+                            'user_role_id' => [0 => 'Invalid option',],
+                            'password' => [0 => 'Minimum length is 3',],
+                            'password2' => [0 => 'Minimum length is 3',],
                         ],
                     ],
                 ],
             ],
+            [// Test with empty request body
+                'request_body' => [],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'first_name' => [0 => 'Key is required',],
+                            'surname' => [0 => 'Key is required',],
+                            'email' => [0 => 'Key is required',],
+                            'status' => [0 => 'Key is required',],
+                            'user_role_id' => [0 => 'Key is required',],
+                            'password' => [0 => 'Key is required',],
+                            'password2' => [0 => 'Key is required',],
+                        ],
+                    ],
+                ],
+            ]
         ];
     }
 

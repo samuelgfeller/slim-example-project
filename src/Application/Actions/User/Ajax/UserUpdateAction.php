@@ -4,11 +4,8 @@ namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
 use App\Application\Validation\MalformedRequestBodyChecker;
-use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Service\UserUpdater;
-use App\Domain\Validation\ValidationExceptionOld;
-use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -42,9 +39,9 @@ final class UserUpdateAction
      * @param ResponseInterface $response The response
      * @param array $args The routing arguments
      *
+     * @return ResponseInterface The response
      * @throws \JsonException
      *
-     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -65,23 +62,8 @@ final class UserUpdateAction
             // When adding a new field also add it in updateUser(), validateUserUpdate(), isGrantedToUpdate(),
             // UserFinderRepository->fields and don't forget testing
         ])) {
-            try {
-                $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
-            } catch (ValidationExceptionOld $exception) {
-                return $this->responder->respondWithJsonOnValidationError(
-                    $exception->getValidationResult(),
-                    $response
-                );
-            } catch (ForbiddenException $fe) {
-                return $this->responder->respondWithJson(
-                    $response,
-                    [
-                        'status' => 'error',
-                        'message' => 'Not allowed to update user.',
-                    ],
-                    StatusCodeInterface::STATUS_FORBIDDEN
-                );
-            }
+            $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
+
 
             if ($updated) {
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);

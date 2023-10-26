@@ -14,7 +14,7 @@ class UserUtilFinder
     }
 
     /**
-     * Find all dropdown values for a client.
+     * Find all dropdown values for user creation form.
      *
      * @return array
      */

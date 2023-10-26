@@ -40,8 +40,8 @@ class PasswordChanger
      */
     public function resetPasswordWithToken(string $password1, string $password2, int $tokenId, string $token): bool
     {
-        // Validate passwords BEFORE token as token would be set to usedAt even if passwords are not valid
-        $this->userValidator->validatePasswords([$password1, $password2], true);
+        // ! Validate passwords BEFORE token as token would be set to usedAt even if passwords are not valid
+        $this->userValidator->validatePasswords([$password1, $password2]);
         // If passwords are valid strings, verify token and set token as used
         $userId = $this->verificationTokenVerifier->getUserIdIfTokenIsValid($tokenId, $token);
 
@@ -72,7 +72,7 @@ class PasswordChanger
         ?string $oldPassword = null
     ): bool {
         // Check if password strings are valid
-        $this->userValidator->validatePasswords([$password1, $password2], true);
+        $this->userValidator->validatePasswords([$password1, $password2]);
 
         // If old password is provided and user is allowed to update password, test password correctness
         if ($oldPassword

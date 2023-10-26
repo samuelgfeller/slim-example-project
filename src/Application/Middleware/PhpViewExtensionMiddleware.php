@@ -54,7 +54,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'config' => $this->publicSettings,
             'authenticatedUser' => $loggedInUserId,
         ]);
-        // Check if granted to read user that is different then the authenticated user itself (+1)
+        // Check if granted to read user that is different then the authenticated user itself (hence check with id + 1)
         // this determines if the nav point "users" is visible in the layout
         if ($loggedInUserId) {
             try {
@@ -63,7 +63,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
                     $this->userAuthorizationChecker->isGrantedToRead($loggedInUserId + 1, false)
                 );
             } catch (DatabaseException $databaseException) {
-                // Mysql connection not working
+                // Mysql connection not working. Caught here to prevent error page from crashing
             }
         }
 

@@ -12,13 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class UserDeleteAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param UserDeleter $userDeleter
-     * @param SessionInterface $session
-     */
+
     public function __construct(
         private readonly Responder $responder,
         private readonly UserDeleter $userDeleter,

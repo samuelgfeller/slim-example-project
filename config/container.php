@@ -104,6 +104,7 @@ return [
         $class = new ReflectionClass($driver);
         $method = $class->getMethod('getPdo');
         $method->setAccessible(true);
+
         return $method->invoke($driver);
     },
     // Used by command line to generate `schema.sql` for integration testing

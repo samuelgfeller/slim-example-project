@@ -88,7 +88,7 @@ class ClientValidator
             ->allowEmptyString('vigilance_level')
              ->add('vigilance_level', 'validateBackedEnum', [
                  'rule' => function ($value, $context) {
-                     return $this->isBackedEnum($value, ClientVigilanceLevel::class);
+                     return in_array($value, ClientVigilanceLevel::values(), true);
                  },
                  'message' => __('Invalid option'),
              ])
@@ -122,20 +122,5 @@ class ClientValidator
         if ($errors) {
             throw new ValidationException($errors);
         }
-    }
-
-    /**
-     * Check if value is a specific backed enum case or string
-     * that can be converted into one.
-     *
-     * @param \BackedEnum|string|null $value
-     * @param string $enum
-     *
-     * @return bool
-     */
-    public function isBackedEnum(\BackedEnum|string|null $value, string $enum): bool
-    {
-        // If $value is already an enum case, it means that its valid otherwise try to convert it to enum case
-        return is_a($value, $enum, true) || is_a($enum::tryFrom($value), $enum, true);
     }
 }

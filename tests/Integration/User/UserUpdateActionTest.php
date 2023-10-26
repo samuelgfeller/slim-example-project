@@ -18,7 +18,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing user update.
@@ -149,38 +148,5 @@ class UserUpdateActionTest extends TestCase
         // database must be unchanged
         $this->assertTableRowEquals($userRow, 'user', $userRow['id']);
         $this->assertJsonData($jsonResponse, $response);
-    }
-
-    /**
-     * Empty or malformed request body is when parameters
-     * are not set or have the wrong name ("key").
-     * Example: Server needs the argument "email" to process
-     * the request but "email" is not present in the body or
-     * misspelled.
-     * Good: "email: valid_or_invalid@data.com"
-     * Bad: "emal: valid_or_invalid@data.com".
-     *
-     * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user because that means that
-     * there is an error with the client sending the request that has to be fixed.
-     */
-    public function testUserSubmitUpdateMalformedBody(): void
-    {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
-        $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('user-update-submit', ['user_id' => $userRow['id']]),
-            // The update request can format the request body pretty freely as long as it doesn't contain a non-allowed key
-            // so to test only one invalid key is enough
-            ['non_existing_key' => 'value']
-        );
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
     }
 }

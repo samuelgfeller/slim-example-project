@@ -65,6 +65,7 @@ class ClientStatusFinderRepository
      * Check if given client status id exists.
      *
      * @param int $clientStatusId
+     *
      * @return bool
      */
     public function clientStatusExists(int $clientStatusId): bool

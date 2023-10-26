@@ -13,7 +13,6 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * When user wants to change password being authenticated.
@@ -22,15 +21,6 @@ class PasswordChangeSubmitAction
 {
     private LoggerInterface $logger;
 
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder
-     * @param SessionInterface $session
-     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
-     * @param PasswordChanger $passwordChanger
-     * @param LoggerFactory $loggerFactory
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
@@ -58,10 +48,6 @@ class PasswordChangeSubmitAction
         $userId = $args['user_id'];
         $flash = $this->session->getFlash();
 
-        if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($parsedBody, [
-            'password',
-            'password2',
-        ], ['old_password'])) {
             try {
                 $this->passwordChanger->changeUserPassword(
                     $parsedBody['password'],
@@ -85,16 +71,4 @@ class PasswordChangeSubmitAction
                 );
             }
         }
-
-        $flash->add('error', 'There is something wrong with the request body.');
-        // Prevent to log passwords
-        $this->logger->error(
-            'Password change request malformed. Array keys: ' . json_encode(
-                array_keys($parsedBody ?? []),
-                JSON_THROW_ON_ERROR
-            )
-        );
-        // Caught in error handler which displays error page because if POST request body is empty frontend has error
-        throw new HttpBadRequestException($request, 'Request body malformed.');
-    }
 }

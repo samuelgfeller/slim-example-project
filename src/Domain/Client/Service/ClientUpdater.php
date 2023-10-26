@@ -5,25 +5,19 @@ namespace App\Domain\Client\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Exception\InvalidOperationException;
-use App\Domain\Factory\LoggerFactory;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Infrastructure\Client\ClientUpdaterRepository;
-use Psr\Log\LoggerInterface;
 
 class ClientUpdater
 {
-    private LoggerInterface $logger;
-
     public function __construct(
         private readonly ClientUpdaterRepository $clientUpdaterRepository,
         private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
-        LoggerFactory $logger,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly UserActivityManager $userActivityManager,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('post-service');
     }
 
     /**

@@ -23,6 +23,9 @@ $settings = [];
 // Simulate prod env
 $settings['dev'] = false;
 
+// Project root dir
+$settings['root_dir'] = dirname(__DIR__, 2);
+
 $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
@@ -40,8 +43,6 @@ $settings['public'] = [
     ],
 ];
 
-// Project root dir
-$settings['root_dir'] = dirname(__DIR__, 2);
 
 $settings['locale'] = [
     // Available languages format: ['language code' => 'locale code']

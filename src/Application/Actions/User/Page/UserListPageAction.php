@@ -13,12 +13,7 @@ use Slim\Exception\HttpForbiddenException;
  */
 final class UserListPageAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param UserAuthorizationChecker $userAuthorizationChecker
-     */
+
     public function __construct(
         private readonly Responder $responder,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,

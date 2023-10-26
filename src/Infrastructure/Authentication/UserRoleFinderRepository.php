@@ -4,7 +4,6 @@ namespace App\Infrastructure\Authentication;
 
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Exceptions\PersistenceRecordNotFoundException;
 use App\Infrastructure\Factory\QueryFactory;
 
 class UserRoleFinderRepository
@@ -15,25 +14,15 @@ class UserRoleFinderRepository
     }
 
     /**
-     * Retrieve user role.
+     * Check if user role with given id exists.
      *
-     * @param int $userId
-     *
-     * @throws PersistenceRecordNotFoundException if entry not found
-     *
-     * @return int
+     * @param int|string $userRoleId
+     * @return bool
      */
-    public function getRoleIdFromUser(int $userId): int
+    public function userRoleWithIdExists(string|int $userRoleId): bool
     {
-        $query = $this->queryFactory->selectQuery()->select(['user_role_id'])->from('user')->where(
-            ['deleted_at IS' => null, 'id' => $userId]
-        );
-        $roleId = $query->execute()->fetch('assoc')['user_role_id'];
-        if (!$roleId) {
-            throw new PersistenceRecordNotFoundException('user');
-        }
-
-        return $roleId;
+        $query = $this->queryFactory->selectQuery()->from('user_role')->select(['id'])->where(['id' => $userRoleId]);
+        return $query->execute()->fetch('assoc') !== false;
     }
 
     /**

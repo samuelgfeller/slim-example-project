@@ -136,35 +136,15 @@ class ClientCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [
-                                0 => 'Minimum length is 2',
-                            ],
-                            'last_name' => [
-                                0 => 'Minimum length is 2',
-                            ],
-                            'email' => [
-                                0 => 'Invalid email',
-                            ],
-                            'birthdate' => [
-                                0 => 'Cannot be older than 130 years',
-                            ],
-                            'location' => [
-                                0 => 'Minimum length is 2',
-                            ],
-                            'phone' => [
-                                0 => 'Minimum length is 3',
-                            ],
-                            'sex' => [
-                                0 => 'Invalid option',
-                            ],
-                            'client_status_id' => [
-                                0 => 'Invalid option format',
-                                1 => 'Invalid option',
-                            ],
-                            'user_id' => [
-                                0 => 'Invalid option format',
-                                1 => 'Invalid option',
-                            ],
+                            'first_name' => [0 => 'Minimum length is 2',],
+                            'last_name' => [0 => 'Minimum length is 2',],
+                            'email' => [0 => 'Invalid email',],
+                            'birthdate' => [0 => 'Cannot be older than 130 years',],
+                            'location' => [0 => 'Minimum length is 2',],
+                            'phone' => [0 => 'Minimum length is 3',],
+                            'sex' => [0 => 'Invalid option',],
+                            'client_status_id' => [0 => 'Invalid option format', 1 => 'Invalid option',],
+                            'user_id' => [0 => 'Invalid option format', 1 => 'Invalid option',],
                         ],
                     ],
                 ],
@@ -190,28 +170,14 @@ class ClientCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [
-                                0 => 'Maximum length is 100',
-                            ],
-                            'last_name' => [
-                                0 => 'Maximum length is 100',
-                            ],
-                            'birthdate' => [
-                                0 => 'Cannot be in the future',
-                            ],
-                            'location' => [
-                                0 => 'Maximum length is 100',
-                            ],
-                            'phone' => [
-                                0 => 'Maximum length is 20',
-                            ],
-                            'client_status_id' => [
-                                0 => 'Invalid option',
-                            ],
-                            'user_id' => [
-                                0 => 'Invalid option',
-                            ],
-                        ]
+                            'first_name' => [0 => 'Maximum length is 100',],
+                            'last_name' => [0 => 'Maximum length is 100',],
+                            'birthdate' => [0 => 'Cannot be in the future',],
+                            'location' => [0 => 'Maximum length is 100',],
+                            'phone' => [0 => 'Maximum length is 20',],
+                            'client_status_id' => [0 => 'Invalid option',],
+                            'user_id' => [0 => 'Invalid option',],
+                        ],
                     ],
                 ],
             ],
@@ -234,43 +200,26 @@ class ClientCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'message' => [
-                                0 => 'Maximum length is 1000',
-                            ],
+                            'message' => [0 => 'Maximum length is 1000',],
                         ],
                     ],
                 ],
             ],
             [ // Check for request body key presence (previously done via malformedBodyRequestChecker)
                 // Empty request body
-                'request_body' => [
-                ],
+                'request_body' => [],
                 'json_response' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [
-                                0 => 'Key is required',
-                            ],
-                            'last_name' => [
-                                0 => 'Key is required',
-                            ],
-                            'email' => [
-                                0 => 'Key is required',
-                            ],
-                            'birthdate' => [
-                                0 => 'Key is required',
-                            ],
-                            'location' => [
-                                0 => 'Key is required',
-                            ],
-                            'phone' => [
-                                0 => 'Key is required',
-                            ],
-                            'client_status_id' => [
-                                0 => 'Key is required',
-                            ],
+                            'first_name' => [0 => 'Key is required',],
+                            'last_name' => [0 => 'Key is required',],
+                            'email' => [0 => 'Key is required',],
+                            'birthdate' => [0 => 'Key is required',],
+                            'location' => [0 => 'Key is required',],
+                            'phone' => [0 => 'Key is required',],
+                            'client_status_id' => [0 => 'Key is required',],
                         ],
                     ],
                 ],

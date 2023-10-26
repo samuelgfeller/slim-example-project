@@ -135,5 +135,4 @@ class ApiClientCreateActionTest extends TestCase
 
         $this->assertJsonData($jsonResponse, $response);
     }
-
 }

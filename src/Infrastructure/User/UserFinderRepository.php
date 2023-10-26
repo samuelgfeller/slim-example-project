@@ -95,11 +95,11 @@ class UserFinderRepository
         $query = $this->queryFactory->selectQuery()->select(['*'])->from('user')->where(
             ['deleted_at IS' => null, 'id' => $id]
         );
-        $userRows = $query->execute()->fetch('assoc') ?: [];
+        $userValues = $query->execute()->fetch('assoc') ?: [];
 
         // Empty user object if not found
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows);
+        return new UserData($userValues);
     }
 
     /**
@@ -118,11 +118,32 @@ class UserFinderRepository
             ['deleted_at IS' => null, 'email' => $email]
         );
 
-        $userRows = $query->execute()->fetch('assoc') ?: [];
+        $userValues = $query->execute()->fetch('assoc') ?: [];
 
         // Empty user object if not found
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows);
+        return new UserData($userValues);
+    }
+
+    /**
+     * Checks if user with given email already exists.
+     *
+     * @param string $email
+     * @param int|null $userIdToExclude exclude user that already has the email from check (for update)
+     *
+     * @return bool
+     */
+    public function userWithEmailAlreadyExists(string $email, ?int $userIdToExclude = null): bool
+    {
+        $query = $this->queryFactory->selectQuery()->select(['id'])->from('user')->andWhere(
+            ['deleted_at IS' => null, 'email' => $email]
+        );
+
+        if ($userIdToExclude !== null) {
+            $query->andWhere(['id !=' => $userIdToExclude]);
+        }
+
+        return $query->execute()->fetch('assoc') !== false;
     }
 
     /**
@@ -131,10 +152,10 @@ class UserFinderRepository
      *
      * @param int $id
      *
-     * @throws \Exception
-     *
      * @return UserData
      * Throws PersistenceRecordNotFoundException if not found
+     * @throws \Exception
+     *
      */
     public function getUserById(int $id): UserData
     {
