@@ -38,7 +38,7 @@ class UserVerificationProvider
      *
      * @return array[]
      */
-    public static function userVerificationInvalidExpiredProvider(): array
+    public static function userVerificationInvalidTokenProvider(): array
     {
         // Same as in AuthService:createAndSendUserVerification()
         $token = bin2hex(random_bytes(50));

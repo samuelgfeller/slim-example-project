@@ -36,7 +36,7 @@ final class VerificationTokenVerifier
             ($verification->token !== null) && $verification->usedAt === null && $verification->expiresAt > time()
             && true === password_verify($token, $verification->token)
         ) {
-            // Mark token as being used
+            // Mark token as being used if it was correct and not expired
             $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
 
             return $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);

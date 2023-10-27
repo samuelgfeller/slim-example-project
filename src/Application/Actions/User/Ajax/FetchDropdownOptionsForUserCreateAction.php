@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FetchDropdownOptionsForUserCreateAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly UserUtilFinder $userUtilFinder,

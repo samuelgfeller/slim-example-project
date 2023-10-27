@@ -175,9 +175,10 @@ class UserCreateActionTest extends TestCase
     /**
      * Test that user with same email as existing user cannot be created.
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testUserSubmitCreateEmailAlreadyExists(): void
     {
@@ -219,8 +220,8 @@ class UserCreateActionTest extends TestCase
             'status' => 'error',
             'message' => 'Validation error',
             'data' => [
-                'errors' => ['email' => ['Email already exists']]
-            ]
+                'errors' => ['email' => ['Email already exists']],
+            ],
         ], $response);
     }
 }

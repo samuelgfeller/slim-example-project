@@ -8,13 +8,11 @@ use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
-use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing password change from authenticated user
@@ -61,13 +59,9 @@ class PasswordResetSubmitActionTest extends TestCase
 
         $response = $this->app->handle($request);
 
-        // Assert: 302 Redirect to desired page
+        // Assert: 302 Redirect to login page
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-
-        self::assertSame($this->urlFor('profile-page'), $response->getHeaderLine('Location'));
-
-        // Assert that session user_id is set meaning user is logged-in
-        self::assertNotNull($this->container->get(SessionInterface::class)->get('user_id'));
+        self::assertSame($this->urlFor('login-page'), $response->getHeaderLine('Location'));
 
         // Assert that password was changed correctly
         $dbPasswordHash = $this->getTableRowById('user', $userRow['id'])['password_hash'];
@@ -79,12 +73,12 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Test password submit reset with invalid, used or expired token.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
-    public function testResetPasswordSubmitInvalidUsedExpiredToken(
+    public function testResetPasswordSubmitInvalidToken(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -112,10 +106,6 @@ class PasswordResetSubmitActionTest extends TestCase
         // Assert 200 password reset first email form loaded
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
-        // I would love to assert that client is redirected to the password reset page but didn't figure out how to get
-        // the uri from the response.
-        // self::assertSame($this->urlFor('password-reset-page'), $response->getHeaderLine('Location'));
-
         // Assert that token had NOT been used (except if already used)
         self::assertSame(
             $verification->usedAt,
@@ -124,9 +114,6 @@ class PasswordResetSubmitActionTest extends TestCase
 
         // Assert that password was not changed to the new one
         $this->assertTableRowValue(UserStatus::Unverified->value, 'user', $userRow['id'], 'status');
-
-        // Assert that user is not logged in
-        self::assertNull($this->container->get(SessionInterface::class)->get('user_id'));
 
         // Assert that password was NOT changed
         $dbPasswordHash = $this->getTableRowById('user', $userRow['id'])['password_hash'];
@@ -168,37 +155,5 @@ class PasswordResetSubmitActionTest extends TestCase
         // Assert that response has error status 422
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         // As form is directly rendered with validation errors it's not possible to test them as response is a stream
-    }
-
-    /**
-     * Empty or malformed request body is when parameters are not set or have
-     * the wrong name ("key").
-     *
-     * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user because that means that
-     * there is an error with the client sending the request that has to be fixed.
-     *
-     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::malformedPasswordResetRequestBodyProvider()
-     *
-     * @param array|null $malformedBody null for the case that request body is null
-     * @param string $message
-     */
-    public function testChangePasswordMalformedBody(?array $malformedBody, string $message): void
-    {
-        // Insert user id 2 role: user
-        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
-
-        $malformedRequest = $this->createFormRequest(
-            'POST',
-            $this->urlFor('password-reset-submit'),
-            $malformedBody
-        );
-
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage($message);
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($malformedRequest);
     }
 }

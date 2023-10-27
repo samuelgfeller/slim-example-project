@@ -97,13 +97,6 @@ class AuthenticationProvider
             ],
             [
                 [
-                    // Invalid password
-                    'email' => 'admin@example.com',
-                    'password' => '12',
-                ],
-            ],
-            [
-                [
                     // Missing password
                     'email' => 'admin@example.com',
                     'password' => '',

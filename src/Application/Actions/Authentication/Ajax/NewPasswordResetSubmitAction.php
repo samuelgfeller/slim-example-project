@@ -3,16 +3,14 @@
 namespace App\Application\Actions\Authentication\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Exception\InvalidTokenException;
-use App\Domain\Authentication\Service\PasswordChanger;
+use App\Domain\Authentication\Service\PasswordResetterWithToken;
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationExceptionOld;
+use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpBadRequestException;
 
 class NewPasswordResetSubmitAction
 {
@@ -21,8 +19,7 @@ class NewPasswordResetSubmitAction
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
-        private readonly PasswordChanger $passwordChanger,
-        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
+        private readonly PasswordResetterWithToken $passwordResetterWithToken,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-service');
@@ -43,68 +40,48 @@ class NewPasswordResetSubmitAction
         $parsedBody = $request->getParsedBody();
         $flash = $this->session->getFlash();
 
-        // There may be other query params e.g. redirect
-        if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys(
-            $parsedBody,
-            ['id', 'token', 'password', 'password2'],
-            ['redirect']
-        )) {
-            try {
-                $this->passwordChanger->resetPasswordWithToken(
-                    $parsedBody['password'],
-                    $parsedBody['password2'],
-                    (int)$parsedBody['id'],
-                    $parsedBody['token']
-                );
+        try {
+            $this->passwordResetterWithToken->resetPasswordWithToken($parsedBody);
 
-                $flash->add(
-                    'success',
-                    sprintf(__('Successfully changed password. <b>%s</b>'), __('You are now logged in.'))
-                );
+            $flash->add(
+                'success',
+                sprintf(__('Successfully changed password. <b>%s</b>'), __('Please log in.'))
+            );
 
-                return $this->responder->redirectToRouteName($response, 'profile-page');
-            } catch (InvalidTokenException $ite) {
-                $this->responder->addPhpViewAttribute(
-                    'formErrorMessage',
-                    __(
-                        '<b>Invalid, used or expired link. <br> Please request a new link below and make 
+            return $this->responder->redirectToRouteName($response, 'login-page');
+        } catch (InvalidTokenException $ite) {
+            $this->responder->addPhpViewAttribute(
+                'formErrorMessage',
+                __(
+                    '<b>Invalid, used or expired link. <br> Please request a new link below and make 
 sure to click on the most recent email we send you</a>.</b>'
-                    )
-                );
-                // Pre-fill email input field for more user comfort. The usefulness of this specific situation may be
-                // questionable but this is here to serve as inspiration. My goal is a program user LOVE to use.
-                if ($ite->userData->email !== null) {
-                    $this->responder->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
-                }
-
-                $this->logger->error(
-                    'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
-                );
-
-                // Render password
-                return $this->responder->render($response, 'authentication/login.html.php');
-            } catch (ValidationExceptionOld $validationException) {
-                $flash->add('error', $validationException->getMessage());
-                // Add token and id to php view attribute like PasswordResetAction does
-                $this->responder->addPhpViewAttribute('token', $parsedBody['token']);
-                $this->responder->addPhpViewAttribute('id', $parsedBody['id']);
-
-                return $this->responder->renderOnValidationError(
-                    $response,
-                    'authentication/reset-password.html.php',
-                    $validationException,
-                    $request->getQueryParams(),
-                );
+                )
+            );
+            // Pre-fill email input field for more user comfort.
+            if ($ite->userData->email !== null) {
+                $this->responder->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
             }
-        }
 
-        $flash->add('error', __('Token not found. Please click on the link you received via email.'));
-        // Prevent to log passwords
-        $this->logger->error(
-            'Password change request malformed: ' . json_encode($parsedBody, JSON_THROW_ON_ERROR)
-        );
-        // Caught in error handler which displays error page because if POST request body is empty frontend has error
-        // Exception message same as in tests/Provider/UserProvider->malformedPasswordResetRequestBodyProvider()
-        throw new HttpBadRequestException($request, 'Request body malformed.');
+            $this->logger->error(
+                'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
+            );
+
+            // The login page is rendered but the url is reset-password. In login-main.js the url is replaced and
+            // the password forgotten form is shown instead of the login form.
+            return $this->responder->render($response, 'authentication/login.html.php');
+        } // Validation Exception has to be caught here and not middleware as we need to add token and id to php view
+        catch (ValidationException $validationException) {
+            $flash->add('error', $validationException->getMessage());
+            // Add token and id to php view attribute like PasswordResetAction does
+            $this->responder->addPhpViewAttribute('token', $parsedBody['token']);
+            $this->responder->addPhpViewAttribute('id', $parsedBody['id']);
+
+            return $this->responder->renderOnValidationError(
+                $response,
+                'authentication/reset-password.html.php',
+                $validationException,
+                $request->getQueryParams(),
+            );
+        }
     }
 }

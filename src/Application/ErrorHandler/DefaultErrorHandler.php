@@ -3,7 +3,7 @@
 namespace App\Application\ErrorHandler;
 
 use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationExceptionOld;
+use App\Domain\Validation\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -134,7 +134,7 @@ class DefaultErrorHandler
             $statusCode = (int)$exception->getCode();
         }
 
-        if ($exception instanceof ValidationExceptionOld) {
+        if ($exception instanceof ValidationException) {
             $statusCode = StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY; // 422
         }
 

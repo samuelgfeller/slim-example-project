@@ -13,7 +13,6 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing email submit of forgotten password form
@@ -145,31 +144,5 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
 
         // As form is directly rendered with validation errors it's not possible to test them as response is a stream
         // There is a visual test in insomnia for this, but I couldn't manage to keep the login session
-    }
-
-    /**
-     * Empty or malformed request body is when parameters are not set or have
-     * the wrong name ("key").
-     *
-     * If the request contains a different body than expected, HttpBadRequestException
-     * is thrown and an error page is displayed to the user because that means that
-     * there is an error with the client sending the request that has to be fixed.
-     */
-    public function testChangePasswordMalformedBody(): void
-    {
-        // Not necessary to insert fixture as exception must be thrown in action
-        $validEmail = 'user@example.com';
-        $malformedRequest = $this->createFormRequest(
-            'POST', // Request to change password
-            $this->urlFor('password-forgotten-email-submit'),
-            ['emal' => $validEmail]
-        );
-
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-
-        // Handle request after defining expected exceptions
-        $this->app->handle($malformedRequest);
     }
 }

@@ -128,7 +128,7 @@ class RegisterVerifyActionTest extends TestCase
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
      * according exception should be thrown and user redirected to register page.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken

@@ -35,7 +35,7 @@ final class ValidatorNative
      *
      * @param ValidationResult $validationResult
      *
-     * @throws ValidationExceptionOld
+     * @throws ValidationException
      */
     public function throwOnError(ValidationResult $validationResult): void
     {
@@ -46,7 +46,7 @@ final class ValidatorNative
                     JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
                 )
             );
-            throw new ValidationExceptionOld($validationResult);
+            throw new ValidationException($validationResult);
         }
     }
 

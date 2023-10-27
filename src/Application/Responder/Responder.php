@@ -3,7 +3,7 @@
 namespace App\Application\Responder;
 
 use App\Domain\Security\Exception\SecurityException;
-use App\Domain\Validation\ValidationExceptionOld;
+use App\Domain\Validation\ValidationException;
 use App\Domain\Validation\ValidationResult;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -47,8 +47,6 @@ final class Responder
      * @param ResponseInterface $response The response
      * @param string $template Template pathname relative to templates directory
      * @param array $data Associative array of template variables
-     *
-     * @throws \Throwable
      *
      * @return ResponseInterface The response
      */
@@ -138,33 +136,29 @@ final class Responder
      *
      * @param ResponseInterface $response
      * @param string $template
-     * @param ValidationExceptionOld $validationException
+     * @param ValidationException $validationException
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      * @param array|null $preloadValues
-     *
-     * @throws \Throwable
      *
      * @return ResponseInterface|null
      */
     public function renderOnValidationError(
         ResponseInterface $response,
         string $template,
-        ValidationExceptionOld $validationException,
+        ValidationException $validationException,
         array $queryParams = [],
         ?array $preloadValues = null,
     ): ?ResponseInterface {
-        // $this->phpRenderer->addAttribute('formErrorMessage', $validationException->getMessage());
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
 
         // Add the validation errors to phpRender attributes
-        $validationResult = $validationException->getValidationResult();
-        $this->phpRenderer->addAttribute('validation', $validationResult->toArray());
+        $this->phpRenderer->addAttribute('validation', $validationException->validationErrors);
         $this->phpRenderer->addAttribute('formError', true);
         // Provide same query params passed to page to be added again after validation error (e.g. redirect)
         $this->phpRenderer->addAttribute('queryParams', $queryParams);
 
         // Render template with status code
-        return $this->render($response->withStatus($validationResult->getStatusCode()), $template);
+        return $this->render($response->withStatus(422), $template);
     }
 
     /**

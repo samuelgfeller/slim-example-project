@@ -82,7 +82,7 @@ class AccountUnlockActionTest extends TestCase
      * Test that with given used, invalid or expired token the account cannot be unlocked
      * This is a very important test for security.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidExpiredProvider()
+     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
      *
      * @param UserVerificationData $verification
      * @param string $clearTextToken

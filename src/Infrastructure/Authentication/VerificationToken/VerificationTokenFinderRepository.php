@@ -34,8 +34,9 @@ class VerificationTokenFinderRepository
     /**
      * @param int $verificationId
      *
+     * @throws PersistenceRecordNotFoundException
+     *
      * @return int
-     * Throws PersistenceRecordNotFoundException if entry not found
      */
     public function getUserIdFromVerification(int $verificationId): int
     {
@@ -45,7 +46,7 @@ class VerificationTokenFinderRepository
         // Cake query builder return value is string
         $userId = $query->execute()->fetch('assoc')['user_id'];
         if (!$userId) {
-            throw new PersistenceRecordNotFoundException('post');
+            throw new PersistenceRecordNotFoundException('user_verification');
         }
 
         return (int)$userId;

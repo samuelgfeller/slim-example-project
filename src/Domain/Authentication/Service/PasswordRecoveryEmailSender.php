@@ -8,7 +8,7 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Mailer;
-use App\Domain\Validation\ValidationExceptionOld;
+use App\Domain\Validation\ValidationException;
 use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -54,14 +54,14 @@ class PasswordRecoveryEmailSender
      * When user requests a new password for email.
      *
      * @param array $userValues
-     * @param string|null|null $captcha
+     * @param string|null $captcha
      *
-     * @throws ValidationExceptionOld|TransportExceptionInterface|\JsonException
+     * @throws ValidationException|TransportExceptionInterface
      */
     public function sendPasswordRecoveryEmail(array $userValues, ?string $captcha = null): void
     {
+        $this->userValidator->validatePasswordResetEmail($userValues);
         $email = $userValues['email'];
-        $this->userValidator->validatePasswordResetEmail($email);
 
         // Verify that user (concerned email) or ip address doesn't spam email sending
         $this->securityEmailChecker->performEmailAbuseCheck($email, $captcha);

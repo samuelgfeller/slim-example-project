@@ -10,7 +10,7 @@ use App\Domain\Authentication\Service\LoginVerifier;
 use App\Domain\Factory\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserFinder;
-use App\Domain\Validation\ValidationExceptionOld;
+use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -75,7 +75,8 @@ final class LoginSubmitAction
                 }
 
                 return $this->responder->redirectToRouteName($response, 'home-page', [], $themeQueryParams);
-            } catch (ValidationExceptionOld $ve) {
+            } // When the response is not JSON but rendered, the validation exception has to be caught in action
+            catch (ValidationException $ve) {
                 return $this->responder->renderOnValidationError(
                     $response,
                     'authentication/login.html.php',

@@ -29,10 +29,22 @@ class UserAuthorizationChecker
     }
 
     /**
+     * When the session is created during the request, the user is not logged in yet
+     * when the code traverses through the UserNetworkSessionMiddleware.
+     *
+     * @return int|null
+     */
+    public function getLoggedInUserId(): ?int
+    {
+        return $this->userNetworkSessionData->userId;
+    }
+
+    /**
      * Check if authenticated user is allowed to create
      * Important to have user role in the object.
      *
      * @param array $userValues
+     *
      * @return bool
      */
     public function isGrantedToCreate(array $userValues): bool
@@ -199,11 +211,11 @@ class UserAuthorizationChecker
                     }
                     // Check that authenticated user is granted to attribute role
                     if (array_key_exists('user_role_id', $userDataToUpdate) && $this->userRoleIsGranted(
-                            $userDataToUpdate['user_role_id'],
-                            $userToUpdateRoleData->id,
-                            $authenticatedUserRoleData,
-                            $userRoleHierarchies
-                        ) === true) {
+                        $userDataToUpdate['user_role_id'],
+                        $userToUpdateRoleData->id,
+                        $authenticatedUserRoleData,
+                        $userRoleHierarchies
+                    ) === true) {
                         $grantedUpdateKeys[] = 'user_role_id';
                     }
 

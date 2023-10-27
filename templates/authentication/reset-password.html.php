@@ -43,7 +43,7 @@ $this->setLayout('');
             'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/password-reset-main.js'],
         ]
     );
-    ?>
+?>
 
     <title>Reset password - <?= $config['app_name'] ?></title>
 
@@ -58,32 +58,27 @@ $this->setLayout('');
           class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
-            '</strong>' : '' ?>
-
-        <?php
-        // If error for both passwords
-        $passwordsErr = get_field_error(($validation ?? []), 'passwords');
-        ?>
+    isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+        '</strong>' : '' ?>
 
         <!--   Password 1    -->
-        <div class="form-input-div <?= //If there is an error on a specific field, echo error class
-        ($passwordErr = get_field_error(($validation ?? []), 'password')) ||
-        $passwordsErr ? ' input-group-error' : '' ?>">
+
+        <div class="form-input-div <?= isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password1-input"><?= __('Password') ?></label>
             <input type="password" name="password" id="password1-input" minlength="3" required>
-            <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+            <?= isset($validation['password']) ? '<strong class="err-msg">' . $validation['password'][0] . '</strong>' : '' ?>
         </div>
 
         <!--   Password 2     -->
-        <div class="form-input-div <?= //If there is an error on a specific field, echo error class
-        ($password2Err = get_field_error(($validation ?? []), 'password2')) ||
-        $passwordsErr ? ' input-group-error' : '' ?>" style="margin-bottom: 0;">
+        <div class="form-input-div <?= isset($validation['password2']) ? ' input-group-error' : '' ?>"
+             style="margin-bottom: 0;">
             <label for="password2-input"><?= __('Repeat password') ?></label>
             <input type="password" name="password2" id="password2-input" minlength="3" required>
-            <?= isset($password2Err) ? '<strong class="err-msg">' . $password2Err . '</strong>' : '' ?>
+            <?= isset($validation['password2']) ?
+            '<strong class="err-msg">' . $validation['password2'][0] . '</strong>' : '' ?>
         </div>
-        <?= isset($passwordsErr) ? '<strong class="err-msg">' . $passwordsErr . '</strong>' : '' ?>
+        <?= /*In case passwords not match there may be a second error for password2 */
+    isset($validation['password2'][1]) ? '<strong class="err-msg">' . $validation['password2'][1] . '</strong>' : '' ?>
         <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
 
         <input type="hidden" name="token" value="<?= $token ?? null ?>">

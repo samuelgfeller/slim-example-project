@@ -13,26 +13,6 @@ function html(?string $text = null): string
 }
 
 /**
- * Get validation error message of given field.
- *
- * @param array $validation Entire validation array (containing message and errors)
- * @param string $field Name given in validation class where error messages are made (may differ from HTML)
- *
- * @return string|null
- */
-function get_field_error(array $validation, string $field): ?string
-{
-    if ($validation !== []) {
-        $key = array_search($field, array_column($validation['errors'], 'field'), false);
-        if ($key !== false) {
-            return $validation['errors'][$key]['message'];
-        }
-    }
-
-    return null;
-}
-
-/**
  * Text translation.
  *
  * @param string $message The message

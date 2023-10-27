@@ -94,12 +94,13 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Minimum length is 2',],
-                            'surname' => [0 => 'Minimum length is 2',],
-                            'email' => [0 => 'Invalid email',],
-                            'status' => [0 => 'Invalid option',],
-                            'password' => [0 => 'Minimum length is 3',],
-                            'password2' => [0 => 'Minimum length is 3', 1 => 'Passwords do not match',],
+                            'first_name' => [0 => 'Minimum length is 2'],
+                            'surname' => [0 => 'Minimum length is 2'],
+                            'email' => [0 => 'Invalid email'],
+                            'status' => [0 => 'Invalid option'],
+                            'user_role_id' => [0 => 'Invalid option'],
+                            'password' => [0 => 'Minimum length is 3'],
+                            'password2' => [0 => 'Minimum length is 3', 1 => 'Passwords do not match'],
                         ],
                     ],
                 ],
@@ -121,9 +122,9 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Maximum length is 100',],
-                            'surname' => [0 => 'Maximum length is 100',],
-                            'email' => [0 => 'Invalid email',],
+                            'first_name' => [0 => 'Maximum length is 100'],
+                            'surname' => [0 => 'Maximum length is 100'],
+                            'email' => [0 => 'Invalid email'],
                         ],
                     ],
                 ],
@@ -145,13 +146,14 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Minimum length is 2',],
-                            'surname' => [0 => 'Minimum length is 2',],
-                            'email' => [0 => 'Invalid email',],
-                            'status' => [0 => 'Invalid option',],
-                            'user_role_id' => [0 => 'Invalid option',],
-                            'password' => [0 => 'Minimum length is 3',],
-                            'password2' => [0 => 'Minimum length is 3',],
+                            'first_name' => [0 => 'Minimum length is 2'],
+                            'surname' => [0 => 'Minimum length is 2'],
+                            'email' => [0 => 'Invalid email'],
+                            'status' => [0 => 'Invalid option'],
+                            // Same error message twice because not numeric and not existing
+                            'user_role_id' => [0 => 'Invalid option', 1 => 'Invalid option'],
+                            'password' => [0 => 'Password required'],
+                            'password2' => [0 => 'Password required'],
                         ],
                     ],
                 ],
@@ -163,17 +165,17 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Key is required',],
-                            'surname' => [0 => 'Key is required',],
-                            'email' => [0 => 'Key is required',],
-                            'status' => [0 => 'Key is required',],
-                            'user_role_id' => [0 => 'Key is required',],
-                            'password' => [0 => 'Key is required',],
-                            'password2' => [0 => 'Key is required',],
+                            'first_name' => [0 => 'Key is required'],
+                            'surname' => [0 => 'Key is required'],
+                            'email' => [0 => 'Key is required'],
+                            'status' => [0 => 'Key is required'],
+                            'user_role_id' => [0 => 'Key is required'],
+                            'password' => [0 => 'Key is required'],
+                            'password2' => [0 => 'Key is required'],
                         ],
                     ],
                 ],
-            ]
+            ],
         ];
     }
 

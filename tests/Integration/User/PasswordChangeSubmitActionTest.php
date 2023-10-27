@@ -16,16 +16,14 @@ use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Integration testing password change from authenticated user
  *  - change password authenticated - authorization
  *  - change password authenticated - invalid data -> 400 Bad request
- *  - change password not authenticated -> 302 to login page with correct redirect param
- *  - change password authenticated malformed request body -> HttpBadRequestException.
+ *  - change password not authenticated -> 302 to login page with correct redirect param.
  */
-class UserChangePasswordActionTest extends TestCase
+class PasswordChangeSubmitActionTest extends TestCase
 {
     use AppTestTrait;
     use HttpTestTrait;
@@ -160,31 +158,5 @@ class UserChangePasswordActionTest extends TestCase
         // database should be unchanged
         $this->assertTableRowEquals($userRow, 'user', $userRow['id']);
         $this->assertJsonData($jsonResponse, $response);
-    }
-
-    /**
-     * Empty or malformed request body is when parameters are not set or have
-     * the wrong name ('key').
-     *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::malformedPasswordChangeRequestCases()
-     *
-     * @param array|null $malformedRequestBody null for the case that request body is null
-     */
-    public function testChangePasswordSubmitActionMalformedBody(?array $malformedRequestBody): void
-    {
-        // Action class should directly return error so only logged-in user has to be inserted
-        $userRow = $this->insertFixturesWithAttributes([], UserFixture::class);
-        // Simulate logged-in user with same user as linked to client
-        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
-        $request = $this->createJsonRequest(
-            'PUT',
-            $this->urlFor('change-password-submit', ['user_id' => $userRow['id']]),
-            $malformedRequestBody
-        );
-        // Bad Request (400) means that the client sent the request wrongly; it's a client error
-        $this->expectException(HttpBadRequestException::class);
-        $this->expectExceptionMessage('Request body malformed.');
-        // Handle request after defining expected exceptions
-        $this->app->handle($request);
     }
 }

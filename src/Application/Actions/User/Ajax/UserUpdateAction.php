@@ -39,9 +39,9 @@ final class UserUpdateAction
      * @param ResponseInterface $response The response
      * @param array $args The routing arguments
      *
-     * @return ResponseInterface The response
      * @throws \JsonException
      *
+     * @return ResponseInterface The response
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -63,7 +63,6 @@ final class UserUpdateAction
             // UserFinderRepository->fields and don't forget testing
         ])) {
             $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
-
 
             if ($updated) {
                 return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);

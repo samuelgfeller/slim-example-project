@@ -38,7 +38,7 @@ $this->setLayout('');
             'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/login-main.js'],
         ]
     );
-?>
+    ?>
 
     <title>Login - <?= $config['app_name'] ?></title>
 
@@ -54,17 +54,16 @@ $this->setLayout('');
           id="login-form" class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-    isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
-        '</strong>' : '' ?>
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
+            '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
-        <div class="form-input-div <?= //If there is an error on a specific field, echo error class
-    ($emailErr = get_field_error(($validation ?? []), 'email')) ? ' input-group-error' : '' ?>">
+        <div class="form-input-div <?= isset($validation['email']) ? ' input-group-error' : '' ?>">
             <label for="email-input"><?= __('E-Mail') ?></label>
             <input type="email" name="email"
                    maxlength="254" id="email-input"
                    required value="<?= $preloadValues['email'] ?? '' ?>">
-            <?= isset($emailErr) ? '<strong class="err-msg">' . $emailErr . '</strong>' : '' ?>
+            <?= isset($validation['email']) ? '<strong class="err-msg">' . $validation['email'][0] . '</strong>' : '' ?>
             <span class="discrete-text content-below-input cursor-pointer" id="discrete-login-btn">
                 <?= __('Login') ?></span>
         </div>
@@ -72,10 +71,10 @@ $this->setLayout('');
         <!-- ===== PASSWORD ===== -->
         <div id="password-input-div"
              class="form-input-div<?= //If there is an error on a specific field, echo error class
-         ($passwordErr = get_field_error(($validation ?? []), 'password')) ? ' input-group-error' : '' ?>">
+             isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password-input"><?= __('Password') ?></label>
             <input type="password" id="password-input" name="password" minlength="3" required>
-            <?= isset($passwordErr) ? '<strong class="err-msg">' . $passwordErr . '</strong>' : '' ?>
+            <?= isset($validation['password']) ? '<strong class="err-msg">' . $validation['password'][0] . '</strong>' : '' ?>
             <span class="discrete-text content-below-input cursor-pointer"
                   id="password-forgotten-btn"><?= __('Password forgotten') ?></span>
         </div>

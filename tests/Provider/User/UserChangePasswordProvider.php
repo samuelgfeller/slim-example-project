@@ -109,11 +109,9 @@ class UserChangePasswordProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error with the passwords.',
                         'errors' => [
-                            ['field' => 'password2', 'message' => 'Passwords do not match'],
-                            ['field' => 'password', 'message' => 'Minimum length is 3'],
-                            ['field' => 'password2', 'message' => 'Minimum length is 3'],
+                            'password' => [0 => 'Minimum length is 3'],
+                            'password2' => [0 => 'Minimum length is 3', 1 => 'Passwords do not match'],
                         ],
                     ],
                 ],
@@ -129,9 +127,22 @@ class UserChangePasswordProvider
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
-                        'message' => 'There is a validation error with the password.',
                         'errors' => [
-                            ['field' => 'old_password', 'message' => 'Incorrect password'],
+                            'old_password' => [0 => 'Incorrect password'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                // Test with empty request body
+                'request_body' => [],
+                'json_response' => [
+                    'status' => 'error',
+                    'message' => 'Validation error',
+                    'data' => [
+                        'errors' => [
+                            'password' => [0 => 'Key is required'],
+                            'password2' => [0 => 'Key is required'],
                         ],
                     ],
                 ],
