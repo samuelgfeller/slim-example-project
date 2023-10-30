@@ -4,12 +4,12 @@ namespace App\Domain\Note\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
+use App\Domain\Note\Repository\NoteCreatorRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Note\NoteCreatorRepository;
 use IntlDateFormatter;
 
 class NoteCreator

@@ -4,8 +4,8 @@ namespace App\Test\Unit\Security;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\Security\Repository\LoginLogFinderRepository;
 use App\Domain\Security\Service\SecurityLoginChecker;
-use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;

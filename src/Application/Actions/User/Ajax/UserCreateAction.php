@@ -3,7 +3,7 @@
 namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Service\UserCreator;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;

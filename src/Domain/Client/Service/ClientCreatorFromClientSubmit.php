@@ -3,10 +3,10 @@
 namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Enum\ClientStatus;
+use App\Domain\Client\Repository\ClientCreatorRepository;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Client\ClientCreatorRepository;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 
 class ClientCreatorFromClientSubmit
 {

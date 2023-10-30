@@ -2,9 +2,9 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;

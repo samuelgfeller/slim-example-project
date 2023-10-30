@@ -2,9 +2,9 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenUpdaterRepository;
 
 class VerificationTokenUpdater
 {

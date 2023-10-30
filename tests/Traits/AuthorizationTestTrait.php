@@ -2,8 +2,8 @@
 
 namespace App\Test\Traits;
 
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
 
 trait AuthorizationTestTrait

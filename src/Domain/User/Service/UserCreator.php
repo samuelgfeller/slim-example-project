@@ -3,6 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Authentication\Service\RegistrationMailer;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Security\Service\SecurityEmailChecker;
@@ -11,8 +12,7 @@ use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\User\UserCreatorRepository;
+use App\Domain\User\Repository\UserCreatorRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserCreator

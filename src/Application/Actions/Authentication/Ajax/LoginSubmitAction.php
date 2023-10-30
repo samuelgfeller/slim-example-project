@@ -6,7 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;

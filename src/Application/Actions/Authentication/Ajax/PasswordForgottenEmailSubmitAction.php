@@ -5,7 +5,7 @@ namespace App\Application\Actions\Authentication\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;

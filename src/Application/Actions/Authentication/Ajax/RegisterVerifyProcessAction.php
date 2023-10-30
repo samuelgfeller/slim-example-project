@@ -6,7 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;

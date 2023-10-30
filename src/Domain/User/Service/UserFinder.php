@@ -8,7 +8,7 @@ use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Data\UserResultData;
-use App\Infrastructure\User\UserFinderRepository;
+use App\Domain\User\Repository\UserFinderRepository;
 
 class UserFinder
 {

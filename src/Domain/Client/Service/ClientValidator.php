@@ -3,10 +3,10 @@
 namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Enum\ClientVigilanceLevel;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use Cake\Validation\Validator;
 
 class ClientValidator

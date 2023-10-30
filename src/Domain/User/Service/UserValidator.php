@@ -2,12 +2,12 @@
 
 namespace App\Domain\User\Service;
 
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use Cake\Validation\Validator;
 
 /**

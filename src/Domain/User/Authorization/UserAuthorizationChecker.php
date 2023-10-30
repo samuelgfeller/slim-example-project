@@ -3,10 +3,10 @@
 namespace App\Domain\User\Authorization;
 
 use App\Application\Data\UserNetworkSessionData;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Psr\Log\LoggerInterface;
 
 /**

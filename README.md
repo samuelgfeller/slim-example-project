@@ -261,7 +261,9 @@ The folder structure adheres to the [Standard PHP Package Skeleton](https://gith
 -- src
    -- Application // top layer, contains action classes, middlewares, error handler, responder
    -- Domain // includes business logic / service classes
-   -- Infrastructure // database access / manipulation / repository classes 
+      -- Entity // domain entities
+         -- Service // domain service classes
+         -- Repository // infrastructure repository classes / database access (vertical slice architecture)
    -- Common // generic helper classes 
 -- templates
    -- layout // html layout with nav menu, page structure

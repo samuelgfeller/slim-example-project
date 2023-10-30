@@ -3,10 +3,10 @@
 namespace App\Domain\Dashboard;
 
 use App\Domain\Authorization\AuthorizationChecker;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\Dashboard\Data\DashboardData;
 use App\Domain\Dashboard\Panel\UserFilterChipProvider;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
 use Odan\Session\SessionInterface;
 
 class DashboardPanelProvider

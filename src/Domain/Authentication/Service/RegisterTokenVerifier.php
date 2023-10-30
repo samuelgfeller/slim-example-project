@@ -4,12 +4,12 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Repository\UserUpdaterRepository;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
-use App\Infrastructure\User\UserUpdaterRepository;
 
 final class RegisterTokenVerifier
 {

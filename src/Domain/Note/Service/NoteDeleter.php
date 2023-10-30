@@ -5,9 +5,9 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
+use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Note\NoteDeleterRepository;
 
 class NoteDeleter
 {

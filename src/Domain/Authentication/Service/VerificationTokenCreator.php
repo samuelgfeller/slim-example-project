@@ -2,11 +2,11 @@
 
 namespace App\Domain\Authentication\Service;
 
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenCreatorRepository;
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenDeleterRepository;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenCreatorRepository;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenDeleterRepository;
 
 class VerificationTokenCreator
 {

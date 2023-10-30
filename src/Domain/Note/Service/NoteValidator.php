@@ -2,9 +2,9 @@
 
 namespace App\Domain\Note\Service;
 
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
+use App\Domain\Note\Repository\NoteValidatorRepository;
 use App\Domain\Validation\ValidationException;
-use App\Infrastructure\Note\NoteValidatorRepository;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 

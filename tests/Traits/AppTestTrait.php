@@ -2,7 +2,7 @@
 
 namespace App\Test\Traits;
 
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Test\Fixture\UserRoleFixture;
 use Cake\Database\Connection;
 use Odan\Session\MemorySession;

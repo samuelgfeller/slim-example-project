@@ -4,13 +4,13 @@ namespace App\Domain\Authentication\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
+use App\Domain\Security\Repository\AuthenticationLoggerRepository;
 use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
-use App\Infrastructure\SecurityLogging\AuthenticationLoggerRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class LoginVerifier

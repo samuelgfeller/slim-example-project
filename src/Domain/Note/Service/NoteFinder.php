@@ -3,11 +3,11 @@
 namespace App\Domain\Note\Service;
 
 use App\Domain\Authorization\Privilege;
+use App\Domain\Client\Repository\ClientFinderRepository;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
-use App\Infrastructure\Client\ClientFinderRepository;
-use App\Infrastructure\Note\NoteFinderRepository;
+use App\Domain\Note\Repository\NoteFinderRepository;
 
 class NoteFinder
 {

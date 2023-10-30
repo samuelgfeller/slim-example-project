@@ -4,8 +4,8 @@ namespace App\Domain\Security\Service;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\Security\Repository\LoginLogFinderRepository;
 use App\Domain\Settings;
-use App\Infrastructure\SecurityLogging\LoginLogFinderRepository;
 use App\Test\Unit\Security\SecurityLoginCheckerTest;
 
 class SecurityLoginChecker

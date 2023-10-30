@@ -3,7 +3,7 @@
 namespace App\Domain\FilterSetting;
 
 use App\Domain\FilterSetting\Data\FilterData;
-use App\Infrastructure\UserFilterSetting\UserFilterHandlerRepository;
+use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
 use Odan\Session\SessionInterface;
 
 class FilterSettingFinder

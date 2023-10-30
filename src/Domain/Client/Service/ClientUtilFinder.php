@@ -4,9 +4,9 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientDropdownValuesData;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 
 class ClientUtilFinder
 {

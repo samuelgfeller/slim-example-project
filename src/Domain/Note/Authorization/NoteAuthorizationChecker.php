@@ -2,9 +2,9 @@
 
 namespace App\Domain\Note\Authorization;
 
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Enum\UserRole;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 

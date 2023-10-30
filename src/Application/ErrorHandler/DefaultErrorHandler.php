@@ -2,7 +2,7 @@
 
 namespace App\Application\ErrorHandler;
 
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Validation\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

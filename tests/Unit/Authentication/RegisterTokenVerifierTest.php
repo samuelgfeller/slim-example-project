@@ -4,11 +4,11 @@ namespace App\Test\Unit\Authentication;
 
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFinderRepository;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;

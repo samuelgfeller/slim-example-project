@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Authorization;
 
+use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Authorization\Privilege;
-use App\Infrastructure\Authentication\UserRoleFinderRepository;
 
 /**
  * The client should know when to display edit and delete icons

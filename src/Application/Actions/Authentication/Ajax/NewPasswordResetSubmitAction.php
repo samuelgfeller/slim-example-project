@@ -5,7 +5,7 @@ namespace App\Application\Actions\Authentication\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Service\PasswordResetterWithToken;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;

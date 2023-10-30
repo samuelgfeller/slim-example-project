@@ -5,7 +5,7 @@ namespace App\Domain\User\Service;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivity;
-use App\Infrastructure\User\UserActivityRepository;
+use App\Domain\User\Repository\UserActivityRepository;
 use Odan\Session\SessionInterface;
 
 class UserActivityManager

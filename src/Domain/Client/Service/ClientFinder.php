@@ -9,13 +9,13 @@ use App\Domain\Client\Authorization\ClientAuthorizationGetter;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
 use App\Domain\Client\Data\ClientResultDataCollection;
+use App\Domain\Client\Repository\ClientFinderRepository;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Service\NoteFinder;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
-use App\Infrastructure\Client\ClientFinderRepository;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 
 class ClientFinder
 {

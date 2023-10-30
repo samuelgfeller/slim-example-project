@@ -6,8 +6,8 @@ use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
-use App\Infrastructure\User\UserFinderRepository;
 use Odan\Session\SessionInterface;
 
 class UserFilterChipProvider

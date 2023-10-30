@@ -3,7 +3,7 @@
 namespace App\Domain\FilterSetting;
 
 use App\Application\Data\UserNetworkSessionData;
-use App\Infrastructure\UserFilterSetting\UserFilterHandlerRepository;
+use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
 
 class FilterSettingSaver
 {

@@ -2,11 +2,11 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Enum\UserActivity;
+use App\Domain\User\Repository\UserUpdaterRepository;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
-use App\Infrastructure\User\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
 class PasswordResetterWithToken

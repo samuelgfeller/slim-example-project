@@ -5,9 +5,9 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
+use App\Domain\Note\Repository\NoteUpdaterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Note\NoteUpdaterRepository;
 
 class NoteUpdater
 {

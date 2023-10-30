@@ -3,13 +3,13 @@
 namespace App\Domain\Client\Service\ClientListFilter;
 
 use App\Domain\Authorization\AuthorizationChecker;
+use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
 use App\Domain\User\Enum\UserRole;
+use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
-use App\Infrastructure\Client\ClientStatus\ClientStatusFinderRepository;
-use App\Infrastructure\User\UserFinderRepository;
 use Odan\Session\SessionInterface;
 
 class ClientListFilterChipProvider

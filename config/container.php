@@ -2,7 +2,7 @@
 
 use App\Application\ErrorHandler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Settings;
 use Cake\Database\Connection;
 use Nyholm\Psr7\Factory\Psr17Factory;

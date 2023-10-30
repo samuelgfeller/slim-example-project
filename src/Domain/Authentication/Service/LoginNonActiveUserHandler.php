@@ -4,7 +4,7 @@ namespace App\Domain\Authentication\Service;
 
 use App\Common\LocaleHelper;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\Settings;
 use App\Domain\User\Data\UserData;

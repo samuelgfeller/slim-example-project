@@ -4,8 +4,8 @@ namespace App\Domain\Security\Service;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\Security\Repository\EmailLogFinderRepository;
 use App\Domain\Settings;
-use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 
 class SecurityEmailChecker
 {

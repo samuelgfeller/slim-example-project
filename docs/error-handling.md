@@ -323,16 +323,7 @@ found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/s
 
 namespace App\Application\ErrorHandler;
 
-use App\Domain\Factory\LoggerFactory;
-use App\Domain\Validation\ValidationException;
-use Fig\Http\Message\StatusCodeInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpException;
-use Slim\Views\PhpRenderer;
-use Throwable;
+use App\Domain\Factory\Infrastructure\LoggerFactory;use App\Domain\Validation\ValidationException;use Fig\Http\Message\StatusCodeInterface;use Psr\Http\Message\ResponseFactoryInterface;use Psr\Http\Message\ResponseInterface;use Psr\Http\Message\ServerRequestInterface;use Psr\Log\LoggerInterface;use Slim\Exception\HttpException;use Slim\Views\PhpRenderer;use Throwable;
 
 /**
  * Default Error Renderer.

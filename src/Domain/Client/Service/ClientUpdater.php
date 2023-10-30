@@ -4,10 +4,10 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Repository\ClientUpdaterRepository;
 use App\Domain\Exception\InvalidOperationException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
-use App\Infrastructure\Client\ClientUpdaterRepository;
 
 class ClientUpdater
 {

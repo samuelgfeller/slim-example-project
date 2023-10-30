@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Authentication\Page;
 
 use App\Application\Responder\Responder;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;

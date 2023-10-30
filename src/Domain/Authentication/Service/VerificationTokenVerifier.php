@@ -3,7 +3,7 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
-use App\Infrastructure\Authentication\VerificationToken\VerificationTokenFinderRepository;
+use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFinderRepository;
 
 final class VerificationTokenVerifier
 {

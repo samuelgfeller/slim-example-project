@@ -6,12 +6,12 @@ use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
+use App\Domain\Client\Repository\ClientCreatorRepository;
+use App\Domain\Client\Repository\ClientDeleterRepository;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserActivityManager;
 use App\Domain\Validation\ValidationException;
-use App\Infrastructure\Client\ClientCreatorRepository;
-use App\Infrastructure\Client\ClientDeleterRepository;
 
 class ClientCreator
 {

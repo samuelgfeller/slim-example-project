@@ -4,8 +4,8 @@ namespace App\Test\Unit\Security;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
+use App\Domain\Security\Repository\EmailLogFinderRepository;
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Infrastructure\SecurityLogging\EmailLogFinderRepository;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;

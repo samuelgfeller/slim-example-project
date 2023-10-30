@@ -4,10 +4,10 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\InvalidOperationException;
-use App\Domain\Factory\LoggerFactory;
+use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
-use App\Infrastructure\User\UserUpdaterRepository;
+use App\Domain\User\Repository\UserUpdaterRepository;
 use Psr\Log\LoggerInterface;
 
 final class UserUpdater
