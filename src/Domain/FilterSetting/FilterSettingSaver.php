@@ -11,7 +11,7 @@ class FilterSettingSaver
         private readonly UserFilterHandlerRepository $userFilterHandlerRepository,
         private readonly UserNetworkSessionData $userNetworkSessionData,
     ) {
-   }
+    }
 
     /**
      * Remove old filters from db and save given filters.

@@ -10,7 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class UserFetchListAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         protected readonly UserFinder $userFinder,

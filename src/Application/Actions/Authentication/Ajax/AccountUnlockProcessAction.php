@@ -86,7 +86,7 @@ final class AccountUnlockProcessAction
 
         $flash->add('error', __('Token not found. Please click on the link you received via email.'));
         // Prevent to log passwords
-        $this->logger->error('GET request malformed: ' . json_encode($queryParams));
+        $this->logger->error('GET request malformed: ' . json_encode($queryParams, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
         // Caught in error handler which displays error page because if POST request body is empty frontend has error
         // Error message same as in tests/Provider/UserProvider->malformedRequestBodyProvider()
         throw new HttpBadRequestException($request, 'Query params malformed.');

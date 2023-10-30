@@ -27,9 +27,9 @@ class PasswordResetPageAction
      * @param ServerRequest $request
      * @param Response $response
      *
-     * @return Response
      * @throws \Throwable
      *
+     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -50,6 +50,7 @@ class PasswordResetPageAction
         );
         // If the user clicks on the link and the token's missing, load page with 400 Bad request status
         $response = $response->withStatus(400);
+
         return $this->responder->render($response, 'authentication/reset-password.html.php', [
             'formErrorMessage' => __('Token not found. Please click on the link you received via email.'),
         ]);

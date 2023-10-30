@@ -13,7 +13,6 @@ use Slim\Exception\HttpNotFoundException;
 
 final class UserReadPageAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly UserFinder $userFinder,

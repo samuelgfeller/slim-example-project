@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class TranslateAction
 {
-
     public function __construct(
         private readonly Responder $responder,
     ) {
@@ -34,8 +33,10 @@ final class TranslateAction
             foreach ($queryParams['strings'] as $string) {
                 $translatedStrings[$string] = __($string);
             }
+
             return $this->responder->respondWithJson($response, $translatedStrings);
         }
+
         return $this->responder->respondWithJson($response, ['error' => 'Wrong request body format.'], 400);
     }
 }

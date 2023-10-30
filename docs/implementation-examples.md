@@ -15,10 +15,9 @@ The value can only be added by **update**, so we only need to
 change one action.  
 #### Recap
 * `UserTheme.php` create theme enum. 
-* `UserSubmitUpdateAction.php` add argument to `malformedRequestBodyChecker()` call.
-* `UserValidator.php` add validation line in `validateUserUpdate()`.
+* `UserValidator.php` add validation line in `validateUserValues()`.
 * `UserAuthorizationChecker.php` add to the `$grantedUpdateKeys` in `isGrantedToUpdate()`.
-* `UserUpdater.php` add to the `if(in_array())` in `updateUser()`.
+* `UserUpdater.php` add to the `if(in_array())` statement in `updateUser()`.
 * `UserData.php` add to the instance variables and constructor.
 * `UserFinderRepository.php` add to the instance variable `$fields`.
 * `UserUpdateProvider.php` add theme change to `$basicDataChanges` var in `userUpdateAuthorizationCases()`.
@@ -33,26 +32,27 @@ will be other themes than just light and dark, so it makes sense to create a php
     // Domain/User/Enum/UserTheme.php
     enum UserTheme: string
     {
+        use EnumToArray;
+  
         case light = 'light';
         case dark = 'dark';
     }
     ```
-* In the action class `UserSubmitUpdateAction.php`, `'theme'` has to be added to the
-  `malformedRequestBodyChecker` argument list, so it knows `theme` is an accepted value.
-* After it passed the request body keys validator, the service function `updateUser()`
-is called which first validates the values `validateUserUpdate()`. As it's a backed enum
-the function `validateBackedEnum()` can be used:
-    ```php
-  // UserValidator.php validateUserUpdate()  
-  // ...
-  if (array_key_exists('theme', $userValues)) {
-        $this->validator->validateBackedEnum(
-            $userValues['theme'],
-            UserTheme::class,
-            'theme',
-            $validationResult
-        );
-    }
+  * The service function `updateUser()`
+  is called which first validates the values `validateUserUpdate()`. As it's a backed enum
+  the function `validateBackedEnum()` can be used:
+      ```php
+    // UserValidator.php  
+    $validator
+    // ...
+    ->requirePresence('theme', false, __('Key is required'))
+    ->add('theme', 'themeIsAvailable', [
+          'rule' => function ($value, $context) {
+              // Check if given user status is one of the enum cases values
+              return in_array($value, UserTheme::values(), true);
+          },
+          'message' => __('Invalid option'),
+    ]);
     ```
 * When value validation is done, authorization is tested with `isGrantedToUpdate()`. 
 It checks if authenticated user is allowed to change given field. The way it works

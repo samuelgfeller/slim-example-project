@@ -11,7 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class UserActivityFetchListAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly UserActivityFinder $userActivityFinder,

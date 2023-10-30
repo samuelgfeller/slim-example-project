@@ -4,7 +4,6 @@ namespace App\Application\Responder;
 
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;
-use App\Domain\Validation\ValidationResult;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface;
@@ -14,7 +13,6 @@ use function http_build_query;
 
 final class Responder
 {
-
     public function __construct(
         private readonly RouteParserInterface $routeParser,
         private readonly ResponseFactoryInterface $responseFactory,

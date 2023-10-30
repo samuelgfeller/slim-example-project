@@ -43,7 +43,7 @@ class DashboardTogglePanelActionTest extends TestCase
                 'panelIds' => json_encode(
                     ['unassigned-panel', 'assigned-to-me-panel'],
                     JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
-                )
+                ),
             ]
         );
         $response = $this->app->handle($request);

@@ -12,7 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class DashboardPageAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,

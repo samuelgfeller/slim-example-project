@@ -159,6 +159,7 @@ class PasswordResetSubmitActionTest extends TestCase
 
     /**
      * Test that password reset page loads successfully.
+     *
      * @return void
      */
     public function testPasswordResetPageAction(): void
@@ -178,6 +179,7 @@ class PasswordResetSubmitActionTest extends TestCase
 
     /**
      * Test that password reset page loads with status code 400 if token is missing.
+     *
      * @return void
      */
     public function testPasswordResetPageActionTokenMissing(): void
@@ -188,5 +190,4 @@ class PasswordResetSubmitActionTest extends TestCase
         // Assert 400 Bad request
         self::assertSame(StatusCodeInterface::STATUS_BAD_REQUEST, $response->getStatusCode());
     }
-
 }

@@ -3,9 +3,7 @@
 namespace App\Application\Actions\User\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\User\Service\UserDeleter;
-use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,44 +36,35 @@ final class UserDeleteAction
         array $args
     ): ResponseInterface {
         $userIdToDelete = (int)$args['user_id'];
-        try {
-            // Delete user
-            $deleted = $this->userDeleter->deleteUser($userIdToDelete);
+        // Delete user
+        $deleted = $this->userDeleter->deleteUser($userIdToDelete);
 
-            if ($deleted) {
-                // If user deleted his own account, log him out and send redirect location
-                if ((int)$this->session->get('user_id') === $userIdToDelete) {
-                    $this->session->destroy();
-                    $this->session->start();
-                    $this->session->regenerateId();
-                    $this->session->getFlash()->add(
-                        'success',
-                        'Successfully deleted your account. You are now logged out.'
-                    );
-                } else {
-                    $this->session->getFlash()->add(
-                        'success',
-                        __('Successfully deleted user.')
-                    );
-                }
-
-                return $this->responder->respondWithJson($response, ['status' => 'success']);
+        if ($deleted) {
+            // If user deleted his own account, log him out and send redirect location
+            if ((int)$this->session->get('user_id') === $userIdToDelete) {
+                $this->session->destroy();
+                $this->session->start();
+                $this->session->regenerateId();
+                $this->session->getFlash()->add(
+                    'success',
+                    'Successfully deleted your account. You are now logged out.'
+                );
+            } else {
+                $this->session->getFlash()->add(
+                    'success',
+                    __('Successfully deleted user.')
+                );
             }
 
-            $response = $this->responder->respondWithJson(
-                $response,
-                // response json body asserted in UserDeleteActionTest
-                ['status' => 'warning', 'message' => 'User not deleted.']
-            );
-
-            return $response->withAddedHeader('Warning', 'The account was not deleted');
-        } catch (ForbiddenException $fe) {
-            // Not throwing HttpForbiddenException as it's a json request and response should be json too
-            return $this->responder->respondWithJson(
-                $response,
-                ['status' => 'error', 'message' => $fe->getMessage()],
-                StatusCodeInterface::STATUS_FORBIDDEN
-            );
+            return $this->responder->respondWithJson($response, ['status' => 'success']);
         }
+
+        $response = $this->responder->respondWithJson(
+            $response,
+            // response json body asserted in UserDeleteActionTest
+            ['status' => 'warning', 'message' => 'User not deleted.']
+        );
+
+        return $response->withAddedHeader('Warning', 'The account was not deleted');
     }
 }

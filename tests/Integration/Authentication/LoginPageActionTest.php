@@ -12,13 +12,12 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 
 class LoginPageActionTest extends TestCase
 {
-
     use AppTestTrait;
     use RouteTestTrait;
     use FixtureTestTrait;
 
     /**
-     * Test that login page loads successfully when not authenticated
+     * Test that login page loads successfully when not authenticated.
      *
      * @return void
      */
@@ -54,6 +53,4 @@ class LoginPageActionTest extends TestCase
 
         self::assertSame($requestRouteAfterLogin, $response->getHeaderLine('Location'));
     }
-
-
 }

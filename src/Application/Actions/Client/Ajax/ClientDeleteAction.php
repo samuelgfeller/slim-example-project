@@ -3,26 +3,18 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Service\ClientDeleter;
-use App\Domain\Factory\LoggerFactory;
-use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 final class ClientDeleteAction
 {
-    protected LoggerInterface $logger;
-
     public function __construct(
         private readonly Responder $responder,
         private readonly ClientDeleter $clientDeleter,
         private readonly SessionInterface $session,
-        LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('client-delete');
     }
 
     /**
@@ -39,46 +31,27 @@ final class ClientDeleteAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        if (($loggedInUserId = $this->session->get('user_id')) !== null) {
-            $clientId = (int)$args['client_id'];
+        $clientId = (int)$args['client_id'];
 
-            try {
-                // Delete client logic
-                $deleted = $this->clientDeleter->deleteClient($clientId);
+        // Delete client logic
+        $deleted = $this->clientDeleter->deleteClient($clientId);
 
-                $flash = $this->session->getFlash();
+        $flash = $this->session->getFlash();
 
-                if ($deleted) {
-                    // Add flash here as user gets redirected to client list after deletion
-                    $flash->add('success', __('Successfully deleted client.'));
+        if ($deleted) {
+            // Add flash here as user gets redirected to client list after deletion
+            $flash->add('success', __('Successfully deleted client.'));
 
-                    return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
-                }
-
-                $response = $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'warning', 'message' => 'Client not deleted.']
-                );
-                // If not deleted, inform user
-                $flash->add('warning', 'The client was not deleted');
-
-                return $response->withAddedHeader('Warning', 'The client was not deleted');
-            } catch (ForbiddenException $fe) {
-                // Log event as this should not be able to happen with normal use. User has to manually make exact request
-                $this->logger->notice(
-                    '403 Forbidden, user ' . $loggedInUserId . ' tried to delete other client with id: ' . $clientId
-                );
-
-                // Not throwing HttpForbiddenException as it's a json request and response should be json too
-                return $this->responder->respondWithJson(
-                    $response,
-                    ['status' => 'error', 'message' => 'Not allowed to delete client.'],
-                    StatusCodeInterface::STATUS_FORBIDDEN
-                );
-            }
+            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
         }
 
-        // UserAuthenticationMiddleware handles redirect to login
-        return $response;
+        $response = $this->responder->respondWithJson(
+            $response,
+            ['status' => 'warning', 'message' => 'Client not deleted.']
+        );
+        // If not deleted, inform user
+        $flash->add('warning', 'The client was not deleted');
+
+        return $response->withAddedHeader('Warning', 'The client was not deleted');
     }
 }

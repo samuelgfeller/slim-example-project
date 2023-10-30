@@ -13,7 +13,6 @@ use Slim\Exception\HttpBadRequestException;
 
 final class DashboardTogglePanelProcessAction
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
@@ -30,7 +29,6 @@ final class DashboardTogglePanelProcessAction
      * @param array $args
      *
      * @return ResponseInterface The response
-     *
      */
     public function __invoke(
         ServerRequestInterface $request,

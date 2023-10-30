@@ -32,7 +32,7 @@ class TranslateActionTest extends TestCase
         // Assert 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
         // Testing only response structure and not if strings actually were translated as they don't work locally
-        $this->assertJsonData(['Hello' => 'Hello', 'World' => 'World',], $response, );
+        $this->assertJsonData(['Hello' => 'Hello', 'World' => 'World'], $response);
     }
 
     /**
