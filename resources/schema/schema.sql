@@ -65,13 +65,6 @@ CREATE TABLE `note` (
   KEY `FK_note_client` (`client_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE `permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action` varchar(200) NOT NULL,
-  `module` varchar(100) NOT NULL COMMENT 'module where action takes place',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-
 CREATE TABLE `phinxlog` (
   `version` bigint(20) NOT NULL,
   `migration_name` varchar(100) DEFAULT NULL,
@@ -119,31 +112,12 @@ CREATE TABLE `user_filter_setting` (
   PRIMARY KEY (`user_id`,`filter_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE `user_request` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(254) NOT NULL,
-  `ip_address` int(11) unsigned DEFAULT NULL,
-  `sent_email` tinyint(4) NOT NULL DEFAULT 0,
-  `is_login` enum('success','failure') DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `created_at_index` (`created_at`),
-  KEY `request_track_idx_is_login` (`is_login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-
 CREATE TABLE `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `hierarchy` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-
-CREATE TABLE `user_role_to_permission` (
-  `user_role_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_role_id`,`permission_id`),
-  KEY `user_role_to_permission_permission_null_fk` (`permission_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_verification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
