@@ -295,29 +295,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'note_client_id_fk' => 
-        array (
-          'TABLE_NAME' => 'note',
-          'COLUMN_NAME' => 'client_id',
-          'CONSTRAINT_NAME' => 'note_client_id_fk',
-          'REFERENCED_TABLE_NAME' => 'client',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-        'note_user_id_fk' => 
-        array (
-          'TABLE_NAME' => 'note',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'note_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
     'authentication_log' => 
     array (
@@ -516,19 +494,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'authentication_log_user_id_fk' => 
-        array (
-          'TABLE_NAME' => 'authentication_log',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'authentication_log_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
     'email_log' => 
     array (
@@ -751,19 +717,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'email_log_user_id_fk' => 
-        array (
-          'TABLE_NAME' => 'email_log',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'email_log_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
     'user_filter_setting' => 
     array (
@@ -1251,14 +1205,14 @@ return array (
           'COLUMN_DEFAULT' => 'NULL',
           'IS_NULLABLE' => 'YES',
           'DATA_TYPE' => 'enum',
-          'CHARACTER_MAXIMUM_LENGTH' => 13,
-          'CHARACTER_OCTET_LENGTH' => 52,
+          'CHARACTER_MAXIMUM_LENGTH' => 6,
+          'CHARACTER_OCTET_LENGTH' => 24,
           'NUMERIC_PRECISION' => NULL,
           'NUMERIC_SCALE' => NULL,
           'DATETIME_PRECISION' => NULL,
           'CHARACTER_SET_NAME' => 'utf8mb4',
           'COLLATION_NAME' => 'utf8mb4_unicode_ci',
-          'COLUMN_TYPE' => 'enum(\'moderate\',\'caution\',\'extra_caution\')',
+          'COLUMN_TYPE' => 'enum(\'low\',\'medium\',\'high\')',
           'COLUMN_KEY' => '',
           'EXTRA' => '',
           'PRIVILEGES' => 'select,insert,update,references',
@@ -1468,29 +1422,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'client_client_status__fk' => 
-        array (
-          'TABLE_NAME' => 'client',
-          'COLUMN_NAME' => 'client_status_id',
-          'CONSTRAINT_NAME' => 'client_client_status__fk',
-          'REFERENCED_TABLE_NAME' => 'client_status',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-        'client_user_id_fk' => 
-        array (
-          'TABLE_NAME' => 'client',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'client_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
     'client_status' => 
     array (
@@ -2208,19 +2140,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'user_user_role_id_fk' => 
-        array (
-          'TABLE_NAME' => 'user',
-          'COLUMN_NAME' => 'user_role_id',
-          'CONSTRAINT_NAME' => 'user_user_role_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user_role',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
     'user_activity' => 
     array (
@@ -2491,19 +2411,224 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
+      'foreign_keys' => NULL,
+    ),
+    'user_request' => 
+    array (
+      'table' => 
       array (
-        'user_activity_user_id_fk' => 
+        'table_name' => 'user_request',
+        'engine' => 'InnoDB',
+        'table_comment' => '',
+        'table_collation' => 'utf8mb4_unicode_ci',
+        'character_set_name' => 'utf8mb4',
+        'row_format' => 'Dynamic',
+      ),
+      'columns' => 
+      array (
+        'id' => 
         array (
-          'TABLE_NAME' => 'user_activity',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'user_activity_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'id',
+          'ORDINAL_POSITION' => 1,
+          'COLUMN_DEFAULT' => NULL,
+          'IS_NULLABLE' => 'NO',
+          'DATA_TYPE' => 'int',
+          'CHARACTER_MAXIMUM_LENGTH' => NULL,
+          'CHARACTER_OCTET_LENGTH' => NULL,
+          'NUMERIC_PRECISION' => 10,
+          'NUMERIC_SCALE' => 0,
+          'DATETIME_PRECISION' => NULL,
+          'CHARACTER_SET_NAME' => NULL,
+          'COLLATION_NAME' => NULL,
+          'COLUMN_TYPE' => 'int(11) unsigned',
+          'COLUMN_KEY' => 'PRI',
+          'EXTRA' => 'auto_increment',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
+        ),
+        'email' => 
+        array (
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'email',
+          'ORDINAL_POSITION' => 2,
+          'COLUMN_DEFAULT' => NULL,
+          'IS_NULLABLE' => 'NO',
+          'DATA_TYPE' => 'varchar',
+          'CHARACTER_MAXIMUM_LENGTH' => 254,
+          'CHARACTER_OCTET_LENGTH' => 1016,
+          'NUMERIC_PRECISION' => NULL,
+          'NUMERIC_SCALE' => NULL,
+          'DATETIME_PRECISION' => NULL,
+          'CHARACTER_SET_NAME' => 'utf8mb4',
+          'COLLATION_NAME' => 'utf8mb4_unicode_ci',
+          'COLUMN_TYPE' => 'varchar(254)',
+          'COLUMN_KEY' => '',
+          'EXTRA' => '',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
+        ),
+        'ip_address' => 
+        array (
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'ip_address',
+          'ORDINAL_POSITION' => 3,
+          'COLUMN_DEFAULT' => 'NULL',
+          'IS_NULLABLE' => 'YES',
+          'DATA_TYPE' => 'int',
+          'CHARACTER_MAXIMUM_LENGTH' => NULL,
+          'CHARACTER_OCTET_LENGTH' => NULL,
+          'NUMERIC_PRECISION' => 10,
+          'NUMERIC_SCALE' => 0,
+          'DATETIME_PRECISION' => NULL,
+          'CHARACTER_SET_NAME' => NULL,
+          'COLLATION_NAME' => NULL,
+          'COLUMN_TYPE' => 'int(11) unsigned',
+          'COLUMN_KEY' => '',
+          'EXTRA' => '',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
+        ),
+        'sent_email' => 
+        array (
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'sent_email',
+          'ORDINAL_POSITION' => 4,
+          'COLUMN_DEFAULT' => '0',
+          'IS_NULLABLE' => 'NO',
+          'DATA_TYPE' => 'tinyint',
+          'CHARACTER_MAXIMUM_LENGTH' => NULL,
+          'CHARACTER_OCTET_LENGTH' => NULL,
+          'NUMERIC_PRECISION' => 3,
+          'NUMERIC_SCALE' => 0,
+          'DATETIME_PRECISION' => NULL,
+          'CHARACTER_SET_NAME' => NULL,
+          'COLLATION_NAME' => NULL,
+          'COLUMN_TYPE' => 'tinyint(4)',
+          'COLUMN_KEY' => '',
+          'EXTRA' => '',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
+        ),
+        'is_login' => 
+        array (
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'is_login',
+          'ORDINAL_POSITION' => 5,
+          'COLUMN_DEFAULT' => 'NULL',
+          'IS_NULLABLE' => 'YES',
+          'DATA_TYPE' => 'enum',
+          'CHARACTER_MAXIMUM_LENGTH' => 7,
+          'CHARACTER_OCTET_LENGTH' => 28,
+          'NUMERIC_PRECISION' => NULL,
+          'NUMERIC_SCALE' => NULL,
+          'DATETIME_PRECISION' => NULL,
+          'CHARACTER_SET_NAME' => 'utf8mb4',
+          'COLLATION_NAME' => 'utf8mb4_unicode_ci',
+          'COLUMN_TYPE' => 'enum(\'success\',\'failure\')',
+          'COLUMN_KEY' => 'MUL',
+          'EXTRA' => '',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
+        ),
+        'created_at' => 
+        array (
+          'TABLE_CATALOG' => 'def',
+          'TABLE_NAME' => 'user_request',
+          'COLUMN_NAME' => 'created_at',
+          'ORDINAL_POSITION' => 6,
+          'COLUMN_DEFAULT' => 'current_timestamp()',
+          'IS_NULLABLE' => 'YES',
+          'DATA_TYPE' => 'datetime',
+          'CHARACTER_MAXIMUM_LENGTH' => NULL,
+          'CHARACTER_OCTET_LENGTH' => NULL,
+          'NUMERIC_PRECISION' => NULL,
+          'NUMERIC_SCALE' => NULL,
+          'DATETIME_PRECISION' => 0,
+          'CHARACTER_SET_NAME' => NULL,
+          'COLLATION_NAME' => NULL,
+          'COLUMN_TYPE' => 'datetime',
+          'COLUMN_KEY' => 'MUL',
+          'EXTRA' => '',
+          'PRIVILEGES' => 'select,insert,update,references',
+          'COLUMN_COMMENT' => '',
+          'IS_GENERATED' => 'NEVER',
+          'GENERATION_EXPRESSION' => NULL,
         ),
       ),
+      'indexes' => 
+      array (
+        'PRIMARY' => 
+        array (
+          1 => 
+          array (
+            'Table' => 'user_request',
+            'Non_unique' => 0,
+            'Key_name' => 'PRIMARY',
+            'Seq_in_index' => 1,
+            'Column_name' => 'id',
+            'Collation' => 'A',
+            'Sub_part' => NULL,
+            'Packed' => NULL,
+            'Null' => '',
+            'Index_type' => 'BTREE',
+            'Comment' => '',
+            'Index_comment' => '',
+          ),
+        ),
+        'created_at_index' => 
+        array (
+          1 => 
+          array (
+            'Table' => 'user_request',
+            'Non_unique' => 1,
+            'Key_name' => 'created_at_index',
+            'Seq_in_index' => 1,
+            'Column_name' => 'created_at',
+            'Collation' => 'A',
+            'Sub_part' => NULL,
+            'Packed' => NULL,
+            'Null' => 'YES',
+            'Index_type' => 'BTREE',
+            'Comment' => '',
+            'Index_comment' => '',
+          ),
+        ),
+        'request_track_idx_is_login' => 
+        array (
+          1 => 
+          array (
+            'Table' => 'user_request',
+            'Non_unique' => 1,
+            'Key_name' => 'request_track_idx_is_login',
+            'Seq_in_index' => 1,
+            'Column_name' => 'is_login',
+            'Collation' => 'A',
+            'Sub_part' => NULL,
+            'Packed' => NULL,
+            'Null' => 'YES',
+            'Index_type' => 'BTREE',
+            'Comment' => '',
+            'Index_comment' => '',
+          ),
+        ),
+      ),
+      'foreign_keys' => NULL,
     ),
     'user_role_to_permission' => 
     array (
@@ -2844,19 +2969,7 @@ return array (
           ),
         ),
       ),
-      'foreign_keys' => 
-      array (
-        'user_verification_user_id_fk' => 
-        array (
-          'TABLE_NAME' => 'user_verification',
-          'COLUMN_NAME' => 'user_id',
-          'CONSTRAINT_NAME' => 'user_verification_user_id_fk',
-          'REFERENCED_TABLE_NAME' => 'user',
-          'REFERENCED_COLUMN_NAME' => 'id',
-          'UPDATE_RULE' => 'RESTRICT',
-          'DELETE_RULE' => 'RESTRICT',
-        ),
-      ),
+      'foreign_keys' => NULL,
     ),
   ),
 );

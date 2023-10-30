@@ -210,7 +210,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'null' => true,
                 'default' => null,
                 'limit' => 13,
-                'values' => ['moderate', 'caution', 'extra_caution'],
+                'values' => ['low', 'medium', 'high'],
                 'after' => 'client_message',
             ])
             ->addColumn('user_id', 'integer', [

@@ -8,9 +8,9 @@ enum ClientVigilanceLevel: string
 {
     use EnumToArray;
 
-    case MODERATE = 'moderate';
-    case CAUTION = 'caution';
-    case EXTRA_CAUTION = 'extra_caution';
+    case LOW = 'low';
+    case MEDIUM = 'medium';
+    case HIGH = 'high';
 
     /**
      * Calling the translation function __() for each enum value
@@ -23,9 +23,9 @@ enum ClientVigilanceLevel: string
     public static function getTranslatedValues(): array
     {
         return [
-            __('Moderate'),
-            __('Caution'),
-            __('Extra caution'),
+            __('Low'),
+            __('Medium'),
+            __('High'),
         ];
     }
 

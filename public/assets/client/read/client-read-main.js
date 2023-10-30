@@ -113,16 +113,16 @@ function submitClientDropdownChange() {
 
 function changeMainNoteBorderAccordingToVigilanceLevel(vigilanceLevel) {
     let mainNote = document.querySelector('#main-note-textarea-div textarea');
-    mainNote.classList.remove('vigilance-moderate', 'vigilance-caution', 'vigilance-extra-caution');
+    mainNote.classList.remove('vigilance-low', 'vigilance-medium', 'vigilance-high');
     switch (vigilanceLevel) {
-        case 'moderate':
-            mainNote.classList.add('vigilance-moderate');
+        case 'low':
+            mainNote.classList.add('vigilance-low');
             break;
-        case 'caution':
-            mainNote.classList.add('vigilance-caution');
+        case 'medium':
+            mainNote.classList.add('vigilance-medium');
             break;
-        case 'extra_caution':
-            mainNote.classList.add('vigilance-extra-caution');
+        case 'high':
+            mainNote.classList.add('vigilance-high');
             break;
         default:
             break;

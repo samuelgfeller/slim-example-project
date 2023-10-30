@@ -6,9 +6,8 @@ CREATE TABLE `authentication_log` (
   `is_success` tinyint(4) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
-  KEY `authentication_log_user_id_fk` (`user_id`),
-  CONSTRAINT `authentication_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `authentication_log_user_id_fk` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `client` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,7 +19,7 @@ CREATE TABLE `client` (
   `email` varchar(254) DEFAULT NULL,
   `sex` enum('M','F','O') DEFAULT NULL,
   `client_message` varchar(1000) DEFAULT NULL COMMENT 'Message that client submitted via webform',
-  `vigilance_level` enum('moderate','caution','extra_caution') DEFAULT NULL,
+  `vigilance_level` enum('low','medium','high') DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `client_status_id` int(11) DEFAULT NULL,
   `assigned_at` datetime DEFAULT NULL COMMENT 'date at which user_id was set',
@@ -29,9 +28,7 @@ CREATE TABLE `client` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_client_user` (`user_id`),
-  KEY `FK_client_status` (`client_status_id`),
-  CONSTRAINT `client_client_status__fk` FOREIGN KEY (`client_status_id`) REFERENCES `client_status` (`id`),
-  CONSTRAINT `client_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `FK_client_status` (`client_status_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Advisors help and consult clients';
 
 CREATE TABLE `client_status` (
@@ -50,9 +47,8 @@ CREATE TABLE `email_log` (
   `subject` varchar(998) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
-  KEY `email_log_user_id_fk` (`user_id`),
-  CONSTRAINT `email_log_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `email_log_user_id_fk` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -66,9 +62,7 @@ CREATE TABLE `note` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK__user` (`user_id`),
-  KEY `FK_note_client` (`client_id`),
-  CONSTRAINT `note_client_id_fk` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`),
-  CONSTRAINT `note_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `FK_note_client` (`client_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `permission` (
@@ -101,8 +95,7 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_user_user_role` (`user_role_id`),
-  CONSTRAINT `user_user_role_id_fk` FOREIGN KEY (`user_role_id`) REFERENCES `user_role` (`id`)
+  KEY `FK_user_user_role` (`user_role_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_activity` (
@@ -116,8 +109,7 @@ CREATE TABLE `user_activity` (
   `ip_address` varchar(50) DEFAULT NULL,
   `user_agent` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_activity_user_id_fk` (`user_id`),
-  CONSTRAINT `user_activity_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `user_activity_user_id_fk` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_filter_setting` (
@@ -126,6 +118,18 @@ CREATE TABLE `user_filter_setting` (
   `module` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`filter_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE `user_request` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) NOT NULL,
+  `ip_address` int(11) unsigned DEFAULT NULL,
+  `sent_email` tinyint(4) NOT NULL DEFAULT 0,
+  `is_login` enum('success','failure') DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `created_at_index` (`created_at`),
+  KEY `request_track_idx_is_login` (`is_login`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -150,6 +154,5 @@ CREATE TABLE `user_verification` (
   `created_at` datetime DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK__user_table` (`user_id`),
-  CONSTRAINT `user_verification_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `FK__user_table` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

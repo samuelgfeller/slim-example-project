@@ -1,15 +1,15 @@
 :root {
-    --vigilance-moderate: 0 0 5px 4px rgb(224, 211, 69);
-    --vigilance-caution: 0 0 5px 4px rgb(238, 170, 93);
-    --vigilance-extra-caution: 0 0 5px 4px rgb(236, 124, 86);
+    --vigilance-low: 0 0 5px 4px rgb(224, 211, 69);
+    --vigilance-medium: 0 0 5px 4px rgb(238, 170, 93);
+    --vigilance-high: 0 0 5px 4px rgb(236, 124, 86);
     --add-personal-info-icon-background: transparent;
     --add-personal-info-icon-box-shadow: 0 0px 9px rgba(46, 66, 80, 0.12);
 }
 
 [data-theme="dark"] {
-    --vigilance-moderate: 0 0 5px 4px rgb(189, 177, 44);
-    --vigilance-caution: 0 0 5px 4px rgb(178, 127, 18);
-    --vigilance-extra-caution: 0 0 5px 4px rgb(169, 62, 26);
+    --vigilance-low: 0 0 5px 4px rgb(189, 177, 44);
+    --vigilance-medium: 0 0 5px 4px rgb(178, 127, 18);
+    --vigilance-high: 0 0 5px 4px rgb(169, 62, 26);
     --add-personal-info-icon-background: var(--background-accent-color);
     --add-personal-info-icon-box-shadow: 0 0px 9px rgba(123, 197, 255, 0.12);
 }
@@ -251,14 +251,14 @@
         box-shadow: none;
     }
 
-    #main-note-textarea-div textarea.vigilance-moderate {
-        box-shadow: var(--vigilance-moderate);
+    #main-note-textarea-div textarea.vigilance-low {
+        box-shadow: var(--vigilance-low);
     }
-    #main-note-textarea-div textarea.vigilance-caution {
-        box-shadow: var(--vigilance-caution);
+    #main-note-textarea-div textarea.vigilance-medium {
+        box-shadow: var(--vigilance-medium);
     }
-    #main-note-textarea-div textarea.vigilance-extra-caution {
-        box-shadow: var(--vigilance-extra-caution);
+    #main-note-textarea-div textarea.vigilance-high {
+        box-shadow: var(--vigilance-high);
     }
 }
 
