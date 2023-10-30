@@ -4,7 +4,7 @@ namespace App\Domain\Security\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Security\Repository\LoginLogFinderRepository;
-use App\Domain\Settings;
+use App\Domain\Utility\Settings;
 
 class LoginRequestFinder
 {

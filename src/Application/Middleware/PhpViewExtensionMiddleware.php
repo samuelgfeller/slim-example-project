@@ -3,8 +3,8 @@
 namespace App\Application\Middleware;
 
 use App\Common\JsImportVersionAdder;
-use App\Domain\Settings;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
+use App\Domain\Utility\Settings;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

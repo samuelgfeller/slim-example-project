@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Utility;
+namespace App\Domain\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Security\Repository\EmailLoggerRepository;

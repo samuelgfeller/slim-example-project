@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Domain;
+namespace App\Domain\Utility;
 
-/**
- * Class Settings.
- */
 class Settings
 {
     /** @var array */

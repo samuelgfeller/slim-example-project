@@ -3,9 +3,9 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Common\LocaleHelper;
-use App\Domain\Settings;
+use App\Domain\Service\Mailer;
 use App\Domain\User\Data\UserData;
-use App\Domain\Utility\Mailer;
+use App\Domain\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;

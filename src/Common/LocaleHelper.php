@@ -2,7 +2,7 @@
 
 namespace App\Common;
 
-use App\Domain\Settings;
+use App\Domain\Utility\Settings;
 
 final class LocaleHelper
 {

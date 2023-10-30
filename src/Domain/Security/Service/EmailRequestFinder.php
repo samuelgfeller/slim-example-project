@@ -3,7 +3,7 @@
 namespace App\Domain\Security\Service;
 
 use App\Domain\Security\Repository\EmailLogFinderRepository;
-use App\Domain\Settings;
+use App\Domain\Utility\Settings;
 
 class EmailRequestFinder
 {
