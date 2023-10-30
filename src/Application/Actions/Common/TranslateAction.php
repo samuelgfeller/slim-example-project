@@ -6,16 +6,9 @@ use App\Application\Responder\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class TranslateAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     */
+
     public function __construct(
         private readonly Responder $responder,
     ) {
@@ -27,8 +20,6 @@ final class TranslateAction
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      * @param array $args
-     *
-     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */
@@ -43,8 +34,8 @@ final class TranslateAction
             foreach ($queryParams['strings'] as $string) {
                 $translatedStrings[$string] = __($string);
             }
+            return $this->responder->respondWithJson($response, $translatedStrings);
         }
-
-        return $this->responder->respondWithJson($response, $translatedStrings);
+        return $this->responder->respondWithJson($response, ['error' => 'Wrong request body format.'], 400);
     }
 }

@@ -23,7 +23,7 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 /**
  * Client creation submit tests
  *  - Normal client creation
- *  - With invalid values -> 422
+ *  - With invalid values -> 422.
  */
 class ClientCreateActionTest extends TestCase
 {

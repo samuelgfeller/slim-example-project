@@ -10,19 +10,9 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Action.
- */
 final class DashboardPageAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder
-     * @param SessionInterface $session
-     * @param FilterSettingFinder $filterSettingFinder
-     * @param DashboardPanelProvider $dashboardGetter
-     */
+
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,

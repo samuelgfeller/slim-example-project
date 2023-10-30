@@ -6,7 +6,6 @@ use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 use App\Domain\Validation\ValidationException;
-use App\Domain\Validation\ValidatorNative;
 use App\Infrastructure\Authentication\UserRoleFinderRepository;
 use App\Infrastructure\User\UserFinderRepository;
 use Cake\Validation\Validator;
@@ -17,7 +16,6 @@ use Cake\Validation\Validator;
 class UserValidator
 {
     public function __construct(
-        private readonly ValidatorNative $validatorNative,
         private readonly UserFinderRepository $userFinderRepository,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
     ) {
@@ -194,9 +192,10 @@ class UserValidator
             ->requirePresence('email', true, __('Key is required'))
             ->email('email', false, __('Invalid email'))
             ->requirePresence('password', true, __('Key is required'))
-            ->notEmptyString('password', __('Invalid password'));
-        // Further validating seems not very useful and could lead to issues if password validation rules
-        // change and user want's to log in with a password that was created before the rule change
+            ->notEmptyString('password', __('Invalid password'))
+            // Further password validating seems not very useful and could lead to issues if password validation rules
+            // change and user want's to log in with a password that was created before the rule change
+            ->requirePresence('g-recaptcha-response', false); // Optional key
 
         // Validate and throw exception if there are errors
         $errors = $validator->validate($userLoginValues);

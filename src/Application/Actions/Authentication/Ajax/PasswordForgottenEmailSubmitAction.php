@@ -3,7 +3,6 @@
 namespace App\Application\Actions\Authentication\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Factory\LoggerFactory;
@@ -19,20 +18,10 @@ final class PasswordForgottenEmailSubmitAction
 {
     protected LoggerInterface $logger;
 
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder
-     * @param SessionInterface $session
-     * @param PasswordRecoveryEmailSender $passwordRecoveryEmailSender
-     * @param LoggerFactory $logger
-     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
-     */
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
-        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
         LoggerFactory $logger,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login');

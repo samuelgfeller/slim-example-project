@@ -11,13 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class UserActivityFetchListAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder The responder
-     * @param UserActivityFinder $userActivityFinder
-     * @param FilterSettingSaver $filterSettingSaver
-     */
+
     public function __construct(
         private readonly Responder $responder,
         private readonly UserActivityFinder $userActivityFinder,
@@ -31,8 +25,6 @@ class UserActivityFetchListAction
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
      * @param array $args
-     *
-     * @throws \JsonException
      *
      * @return ResponseInterface The response
      */

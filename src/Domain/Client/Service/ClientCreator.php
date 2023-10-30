@@ -71,6 +71,7 @@ class ClientCreator
                 $this->clientDeleterRepository->hardDeleteClient($clientId);
                 // Also remove client creation activity
                 $this->userActivityManager->deleteUserActivity($clientInsertActivityId);
+                // Throw exception for it to be caught in middleware
                 throw $validationException;
             }
         }

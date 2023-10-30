@@ -11,19 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
 
-/**
- * Action.
- */
 final class DashboardTogglePanelProcessAction
 {
-    /**
-     * The constructor.
-     *
-     * @param Responder $responder
-     * @param SessionInterface $session
-     * @param FilterSettingSaver $filterSettingSaver
-     * @param MalformedRequestBodyChecker $malformedRequestBodyChecker
-     */
+
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
@@ -39,9 +29,8 @@ final class DashboardTogglePanelProcessAction
      * @param ResponseInterface $response The response
      * @param array $args
      *
-     * @throws \JsonException
-     *
      * @return ResponseInterface The response
+     *
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -49,9 +38,10 @@ final class DashboardTogglePanelProcessAction
         array $args
     ): ResponseInterface {
         $params = $request->getParsedBody();
+        // As there is no other validation the request body is checked for valid keys here
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($params, ['panelIds'])) {
             $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(
-                json_decode($params['panelIds'], true),
+                json_decode($params['panelIds'], true, 512, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR),
                 FilterModule::DASHBOARD_PANEL
             );
 

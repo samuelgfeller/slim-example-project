@@ -133,12 +133,12 @@ class UserUpdateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Minimum length is 2',],
-                            'surname' => [0 => 'Minimum length is 2',],
-                            'email' => [0 => 'Invalid email',],
-                            'status' => [0 => 'Invalid option',],
-                            'user_role_id' => [0 => 'Invalid option',],
-                            'theme' => [0 => 'Invalid option',],
+                            'first_name' => [0 => 'Minimum length is 2'],
+                            'surname' => [0 => 'Minimum length is 2'],
+                            'email' => [0 => 'Invalid email'],
+                            'status' => [0 => 'Invalid option'],
+                            'user_role_id' => [0 => 'Invalid option'],
+                            'theme' => [0 => 'Invalid option'],
                         ],
                     ],
                 ],
@@ -155,9 +155,9 @@ class UserUpdateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Maximum length is 100',],
-                            'surname' => [0 => 'Maximum length is 100',],
-                            'email' => [0 => 'Invalid email',],
+                            'first_name' => [0 => 'Maximum length is 100'],
+                            'surname' => [0 => 'Maximum length is 100'],
+                            'email' => [0 => 'Invalid email'],
                         ],
                     ],
                 ],

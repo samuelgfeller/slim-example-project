@@ -58,9 +58,7 @@ class AccountUnlockActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams))
-            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));
         $response = $this->app->handle($request);
 
         // Assert that redirect worked
@@ -107,9 +105,7 @@ class AccountUnlockActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams))
-            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));
         $response = $this->app->handle($request);
 
         // Assert that redirect to register worked with correct further redirect query params
@@ -162,9 +158,7 @@ class AccountUnlockActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams))
-            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));
         $response = $this->app->handle($request);
 
         // Assert that redirect worked

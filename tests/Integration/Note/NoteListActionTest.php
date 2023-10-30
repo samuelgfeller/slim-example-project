@@ -169,9 +169,8 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('note-list')
-        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-        ->withQueryParams($filterQueryParams);
+            $this->urlFor('note-list', [], $filterQueryParams)
+        );
 
         $response = $this->app->handle($request);
 
@@ -228,9 +227,8 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('note-list')
-        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-        ->withQueryParams($filterQueryParams);
+            $this->urlFor('note-list', [], $filterQueryParams)
+        );
 
         $response = $this->app->handle($request);
 

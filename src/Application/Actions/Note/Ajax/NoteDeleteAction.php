@@ -9,9 +9,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Action.
- */
 final class NoteDeleteAction
 {
     protected LoggerInterface $logger;

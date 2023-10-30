@@ -341,13 +341,6 @@ class DefaultErrorHandler
 {
     private LoggerInterface $logger;
 
-    /**
-     * The constructor.
-     *
-     * @param PhpRenderer $phpRenderer PHP-View renderer
-     * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param LoggerFactory $logger Logger
-     */
     public function __construct(
         private readonly PhpRenderer $phpRenderer,
         private readonly ResponseFactoryInterface $responseFactory,

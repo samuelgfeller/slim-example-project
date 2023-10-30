@@ -12,18 +12,9 @@ use Slim\Views\PhpRenderer;
 
 use function http_build_query;
 
-/**
- * A generic responder.
- */
 final class Responder
 {
-    /**
-     * The constructor.
-     *
-     * @param RouteParserInterface $routeParser The route parser
-     * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param PhpRenderer $phpRenderer slimphp/PHP-View renderer
-     */
+
     public function __construct(
         private readonly RouteParserInterface $routeParser,
         private readonly ResponseFactoryInterface $responseFactory,
@@ -243,18 +234,5 @@ final class Responder
         $response = $response->withStatus($status);
 
         return $response->withHeader('Content-Type', 'application/json');
-    }
-
-    public function respondWithJsonOnValidationError(
-        ValidationResult $validationResult,
-        ResponseInterface $response
-    ): ?ResponseInterface {
-        $responseData = [
-            'status' => 'error',
-            'message' => 'Validation error',
-            'data' => $validationResult->toArray(),
-        ];
-
-        return $this->respondWithJson($response, $responseData, $validationResult->getStatusCode());
     }
 }

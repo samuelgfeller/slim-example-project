@@ -26,9 +26,6 @@ class DashboardTogglePanelActionTest extends TestCase
      * Test that when user clicks to enable 2 panels it is
      * saved in the database table user_filter_setting.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     *
      * @return void
      */
     public function testDashboardTogglePanelActionAuthenticated(): void
@@ -42,7 +39,12 @@ class DashboardTogglePanelActionTest extends TestCase
         $request = $this->createJsonRequest(
             'PUT',
             $this->urlFor('dashboard-toggle-panel'),
-            ['panelIds' => json_encode(['unassigned-panel', 'assigned-to-me-panel'])]
+            [
+                'panelIds' => json_encode(
+                    ['unassigned-panel', 'assigned-to-me-panel'],
+                    JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
+                )
+            ]
         );
         $response = $this->app->handle($request);
 

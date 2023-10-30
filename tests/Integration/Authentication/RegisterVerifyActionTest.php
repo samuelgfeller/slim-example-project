@@ -57,9 +57,7 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-            // Needed until nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
         $response = $this->app->handle($request);
 
         // Assert that redirect worked
@@ -105,9 +103,7 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
 
         $response = $this->app->handle($request);
 
@@ -153,9 +149,7 @@ class RegisterVerifyActionTest extends TestCase
             'id' => $verification->id,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
         $response = $this->app->handle($request);
 
         // Assert that client is redirected to register page with the redirect GET param
@@ -192,9 +186,7 @@ class RegisterVerifyActionTest extends TestCase
             'id' => 1,
         ];
 
-        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams))
-            // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105];
-            ->withQueryParams($queryParams);
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
 
         $this->expectException(HttpBadRequestException::class);
 

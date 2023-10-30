@@ -181,11 +181,6 @@ Request is created as follows:
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
 ```
 
-Very important note here, query params can be added directly in the `urlFor()` method, like
-`$this->createJsonRequest('GET', $this->urlFor('note-list', [], ['client_id' => 1]))` but
-**[that won't work](https://github.com/Nyholm/psr7/issues/181) if `nyholm/psr7`
-is used in the project.** So we have to explicitly use `->withQueryParams(['client_id' => 1])` like shown above.
-
 ### Simulate session, execute request and assert status code
 
 ```php
@@ -1414,105 +1409,6 @@ public function testClientSubmitUpdateAction_invalid(array $requestBody, array $
     // database should be unchanged
     $this->assertTableRowEquals($clientRow, 'client', $clientRow['id']);
     $this->assertJsonData($jsonResponse, $response);
-}
-```
-
-</details>
-
-## Test and assert malformed request body example
-
-When the client makes a request and the body has not the right syntax (e.g. wrong key or invalid amount of keys)
-the server should respond with 400 Bad Request.
-
-The different combination of malformed request body are provided via data provider. It doesn't have to be
-so extensive though, I don't know if I will implement it so thoroughly for each module but that would cover most cases.
-
-### Malformed request body provider and test function example
-
-<details>
-  <summary><h4>Case provider <code>tests/Provider/Note/NoteCaseProvider.php</code></h4></summary>
-
-```php
-public function provideNoteMalformedRequestBodyForCreation(): array
-{
-    return [
-        [
-            // Empty body
-            'requestBody' => [],
-        ],
-        [
-            // Body "null" (because both can happen )
-            'requestBody' => null,
-        ],
-        [
-            'requestBody' => [
-                'message_wrong' => 'Message', // wrong message key name
-                'client_id' => 1,
-                'is_main' => 1,
-            ],
-        ],
-        [
-            'requestBody' => [
-                'message' => 'Message',
-                'client_id_wrong' => 1, // wrong client id
-                'is_main' => 1,
-            ],
-        ],
-        [
-            'requestBody' => [
-                'message' => 'Message',
-                'client_id' => 1,
-                'is_main_wrong' => 1, // wrong is_main
-            ],
-        ],
-        [
-            'requestBody' => [ // One key too much
-                'message' => 'Message',
-                'client_id' => 1,
-                'is_main' => 1,
-                'extra_key' => 1, // wrong is_main
-            ],
-        ],
-        [
-            'requestBody' => [ // Missing is_main
-                'message' => 'Message',
-                'client_id' => 1,
-            ],
-        ],
-    ];
-}
-```
-
-</details>
-
-<details>
-  <summary><h4>Test function <code>tests/Integration/Note/NoteCreateActionTest.php</code></h4></summary>
-
-```php
-/**
- * Test client read note creation with different 
- * combinations of malformed request body.
- *
- * @dataProvider \App\Test\Provider\Note\NoteCaseProvider::provideNoteMalformedRequestBodyForCreation()
- * @param array $malformedRequestBody
- * @return void
- */
-public function testNoteSubmitCreateAction_malformedRequest(array $malformedRequestBody): void
-{
-    // Action class should directly return error so only logged-in user has to be inserted
-    $userData = $this->insertFixturesWithAttributes([], UserFixture::class);
-    // Simulate logged-in user with same user as linked to client
-    $this->container->get(SessionInterface::class)->set('user_id', $userData['id']);
-    $request = $this->createJsonRequest(
-        'POST',
-        $this->urlFor('note-submit-creation'),
-        $malformedRequestBody
-    );
-    // Bad Request (400) means that the client sent the request wrongly; it's a client error
-    $this->expectException(HttpBadRequestException::class);
-    $this->expectExceptionMessage('Request body malformed.');
-    // Handle request after defining expected exceptions
-    $this->app->handle($request);
 }
 ```
 

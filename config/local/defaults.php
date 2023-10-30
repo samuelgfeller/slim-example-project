@@ -43,7 +43,6 @@ $settings['public'] = [
     ],
 ];
 
-
 $settings['locale'] = [
     // Available languages format: ['language code' => 'locale code']
     'available' => [

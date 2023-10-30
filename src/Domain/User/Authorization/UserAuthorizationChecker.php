@@ -29,17 +29,6 @@ class UserAuthorizationChecker
     }
 
     /**
-     * When the session is created during the request, the user is not logged in yet
-     * when the code traverses through the UserNetworkSessionMiddleware.
-     *
-     * @return int|null
-     */
-    public function getLoggedInUserId(): ?int
-    {
-        return $this->userNetworkSessionData->userId;
-    }
-
-    /**
      * Check if authenticated user is allowed to create
      * Important to have user role in the object.
      *

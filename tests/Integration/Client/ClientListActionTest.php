@@ -133,9 +133,8 @@ class ClientListActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('client-list')
-        )   // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set [SLE-105]
-        ->withQueryParams($filterQueryParamsArr);
+            $this->urlFor('client-list', [], $filterQueryParamsArr)
+        );
 
         $response = $this->app->handle($request);
 
@@ -223,9 +222,8 @@ class ClientListActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('client-list')
-        ) // Needed until Nyholm/psr7 supports ->getQueryParams() taking uri query parameters if no other are set
-        ->withQueryParams($queryParams);
+            $this->urlFor('client-list', [], $queryParams)
+        );
 
         $response = $this->app->handle($request);
 

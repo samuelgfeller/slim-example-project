@@ -152,10 +152,10 @@ class UserFinderRepository
      *
      * @param int $id
      *
-     * @return UserData
-     * Throws PersistenceRecordNotFoundException if not found
      * @throws \Exception
      *
+     * @return UserData
+     * Throws PersistenceRecordNotFoundException if not found
      */
     public function getUserById(int $id): UserData
     {

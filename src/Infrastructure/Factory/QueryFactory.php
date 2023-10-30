@@ -13,11 +13,7 @@ use Cake\Database\Query\UpdateQuery;
  */
 final class QueryFactory
 {
-    /**
-     * The constructor.
-     *
-     * @param Connection $connection The database connection
-     */
+
     public function __construct(public readonly Connection $connection)
     {
     }

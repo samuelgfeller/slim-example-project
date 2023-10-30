@@ -156,4 +156,37 @@ class PasswordResetSubmitActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         // As form is directly rendered with validation errors it's not possible to test them as response is a stream
     }
+
+    /**
+     * Test that password reset page loads successfully.
+     * @return void
+     */
+    public function testPasswordResetPageAction(): void
+    {
+        $request = $this->createRequest(
+            'GET',
+            $this->urlFor(
+                'password-reset-page',
+                [],
+                ['id' => 1, 'token' => 'Token Content Does Not Matter As Only Key Is Checked In Page Action']
+            ),
+        );
+        $response = $this->app->handle($request);
+        // Assert 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+    }
+
+    /**
+     * Test that password reset page loads with status code 400 if token is missing.
+     * @return void
+     */
+    public function testPasswordResetPageActionTokenMissing(): void
+    {
+        // Create token with missing token
+        $request = $this->createRequest('GET', $this->urlFor('password-reset-page'));
+        $response = $this->app->handle($request);
+        // Assert 400 Bad request
+        self::assertSame(StatusCodeInterface::STATUS_BAD_REQUEST, $response->getStatusCode());
+    }
+
 }
