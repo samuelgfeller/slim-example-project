@@ -13,6 +13,7 @@ use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Repository\UserCreatorRepository;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserCreator
@@ -25,7 +26,7 @@ class UserCreator
         private readonly VerificationTokenCreator $verificationTokenCreator,
         private readonly RegistrationMailer $registrationMailer,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -64,7 +65,7 @@ class UserCreator
             $user->id = $this->userCreatorRepository->insertUser($userRow);
             // remove passwords from user row before they are inserted into activity (also id because not relevant)
             unset($userRow['password'], $userRow['password2'], $userRow['password_hash'], $userRow['id'], $userRow['theme']);
-            $this->userActivityManager->addUserActivity(UserActivity::CREATED, 'user', $user->id, $userRow);
+            $this->userActivityLogger->logUserActivity(UserActivity::CREATED, 'user', $user->id, $userRow);
 
             // Create and insert token if unverified
             if ($user->status === UserStatus::Unverified) {

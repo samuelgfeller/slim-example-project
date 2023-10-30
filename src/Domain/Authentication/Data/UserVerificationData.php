@@ -2,11 +2,6 @@
 
 namespace App\Domain\Authentication\Data;
 
-/**
- * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
- * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
- * sense to keep them private otherwise not really.
- */
 class UserVerificationData
 {
     public ?int $id;
@@ -16,9 +11,7 @@ class UserVerificationData
     public ?string $usedAt = null;
     public ?string $createdAt;
 
-    /**
-     * @param array $verificationData
-     */
+
     public function __construct(array $verificationData = [])
     {
         $this->id = $verificationData['id'] ?? null;

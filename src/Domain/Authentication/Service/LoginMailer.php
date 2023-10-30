@@ -17,13 +17,7 @@ class LoginMailer
 {
     private Email $email;
 
-    /**
-     * LoginMailer constructor.
-     *
-     * @param Mailer $mailer email sender and helper
-     * @param LocaleHelper $localeHelper
-     * @param Settings $settings
-     */
+
     public function __construct(
         private readonly Mailer $mailer,
         private readonly LocaleHelper $localeHelper,

@@ -5,7 +5,7 @@ namespace App\Application\Actions\User\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
-use App\Domain\User\Service\UserActivityFinder;
+use App\Domain\UserActivity\Service\UserActivityFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

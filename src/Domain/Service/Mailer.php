@@ -16,14 +16,7 @@ use Symfony\Component\Mime\Email;
  */
 class Mailer
 {
-    /**
-     * Mailer constructor.
-     *
-     * @param MailerInterface $mailer
-     * @param PhpRenderer $phpRenderer
-     * @param EmailLoggerRepository $emailLoggerRepository
-     * @param UserNetworkSessionData $userNetworkSessionData
-     */
+
     public function __construct(
         private readonly MailerInterface $mailer,
         private readonly PhpRenderer $phpRenderer,

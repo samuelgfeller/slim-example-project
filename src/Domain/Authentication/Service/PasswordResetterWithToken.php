@@ -5,8 +5,8 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 class PasswordResetterWithToken
@@ -17,7 +17,7 @@ class PasswordResetterWithToken
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
         private readonly VerificationTokenVerifier $verificationTokenVerifier,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('password-reset');
@@ -44,7 +44,7 @@ class PasswordResetterWithToken
         $passwordHash = password_hash($passwordResetValues['password'], PASSWORD_DEFAULT);
         $updated = $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
         if ($updated) {
-            $this->userActivityManager->addUserActivity(
+            $this->userActivityLogger->logUserActivity(
                 UserActivity::UPDATED,
                 'user',
                 $userId,

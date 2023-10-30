@@ -7,7 +7,7 @@ use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Repository\ClientDeleterRepository;
 use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class ClientDeleter
 {
@@ -15,7 +15,7 @@ class ClientDeleter
         private readonly ClientDeleterRepository $clientDeleterRepository,
         private readonly ClientFinder $clientFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         private readonly NoteDeleterRepository $noteDeleterRepository,
     ) {
     }
@@ -38,7 +38,7 @@ class ClientDeleter
             $this->noteDeleterRepository->deleteNotesFromClient($clientId);
             $deleted = $this->clientDeleterRepository->deleteClient($clientId);
             if ($deleted) {
-                $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'client', $clientId);
+                $this->userActivityLogger->logUserActivity(UserActivity::DELETED, 'client', $clientId);
             }
 
             return $deleted;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\Repository;
+namespace App\Domain\UserActivity\Repository;
 
 use App\Common\Hydrator;
 use App\Domain\Factory\Infrastructure\QueryFactory;

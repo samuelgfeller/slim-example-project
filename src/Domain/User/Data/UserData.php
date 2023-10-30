@@ -6,11 +6,7 @@ use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 
-/**
- * Class User also serving as DTO for simplicity reasons. More details on slim-api-example/issues/2
- * Public attributes: Basically if it is intended to interface DTOs or there may be read-only fields it makes
- * sense to keep them private otherwise not really.
- */
+
 class UserData implements \JsonSerializable
 {
     // Variable names matching database columns (camelCase instead of snake_case)
@@ -30,11 +26,7 @@ class UserData implements \JsonSerializable
     public ?\DateTimeImmutable $createdAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added to authorization and service
 
-    /**
-     * User constructor.
-     *
-     * @param array $userData
-     */
+
     public function __construct(array $userData = [])
     {
         // Keys may be taken from view form or database, so they have to correspond to both; otherwise use mapper

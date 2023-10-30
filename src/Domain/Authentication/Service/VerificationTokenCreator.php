@@ -6,14 +6,14 @@ use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenCrea
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenDeleterRepository;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class VerificationTokenCreator
 {
     public function __construct(
         private readonly VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
         private readonly VerificationTokenCreatorRepository $verificationTokenCreatorRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -52,7 +52,7 @@ class VerificationTokenCreator
 
         // Add user activity entry
         $userVerificationRow['token'] = '******';
-        $this->userActivityManager->addUserActivity(
+        $this->userActivityLogger->logUserActivity(
             UserActivity::CREATED,
             'user_verification',
             $tokenId,

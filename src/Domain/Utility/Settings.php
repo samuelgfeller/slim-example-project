@@ -4,14 +4,10 @@ namespace App\Domain\Utility;
 
 class Settings
 {
-    /** @var array */
+
     private array $settings;
 
-    /**
-     * Settings constructor.
-     *
-     * @param array $settings
-     */
+
     public function __construct(array $settings)
     {
         $this->settings = $settings;

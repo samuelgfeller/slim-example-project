@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Domain\User\Service;
+namespace App\Domain\UserActivity\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Repository\UserActivityRepository;
-use Odan\Session\SessionInterface;
+use App\Domain\UserActivity\Repository\UserActivityRepository;
 
-class UserActivityManager
+class UserActivityLogger
 {
     public function __construct(
         private readonly UserActivityRepository $userActivityRepository,
-        private readonly SessionInterface $session,
         private readonly UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
@@ -21,14 +19,14 @@ class UserActivityManager
      * Insert new user activity.
      *
      * @param UserActivity $userActivityAction
-     * @param string $table
+     * @param string $table A better name should be found as the service should not know the table name
      * @param int $rowId
      * @param array|null $data
      * @param int|null $userId in case there is no session like on login
      *
      * @return int
      */
-    public function addUserActivity(
+    public function logUserActivity(
         UserActivity $userActivityAction,
         string $table,
         int $rowId,

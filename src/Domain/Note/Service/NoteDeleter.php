@@ -7,7 +7,7 @@ use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class NoteDeleter
 {
@@ -15,7 +15,7 @@ class NoteDeleter
         private readonly NoteDeleterRepository $noteDeleterRepository,
         private readonly NoteFinder $noteFinder,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -40,7 +40,7 @@ class NoteDeleter
         if ($this->noteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)) {
             $deleted = $this->noteDeleterRepository->deleteNote($noteId);
             if ($deleted) {
-                $this->userActivityManager->addUserActivity(
+                $this->userActivityLogger->logUserActivity(
                     UserActivity::DELETED,
                     'note',
                     $noteId,

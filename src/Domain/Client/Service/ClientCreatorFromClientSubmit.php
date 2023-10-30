@@ -6,14 +6,14 @@ use App\Domain\Client\Enum\ClientStatus;
 use App\Domain\Client\Repository\ClientCreatorRepository;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class ClientCreatorFromClientSubmit
 {
     public function __construct(
         private readonly ClientValidator $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
     ) {
     }
@@ -39,7 +39,7 @@ class ClientCreatorFromClientSubmit
         // Insert client
         $clientId = $this->clientCreatorRepository->insertClient($clientValues);
         // Insert user activity
-        $clientInsertActivityId = $this->userActivityManager->addUserActivity(
+        $clientInsertActivityId = $this->userActivityLogger->logUserActivity(
             UserActivity::CREATED,
             'client',
             $clientId,

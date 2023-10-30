@@ -9,8 +9,8 @@ use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserValidator;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class LoginVerifier
@@ -21,7 +21,7 @@ class LoginVerifier
         private readonly UserFinderRepository $userFinderRepository,
         private readonly AuthenticationLoggerRepository $authenticationLoggerRepository,
         private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         private readonly UserNetworkSessionData $ipAddressData,
     ) {
     }
@@ -64,7 +64,7 @@ class LoginVerifier
                     $dbUser->id
                 );
 
-                $this->userActivityManager->addUserActivity(
+                $this->userActivityLogger->logUserActivity(
                     UserActivity::READ,
                     'user',
                     $dbUser->id,

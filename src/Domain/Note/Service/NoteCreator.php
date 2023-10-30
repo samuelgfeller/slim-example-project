@@ -8,8 +8,8 @@ use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Repository\NoteCreatorRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use IntlDateFormatter;
 
 class NoteCreator
@@ -18,7 +18,7 @@ class NoteCreator
         private readonly NoteValidator $noteValidator,
         private readonly NoteCreatorRepository $noteCreatorRepository,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         private readonly UserNetworkSessionData $userNetworkSessionData,
         private readonly UserFinder $userFinder,
         private readonly NoteFinder $noteFinder,
@@ -42,7 +42,7 @@ class NoteCreator
         if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
             $noteId = $this->noteCreatorRepository->insertNote($noteValues);
             if (!empty($noteId)) {
-                $this->userActivityManager->addUserActivity(
+                $this->userActivityLogger->logUserActivity(
                     UserActivity::CREATED,
                     'note',
                     $noteId,

@@ -10,11 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-/**
- * User auth verification middleware.
- *
- * Class UserAuthMiddleware
- */
 final class LocaleMiddleware implements MiddlewareInterface
 {
     public function __construct(
@@ -24,6 +19,13 @@ final class LocaleMiddleware implements MiddlewareInterface
     ) {
     }
 
+    /**
+     * Locale middleware set language to default lang, browser lang or from settings.
+     *
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     */
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler

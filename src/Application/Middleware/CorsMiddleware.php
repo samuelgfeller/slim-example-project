@@ -18,10 +18,7 @@ final class CorsMiddleware implements MiddlewareInterface
 {
     private ?string $allowedOrigin;
 
-    /**
-     * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param Settings $settings
-     */
+
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         Settings $settings,

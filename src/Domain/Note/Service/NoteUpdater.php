@@ -7,7 +7,7 @@ use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Repository\NoteUpdaterRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class NoteUpdater
 {
@@ -16,7 +16,7 @@ class NoteUpdater
         private readonly NoteUpdaterRepository $noteUpdaterRepository,
         private readonly NoteFinder $noteFinder,
         private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -54,7 +54,7 @@ class NoteUpdater
 
             $updated = $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             if ($updated) {
-                $this->userActivityManager->addUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
+                $this->userActivityLogger->logUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
             }
 
             return $updated;

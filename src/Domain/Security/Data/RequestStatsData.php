@@ -12,11 +12,7 @@ class RequestStatsData
     public ?int $loginFailures;
     public ?int $loginSuccesses;
 
-    /**
-     * RequestStatsData constructor.
-     *
-     * @param array $requestStatsData
-     */
+
     public function __construct(array $requestStatsData = [])
     {
         $this->sentEmails = $requestStatsData['sent_emails'] ?? null;

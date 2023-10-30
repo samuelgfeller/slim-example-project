@@ -10,7 +10,7 @@ use App\Domain\Client\Repository\ClientCreatorRepository;
 use App\Domain\Client\Repository\ClientDeleterRepository;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use App\Domain\Validation\ValidationException;
 
 class ClientCreator
@@ -21,7 +21,7 @@ class ClientCreator
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
         private readonly NoteCreator $noteCreator,
         private readonly ClientDeleterRepository $clientDeleterRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         private readonly UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
@@ -45,7 +45,7 @@ class ClientCreator
             // Insert client
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Insert user activity
-            $clientInsertActivityId = $this->userActivityManager->addUserActivity(
+            $clientInsertActivityId = $this->userActivityLogger->logUserActivity(
                 UserActivity::CREATED,
                 'client',
                 $clientId,
@@ -70,7 +70,7 @@ class ClientCreator
                 // and to prevent duplicate the newly created client has to be deleted
                 $this->clientDeleterRepository->hardDeleteClient($clientId);
                 // Also remove client creation activity
-                $this->userActivityManager->deleteUserActivity($clientInsertActivityId);
+                $this->userActivityLogger->deleteUserActivity($clientInsertActivityId);
                 // Throw exception for it to be caught in middleware
                 throw $validationException;
             }

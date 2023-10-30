@@ -7,7 +7,7 @@ use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Repository\ClientUpdaterRepository;
 use App\Domain\Exception\InvalidOperationException;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class ClientUpdater
 {
@@ -16,7 +16,7 @@ class ClientUpdater
         private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -82,7 +82,7 @@ class ClientUpdater
             // Update client
             $updated = $this->clientUpdaterRepository->updateClient($updateData, $clientId);
             if ($updated) {
-                $this->userActivityManager->addUserActivity(
+                $this->userActivityLogger->logUserActivity(
                     UserActivity::UPDATED,
                     'client',
                     $clientId,
@@ -97,7 +97,7 @@ class ClientUpdater
         }
 
         // Add activity entry with failed update attempt
-        $this->userActivityManager->addUserActivity(
+        $this->userActivityLogger->logUserActivity(
             UserActivity::UPDATED,
             'client',
             $clientId,

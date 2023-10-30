@@ -11,11 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-/**
- * User auth verification middleware.
- *
- * Class UserAuthMiddleware
- */
 final class UserAuthenticationMiddleware implements MiddlewareInterface
 {
     public function __construct(
@@ -25,6 +20,14 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
     ) {
     }
 
+    /**
+     * User authentication middleware. Check if user is logged in and if not
+     * redirect to login page with redirect back query params.
+     *
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     */
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler

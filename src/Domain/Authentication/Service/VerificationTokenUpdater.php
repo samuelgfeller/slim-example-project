@@ -4,13 +4,13 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenUpdaterRepository;
 use App\Domain\User\Enum\UserActivity;
-use App\Domain\User\Service\UserActivityManager;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 class VerificationTokenUpdater
 {
     public function __construct(
         private readonly VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -28,7 +28,7 @@ class VerificationTokenUpdater
         $success = $this->verificationTokenUpdaterRepository->updateUserVerificationRow($verificationId, $updateValues);
         if ($success) {
             // Add user activity entry
-            $this->userActivityManager->addUserActivity(
+            $this->userActivityLogger->logUserActivity(
                 UserActivity::UPDATED,
                 'user_verification',
                 $verificationId,

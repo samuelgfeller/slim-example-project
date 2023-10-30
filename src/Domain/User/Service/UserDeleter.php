@@ -7,6 +7,7 @@ use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserDeleterRepository;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -14,19 +15,12 @@ class UserDeleter
 {
     protected LoggerInterface $logger;
 
-    /**
-     * @param LoggerFactory $logger
-     * @param UserDeleterRepository $userDeleterRepository
-     * @param SessionInterface $session
-     * @param UserAuthorizationChecker $userAuthorizationChecker
-     * @param UserActivityManager $userActivityManager
-     */
     public function __construct(
         LoggerFactory $logger,
         private readonly UserDeleterRepository $userDeleterRepository,
         private readonly SessionInterface $session,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createLogger('user-delete');
     }
@@ -46,7 +40,7 @@ class UserDeleter
         if ($this->userAuthorizationChecker->isGrantedToDelete($userIdToDelete)) {
             $isDeleted = $this->userDeleterRepository->deleteUserById($userIdToDelete);
             if ($isDeleted) {
-                $this->userActivityManager->addUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);
+                $this->userActivityLogger->logUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);
             }
 
             return $isDeleted;

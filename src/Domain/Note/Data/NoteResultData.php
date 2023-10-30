@@ -16,13 +16,7 @@ class NoteResultData extends NoteData
     // Populated in NoteUserRightSetter
     public ?Privilege $privilege; // json_encode automatically takes $enum->value
 
-    /**
-     * Note constructor.
-     *
-     * @param array $noteValues
-     *
-     * @throws \Exception
-     */
+
     public function __construct(array $noteValues = [])
     {
         parent::__construct($noteValues);

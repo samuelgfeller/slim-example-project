@@ -10,9 +10,6 @@ use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 
-/**
- * Class UserValidator.
- */
 class UserValidator
 {
     public function __construct(

@@ -8,8 +8,8 @@ use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFind
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Repository\UserUpdaterRepository;
-use App\Domain\User\Service\UserActivityManager;
 use App\Domain\User\Service\UserFinder;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 
 final class RegisterTokenVerifier
 {
@@ -18,7 +18,7 @@ final class RegisterTokenVerifier
         private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
         private readonly VerificationTokenUpdater $verificationTokenUpdater,
         private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
 
@@ -60,7 +60,7 @@ final class RegisterTokenVerifier
                         );
                         $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
                         // Add user activity entry
-                        $this->userActivityManager->addUserActivity(
+                        $this->userActivityLogger->logUserActivity(
                             UserActivity::UPDATED,
                             'user',
                             $userId,

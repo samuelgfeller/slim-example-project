@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\User\Service;
+namespace App\Domain\UserActivity\Service;
 
 use App\Domain\User\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Repository\UserActivityRepository;
 use App\Domain\User\Repository\UserFinderRepository;
+use App\Domain\UserActivity\Repository\UserActivityRepository;
 use IntlDateFormatter;
 use InvalidArgumentException;
 use RuntimeException;

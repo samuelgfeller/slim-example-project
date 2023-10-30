@@ -8,19 +8,11 @@ use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class NoteValidator.
- */
+
 class NoteValidator
 {
     private LoggerInterface $logger;
 
-    /**
-     * NoteValidator constructor.
-     *
-     * @param NoteValidatorRepository $noteValidatorRepository
-     * @param LoggerFactory $loggerFactory
-     */
     public function __construct(
         private readonly NoteValidatorRepository $noteValidatorRepository,
         private readonly LoggerFactory $loggerFactory,

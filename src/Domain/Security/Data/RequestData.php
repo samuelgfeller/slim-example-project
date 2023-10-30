@@ -11,11 +11,7 @@ class RequestData
     public ?string $isLogin;
     public ?\DateTimeImmutable $createdAt;
 
-    /**
-     * @param array $requestData
-     *
-     * @throws \Exception
-     */
+
     public function __construct(array $requestData = [])
     {
         $this->id = $requestData['id'] ?? null;

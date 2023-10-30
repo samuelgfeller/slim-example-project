@@ -20,9 +20,7 @@ class UserActivityData
     public ?string $pageUrl = null;
     public ?string $timeAndActionName = null; // Time in the correct format and action name with upper case
 
-    /**
-     * @param array $userActivityValues assoc values array with as key the column name
-     */
+
     public function __construct(array $userActivityValues = [])
     {
         $this->id = $userActivityValues['id'] ?? null;

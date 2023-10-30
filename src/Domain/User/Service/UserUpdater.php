@@ -8,6 +8,7 @@ use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
+use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 final class UserUpdater
@@ -18,7 +19,7 @@ final class UserUpdater
         private readonly UserValidator $userValidator,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserActivityManager $userActivityManager,
+        private readonly UserActivityLogger $userActivityLogger,
         LoggerFactory $logger
     ) {
         $this->logger = $logger->addFileHandler('error.log')->createLogger('user-service');
@@ -66,7 +67,7 @@ final class UserUpdater
             }
             $updated = $this->userUpdaterRepository->updateUser($userIdToChange, $validUpdateData);
             if ($updated) {
-                $this->userActivityManager->addUserActivity(
+                $this->userActivityLogger->logUserActivity(
                     UserActivity::UPDATED,
                     'user',
                     $userIdToChange,

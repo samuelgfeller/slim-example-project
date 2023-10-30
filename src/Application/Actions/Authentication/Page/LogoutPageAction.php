@@ -9,12 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
 final class LogoutPageAction
 {
-    /**
-     * LogoutAction constructor.
-     *
-     * @param SessionInterface $session
-     * @param Responder $responder
-     */
+
     public function __construct(
         private readonly SessionInterface $session,
         private readonly Responder $responder,

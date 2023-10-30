@@ -22,11 +22,7 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
 
     private LoggerInterface $logger;
 
-    /**
-     * @param bool $displayErrorDetails
-     * @param bool $logErrors
-     * @param LoggerFactory $logger
-     */
+
     public function __construct(
         bool $displayErrorDetails,
         bool $logErrors,

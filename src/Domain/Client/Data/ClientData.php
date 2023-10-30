@@ -28,11 +28,7 @@ class ClientData implements \JsonSerializable
     // Not database field but here so that age doesn't have to be calculated in view
     public ?int $age = null;
 
-    /**
-     * Client Data constructor.
-     *
-     * @param array|null $clientData
-     */
+
     public function __construct(?array $clientData = [])
     {
         $this->id = $clientData['id'] ?? null;

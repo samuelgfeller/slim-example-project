@@ -21,17 +21,7 @@ class PasswordRecoveryEmailSender
 {
     private Email $email;
 
-    /**
-     * LoginMailer constructor.
-     *
-     * @param Mailer $mailer email sender and helper
-     * @param UserValidator $userValidator
-     * @param UserFinderRepository $userFinderRepository
-     * @param VerificationTokenCreator $verificationTokenCreator
-     * @param Settings $settings
-     * @param SecurityEmailChecker $securityEmailChecker
-     * @param LocaleHelper $localeHelper
-     */
+
     public function __construct(
         private readonly Mailer $mailer,
         private readonly UserValidator $userValidator,
