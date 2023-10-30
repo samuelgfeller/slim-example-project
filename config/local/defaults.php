@@ -16,6 +16,8 @@ ini_set('display_startup_errors', '0');
 
 // Timezone - time() is timezone independent https://stackoverflow.com/a/36390811/9013718
 date_default_timezone_set('Europe/Zurich');
+// Set default locale
+setlocale(LC_ALL, 'en_US.utf8', 'en_US');
 
 // Init settings var
 $settings = [];
@@ -30,7 +32,8 @@ $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
     // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
-    'update_imports_version' => true, // Disable in prod
+    'update_imports_version' => true,
+    // Disable in prod
     'assets_path' => $settings['root_dir'] . '/public/assets',
 ];
 

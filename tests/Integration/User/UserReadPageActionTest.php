@@ -8,12 +8,9 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
-use Slim\Exception\HttpForbiddenException;
 
 class UserReadPageActionTest extends TestCase
 {
@@ -31,10 +28,7 @@ class UserReadPageActionTest extends TestCase
      *
      * @param array $userData user attributes containing the user_role_id
      * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
-     * @param array{string: StatusCodeInterface} $expectedResult
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @param array $expectedResult
      *
      * @return void
      */
@@ -50,11 +44,6 @@ class UserReadPageActionTest extends TestCase
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
 
         $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => $userData['id']]));
-
-        // When forbidden, exception is thrown and caught by the error handler which displays the error page
-        if ($expectedResult[StatusCodeInterface::class] === StatusCodeInterface::STATUS_FORBIDDEN) {
-            $this->expectException(HttpForbiddenException::class);
-        }
 
         $response = $this->app->handle($request);
 
