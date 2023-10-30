@@ -2,6 +2,7 @@
 
 namespace App\Domain\Client\Service;
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
@@ -11,7 +12,6 @@ use App\Domain\User\Service\UserActivityManager;
 use App\Domain\Validation\ValidationException;
 use App\Infrastructure\Client\ClientCreatorRepository;
 use App\Infrastructure\Client\ClientDeleterRepository;
-use Odan\Session\SessionInterface;
 
 class ClientCreator
 {
@@ -22,7 +22,7 @@ class ClientCreator
         private readonly NoteCreator $noteCreator,
         private readonly ClientDeleterRepository $clientDeleterRepository,
         private readonly UserActivityManager $userActivityManager,
-        private readonly SessionInterface $session,
+        private readonly UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
 
@@ -58,7 +58,7 @@ class ClientCreator
                     $mainNoteValues = [
                         'message' => $clientValues['message'],
                         'client_id' => $clientId,
-                        'user_id' => $this->session->get('user_id'),
+                        'user_id' => $this->userNetworkSessionData->userId,
                         'is_main' => 1,
                     ];
                     $this->noteCreator->createNote($mainNoteValues);
