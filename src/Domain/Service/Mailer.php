@@ -66,7 +66,7 @@ class Mailer
         $this->emailLoggerRepository->logEmailRequest(
             $email->getFrom()[0]->getAddress(),
             $email->getTo()[0]->getAddress(),
-            $email->getSubject(),
+            $email->getSubject() ?? '',
             $this->userNetworkSessionData->userId
         );
     }

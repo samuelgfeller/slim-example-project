@@ -53,9 +53,9 @@ class UserFinderRepository
     /**
      * Returns array of user rows.
      *
-     * @return array|false
+     * @return array
      */
-    public function findAllUserRows(): bool|array
+    public function findAllUserRows(): array
     {
         $query = $this->queryFactory->selectQuery()->select($this->fields)->from('user')->where(
             ['deleted_at IS' => null]

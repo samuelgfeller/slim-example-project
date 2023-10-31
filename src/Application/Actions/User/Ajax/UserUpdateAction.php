@@ -31,7 +31,7 @@ final class UserUpdateAction
     ): ResponseInterface {
         // Id in url user_id defined in routes.php
         $userIdToChange = (int)$args['user_id'];
-        $userValuesToChange = $request->getParsedBody();
+        $userValuesToChange = (array)$request->getParsedBody();
         $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
 
         if ($updated) {

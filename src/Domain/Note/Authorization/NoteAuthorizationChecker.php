@@ -26,7 +26,7 @@ class NoteAuthorizationChecker
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
      * @param int|null $clientOwnerId client owner might become relevant
-     * @param int|null $hidden when note message is hidden
+     * @param int|null $isHidden when note message is hidden
      * @param bool $log
      *
      * @return bool
@@ -35,19 +35,20 @@ class NoteAuthorizationChecker
         int $isMain = 0,
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
-        ?int $hidden = null,
+        ?int $isHidden = null,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes
             if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
-                && (
-                    in_array($hidden, [null, 0], true) // When hidden is not null or 0, user has to be advisor to read note
+                && ( // When hidden is not null or 0, user has to be advisor to read note
+                    in_array($isHidden, [null, 0, false], true)
                     || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]
                     // If authenticated user is client owner or note owner -> granted to read hidden notes
                     || $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
@@ -80,7 +81,8 @@ class NoteAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             if (($isMain === 0 // newcomers may see create notes for any client
                     && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
@@ -119,7 +121,8 @@ class NoteAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
@@ -162,7 +165,8 @@ class NoteAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update

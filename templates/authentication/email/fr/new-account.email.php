@@ -3,11 +3,11 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
- * @var \App\Domain\User\Data\UserData $user object
+ * @var string $userFullName
  * @var array $config public configuration values
  */
 ?>
-Bonjour <?= $user->getFullName() ?> <br>
+Bonjour <?= $userFullName ?> <br>
 <br>
 Votre compte a été créé. <br>
 <br>

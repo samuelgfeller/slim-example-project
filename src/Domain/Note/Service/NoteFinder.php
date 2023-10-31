@@ -21,11 +21,11 @@ class NoteFinder
     /**
      * Find one note in the database.
      *
-     * @param $id
+     * @param int $id
      *
      * @return NoteData
      */
-    public function findNote($id): NoteData
+    public function findNote(int $id): NoteData
     {
         return $this->noteFinderRepository->findNoteById($id);
     }
@@ -76,14 +76,14 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         foreach ($notes as $noteResultData) {
             // Privilege only create possible if user may not see the note but may create one
             $noteResultData->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
-                $noteResultData->userId,
+                (int)$noteResultData->userId,
                 $clientOwnerId,
                 $noteResultData->hidden,
             );
             // If not allowed to read
             if (!$noteResultData->privilege->hasPrivilege(Privilege::READ)) {
                 // Change message of note to lorem ipsum
-                $noteResultData->message = substr($randomText, 0, strlen($noteResultData->message));
+                $noteResultData->message = substr($randomText, 0, strlen($noteResultData->message ?? ''));
                 // Remove line breaks and extra spaces from string
                 $noteResultData->message = preg_replace('/\s\s+/', ' ', $noteResultData->message);
             }

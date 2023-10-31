@@ -37,7 +37,7 @@ class NewPasswordResetSubmitAction
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        $parsedBody = $request->getParsedBody();
+        $parsedBody = (array)$request->getParsedBody();
         $flash = $this->session->getFlash();
 
         try {

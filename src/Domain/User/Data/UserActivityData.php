@@ -8,7 +8,7 @@ class UserActivityData
 {
     public ?int $id;
     public ?int $userId; // Has to be nullable when user id is unknown
-    public ?UserActivity $action;
+    public UserActivity $action = UserActivity::UPDATED; // Default to updated
     public ?string $table;
     public ?int $rowId;
     public ?array $data;
@@ -25,8 +25,8 @@ class UserActivityData
     {
         $this->id = $userActivityValues['id'] ?? null;
         $this->userId = $userActivityValues['user_id'] ?? null;
-        $this->action = $userActivityValues['action'] ?? null ?
-            UserActivity::tryFrom($userActivityValues['action']) : null;
+        $this->action = isset($userActivityValues['action']) ?
+            UserActivity::tryFrom($userActivityValues['action']) : UserActivity::UPDATED;
         $this->table = $userActivityValues['table'] ?? null;
         $this->rowId = $userActivityValues['row_id'] ?? null;
         $this->data = $userActivityValues['data'] ?? null ?

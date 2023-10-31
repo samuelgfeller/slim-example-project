@@ -36,11 +36,11 @@ class ClientFinder
      * Gives clients from db with aggregate data
      * matching given filter params (client list).
      *
-     * @param $queryBuilderWhereArray
+     * @param array $queryBuilderWhereArray
      *
      * @return ClientResultDataCollection
      */
-    public function findClientListWithAggregates($queryBuilderWhereArray): ClientResultDataCollection
+    public function findClientListWithAggregates(array $queryBuilderWhereArray): ClientResultDataCollection
     {
         $clientResultCollection = new ClientResultDataCollection();
         // Retrieve clients
@@ -89,11 +89,11 @@ class ClientFinder
     /**
      * Find one client in the database.
      *
-     * @param $id
+     * @param int $id
      *
      * @return ClientData
      */
-    public function findClient($id): ClientData
+    public function findClient(int $id): ClientData
     {
         return $this->clientFinderRepository->findClientById($id);
     }
@@ -121,10 +121,12 @@ class ClientFinder
                 'main_data'
             );
             // Set main note privilege
-            $clientResultAggregate->mainNoteData->privilege = $this->noteAuthorizationGetter->getMainNotePrivilege(
-                $clientResultAggregate->mainNoteData->userId,
-                $clientResultAggregate->userId
-            );
+            if ($clientResultAggregate->mainNoteData !== null) {
+                $clientResultAggregate->mainNoteData->privilege = $this->noteAuthorizationGetter->getMainNotePrivilege(
+                    $clientResultAggregate->mainNoteData->userId,
+                    $clientResultAggregate->userId
+                );
+            }
 
             // Set assigned user privilege
             $clientResultAggregate->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(

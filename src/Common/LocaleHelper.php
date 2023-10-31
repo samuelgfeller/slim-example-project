@@ -16,22 +16,23 @@ final class LocaleHelper
     /**
      * Set the locale to the given lang code and bind text domain for gettext translations.
      *
-     * @param string|null $locale The locale or language code (e.g. 'en_US' or 'en')
+     * @param string|false|null $locale The locale or language code (e.g. 'en_US' or 'en')
      * @param string $domain The text domain (e.g. 'messages')
      *
      * @return false|string
      */
-    public function setLanguage(?string $locale, string $domain = 'messages'): bool|string
+    public function setLanguage(string|null|false $locale, string $domain = 'messages'): bool|string
     {
         $codeset = 'UTF-8';
+        $defaultLocale = $this->localeSettings['default'] ?? 'en_US';
         // Current path src/Application/Middleware
         $directory = __DIR__ . '/../../resources/translations';
         // If locale has hyphen instead of underscore, replace it
-        $locale = str_replace('-', '_', $locale);
+        $locale = $locale ? str_replace('-', '_', $locale) : $defaultLocale;
         // Get language code from locale
         $langCode = explode('_', $locale)[0];
         // Get the available locale or the default one
-        $locale = $this->localeSettings['available'][$langCode] ?? $this->localeSettings['default'] ?? 'en_US';
+        $locale = $this->localeSettings['available'][$langCode] ?? $defaultLocale;
         // Get locale with hyphen as alternative if server doesn't have the one with underscore (windows)
         $localeHyphen = str_replace('_', '-', $locale);
 

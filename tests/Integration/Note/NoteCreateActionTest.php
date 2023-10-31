@@ -107,7 +107,11 @@ class NoteCreateActionTest extends TestCase
             'user_activity',
             (int)$this->findLastInsertedTableRow('user_activity')['id']
         );
-        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+        $dateFormatter = new IntlDateFormatter(
+            setlocale(LC_ALL, 0) ?: null,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::SHORT
+        );
 
         // Assert response
         $expectedResponseJson = [

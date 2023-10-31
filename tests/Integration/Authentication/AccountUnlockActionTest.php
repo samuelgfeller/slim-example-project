@@ -55,7 +55,7 @@ class AccountUnlockActionTest extends TestCase
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));
@@ -66,7 +66,9 @@ class AccountUnlockActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Assert that token has been used
-        self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
+        self::assertNotNull(
+            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
+        );
 
         // Assert that status is active on user
         $this->assertTableRowValue(UserStatus::Active->value, 'user', $userRow['id'], 'status');
@@ -102,7 +104,7 @@ class AccountUnlockActionTest extends TestCase
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));
@@ -116,7 +118,7 @@ class AccountUnlockActionTest extends TestCase
         // Assert that token had NOT been used (except if already used)
         self::assertSame(
             $verification->usedAt,
-            $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
+            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
         );
         // Assert that status is still locked on user
         $this->assertTableRowValue(UserStatus::Locked->value, 'user', $userRow['id'], 'status');
@@ -155,7 +157,7 @@ class AccountUnlockActionTest extends TestCase
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' =>  (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));

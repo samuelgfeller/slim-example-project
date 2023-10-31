@@ -23,11 +23,7 @@ class ClientStatusFinderRepository
     {
         $query = $this->queryFactory->selectQuery()->from('client_status');
 
-        $query->select(['id', 'name'])
-            ->where(
-                ['name' => $clientStatus->value],
-                ['deleted_at IS' => null]
-            );
+        $query->select(['id', 'name'])->where(['name' => $clientStatus->value, 'deleted_at IS' => null]);
         $resultRow = $query->execute()->fetch('assoc') ?: [];
 
         return $resultRow['id'] ?? null;
@@ -39,16 +35,14 @@ class ClientStatusFinderRepository
      *
      * @param bool $withoutTranslation
      *
-     * @return array{id: string, name: string}
+     * @return array<int, string>
      */
     public function findAllClientStatusesMappedByIdName(bool $withoutTranslation = false): array
     {
         $query = $this->queryFactory->selectQuery()->from('client_status');
 
-        $query->select(['id', 'name'])
-            ->andWhere(
-                ['deleted_at IS' => null]
-            );
+        $query->select(['id', 'name'])->andWhere(['deleted_at IS' => null]);
+
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $statuses = [];
         foreach ($resultRows as $resultRow) {
@@ -72,11 +66,7 @@ class ClientStatusFinderRepository
     {
         $query = $this->queryFactory->selectQuery()->from('client_status');
 
-        $query->select(['id'])
-            ->where(
-                ['id' => $clientStatusId],
-                ['deleted_at IS' => null]
-            );
+        $query->select(['id'])->where(['id' => $clientStatusId, 'deleted_at IS' => null]);
         $resultRow = $query->execute()->fetch('assoc') ?: [];
 
         return !empty($resultRow);

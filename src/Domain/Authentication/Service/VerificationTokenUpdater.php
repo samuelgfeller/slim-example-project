@@ -18,11 +18,11 @@ class VerificationTokenUpdater
      * Set verification token to used.
      *
      * @param int $verificationId
-     * @param int $userId
+     * @param int|null $userId
      *
      * @return bool
      */
-    public function setVerificationEntryToUsed(int $verificationId, int $userId): bool
+    public function setVerificationEntryToUsed(int $verificationId, int|null $userId): bool
     {
         $updateValues = ['used_at' => (new \DateTime())->format('Y-m-d H:i:s')];
         $success = $this->verificationTokenUpdaterRepository->updateUserVerificationRow($verificationId, $updateValues);

@@ -39,7 +39,7 @@
     "roave/security-advisories": "dev-master",
     "phpunit/phpunit": "^9 || ^10",
     "selective/test-traits": "^4",
-    "phpstan/phpstan": "^0.12.81",
+    "phpstan/phpstan": "^1",
     "jetbrains/phpstorm-attributes": "^1.0",
     "friendsofphp/php-cs-fixer": "^3",
     "odan/phinx-migrations-generator": "^6"

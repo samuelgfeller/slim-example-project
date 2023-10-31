@@ -30,8 +30,8 @@ class UserResultData extends UserData
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'statusPrivilege' => $this->statusPrivilege->value,
-            'userRolePrivilege' => $this->userRolePrivilege->value,
+            'statusPrivilege' => $this->statusPrivilege?->value,
+            'userRolePrivilege' => $this->userRolePrivilege?->value,
             'availableUserRoles' => $this->availableUserRoles,
         ]);
     }

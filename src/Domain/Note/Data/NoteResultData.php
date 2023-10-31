@@ -14,7 +14,7 @@ class NoteResultData extends NoteData
     public ?bool $isClientMessage = false;
 
     // Populated in NoteUserRightSetter
-    public ?Privilege $privilege; // json_encode automatically takes $enum->value
+    public Privilege $privilege; // json_encode automatically takes $enum->value
 
 
     public function __construct(array $noteValues = [])

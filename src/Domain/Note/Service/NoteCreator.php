@@ -4,7 +4,6 @@ namespace App\Domain\Note\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Repository\NoteCreatorRepository;
 use App\Domain\User\Enum\UserActivity;
@@ -21,8 +20,7 @@ class NoteCreator
         private readonly UserActivityLogger $userActivityLogger,
         private readonly UserNetworkSessionData $userNetworkSessionData,
         private readonly UserFinder $userFinder,
-        private readonly NoteFinder $noteFinder,
-        LoggerFactory $logger
+        private readonly NoteFinder $noteFinder
     ) {
     }
 
@@ -52,9 +50,9 @@ class NoteCreator
 
             // Retrieve data that will be sent to client after note creation
             $user = $this->userFinder->findUserById($this->userNetworkSessionData->userId);
-            $noteCreatedAtTimestamp = $this->noteFinder->findNote($noteId)->createdAt;
+            $noteCreatedAtTimestamp = $this->noteFinder->findNote($noteId)->createdAt ?: time();
             $dateFormatter = new IntlDateFormatter(
-                setlocale(LC_ALL, 0),
+                setlocale(LC_ALL, 0) ?: null,
                 IntlDateFormatter::LONG,
                 IntlDateFormatter::SHORT
             );

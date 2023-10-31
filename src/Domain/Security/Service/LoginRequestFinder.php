@@ -24,8 +24,8 @@ class LoginRequestFinder
      * @param string $email
      *
      * @return array{
-     *     logins_by_email: array{successes: int, logins: int},
-     *     logins_by_ip: array{successes: int, logins: int},
+     *     logins_by_email: array{successes: int, failures: int},
+     *     logins_by_ip: array{successes: int, failures: int},
      * }
      */
     public function findLoginLogEntriesInTimeLimit(string $email): array
@@ -51,10 +51,7 @@ class LoginRequestFinder
             $email,
             $this->ipAddressData->ipAddress,
         );
-        if ($createdAt) {
-            return (new \DateTime($createdAt))->format('U');
-        }
 
-        return 0;
+        return (int)(new \DateTime($createdAt ?? 'now'))->format('U');
     }
 }

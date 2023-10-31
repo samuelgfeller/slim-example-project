@@ -41,8 +41,10 @@ final class JsImportVersionAdder
             );
 
             foreach ($rii as $file) {
-                if (pathinfo($file->getPathname())['extension'] === 'js') {
-                    $content = file_get_contents($file->getPathname());
+                $fileInfo = pathinfo($file->getPathname());
+
+                if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'js') {
+                    $content = file_get_contents($file->getPathname()) ?: '';
                     $originalContent = $content;
                     // Matches lines that have 'import ' then any string then ' from ' and single or double quote opening then
                     // any string (path) then '.js' and optionally v GET param '?v=234' and '";' at the end with single or double quotes

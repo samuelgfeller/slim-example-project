@@ -13,9 +13,6 @@ use Slim\Exception\HttpException;
 use Slim\Views\PhpRenderer;
 use Throwable;
 
-/**
- * Default Error Renderer.
- */
 class DefaultErrorHandler
 {
     private LoggerInterface $logger;
@@ -215,7 +212,7 @@ class DefaultErrorHandler
             $nonVendorClassClass = !empty($nonVendorFileClass) && !$classIsVendor ? 'non-vendor' : '';
             // Get function arguments
             $args = [];
-            foreach ($t['args'] as $argument) {
+            foreach ($t['args'] ?? [] as $argument) {
                 $args[] = $this->getTraceArgumentAsString($argument);
             }
             $args = implode(', ', $args);

@@ -31,7 +31,7 @@ class PasswordChangeSubmitAction
      */
     public function __invoke(ServerRequest $request, Response $response, array $args): Response
     {
-        $parsedBody = $request->getParsedBody();
+        $parsedBody = (array)$request->getParsedBody();
         $userId = $args['user_id'];
 
         $this->passwordChanger->changeUserPassword($parsedBody, $userId);

@@ -44,44 +44,53 @@ class LoginNonActiveUserHandler
      * @param array $queryParams the query parameters
      * @param ?string $captcha
      *
-     * @throws TransportExceptionInterface if there is an exception while sending an email
+     * @return void
      * @throws \RuntimeException if there is an invalid status in the database
      * @throws UnableToLoginStatusNotActiveException thrown in all cases as the user status is not active
      *
-     * @return void
+     * @throws TransportExceptionInterface if there is an exception while sending an email
      */
     public function handleLoginAttemptFromNonActiveUser(
         UserData $dbUser,
         array $queryParams,
         ?string $captcha = null
     ): void {
+        // DTO values may be null and these values are required
+        if (!isset($dbUser->id, $dbUser->email)) {
+            throw new \RuntimeException('User details not found');
+        }
         $this->securityEmailChecker->performEmailAbuseCheck($dbUser->email, $captcha);
         // If status not active, create exception object
         $unableToLoginException = new UnableToLoginStatusNotActiveException(
             __('Unable to login at the moment, please check your email inbox for a more detailed message.')
         );
+
         try {
+            $userId = $dbUser->id;
+            $email = $dbUser->email;
+            $fullName = $dbUser->getFullName();
+
             // Change language to the one the user selected in settings (in case it differs from browser lang)
             $originalLocale = setlocale(LC_ALL, 0);
             $this->localeHelper->setLanguage($dbUser->language->value);
 
             if ($dbUser->status === UserStatus::Unverified) {
                 // Inform user via email that account is unverified, and he should click on the link in his inbox
-                $this->handleUnverifiedUserLoginAttempt($dbUser, $queryParams);
+                $this->handleUnverifiedUserLoginAttempt($userId, $email, $fullName, $queryParams);
                 // Throw exception to display error message in form
                 throw $unableToLoginException;
             }
 
             if ($dbUser->status === UserStatus::Suspended) {
                 // Inform user (only via mail) that he is suspended
-                $this->handleSuspendedUserLoginAttempt($dbUser);
+                $this->handleSuspendedUserLoginAttempt($userId, $email, $fullName);
                 // Throw exception to display error message in form
                 throw $unableToLoginException;
             }
 
             if ($dbUser->status === UserStatus::Locked) {
                 // login fail and inform user (only via mail) that he is locked and provide unlock token
-                $this->handleLockedUserLoginAttempt($dbUser, $queryParams);
+                $this->handleLockedUserLoginAttempt($userId, $email, $fullName, $queryParams);
                 // Throw exception to display error message in form
                 throw $unableToLoginException;
             }
@@ -109,61 +118,71 @@ class LoginNonActiveUserHandler
     /**
      * When user tries to log in but his status is unverified.
      *
-     * @param UserData $user
+     * @param int $userId
+     * @param string $email
+     * @param string $fullName
      * @param array $queryParams
      *
-     * @throws TransportExceptionInterface
-     *
      * @return void
+     * @throws TransportExceptionInterface
      */
-    private function handleUnverifiedUserLoginAttempt(UserData $user, array $queryParams = []): void
-    {
+    private function handleUnverifiedUserLoginAttempt(
+        int $userId,
+        string $email,
+        string $fullName,
+        array $queryParams = []
+    ): void {
         // Create verification token, so he doesn't have to register again
-        $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
-        $this->loginMailer->sendInfoToUnverifiedUser($user, $queryParams);
+        $queryParams = $this->verificationTokenCreator->createUserVerification($userId, $queryParams);
+        $this->loginMailer->sendInfoToUnverifiedUser($email, $fullName, $queryParams);
 
         // Write event in logger
-        $this->logger->info('Login attempt on unverified user id ' . $user->id . '.');
+        $this->logger->info('Login attempt on unverified user id ' . $userId . '.');
     }
 
     /**
      * When user tries to log in but his status is suspended.
      *
-     * @param UserData $user
-     *
-     * @throws TransportExceptionInterface
-     *
+     * @param int $userId
+     * @param string $email
+     * @param string $fullName
      * @return void
+     * @throws TransportExceptionInterface
      */
-    private function handleSuspendedUserLoginAttempt(UserData $user): void
+    private function handleSuspendedUserLoginAttempt(int $userId, string $email, string $fullName): void
     {
         // Send email to suspended user
-        $this->loginMailer->sendInfoToSuspendedUser($user);
+        $this->loginMailer->sendInfoToSuspendedUser($email, $fullName);
 
         // Write event in logger
-        $this->logger->info('Login attempt on suspended user id ' . $user->id . '.');
+        $this->logger->info('Login attempt on suspended user id ' . $userId . '.');
     }
 
     /**
      * When user tries to log in but his status is locked
      * which can happen on too many failed login requests.
      *
-     * @param UserData $user
+     * @param int $userId
+     * @param string $email
+     * @param string $fullName
      * @param array $queryParams existing query params like redirect
      *
-     * @throws TransportExceptionInterface
-     *
      * @return void
+     * @throws TransportExceptionInterface
      */
-    private function handleLockedUserLoginAttempt(UserData $user, array $queryParams = []): void
-    {
+    private function handleLockedUserLoginAttempt(
+        int $userId,
+        string $email,
+        string $fullName,
+        array $queryParams = []
+    ): void {
         // Create verification token to unlock account
-        $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
+        $queryParams = $this->verificationTokenCreator->createUserVerification($userId, $queryParams);
 
         // Send email to locked user
-        $this->loginMailer->sendInfoToLockedUser($user, $queryParams);
+        $this->loginMailer->sendInfoToLockedUser($email, $fullName, $queryParams);
 
         // Write event in logger
-        $this->logger->info('Login attempt on locked user id ' . $user->id . '.');
+        $this->logger->info('Login attempt on locked user id ' . $userId . '.');
     }
 }

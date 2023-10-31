@@ -3,11 +3,11 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
- * @var \App\Domain\User\Data\UserData $user object
+ * @var string $userFullName
  * @var array $config public configuration values
  */
 ?>
-Guten Tag <?= $user->getFullName() ?> <br>
+Guten Tag <?= $userFullName ?> <br>
 <br>
 Ihr Konto wurde erstellt. <br> <br>
 Um zu überprüfen, ob diese E-Mail-Adresse Ihnen gehört, klicken Sie bitte auf den folgenden Link: <br>

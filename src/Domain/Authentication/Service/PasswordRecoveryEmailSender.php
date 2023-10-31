@@ -58,9 +58,9 @@ class PasswordRecoveryEmailSender
 
         $dbUser = $this->userFinderRepository->findUserByEmail($email);
 
-        if ($dbUser->email !== null) {
+        if (isset($dbUser->email, $dbUser->id)) {
             // Create verification token, so he doesn't have to register again
-            $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($dbUser);
+            $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($dbUser->id);
 
             // Change language to one the user chose in settings
             $originalLocale = setlocale(LC_ALL, 0);

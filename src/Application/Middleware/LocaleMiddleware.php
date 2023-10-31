@@ -45,7 +45,7 @@ final class LocaleMiddleware implements MiddlewareInterface
         $browserLangShort = explode('-', $language)[0];
 
         // Set the language to the userLang if available and else to the browser language
-        $actualLocale = $this->localeHelper->setLanguage($userLangShort ?? $browserLangShort ?? null);
+        $actualLocale = $this->localeHelper->setLanguage($userLangShort ?? $browserLangShort);
 
         return $handler->handle($request);
     }

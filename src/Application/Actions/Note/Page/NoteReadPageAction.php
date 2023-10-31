@@ -36,7 +36,7 @@ final class NoteReadPageAction
             // Redirect to client read page with hash anchor to the correct note container
             return $this->responder->redirectToUrl(
                 $response,
-                $this->responder->urlFor('client-read-page', ['client_id' => $noteData->clientId]) .
+                $this->responder->urlFor('client-read-page', ['client_id' => (string)$noteData->clientId]) .
                 "#note-$noteData->id-container"
             );
         }

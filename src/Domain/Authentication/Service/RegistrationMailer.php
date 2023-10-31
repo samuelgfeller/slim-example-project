@@ -4,7 +4,6 @@ namespace App\Domain\Authentication\Service;
 
 use App\Common\LocaleHelper;
 use App\Domain\Service\Mailer;
-use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -40,16 +39,18 @@ class RegistrationMailer
     /**
      * Send verification token.
      *
-     * @param UserData $user
+     * @param string $email
+     * @param string $fullName
+     * @param string $language
      * @param array $queryParams
      *
      * @throws TransportExceptionInterface
      */
-    public function sendRegisterVerificationToken(UserData $user, array $queryParams): void
+    public function sendRegisterVerificationToken(string $email, string $fullName, string $language, array $queryParams): void
     {
         // Change language to one the user is being registered with
         $originalLocale = setlocale(LC_ALL, 0);
-        $this->localeHelper->setLanguage($user->language->value);
+        $this->localeHelper->setLanguage($language);
 
         // Send verification mail in the language that was selected for the user
         $this->email->subject(__('Account created'))
@@ -57,9 +58,9 @@ class RegistrationMailer
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'new-account.email.php',
-                    ['user' => $user, 'queryParams' => $queryParams]
+                    ['userFullName' => $fullName, 'queryParams' => $queryParams]
                 )
-            )->to(new Address($user->email, $user->getFullName()));
+            )->to(new Address($email, $fullName));
         // Send email
         $this->mailer->send($this->email);
 

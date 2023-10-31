@@ -20,7 +20,7 @@ class UserData implements \JsonSerializable
     public ?string $passwordHash;
     public ?UserStatus $status = null;
     public ?UserTheme $theme = null;
-    public ?UserLang $language = null;
+    public UserLang $language = UserLang::English;
     public ?int $userRoleId = null;
     public ?\DateTimeImmutable $updatedAt;
     public ?\DateTimeImmutable $createdAt;
@@ -38,14 +38,14 @@ class UserData implements \JsonSerializable
         $this->password2 = $userData['password2'] ?? null;
         $this->passwordHash = $userData['password_hash'] ?? null;
         $this->theme = $userData['theme'] ?? null ? UserTheme::tryFrom($userData['theme']) : null;
-        $this->language = $userData['language'] ?? null ? UserLang::tryFrom($userData['language']) : null;
+        $this->language = isset($userData['language']) ? UserLang::tryFrom($userData['language']) : UserLang::English;
         // It may be useful to surround the datetime values with try catch in the user data constructor as object
         // can be created before validation
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
         $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;
         // Empty check is for testUserSubmitCreate_invalid test function where user_role_id is an empty string
-        $this->userRoleId = !empty($userData['user_role_id'] ?? null) ? $userData['user_role_id'] : null;
+        $this->userRoleId = !empty($userData['user_role_id']) ? $userData['user_role_id'] : null;
     }
 
     /**
@@ -75,9 +75,9 @@ class UserData implements \JsonSerializable
             'email' => $this->email,
             'password_hash' => $this->passwordHash,
             'user_role_id' => $this->userRoleId,
-            'status' => $this->status->value,
+            'status' => $this->status?->value,
             'theme' => $this->theme?->value,
-            'language' => $this->language?->value,
+            'language' => $this->language->value,
         ];
     }
 
@@ -90,8 +90,8 @@ class UserData implements \JsonSerializable
             'email' => $this->email,
             'status' => $this->status,
             'userRoleId' => $this->userRoleId,
-            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
-            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt?->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt?->format('Y-m-d H:i:s'),
         ];
     }
 }

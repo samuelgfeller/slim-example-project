@@ -23,8 +23,8 @@ class FilterSettingFinder
      * @param FilterModule $filterModule
      *
      * @return array{
-     *     active: array{string: FilterData[]},
-     *     inactive: array{string: FilterData[]}
+     *     active: array<string, FilterData[]>,
+     *     inactive: array<string, FilterData[]>
      *     }
      */
     public function getActiveAndInactiveFilters(array $allAvailableFilters, FilterModule $filterModule): array

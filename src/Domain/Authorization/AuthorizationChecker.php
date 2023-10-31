@@ -30,8 +30,8 @@ class AuthorizationChecker
         $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
             $this->userNetworkSessionData->userId
         );
-        /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
-         * lower hierarchy number means higher privilege */
+        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
         return $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[$minimalRequiredRole->value];

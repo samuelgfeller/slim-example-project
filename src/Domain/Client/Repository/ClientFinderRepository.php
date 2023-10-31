@@ -80,7 +80,6 @@ class ClientFinderRepository
             ],
         ])
             ->where($whereArray);
-        $sql = $query->sql();
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
 
         // Convert to list of Post objects with associated User info

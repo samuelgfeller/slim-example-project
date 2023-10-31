@@ -38,7 +38,7 @@ final class PasswordForgottenEmailSubmitAction
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         $flash = $this->session->getFlash();
-        $userValues = $request->getParsedBody();
+        $userValues = (array)$request->getParsedBody();
 
         try {
             $this->passwordRecoveryEmailSender->sendPasswordRecoveryEmail($userValues);

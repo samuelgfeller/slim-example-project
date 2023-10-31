@@ -28,8 +28,8 @@ class ClientListFilterChipProvider
      * Returns active and inactive filters.
      *
      * @return array{
-     *     active: array{string: FilterData[]},
-     *     inactive: array{string: FilterData[]}
+     *     active: array<string, FilterData[]>,
+     *     inactive: array<string, FilterData[]>
      *     }
      */
     public function getActiveAndInactiveClientListFilters(): array

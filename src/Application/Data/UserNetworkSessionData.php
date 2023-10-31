@@ -11,5 +11,5 @@ class UserNetworkSessionData
     // Initialize vars with default values
     public ?string $ipAddress = null;
     public ?string $userAgent = null;
-    public null|int|string $userId = null;
+    public int $userId;
 }

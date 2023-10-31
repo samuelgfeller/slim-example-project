@@ -3,7 +3,6 @@
 namespace App\Domain\Note\Repository;
 
 use App\Common\Hydrator;
-use App\Domain\Exception\Persistence\PersistenceRecordNotFoundException;
 use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
@@ -85,29 +84,6 @@ class NoteFinderRepository
 
         // Instantiate UserNote DTO
         return new NoteResultData($resultRows);
-    }
-
-    /**
-     * Retrieve note from database
-     * If not found error is thrown.
-     *
-     * @param int $id
-     *
-     * @throws PersistenceRecordNotFoundException
-     *
-     * @return array
-     */
-    public function getNoteById(int $id): array
-    {
-        $query = $this->queryFactory->selectQuery()->select(['*'])->from('note')->where(
-            ['deleted_at IS' => null, 'id' => $id]
-        );
-        $entry = $query->execute()->fetch('assoc');
-        if (!$entry) {
-            throw new PersistenceRecordNotFoundException('note');
-        }
-
-        return $entry;
     }
 
     /**

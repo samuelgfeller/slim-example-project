@@ -105,7 +105,11 @@ amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy e
 ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
 et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 
-        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+        $dateFormatter = new IntlDateFormatter(
+            setlocale(LC_ALL, 0) ?: null,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::SHORT
+        );
 
         $expectedResponseArray[] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718

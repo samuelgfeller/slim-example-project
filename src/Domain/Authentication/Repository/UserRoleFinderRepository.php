@@ -59,7 +59,7 @@ class UserRoleFinderRepository
      *
      * @param bool $mappedById if key of return array should be the role id or name
      *
-     * @return array{role_name: int}
+     * @return array<string|int, int>
      */
     public function getUserRolesHierarchies(bool $mappedById = false): array
     {
@@ -69,9 +69,9 @@ class UserRoleFinderRepository
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
             if ($mappedById === false) {
-                $userRoles[$resultRow['name']] = $resultRow['hierarchy'];
+                $userRoles[$resultRow['name']] = (int)$resultRow['hierarchy'];
             } else {
-                $userRoles[$resultRow['id']] = $resultRow['hierarchy'];
+                $userRoles[$resultRow['id']] = (int)$resultRow['hierarchy'];
             }
         }
 
@@ -81,7 +81,7 @@ class UserRoleFinderRepository
     /**
      * Return all user roles with as key the id and value the name.
      *
-     * @return array{id: string, name: string}
+     * @return array<int, string>
      */
     public function findAllUserRolesForDropdown(): array
     {

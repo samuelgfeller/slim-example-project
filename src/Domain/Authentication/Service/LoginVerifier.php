@@ -53,7 +53,8 @@ class LoginVerifier
         $dbUser = $this->userFinderRepository->findUserByEmail($userLoginValues['email']);
         // Check if user exists
         // Verify if password matches and enter login request
-        if (($dbUser->email !== null) && password_verify($userLoginValues['password'], $dbUser->passwordHash)) {
+        if (isset($dbUser->email, $dbUser->passwordHash)
+            && password_verify($userLoginValues['password'], $dbUser->passwordHash)) {
             // If password correct and status active, log user in by
             if ($dbUser->status === UserStatus::Active) {
                 // Insert login success request
@@ -73,7 +74,7 @@ class LoginVerifier
                 );
 
                 // Return id (not sure if it's better to regenerate session here in service or in action)
-                return $dbUser->id;
+                return (int)$dbUser->id;
             }
 
             // If password is correct but the status not verified, send email to user

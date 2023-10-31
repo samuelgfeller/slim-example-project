@@ -3,7 +3,7 @@
 namespace App\Application\Actions\Client\Ajax;
 
 use App\Application\Responder\Responder;
-use App\Domain\Client\Service\ClientCreatorFromClientSubmit;
+use App\Domain\Client\Service\ClientCreatorFromApi;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,7 +14,7 @@ final class ApiClientCreateAction
 {
     public function __construct(
         private readonly Responder $responder,
-        private readonly ClientCreatorFromClientSubmit $clientCreatorFromClientSubmit,
+        private readonly ClientCreatorFromApi $clientCreatorFromClientSubmit,
     ) {
     }
 
@@ -32,7 +32,7 @@ final class ApiClientCreateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $clientValues = $request->getParsedBody();
+        $clientValues = (array)$request->getParsedBody();
 
         $insertId = $this->clientCreatorFromClientSubmit->createClientFromClientSubmit($clientValues);
 

@@ -21,10 +21,10 @@ class UserValidator
     /**
      * Validate user registration and update.
      *
-     * @param $userValues
+     * @param array $userValues
      * @param bool $isCreateMode
      */
-    public function validateUserValues($userValues, bool $isCreateMode = true): void
+    public function validateUserValues(array $userValues, bool $isCreateMode = true): void
     {
         $validator = new Validator();
 
@@ -100,11 +100,11 @@ class UserValidator
     /**
      * Validate passwords.
      *
-     * @param $passwordValues
+     * @param array $passwordValues
      *
      * @return void
      */
-    public function validatePasswordChange($passwordValues): void
+    public function validatePasswordChange(array $passwordValues): void
     {
         $validator = new Validator();
         // Passwords are always required when this validation method is called
@@ -176,7 +176,7 @@ class UserValidator
      * Validate if user inputs for the login
      * are valid.
      *
-     * @param array{email: string|null, password: string|null} $userLoginValues
+     * @param array $userLoginValues
      *
      * @throws ValidationException
      */
@@ -244,7 +244,7 @@ class UserValidator
                     $dbUser = $this->userFinderRepository->findUserByIdWithPasswordHash($userId);
 
                     // Check if old password is correct
-                    return password_verify($value, $dbUser->passwordHash);
+                    return password_verify($value, (string)$dbUser->passwordHash);
                 },
                 'message' => __('Incorrect password'),
             ]);

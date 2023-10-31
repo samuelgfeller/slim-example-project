@@ -29,7 +29,7 @@ class UserActivityLogger
     public function logUserActivity(
         UserActivity $userActivityAction,
         string $table,
-        int $rowId,
+        ?int $rowId,
         ?array $data = null,
         ?int $userId = null,
     ): int {

@@ -15,7 +15,7 @@ class LoginLogFinderRepository
      * Retrieves request summary from the given ip address.
      *
      * @param string $email
-     * @param string $ip
+     * @param string|null $ip
      * @param int $seconds
      *
      * @return array{
@@ -25,7 +25,10 @@ class LoginLogFinderRepository
      */
     public function getLoginSummaryFromEmailAndIp(string $email, ?string $ip, int $seconds): array
     {
-        $summary = ['logins_by_ip' => ['successes' => 0, 'failures' => 0], 'logins_by_email' => []];
+        $summary = [
+            'logins_by_email' => ['successes' => 0, 'failures' => 0],
+            'logins_by_ip' => ['successes' => 0, 'failures' => 0],
+        ];
 
         // Only return values if not empty string as it doesn't represent a user request
         if ($email !== '') {
@@ -76,9 +79,9 @@ class LoginLogFinderRepository
      * @param string $email
      * @param ?string $ip
      *
-     * @return string
+     * @return ?string
      */
-    public function findLatestLoginTimestampFromUserOrIp(string $email, ?string $ip): string
+    public function findLatestLoginTimestampFromUserOrIp(string $email, ?string $ip): ?string
     {
         $query = $this->queryFactory->selectQuery();
         $query->select('created_at')->from('authentication_log');
@@ -93,7 +96,7 @@ class LoginLogFinderRepository
         // Order desc id instead of created at for testing as last request is preponed to simulate waiting
         $query->orderByDesc('id')->limit(1);
 
-        return $query->execute()->fetch('assoc')['created_at'] ?? 0;
+        return $query->execute()->fetch('assoc')['created_at'] ?? null;
     }
 
     /**
@@ -110,7 +113,7 @@ class LoginLogFinderRepository
         $query = $this->queryFactory->selectQuery();
         $query->select(
             [
-                'total_amount' => $query->func()->count(1),
+                'total_amount' => $query->func()->count('id'),
                 'successes' => $query->func()->sum('is_success'),
             ]
         )->from('authentication_log')->where(

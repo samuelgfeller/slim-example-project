@@ -32,7 +32,7 @@ final class LoginSubmitAction
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         $flash = $this->session->getFlash();
-        $submitValues = $request->getParsedBody();
+        $submitValues = (array)$request->getParsedBody();
         $queryParams = $request->getQueryParams();
 
         try {

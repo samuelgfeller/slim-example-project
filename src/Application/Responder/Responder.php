@@ -51,11 +51,11 @@ final class Responder
      * Add global variable accessible in templates.
      *
      * @param string $key
-     * @param $value
+     * @param mixed $value
      *
      * @return void
      */
-    public function addPhpViewAttribute(string $key, $value): void
+    public function addPhpViewAttribute(string $key, mixed $value): void
     {
         $this->phpRenderer->addAttribute($key, $value);
     }
@@ -110,8 +110,8 @@ final class Responder
      * Build the path for a named route including the base path.
      *
      * @param string $routeName Route name
-     * @param string[] $data Named argument replacement data
-     * @param string[] $queryParams Optional query string parameters
+     * @param array<string, string> $data Named argument replacement data
+     * @param array<string, string> $queryParams Optional query string parameters
      *
      * @return string
      */
@@ -129,7 +129,7 @@ final class Responder
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      * @param array|null $preloadValues
      *
-     * @return ResponseInterface|null
+     * @return ResponseInterface
      */
     public function renderOnValidationError(
         ResponseInterface $response,
@@ -137,7 +137,7 @@ final class Responder
         ValidationException $validationException,
         array $queryParams = [],
         ?array $preloadValues = null,
-    ): ?ResponseInterface {
+    ): ResponseInterface {
         $this->phpRenderer->addAttribute('preloadValues', $preloadValues);
 
         // Add the validation errors to phpRender attributes

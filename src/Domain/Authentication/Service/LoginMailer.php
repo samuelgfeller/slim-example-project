@@ -4,7 +4,6 @@ namespace App\Domain\Authentication\Service;
 
 use App\Common\LocaleHelper;
 use App\Domain\Service\Mailer;
-use App\Domain\User\Data\UserData;
 use App\Domain\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -35,12 +34,13 @@ class LoginMailer
     /**
      * When user tries to log in but his status is unverified.
      *
-     * @param UserData $user
+     * @param string $email
+     * @param string $fullName
      * @param array $queryParamsWithToken
      *
      * @throws TransportExceptionInterface
      */
-    public function sendInfoToUnverifiedUser(UserData $user, array $queryParamsWithToken): void
+    public function sendInfoToUnverifiedUser(string $email, string $fullName, array $queryParamsWithToken): void
     {
         // Send verification mail
         $this->email->subject(__('Login failed because your account is unverified'))
@@ -48,9 +48,9 @@ class LoginMailer
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'login-but-unverified.email.php',
-                    ['user' => $user, 'queryParams' => $queryParamsWithToken]
+                    ['userFullName' => $fullName, 'queryParams' => $queryParamsWithToken]
                 )
-            )->to(new Address($user->email, $user->getFullName()));
+            )->to(new Address($email, $fullName));
         // Send email
         $this->mailer->send($this->email);
     }
@@ -58,11 +58,9 @@ class LoginMailer
     /**
      * When user tries to log in but his status is suspended.
      *
-     * @param UserData $user
-     *
      * @throws TransportExceptionInterface
      */
-    public function sendInfoToSuspendedUser(UserData $user): void
+    public function sendInfoToSuspendedUser(string $email, string $fullName): void
     {
         // Send verification mail
         $this->email->subject(__('Login failed because your account is suspended'))
@@ -70,9 +68,9 @@ class LoginMailer
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'login-but-suspended.email.php',
-                    ['user' => $user]
+                    ['userFullName' => $fullName]
                 )
-            )->to(new Address($user->email, $user->getFullName()));
+            )->to(new Address($email, $fullName));
         // Send email
         $this->mailer->send($this->email);
     }
@@ -80,12 +78,13 @@ class LoginMailer
     /**
      * When user tries to log in but his status is suspended.
      *
-     * @param UserData $user
+     * @param string $email
+     * @param string $fullName
      * @param array $queryParamsWithToken
      *
      * @throws TransportExceptionInterface
      */
-    public function sendInfoToLockedUser(UserData $user, array $queryParamsWithToken): void
+    public function sendInfoToLockedUser(string $email, string $fullName, array $queryParamsWithToken): void
     {
         // Send verification mail
         $this->email->subject(__('Login failed because your account is locked'))
@@ -93,9 +92,9 @@ class LoginMailer
                 $this->mailer->getContentFromTemplate(
                     'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
                     'login-but-locked.email.php',
-                    ['user' => $user, 'queryParams' => $queryParamsWithToken]
+                    ['userFullName' => $fullName, 'queryParams' => $queryParamsWithToken]
                 )
-            )->to(new Address($user->email, $user->getFullName()));
+            )->to(new Address($email, $fullName));
         // Send email
         $this->mailer->send($this->email);
     }

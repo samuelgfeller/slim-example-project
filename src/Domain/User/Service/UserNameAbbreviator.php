@@ -6,8 +6,8 @@ use App\Domain\User\Data\UserData;
 
 class UserNameAbbreviator
 {
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
     /**
@@ -41,7 +41,9 @@ class UserNameAbbreviator
                 return $shortName;
             };
             // Always privilege longest lastname abbreviation as it means that this length necessary
-            if (strlen($builtLastName = $buildLastName($lastName, $userToCheck->surname)) > strlen($abbreviatedLastName)) {
+            if (strlen($builtLastName = $buildLastName($lastName, (string)$userToCheck->surname)) > strlen(
+                $abbreviatedLastName
+            )) {
                 $abbreviatedLastName = $builtLastName;
             }
         }
@@ -60,7 +62,7 @@ class UserNameAbbreviator
      *
      * @param UserData[] $users original users
      *
-     * @return array{user_id: string} array of users with abbreviated full names
+     * @return array<int, string> array of users with abbreviated full names
      */
     public function abbreviateUserNames(array $users): array
     {
@@ -80,7 +82,7 @@ class UserNameAbbreviator
             if (count($usersWithIdenticalFirstName) === 1) {
                 // reset() returns the first value of the array
                 $userWithUniqueFirstName = reset($usersWithIdenticalFirstName);
-                $outputNames[$userWithUniqueFirstName->id] = $userWithUniqueFirstName->firstName;
+                $outputNames[$userWithUniqueFirstName->id] = ($userWithUniqueFirstName->firstName ?? '');
                 continue;
             }
 
@@ -92,7 +94,7 @@ class UserNameAbbreviator
                 unset($usersToCheckAgainst[$userId]);
                 // Call recursive function which compares last name of currently iterated user with other users with same
                 // first name and returns the shortest version of non-duplicate lastname
-                $lastNameAbbr = $this->buildLastNameAbbreviation($user->surname, $usersToCheckAgainst);
+                $lastNameAbbr = $this->buildLastNameAbbreviation((string)$user->surname, $usersToCheckAgainst);
                 $outputNames[(int)$userId] = $user->firstName . ' ' . $lastNameAbbr;
             }
         }

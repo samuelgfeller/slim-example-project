@@ -43,7 +43,8 @@ class ClientAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Newcomer is not allowed to do anything
@@ -91,7 +92,8 @@ class ClientAuthorizationChecker
                 );
             }
             if ($userRoleHierarchies === null) {
-                /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+                // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+                // * Lower hierarchy number means higher privileged role
                 $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             }
 
@@ -127,8 +129,8 @@ class ClientAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
-             * (lower hierarchy number means higher privilege) */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Roles: newcomer < advisor < managing_advisor < administrator
@@ -222,7 +224,8 @@ class ClientAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Only managing_advisor and higher are allowed to delete client so user has to at least have this role
@@ -244,14 +247,14 @@ class ClientAuthorizationChecker
      * with isGrantedToReadClient and removes clients that
      * authenticated user may not see.
      *
-     * @param ClientResultData[] $clients
+     * @param ClientResultData[]|null $clients
      *
      * @return ClientResultData[]
      */
-    public function removeNonAuthorizedClientsFromList(array $clients): array
+    public function removeNonAuthorizedClientsFromList(?array $clients): array
     {
         $authorizedClients = [];
-        foreach ($clients as $client) {
+        foreach ($clients ?? [] as $client) {
             // Check if authenticated user is allowed to read each client and if yes, add it to the return array
             if ($this->isGrantedToRead($client->userId)) {
                 $authorizedClients[] = $client;
@@ -279,7 +282,8 @@ class ClientAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Newcomer are allowed to see all clients regardless of owner if not deleted

@@ -29,7 +29,7 @@ final class ClientCreateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $clientValues = $request->getParsedBody();
+        $clientValues = (array)$request->getParsedBody();
 
         // Validation and Forbidden exception caught in respective middlewares
         $insertId = $this->clientCreator->createClient($clientValues);

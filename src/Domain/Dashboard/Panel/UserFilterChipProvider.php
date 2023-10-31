@@ -42,8 +42,8 @@ class UserFilterChipProvider
         }
         $inactiveFilterChips = '';
         foreach ($filters['inactive'] as $filterCategory => $filtersInCategory) {
-            $inactiveFilterChips .= $filterCategory ?
-                "<span class='filter-chip-container-label' data-category='$filterCategory'>$filterCategory</span>" : '';
+            $inactiveFilterChips .=
+                "<span class='filter-chip-container-label' data-category='$filterCategory'>$filterCategory</span>";
             /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) {
                 $inactiveFilterChips .= "<div class='filter-chip'>
@@ -68,8 +68,8 @@ class UserFilterChipProvider
      * Returns active and inactive filters.
      *
      * @return array{
-     *     active: array{string: FilterData[]},
-     *     inactive: array{string: FilterData[]}
+     *     active: array<string, FilterData[]>,
+     *     inactive: array<string, FilterData[]>
      *     }
      */
     public function getActiveAndInactiveUserFilters(): array
@@ -101,7 +101,7 @@ class UserFilterChipProvider
                     'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => null,
-                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity($userId, false),
+                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity((int)$userId, false),
                 ]);
             }
         }

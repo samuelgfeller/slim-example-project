@@ -119,7 +119,7 @@ class SecurityLoginChecker
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to latest request
                     if ($currentTimestamp < ($timeForNextLogin = $delay + $latestLoginTimestamp)) {
-                        $remainingDelay = $timeForNextLogin - $currentTimestamp;
+                        $remainingDelay = (int)($timeForNextLogin - $currentTimestamp);
                         throw new SecurityException($remainingDelay, SecurityType::USER_LOGIN, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {

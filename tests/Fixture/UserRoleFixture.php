@@ -2,9 +2,6 @@
 
 namespace App\Test\Fixture;
 
-/**
- * User role fixture.
- */
 class UserRoleFixture
 {
     // Table name

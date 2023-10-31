@@ -33,7 +33,7 @@ class NoteAuthorizationGetter
         if ($this->noteAuthorizationChecker->isGrantedToCreate(1, $clientOwnerId, false)) {
             return Privilege::CREATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, false)) {
+        if ($this->noteAuthorizationChecker->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, 0, false)) {
             return Privilege::READ;
         }
 

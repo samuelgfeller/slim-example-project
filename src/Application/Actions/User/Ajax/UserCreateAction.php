@@ -34,7 +34,7 @@ final class UserCreateAction
     public function __invoke(ServerRequest $request, Response $response): Response
     {
         $flash = $this->session->getFlash();
-        $userValues = $request->getParsedBody();
+        $userValues = (array)$request->getParsedBody();
 
         // Populate $captcha var if reCAPTCHA response is given
         $captcha = $userValues['g-recaptcha-response'] ?? null;

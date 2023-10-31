@@ -24,11 +24,11 @@ class ClientUpdater
      * Change something or multiple things on post.
      *
      * @param int $clientId id of post being changed
-     * @param array|null $clientValues values that user wants to change
+     * @param array $clientValues values that user wants to change
      *
      * @return array update infos containing status and optionally other
      */
-    public function updateClient(int $clientId, ?array $clientValues): array
+    public function updateClient(int $clientId, array $clientValues): array
     {
         // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
         $this->clientValidator->validateClientValues($clientValues, false);
@@ -66,7 +66,7 @@ class ClientUpdater
             }
             // If birthdate is set, change the format to suit database
             if (isset($updateData['birthdate'])) {
-                if ($updateData['birthdate'] === '') {
+                if (empty($updateData['birthdate'])) {
                     $updateData['birthdate'] = null;
                 } else {
                     $birthdate = new \DateTime($updateData['birthdate']);

@@ -24,7 +24,7 @@ class UserAuthorizationChecker
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         LoggerFactory $loggerFactory
     ) {
-        $this->loggedInUserId = $this->userNetworkSessionData->userId;
+        $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
         $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-authorization');
     }
 
@@ -42,7 +42,8 @@ class UserAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Newcomer and advisor are not allowed to do anything from other users - only user edit his own profile
@@ -98,7 +99,8 @@ class UserAuthorizationChecker
                 );
             }
             if ($userRoleHierarchies === null) {
-                /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+                // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+                // * Lower hierarchy number means higher privileged role
                 $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             }
 
@@ -150,8 +152,8 @@ class UserAuthorizationChecker
             $userToUpdateRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 (int)$userIdToUpdate
             );
-            /** @var array{role_name: int} $userRoleHierarchies role name as key and hierarchy value
-             * lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Roles: newcomer < advisor < managing_advisor < administrator
@@ -261,7 +263,8 @@ class UserAuthorizationChecker
             );
             $userToDeleteRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($userIdToDelete);
 
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Only managing_advisor and higher are allowed to delete user and only if the user is advisor or lower or their own
@@ -299,7 +302,8 @@ class UserAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             // Only managing advisor and higher privilege are allowed to see other users
@@ -335,7 +339,8 @@ class UserAuthorizationChecker
             $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
                 $this->loggedInUserId
             );
-            /** @var array{role_name: int} $userRoleHierarchies lower hierarchy number means higher privilege */
+            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
             $userToReadRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser($userIdToRead);

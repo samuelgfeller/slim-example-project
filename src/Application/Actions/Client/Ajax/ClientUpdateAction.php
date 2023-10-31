@@ -30,7 +30,7 @@ final class ClientUpdateAction
         array $args
     ): ResponseInterface {
         $clientId = (int)$args['client_id'];
-        $clientValues = $request->getParsedBody();
+        $clientValues = (array)$request->getParsedBody();
         $updateData = $this->clientUpdater->updateClient($clientId, $clientValues);
 
         if ($updateData['updated']) {

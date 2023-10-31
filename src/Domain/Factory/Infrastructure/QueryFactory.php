@@ -28,7 +28,7 @@ final class QueryFactory
      *
      * @return SelectQuery
      */
-    public function selectQuery(): SelectQuery
+    public function selectQuery(): \Cake\Database\Query\SelectQuery
     {
         return $this->connection->selectQuery();
     }

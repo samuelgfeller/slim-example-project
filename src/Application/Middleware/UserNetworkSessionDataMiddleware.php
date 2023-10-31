@@ -30,7 +30,11 @@ class UserNetworkSessionDataMiddleware implements MiddlewareInterface
         // Add ip address to the ipAddressData DTO object
         $this->clientNetworkData->ipAddress = $ipAddress;
         $this->clientNetworkData->userAgent = $userAgent;
-        $this->clientNetworkData->userId = $this->session->get('user_id');
+
+        // Only initialize userId if it exists in session
+        if ($userIdFromSession = $this->session->get('user_id')) {
+            $this->clientNetworkData->userId = $userIdFromSession;
+        }
 
         return $handler->handle($request);
     }

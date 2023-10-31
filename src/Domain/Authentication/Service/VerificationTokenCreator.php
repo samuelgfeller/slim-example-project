@@ -4,7 +4,6 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenCreatorRepository;
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenDeleterRepository;
-use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
@@ -20,12 +19,12 @@ class VerificationTokenCreator
     /**
      * Create and insert verification token.
      *
-     * @param UserData $user WITH id
+     * @param int $userId
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
      * @return array $queryParams with token and id
      */
-    public function createUserVerification(UserData $user, array $queryParams = []): array
+    public function createUserVerification(int $userId, array $queryParams = []): array
     {
         // Create token
         $token = bin2hex(random_bytes(50));
@@ -35,11 +34,11 @@ class VerificationTokenCreator
         $expiresAt->add(new \DateInterval('PT02H')); // 2 hours
 
         // Soft delete any existing tokens for this user
-        $this->verificationTokenDeleterRepository->deleteVerificationToken($user->id);
+        $this->verificationTokenDeleterRepository->deleteVerificationToken($userId);
 
         // Insert verification token into database
         $userVerificationRow = [
-            'user_id' => $user->id,
+            'user_id' => $userId,
             'token' => password_hash($token, PASSWORD_DEFAULT),
             // expiresAt format 'U' is the same as time() so it can be used later to compare easily
             'expires_at' => $expiresAt->format('U'),
@@ -57,7 +56,7 @@ class VerificationTokenCreator
             'user_verification',
             $tokenId,
             $userVerificationRow,
-            $user->id,
+            $userId,
         );
 
         return $queryParams;

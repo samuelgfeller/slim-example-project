@@ -40,7 +40,7 @@ class NoteUpdater
 
         $note = new NoteData($noteValues);
 
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain, $noteFromDb->userId)) {
+        if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain ?? 0, $noteFromDb->userId)) {
             $updateData = [];
             // Change message
             if (null !== $note->message) {

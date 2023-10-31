@@ -37,12 +37,12 @@ class SecurityEmailChecker
      * - concerning a specific email address
      * - global email requests
      *
-     * @param string $email
+     * @param string|null $email
      * @param string|null $reCaptchaResponse
      */
-    public function performEmailAbuseCheck(string $email, ?string $reCaptchaResponse = null): void
+    public function performEmailAbuseCheck(?string $email, ?string $reCaptchaResponse = null): void
     {
-        if ($this->securitySettings['throttle_user_email'] === true) {
+        if ($this->securitySettings['throttle_user_email'] === true && isset($email)) {
             $validCaptcha = false;
             // reCAPTCHA verification
             if ($reCaptchaResponse !== null) {
@@ -86,7 +86,7 @@ class SecurityEmailChecker
                 if (is_numeric($delay)) {
                     // Check that time is in the future by comparing actual time with forced delay + to the latest request
                     if (time() < ($timeForNextRequest = $delay + $latestEmailTimestamp)) {
-                        $remainingDelay = $timeForNextRequest - time();
+                        $remainingDelay = (int)($timeForNextRequest - time());
                         throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);
                     }
                 } elseif ($delay === 'captcha') {

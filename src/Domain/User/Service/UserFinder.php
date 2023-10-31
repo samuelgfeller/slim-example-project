@@ -39,7 +39,7 @@ class UserFinder
 
                 // Check if user is allowed to change status
                 $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
-                    $userResultData->id,
+                    (int)$userResultData->id,
                     'status',
                 );
                 // General data privilege like first name, email and so on no needed for list
@@ -54,14 +54,14 @@ class UserFinder
     }
 
     /**
-     * @param string|int $id
+     * @param string|int|null $id
      *
      * @return UserData
      */
-    public function findUserById(string|int $id): UserData
+    public function findUserById(string|int|null $id): UserData
     {
         // Find user in database and return object
-        return new UserData($this->userFinderRepository->findUserById((int)$id));
+        return $id ? new UserData($this->userFinderRepository->findUserById((int)$id)) : new UserData();
     }
 
     /**
@@ -69,9 +69,9 @@ class UserFinder
      *
      * @param int $id
      *
+     * @return UserResultData
      * @throws \Exception
      *
-     * @return UserResultData
      */
     public function findUserReadResult(int $id): UserResultData
     {

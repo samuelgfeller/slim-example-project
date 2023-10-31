@@ -32,11 +32,11 @@ class UserUpdaterRepository
      * Change user status.
      *
      * @param UserStatus $status
-     * @param string $userId
+     * @param string|int|null $userId
      *
      * @return bool
      */
-    public function changeUserStatus(UserStatus $status, string $userId): bool
+    public function changeUserStatus(UserStatus $status, string|int|null $userId): bool
     {
         $query = $this->queryFactory->updateQuery()->update('user')->set(['status' => $status->value])->where(
             ['id' => $userId]
@@ -49,11 +49,11 @@ class UserUpdaterRepository
      * Change user password.
      *
      * @param string $passwordHash
-     * @param string $userId
+     * @param int $userId
      *
      * @return bool
      */
-    public function changeUserPassword(string $passwordHash, string $userId): bool
+    public function changeUserPassword(string $passwordHash, int $userId): bool
     {
         $query = $this->queryFactory->updateQuery()->update('user')->set(['password_hash' => $passwordHash])->where(
             ['id' => $userId]

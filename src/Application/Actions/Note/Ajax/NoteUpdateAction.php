@@ -30,7 +30,7 @@ final class NoteUpdateAction
         array $args
     ): ResponseInterface {
         $noteIdToChange = (int)$args['note_id'];
-        $noteValues = $request->getParsedBody();
+        $noteValues = (array)$request->getParsedBody();
 
         $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
 

@@ -7,7 +7,7 @@ class InvalidCredentialsException extends AuthenticationException
     // Voluntarily not more information
     private string $userEmail;
 
-    public function __construct(string $email, $message = 'Invalid credentials')
+    public function __construct(string $email, string $message = 'Invalid credentials')
     {
         parent::__construct($message);
         $this->userEmail = $email;

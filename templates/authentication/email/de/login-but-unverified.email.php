@@ -3,11 +3,11 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
- * @var \App\Domain\User\Data\UserData $user object
+ * @var string $userFullName
  * @var array $config public configuration values
  */
 ?>
-Guten Tag <?= $user->getFullName() ?> <br>
+Guten Tag <?= $userFullName ?> <br>
 <br>
 Wenn Sie gerade versucht haben, sich anzumelden, beachten Sie bitte, dass Sie zunächst Ihre E-Mail-Adresse
 bestätigen müssen. <br>

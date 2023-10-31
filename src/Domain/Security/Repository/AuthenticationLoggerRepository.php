@@ -19,9 +19,9 @@ class AuthenticationLoggerRepository
      * @param bool $success whether login request was a successful login or not
      * @param int|null $userId
      *
-     * @return string
+     * @return int
      */
-    public function logLoginRequest(string $email, ?string $ip, bool $success, ?int $userId = null): string
+    public function logLoginRequest(string $email, ?string $ip, bool $success, ?int $userId = null): int
     {
         $query = $this->queryFactory->insertQuery();
         $query->insert(['email', 'ip_address', 'is_success', 'user_id', 'created_at'])
@@ -35,6 +35,6 @@ class AuthenticationLoggerRepository
                 'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
             ]);
 
-        return $query->execute()->lastInsertId();
+        return (int)$query->execute()->lastInsertId();
     }
 }

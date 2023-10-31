@@ -43,8 +43,8 @@ class EmailRequestFinder
     public function findLastEmailRequestTimestamp(string $email): int
     {
         $createdAt = $this->emailRequestFinderRepository->findLatestEmailRequest($email);
-        if ($createdAt) {
-            return (new \DateTime($createdAt))->format('U');
+        if (is_string($createdAt)) {
+            return (int)(new \DateTime($createdAt))->format('U');
         }
 
         return 0;

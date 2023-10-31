@@ -35,7 +35,7 @@ final class DashboardTogglePanelProcessAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $params = $request->getParsedBody();
+        $params = (array)$request->getParsedBody();
         // As there is no other validation the request body is checked for valid keys here
         if ($this->malformedRequestBodyChecker->requestBodyHasValidKeys($params, ['panelIds'])) {
             $this->filterSettingSaver->saveFilterSettingForAuthenticatedUser(

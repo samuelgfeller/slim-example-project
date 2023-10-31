@@ -22,7 +22,7 @@ class NoteData implements \JsonSerializable
     public ?UserData $user;
 
     // User mutation rights from authenticated user
-    public ?Privilege $privilege; // json_encode automatically takes $enum->value
+    public Privilege $privilege = Privilege::NONE; // json_encode automatically takes $enum->value
 
     public function __construct(?array $noteValues = null)
     {
@@ -71,7 +71,11 @@ class NoteData implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        $dateFormatter = new IntlDateFormatter(setlocale(LC_ALL, 0), IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
+        $dateFormatter = new IntlDateFormatter(
+            setlocale(LC_ALL, 0) ?: null,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::SHORT
+        );
 
         return [
             'id' => $this->id,
@@ -81,7 +85,7 @@ class NoteData implements \JsonSerializable
             // 'isMain' => $this->isMain,
             'hidden' => $this->hidden,
             'createdAt' => $this->createdAt ? $dateFormatter->format($this->createdAt) : null,
-            'updatedAt' => $this->createdAt ? $dateFormatter->format($this->updatedAt) : null,
+            'updatedAt' => $this->updatedAt ? $dateFormatter->format($this->updatedAt) : null,
         ];
     }
 }

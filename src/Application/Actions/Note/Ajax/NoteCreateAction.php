@@ -29,7 +29,7 @@ final class NoteCreateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $noteValues = $request->getParsedBody();
+        $noteValues = (array)$request->getParsedBody();
 
         // To domain function to validate and create note
         $noteCreationData = $this->noteCreator->createNote($noteValues);

@@ -37,6 +37,7 @@ final class AccountUnlockTokenVerifier
         if (
             $verification->token !== null
             && $verification->usedAt === null
+            && $verification->userId !== null
             && $verification->expiresAt > time()
             && true === password_verify($token, $verification->token)
         ) {

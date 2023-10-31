@@ -37,9 +37,9 @@ class UserCreator
      * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
+     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
-     * @return int|bool insert id, false if user already exists
      */
     public function createUser(array $userValues, ?string $captcha = null, array $queryParams = []): bool|int
     {
@@ -53,7 +53,7 @@ class UserCreator
             // Verify that user (concerned email) or ip address doesn't spam email sending
             $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
 
-            $user->passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
+            $user->passwordHash = password_hash($user->password ?? '', PASSWORD_DEFAULT);
 
             // Set default status and role
             $user->status = $user->status ?? UserStatus::Unverified;
@@ -69,9 +69,14 @@ class UserCreator
 
             // Create and insert token if unverified
             if ($user->status === UserStatus::Unverified) {
-                $queryParams = $this->verificationTokenCreator->createUserVerification($user, $queryParams);
+                $queryParams = $this->verificationTokenCreator->createUserVerification($user->id, $queryParams);
                 // Send token to user. Mailer errors caught in action
-                $this->registrationMailer->sendRegisterVerificationToken($user, $queryParams);
+                $this->registrationMailer->sendRegisterVerificationToken(
+                    $user->email ?? '',
+                    $user->getFullName(),
+                    $user->language->value,
+                    $queryParams
+                );
             }
 
             return $user->id;

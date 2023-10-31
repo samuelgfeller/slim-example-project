@@ -19,17 +19,17 @@ class EmailLoggerRepository
      * @param string $subject
      * @param int|string|null $userId
      *
-     * @return string
+     * @return int
      */
     public function logEmailRequest(
         string $fromEmail,
         string $toEmail,
         string $subject,
         int|string|null $userId
-    ): string {
+    ): int {
         $query = $this->queryFactory->insertQuery();
 
-        return $query->insert(['id', 'user_id', 'from_email', 'to_email', 'other_recipient', 'subject', 'created_at'])
+        return (int)$query->insert(['id', 'user_id', 'from_email', 'to_email', 'other_recipient', 'subject', 'created_at'])
             ->into('email_log')->values([
                 'user_id' => $userId,
                 'from_email' => $fromEmail,
