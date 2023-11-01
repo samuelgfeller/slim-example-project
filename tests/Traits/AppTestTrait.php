@@ -16,6 +16,7 @@ use UnexpectedValueException;
 
 /**
  * Handles slim app for testing
+ * What are traits?
  * Traits basically "extend" the class that include them with their content.
  * Or simply "language assisted copy and paste" (from PHP docs comments).
  */
@@ -60,17 +61,12 @@ trait AppTestTrait
 
             // Create tables, truncate old ones
             $this->setUpDatabase($container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
-            // Always insert user roles so that it doesn't have to be done inside each test function that uses users
-            $this->insertFixtures([UserRoleFixture::class]);
-        }
 
-        // XDebug start_with_request produces errors when testing (SLE-102)
-        // if (!isset($_ENV['AUTO_XDEBUG_DISABLED'])) {
-        // Disable xdebug.start_with_request (when already disabled, delay is approx 200ms for 80 tests)
-        // shell_exec(__DIR__ . '/../../resources/scripts/1_disable_autostart_minimized_shortcut.lnk');
-        // $_ENV['AUTO_XDEBUG_DISABLED'] = true;
-        //            self::fail('XDebug start_with_request was enabled. It is now disabled, please run the test again');
-        //         }
+            if (method_exists($this, 'insertFixtures')) {
+                // Always insert user roles so that it doesn't have to be done inside each test function that uses users
+                $this->insertFixtures([UserRoleFixture::class]);
+            }
+        }
     }
 
     /**

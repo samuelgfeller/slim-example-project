@@ -55,11 +55,11 @@ class NoteDeleteActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
 
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Insert main note attached to client and given "owner" user
@@ -69,7 +69,7 @@ class NoteDeleteActionTest extends TestCase
                 'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
             ],
-            NoteFixture::class
+            new NoteFixture()
         );
 
         // Insert normal note attached to client and given "owner" user
@@ -79,7 +79,7 @@ class NoteDeleteActionTest extends TestCase
                 'user_id' => $userLinkedToNoteRow['id'],
                 'client_id' => $clientRow['id'],
             ],
-            NoteFixture::class
+            new NoteFixture()
         );
 
         // Simulate logged-in user
@@ -153,10 +153,10 @@ class NoteDeleteActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('note-submit-delete', ['note_id' => 1]),
+            $this->urlFor('note-submit-delete', ['note_id' => '1']),
         );
         // Create url where client should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
         // Make request
         $response = $this->app->handle($request);

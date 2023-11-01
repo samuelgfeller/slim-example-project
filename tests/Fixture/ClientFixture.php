@@ -5,7 +5,7 @@ namespace App\Test\Fixture;
 /**
  * Client values that can be inserted into the database.
  */
-class ClientFixture
+class ClientFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'client';
@@ -95,4 +95,14 @@ class ClientFixture
             'deleted_at' => null,
         ],
     ];
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
 }

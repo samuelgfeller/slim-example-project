@@ -2,7 +2,7 @@
 
 namespace App\Test\Fixture;
 
-class UserRoleFixture
+class UserRoleFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'user_role';
@@ -30,4 +30,14 @@ class UserRoleFixture
             'hierarchy' => 4,
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Test\Fixture;
 
-class UserActivityFixture
+class UserActivityFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'user_activity';
@@ -21,4 +21,14 @@ class UserActivityFixture
             'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }

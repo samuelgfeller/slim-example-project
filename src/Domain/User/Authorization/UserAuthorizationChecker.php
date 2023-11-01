@@ -24,6 +24,7 @@ class UserAuthorizationChecker
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         LoggerFactory $loggerFactory
     ) {
+        // Fix error $userId must not be accessed before initialization
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
         $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-authorization');
     }

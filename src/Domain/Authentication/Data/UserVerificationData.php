@@ -11,7 +11,6 @@ class UserVerificationData
     public ?string $usedAt = null;
     public ?string $createdAt;
 
-
     public function __construct(array $verificationData = [])
     {
         $this->id = $verificationData['id'] ?? null;

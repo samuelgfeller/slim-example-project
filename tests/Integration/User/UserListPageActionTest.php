@@ -39,7 +39,7 @@ class UserListPageActionTest extends TestCase
         // Insert authenticated but unauthorized user newcomer
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            UserFixture::class
+            new UserFixture()
         );
 
         // Simulate logged-in user with logged-in user id
@@ -64,7 +64,7 @@ class UserListPageActionTest extends TestCase
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         );
 
         // Simulate logged-in user with logged-in user id

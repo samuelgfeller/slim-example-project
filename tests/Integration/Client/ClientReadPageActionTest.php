@@ -40,13 +40,13 @@ class ClientReadPageActionTest extends TestCase
     public function testClientReadPageActionAuthorization(): void
     {
         // Insert linked and authenticated user
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
         // Insert linked client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Add needed database values to correctly display the page
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));
@@ -66,7 +66,7 @@ class ClientReadPageActionTest extends TestCase
     public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $requestRoute = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url

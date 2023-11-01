@@ -6,7 +6,7 @@ namespace App\Test\Fixture;
  * Client status values that can be inserted into the database
  * No fixture has to be inserted first.
  */
-class ClientStatusFixture
+class ClientStatusFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'client_status';
@@ -25,4 +25,14 @@ class ClientStatusFixture
             'deleted_at' => null,
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }

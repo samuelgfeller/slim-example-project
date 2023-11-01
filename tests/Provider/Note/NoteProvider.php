@@ -108,7 +108,7 @@ class NoteProvider
         return [
             // * Filter "client_id"
             [ // client 1 (not tested with other clients)
-                'get_params' => ['client_id' => 1],
+                'get_params' => ['client_id' => '1'],
                 // Expected where string to search in the note table
                 'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 AND client_id = 1',
                 'user_to_insert' => $usersToInsert,
@@ -175,16 +175,16 @@ class NoteProvider
      * get more complex, they should be split in different providers.
      *
      * @return array{
-     *              array{
-     *                  owner_user: array,
-     *                  authenticated_user: array,
-     *                  expected_result: array{
-     *                                     creation: array,
-     *                                     modification: array{main_note: array, normal_note: array},
-     *                                     deletion: array{main_note: array, normal_note: array},
-     *                                     }
-     *                  }
-     *           }
+     *     array{
+     *         owner_user: array,
+     *         authenticated_user: array,
+     *         expected_result: array{
+     *             creation: array,
+     *             modification: array,
+     *             deletion: array,
+     *         },
+     *     },
+     * }
      */
     public static function noteCreateUpdateDeleteProvider(): array
     {

@@ -4,9 +4,7 @@ namespace App\Domain\Utility;
 
 class Settings
 {
-
     private array $settings;
-
 
     public function __construct(array $settings)
     {

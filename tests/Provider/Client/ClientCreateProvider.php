@@ -11,7 +11,14 @@ class ClientCreateProvider
     use FixtureTestTrait;
 
     /**
-     * @return \array[][]
+     * Provides test cases for client creation dropdown options.
+     *
+     * Each test case is an array with the following structure:
+     * - 'authenticated_user': An array of attributes for the authenticated user. This includes 'first_name' and 'user_role_id'.
+     * - 'other_user': An array of attributes for another user. This includes 'first_name' and 'user_role_id'.
+     * - 'expected_user_names': An array of expected user names. This is used to verify the output of the function being tested.
+     *
+     * @return array an array of test cases
      */
     public static function clientCreationDropdownOptionsCases(): array
     {
@@ -50,7 +57,7 @@ class ClientCreateProvider
      * Provides combination of different user roles with expected result.
      * This tests the rules in ClientAuthorizationChecker.
      *
-     * @return array[]
+     * @return array
      */
     public static function clientCreationAuthorizationProvider(): array
     {

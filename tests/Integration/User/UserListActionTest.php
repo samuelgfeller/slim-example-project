@@ -2,8 +2,6 @@
 
 namespace App\Test\Integration\User;
 
-use App\Domain\Authorization\Privilege;
-use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\AuthorizationTestTrait;
@@ -11,6 +9,8 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
@@ -31,19 +31,23 @@ class UserListActionTest extends TestCase
      * @dataProvider \App\Test\Provider\User\UserListProvider::userListAuthorizationCases()
      *
      * @param array $userRow user attributes containing the user_role_id
-     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
-     * @param array{
-     *        string: StatusCodeInterface,
-     *        own: array{
-     *          statusPrivilege: Privilege,
-     *          userRolePrivilege: Privilege,
-     *          availableUserRoles: UserRole        },
-     *        other: null|array{
-     *          statusPrivilege: Privilege,
-     *          userRolePrivilege: Privilege,
-     *          availableUserRoles: UserRole        }
+     * @param $authenticatedUserRow array{
+     *     Statuscodeinterface::class: string,
+     *     own: array{
+     *         statusPrivilege: Privilege,
+     *         userRolePrivilege: Privilege,
+     *         availableUserRoles: array<UserRole>
+     *     },
+     *     other: false|array{
+     *         statusPrivilege: Privilege,
+     *         userRolePrivilege: Privilege,
+     *         availableUserRoles: array<UserRole>
      *     }
-     * $expectedResult HTTP status code and privilege
+     *    } authenticated user attributes containing the user_role_id
+     * @param array $expectedResult HTTP status code and privilege
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return void
      */

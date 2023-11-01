@@ -28,7 +28,6 @@ class ClientResultData extends ClientData
     public ?Privilege $assignedUserPrivilege = null;
     public ?Privilege $noteCreatePrivilege = null;
 
-
     public function __construct(array $clientResultData = [])
     {
         parent::__construct($clientResultData);

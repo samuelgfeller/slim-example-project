@@ -8,7 +8,6 @@ use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 
-
 class NoteValidator
 {
     private LoggerInterface $logger;

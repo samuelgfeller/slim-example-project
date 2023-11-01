@@ -53,11 +53,11 @@ class ClientDeleteActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert client linked to given user
         $clientRow = $this->insertFixturesWithAttributes(
             ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Simulate logged-in user
@@ -110,7 +110,7 @@ class ClientDeleteActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('client-delete-submit', ['client_id' => 1]),
+            $this->urlFor('client-delete-submit', ['client_id' => '1']),
         );
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url

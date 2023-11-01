@@ -82,7 +82,7 @@ class UserNameAbbreviator
             if (count($usersWithIdenticalFirstName) === 1) {
                 // reset() returns the first value of the array
                 $userWithUniqueFirstName = reset($usersWithIdenticalFirstName);
-                $outputNames[$userWithUniqueFirstName->id] = ($userWithUniqueFirstName->firstName ?? '');
+                $outputNames[(int)$userWithUniqueFirstName->id] = (string)$userWithUniqueFirstName->firstName;
                 continue;
             }
 

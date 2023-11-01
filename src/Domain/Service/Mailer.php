@@ -16,6 +16,7 @@ use Symfony\Component\Mime\Email;
  */
 class Mailer
 {
+    private ?int $loggedInUserId;
 
     public function __construct(
         private readonly MailerInterface $mailer,
@@ -23,6 +24,8 @@ class Mailer
         private readonly EmailLoggerRepository $emailLoggerRepository,
         private readonly UserNetworkSessionData $userNetworkSessionData
     ) {
+        // Fix error $userId must not be accessed before initialization
+        $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
     }
 
     /**
@@ -67,7 +70,7 @@ class Mailer
             $email->getFrom()[0]->getAddress(),
             $email->getTo()[0]->getAddress(),
             $email->getSubject() ?? '',
-            $this->userNetworkSessionData->userId
+            $this->loggedInUserId
         );
     }
 }

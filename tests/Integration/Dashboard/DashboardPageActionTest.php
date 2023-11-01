@@ -24,16 +24,16 @@ class DashboardPageActionTest extends TestCase
     public function testDashboardPageActionAuthenticated(): void
     {
         // Insert authenticated user
-        $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $loggedInUserId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
         // Insert other users to have different user filter chips (to test logic for user activity panel)
-        $userId = $this->insertFixturesWithAttributes(['first_name' => 'Andrew'], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes(['first_name' => 'Andrew'], new UserFixture())['id'];
         // Set user Andrew to active filter
         $this->insertFixturesWithAttributes(
             ['module' => 'dashboard-user-activity', 'filter_id' => "user_$userId", 'user_id' => $loggedInUserId],
-            UserFilterSettingFixture::class
+            new UserFilterSettingFixture()
         );
         // Insert another inactive user
-        $this->insertFixturesWithAttributes(['first_name' => 'Mike'], UserFixture::class);
+        $this->insertFixturesWithAttributes(['first_name' => 'Mike'], new UserFixture());
 
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

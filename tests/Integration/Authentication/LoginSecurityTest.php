@@ -44,7 +44,7 @@ class LoginSecurityTest extends TestCase
         $user = $this->insertFixturesWithAttributes([
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-        ], UserFixture::class);
+        ], new UserFixture());
 
         // Login request body with invalid credentials
         $loginRequestBody = ['email' => 'wrong@email.com', 'password' => 'wrong_password'];
@@ -104,7 +104,7 @@ class LoginSecurityTest extends TestCase
                             // security check** after the failed request in LoginVerifier.
                             // (This second security check is not done if request has correct credentials)
                             // Prepone last authentication_log to simulate waiting
-                            $this->preponeLastAuthenticationLogEntry($delay);
+                            $this->preponeLastAuthenticationLogEntry((int)$delay);
                             try {
                                 // Request again with wrong credentials
                                 $this->app->handle($request);
@@ -181,25 +181,5 @@ class LoginSecurityTest extends TestCase
         // Change row with the highest id
         $query = 'DELETE FROM authentication_log ORDER BY id DESC LIMIT 1';
         $this->createQueryStatement($query);
-    }
-
-    /**
-     * Postpone last request (the last request has to be reset to its initial value as security check is done before
-     * the `authentication_log` of the next login request is inserted.
-     *
-     * @param int $seconds
-     *
-     * @return void
-     */
-    private function postponeLastAuthenticationLog(int $seconds): void
-    {
-        // Change row with the highest id
-        $query = "UPDATE authentication_log SET created_at = DATE_SUB(created_at, INTERVAL $seconds SECOND) ORDER BY id DESC LIMIT 1";
-        $this->createQueryStatement($query);
-
-        // $sql = "SELECT * FROM user_request ORDER BY id DESC LIMIT 1";
-        // $statement = $this->createPreparedStatement($sql);
-        // $statement->execute();
-        // $r = $statement->fetch(PDO::FETCH_ASSOC);
     }
 }

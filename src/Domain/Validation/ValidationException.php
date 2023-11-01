@@ -4,7 +4,6 @@ namespace App\Domain\Validation;
 
 use RuntimeException;
 
-
 class ValidationException extends RuntimeException
 {
     public readonly array $validationErrors;

@@ -20,13 +20,11 @@ class UserActivityData
     public ?string $pageUrl = null;
     public ?string $timeAndActionName = null; // Time in the correct format and action name with upper case
 
-
     public function __construct(array $userActivityValues = [])
     {
         $this->id = $userActivityValues['id'] ?? null;
         $this->userId = $userActivityValues['user_id'] ?? null;
-        $this->action = isset($userActivityValues['action']) ?
-            UserActivity::tryFrom($userActivityValues['action']) : UserActivity::UPDATED;
+        $this->action = UserActivity::tryFrom($userActivityValues['action'] ?? '') ?? UserActivity::UPDATED;
         $this->table = $userActivityValues['table'] ?? null;
         $this->rowId = $userActivityValues['row_id'] ?? null;
         $this->data = $userActivityValues['data'] ?? null ?

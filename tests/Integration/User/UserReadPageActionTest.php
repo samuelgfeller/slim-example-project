@@ -59,7 +59,7 @@ class UserReadPageActionTest extends TestCase
     public function testClientReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $requestRoute = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url

@@ -37,11 +37,11 @@ class LoginPageActionTest extends TestCase
     public function testLoginPageActionAlreadyLoggedIn(): void
     {
         // Insert authenticated user
-        $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
         // Prepare route to test the case when the user clicks on a login link with a redirect route
-        $requestRouteAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $requestRouteAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
         // Create request to the login page
         $request = $this->createRequest(
             'GET',

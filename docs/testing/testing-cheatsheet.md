@@ -81,17 +81,16 @@ use FixtureTestTrait; // Custom
 public function testClientReadPageAction_authenticated(): void
 {
     // Insert linked and authenticated user
-    $userId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+    $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
     // Insert linked client status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Add needed database values to correctly display the page
     $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
     
     // Simulate logged-in user with logged-in user id
     $this->container->get(SessionInterface::class)->set('user_id', $userId);
-        ClientFixture::class);
         
-    $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => 1]));
+    $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => '1']));
     $response = $this->app->handle($request);
     // Assert 200 OK
     self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
@@ -106,7 +105,7 @@ This test is also useful to test if the automatic redirect in the `UserAuthentic
 public function testClientReadPageAction_unauthenticated(): void
 {
     // Request route to client read page while not being logged in
-    $requestRoute = $this->urlFor('client-read-page', ['client_id' => 1]);
+    $requestRoute = $this->urlFor('client-read-page', ['client_id' => '1']);
     $request = $this->createRequest('GET', $requestRoute);
     $response = $this->app->handle($request);
     // Assert 302 Found redirect to login url
@@ -146,7 +145,7 @@ Parameters are
 
 * `$attributes` where an associative array is expected with as key the column and value the value
   we want to attribute to this column.
-* `$fixtureClass` where the class string of a fixture is expected such as `UserFixture::class`.
+* `$fixture` instance of the wanted fixture e.g. `new UserFixture()`.
 * `$amount` optional amount of rows you want to generate. Default 1.
 
 Return value is an associative array of the inserted row including the id.
@@ -157,18 +156,18 @@ To insert only the records that matching specific criteria, the function `insert
 like follows:
 
 ```php
-$clientOwnerId = $this->insertFixturesWithAttributes(['first_name' => 'Josh'], UserFixture::class)['id'];
+$clientOwnerId = $this->insertFixturesWithAttributes(['first_name' => 'Josh'], new UserFixture())['id'];
 // Insert linked status
-$clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+$clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
 // Insert client row
 $clientRow = $this->insertFixturesWithAttributes(
     ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-    ClientFixture::class
+    new ClientFixture()
 );
 // Insert linked note
 $noteRow = $this->insertFixturesWithAttributes(
     ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $clientOwnerId],
-    NoteFixture::class
+    new NoteFixture()
 );
 ```
 
@@ -178,7 +177,7 @@ For a json request and assertions later, the `HttpJsonTestTrait.php` is used.
 Request is created as follows:
 
 ```php
-$request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
+$request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => '1']);
 ```
 
 ### Simulate session, execute request and assert status code
@@ -277,9 +276,9 @@ xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" 
 
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
-    ->withQueryParams(['client_id' => 1]);
+    ->withQueryParams(['client_id' => '1']);
 // Create url where client should be redirected to after login    
-$redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+$redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
 $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
 // Make request
 $response = $this->app->handle($request);
@@ -296,7 +295,7 @@ $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
 
 ```php
 $request = $this->createJsonRequest('GET', $this->urlFor('ajax-route-name'))
-    ->withQueryParams(['client_id' => 1]);
+    ->withQueryParams(['client_id' => '1']);
 // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
 $redirectAfterLoginRouteName = 'page-route-name';
 $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
@@ -369,24 +368,24 @@ public function testNoteListAction(
     // client owner id has to be added to the provider
     $clientOwnerId = $this->insertFixturesWithAttributes(
         $this->addUserRoleId(['user_role_id' => 3]), 
-        UserFixture::class
+        new UserFixture()
     )['id'];
     // Insert linked status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert client row
     $clientRow = $this->insertFixturesWithAttributes(
         ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-        ClientFixture::class
+        new ClientFixture()
     );
     // Insert linked note. Only one per test to simplify assertions with different privileges
     $noteData = $this->insertFixturesWithAttributes(
         ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $userLinkedToNoteRow['id']],
-        NoteFixture::class
+        new NoteFixture()
     );
     // Simulate logged-in user with logged-in user id
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     // Make request
-    $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
+    $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => '1']);
     $response = $this->app->handle($request);
     // Assert status code
     self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
@@ -626,11 +625,11 @@ public function testNoteSubmitCreateAction(
     $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
     // Insert needed client status fixture
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert one client linked to this user
     $clientRow = $this->insertFixturesWithAttributes(
         ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
-        ClientFixture::class
+        new ClientFixture()
     );
     // Create request
     $noteMessage = 'Test note';
@@ -694,21 +693,21 @@ public function testNoteSubmitUpdateAction(
     $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
 
     // Insert linked status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert one client linked to this user
     $clientRow = $this->insertFixturesWithAttributes(
         ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
-        ClientFixture::class
+        new ClientFixture()
     );
     // Insert main note attached to client and given "owner" user
     $mainNoteRow = $this->insertFixturesWithAttributes(
         ['is_main' => 1, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
-        NoteFixture::class
+        new NoteFixture()
     );
     // Insert normal note attached to client and given "owner" user
     $normalNoteRow = $this->insertFixturesWithAttributes(
         ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
-        NoteFixture::class
+        new NoteFixture()
     );
     // Simulate logged-in user
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
@@ -783,11 +782,11 @@ public function testNoteSubmitDeleteAction(
     $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
         
     // Insert linked status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert one client linked to this user
     $clientRow = $this->insertFixturesWithAttributes(
         ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
-        ClientFixture::class
+        new ClientFixture()
     );
     // Insert main note attached to client and given "owner" user
     $mainNoteData = $this->insertFixturesWithAttributes(
@@ -796,7 +795,7 @@ public function testNoteSubmitDeleteAction(
             'user_id' => $userLinkedToNoteRow['id'],
             'client_id' => $clientRow['id'],
         ],
-        NoteFixture::class
+        new NoteFixture()
     );
     // Insert normal note attached to client and given "owner" user
     $normalNoteData = $this->insertFixturesWithAttributes(
@@ -805,7 +804,7 @@ public function testNoteSubmitDeleteAction(
             'user_id' => $userLinkedToNoteRow['id'],
             'client_id' => $clientRow['id'],
         ],
-        NoteFixture::class
+        new NoteFixture()
     );
     // Simulate logged-in user
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
@@ -879,7 +878,7 @@ public function testClientSubmitCreateAction_authorization(
     $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
     
     // Client status is not authorization relevant for client creation
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     $clientCreationValues = [
         'first_name' => 'New',
         'last_name' => 'Client',
@@ -1000,17 +999,17 @@ public function testClientSubmitUpdateAction_authenticated(
     $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
     
     // Insert client status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert client that will be used for this test
     $clientRow = $this->insertFixturesWithAttributes(
         ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
-        ClientFixture::class
+        new ClientFixture()
     );
     // Insert other user and client status that are used for the modification request if needed
     if (isset($requestData['user_id'])) {
         // Add 1 to user_id linked to client
         $requestData['user_id'] = $clientRow['user_id'] + 1;
-        $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], UserFixture::class);
+        $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], new UserFixture());
     }
     if (isset($requestData['client_status_id'])) {
         // Add 1 to client status id
@@ -1150,11 +1149,11 @@ public function testClientSubmitDeleteAction_authenticated(
     // Insert authenticated user and user linked to resource with given attributes containing the user role
     $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
     // Insert client status
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert client linked to given user
     $clientRow = $this->insertFixturesWithAttributes(
         ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
-        ClientFixture::class
+        new ClientFixture()
     );
     
     // Simulate logged-in user
@@ -1390,15 +1389,15 @@ public function testClientSubmitUpdateAction_invalid(array $requestBody, array $
     // Insert user that is allowed to change content
     $userId = $this->insertFixturesWithAttributes(
         $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]), 
-        UserFixture::class
+        new UserFixture()
     )['id'];
-    $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+    $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Insert client that will be used for this test
     $clientRow = $this->insertFixturesWithAttributes(['client_status_id' => $clientStatusId, 'user_id' => $userId],
-        ClientFixture::class);
+        new ClientFixture());
     $request = $this->createJsonRequest(
         'PUT',
-        $this->urlFor('client-submit-update', ['client_id' => 1]),
+        $this->urlFor('client-submit-update', ['client_id' => '1']),
         $requestBody
     );
     // Simulate logged-in user with logged-in user id

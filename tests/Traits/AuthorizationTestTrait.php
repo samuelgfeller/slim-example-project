@@ -62,7 +62,7 @@ trait AuthorizationTestTrait
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $authenticatedUserAttr = $this->insertFixturesWithAttributes(
             $this->addUserRoleId($authenticatedUserAttr),
-            UserFixture::class
+            new UserFixture()
         );
         if ($authenticatedUserAttrOriginal === $userAttr) {
             $userAttr = $authenticatedUserAttr;
@@ -73,7 +73,7 @@ trait AuthorizationTestTrait
             // If authenticated user and owner user is not the same, insert owner
             $userAttr = $this->insertFixturesWithAttributes(
                 $this->addUserRoleId($userAttr),
-                UserFixture::class
+                new UserFixture()
             );
         }
     }
@@ -89,7 +89,7 @@ trait AuthorizationTestTrait
     protected function addUserRoleId(array $userAttr): array
     {
         // If user role is provided and is instance of UserRole, replace array key with the actual id
-        if ($userAttr['user_role_id'] ?? '' instanceof UserRole) {
+        if (isset($userAttr['user_role_id']) && $userAttr['user_role_id'] instanceof UserRole) {
             $userAttr['user_role_id'] = $this->getUserRoleIdByEnum($userAttr['user_role_id']);
         }
 

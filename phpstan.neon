@@ -5,8 +5,9 @@ parameters:
         - src
         - tests
     ignoreErrors:
-        - '#Parameter \#2 \$locale of function setlocale expects array\|string\|null, int given.#'
         - '#Call to an undefined method Odan\\Session\\SessionInterface::destroy\(\)\.#'
         - '#Call to an undefined method Odan\\Session\\SessionInterface::start\(\)\.#'
         - '#Call to an undefined method Odan\\Session\\SessionInterface::regenerateId\(\)\.#'
         - '#Method App\\Domain\\Factory\\Infrastructure\\QueryFactory::selectQuery\(\) return type with generic class Cake\\Database\\Query\\SelectQuery does not specify its types: T#'
+        - '#^Method .*::getTranslatedValues\(\) is unused\.$#'
+        - '#Call to an undefined method Psr\\Container\\ContainerInterface::set\(\).#'

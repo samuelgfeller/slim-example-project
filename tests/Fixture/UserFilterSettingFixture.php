@@ -2,7 +2,7 @@
 
 namespace App\Test\Fixture;
 
-class UserFilterSettingFixture
+class UserFilterSettingFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'user_filter_setting';
@@ -15,4 +15,14 @@ class UserFilterSettingFixture
             'module' => 'dashboard-panel',
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }

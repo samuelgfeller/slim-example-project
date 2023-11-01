@@ -59,11 +59,11 @@ class NoteCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert needed client status fixture
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Create request
@@ -134,7 +134,7 @@ class NoteCreateActionTest extends TestCase
     {
         $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
         // Create url where client should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
         // Make request
         $response = $this->app->handle($request);
@@ -165,20 +165,20 @@ class NoteCreateActionTest extends TestCase
         // Insert user that is authorized to create
         $clientOwnerId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert client row
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Insert main note linked to client and user if data provider $existingMainNote is true
         if ($existingMainNote === true) {
             // Creating main note row with correct values
-            $mainNoteRow = (new NoteFixture())->records[0];
+            $mainNoteRow = (new NoteFixture())->getRecords()[0];
             $mainNoteRow['is_main'] = 1;
             $mainNoteRow['client_id'] = $clientRow['id'];
             $mainNoteRow['user_id'] = $clientOwnerId;

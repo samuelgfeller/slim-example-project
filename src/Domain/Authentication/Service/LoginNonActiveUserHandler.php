@@ -44,11 +44,11 @@ class LoginNonActiveUserHandler
      * @param array $queryParams the query parameters
      * @param ?string $captcha
      *
-     * @return void
      * @throws \RuntimeException if there is an invalid status in the database
      * @throws UnableToLoginStatusNotActiveException thrown in all cases as the user status is not active
-     *
      * @throws TransportExceptionInterface if there is an exception while sending an email
+     *
+     * @return void
      */
     public function handleLoginAttemptFromNonActiveUser(
         UserData $dbUser,
@@ -123,8 +123,9 @@ class LoginNonActiveUserHandler
      * @param string $fullName
      * @param array $queryParams
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleUnverifiedUserLoginAttempt(
         int $userId,
@@ -146,8 +147,10 @@ class LoginNonActiveUserHandler
      * @param int $userId
      * @param string $email
      * @param string $fullName
-     * @return void
+     *
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleSuspendedUserLoginAttempt(int $userId, string $email, string $fullName): void
     {
@@ -167,8 +170,9 @@ class LoginNonActiveUserHandler
      * @param string $fullName
      * @param array $queryParams existing query params like redirect
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     private function handleLockedUserLoginAttempt(
         int $userId,

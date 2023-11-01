@@ -6,7 +6,7 @@ namespace App\Test\Fixture;
  * User values that can be inserted into the database
  * ! All user roles are inserted automatically for each test (in AppTestTrait).
  */
-class UserFixture
+class UserFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'user';
@@ -31,4 +31,14 @@ class UserFixture
             'deleted_at' => null,
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }

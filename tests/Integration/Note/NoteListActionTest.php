@@ -66,15 +66,15 @@ class NoteListActionTest extends TestCase
         // client owner id has to be added to the provider
         $clientOwnerId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
 
         // Insert client row
         $clientRow = $this->insertFixturesWithAttributes(
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Insert linked note. Only one per test to simplify assertions with different privileges
@@ -85,13 +85,13 @@ class NoteListActionTest extends TestCase
                 'user_id' => $userLinkedToNoteRow['id'],
                 'hidden' => $noteHidden,
             ],
-            NoteFixture::class
+            new NoteFixture()
         );
 
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         // Make request
-        $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => 1]);
+        $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => '1']);
         $response = $this->app->handle($request);
 
         // Assert status code
@@ -157,16 +157,16 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // Authenticated user role not relevant here, and it should not cause issues (authorization tested above)
         $loggedInUserId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
 
         // Insert users without specific user role
-        $users = $this->insertFixturesWithAttributes($usersAttrToInsert, UserFixture::class);
+        $users = $this->insertFixturesWithAttributes($usersAttrToInsert, new UserFixture());
         // Insert client status and client
-        $statusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $statusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         $clientAttrToInsert['client_status_id'] = $statusId;
-        $clientId = $this->insertFixturesWithAttributes($clientAttrToInsert, ClientFixture::class)['id'];
-        $notes = $this->insertFixturesWithAttributes($notesAttrToInsert, NoteFixture::class);
+        $clientId = $this->insertFixturesWithAttributes($clientAttrToInsert, new ClientFixture())['id'];
+        $notes = $this->insertFixturesWithAttributes($notesAttrToInsert, new NoteFixture());
 
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
@@ -226,7 +226,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         array $filterQueryParams,
         string $exceptionMessage,
     ): void {
-        $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $loggedInUserId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(
@@ -252,9 +252,9 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     public function testClientReadNotesLoadUnauthenticated(): void
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
-            ->withQueryParams(['client_id' => 1]);
+            ->withQueryParams(['client_id' => '1']);
 
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
 
         // Make request

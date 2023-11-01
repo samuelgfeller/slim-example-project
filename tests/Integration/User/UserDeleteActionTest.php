@@ -100,7 +100,7 @@ class UserDeleteActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('user-delete-submit', ['user_id' => 1]),
+            $this->urlFor('user-delete-submit', ['user_id' => '1']),
         );
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url

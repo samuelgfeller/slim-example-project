@@ -44,7 +44,7 @@ class RegisterVerifyActionTest extends TestCase
         // User needed to insert verification (taking first record from userFixture)
         $userRow = $this->insertFixturesWithAttributes(
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -54,7 +54,7 @@ class RegisterVerifyActionTest extends TestCase
             // Test redirect at the same time
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
@@ -65,7 +65,9 @@ class RegisterVerifyActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Assert that token has been used
-        self::assertNotNull($this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']);
+        self::assertNotNull(
+            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
+        );
 
         // Assert that status is active on user
         $this->assertTableRowValue(UserStatus::Active->value, 'user', $userRow['id'], 'status');
@@ -90,7 +92,7 @@ class RegisterVerifyActionTest extends TestCase
         // User needed to insert verification
         $userRow = $this->insertFixturesWithAttributes(
             ['id' => $verification->userId, 'status' => UserStatus::Active->value],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -100,7 +102,7 @@ class RegisterVerifyActionTest extends TestCase
             // Test redirect at the same time
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
@@ -136,7 +138,7 @@ class RegisterVerifyActionTest extends TestCase
         // User needed to insert verification
         $userRow = $this->insertFixturesWithAttributes(
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -146,7 +148,7 @@ class RegisterVerifyActionTest extends TestCase
             // Test redirect at the same time
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' => $verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
@@ -163,7 +165,7 @@ class RegisterVerifyActionTest extends TestCase
         // Assert that token had NOT been used (except if already used)
         self::assertSame(
             $verification->usedAt,
-            $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
+            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
         );
 
         // Assert that status is still unverified on user
@@ -183,7 +185,7 @@ class RegisterVerifyActionTest extends TestCase
 
         $queryParams = [
             // Missing token
-            'id' => 1,
+            'id' => '1',
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));

@@ -2,6 +2,7 @@
 
 namespace App\Test\Traits;
 
+use App\Test\Fixture\FixtureInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
@@ -18,15 +19,14 @@ trait FixtureTestTrait
      * function can control fixtures and there is no dependencies.
      *
      * @param array $attributes
-     * @param string $fixtureClass
+     * @param FixtureInterface $fixture
      * @param int $amount amount rows that will be returned
      *
      * @return array either one row of requested fixture or array of rows if $amount is higher than 1
      */
-    protected function getFixtureRecordsWithAttributes(array $attributes, string $fixtureClass, int $amount = 1): array
+    protected function getFixtureRecordsWithAttributes(array $attributes, FixtureInterface $fixture, int $amount = 1): array
     {
-        $fixture = new $fixtureClass();
-        $rows = $fixture->records;
+        $rows = $fixture->getRecords();
         $returnArray = [];
         $rowKey = 0;
         // To have a pool of different data; instead of taking one basic record when multiple records are asked,
@@ -62,14 +62,14 @@ trait FixtureTestTrait
      * @param array $attributes array of db column name and the expected value an array of multiple attribute sets
      * Format: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',] or
      * [['field_name' => 'expected_value'], ['field_name' => 'expected_value']] -> makes 2 insets
-     * @param class-string $fixtureClass
+     * @param FixtureInterface $fixture
      * @param int $amount
      *
      * @return array row when $amount is 1 or array of rows when more than 1 inserted
      */
     protected function insertFixturesWithAttributes(
         array $attributes,
-        string $fixtureClass,
+        FixtureInterface $fixture,
         int $amount = 1
     ): array {
         $attributesIsMultidimensional = true; // I know there are technically no multidimensional arrays but its more readable
@@ -82,19 +82,19 @@ trait FixtureTestTrait
 
         $recordsCollection = [];
         foreach ($attributes as $attributesForOneRow) {
-            $records = $this->getFixtureRecordsWithAttributes($attributesForOneRow, $fixtureClass, $amount);
+            $records = $this->getFixtureRecordsWithAttributes($attributesForOneRow, $fixture, $amount);
             // Check if $records is a collection of records or only one (if amount > 1 it will be a collection)
             if (!(isset($records[0]) && is_array($records[0]))) {
                 $row = $records;
                 // If only one record, insert it and return row
-                $row['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+                $row['id'] = (int)$this->insertFixture($fixture->getTable(), $row);
                 $recordsCollection[] = $row;
                 continue;
             }
             // Loop through records and insert them
             foreach ($records as $key => $row) {
                 // Insert records and add id to collection
-                $records[$key]['id'] = (int)$this->insertFixture((new $fixtureClass())->table, $row);
+                $records[$key]['id'] = (int)$this->insertFixture($fixture->getTable(), $row);
             }
             // If $amount is greater than 1, the results are in a sub-array
             $recordsCollection[] = $records;
@@ -131,18 +131,17 @@ trait FixtureTestTrait
      *
      * @param array<string, mixed> $conditions array of db field name and the expected value. Example:
      *  ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
-     * @param class-string $fixtureClass
+     * @param FixtureInterface $fixture
      * @param array $oppositeConditions optional NOT conditions. If ['id' => 1] is provided -> user 1 will NOT be returned
      *
      * @return array[] records matching the conditions
      */
     protected function findRecordsFromFixtureWhere(
         array $conditions,
-        string $fixtureClass,
+        FixtureInterface $fixture,
         array $oppositeConditions = []
     ): array {
-        $fixture = new $fixtureClass();
-        $rows = $fixture->records;
+        $rows = $fixture->getRecords();
         $matchingRecords = [];
         // Loop over all records (rows)
         foreach ($rows as $row) {
@@ -176,36 +175,15 @@ trait FixtureTestTrait
      *
      * @param array<string, mixed> $conditions array of db column name and the expected value.
      * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
-     * @param class-string $fixtureClass
+     * @param FixtureInterface $fixture
      *
      * @return void
      */
-    protected function insertFixtureWhere(array $conditions, string $fixtureClass): void
+    protected function insertFixtureWhere(array $conditions, FixtureInterface $fixture): void
     {
-        $filteredRecords = $this->findRecordsFromFixtureWhere($conditions, $fixtureClass);
+        $filteredRecords = $this->findRecordsFromFixtureWhere($conditions, $fixture);
         foreach ($filteredRecords as $row) {
-            $this->insertFixture((new $fixtureClass())->table, $row);
+            $this->insertFixture($fixture->getTable(), $row);
         }
     }
-
-    /**
-     * Get all rows with the given string as key.
-     * This is practical for dynamic targeting for assertion so that it's
-     * not necessary to change the code everywhere if I change value for
-     * in the rows as the expected value will be targeted via the key.
-     *
-     * @param string $key that will be the value
-     * @param class-string $class
-     *
-     * @return array
-     */
-    //    public function getFixtureRowsWithValueKey(string $key, string $class): array
-    //    {
-    //        $fixture = new $class();
-    //        $resultRows = [];
-    //        foreach ($fixture->records as $record) {
-    //            $resultRows[$record[$key]] = $record;
-    //        }
-    //        return $resultRows;
-    //    }
 }

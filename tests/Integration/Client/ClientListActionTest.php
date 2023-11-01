@@ -63,7 +63,7 @@ class ClientListActionTest extends TestCase
         // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            UserFixture::class
+            new UserFixture()
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
@@ -119,15 +119,15 @@ class ClientListActionTest extends TestCase
         array $usersToInsert,
         array $clientStatusesToInsert,
     ): void {
-        $users = $this->insertFixturesWithAttributes($usersToInsert, UserFixture::class);
-        $statuses = $this->insertFixturesWithAttributes($clientStatusesToInsert, ClientStatusFixture::class);
+        $users = $this->insertFixturesWithAttributes($usersToInsert, new UserFixture());
+        $statuses = $this->insertFixturesWithAttributes($clientStatusesToInsert, new ClientStatusFixture());
         // Insert authenticated user before client
         $loggedInUserId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId($authenticatedUserAttributes),
-            UserFixture::class
+            new UserFixture()
         )['id'];
         // Insert clients
-        $clients = $this->insertFixturesWithAttributes($clientsToInsert, ClientFixture::class);
+        $clients = $this->insertFixturesWithAttributes($clientsToInsert, new ClientFixture());
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
@@ -217,7 +217,7 @@ class ClientListActionTest extends TestCase
      */
     public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
     {
-        $loggedInUserId = $this->insertFixturesWithAttributes([], UserFixture::class)['id'];
+        $loggedInUserId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

@@ -2,7 +2,6 @@
 
 namespace App\Domain\Authentication\Exception;
 
-
 class UserAlreadyVerifiedException extends \RuntimeException
 {
     public function __construct(string $message)

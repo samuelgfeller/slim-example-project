@@ -42,7 +42,7 @@ class PasswordResetSubmitActionTest extends TestCase
     {
         $newPassword = 'new password';
         // Insert user
-        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], new UserFixture());
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -53,7 +53,7 @@ class PasswordResetSubmitActionTest extends TestCase
                 'password' => $newPassword,
                 'password2' => $newPassword,
                 'token' => $clearTextToken,
-                'id' => $verification->id,
+                'id' => (string)$verification->id,
             ]
         );
 
@@ -85,7 +85,7 @@ class PasswordResetSubmitActionTest extends TestCase
         // User needed to insert verification
         $userRow = $this->insertFixturesWithAttributes(
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -97,7 +97,7 @@ class PasswordResetSubmitActionTest extends TestCase
                 'password' => $newPassword,
                 'password2' => $newPassword,
                 'token' => $clearTextToken,
-                'id' => $verification->id,
+                'id' => (string)$verification->id,
             ]
         );
 
@@ -109,7 +109,7 @@ class PasswordResetSubmitActionTest extends TestCase
         // Assert that token had NOT been used (except if already used)
         self::assertSame(
             $verification->usedAt,
-            $this->getTableRowById('user_verification', $verification->id, ['used_at'])['used_at']
+            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
         );
 
         // Assert that password was not changed to the new one
@@ -135,7 +135,7 @@ class PasswordResetSubmitActionTest extends TestCase
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], UserFixture::class);
+        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], new UserFixture());
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -146,7 +146,7 @@ class PasswordResetSubmitActionTest extends TestCase
                 'password' => $newPassword,
                 'password2' => $newPassword,
                 'token' => $clearTextToken,
-                'id' => $verification->id,
+                'id' => (string)$verification->id,
             ]
         );
 
@@ -169,7 +169,7 @@ class PasswordResetSubmitActionTest extends TestCase
             $this->urlFor(
                 'password-reset-page',
                 [],
-                ['id' => 1, 'token' => 'Token Content Does Not Matter As Only Key Is Checked In Page Action']
+                ['id' => '1', 'token' => 'Token Content Does Not Matter As Only Key Is Checked In Page Action']
             ),
         );
         $response = $this->app->handle($request);

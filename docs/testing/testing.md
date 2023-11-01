@@ -36,7 +36,7 @@ UserFind does for e.g.):
 ```php
     public function testListUsers(): void
     {
-        $this->insertFixtures([UserFixture::class]);
+        $this->insertFixturesWithAttributes([], new UserFixture());
         // ...
     }
 ```

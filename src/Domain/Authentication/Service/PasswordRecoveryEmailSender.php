@@ -21,7 +21,6 @@ class PasswordRecoveryEmailSender
 {
     private Email $email;
 
-
     public function __construct(
         private readonly Mailer $mailer,
         private readonly UserValidator $userValidator,

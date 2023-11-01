@@ -21,7 +21,6 @@ class RegistrationMailer
 {
     private Email $email;
 
-
     public function __construct(
         private readonly Mailer $mailer,
         private readonly LocaleHelper $localeHelper,

@@ -113,9 +113,9 @@ class PasswordChangeSubmitActionTest extends TestCase
     public function testChangePasswordSubmitActionUnauthenticated(): void
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
-        $request = $this->createJsonRequest('PUT', $this->urlFor('change-password-submit', ['user_id' => 1]));
+        $request = $this->createJsonRequest('PUT', $this->urlFor('change-password-submit', ['user_id' => '1']));
         // Create url where user should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('user-read-page', ['user_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('user-read-page', ['user_id' => '1']);
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
         // Make request
         $response = $this->app->handle($request);
@@ -142,7 +142,7 @@ class PasswordChangeSubmitActionTest extends TestCase
         // Insert user that is allowed to change content
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         );
 
         $request = $this->createJsonRequest(

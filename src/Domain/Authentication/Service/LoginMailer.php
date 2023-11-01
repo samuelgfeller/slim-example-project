@@ -16,7 +16,6 @@ class LoginMailer
 {
     private Email $email;
 
-
     public function __construct(
         private readonly Mailer $mailer,
         private readonly LocaleHelper $localeHelper,
@@ -57,6 +56,9 @@ class LoginMailer
 
     /**
      * When user tries to log in but his status is suspended.
+     *
+     * @param string $email
+     * @param string $fullName
      *
      * @throws TransportExceptionInterface
      */

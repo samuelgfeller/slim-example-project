@@ -43,14 +43,14 @@ class NoteReadPageActionTest extends TestCase
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
 
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         // *Test request on NOT existing note
-        $requestNotExistingNote = $this->createRequest('GET', $this->urlFor('note-read-page', ['note_id' => 1]));
+        $requestNotExistingNote = $this->createRequest('GET', $this->urlFor('note-read-page', ['note_id' => '1']));
         $response = $this->app->handle($requestNotExistingNote);
 
         // Assert 200 OK
@@ -61,14 +61,14 @@ class NoteReadPageActionTest extends TestCase
         self::assertSame($expectedClientReadUrl, $response->getHeaderLine('Location'));
 
         // *Test request on existing note
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         $clientId = $this->insertFixturesWithAttributes(
             ['client_status_id' => $clientStatusId],
-            ClientFixture::class
+            new ClientFixture()
         )['id'];
         $noteId = $this->insertFixturesWithAttributes(
             ['client_id' => $clientId, 'user_id' => $userId],
-            NoteFixture::class
+            new NoteFixture()
         )['id'];
 
         $requestExistingNote = $this->createRequest(
@@ -95,7 +95,7 @@ class NoteReadPageActionTest extends TestCase
     public function testNoteReadPageActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('note-read-page', ['note_id' => 1]);
+        $requestRoute = $this->urlFor('note-read-page', ['note_id' => '1']);
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url

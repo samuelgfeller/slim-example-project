@@ -24,6 +24,7 @@ final class LocaleMiddleware implements MiddlewareInterface
      *
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
+     *
      * @return ResponseInterface
      */
     public function process(

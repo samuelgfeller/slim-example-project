@@ -6,7 +6,6 @@ use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 
-
 class UserData implements \JsonSerializable
 {
     // Variable names matching database columns (camelCase instead of snake_case)
@@ -26,7 +25,6 @@ class UserData implements \JsonSerializable
     public ?\DateTimeImmutable $createdAt;
     // When adding a new attribute that should be editable with updateUser() it has to be added to authorization and service
 
-
     public function __construct(array $userData = [])
     {
         // Keys may be taken from view form or database, so they have to correspond to both; otherwise use mapper
@@ -38,12 +36,12 @@ class UserData implements \JsonSerializable
         $this->password2 = $userData['password2'] ?? null;
         $this->passwordHash = $userData['password_hash'] ?? null;
         $this->theme = $userData['theme'] ?? null ? UserTheme::tryFrom($userData['theme']) : null;
-        $this->language = isset($userData['language']) ? UserLang::tryFrom($userData['language']) : UserLang::English;
+        $this->language = UserLang::tryFrom($userData['language'] ?? '') ?? UserLang::English;
         // It may be useful to surround the datetime values with try catch in the user data constructor as object
         // can be created before validation
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
-        $this->status = $userData['status'] ?? null ? UserStatus::tryFrom($userData['status']) : null;
+        $this->status = isset($userData['status']) ? UserStatus::tryFrom($userData['status']) : null;
         // Empty check is for testUserSubmitCreate_invalid test function where user_role_id is an empty string
         $this->userRoleId = !empty($userData['user_role_id']) ? $userData['user_role_id'] : null;
     }

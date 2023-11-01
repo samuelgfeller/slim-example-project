@@ -45,7 +45,7 @@ class AccountUnlockActionTest extends TestCase
         // Insert locked user
         $userRow = $this->insertFixturesWithAttributes(
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -94,7 +94,7 @@ class AccountUnlockActionTest extends TestCase
         // Insert locked user
         $userRow = $this->insertFixturesWithAttributes(
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -147,7 +147,7 @@ class AccountUnlockActionTest extends TestCase
         // Insert locked user
         $userRow = $this->insertFixturesWithAttributes(
             ['status' => UserStatus::Active->value, 'id' => $verification->userId],
-            UserFixture::class
+            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -164,6 +164,7 @@ class AccountUnlockActionTest extends TestCase
         $response = $this->app->handle($request);
 
         // Assert that redirect worked
+
         self::assertSame(
             $this->urlFor('login-page', [], ['redirect' => $redirectLocation]),
             $response->getHeaderLine('Location')

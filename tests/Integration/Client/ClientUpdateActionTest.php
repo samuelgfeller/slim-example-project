@@ -65,7 +65,7 @@ class ClientUpdateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert client that will be used for this test
         $clientAttributes = ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']];
         // If deleted at is provided in the request data, it means that client should be undeleted
@@ -75,19 +75,19 @@ class ClientUpdateActionTest extends TestCase
         }
         $clientRow = $this->insertFixturesWithAttributes(
             $clientAttributes,
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Insert other user and client status that are used for the modification request if needed
         if (isset($requestData['user_id'])) {
             // Add 1 to user_id linked to client
             $requestData['user_id'] = $clientRow['user_id'] + 1;
-            $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], UserFixture::class);
+            $this->insertFixturesWithAttributes(['id' => $requestData['user_id']], new UserFixture());
         }
         if (isset($requestData['client_status_id'])) {
             // Add 1 to client status id
             $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
-            $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], ClientStatusFixture::class);
+            $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], new ClientStatusFixture());
         }
 
         // Simulate logged-in user with logged-in user id
@@ -171,18 +171,18 @@ class ClientUpdateActionTest extends TestCase
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixturesWithAttributes(
             ['client_status_id' => $clientStatusId, 'user_id' => $userId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-update-submit', ['client_id' => 1]),
+            $this->urlFor('client-update-submit', ['client_id' => '1']),
             $requestBody
         );
 
@@ -208,11 +208,11 @@ class ClientUpdateActionTest extends TestCase
     public function testClientSubmitUpdateActionUnauthenticated(): void
     {
         // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-update-submit', ['client_id' => 1]);
+        $requestRoute = $this->urlFor('client-update-submit', ['client_id' => '1']);
         // Request body not important as it shouldn't be taken into account when unauthenticated
         $request = $this->createJsonRequest('PUT', $requestRoute, ['user_id' => 2]);
         // Create url where client should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => 1]);
+        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
         $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
         // Make request
         $response = $this->app->handle($request);
@@ -237,13 +237,13 @@ class ClientUpdateActionTest extends TestCase
         // Insert user that is allowed to change content
         $userId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixturesWithAttributes(
             ['client_status_id' => $clientStatusId, 'user_id' => $userId],
-            ClientFixture::class
+            new ClientFixture()
         );
 
         // Simulate logged-in user
@@ -251,7 +251,7 @@ class ClientUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('client-update-submit', ['client_id' => 1]),
+            $this->urlFor('client-update-submit', ['client_id' => '1']),
             // Submitted first name is EXACTLY THE SAME as what's already in the database
             ['first_name' => $clientRow['first_name']]
         );

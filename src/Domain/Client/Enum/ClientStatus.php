@@ -10,10 +10,10 @@ enum ClientStatus: string
     case CANNOT_HELP = 'Cannot help';
 
     /**
-     * Calling the translation function __() for each enum value
-     * so that poedit recognizes them to be translated.
-     * When using the enum values, __() will work as it's
-     * setup here and translations are in the .mo files.
+     * This function is not designed to be used.
+     * In order for the enum values to be acknowledged by the
+     * translation tool Poedit, they each
+     * have to be called with the __() method.
      *
      * @return array
      */

@@ -42,9 +42,9 @@ class UserFinder
                     (int)$userResultData->id,
                     'status',
                 );
-                // General data privilege like first name, email and so on no needed for list
-                // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
-                //     'general_data', $userResultData->id );
+            // General data privilege like first name, email and so on no needed for list
+            // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
+            //     'general_data', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
             }
@@ -69,9 +69,9 @@ class UserFinder
      *
      * @param int $id
      *
-     * @return UserResultData
      * @throws \Exception
      *
+     * @return UserResultData
      */
     public function findUserReadResult(int $id): UserResultData
     {

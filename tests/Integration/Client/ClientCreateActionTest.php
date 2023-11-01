@@ -58,7 +58,7 @@ class ClientCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Client status is not authorization relevant for client creation
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
 
         $clientCreationValues = [
             'first_name' => 'New',
@@ -165,9 +165,9 @@ class ClientCreateActionTest extends TestCase
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // To test note message validation when submitted in client creation form the client values have to be valid
         if ($requestBody['user_id'] === 'valid' && $requestBody['client_status_id'] === 'valid') {
             $requestBody['user_id'] = $userId;
@@ -218,10 +218,10 @@ class ClientCreateActionTest extends TestCase
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            UserFixture::class
+            new UserFixture()
         )['id'];
         // Insert mandatory field client status id
-        $clientStatusId = $this->insertFixturesWithAttributes([], ClientStatusFixture::class)['id'];
+        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // Add valid client status id to request body
         $requestBody['client_status_id'] = $clientStatusId;
 

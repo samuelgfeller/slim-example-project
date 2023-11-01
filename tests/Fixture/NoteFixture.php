@@ -6,7 +6,7 @@ namespace App\Test\Fixture;
  * Post values that can be inserted into the database
  * UserFixture HAS to be inserted first.
  */
-class NoteFixture
+class NoteFixture implements FixtureInterface
 {
     // Table name
     public string $table = 'note';
@@ -101,4 +101,14 @@ class NoteFixture
             'deleted_at' => null,
         ],
     ];
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getRecords(): array
+    {
+        return $this->records;
+    }
 }
