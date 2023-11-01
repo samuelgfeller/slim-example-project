@@ -62,7 +62,6 @@ $this->setLayout('');
         '</strong>' : '' ?>
 
         <!--   Password 1    -->
-
         <div class="form-input-div <?= isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password1-input"><?= __('Password') ?></label>
             <input type="password" name="password" id="password1-input" minlength="3" required>

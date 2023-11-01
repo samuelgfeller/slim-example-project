@@ -36,15 +36,15 @@ feature to quickly create a repository with the code of this project.
 Checkout this repository in your preferred IDE before proceeding.
 
 ### 2. Set up the database
-After opening the project in your IDE, copy the file `config/local/env.example.php` to `config/local/env.php` 
+After opening the project in your IDE, copy the file `config/env/env.example.php` to `config/env/env.php` 
 and fill in your database credentials.  
 
-Then, create your database and update the `config/local/env.dev.php` file with the name of your 
+Then, create your database and update the `config/env/env.dev.php` file with the name of your 
 database, like this:
 ```php
 $settings['db']['database'] = 'my_database_name';
 ```
-After that, create a separate test database and update the `config/local/env.test.php` file with its
+After that, create a separate test database and update the `config/env/env.test.php` file with its
 name. The name must contain the word "test" as a safety measure to prevent accidentally truncating 
 the development database:
 ```php
@@ -87,7 +87,7 @@ add your server's credentials to GitHub's
 To run the project's tests automatically when pushing, update the 
 `.github/workflows/develop.yml` file.   
 **Replace the matrix value "test-database" `slim_example_project_test` with the name of 
-your test database** as specified in `config/local/env.test.php`.
+your test database** as specified in `config/env/env.test.php`.
 If you are not using SonarCloud, remove the "SonarCloud Scan" step from the workflow.
 
 ### Done!

@@ -3,14 +3,11 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 
 
 /**
- * Send PUT update request.
- * Fail handled by handleFail() method which supports forms
- * On success validation errors are removed and response content returned
+ * Send DELETE request.
  *
  * @param {string} route after base path
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
  * If true, the redirect url is the same as the given route
- *
  * @return Promise with as content server response as JSON
  */
 export function submitDelete(route, redirectToRouteIfUnauthenticated = false) {

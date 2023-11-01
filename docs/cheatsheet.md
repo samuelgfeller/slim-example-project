@@ -23,10 +23,14 @@
 
 ### Fetch data: GET request
 
-#### Function JSDoc
-
-`public/assets/general/ajax/fetch-data.js`
-
+```js
+fetchData('clients' + '?param=value&param2=value2', 'clients/list').then(jsonResponse => {
+    // Doing something with the jsonResponse
+}).catch(error => {
+    console.error(error);
+});;
+```
+#### `fetchData()` in `public/assets/general/ajax/fetch-data.js`
 ```js
 /**
  * Sends a GET request and returns result in promise
@@ -36,23 +40,20 @@
  * If true, the redirect url is the same as the given route
  * @return {Promise<JSON>}
  */
-```
-
-#### Usage
-
-```php
-fetchData('clients' + '?param=value&param2=value2', 'clients/list').then(jsonResponse => {
-    // Doing something with the jsonResponse
-}).catch(error => {
-    console.error(error);
-});;
+function fetchData(route, redirectToRouteIfUnauthenticated = false) {
+    // ...
+}
 ```
 
 ### Update data: PUT request
 
-#### Function JSDoc
+```js
+submitUpdate({[inputField.name]: inputField.value}, `clients/${clientId}`, true).then(jsonParsedResponse => {
+}).catch(e => {
+});
+```
 
-`public/assets/general/ajax/submit-update-data.js`
+#### `updateData()` in `public/assets/general/ajax/submit-update-data.js`
 
 ```js
 /**
@@ -67,24 +68,11 @@ fetchData('clients' + '?param=value&param2=value2', 'clients/list').then(jsonRes
  *
  * @return Promise with as content server response as JSON
  */
+export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauthenticated = false) {
+    // ...
+}
 ```
-
-#### Usage
-
-```php
-submitUpdate({[inputField.name]: inputField.value}, `clients/${clientId}`, true).then(jsonParsedResponse => {
-}).catch(e => {
-});
-```
-
 ### Delete data: DELETE request
-
-#### Function JSDoc
-
-`public/assets/general/ajax/submit-delete-request.js`  
-JSDoc is pretty similar to the other two with `route` and `redirectToRouteIfUnauthenticated`.
-
-#### Usage
 
 Delete request with confirmation modal.
 
@@ -99,14 +87,38 @@ document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
 });
 ```
 
-### Submit new data: POST request
+#### `submitDelete()` in `public/assets/general/ajax/submit-delete-request.js`
+```js
+/**
+ * Send DELETE request.
+ *
+ * @param {string} route after base path
+ * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
+ * If true, the redirect url is the same as the given route
+ * @return Promise with as content server response as JSON
+ */
+export function submitDelete(route, redirectToRouteIfUnauthenticated = false) {
+    // ...
+}
+```
 
-#### Function JSDoc
+
+### Submit new data: POST request
 
 Currently, the application only submits new values through modal forms. The logic is a bit more than just a simple
 POST request. It retrieves the form data with the html id, checks the validity, disables the form fields during the
 request and closes the modal box on success.
-`public/assets/general/page-component/modal/modal-submit-request.js`
+
+Submit modal form with flash message and client list reload.
+
+```js
+submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
+    displayFlashMessage('success', translated['Client created successfully.']);
+    fetchAndLoadClients();
+})
+```
+
+#### `submitModalForm()` in `public/assets/general/page-component/modal/modal-submit-request.js`
 
 ```js
 /**
@@ -119,17 +131,9 @@ request and closes the modal box on success.
  * If true, the redirect url is the same as the given route.
  * @return void|Promise
  */
-```
-
-#### Usage
-
-Submit modal form with flash message and client list reload.
-
-```php
-submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
-    displayFlashMessage('success', translated['Client created successfully.']);
-    fetchAndLoadClients();
-})
+function submitModalForm(modalFormId, moduleRoute, httpMethod = 'POST', redirectToRouteIfUnauthenticated = false) {
+    // ...
+}
 ```
 
 </details>
@@ -141,7 +145,7 @@ Translations are done in the backend by PHP `gettext()` function.
 
 To access them via Javascript we can make an Ajax request that loads in the background while the page loads. 
 This obviously adds a delay for the availability of the translated words so this method should only be used 
-with "secondary" things that are not visible on the page on load. It works for things like modal boxes that 
+with "secondary" things that are not visible on the page load. It works for things like modal boxes that 
 are displayed only after a user action is being made. There is most probably enough time for the Ajax request
 to be done loading before the content is needed.
 

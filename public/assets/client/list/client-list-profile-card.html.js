@@ -17,36 +17,37 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
             <div class="profile-card-avatar">
                 <img src=${getAvatarPath(client.sex)} alt="avatar">
         ${// Display age if content not empty
-            client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
-        }
+        client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
+    }
             </div>
         </div>
         <div class="profile-card-content">
             <h3 data-deleted="${client.deletedAt !== null ? '1' : '0'}"
-            >${client.firstName !== null ? client.firstName : ''} ${client.lastName !== null ? client.lastName : ''}</h3>
+            >${client.firstName !== null ? escapeHtml(client.firstName) : ''} ${
+        client.lastName !== null ? escapeHtml(client.lastName) : ''}</h3>
             <div class="profile-card-infos-flexbox">
         ${// Display location icon and content if not empty 
-            client.location !== null && client.location !== '' ?
-                `<div>
+        client.location !== null && client.location !== '' ?
+            `<div>
                      <img src="assets/general/general-img/personal-data-icons/location-icon.svg" 
                             class="profile-card-content-icon default-icon" alt="location">
                      <span>${escapeHtml(client.location)}</span>
                  </div>` : ''
-        }
+    }
         ${// Display location icon and content if not empty 
-            client.phone !== null && client.phone !== '' ?
-                `<div>
+        client.phone !== null && client.phone !== '' ?
+            `<div>
                      <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" 
                             class="profile-card-content-icon default-icon" alt="phone">
                      <span>${escapeHtml(client.phone)}</span>
                  </div>` : ''
-        }
+    }
             </div>
             <div class="profile-card-assignee-and-status">
                 <div>
                     <select name="user_id" class="default-select" 
                             ${client.assignedUserPrivilege.includes('U') ? '' : 'disabled'}>
-                        ${getDropdownAsHtmlOptions(allUsers, client.userId,' ')}
+                        ${getDropdownAsHtmlOptions(allUsers, client.userId, ' ')}
                     </select>
                 </div>
                 <div>

@@ -73,9 +73,9 @@ test function.
 ### Test database configuration
 During testing tables are truncated and created. This is why a second database exists 
 `slim_example_project_test`. Here is how `DatabaseTestTrait` knows which database to use.
- * The database name is in the config file `app/env.testing.php`
+ * The database name is in the config file `config/env/env.testing.php`
  * `phpunit.xml` sets the env variable `APP_ENV` to `testing`
- * `app/settings.php` bundles all configuration together and at last checks if `APP_ENV` is set and if 
+ * `config/settings.php` bundles all configuration together and at last checks if `APP_ENV` is set and if 
  it's the case then `env.`[`APP_ENV`-value]`.php` so `env.testing.php` is included which makes that previous config values get 
  overwritten by `env.testing.php`
  

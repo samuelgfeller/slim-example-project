@@ -1,6 +1,6 @@
 /vendor/
 /.idea/
-/config/local/env.php
+/config/env/env.php
 /logs/*.log
 /var/cache/*
 /composer.lock

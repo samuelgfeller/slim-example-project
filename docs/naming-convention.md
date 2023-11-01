@@ -129,7 +129,7 @@ classes that MUST end with "Provider": `ClientCreateProvider` that can both cont
 Unlike providers, fixtures are only used in integration tests. Therefore, they can be stored inside
 the integration test case bundle folder in a "Fixture" sub folder 
 (e.g. `tests\Integration\User\Fixture`).  
-Fixtures MUST end with `Fixture.php`.
+Fixtures MUST end with `Fixture.php` and implement `FixtureInterface.php`.
 
 ## Database
 * Database and table names MUST be all lower case and words separated by underscores

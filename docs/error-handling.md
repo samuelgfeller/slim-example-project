@@ -176,7 +176,7 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
 }
 ```
 Add the container definition.  
-File: `app/container/container.php`  
+File: `config/container.php`  
 ```php
 use App\Application\Middleware\ErrorHandlerMiddleware;
 use Psr\Container\ContainerInterface;
@@ -198,7 +198,7 @@ return [
 ];
 ```
 Add to the middleware stack.  
-File: `app/middleware.`
+File: `config/middleware.php`
 ```php
 use Slim\App;
 use App\Application\Middleware\ErrorHandlerMiddleware;
@@ -236,7 +236,7 @@ File: `vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php`
 ```
 
 Add the container definition with the right arguments.   
-File: `app/container/container.php`  
+File: `config/container.php`  
 ```php
 use App\Application\Handler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
@@ -277,7 +277,7 @@ return [
 
 This should be the last middleware added since anything that happens afterwards will not
 be handled by this middleware.   
-File: `app/middleware.`
+File: `config/middleware.php`
 ```php
 use Slim\App;
 use App\Application\Middleware\ErrorHandlerMiddleware;

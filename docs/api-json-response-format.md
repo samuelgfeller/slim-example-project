@@ -32,23 +32,19 @@ Note 2: HTTP Code also in the response body would be overkill as we have already
 {
   "status": "error",
   "message": "Validation error",
-  "data": [
-    {
-      "message": "Email required but not given",
-      "field": "email"
-    },
-    {
-      "message": "Required minimum length is 3",
-      "field": "name"
+  "data": {
+    "errors": {
+      "first_name": ["Minimum length is 2"],
+      "email": ["Invalid email"]
     }
-  ]
+  }
 }
 ```
 
 
 ## Warning
 
-There is no warning entry in the jsend documentation, but I find it useful sometimes
+There is no warning entry in the jsend documentation, but I find it useful sometimes.
 
 ```json
 

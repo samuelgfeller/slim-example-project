@@ -76,7 +76,7 @@ jobs:
             .git*/**
             docs/**
             tests/**
-            config/local/env.prod.php
+            config/env/env.prod.php
             public/assets/favicon.ico
 
       - name: Executing care-point database migrations

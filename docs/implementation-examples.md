@@ -4,7 +4,7 @@ This document functions as a dev journal, documenting some changes made and
 the corresponding code modifications.  
 It may serve as an inspiration for future feature implementation and bug
 fixes. Especially for those that are not familiar with the project code, but I will be using
-it as a cheatsheet all the time as well probably.
+it as a cheatsheet as well.
 
 ### Adding a simple new field `theme`
 
@@ -17,9 +17,9 @@ change one action.
 * `UserTheme.php` create theme enum. 
 * `UserValidator.php` add validation line in `validateUserValues()`.
 * `UserAuthorizationChecker.php` add to the `$grantedUpdateKeys` in `isGrantedToUpdate()`.
-* `UserUpdater.php` add to the `if(in_array())` statement in `updateUser()`.
-* `UserData.php` add to the instance variables and constructor.
-* `UserFinderRepository.php` add to the instance variable `$fields`.
+* `UserUpdater.php` add `theme` to the authorized update keys in `updateUser()`.
+* `UserData.php` add instance variable and populate in constructor.
+* `UserFinderRepository.php` add to the class attribute `$fields`.
 * `UserUpdateProvider.php` add theme change to `$basicDataChanges` var in `userUpdateAuthorizationCases()`.
 * `UserUpdateProvider.php` add theme change to request body and error message to response 
 in `invalidUserUpdateCases()`.
@@ -87,7 +87,7 @@ add it to `UserData.php` instance variables and also the constructor.
     ```
 * The file that retrieves the user values from the database is the repository `UserFinderRepository.php`
 and it retrieves only the requested values, not automatically all fields. The list of values that
-should be selected are in an instance variable of this file `$fields`: 
+should be selected are in the class attribute `$fields`: 
     ```php
     class UserFinderRepository
     {
