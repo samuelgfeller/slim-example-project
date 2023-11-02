@@ -8,7 +8,6 @@ use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\MockTestTrait;
 use Slim\App;
 use UnexpectedValueException;
 
@@ -21,7 +20,6 @@ use UnexpectedValueException;
 trait AppTestTrait
 {
     use HttpTestTrait;
-    use MockTestTrait;
 
     protected ContainerInterface $container;
 

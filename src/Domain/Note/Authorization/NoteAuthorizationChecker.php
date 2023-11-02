@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 
 class NoteAuthorizationChecker
 {
-
     public function __construct(
         private readonly SessionInterface $session,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,

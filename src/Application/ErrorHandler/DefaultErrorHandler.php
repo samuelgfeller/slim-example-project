@@ -14,7 +14,6 @@ use Throwable;
 
 class DefaultErrorHandler
 {
-
     public function __construct(
         private readonly PhpRenderer $phpRenderer,
         private readonly ResponseFactoryInterface $responseFactory,

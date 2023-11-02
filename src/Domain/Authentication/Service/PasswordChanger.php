@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
 
 class PasswordChanger
 {
-
     public function __construct(
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,

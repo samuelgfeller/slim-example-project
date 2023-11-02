@@ -14,7 +14,6 @@ use Psr\Log\LoggerInterface;
 
 class InvalidOperationExceptionMiddleware implements MiddlewareInterface
 {
-
     public function __construct(
         private readonly Responder $responder,
         private readonly UserNetworkSessionData $userNetworkSessionData,

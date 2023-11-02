@@ -19,7 +19,6 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
 
     private bool $logErrors;
 
-
     public function __construct(
         bool $displayErrorDetails,
         bool $logErrors,

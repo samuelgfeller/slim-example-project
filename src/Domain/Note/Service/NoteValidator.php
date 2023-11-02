@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 
 class NoteValidator
 {
-
     public function __construct(
         private readonly NoteValidatorRepository $noteValidatorRepository,
         private readonly LoggerInterface $logger,

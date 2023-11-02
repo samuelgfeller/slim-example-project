@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
 
 final class UserUpdater
 {
-
     public function __construct(
         private readonly UserValidator $userValidator,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,

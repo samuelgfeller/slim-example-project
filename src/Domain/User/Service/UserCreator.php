@@ -16,7 +16,7 @@ use App\Domain\User\Repository\UserCreatorRepository;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class UserCreator
+final class UserCreator
 {
     public function __construct(
         private readonly UserValidator $userValidator,

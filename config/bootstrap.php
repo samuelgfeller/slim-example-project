@@ -7,12 +7,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Instantiate DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
-
-// Add container definitions
-$containerBuilder->addDefinitions(__DIR__ . '/container.php');
-
-// Build DI Container instance
-$container = $containerBuilder->build();
-
-// Create App instance
+// Add container definitions and build DI container
+$container = $containerBuilder->addDefinitions(__DIR__ . '/container.php')->build();
+// Create app instance
 return $container->get(App::class);

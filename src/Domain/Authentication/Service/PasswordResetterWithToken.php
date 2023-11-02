@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class PasswordResetterWithToken
 {
-
     public function __construct(
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
