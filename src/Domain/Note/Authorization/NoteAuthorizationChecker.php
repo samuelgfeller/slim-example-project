@@ -3,21 +3,18 @@
 namespace App\Domain\Note\Authorization;
 
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
 class NoteAuthorizationChecker
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly SessionInterface $session,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('note-authorization');
     }
 
     /**

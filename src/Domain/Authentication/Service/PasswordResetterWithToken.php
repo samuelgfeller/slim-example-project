@@ -2,7 +2,6 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
 use App\Domain\User\Service\UserValidator;
@@ -11,16 +10,14 @@ use Psr\Log\LoggerInterface;
 
 class PasswordResetterWithToken
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
         private readonly VerificationTokenVerifier $verificationTokenVerifier,
         private readonly UserActivityLogger $userActivityLogger,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('password-reset');
     }
 
     /**

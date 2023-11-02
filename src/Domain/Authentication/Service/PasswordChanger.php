@@ -3,7 +3,6 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
@@ -13,16 +12,14 @@ use Psr\Log\LoggerInterface;
 
 class PasswordChanger
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
         private readonly UserActivityLogger $userActivityLogger,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('password-changer');
     }
 
     /**

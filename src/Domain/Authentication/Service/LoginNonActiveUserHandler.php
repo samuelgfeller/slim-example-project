@@ -4,7 +4,6 @@ namespace App\Domain\Authentication\Service;
 
 use App\Common\LocaleHelper;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
@@ -19,7 +18,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class LoginNonActiveUserHandler
 {
-    private LoggerInterface $logger;
     private string $mainContactEmail;
 
     public function __construct(
@@ -27,10 +25,9 @@ class LoginNonActiveUserHandler
         private readonly LoginMailer $loginMailer,
         private readonly LocaleHelper $localeHelper,
         private readonly SecurityEmailChecker $securityEmailChecker,
+        private readonly LoggerInterface $logger,
         readonly Settings $settings,
-        LoggerFactory $logger
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login-non-active-status');
         $this->mainContactEmail = $this->settings->get(
             'public'
         )['email']['main_contact_address'] ?? 'slim-example-project@samuel-gfeller.ch';

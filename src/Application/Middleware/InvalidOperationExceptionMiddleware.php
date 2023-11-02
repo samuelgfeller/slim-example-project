@@ -5,7 +5,6 @@ namespace App\Application\Middleware;
 use App\Application\Data\UserNetworkSessionData;
 use App\Application\Responder\Responder;
 use App\Domain\Exception\InvalidOperationException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,14 +14,12 @@ use Psr\Log\LoggerInterface;
 
 class InvalidOperationExceptionMiddleware implements MiddlewareInterface
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly Responder $responder,
         private readonly UserNetworkSessionData $userNetworkSessionData,
-        LoggerFactory $logger
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('invalid-operation');
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

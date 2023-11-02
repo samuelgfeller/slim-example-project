@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;
@@ -17,16 +16,14 @@ use Psr\Log\LoggerInterface;
 
 final class LoginSubmitAction
 {
-    protected LoggerInterface $logger;
 
     public function __construct(
         private readonly Responder $responder,
-        LoggerFactory $logger,
+        private readonly LoggerInterface $logger,
         private readonly LoginVerifier $loginVerifier,
         private readonly SessionInterface $session,
         private readonly UserFinder $userFinder,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response

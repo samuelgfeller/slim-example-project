@@ -4,7 +4,6 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Enum\ClientVigilanceLevel;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
@@ -12,11 +11,9 @@ use Cake\Validation\Validator;
 class ClientValidator
 {
     public function __construct(
-        LoggerFactory $logger,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly UserFinderRepository $userFinderRepository,
     ) {
-        $logger->addFileHandler('error.log')->createLogger('post-validation');
     }
 
     /**

@@ -317,19 +317,16 @@ found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/s
 <?php
 
 namespace App\Application\ErrorHandler;
-
-use App\Domain\Factory\Infrastructure\LoggerFactory;use App\Domain\Validation\ValidationException;use Fig\Http\Message\StatusCodeInterface;use Psr\Http\Message\ResponseFactoryInterface;use Psr\Http\Message\ResponseInterface;use Psr\Http\Message\ServerRequestInterface;use Psr\Log\LoggerInterface;use Slim\Exception\HttpException;use Slim\Views\PhpRenderer;use Throwable;
+use App\Domain\Validation\ValidationException;use Fig\Http\Message\StatusCodeInterface;use Psr\Http\Message\ResponseFactoryInterface;use Psr\Http\Message\ResponseInterface;use Psr\Http\Message\ServerRequestInterface;use Psr\Log\LoggerInterface;use Slim\Exception\HttpException;use Slim\Views\PhpRenderer;use Throwable;
 
 class DefaultErrorHandler
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly PhpRenderer $phpRenderer,
         private readonly ResponseFactoryInterface $responseFactory,
-        LoggerFactory $logger
+      private readonly LoggerInterface $logger,        
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createInstance('error');
     }
 
     /**

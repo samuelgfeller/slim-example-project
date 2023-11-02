@@ -14,3 +14,9 @@ $settings['smtp']['type'] = 'null';
 
 // Add example.com to allowed origin to test out CORS
 $settings['api']['allowed_origin'] = 'https://example.com/';
+
+// Overwrite logger settings with missing 'path' so that container can't create a proper instance with the log file
+$settings['logger'] = [
+    // Key "path" must not exist
+    'test' => new \Monolog\Handler\TestHandler(),
+];

@@ -2,7 +2,6 @@
 
 namespace App\Domain\Note\Service;
 
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Note\Repository\NoteValidatorRepository;
 use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
@@ -10,13 +9,11 @@ use Psr\Log\LoggerInterface;
 
 class NoteValidator
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly NoteValidatorRepository $noteValidatorRepository,
-        private readonly LoggerFactory $loggerFactory,
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $this->loggerFactory->addFileHandler('error.log')->createLogger('note-validation');
     }
 
     /**

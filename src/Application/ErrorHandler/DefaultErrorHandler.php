@@ -2,7 +2,6 @@
 
 namespace App\Application\ErrorHandler;
 
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Validation\ValidationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -15,14 +14,12 @@ use Throwable;
 
 class DefaultErrorHandler
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly PhpRenderer $phpRenderer,
         private readonly ResponseFactoryInterface $responseFactory,
-        LoggerFactory $logger
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('error');
     }
 
     /**

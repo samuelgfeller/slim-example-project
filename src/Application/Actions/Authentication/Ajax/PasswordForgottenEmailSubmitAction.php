@@ -5,7 +5,6 @@ namespace App\Application\Actions\Authentication\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
@@ -16,15 +15,13 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class PasswordForgottenEmailSubmitAction
 {
-    protected LoggerInterface $logger;
 
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
-        LoggerFactory $logger,
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-login');
     }
 
     /**

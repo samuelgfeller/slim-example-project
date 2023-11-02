@@ -4,7 +4,6 @@ namespace App\Domain\User\Authorization;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
@@ -15,18 +14,15 @@ use Psr\Log\LoggerInterface;
  */
 class UserAuthorizationChecker
 {
-    private LoggerInterface $logger;
-
     private ?int $loggedInUserId = null;
 
     public function __construct(
         private readonly UserNetworkSessionData $userNetworkSessionData,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
         // Fix error $userId must not be accessed before initialization
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-authorization');
     }
 
     /**

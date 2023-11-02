@@ -32,7 +32,7 @@ $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
     // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
-    'update_imports_version' => true,
+    'update_js_imports_version' => true,
     // Disable in prod
     'assets_path' => $settings['root_dir'] . '/public/assets',
 ];
@@ -158,11 +158,10 @@ $settings['session'] = [
 ];
 
 $settings['logger'] = [
-    'name' => 'app',
+    // Log file location
     'path' => $settings['root_dir'] . '/logs',
-    'filename' => 'app.log',
+    // Default log level
     'level' => \Monolog\Level::Debug,
-    'file_permission' => 0775,
 ];
 
 // Email settings

@@ -81,7 +81,7 @@ class LoginSubmitActionTest extends TestCase
         $this->insertFixturesWithAttributes([], new UserFixture());
 
         $invalidCredentials = [
-            'email' => 'admin@example.com',
+            'email' => 'admin@test.com',
             'password' => 'wrong password',
         ];
 

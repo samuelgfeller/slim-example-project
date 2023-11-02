@@ -2,9 +2,11 @@
 
 use App\Application\ErrorHandler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\Utility\Settings;
 use Cake\Database\Connection;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Odan\Session\PhpSession;
@@ -12,6 +14,7 @@ use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
@@ -42,8 +45,22 @@ return [
 
         return $app;
     },
-    LoggerFactory::class => function (ContainerInterface $container) {
-        return new LoggerFactory($container->get('settings')['logger']);
+    LoggerInterface::class => function (ContainerInterface $container) {
+        $loggerSettings = $container->get('settings')['logger'];
+
+        $logger = new Logger('app');
+
+        // Check if config file contains the key 'path' env.test.php removes this key to prevent logging
+        if (isset($loggerSettings['path'])) {
+            $filename = sprintf('%s/app.log', $loggerSettings['path']);
+            $level = $loggerSettings['level'];
+            $rotatingFileHandler = new RotatingFileHandler($filename, 0, $level, true, 0777);
+            // The last "true" here tells monolog to remove empty []'s
+            $rotatingFileHandler->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s', false, true));
+            $logger->pushHandler($rotatingFileHandler);
+        }
+
+        return $logger;
     },
 
     // HTTP factories
@@ -63,7 +80,7 @@ return [
     // Error middlewares
     ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
-        $logger = $container->get(LoggerFactory::class);
+        $logger = $container->get(LoggerInterface::class);
 
         return new ErrorHandlerMiddleware(
             (bool)$config['display_error_details'],
@@ -75,9 +92,7 @@ return [
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);
 
-        $logger = $container->get(LoggerFactory::class)->addFileHandler('error.log')->createLogger(
-            'default-errorhandler'
-        );
+        $logger = $container->get(LoggerInterface::class);
 
         $errorMiddleware = new ErrorMiddleware(
             $app->getCallableResolver(),

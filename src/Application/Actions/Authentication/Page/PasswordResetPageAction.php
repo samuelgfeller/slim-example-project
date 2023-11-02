@@ -3,7 +3,6 @@
 namespace App\Application\Actions\Authentication\Page;
 
 use App\Application\Responder\Responder;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -11,14 +10,12 @@ use Psr\Log\LoggerInterface;
 
 class PasswordResetPageAction
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly Responder $responder,
         private readonly SessionInterface $session,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('user-service');
     }
 
     /**

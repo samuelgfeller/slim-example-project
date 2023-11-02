@@ -6,7 +6,6 @@ use App\Application\Responder\Responder;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
@@ -15,15 +14,13 @@ use Slim\Exception\HttpBadRequestException;
 
 final class RegisterVerifyProcessAction
 {
-    protected LoggerInterface $logger;
 
     public function __construct(
-        LoggerFactory $logger,
+        private readonly LoggerInterface $logger,
         private readonly Responder $responder,
         private readonly SessionInterface $session,
         private readonly RegisterTokenVerifier $registerTokenVerifier
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('auth-verify-register');
     }
 
     public function __invoke(ServerRequest $request, Response $response): Response

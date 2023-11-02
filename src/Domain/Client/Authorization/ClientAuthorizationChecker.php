@@ -6,7 +6,6 @@ use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
@@ -17,16 +16,14 @@ use Psr\Log\LoggerInterface;
  */
 class ClientAuthorizationChecker
 {
-    private LoggerInterface $logger;
     private ?int $loggedInUserId = null;
 
     public function __construct(
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly UserNetworkSessionData $userNetworkSessionData,
-        LoggerFactory $loggerFactory
+        private readonly LoggerInterface $logger,
     ) {
         $this->loggedInUserId = $this->userNetworkSessionData->userId;
-        $this->logger = $loggerFactory->addFileHandler('error.log')->createLogger('client-authorization');
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserDeleterRepository;
@@ -13,16 +12,13 @@ use Psr\Log\LoggerInterface;
 
 class UserDeleter
 {
-    protected LoggerInterface $logger;
-
     public function __construct(
-        LoggerFactory $logger,
+        private readonly LoggerInterface $logger,
         private readonly UserDeleterRepository $userDeleterRepository,
         private readonly SessionInterface $session,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserActivityLogger $userActivityLogger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('user-delete');
     }
 
     /**

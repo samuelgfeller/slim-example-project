@@ -4,7 +4,6 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\InvalidOperationException;
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
@@ -13,16 +12,14 @@ use Psr\Log\LoggerInterface;
 
 final class UserUpdater
 {
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly UserValidator $userValidator,
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserActivityLogger $userActivityLogger,
-        LoggerFactory $logger
+        private readonly LoggerInterface $logger,
     ) {
-        $this->logger = $logger->addFileHandler('error.log')->createLogger('user-service');
     }
 
     /**

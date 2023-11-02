@@ -2,13 +2,11 @@
 
 namespace App\Test\Traits;
 
-use App\Domain\Factory\Infrastructure\LoggerFactory;
 use App\Test\Fixture\UserRoleFixture;
 use Cake\Database\Connection;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Log\NullLogger;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\MockTestTrait;
 use Slim\App;
@@ -46,10 +44,6 @@ trait AppTestTrait
 
         // Set memory sessions
         $this->container->set(SessionInterface::class, new MemorySession());
-
-        // Mock LoggerFactory so that createInstance() returns NullLogger
-        // addFileHandler() automatically returns a stub of its return type which is the mock instance itself
-        $this->mock(LoggerFactory::class)->method('createLogger')->willReturn(new NullLogger());
 
         // If setUp() is called in a testClass that uses DatabaseTestTrait, the method setUpDatabase() exists
         if (method_exists($this, 'setUpDatabase')) {
