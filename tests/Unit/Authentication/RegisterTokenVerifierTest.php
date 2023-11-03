@@ -13,6 +13,7 @@ use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Selective\TestTrait\Traits\MockTestTrait;
 
 /**
  * Email verification test (after user clicked on link).
@@ -23,6 +24,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class RegisterTokenVerifierTest extends TestCase
 {
     use AppTestTrait;
+    use MockTestTrait;
 
     /**
      * Case when user clicks on the link even though the user is not 'unverified' anymore.

@@ -10,6 +10,7 @@ use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Selective\TestTrait\Traits\MockTestTrait;
 
 /**
  * Threats:
@@ -28,6 +29,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class SecurityLoginCheckerTest extends TestCase
 {
     use AppTestTrait;
+    use MockTestTrait;
 
     /**
      * Covered in this test:
