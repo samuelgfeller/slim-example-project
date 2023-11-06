@@ -7,6 +7,7 @@ use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
@@ -17,6 +18,7 @@ final class RegisterVerifyProcessAction
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly Responder $responder,
+        private readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
         private readonly RegisterTokenVerifier $registerTokenVerifier
     ) {
@@ -44,7 +46,7 @@ final class RegisterVerifyProcessAction
                 );
                 // Log user in
                 // Clear all session data and regenerate session ID
-                $this->session->regenerateId();
+                $this->sessionManager->regenerateId();
                 // Add user to session
                 $this->session->set('user_id', $userId);
 

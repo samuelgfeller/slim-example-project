@@ -157,7 +157,7 @@ class AccountUnlockActionTest extends TestCase
         $queryParams = [
             'redirect' => $redirectLocation,
             'token' => $clearTextToken,
-            'id' =>  (string)$verification->id,
+            'id' => (string)$verification->id,
         ];
 
         $request = $this->createRequest('GET', $this->urlFor('account-unlock-verification', [], $queryParams));

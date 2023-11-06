@@ -5,6 +5,7 @@ namespace App\Application\Action\User\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\User\Service\UserDeleter;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -13,7 +14,8 @@ final class UserDeleteAction
     public function __construct(
         private readonly Responder $responder,
         private readonly UserDeleter $userDeleter,
-        private readonly SessionInterface $session
+        private readonly SessionManagerInterface $sessionManager,
+        private readonly SessionInterface $session,
     ) {
     }
 
@@ -42,9 +44,9 @@ final class UserDeleteAction
         if ($deleted) {
             // If user deleted his own account, log him out and send redirect location
             if ((int)$this->session->get('user_id') === $userIdToDelete) {
-                $this->session->destroy();
-                $this->session->start();
-                $this->session->regenerateId();
+                $this->sessionManager->destroy();
+                $this->sessionManager->start();
+                $this->sessionManager->regenerateId();
                 $this->session->getFlash()->add(
                     'success',
                     'Successfully deleted your account. You are now logged out.'

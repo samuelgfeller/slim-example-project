@@ -22,14 +22,6 @@ return function (App $app) {
         });
     })->add(CorsMiddleware::class);
 
-    // Testing
-    $app->get('/test', \App\Application\Action\Dashboard\PhpDevTestAction::class)
-        ->setName('test-get-request');
-    $app->post('/test-post', function ($request, $response) {
-        // var_dump($request->getParsedBody(), $request->getQueryParams());
-        return $response;
-    })->setName('test-post-request');
-
     $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
 

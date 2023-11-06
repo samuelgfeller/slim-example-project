@@ -26,7 +26,7 @@ final class QueryFactory
      *         ['deleted_at IS' => null, 'name LIKE' => '%John%']);
      *     return $query->execute()->fetchAll('assoc');
      *
-     * @return SelectQuery
+     * @return SelectQuery<mixed>
      */
     public function selectQuery(): SelectQuery
     {

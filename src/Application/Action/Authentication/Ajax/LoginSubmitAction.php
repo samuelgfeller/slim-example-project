@@ -10,6 +10,7 @@ use App\Domain\Security\Exception\SecurityException;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
@@ -20,6 +21,7 @@ final class LoginSubmitAction
         private readonly Responder $responder,
         private readonly LoggerInterface $logger,
         private readonly LoginVerifier $loginVerifier,
+        private readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
         private readonly UserFinder $userFinder,
     ) {
@@ -40,7 +42,7 @@ final class LoginSubmitAction
             );
 
             // Clear all session data and regenerate session ID
-            $this->session->regenerateId();
+            $this->sessionManager->regenerateId();
             // Add user to session
             $this->session->set('user_id', $userId);
 

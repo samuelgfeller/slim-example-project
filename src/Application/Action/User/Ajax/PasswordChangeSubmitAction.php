@@ -5,6 +5,7 @@ namespace App\Application\Action\User\Ajax;
 use App\Application\Responder\Responder;
 use App\Domain\Authentication\Service\PasswordChanger;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
@@ -15,6 +16,7 @@ class PasswordChangeSubmitAction
 {
     public function __construct(
         private readonly Responder $responder,
+        protected readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
         private readonly PasswordChanger $passwordChanger
     ) {
@@ -38,7 +40,7 @@ class PasswordChangeSubmitAction
 
         // Clear all session data and regenerate session ID if changed user is the one authenticated
         if ((int)$this->session->get('user_id') === $userId) {
-            $this->session->regenerateId();
+            $this->sessionManager->regenerateId();
         }
 
         return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);

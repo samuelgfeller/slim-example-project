@@ -4,6 +4,7 @@ namespace App\Test\Traits;
 
 use App\Test\Fixture\UserRoleFixture;
 use Cake\Database\Connection;
+use DI\Container;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -80,8 +81,10 @@ trait AppTestTrait
             $connection = $this->container->get(Connection::class);
             $connection->rollback();
             $connection->getDriver()->disconnect();
-            $this->container->set(Connection::class, null);
-            $this->container->set(\PDO::class, null);
+            if ($this->container instanceof Container) {
+                $this->container->set(Connection::class, null);
+                $this->container->set(\PDO::class, null);
+            }
         }
     }
 }

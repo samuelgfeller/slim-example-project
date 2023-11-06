@@ -20,11 +20,11 @@ use Selective\TestTrait\Traits\MockTestTrait;
  * Testing whole function performLoginSecurityCheck() and performEmailAbuseCheck() and not sub-functions directly as
  * they are private mainly because here (https://stackoverflow.com/a/2798203/9013718 comments), they say:
  * > You should not test protected/private members directly. They belong to the internal implementation of the class,
- * > and should not be coupled with the test. This makes refactoring impossible and eventually you don't test what
+ * > and should not be coupled with the test. This makes refactoring impossible, and eventually you don't test what
  * > needs to be tested. You need to test them indirectly using public methods.
  * I thought it would make sense to test each function separately to avoid the following complex test function and
  * I don't want those sub-functions to be public as the security check is always done in its entirety from outside.
- * But probably there are things I'm missing out on and it seems that the internet agrees that it's a bad practice.
+ * But probably there are things I'm missing out on, and it seems that the internet agrees that it's a bad practice.
  */
 class SecurityLoginCheckerTest extends TestCase
 {

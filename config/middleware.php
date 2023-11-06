@@ -35,7 +35,7 @@ return function (App $app) {
     // $app->add(CorsMiddleware::class); // Middleware added in api group in routes.php
 
     // Has to be after phpViewExtensionMiddleware https://www.slimframework.com/docs/v4/cookbook/retrieving-current-route.html
-    // The RoutingMiddleware should be added after our CORS middleware so routing is performed first
+    // The RoutingMiddleware should be added after our CORS middleware
     $app->addRoutingMiddleware();
 
     // Has to be after Routing (called before on response)

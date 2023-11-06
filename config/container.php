@@ -11,6 +11,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
@@ -143,10 +144,14 @@ return [
     },
 
     // Sessions
-    SessionInterface::class => function (ContainerInterface $container) {
-        $settings = $container->get('settings');
+    SessionManagerInterface::class => function (ContainerInterface $container) {
+        return $container->get(SessionInterface::class);
+    },
 
-        return new PhpSession((array)$settings['session']);
+    SessionInterface::class => function (ContainerInterface $container) {
+        $options = $container->get('settings')['session'];
+
+        return new PhpSession($options);
     },
 
     SessionStartMiddleware::class => function (ContainerInterface $container) {

@@ -6,6 +6,7 @@ use App\Application\Responder\Responder;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -14,9 +15,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class UserAuthenticationMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        protected readonly SessionInterface $session,
-        protected readonly Responder $responder,
-        protected readonly UserFinder $userFinder,
+        private readonly SessionManagerInterface $sessionManager,
+        private readonly SessionInterface $session,
+        private readonly Responder $responder,
+        private readonly UserFinder $userFinder,
     ) {
     }
 
@@ -40,9 +42,9 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
                 return $handler->handle($request);
             }
             // Log user out if not active
-            $this->session->destroy();
-            $this->session->start();
-            $this->session->regenerateId();
+            $this->sessionManager->destroy();
+            $this->sessionManager->start();
+            $this->sessionManager->regenerateId();
         }
 
         $response = $this->responder->createResponse();
