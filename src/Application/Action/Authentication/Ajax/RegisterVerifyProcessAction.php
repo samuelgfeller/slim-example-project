@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\RegisterTokenVerifier;
@@ -12,12 +12,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Interfaces\RouteParserInterface;
 
 final class RegisterVerifyProcessAction
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
+        private readonly RouteParserInterface $routeParser,
         private readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
         private readonly RegisterTokenVerifier $registerTokenVerifier
@@ -51,17 +53,17 @@ final class RegisterVerifyProcessAction
                 $this->session->set('user_id', $userId);
 
                 if (isset($queryParams['redirect'])) {
-                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                    return $this->redirectHandler->redirectToUrl($response, $queryParams['redirect']);
                 }
 
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                return $this->redirectHandler->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add('error', __('Invalid or expired link. Please log in to receive a new link.'));
                 $this->logger->error('Invalid or expired token user_verification id: ' . $queryParams['id']);
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
                 // Redirect to login page with redirect query param if set
-                return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
+                return $this->redirectHandler->redirectToRouteName($response, 'login-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
                 // Check if already logged in
                 if ($this->session->get('user_id') === null) {
@@ -69,23 +71,23 @@ final class RegisterVerifyProcessAction
                     $flash->add('info', __('You are already verified. Please log in.'));
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
-                    return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
+                    return $this->redirectHandler->redirectToRouteName($response, 'login-page', [], $newQueryParam);
                 }
                 // Already logged in
                 $flash->add(
                     'info',
                     sprintf(
                         __('You are already logged-in.<br>Would you like to %slogout%s?'),
-                        '<a href="' . $this->responder->urlFor('logout') . '">',
+                        '<a href="' . $this->routeParser->urlFor('logout') . '">',
                         '</a>'
                     )
                 );
 
                 if (isset($queryParams['redirect'])) {
-                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                    return $this->redirectHandler->redirectToUrl($response, $queryParams['redirect']);
                 }
 
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                return $this->redirectHandler->redirectToRouteName($response, 'home-page');
             }
         }
 

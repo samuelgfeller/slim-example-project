@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Note\Service\NoteCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class NoteCreateAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly NoteCreator $noteCreator,
     ) {
     }
@@ -36,7 +36,7 @@ final class NoteCreateAction
 
         if (0 !== $noteCreationData['note_id']) {
             // camelCase according to Google recommendation
-            return $this->responder->respondWithJson($response, [
+            return $this->jsonResponder->respondWithJson($response, [
                 'status' => 'success',
                 'data' => [
                     'userFullName' => $noteCreationData['user_full_name'],
@@ -45,7 +45,7 @@ final class NoteCreateAction
                 ],
             ], 201);
         }
-        $response = $this->responder->respondWithJson($response, [
+        $response = $this->jsonResponder->respondWithJson($response, [
             'status' => 'warning',
             'message' => 'Note not created',
         ]);

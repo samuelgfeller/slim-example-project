@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\User\Service\UserCreator;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -14,8 +14,8 @@ final class UserCreateAction
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        protected Responder $responder,
-        protected UserCreator $userCreator,
+        private readonly JsonResponder $jsonResponder,
+        private readonly UserCreator $userCreator,
         private readonly SessionInterface $session,
     ) {
     }
@@ -45,12 +45,12 @@ final class UserCreateAction
                 $response = $response->withAddedHeader('Warning', 'The post could not be created');
             }
 
-            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
+            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
         } catch (TransportExceptionInterface $e) {
             // Flash message has to be added in the frontend as form is submitted via Ajax
             $this->logger->error('Mailer exception: ' . $e->getMessage());
 
-            return $this->responder->respondWithJson(
+            return $this->jsonResponder->respondWithJson(
                 $response,
                 ['status' => 'error', 'message' => __('Email error. Please contact an administrator.')]
             );

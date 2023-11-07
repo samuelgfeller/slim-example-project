@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Dashboard;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Dashboard\DashboardPanelProvider;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class DashboardPageAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly TemplateRenderer $templateRenderer,
         private readonly SessionInterface $session,
         private readonly FilterSettingFinder $filterSettingFinder,
         private readonly DashboardPanelProvider $dashboardGetter,
@@ -38,7 +38,7 @@ final class DashboardPageAction
     ): ResponseInterface {
         $dashboards = $this->dashboardGetter->getAuthorizedDashboards();
 
-        return $this->responder->render(
+        return $this->templateRenderer->render(
             $response,
             'dashboard/dashboard.html.php',
             [

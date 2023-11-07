@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientFinderWithFilter;
 use App\Test\Integration\Client\ClientListActionTest;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class ClientFetchListAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly ClientFinderWithFilter $clientFilterFinder,
     ) {
     }
@@ -36,9 +36,9 @@ final class ClientFetchListAction
             // Retrieve posts with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
 
-            return $this->responder->respondWithJson($response, $clientResultCollection);
+            return $this->jsonResponder->respondWithJson($response, $clientResultCollection);
         } catch (InvalidClientFilterException $invalidClientFilterException) {
-            return $this->responder->respondWithJson(
+            return $this->jsonResponder->respondWithJson(
                 $response,
                 /** @see ClientListActionTest::testClientListActionInvalidFilters() */
                 [

@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Page;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,7 +13,7 @@ final class LogoutPageAction
     public function __construct(
         private readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
     ) {
     }
 
@@ -26,6 +26,6 @@ final class LogoutPageAction
         // Add flash message to inform user of the success
         $this->session->getFlash()->add('success', __('Logged out successfully.'));
 
-        return $this->responder->redirectToRouteName($response, 'login-page');
+        return $this->redirectHandler->redirectToRouteName($response, 'login-page');
     }
 }

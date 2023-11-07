@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\AccountUnlockTokenVerifier;
@@ -17,7 +17,7 @@ final class AccountUnlockProcessAction
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
         private readonly SessionManagerInterface $sessionManager,
         private readonly SessionInterface $session,
         private readonly AccountUnlockTokenVerifier $accountUnlockTokenVerifier
@@ -52,10 +52,10 @@ final class AccountUnlockProcessAction
                         )
                     );
 
-                    return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                    return $this->redirectHandler->redirectToUrl($response, $queryParams['redirect']);
                 }
 
-                return $this->responder->redirectToRouteName($response, 'home-page');
+                return $this->redirectHandler->redirectToRouteName($response, 'home-page');
             } catch (InvalidTokenException $ite) {
                 $flash->add(
                     'error',
@@ -65,7 +65,7 @@ final class AccountUnlockProcessAction
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
                 // Redirect to login page with redirect query param if set
-                return $this->responder->redirectToRouteName($response, 'login-page', [], $newQueryParam);
+                return $this->redirectHandler->redirectToRouteName($response, 'login-page', [], $newQueryParam);
             } catch (UserAlreadyVerifiedException $uave) {
                 $flash->add('info', $uave->getMessage());
                 $this->logger->info(
@@ -73,7 +73,7 @@ final class AccountUnlockProcessAction
                 );
                 $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
-                return $this->responder->redirectToRouteName(
+                return $this->redirectHandler->redirectToRouteName(
                     $response,
                     'login-page',
                     [],

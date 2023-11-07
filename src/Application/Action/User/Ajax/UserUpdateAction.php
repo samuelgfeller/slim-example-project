@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\User\Service\UserUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class UserUpdateAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly UserUpdater $userUpdater,
     ) {
     }
@@ -35,11 +35,11 @@ final class UserUpdateAction
         $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
 
         if ($updated) {
-            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null]);
         }
 
         // If for example values didn't change
-        return $this->responder->respondWithJson(
+        return $this->jsonResponder->respondWithJson(
             $response,
             ['status' => 'warning', 'message' => 'User wasn\'t updated']
         );

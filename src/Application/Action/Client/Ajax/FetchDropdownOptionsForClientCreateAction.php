@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientUtilFinder;
 use Fig\Http\Message\StatusCodeInterface;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class FetchDropdownOptionsForClientCreateAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly ClientUtilFinder $clientUtilFinder,
     ) {
     }
@@ -34,7 +34,7 @@ class FetchDropdownOptionsForClientCreateAction
         try {
             $dropdownOptions = $this->clientUtilFinder->findClientDropdownValues();
         } catch (InvalidClientFilterException $invalidClientFilterException) {
-            return $this->responder->respondWithJson(
+            return $this->jsonResponder->respondWithJson(
                 $response,
                 // Response format tested in PostFilterProvider.php
                 [
@@ -45,6 +45,6 @@ class FetchDropdownOptionsForClientCreateAction
             );
         }
 
-        return $this->responder->respondWithJson($response, $dropdownOptions);
+        return $this->jsonResponder->respondWithJson($response, $dropdownOptions);
     }
 }

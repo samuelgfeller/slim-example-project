@@ -2,8 +2,9 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Validation\ValidationException;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,7 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 class ValidationExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly ResponseFactoryInterface $responseFactory,
+        private readonly JsonResponder $jsonResponder,
     ) {
     }
 
@@ -22,7 +24,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         } catch (ValidationException $validationException) {
             // Create response (status code and header are added later)
-            $response = $this->responder->createResponse();
+            $response = $this->responseFactory->createResponse();
 
             $responseData = [
                 'status' => 'error',
@@ -31,7 +33,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
                 'data' => ['errors' => $validationException->validationErrors],
             ];
 
-            return $this->responder->respondWithJson($response, $responseData, 422);
+            return $this->jsonResponder->respondWithJson($response, $responseData, 422);
         }
     }
 }

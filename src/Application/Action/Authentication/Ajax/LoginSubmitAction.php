@@ -2,7 +2,8 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;
@@ -18,7 +19,8 @@ use Psr\Log\LoggerInterface;
 final class LoginSubmitAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
+        private readonly TemplateRenderer $templateRenderer,
         private readonly LoggerInterface $logger,
         private readonly LoginVerifier $loginVerifier,
         private readonly SessionManagerInterface $sessionManager,
@@ -57,17 +59,17 @@ final class LoginSubmitAction
 
             // After register and login success, check if user should be redirected
             if (isset($queryParams['redirect'])) {
-                return $this->responder->redirectToUrl(
+                return $this->redirectHandler->redirectToUrl(
                     $response,
                     $request->getQueryParams()['redirect'],
                     $themeQueryParams
                 );
             }
 
-            return $this->responder->redirectToRouteName($response, 'home-page', [], $themeQueryParams);
+            return $this->redirectHandler->redirectToRouteName($response, 'home-page', [], $themeQueryParams);
         } // When the response is not JSON but rendered, the validation exception has to be caught in action
         catch (ValidationException $ve) {
-            return $this->responder->renderOnValidationError(
+            return $this->templateRenderer->renderOnValidationError(
                 $response,
                 'authentication/login.html.php',
                 $ve,
@@ -79,10 +81,10 @@ final class LoginSubmitAction
                 'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
                 $e->getUserEmail() . '"'
             );
-            $this->responder->addPhpViewAttribute('formError', true);
-            $this->responder->addPhpViewAttribute('formErrorMessage', __('Invalid credentials. Please try again.'));
+            $this->templateRenderer->addPhpViewAttribute('formError', true);
+            $this->templateRenderer->addPhpViewAttribute('formErrorMessage', __('Invalid credentials. Please try again.'));
 
-            return $this->responder->render(
+            return $this->templateRenderer->render(
                 $response->withStatus(401),
                 'authentication/login.html.php',
                 // Provide same query params passed to login page to be added to the login submit request
@@ -94,7 +96,7 @@ final class LoginSubmitAction
                 throw $securityException;
             }
 
-            return $this->responder->respondWithFormThrottle(
+            return $this->templateRenderer->respondWithFormThrottle(
                 $response,
                 'authentication/login.html.php',
                 $securityException,
@@ -103,11 +105,11 @@ final class LoginSubmitAction
             );
         } catch (UnableToLoginStatusNotActiveException $unableToLoginException) {
             // When user doesn't have status active
-            $this->responder->addPhpViewAttribute('formError', true);
+            $this->templateRenderer->addPhpViewAttribute('formError', true);
             // Add form error message
-            $this->responder->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());
+            $this->templateRenderer->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());
 
-            return $this->responder->render(
+            return $this->templateRenderer->render(
                 $response->withStatus(401),
                 'authentication/login.html.php',
                 // Provide same query params passed to login page to be added to the login submit request

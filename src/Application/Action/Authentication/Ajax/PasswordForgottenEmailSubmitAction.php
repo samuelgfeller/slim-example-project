@@ -2,7 +2,8 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Exception\SecurityException;
@@ -16,7 +17,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 final class PasswordForgottenEmailSubmitAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly TemplateRenderer $templateRenderer,
+        private readonly RedirectHandler $redirectHandler,
         private readonly SessionInterface $session,
         private readonly PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
         private readonly LoggerInterface $logger,
@@ -46,14 +48,14 @@ final class PasswordForgottenEmailSubmitAction
             );
         } catch (ValidationException $validationException) {
             // Form error messages set in function below
-            return $this->responder->renderOnValidationError(
+            return $this->templateRenderer->renderOnValidationError(
                 $response,
                 'authentication/login.html.php',
                 $validationException,
                 $request->getQueryParams(),
             );
         } catch (SecurityException $securityException) {
-            return $this->responder->respondWithFormThrottle(
+            return $this->templateRenderer->respondWithFormThrottle(
                 $response,
                 'authentication/login.html.php',
                 $securityException,
@@ -63,7 +65,7 @@ final class PasswordForgottenEmailSubmitAction
         } catch (TransportExceptionInterface $transportException) {
             $flash->add('error', __('There was an error when sending the email.'));
 
-            return $this->responder->render(
+            return $this->templateRenderer->render(
                 $response,
                 'authentication/login.html.php',
                 $request->getQueryParams(),
@@ -77,6 +79,6 @@ Please check the spam folder if you don't see it in the inbox."
             )
         );
 
-        return $this->responder->redirectToRouteName($response, 'login-page');
+        return $this->redirectHandler->redirectToRouteName($response, 'login-page');
     }
 }

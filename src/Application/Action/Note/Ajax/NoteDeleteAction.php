@@ -2,19 +2,17 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Note\Service\NoteDeleter;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 final class NoteDeleteAction
 {
-    protected LoggerInterface $logger;
 
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly NoteDeleter $noteDeleter,
         private readonly SessionInterface $session,
     ) {
@@ -40,10 +38,10 @@ final class NoteDeleteAction
         $deleted = $this->noteDeleter->deleteNote($noteId);
 
         if ($deleted) {
-            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null]);
         }
 
-        $response = $this->responder->respondWithJson(
+        $response = $this->jsonResponder->respondWithJson(
             $response,
             ['status' => 'warning', 'message' => 'Note not deleted.']
         );

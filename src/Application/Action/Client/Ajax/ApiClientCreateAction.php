@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Service\ClientCreatorFromApi;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class ApiClientCreateAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly ClientCreatorFromApi $clientCreatorFromClientSubmit,
     ) {
     }
@@ -37,10 +37,10 @@ final class ApiClientCreateAction
         $insertId = $this->clientCreatorFromClientSubmit->createClientFromClientSubmit($clientValues);
 
         if (0 !== $insertId) {
-            return $this->responder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
+            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null], 201);
         }
 
-        $response = $this->responder->respondWithJson($response, [
+        $response = $this->jsonResponder->respondWithJson($response, [
             'status' => 'warning',
             'message' => 'Client not created',
         ]);

@@ -2,7 +2,8 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Service\PasswordResetterWithToken;
 use App\Domain\Validation\ValidationException;
@@ -14,7 +15,8 @@ use Psr\Log\LoggerInterface;
 class NewPasswordResetSubmitAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly TemplateRenderer $templateRenderer,
+        private readonly RedirectHandler $redirectHandler,
         private readonly SessionInterface $session,
         private readonly PasswordResetterWithToken $passwordResetterWithToken,
         private readonly LoggerInterface $logger,
@@ -44,9 +46,9 @@ class NewPasswordResetSubmitAction
                 sprintf(__('Successfully changed password. <b>%s</b>'), __('Please log in.'))
             );
 
-            return $this->responder->redirectToRouteName($response, 'login-page');
+            return $this->redirectHandler->redirectToRouteName($response, 'login-page');
         } catch (InvalidTokenException $ite) {
-            $this->responder->addPhpViewAttribute(
+            $this->templateRenderer->addPhpViewAttribute(
                 'formErrorMessage',
                 __(
                     '<b>Invalid, used or expired link. <br> Please request a new link below and make 
@@ -55,7 +57,7 @@ sure to click on the most recent email we send you</a>.</b>'
             );
             // Pre-fill email input field for more user comfort.
             if ($ite->userData->email !== null) {
-                $this->responder->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
+                $this->templateRenderer->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
             }
 
             $this->logger->error(
@@ -64,15 +66,15 @@ sure to click on the most recent email we send you</a>.</b>'
 
             // The login page is rendered but the url is reset-password. In login-main.js the url is replaced and
             // the password forgotten form is shown instead of the login form.
-            return $this->responder->render($response, 'authentication/login.html.php');
+            return $this->templateRenderer->render($response, 'authentication/login.html.php');
         } // Validation Exception has to be caught here and not middleware as we need to add token and id to php view
         catch (ValidationException $validationException) {
             $flash->add('error', $validationException->getMessage());
             // Add token and id to php view attribute like PasswordResetAction does
-            $this->responder->addPhpViewAttribute('token', $parsedBody['token']);
-            $this->responder->addPhpViewAttribute('id', $parsedBody['id']);
+            $this->templateRenderer->addPhpViewAttribute('token', $parsedBody['token']);
+            $this->templateRenderer->addPhpViewAttribute('id', $parsedBody['id']);
 
-            return $this->responder->renderOnValidationError(
+            return $this->templateRenderer->renderOnValidationError(
                 $response,
                 'authentication/reset-password.html.php',
                 $validationException,

@@ -1,3 +1,6 @@
+# Turn on the rewrite engine
 RewriteEngine on
+# If the URL path is empty, rewrite to the 'public/' directory
 RewriteRule ^$ public/ [L]
+# For any requested URL path, rewrite to the 'public/' directory followed by the requested path
 RewriteRule (.*) public/$1 [L]

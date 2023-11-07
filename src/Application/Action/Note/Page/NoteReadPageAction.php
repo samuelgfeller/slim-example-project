@@ -2,16 +2,18 @@
 
 namespace App\Application\Action\Note\Page;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
 use App\Domain\Note\Service\NoteFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Interfaces\RouteParserInterface;
 
 final class NoteReadPageAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
+        private readonly RouteParserInterface $routeParser,
         private readonly NoteFinder $noteFinder,
         private readonly SessionInterface $session,
     ) {
@@ -34,9 +36,9 @@ final class NoteReadPageAction
         $noteData = $this->noteFinder->findNote((int)$args['note_id']);
         if ($noteData->id) {
             // Redirect to client read page with hash anchor to the correct note container
-            return $this->responder->redirectToUrl(
+            return $this->redirectHandler->redirectToUrl(
                 $response,
-                $this->responder->urlFor('client-read-page', ['client_id' => (string)$noteData->clientId]) .
+                $this->routeParser->urlFor('client-read-page', ['client_id' => (string)$noteData->clientId]) .
                 "#note-$noteData->id-container"
             );
         }
@@ -45,6 +47,6 @@ final class NoteReadPageAction
         $flash->add('error', __('The note was not not found.'));
 
         // When note does not exist link to client list page
-        return $this->responder->redirectToRouteName($response, 'client-list-page');
+        return $this->redirectHandler->redirectToRouteName($response, 'client-list-page');
     }
 }

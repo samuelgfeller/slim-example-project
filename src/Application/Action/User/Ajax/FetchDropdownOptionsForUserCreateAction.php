@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\User\Service\UserUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class FetchDropdownOptionsForUserCreateAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly JsonResponder $jsonResponder,
         private readonly UserUtilFinder $userUtilFinder,
     ) {
     }
@@ -31,6 +31,6 @@ class FetchDropdownOptionsForUserCreateAction
     ): ResponseInterface {
         $dropdownOptions = $this->userUtilFinder->findUserDropdownValues();
 
-        return $this->responder->respondWithJson($response, $dropdownOptions);
+        return $this->jsonResponder->respondWithJson($response, $dropdownOptions);
     }
 }

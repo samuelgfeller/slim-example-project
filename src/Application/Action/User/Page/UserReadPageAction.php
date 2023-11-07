@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Page;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
@@ -14,7 +14,7 @@ use Slim\Exception\HttpNotFoundException;
 final class UserReadPageAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly TemplateRenderer $templateRenderer,
         private readonly UserFinder $userFinder,
         private readonly SessionInterface $session,
     ) {
@@ -38,7 +38,7 @@ final class UserReadPageAction
         $userId = (int)($args['user_id'] ?? $authenticatedUserId);
         try {
             // Retrieve user infos
-            return $this->responder->render($response, 'user/user-read.html.php', [
+            return $this->templateRenderer->render($response, 'user/user-read.html.php', [
                 'user' => $this->userFinder->findUserReadResult($userId),
                 'isOwnProfile' => $userId === $authenticatedUserId,
                 // Get all user status cases as enums

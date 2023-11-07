@@ -2,15 +2,19 @@
 
 namespace App\Application\Action\Authentication\Page;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Interfaces\RouteParserInterface;
 
 final class LoginPageAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly RedirectHandler $redirectHandler,
+        private readonly RouteParserInterface $routeParser,
+        private readonly TemplateRenderer $templateRenderer,
         private readonly SessionInterface $session,
     ) {
     }
@@ -34,20 +38,20 @@ final class LoginPageAction
                 'info',
                 sprintf(
                     __('You are already logged-in.<br>Would you like to %slogout%s?'),
-                    '<a href="' . $this->responder->urlFor('logout') . '">',
+                    '<a href="' . $this->routeParser->urlFor('logout') . '">',
                     '</a>'
                 )
             );
             // If redirect param set, redirect to this url
             if (isset($queryParams['redirect'])) {
-                return $this->responder->redirectToUrl($response, $queryParams['redirect']);
+                return $this->redirectHandler->redirectToUrl($response, $queryParams['redirect']);
             }
 
             // Otherwise, go to home page
-            return $this->responder->redirectToRouteName($response, 'home-page');
+            return $this->redirectHandler->redirectToRouteName($response, 'home-page');
         }
 
-        return $this->responder->render(
+        return $this->templateRenderer->render(
             $response,
             'authentication/login.html.php',
             // Provide same query params passed to login page to be added to the login submit request

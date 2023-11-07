@@ -2,7 +2,6 @@
 
 namespace App\Application\Action\Dashboard;
 
-use App\Application\Responder\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -12,7 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 class PhpDevTestAction
 {
     public function __construct(
-        private readonly Responder $responder,
     ) {
     }
 
@@ -30,6 +28,6 @@ class PhpDevTestAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        return $this->responder->createResponse();
+        return $response;
     }
 }

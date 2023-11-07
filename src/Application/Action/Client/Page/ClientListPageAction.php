@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Page;
 
-use App\Application\Responder\Responder;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class ClientListPageAction
 {
     public function __construct(
-        private readonly Responder $responder,
+        private readonly TemplateRenderer $templateRenderer,
         private readonly ClientListFilterChipProvider $clientListFilterChipGetter,
         private readonly ClientAuthorizationChecker $clientAuthorizationChecker
     ) {
@@ -38,12 +38,12 @@ final class ClientListPageAction
         // Retrieving available filters
         $clientListFilters = $this->clientListFilterChipGetter->getActiveAndInactiveClientListFilters();
 
-        $this->responder->addPhpViewAttribute('clientListFilters', $clientListFilters);
-        $this->responder->addPhpViewAttribute(
+        $this->templateRenderer->addPhpViewAttribute('clientListFilters', $clientListFilters);
+        $this->templateRenderer->addPhpViewAttribute(
             'clientCreatePrivilege',
             $this->clientAuthorizationChecker->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
         );
 
-        return $this->responder->render($response, 'client/clients-list.html.php');
+        return $this->templateRenderer->render($response, 'client/clients-list.html.php');
     }
 }
