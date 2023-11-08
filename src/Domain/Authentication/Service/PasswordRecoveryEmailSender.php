@@ -5,7 +5,7 @@ namespace App\Domain\Authentication\Service;
 use App\Common\LocaleHelper;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Domain\Service\Mailer;
+use App\Domain\Service\Infrastructure\Mailer;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\Utility\Settings;

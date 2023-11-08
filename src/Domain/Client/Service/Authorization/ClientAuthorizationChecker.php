@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Domain\Client\Authorization;
+namespace App\Domain\Client\Service\Authorization;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientResultData;
+use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;

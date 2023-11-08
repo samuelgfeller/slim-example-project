@@ -4,8 +4,8 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\InvalidOperationException;
-use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Repository\NoteDeleterRepository;
+use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 

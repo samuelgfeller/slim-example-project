@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Client\Authorization;
+namespace App\Domain\Client\Service\Authorization;
 
 use App\Domain\Authorization\Privilege;
 

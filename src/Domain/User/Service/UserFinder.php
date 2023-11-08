@@ -4,11 +4,11 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\DomainRecordNotFoundException;
-use App\Domain\User\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Data\UserResultData;
 use App\Domain\User\Repository\UserFinderRepository;
+use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserAuthorizationGetter;
 
 class UserFinder
 {

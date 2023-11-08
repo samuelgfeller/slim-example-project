@@ -53,7 +53,7 @@ Alternatively the word "Show" can also be used as it makes clear that a page is 
 4. **Suffix with "Action"**: `Action` at the end of the action names indicates that 
 the class is an action.
 5. **Prefix with "Api"**: Only for Api requests add `Api` at the beginning of the action name
-to indicate that the request is made from another application via said interface.
+to indicate that the request is made from another application via this interface.
 5. **Folder Structure**: Actions are organized into "Page" and "Ajax" folders based on whether they 
 handle page requests or Ajax requests.
 

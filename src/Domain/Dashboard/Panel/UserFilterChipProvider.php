@@ -5,8 +5,8 @@ namespace App\Domain\Dashboard\Panel;
 use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
-use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Repository\UserFinderRepository;
+use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 

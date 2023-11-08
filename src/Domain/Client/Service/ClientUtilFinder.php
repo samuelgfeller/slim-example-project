@@ -2,9 +2,9 @@
 
 namespace App\Domain\Client\Service;
 
-use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
+use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 

@@ -2,9 +2,9 @@
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Authorization\UserAuthorizationGetter;
 use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
+use App\Domain\User\Service\Authorization\UserAuthorizationGetter;
 
 class UserUtilFinder
 {

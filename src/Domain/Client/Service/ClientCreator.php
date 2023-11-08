@@ -4,10 +4,10 @@ namespace App\Domain\Client\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Client\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Repository\ClientCreatorRepository;
 use App\Domain\Client\Repository\ClientDeleterRepository;
+use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;

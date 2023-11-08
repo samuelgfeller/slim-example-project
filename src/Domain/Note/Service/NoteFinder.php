@@ -4,10 +4,10 @@ namespace App\Domain\Note\Service;
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Repository\ClientFinderRepository;
-use App\Domain\Note\Authorization\NoteAuthorizationGetter;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Repository\NoteFinderRepository;
+use App\Domain\Note\Service\Authorization\NoteAuthorizationGetter;
 
 class NoteFinder
 {

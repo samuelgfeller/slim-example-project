@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\Authorization;
+namespace App\Domain\User\Service\Authorization;
 
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Authorization\Privilege;

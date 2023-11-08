@@ -3,9 +3,9 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
+use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;

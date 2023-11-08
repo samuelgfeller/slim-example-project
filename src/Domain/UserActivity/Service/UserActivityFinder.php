@@ -2,8 +2,8 @@
 
 namespace App\Domain\UserActivity\Service;
 
-use App\Domain\User\Authorization\UserAuthorizationChecker;
 use App\Domain\User\Repository\UserFinderRepository;
+use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
 use App\Domain\UserActivity\Repository\UserActivityRepository;
 use IntlDateFormatter;
 use InvalidArgumentException;

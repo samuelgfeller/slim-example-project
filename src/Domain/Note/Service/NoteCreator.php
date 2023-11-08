@@ -4,8 +4,8 @@ namespace App\Domain\Note\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
-use App\Domain\Note\Authorization\NoteAuthorizationChecker;
 use App\Domain\Note\Repository\NoteCreatorRepository;
+use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\UserActivity\Service\UserActivityLogger;

@@ -4,7 +4,7 @@ namespace App\Application\Action\Client\Page;
 
 use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authorization\Privilege;
-use App\Domain\Client\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
