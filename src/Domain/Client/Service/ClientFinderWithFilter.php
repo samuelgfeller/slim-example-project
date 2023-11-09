@@ -2,7 +2,7 @@
 
 namespace App\Domain\Client\Service;
 
-use App\Domain\Client\Data\ClientResultDataCollection;
+use App\Domain\Client\Data\ClientListResultCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
 use App\Domain\FilterSetting\FilterModule;
@@ -24,9 +24,9 @@ class ClientFinderWithFilter
      *
      * @param array $params GET parameters containing filter values
      *
-     * @return ClientResultDataCollection
+     * @return ClientListResultCollection
      */
-    public function findClientsWithFilter(array $params): ClientResultDataCollection
+    public function findClientsWithFilter(array $params): ClientListResultCollection
     {
         // Filter param names and values that will be in the request are stored in the db `client_list_filter.get_param`
         // Filters can be cumulated, so they are all stored in this array and then the where condition is generated out of it
@@ -99,12 +99,12 @@ class ClientFinderWithFilter
         $queryBuilderWhereArray = $this->clientFilterWhereConditionBuilder->buildWhereArrayWithFilterParams(
             $filterParams
         );
-        $clientResultDataCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
+        $clientListResultCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
-        $clientResultDataCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
-            $clientResultDataCollection->clients
+        $clientListResultCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
+            $clientListResultCollection->clients
         );
 
-        return $clientResultDataCollection;
+        return $clientListResultCollection;
     }
 }

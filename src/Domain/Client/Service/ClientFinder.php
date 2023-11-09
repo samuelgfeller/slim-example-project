@@ -5,8 +5,8 @@ namespace App\Domain\Client\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientResultData;
-use App\Domain\Client\Data\ClientResultDataCollection;
+use App\Domain\Client\Data\ClientListResultCollection;
+use App\Domain\Client\Data\ClientReadResult;
 use App\Domain\Client\Repository\ClientFinderRepository;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
@@ -38,11 +38,11 @@ class ClientFinder
      *
      * @param array $queryBuilderWhereArray
      *
-     * @return ClientResultDataCollection
+     * @return ClientListResultCollection
      */
-    public function findClientListWithAggregates(array $queryBuilderWhereArray): ClientResultDataCollection
+    public function findClientListWithAggregates(array $queryBuilderWhereArray): ClientListResultCollection
     {
-        $clientResultCollection = new ClientResultDataCollection();
+        $clientResultCollection = new ClientListResultCollection();
         // Retrieve clients
         $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate($queryBuilderWhereArray);
 
@@ -61,7 +61,7 @@ class ClientFinder
      *
      * @param array $whereArray cake query builder where array -> ['table.field' => 'value']
      *
-     * @return ClientResultData[]
+     * @return ClientReadResult[]
      */
     private function findClientsWhereWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {
@@ -102,11 +102,10 @@ class ClientFinder
      * Find one client in the database with aggregate.
      *
      * @param int $clientId
-     * @param bool $includingNotes
      *
-     * @return ClientResultData
+     * @return ClientReadResult
      */
-    public function findClientReadAggregate(int $clientId, bool $includingNotes = true): ClientResultData
+    public function findClientReadAggregate(int $clientId): ClientReadResult
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id
@@ -145,36 +144,14 @@ class ClientFinder
                 false
             ) ? Privilege::CREATE : Privilege::NONE;
 
-            if ($includingNotes === true) {
-                $clientResultAggregate->notes = $this->noteFinder->findAllNotesFromClientExceptMain(
-                    $clientId
-                );
-            } else {
-                $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
-            }
+            $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
 
             return $clientResultAggregate;
         }
         // The reasons this exception is thrown when tried to access soft deleted clients:
-        // they are supposed to be deleted so only maybe a very high privileged role should have access, and it should
-        // clearly be marked as deleted in the GUI as well. Also, a non-authorized user that is trying to access a client
+        // they are supposed to be deleted, so only maybe a very high privileged role should have access, and it should
+        // clearly be marked as deleted in the GUI as well. Also, a non-authorized user trying to access a client
         // should not be able to distinguish which clients exist and which not so for both cases the not allowed exception
         throw new ForbiddenException('Not allowed to read client.');
-    }
-
-    /**
-     * Return all posts which are linked to the given user.
-     *
-     * @param int $userId
-     *
-     * @return ClientResultDataCollection
-     */
-    public function findAllClientsFromUser(int $userId): ClientResultDataCollection
-    {
-        $clientResultCollection = new ClientResultDataCollection();
-        $clientResultCollection->clients = $this->clientFinderRepository->findAllClientsByUserId($userId);
-
-        //        $this->clientUserRightSetter->defineUserRightsOnClients($allClients);
-        return $clientResultCollection;
     }
 }

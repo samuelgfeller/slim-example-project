@@ -3,8 +3,7 @@
 namespace App\Test\Integration\Client;
 
 use App\Common\Hydrator;
-use App\Domain\Client\Data\ClientResultDataCollection;
-use App\Domain\Note\Data\NoteData;
+use App\Domain\Client\Data\ClientListResultCollection;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Service\UserNameAbbreviator;
@@ -111,7 +110,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientListWithFiltersAction(
+    public function testClientListWithFilterAction(
         array $filterQueryParamsArr,
         string $expectedClientsWhereString,
         array $authenticatedUserAttributes,
@@ -161,19 +160,11 @@ class ClientListActionTest extends TestCase
                 'birthdate' => $clientRow['birthdate'],
                 'location' => $clientRow['location'],
                 'phone' => $clientRow['phone'],
-                'email' => $clientRow['email'],
                 'sex' => $clientRow['sex'],
-                'clientMessage' => $clientRow['client_message'],
                 'vigilanceLevel' => $clientRow['vigilance_level'],
                 'userId' => $clientRow['user_id'],
                 'clientStatusId' => $clientRow['client_status_id'],
-                'updatedAt' => $clientRow['updated_at'],
-                'createdAt' => $clientRow['created_at'],
                 'age' => (new \DateTime())->diff(new \DateTime($clientRow['birthdate']))->y,
-                'notes' => null,
-                'notesAmount' => null,
-                // Empty on client list but perhaps added later to display on hover
-                'mainNoteData' => (new NoteData())->jsonSerialize(),
                 // Below not asserted as this test is about filtering not authorization
                 // 'mainDataPrivilege' => null
                 // 'clientStatusPrivilege' => 'NONE'
@@ -190,7 +181,7 @@ class ClientListActionTest extends TestCase
         $expected['users'] = $this->container->get(UserNameAbbreviator::class)->abbreviateUserNames(
             $this->container->get(Hydrator::class)->hydrate($allUsers, UserData::class)
         );
-        $expected['sexes'] = (new ClientResultDataCollection())->sexes;
+        $expected['sexes'] = (new ClientListResultCollection())->sexes;
 
         // Get response json data
         $responseJson = $this->getJsonData($response);

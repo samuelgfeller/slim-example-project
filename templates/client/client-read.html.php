@@ -2,7 +2,7 @@
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $clientAggregate \App\Domain\Client\Data\ClientResultData client
+ * @var $clientAggregate \App\Domain\Client\Data\ClientReadResult client
  * @var $dropdownValues App\Domain\Client\Data\ClientDropdownValuesData all statuses, users and sexes to populate dropdown
  */
 

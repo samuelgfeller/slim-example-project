@@ -5,7 +5,7 @@ namespace App\Domain\Client\Service\Authorization;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\Client\Data\ClientData;
-use App\Domain\Client\Data\ClientResultData;
+use App\Domain\Client\Data\ClientReadResult;
 use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
@@ -245,9 +245,9 @@ class ClientAuthorizationChecker
      * with isGrantedToReadClient and removes clients that
      * authenticated user may not see.
      *
-     * @param ClientResultData[]|null $clients
+     * @param ClientReadResult[]|null $clients
      *
-     * @return ClientResultData[]
+     * @return ClientReadResult[]
      */
     public function removeNonAuthorizedClientsFromList(?array $clients): array
     {

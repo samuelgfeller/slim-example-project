@@ -33,7 +33,7 @@ class ClientData implements \JsonSerializable
         $this->id = $clientData['id'] ?? null;
         $this->firstName = $clientData['first_name'] ?? null;
         $this->lastName = $clientData['last_name'] ?? null;
-        $this->birthdate = $clientData['birthdate'] ?? null ? new \DateTimeImmutable($clientData['birthdate']) : null;
+        $this->birthdate = isset($clientData['birthdate']) ? new \DateTimeImmutable($clientData['birthdate']) : null;
         $this->location = $clientData['location'] ?? null;
         $this->phone = $clientData['phone'] ?? null;
         $this->email = $clientData['email'] ?? null;

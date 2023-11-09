@@ -4,18 +4,15 @@ namespace App\Domain\Client\Data;
 
 use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Data\NoteData;
-use App\Domain\Note\Data\NoteResultData;
 
 /**
  * Aggregate DTO to store ClientData combined with
  * some linked (aggregate) tables.
- * Used as result DTO when access to aggregate
+ * Used as a result DTO when access to aggregate
  * details is relevant like client read.
  */
-class ClientResultData extends ClientData
+class ClientReadResult extends ClientData
 {
-    /** @var NoteResultData[]|null */
-    public ?array $notes = null;
     // Amount of notes for the client to know how many content placeholders to display
     public ?int $notesAmount = null;
     // As this below is only relevant for client read, this ClientResult data class could be renamed into ClientListResult
@@ -48,7 +45,6 @@ class ClientResultData extends ClientData
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'notes' => $this->notes,
             'notesAmount' => $this->notesAmount,
             'mainNoteData' => $this->mainNoteData,
 
