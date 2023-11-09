@@ -4,7 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
-use App\Domain\Authentication\Service\RegistrationMailer;
+use App\Domain\Authentication\Service\RegistrationMailSender;
 use App\Domain\Authentication\Service\VerificationTokenCreator;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Data\UserData;
@@ -24,7 +24,7 @@ final class UserCreator
         private readonly UserAuthorizationChecker $userAuthorizationChecker,
         private readonly UserCreatorRepository $userCreatorRepository,
         private readonly VerificationTokenCreator $verificationTokenCreator,
-        private readonly RegistrationMailer $registrationMailer,
+        private readonly RegistrationMailSender $registrationMailer,
         private readonly UserRoleFinderRepository $userRoleFinderRepository,
         private readonly UserActivityLogger $userActivityLogger,
     ) {

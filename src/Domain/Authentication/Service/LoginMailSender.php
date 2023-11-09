@@ -12,7 +12,7 @@ use Symfony\Component\Mime\Email;
 /**
  * This class manages the emails sent in relation to login.
  */
-class LoginMailer
+class LoginMailSender
 {
     private Email $email;
 
@@ -55,7 +55,7 @@ class LoginMailer
     }
 
     /**
-     * When user tries to log in but his status is suspended.
+     * When a user tries to log in but his status is suspended.
      *
      * @param string $email
      * @param string $fullName

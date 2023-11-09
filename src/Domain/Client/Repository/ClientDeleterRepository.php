@@ -38,18 +38,4 @@ class ClientDeleterRepository
 
         return $query->execute()->rowCount() > 0;
     }
-
-    /**
-     * Delete post that are linked to user.
-     *
-     * @param int $userId
-     *
-     * @return bool
-     */
-    public function deletePostsFromUser(int $userId): bool
-    {
-        $query = $this->queryFactory->softDeleteQuery('post')->where(['user_id' => $userId]);
-
-        return $query->execute()->rowCount() > 0;
-    }
 }

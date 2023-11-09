@@ -32,7 +32,7 @@ final class UserFetchListAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Retrieve posts with given filter values (or none)
+        // Retrieve clients with given filter values (or none)
         // $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
         $userResultDataArray = $this->userFinder->findAllUsersResultDataForList();
 

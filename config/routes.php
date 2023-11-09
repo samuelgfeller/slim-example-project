@@ -119,7 +119,6 @@ return function (App $app) {
             ->setName('client-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
-    // Page actions routes outside /posts as they are needed by Ajax after page load
     // All clients with status whose status is not closed
     $app->get('/clients/list', \App\Application\Action\Client\Page\ClientListPageAction::class)->setName(
         'client-list-page'

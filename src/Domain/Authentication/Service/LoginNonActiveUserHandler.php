@@ -22,7 +22,7 @@ class LoginNonActiveUserHandler
 
     public function __construct(
         private readonly VerificationTokenCreator $verificationTokenCreator,
-        private readonly LoginMailer $loginMailer,
+        private readonly LoginMailSender $loginMailer,
         private readonly LocaleHelper $localeHelper,
         private readonly SecurityEmailChecker $securityEmailChecker,
         private readonly LoggerInterface $logger,

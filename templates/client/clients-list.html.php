@@ -82,9 +82,9 @@ $this->addAttribute(
 </div>
 
 
-<!-- Post visibility scope is either "own" or "all" depending on the if current page shows only own posts or all posts.
-All posts and own posts pages are quite similar and share the same create form and modal box. After the creation of
-a post they are re-loaded in the background (async) to be up-to-date with the server -->
+<!-- Client visibility scope is either "own" or "all" depending on the if current page shows only own clients or all.
+All clients and own clients pages are quite similar and share the same create form and modal box. After the creation of
+a client, they are re-loaded in the background (async) to be up to date with the server -->
 <div id="client-wrapper" data-client-filter="all">
 
 </div>

@@ -409,7 +409,7 @@ public function testNoteListAction(
 #### Provider for note list action test
 
 All different relevant combinations of user roles are provided in the following data provider. There are not
-so much cases because newcomer and advisor owner may only change their own posts and managing_advisor and higher
+so much cases because newcomer and advisor owner may only change their own notes and managing_advisor and higher
 are allowed to edit others' notes.
 
 ```php
@@ -1160,7 +1160,6 @@ public function testClientSubmitDeleteAction_authenticated(
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     $request = $this->createJsonRequest(
         'DELETE',
-        // Post delete route with id like /posts/1
         $this->urlFor('client-submit-delete', ['client_id' => $clientRow['id']]),
     );
     $response = $this->app->handle($request);

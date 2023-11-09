@@ -65,7 +65,7 @@ class ClientDeleteActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'DELETE',
-            // Post delete route with id like /posts/1
+            // Client delete route with id like /posts/1
             $this->urlFor('client-delete-submit', ['client_id' => $clientRow['id']]),
         );
 

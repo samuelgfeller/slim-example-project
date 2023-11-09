@@ -17,7 +17,7 @@ use Symfony\Component\Mime\Email;
  *  - Prevents other service classes of having the email responsibility (Single-responsibility principle)
  *  - Contents are centralised and can be changed easier without having to search them all over the code
  */
-class RegistrationMailer
+class RegistrationMailSender
 {
     private Email $email;
 

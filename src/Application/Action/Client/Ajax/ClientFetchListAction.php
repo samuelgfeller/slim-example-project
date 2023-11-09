@@ -33,7 +33,7 @@ final class ClientFetchListAction
         array $args
     ): ResponseInterface {
         try {
-            // Retrieve posts with given filter values (or none)
+            // Retrieve clients with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
 
             return $this->jsonResponder->respondWithJson($response, $clientResultCollection);
