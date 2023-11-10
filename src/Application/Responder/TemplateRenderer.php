@@ -9,12 +9,10 @@ use Slim\Views\PhpRenderer;
 
 class TemplateRenderer
 {
-
     public function __construct(
         private readonly PhpRenderer $phpRenderer,
     ) {
     }
-
 
     /**
      * Output rendered template.
@@ -76,7 +74,6 @@ class TemplateRenderer
         return $this->render($response->withStatus(422), $template);
     }
 
-
     /**
      * Respond with delay user has to wait or action that needs to be made before repeating the action.
      * Specifically for form errors.
@@ -87,9 +84,9 @@ class TemplateRenderer
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      *
-     * @return ResponseInterface
      * @throws \Throwable
      *
+     * @return ResponseInterface
      */
     public function respondWithFormThrottle(
         ResponseInterface $response,

@@ -9,7 +9,6 @@ class RedirectHandler
 {
     private RouteParserInterface $routeParser;
 
-
     /**
      * The constructor.
      *
@@ -19,6 +18,7 @@ class RedirectHandler
     {
         $this->routeParser = $routeParser;
     }
+
     /**
      * Creates a redirect for the given url.
      *
@@ -64,5 +64,4 @@ class RedirectHandler
     ): ResponseInterface {
         return $this->redirectToUrl($response, $this->routeParser->urlFor($routeName, $data, $queryParams));
     }
-
 }

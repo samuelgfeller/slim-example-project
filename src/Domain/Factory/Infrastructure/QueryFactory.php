@@ -19,7 +19,7 @@ final class QueryFactory
 
     /**
      * Returns a select query instance.
-     ** Don't forget to exclude deleted_at records.
+     ** Remember to exclude deleted_at records.
      *
      * SELECT Example:
      *     $query = $this->queryFactory->selectQuery()->select(['*'])->from('user')->where(
@@ -35,7 +35,7 @@ final class QueryFactory
 
     /**
      * Returns an update query instance.
-     ** Don't forget to take into account deleted_at records.
+     ** Remember to take into account deleted_at records.
      *
      * UPDATE Example:
      *     $query = $this->queryFactory->updateQuery()->update('user')->set($data)->where(['id' => 1]);

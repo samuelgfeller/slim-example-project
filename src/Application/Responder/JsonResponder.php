@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class JsonResponder
 {
-
     /**
      * Write JSON to the response body.
      *

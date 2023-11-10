@@ -10,7 +10,6 @@ use App\Domain\Factory\Infrastructure\QueryFactory;
 
 class ClientFinderRepository
 {
-
     public function __construct(
         private readonly QueryFactory $queryFactory,
         private readonly Hydrator $hydrator

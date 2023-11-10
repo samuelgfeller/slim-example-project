@@ -10,7 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class NoteDeleteAction
 {
-
     public function __construct(
         private readonly JsonResponder $jsonResponder,
         private readonly NoteDeleter $noteDeleter,
