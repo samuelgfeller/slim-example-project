@@ -30,17 +30,21 @@ class UserValidator
 
         // Cake validation library automatically sets a rule that field cannot be null as soon as there is any
         // validation rule set for the field. This is why we have to allowEmptyString because it also allows null.
-        // But for the User there are no optional fields meaning that if any field is passed, it has to contain a value.
+        // But for the user, there are no optional fields meaning that if any field is passed, it has to contain a value.
 
         $validator
             // First name and surname are required to have values if they're given so no allowEmptyString
-            ->requirePresence('first_name', $isCreateMode, __('Key is required'))
+            ->requirePresence('first_name', $isCreateMode, __('Field is required'))
             ->minLength('first_name', 2, __('Minimum length is 2'))
             ->maxLength('first_name', 100, __('Maximum length is 100'))
-            ->requirePresence('surname', $isCreateMode, __('Key is required'))
+            // Disallow empty strings as field is required
+            ->notEmptyString('first_name', __('Required'))
+            ->requirePresence('surname', $isCreateMode, __('Field is required'))
             ->minLength('surname', 2, __('Minimum length is 2'))
             ->maxLength('surname', 100, __('Maximum length is 100'))
-            ->requirePresence('email', $isCreateMode, __('Key is required'))
+            ->notEmptyString('surname', __('Required'))
+            ->requirePresence('email', $isCreateMode, __('Field is required'))
+            // email() automatically disallows empty strings
             ->email('email', false, __('Invalid email'))
             ->add('email', 'emailIsUnique', [
                 'rule' => function ($value, $context) {
@@ -52,7 +56,7 @@ class UserValidator
                 },
                 'message' => __('Email already exists'),
             ])
-            ->requirePresence('status', $isCreateMode, __('Key is required'))
+            ->requirePresence('status', $isCreateMode, __('Field is required'))
             ->add('status', 'userStatusExists', [
                 'rule' => function ($value, $context) {
                     // Check if given user status is one of the enum cases values
@@ -61,7 +65,7 @@ class UserValidator
                 'message' => __('Invalid option'),
             ])
             // Language is an optional field for creation and update
-            ->requirePresence('language', false, __('Key is required'))
+            ->requirePresence('language', false, __('Field is required'))
             ->add('language', 'languageIsAvailable', [
                 'rule' => function ($value, $context) {
                     // Check if given user status is one of the enum cases values
@@ -69,7 +73,7 @@ class UserValidator
                 },
                 'message' => __('Invalid option'),
             ])
-            ->requirePresence('user_role_id', $isCreateMode, __('Key is required'))
+            ->requirePresence('user_role_id', $isCreateMode, __('Field is required'))
             ->numeric('user_role_id', __('Invalid option'))
             ->add('user_role_id', 'exists', [
                 'rule' => function ($value, $context) {
@@ -78,8 +82,8 @@ class UserValidator
                 },
                 'message' => __('Invalid option'),
             ])
-            // Theme is only relevant for update
-            ->requirePresence('theme', false, __('Key is required'))
+            // Theme is only relevant in update
+            ->requirePresence('theme', false, __('Field is required'))
             ->add('theme', 'themeIsAvailable', [
                 'rule' => function ($value, $context) {
                     // Check if given user status is one of the enum cases values
@@ -132,9 +136,9 @@ class UserValidator
         $this->addPasswordValidationRules($validator, true);
         // Add token validation rules
         $validator
-            ->requirePresence('id', true, __('Key is required'))
+            ->requirePresence('id', true, __('Field is required'))
             ->numeric('id', __('Token id is not numeric'))
-            ->requirePresence('token', true, __('Key is required'))
+            ->requirePresence('token', true, __('Field is required'))
             ->notEmptyString('token', __('Token is required'));
 
         // Validate and throw exception if there are errors
@@ -155,11 +159,11 @@ class UserValidator
     private function addPasswordValidationRules(Validator $validator, bool $required = true): void
     {
         $validator
-            ->requirePresence('password', $required, __('Key is required'))
+            ->requirePresence('password', $required, __('Field is required'))
             ->notEmptyString('password', __('Password required'))
             ->minLength('password', 3, __('Minimum length is 3'))
             ->maxLength('password', 1000, __('Maximum length is 1000'))
-            ->requirePresence('password2', $required, __('Key is required'))
+            ->requirePresence('password2', $required, __('Field is required'))
             ->notEmptyString('password2', __('Password required'))
             ->minLength('password2', 3, __('Minimum length is 3'))
             ->maxLength('password2', 1000, __('Maximum length is 1000'))
@@ -186,9 +190,9 @@ class UserValidator
 
         // Intentionally not validating user existence as invalid login should be vague
         $validator
-            ->requirePresence('email', true, __('Key is required'))
+            ->requirePresence('email', true, __('Field is required'))
             ->email('email', false, __('Invalid email'))
-            ->requirePresence('password', true, __('Key is required'))
+            ->requirePresence('password', true, __('Field is required'))
             ->notEmptyString('password', __('Invalid password'))
             // Further password validating seems not very useful and could lead to issues if password validation rules
             // change and user want's to log in with a password that was created before the rule change
@@ -211,7 +215,7 @@ class UserValidator
         $validator = new Validator();
 
         // Intentionally not validating user existence as it would be a security flaw to tell the user if email exists
-        $validator->requirePresence('email', true, __('Key is required'))
+        $validator->requirePresence('email', true, __('Field is required'))
             ->email('email', false, __('Invalid email'));
 
         // Validate and throw exception if there are errors

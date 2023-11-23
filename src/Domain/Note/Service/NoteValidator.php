@@ -24,11 +24,11 @@ class NoteValidator
     public function validateNoteValues(array $noteValues, bool $isCreateMode = true): void
     {
         $validator = new Validator();
-        $validator = $validator->requirePresence('message', true, __('Key is required'))
+        $validator = $validator->requirePresence('message', true, __('Field is required'))
             ->maxLength('message', 1000, __('Maximum length is 1000', 1000))
             // is_main and client_id keys only required on creation
-            ->requirePresence('is_main', $isCreateMode, __('Key is required'))
-            ->requirePresence('client_id', $isCreateMode, __('Key is required'));
+            ->requirePresence('is_main', $isCreateMode, __('Field is required'))
+            ->requirePresence('client_id', $isCreateMode, __('Field is required'));
 
         if ((int)$noteValues['is_main'] === 1) {
             // If main note, the min length can be 0 as we can't delete it

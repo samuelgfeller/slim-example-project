@@ -48,7 +48,7 @@ export function displayUserCreateModal() {
         <div class="form-input-div">
             <label for="email-input">${translated['E-Mail']}</label>
             <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
-            maxlength="254" required>
+            maxlength="254" required autocomplete="off">
         </div>
         <div class="form-input-div" id="user-lang-input-group-div">
             <label>${translated['Language']}</label><br>
@@ -56,11 +56,13 @@ export function displayUserCreateModal() {
         </div>
         <div class="form-input-div" id="password1-input-div">
             <label for="password1-input">${translated['New password']}</label>
-            <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
+            <input type="password" name="password" id="password1-input" minlength="3" required 
+             autocomplete="new-password" class="form-input">
         </div>
         <div class="form-input-div">
             <label for="password2-input">${translated['Repeat new password']}</label>
-            <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
+            <input type="password" name="password2" id="password2-input" minlength="3" required
+             autocomplete="new-password" class="form-input">
         </div>
         <div class="form-input-div">
             <label for="user-status-select">${translated['Status']}</label>

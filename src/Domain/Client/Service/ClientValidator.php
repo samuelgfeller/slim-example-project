@@ -29,22 +29,22 @@ class ClientValidator
         $validator = new Validator();
 
         $validator
-            // Require presence indicates that the key is required in the request body
-            // When second parameter "mode" is false, the fields presence is not required
-            ->requirePresence('first_name', $isCreateMode, __('Key is required'))
-            // Cake validation library automatically sets a rule that field cannot be null as soon as there is any
-            // validation rule set for the field. This is why we have to allow empty string (null is also allowed by it)
+            // Require presence indicates that the Field is required in the request body
+            // When second parameter "mode" is false, the field presence is not required
+            ->requirePresence('first_name', $isCreateMode, __('Field is required'))
+            // allowEmptyString to enable null and empty string because cakephp validation library automatically
+            // sets a rule that the field cannot be null when there is another validation rule set for the field.
             ->allowEmptyString('first_name')
             ->minLength('first_name', 2, __('Minimum length is 2'))
             ->maxLength('first_name', 100, __('Maximum length is 100'))
-            ->requirePresence('last_name', $isCreateMode, __('Key is required'))
+            ->requirePresence('last_name', $isCreateMode, __('Field is required'))
             ->allowEmptyString('last_name')
             ->minLength('last_name', 2, __('Minimum length is 2'))
             ->maxLength('last_name', 100, __('Maximum length is 100'))
-            ->requirePresence('email', $isCreateMode, __('Key is required'))
+            ->requirePresence('email', $isCreateMode, __('Field is required'))
             ->allowEmptyString('email')
             ->email('email', false, __('Invalid email'))
-            ->requirePresence('birthdate', $isCreateMode, __('Key is required'))
+            ->requirePresence('birthdate', $isCreateMode, __('Field is required'))
             ->allowEmptyDate('birthdate')
             ->date('birthdate', ['ymd', 'mdy', 'dmy'], __('Invalid date value'))
             ->add('birthdate', 'validateNotInFuture', [
@@ -67,11 +67,11 @@ class ClientValidator
                 },
                 'message' => __('Cannot be older than 130 years'),
             ])
-            ->requirePresence('location', $isCreateMode, __('Key is required'))
+            ->requirePresence('location', $isCreateMode, __('Field is required'))
             ->allowEmptyString('location')
             ->minLength('location', 2, __('Minimum length is 2'))
             ->maxLength('location', 100, __('Maximum length is 100'))
-            ->requirePresence('phone', $isCreateMode, __('Key is required'))
+            ->requirePresence('phone', $isCreateMode, __('Field is required'))
             ->allowEmptyString('phone')
             ->minLength('phone', 3, __('Minimum length is 3'))
             ->maxLength('phone', 20, __('Maximum length is 20'))
@@ -94,7 +94,7 @@ class ClientValidator
             ->allowEmptyString('client_message')
             ->minLength('client_message', 3, __('Minimum length is 3'))
             ->maxLength('client_message', 1000, __('Maximum length is 1000'))
-            ->requirePresence('client_status_id', $isCreateMode, __('Key is required'))
+            ->requirePresence('client_status_id', $isCreateMode, __('Field is required'))
             ->notEmptyString('client_status_id', __('Required'))
             ->numeric('client_status_id', __('Invalid option format'))
             ->add('client_status_id', 'exists', [

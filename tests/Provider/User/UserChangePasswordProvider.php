@@ -141,8 +141,8 @@ class UserChangePasswordProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'password' => [0 => 'Key is required'],
-                            'password2' => [0 => 'Key is required'],
+                            'password' => [0 => 'Field is required'],
+                            'password2' => [0 => 'Field is required'],
                         ],
                     ],
                 ],

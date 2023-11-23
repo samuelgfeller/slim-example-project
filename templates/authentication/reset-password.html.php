@@ -64,7 +64,7 @@ $this->setLayout('');
         <!--   Password 1    -->
         <div class="form-input-div <?= isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password1-input"><?= __('Password') ?></label>
-            <input type="password" name="password" id="password1-input" minlength="3" required>
+            <input type="password" name="password" id="password1-input" minlength="3" required autocomplete="new-password">
             <?= isset($validation['password']) ? '<strong class="err-msg">' . $validation['password'][0] . '</strong>' : '' ?>
         </div>
 
@@ -72,7 +72,7 @@ $this->setLayout('');
         <div class="form-input-div <?= isset($validation['password2']) ? ' input-group-error' : '' ?>"
              style="margin-bottom: 0;">
             <label for="password2-input"><?= __('Repeat password') ?></label>
-            <input type="password" name="password2" id="password2-input" minlength="3" required>
+            <input type="password" name="password2" id="password2-input" minlength="3" required autocomplete="new-password">
             <?= isset($validation['password2']) ?
             '<strong class="err-msg">' . $validation['password2'][0] . '</strong>' : '' ?>
         </div>

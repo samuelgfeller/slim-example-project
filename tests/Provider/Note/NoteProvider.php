@@ -375,13 +375,13 @@ class NoteProvider
                     'data' => [
                         'errors' => [
                             'message' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'is_main' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'client_id' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                         ],
                     ],
@@ -438,7 +438,7 @@ class NoteProvider
                     'data' => [
                         'errors' => [
                             'message' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                         ],
                     ],

@@ -110,22 +110,22 @@ class ApiClientCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'last_name' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'email' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'birthdate' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'location' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                             'phone' => [
-                                0 => 'Key is required',
+                                0 => 'Field is required',
                             ],
                         ],
                     ],

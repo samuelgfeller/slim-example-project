@@ -45,7 +45,7 @@ will be other themes than just light and dark, so it makes sense to create a php
     // UserValidator.php  
     $validator
     // ...
-    ->requirePresence('theme', false, __('Key is required'))
+    ->requirePresence('theme', false, __('Field is required'))
     ->add('theme', 'themeIsAvailable', [
           'rule' => function ($value, $context) {
               // Check if given user status is one of the enum cases values

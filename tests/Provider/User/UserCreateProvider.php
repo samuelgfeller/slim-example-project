@@ -146,8 +146,8 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Minimum length is 2'],
-                            'surname' => [0 => 'Minimum length is 2'],
+                            'first_name' => [0 => 'Required'],
+                            'surname' => [0 => 'Required'],
                             'email' => [0 => 'Invalid email'],
                             'status' => [0 => 'Invalid option'],
                             // Same error message twice because not numeric and not existing
@@ -165,13 +165,13 @@ class UserCreateProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'first_name' => [0 => 'Key is required'],
-                            'surname' => [0 => 'Key is required'],
-                            'email' => [0 => 'Key is required'],
-                            'status' => [0 => 'Key is required'],
-                            'user_role_id' => [0 => 'Key is required'],
-                            'password' => [0 => 'Key is required'],
-                            'password2' => [0 => 'Key is required'],
+                            'first_name' => [0 => 'Field is required'],
+                            'surname' => [0 => 'Field is required'],
+                            'email' => [0 => 'Field is required'],
+                            'status' => [0 => 'Field is required'],
+                            'user_role_id' => [0 => 'Field is required'],
+                            'password' => [0 => 'Field is required'],
+                            'password2' => [0 => 'Field is required'],
                         ],
                     ],
                 ],

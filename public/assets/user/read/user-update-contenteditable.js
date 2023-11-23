@@ -45,8 +45,12 @@ function validateContentEditableAndSaveUserValue() {
 function saveUserValueAndDisableContentEditable(field) {
     disableEditableField(field);
     let userId = document.getElementById('user-id').value;
+    let submitValue = field.textContent.trim();
+    // submitValue = submitValue === '' ? null : submitValue;
+    console.log(submitValue);
+
     submitUpdate(
-        {[field.dataset.name]: field.textContent.trim()},
+        {[field.dataset.name]: submitValue},
         `users/${userId}`,
         true
     ).then(responseJson => {

@@ -34,16 +34,18 @@ export function displayChangePasswordModal() {
             `<div class="form-input-div">
                     <label for="old-password-inp">${translated['Old password']}</label>
                     <input type="password" name="old_password" id="old-password-inp" minlength="3" required 
-                    class="form-input">
+                    class="form-input" autocomplete="current-password">
                 </div>` : ''
     }
     <div class="form-input-div" id="password1-input-div">
     <label for="password1-input">${translated['New password']}</label>
-    <input type="password" name="password" id="password1-input" minlength="3" required class="form-input">
+    <input type="password" name="password" id="password1-input" minlength="3" required class="form-input" 
+    autocomplete="new-password"">
     </div>
     <div class="form-input-div">
     <label for="password2-input">${translated['Repeat new password']}</label>
-    <input type="password" name="password2" id="password2-input" minlength="3" required class="form-input">
+    <input type="password" name="password2" id="password2-input" minlength="3" required 
+    autocomplete="new-password" class="form-input">
     </div>
     </div>`;
     let footer = `<input type="submit" id="change-password-submit-btn" class="submit-btn modal-submit-btn" 

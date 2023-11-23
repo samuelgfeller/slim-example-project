@@ -17,7 +17,7 @@ class ValidationException extends RuntimeException
 
     /**
      * Transform the validation error output from the library to array that is used by the frontend.
-     * The changes are tiny but the main purpose is to add an abstraction layer in case the validation
+     * The changes are tiny, but the main purpose is to add an abstraction layer in case the validation
      * library changes its error output format in the future so that only this function has to be
      * changed instead of the frontend.
      *
@@ -69,9 +69,9 @@ class ValidationException extends RuntimeException
     {
         $validationErrorsForOutput = [];
         foreach ($validationErrors as $fieldName => $fieldErrors) {
-            // There may be the case that there are multiple error messages for a single field.
+            // There may be cases with multiple error messages for a single field.
             foreach ($fieldErrors as $infringedRuleName => $infringedRuleMessage) {
-                // Output is basically the same except we don't need the infringed rule name as key
+                // Output is basically the same except without the rule name as a key.
                 $validationErrorsForOutput[$fieldName][] = $infringedRuleMessage;
             }
         }
