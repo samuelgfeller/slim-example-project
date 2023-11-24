@@ -8,7 +8,6 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Odan\Session\Middleware\SessionStartMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
@@ -150,12 +149,7 @@ return [
 
     SessionInterface::class => function (ContainerInterface $container) {
         $options = $container->get('settings')['session'];
-
         return new PhpSession($options);
-    },
-
-    SessionStartMiddleware::class => function (ContainerInterface $container) {
-        return new SessionStartMiddleware($container->get(SessionInterface::class));
     },
 
     BasePathMiddleware::class => function (ContainerInterface $container) {

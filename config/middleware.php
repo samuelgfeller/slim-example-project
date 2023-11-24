@@ -27,8 +27,7 @@ return function (App $app) {
     // but after PhpViewExtensionMiddleware as it needs the user id)
     $app->add(\App\Application\Middleware\UserNetworkSessionDataMiddleware::class);
 
-    // Has to be after PhpViewExtensionMiddleware to be called before on request as session is used in php-view extension
-    // LocaleMiddleware the same, session has to be established. All middlewares that need session must go above this line
+    // Has to be after every middleware that needs a started session (LIFO)
     $app->add(SessionStartMiddleware::class);
 
     // Cors middleware has to be before routing so that it is performed after routing (LIFO)

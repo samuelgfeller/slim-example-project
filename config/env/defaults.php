@@ -153,8 +153,9 @@ $settings['renderer'] = [
 
 // Session
 $settings['session'] = [
-    'name' => 'webapp',
-    'cache_expire' => 0,
+    'name' => 'slim-example-project',
+    // 5h session lifetime
+    'lifetime' => 18000, // Time in seconds
 ];
 
 $settings['logger'] = [
