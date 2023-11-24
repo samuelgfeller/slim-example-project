@@ -14,6 +14,7 @@ applications.
 
 External library dependencies are kept to a minimum to facilitate maintenance and ensure long-term viability.
 
+**Documentation in the [Wiki section](https://github.com/samuelgfeller/slim-example-project/wiki)**.
 
 <details>
   <summary><h2>Installation guide</h2></summary>
