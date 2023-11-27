@@ -1,32 +1,32 @@
 <?php
 /** @var \Odan\Session\FlashInterface $flash */
-
-// Client side flash message generation in general.js
 ?>
 
 <aside id="flash-container">
     <?php
-    // Display errors if there are some
-    foreach ($flash?->all() ?? [] as $key => $flashCategory) {
-        foreach ($flashCategory as $msg) { ?>
-            <dialog class="flash <?= $key /* success, error, info, warning */ ?>">
+    // Display flash messages if there are any
+    foreach ($flash?->all() ?? [] as $flashCategory => $flashMessages) {
+        foreach ($flashMessages as $msg) { ?>
+            <dialog class="flash <?= $flashCategory /* success, error, info, warning */ ?>">
                 <figure class="flash-fig" draggable="false">
                     <?php
-                    // Sadly I cannot use the `content:` tag because its impossible set basepath for css ?>
-                    <img class="<?= $key === "success" ? "open" : '' ?>" draggable="false"
+                    // If it was possible to set the base path for css, the `content:` tag could be used?>
+                    <img class="<?= $flashCategory === "success" ? "open" : '' ?>" draggable="false"
                          src="assets/general/page-component/flash-message/img/flash-checkmark.svg" alt="success">
-                    <img class="<?= $key === "error" ? "open" : '' ?>" draggable="false"
+                    <img class="<?= $flashCategory === "error" ? "open" : '' ?>" draggable="false"
                          src="assets/general/page-component/flash-message/img/flash-error.svg" alt="error">
-                    <img class="<?= $key === "info" ? "open" : '' ?>" draggable="false"
+                    <img class="<?= $flashCategory === "info" ? "open" : '' ?>" draggable="false"
                          src="assets/general/page-component/flash-message/img/flash-info.svg" alt="info">
-                    <img class="<?= $key === "warning" ? "open" : '' ?>" draggable="false"
+                    <img class="<?= $flashCategory === "warning" ? "open" : '' ?>" draggable="false"
                          src="assets/general/page-component/flash-message/img/flash-warning.svg" alt="warning">
                 </figure>
                 <!-- Elements in flash-message div have to be stuck together, all spaces are interpreted literally and
                  display in DOM -->
-                <div class="flash-message"><h3><?= html(ucfirst($key)) /* Gets overwritten in css, serves as default */
-                        ?> message</h3><p><?= /* Flash messages are written serverside so no xss risk and html should be interpreted*/
-                        $msg ?></p></div>
+                <div class="flash-message"><h3><?= html(ucfirst($flashCategory)) /* Serves as default, is overwritten in  */
+            ?> message</h3><p><?= // No line break between h3 and p
+            /* Flash messages are hardcoded strings on the server, and html is used to format them,
+                   so it should be interpreted. This is the only exception where html() for escaping is not used*/
+            $msg ?></p></div>
                 <span class="flash-close-btn">&times;</span>
             </dialog>
             <?php

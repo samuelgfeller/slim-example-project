@@ -82,7 +82,10 @@ final class LoginSubmitAction
                 $e->getUserEmail() . '"'
             );
             $this->templateRenderer->addPhpViewAttribute('formError', true);
-            $this->templateRenderer->addPhpViewAttribute('formErrorMessage', __('Invalid credentials. Please try again.'));
+            $this->templateRenderer->addPhpViewAttribute(
+                'formErrorMessage',
+                __('Invalid credentials. Please try again.')
+            );
 
             return $this->templateRenderer->render(
                 $response->withStatus(401),
