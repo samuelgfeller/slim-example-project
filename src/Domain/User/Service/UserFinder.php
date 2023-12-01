@@ -7,15 +7,17 @@ use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Data\UserResultData;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
-use App\Domain\User\Service\Authorization\UserAuthorizationGetter;
+use App\Domain\User\Service\Authorization\AuthorizedUserRoleFilterer;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
+use App\Domain\User\Service\Authorization\UserPrivilegeDeterminer;
 
 class UserFinder
 {
     public function __construct(
         private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserAuthorizationGetter $userAuthorizationGetter,
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPrivilegeDeterminer $userPrivilegeDeterminer,
+        private readonly AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
@@ -28,23 +30,23 @@ class UserFinder
 
         foreach ($userResultArray as $key => $userResultData) {
             // Check if authenticated user is allowed to read user
-            if ($this->userAuthorizationChecker->isGrantedToRead($userResultData->id)) {
+            if ($this->userPermissionVerifier->isGrantedToRead($userResultData->id)) {
                 // Authorization limits which entries are in the user role dropdown
-                $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
+                $userResultData->availableUserRoles = $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(
                     $userResultData->userRoleId
                 );
-                $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
+                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->determineUserRoleAssignmentPrivilege(
                     $userResultData->availableUserRoles
                 );
 
                 // Check if user is allowed to change status
-                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
                     (int)$userResultData->id,
                     'status',
                 );
-            // General data privilege like first name, email and so on no needed for list
-            // $userResultData->generalPrivilege = $this->userAuthorizationGetter->getUpdatePrivilegeForUserColumn(
-            //     'general_data', $userResultData->id );
+            // Personal info privilege like first name, email and so on no needed for list
+            // $userResultData->generalPrivilege = $this->userPermissionVerifier->getUpdatePrivilegeForUserColumn(
+            // 'personal_info', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
             }
@@ -69,37 +71,37 @@ class UserFinder
      *
      * @param int $id
      *
+     * @return UserResultData
      * @throws \Exception
      *
-     * @return UserResultData
      */
     public function findUserReadResult(int $id): UserResultData
     {
-        if ($this->userAuthorizationChecker->isGrantedToRead($id)) {
+        if ($this->userPermissionVerifier->isGrantedToRead($id)) {
             $userRow = $this->userFinderRepository->findUserById($id);
             if (!empty($userRow)) {
                 $userResultData = new UserResultData($userRow);
                 // Status privilege
-                $userResultData->statusPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
                     $id,
                     'status',
                 );
                 // Available user roles for dropdown and privilege
-                $userResultData->availableUserRoles = $this->userAuthorizationGetter->getAuthorizedUserRoles(
+                $userResultData->availableUserRoles = $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(
                     $userResultData->userRoleId
                 );
-                $userResultData->userRolePrivilege = $this->userAuthorizationGetter->getUserRoleAttributionPrivilege(
+                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->determineUserRoleAssignmentPrivilege(
                     $userResultData->availableUserRoles
                 );
 
-                // General data privilege like first name, email and so on
-                $userResultData->generalPrivilege = $this->userAuthorizationGetter->getMutationPrivilegeForUserColumn(
+                // Personal info privilege like first name, email and so on
+                $userResultData->generalPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
                     $id,
-                    'general_data',
+                    'personal_info',
                 );
                 // Password change without verification of old password
-                $userResultData->passwordWithoutVerificationPrivilege = $this->userAuthorizationGetter->
-                getMutationPrivilegeForUserColumn($id, 'password_without_verification');
+                $userResultData->passwordWithoutVerificationPrivilege = $this->userPrivilegeDeterminer->
+                determineMutationPrivilege($id, 'password_without_verification');
 
                 return $userResultData;
             }

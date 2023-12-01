@@ -16,7 +16,7 @@ change one action.
 #### Recap
 * `UserTheme.php` create theme enum. 
 * `UserValidator.php` add validation line in `validateUserValues()`.
-* `UserAuthorizationChecker.php` add to the `$grantedUpdateKeys` in `isGrantedToUpdate()`.
+* `UserPermissionVerifier.php` add to the `$grantedUpdateKeys` in `isGrantedToUpdate()`.
 * `UserUpdater.php` add `theme` to the authorized update keys in `updateUser()`.
 * `UserData.php` add instance variable and populate in constructor.
 * `UserFinderRepository.php` add to the class attribute `$fields`.

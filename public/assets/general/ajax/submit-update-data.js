@@ -11,10 +11,10 @@ import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handle
  * @param {string} route after base path e.g. clients/1
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
  * If true, the redirect url is the same as the given route
- *
+ * @param domFieldId field id to display the validation error message for the correct field
  * @return Promise with as content server response as JSON
  */
-export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauthenticated = false) {
+export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauthenticated = false, domFieldId = null) {
     return new Promise(function (resolve, reject) {
         // Make ajax call
         let xHttp = new XMLHttpRequest();
@@ -23,7 +23,7 @@ export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauth
                 // Fail
                 if (xHttp.status !== 201 && xHttp.status !== 200) {
                     // Default fail handler
-                    handleFail(xHttp);
+                    handleFail(xHttp, domFieldId);
                     // reject() only needed if promise is caught with .catch()
                     reject(JSON.parse(xHttp.responseText));
                 }

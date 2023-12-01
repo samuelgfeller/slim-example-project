@@ -6,7 +6,7 @@ use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 
@@ -17,7 +17,7 @@ class UserFilterChipProvider
         private readonly SessionInterface $session,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
@@ -101,7 +101,7 @@ class UserFilterChipProvider
                     'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => null,
-                    'authorized' => $this->userAuthorizationChecker->isGrantedToReadUserActivity((int)$userId, false),
+                    'authorized' => $this->userPermissionVerifier->isGrantedToReadUserActivity((int)$userId, false),
                 ]);
             }
         }

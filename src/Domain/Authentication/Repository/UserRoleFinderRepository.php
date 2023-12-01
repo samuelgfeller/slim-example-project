@@ -55,6 +55,25 @@ class UserRoleFinderRepository
     }
 
     /**
+     * Get role hierarchy from a user that has status active.
+     *
+     * @param int $userId
+     *
+     * @return int user role hierarchy (lower hierarchy means higher privileged role)
+     */
+    public function getRoleHierarchyByUserId(int $userId): int
+    {
+        $query = $this->queryFactory->selectQuery()
+            ->select(['user_role.hierarchy'])
+            ->from('user')
+            ->leftJoin('user_role', ['user.user_role_id = user_role.id'])
+            ->where(['user.deleted_at IS' => null, 'user.id' => $userId]);
+        $roleResultRow = $query->execute()->fetch('assoc');
+        // If no role found, return highest hierarchy which means lowest privileged role
+        return (int)($roleResultRow['hierarchy'] ?? 1000);
+    }
+
+    /**
      * Get user role hierarchies mapped by name or id if param is true.
      *
      * @param bool $mappedById if key of return array should be the role id or name

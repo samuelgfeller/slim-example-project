@@ -4,7 +4,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Repository\ClientUpdaterRepository;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Exception\InvalidOperationException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
@@ -15,7 +15,7 @@ class ClientUpdater
         private readonly ClientUpdaterRepository $clientUpdaterRepository,
         private readonly ClientValidator $clientValidator,
         private readonly ClientFinder $clientFinder,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -36,7 +36,7 @@ class ClientUpdater
         // Find note in db to compare its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
-        if ($this->clientAuthorizationChecker->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
+        if ($this->clientPermissionVerifier->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
             $updateData = [];
             $responseData = null;
             // Check to be sure that only columns that may be updated are in the final $updateData array

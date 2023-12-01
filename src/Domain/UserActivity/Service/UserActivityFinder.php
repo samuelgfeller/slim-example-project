@@ -3,7 +3,7 @@
 namespace App\Domain\UserActivity\Service;
 
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\UserActivity\Repository\UserActivityRepository;
 use IntlDateFormatter;
 use InvalidArgumentException;
@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteParserInterface;
 class UserActivityFinder
 {
     public function __construct(
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly RouteParserInterface $routeParser,
         private readonly UserFinderRepository $userFinderRepository,
         private readonly UserActivityRepository $userActivityRepository,
@@ -52,7 +52,7 @@ class UserActivityFinder
         }
         $grantedUserIds = [];
         foreach ($userIds as $userId) {
-            if ($this->userAuthorizationChecker->isGrantedToReadUserActivity((int)$userId)) {
+            if ($this->userPermissionVerifier->isGrantedToReadUserActivity((int)$userId)) {
                 $grantedUserIds[] = (int)$userId;
             }
         }

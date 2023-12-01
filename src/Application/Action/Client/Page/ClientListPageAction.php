@@ -4,7 +4,7 @@ namespace App\Application\Action\Client\Page;
 
 use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authorization\Privilege;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,7 +14,7 @@ final class ClientListPageAction
     public function __construct(
         private readonly TemplateRenderer $templateRenderer,
         private readonly ClientListFilterChipProvider $clientListFilterChipGetter,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker
+        private readonly ClientPermissionVerifier $clientPermissionVerifier
     ) {
     }
 
@@ -41,7 +41,7 @@ final class ClientListPageAction
         $this->templateRenderer->addPhpViewAttribute('clientListFilters', $clientListFilters);
         $this->templateRenderer->addPhpViewAttribute(
             'clientCreatePrivilege',
-            $this->clientAuthorizationChecker->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
+            $this->clientPermissionVerifier->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
         );
 
         return $this->templateRenderer->render($response, 'client/clients-list.html.php');

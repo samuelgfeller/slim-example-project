@@ -5,7 +5,7 @@ namespace App\Domain\User\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserDeleterRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -16,7 +16,7 @@ class UserDeleter
         private readonly LoggerInterface $logger,
         private readonly UserDeleterRepository $userDeleterRepository,
         private readonly SessionInterface $session,
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -33,7 +33,7 @@ class UserDeleter
     public function deleteUser(int $userIdToDelete): bool
     {
         // Check if it's admin or if it's its own post
-        if ($this->userAuthorizationChecker->isGrantedToDelete($userIdToDelete)) {
+        if ($this->userPermissionVerifier->isGrantedToDelete($userIdToDelete)) {
             $isDeleted = $this->userDeleterRepository->deleteUserById($userIdToDelete);
             if ($isDeleted) {
                 $this->userActivityLogger->logUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);

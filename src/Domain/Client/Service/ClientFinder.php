@@ -9,10 +9,10 @@ use App\Domain\Client\Data\ClientListResultCollection;
 use App\Domain\Client\Data\ClientReadResult;
 use App\Domain\Client\Repository\ClientFinderRepository;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationGetter;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationGetter;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
+use App\Domain\Client\Service\Authorization\ClientPrivilegeDeterminer;
+use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
+use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
 use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
@@ -25,10 +25,10 @@ class ClientFinder
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
         private readonly NoteFinder $noteFinder,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
-        private readonly ClientAuthorizationGetter $clientAuthorizationGetter,
-        private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
+        private readonly ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
+        private readonly NotePrivilegeDeterminer $notePrivilegeDeterminer,
+        private readonly NotePermissionVerifier $notePermissionVerifier,
     ) {
     }
 
@@ -68,13 +68,13 @@ class ClientFinder
         $clientResultsWithAggregates = $this->clientFinderRepository->findClientsWithResultAggregate($whereArray);
         // Add assigned user and client status privilege to each clientResultAggregate
         foreach ($clientResultsWithAggregates as $key => $client) {
-            if ($this->clientAuthorizationChecker->isGrantedToRead($client->userId, $client->deletedAt)) {
-                $client->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+            if ($this->clientPermissionVerifier->isGrantedToRead($client->userId, $client->deletedAt)) {
+                $client->assignedUserPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
                     $client->userId,
                     'user_id'
                 );
                 //  Set client status privilege
-                $client->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+                $client->clientStatusPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
                     $client->userId,
                     'client_status_id',
                 );
@@ -109,36 +109,36 @@ class ClientFinder
     {
         $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id
-            && $this->clientAuthorizationChecker->isGrantedToRead(
+            && $this->clientPermissionVerifier->isGrantedToRead(
                 $clientResultAggregate->userId,
                 $clientResultAggregate->deletedAt
             )
         ) {
             // Set client mutation privilege
-            $clientResultAggregate->mainDataPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+            $clientResultAggregate->generalPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
                 $clientResultAggregate->userId,
-                'main_data'
+                'personal_info'
             );
             // Set main note privilege
             if ($clientResultAggregate->mainNoteData !== null) {
-                $clientResultAggregate->mainNoteData->privilege = $this->noteAuthorizationGetter->getMainNotePrivilege(
+                $clientResultAggregate->mainNoteData->privilege = $this->notePrivilegeDeterminer->getMainNotePrivilege(
                     $clientResultAggregate->mainNoteData->userId,
                     $clientResultAggregate->userId
                 );
             }
 
             // Set assigned user privilege
-            $clientResultAggregate->assignedUserPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+            $clientResultAggregate->assignedUserPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
                 $clientResultAggregate->userId,
                 'user_id',
             );
             //  Set client status privilege
-            $clientResultAggregate->clientStatusPrivilege = $this->clientAuthorizationGetter->getMutationPrivilegeForClientColumn(
+            $clientResultAggregate->clientStatusPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
                 $clientResultAggregate->userId,
                 'client_status_id',
             );
             //  Set create note privilege
-            $clientResultAggregate->noteCreatePrivilege = $this->noteAuthorizationChecker->isGrantedToCreate(
+            $clientResultAggregate->noteCreatePrivilege = $this->notePermissionVerifier->isGrantedToCreate(
                 0,
                 $clientResultAggregate->userId,
                 false

@@ -27,13 +27,13 @@ class AuthorizationChecker
      */
     public function isAuthorizedByRole(UserRole $minimalRequiredRole): bool
     {
-        $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->userNetworkSessionData->userId
         );
         // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-        return $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[$minimalRequiredRole->value];
+        return $authenticatedUserRoleHierarchy <= $userRoleHierarchies[$minimalRequiredRole->value];
     }
 }

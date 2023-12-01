@@ -31,7 +31,7 @@ class PasswordResetterWithToken
         // Validate passwords BEFORE token verification as it would be set to usedAt even if passwords are not valid
         $this->userValidator->validatePasswordReset($passwordResetValues);
         // If passwords are valid strings, verify token and set token to used
-        $userId = $this->verificationTokenVerifier->getUserIdIfTokenIsValid(
+        $userId = $this->verificationTokenVerifier->verifyTokenAndGetUserId(
             $passwordResetValues['id'],
             $passwordResetValues['token']
         );

@@ -30,7 +30,7 @@ final class RegisterTokenVerifier
      *
      * @return int
      */
-    public function getUserIdIfRegisterTokenIsValid(int $verificationId, string $token): int
+    public function verifyRegisterTokenAndGetUserId(int $verificationId, string $token): int
     {
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
         if ($verification->userId) {

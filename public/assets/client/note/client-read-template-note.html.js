@@ -12,27 +12,27 @@ export function getNoteHtml(note) {
                     <a href="${window.location.href}#note-${id}-container" 
                         class="note-left-side-label no-style-a">${createdAt}</a>
                     ${/*Show active eye icon if hidden*/ hidden === 1 || hidden === '1' ? `<img 
-                        class="btn-above-note hide-note-btn ${userHasPrivilegeTo(privilege, 'U') ? `` : `
+                        class="btn-above-note hide-note-btn ${privilege.includes('U') ? `` : `
                             not-clickable` /*Add not clickable class when not allowed to update*/}" alt="hide" 
                         style="display: inline-block" src="assets/general/general-img/eye-icon-active.svg"
-                        >` : /* Else the non-active one if allowed*/ userHasPrivilegeTo(privilege, 'U') ? `
+                        >` : /* Else the non-active one if allowed*/ privilege.includes('U') ? `
                         <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg">` : ''}
-                    ${/*Show delete button */ userHasPrivilegeTo(privilege, 'D') ? `<img 
+                    ${/*Show delete button */ privilege.includes('D') ? `<img 
                         class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
                     <span class="discrete-text note-right-side-label-span 
                     ${isClientMessage === 1 ? 'client-message-label' : ''}">${escapeHtml(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
-                   ${userHasPrivilegeTo(privilege, 'R') ? '' : `<div class="hidden-textarea-overlay"></div>`}
+                   ${privilege.includes('R') ? '' : `<div class="hidden-textarea-overlay"></div>`}
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
                     <textarea class="auto-resize-textarea ${isClientMessage === 1 ? 'client-message-textarea' : ''}
-                      ${/* Blur note text if not allowed to read*/ userHasPrivilegeTo(privilege, 'R') ? `
+                      ${/* Blur note text if not allowed to read*/ privilege.includes('R') ? `
                       ` : 'hidden-note-message'}"
                               id="note-${id}"
                               data-note-id="${id}"
                               minlength="4" maxlength="1000" required
-                              data-editable="${userHasPrivilegeTo(privilege, 'U') ? '1' : '0'}"
+                              data-editable="${privilege.includes('U') ? '1' : '0'}"
                               name="message">${escapeHtml(message)}</textarea>
                     <div class="circle-loader client-note" data-note-id="${id}">
                         <div class="checkmark draw"></div>

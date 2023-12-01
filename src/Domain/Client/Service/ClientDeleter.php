@@ -4,7 +4,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Repository\ClientDeleterRepository;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
@@ -14,7 +14,7 @@ class ClientDeleter
     public function __construct(
         private readonly ClientDeleterRepository $clientDeleterRepository,
         private readonly ClientFinder $clientFinder,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
         private readonly NoteDeleterRepository $noteDeleterRepository,
     ) {
@@ -34,7 +34,7 @@ class ClientDeleter
         // Find post in db to get its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
-        if ($this->clientAuthorizationChecker->isGrantedToDelete($clientFromDb->userId)) {
+        if ($this->clientPermissionVerifier->isGrantedToDelete($clientFromDb->userId)) {
             $this->noteDeleterRepository->deleteNotesFromClient($clientId);
             $deleted = $this->clientDeleterRepository->deleteClient($clientId);
             if ($deleted) {

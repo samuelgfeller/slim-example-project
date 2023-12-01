@@ -27,7 +27,7 @@ final class VerificationTokenVerifier
      *
      * @see AccountUnlockTokenVerifier, RegisterTokenVerifier
      */
-    public function getUserIdIfTokenIsValid(int $verificationId, string $token): int
+    public function verifyTokenAndGetUserId(int $verificationId, string $token): int
     {
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
 

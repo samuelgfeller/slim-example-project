@@ -8,10 +8,10 @@ use App\Domain\Authorization\Privilege;
  * The client should know when to display edit and delete icons
  * Admins can edit all notes, users only their own.
  */
-class ClientAuthorizationGetter
+class ClientPrivilegeDeterminer
 {
     public function __construct(
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
     ) {
     }
 
@@ -23,15 +23,15 @@ class ClientAuthorizationGetter
      *
      * @return Privilege
      */
-    public function getMutationPrivilegeForClientColumn(?int $clientOwnerId, ?string $column = null): Privilege
+    public function determineMutationPrivilege(?int $clientOwnerId, ?string $column = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->clientAuthorizationChecker->isGrantedToDelete($clientOwnerId, false)) {
+        if ($this->clientPermissionVerifier->isGrantedToDelete($clientOwnerId, false)) {
             return Privilege::DELETE;
         }
         // Value does not matter as keys are relevant
         if ($column !== null
-            && $this->clientAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
+            && $this->clientPermissionVerifier->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
         ) {
             return Privilege::UPDATE;
         }

@@ -7,7 +7,7 @@ use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Repository\ClientCreatorRepository;
 use App\Domain\Client\Repository\ClientDeleterRepository;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
@@ -18,7 +18,7 @@ class ClientCreator
     public function __construct(
         private readonly ClientValidator $clientValidator,
         private readonly ClientCreatorRepository $clientCreatorRepository,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
         private readonly NoteCreator $noteCreator,
         private readonly ClientDeleterRepository $clientDeleterRepository,
         private readonly UserActivityLogger $userActivityLogger,
@@ -41,7 +41,7 @@ class ClientCreator
 
         $client = new ClientData($clientValues);
 
-        if ($this->clientAuthorizationChecker->isGrantedToCreate($client)) {
+        if ($this->clientPermissionVerifier->isGrantedToCreate($client)) {
             // Insert client
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Insert user activity

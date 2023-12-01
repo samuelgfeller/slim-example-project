@@ -166,7 +166,7 @@ class ClientListActionTest extends TestCase
                 'clientStatusId' => $clientRow['client_status_id'],
                 'age' => (new \DateTime())->diff(new \DateTime($clientRow['birthdate']))->y,
                 // Below not asserted as this test is about filtering not authorization
-                // 'mainDataPrivilege' => null
+                // 'personalInfoPrivilege' => null
                 // 'clientStatusPrivilege' => 'NONE'
                 // 'assignedUserPrivilege' => 'NONE'
                 // 'noteCreatePrivilege' => null

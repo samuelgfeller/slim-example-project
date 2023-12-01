@@ -5,7 +5,7 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 class PasswordChanger
 {
     public function __construct(
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly UserUpdaterRepository $userUpdaterRepository,
         private readonly UserValidator $userValidator,
         private readonly UserActivityLogger $userActivityLogger,
@@ -36,16 +36,16 @@ class PasswordChanger
 
         // If old password is provided and user is allowed to update password
         if (isset($userValues['old_password'])
-            && $this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)
+            && $this->userPermissionVerifier->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
             // Verify old password; throws validation exception if not correct old password
             $this->userValidator->checkIfOldPasswordIsCorrect(['old_password' => $userValues['old_password']], $userId);
         } // Else if old password is not set, check if granted to update without it.
         if (!isset($userValues['old_password'])
             // Check if allowed to update password without the old password
-            && (!$this->userAuthorizationChecker->isGrantedToUpdate(['password_without_verification' => 'value'], $userId)
+            && (!$this->userPermissionVerifier->isGrantedToUpdate(['password_without_verification' => 'value'], $userId)
                 // Check if allowed to update password_hash of that user
-                || !$this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId))
+                || !$this->userPermissionVerifier->isGrantedToUpdate(['password_hash' => 'value'], $userId))
         ) {
             throw new ForbiddenException('Not granted to update password without verification.');
         }
@@ -64,7 +64,7 @@ class PasswordChanger
      */
     private function updateUserPassword(string $newPassword, int $userId): bool
     {
-        if ($this->userAuthorizationChecker->isGrantedToUpdate(['password_hash' => 'value'], $userId)) {
+        if ($this->userPermissionVerifier->isGrantedToUpdate(['password_hash' => 'value'], $userId)) {
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
             $updated = $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
             if ($updated) {

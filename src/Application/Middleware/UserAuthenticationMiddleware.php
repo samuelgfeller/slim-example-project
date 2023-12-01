@@ -29,7 +29,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
     }
 
     /**
-     * User authentication middleware. Check if user is logged in and if not
+     * User authentication middleware. Check if the user is logged in and if not
      * redirect to login page with redirect back query params.
      *
      * @param ServerRequestInterface $request
@@ -37,10 +37,8 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
      *
      * @return ResponseInterface
      */
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         // Check if user is logged in
         if (($loggedInUserId = $this->session->get('user_id')) !== null) {
             // Check that the user status is active
@@ -55,7 +53,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
 
         $response = $this->responseFactory->createResponse();
 
-        // Inform user that he/she has to login first
+        // Inform the user that he/she has to log in before accessing the page
         $this->session->getFlash()->add('info', 'Please login to access this page.');
 
         $queryParams = [];
@@ -70,7 +68,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
             $queryParams['redirect'] = $routeName;
         }
 
-        // If it's a JSON request return 401 with the login url and its possible query params
+        // If it's a JSON request, return 401 with the login url and its possible query params
         if ($request->getHeaderLine('Content-Type') === 'application/json') {
             return $this->jsonResponder->respondWithJson(
                 $response,
@@ -78,7 +76,7 @@ final class UserAuthenticationMiddleware implements MiddlewareInterface
                 401
             );
         }
-        // If no redirect header is set, and it's not a JSON request, redirect to same url as the request after login
+        // If no redirect header is set, and it's not a JSON request, redirect to the same url as the request after login
         $queryParams = ['redirect' => $request->getUri()->getPath()];
 
         return $this->redirectHandler->redirectToRouteName($response, 'login-page', [], $queryParams);

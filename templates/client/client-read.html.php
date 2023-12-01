@@ -38,7 +38,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="full-header-edit-icon-container" data-deleted="<?= $clientAggregate->deletedAt ? '1' : 0 ?>">
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <!-- Img has to be before title because we are only able to style next sibling in css -->
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
@@ -51,7 +51,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         </div>
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
@@ -132,7 +132,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
             <!-- Toggle edit icons on mobile if user has privilege to update something -->
             <?php
-            if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                      id="toggle-personal-info-edit-icons">
@@ -147,7 +147,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-birthdate-btn">
@@ -174,7 +174,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-sex-btn">
@@ -204,7 +204,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
@@ -223,7 +223,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
@@ -242,7 +242,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
@@ -262,7 +262,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-vigilance-level-btn">
@@ -286,13 +286,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         </div>
         <div class="clearfix"></div>
         <?php
-        if ($clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+        if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
             <div id="add-client-personal-info-div">
                 <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons"
                      class="default-icon" alt="add info">
 
                 <!-- Delete trash icon stays always there -->
-                <?= $clientAggregate->mainDataPrivilege->hasPrivilege(Privilege::DELETE) ?
+                <?= $clientAggregate->generalPrivilege->hasPrivilege(Privilege::DELETE) ?
                     ($clientAggregate->deletedAt ? '<img src="assets/general/general-img/action/undelete-icon.svg" 
                     class="personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
                         '<img src="assets/general/general-img/action/trash-icon.svg" 

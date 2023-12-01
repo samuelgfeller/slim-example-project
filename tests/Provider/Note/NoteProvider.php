@@ -437,8 +437,8 @@ class NoteProvider
                     'message' => 'Validation error',
                     'data' => [
                         'errors' => [
-                            'message' => [
-                                0 => 'Field is required',
+                            'is_main' => [
+                                0 => 'Request body is empty',
                             ],
                         ],
                     ],

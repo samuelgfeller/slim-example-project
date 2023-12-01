@@ -8,10 +8,10 @@ use App\Domain\Authorization\Privilege;
  * The client should know when to display edit and delete icons
  * Admins can edit all notes, users only their own.
  */
-class NoteAuthorizationGetter
+class NotePrivilegeDeterminer
 {
     public function __construct(
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly NotePermissionVerifier $notePermissionVerifier,
     ) {
     }
 
@@ -27,13 +27,13 @@ class NoteAuthorizationGetter
     {
         // Delete not possible with main note
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate(1, $noteOwnerId, $clientOwnerId, false)) {
+        if ($this->notePermissionVerifier->isGrantedToUpdate(1, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::UPDATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToCreate(1, $clientOwnerId, false)) {
+        if ($this->notePermissionVerifier->isGrantedToCreate(1, $clientOwnerId, false)) {
             return Privilege::CREATE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, 0, false)) {
+        if ($this->notePermissionVerifier->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, 0, false)) {
             return Privilege::READ;
         }
 
@@ -52,15 +52,15 @@ class NoteAuthorizationGetter
     public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): Privilege
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->noteAuthorizationChecker->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
+        if ($this->notePermissionVerifier->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
             return Privilege::DELETE;
         }
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
+        if ($this->notePermissionVerifier->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
             return Privilege::UPDATE;
         }
         // Create must NOT be included here as it's irrelevant on specific notes and has an impact on "READ" privilege as
         // read is lower than create in the hierarchy.
-        if ($this->noteAuthorizationChecker->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
+        if ($this->notePermissionVerifier->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
             return Privilege::READ;
         }
 

@@ -398,7 +398,7 @@ public function testNoteListAction(
         'noteUpdatedAt' => (new \DateTime($noteData['updated_at']))->format('d. F Y • H:i'),
         'userId' => $noteData['user_id'],
         'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
-        // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
+        // Has to match privilege from notePrivilegeDeterminer.php (rules are in notePermissionVerifier.php)
         'privilege' => $expectedResult['privilege']->value,
     ];
     // Assert response data

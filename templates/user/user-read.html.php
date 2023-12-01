@@ -147,20 +147,21 @@ $this->addAttribute(
             <?php
         }
         $lang = $user->language?->value;
+        $langRadioButtonDisabled = $user->generalPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled';
         ?>
         <div id="language-switch-div">
             <h3 class="label-h3"><?= __('Language') ?></h3>
             <label class="form-radio-input">
-                <input type="radio" name="language" value="en_US" <?= $lang === 'en_US' ? 'checked' : '' ?>>
-                English
+                <input type="radio" name="language" value="en_US" <?= $lang === 'en_US' ? 'checked' : '' ?>
+                    <?= $langRadioButtonDisabled ?>>English
             </label>
             <label class="form-radio-input">
-                <input type="radio" name="language" value="de_CH" <?= $lang === 'de_CH' ? 'checked' : '' ?>>
-                Deutsch
+                <input type="radio" name="language" value="de_CH" <?= $lang === 'de_CH' ? 'checked' : '' ?>
+                    <?= $langRadioButtonDisabled ?>>Deutsch
             </label>
             <label class="form-radio-input">
-                <input type="radio" name="language" value="fr_CH" <?= $lang === 'fr_CH' ? 'checked' : '' ?>>
-                Français
+                <input type="radio" name="language" value="fr_CH" <?= $lang === 'fr_CH' ? 'checked' : '' ?>
+                    <?= $langRadioButtonDisabled ?>>Français
             </label>
         </div>
         <h3 class="label-h3"><?= __('Metadata') ?></h3>

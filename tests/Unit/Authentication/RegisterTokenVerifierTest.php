@@ -45,7 +45,7 @@ class RegisterTokenVerifierTest extends TestCase
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|\Exception
      */
-    public function testGetUserIdIfRegisterTokenIsValidAlreadyVerified(
+    public function testVerifyRegisterTokenAndGetUserIdAlreadyVerified(
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
@@ -63,7 +63,7 @@ class RegisterTokenVerifierTest extends TestCase
         $this->expectExceptionMessage('User status is not "' . UserStatus::Unverified->value . '"');
 
         // Call function under test
-        $this->container->get(RegisterTokenVerifier::class)->getUserIdIfRegisterTokenIsValid(
+        $this->container->get(RegisterTokenVerifier::class)->verifyRegisterTokenAndGetUserId(
             $verification->id,
             $clearTextToken
         );

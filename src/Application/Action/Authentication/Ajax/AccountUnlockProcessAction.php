@@ -31,7 +31,7 @@ final class AccountUnlockProcessAction
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
             try {
-                $userId = $this->accountUnlockTokenVerifier->getUserIdIfUnlockTokenIsValid(
+                $userId = $this->accountUnlockTokenVerifier->verifyUnlockTokenAndGetUserId(
                     (int)$queryParams['id'],
                     $queryParams['token']
                 );

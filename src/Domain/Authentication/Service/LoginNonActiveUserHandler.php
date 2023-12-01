@@ -26,6 +26,7 @@ class LoginNonActiveUserHandler
         private readonly LocaleHelper $localeHelper,
         private readonly SecurityEmailChecker $securityEmailChecker,
         private readonly LoggerInterface $logger,
+        private readonly AuthenticationLogger $authenticationLogger,
         readonly Settings $settings,
     ) {
         $this->mainContactEmail = $this->settings->get(
@@ -61,6 +62,9 @@ class LoginNonActiveUserHandler
         $unableToLoginException = new UnableToLoginStatusNotActiveException(
             __('Unable to login at the moment, please check your email inbox for a more detailed message.')
         );
+
+        // Log failed login attempt
+        $this->authenticationLogger->logLoginRequest($dbUser->email, false, $dbUser->id);
 
         try {
             $userId = $dbUser->id;

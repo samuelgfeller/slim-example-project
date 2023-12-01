@@ -33,7 +33,7 @@ final class RegisterVerifyProcessAction
         // There may be other query params e.g. redirect
         if (isset($queryParams['id'], $queryParams['token'])) {
             try {
-                $userId = $this->registerTokenVerifier->getUserIdIfRegisterTokenIsValid(
+                $userId = $this->registerTokenVerifier->verifyRegisterTokenAndGetUserId(
                     (int)$queryParams['id'],
                     $queryParams['token']
                 );

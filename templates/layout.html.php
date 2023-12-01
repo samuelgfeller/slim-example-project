@@ -7,8 +7,8 @@
  * @var string $currRouteName current route name
  * @var \Psr\Http\Message\UriInterface $uri
  * @var array $config 'public' configuration values
- * @var bool $userListAuthorization if user is allowed to read other users
- * @var string|int|null $authenticatedUser logged in user id or null if not authenticated
+ * @var bool $userListAuthorization if the user is allowed to read other users
+ * @var string|int|null $authenticatedUser logged-in user id or null if not authenticated
  */
 
 // echo strftime("%A %e %B %Y", mktime(0, 0, 0, 12, 22, 1978));

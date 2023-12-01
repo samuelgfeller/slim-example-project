@@ -30,7 +30,7 @@ final class AccountUnlockTokenVerifier
      *
      * @return int
      */
-    public function getUserIdIfUnlockTokenIsValid(int $verificationId, string $token): int
+    public function verifyUnlockTokenAndGetUserId(int $verificationId, string $token): int
     {
         $verification = $this->verificationTokenFinderRepository->findUserVerification($verificationId);
         // Verify given token with token in database

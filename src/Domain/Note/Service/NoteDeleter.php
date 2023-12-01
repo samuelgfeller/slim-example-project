@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Exception\InvalidOperationException;
 use App\Domain\Note\Repository\NoteDeleterRepository;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
+use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
@@ -14,7 +14,7 @@ class NoteDeleter
     public function __construct(
         private readonly NoteDeleterRepository $noteDeleterRepository,
         private readonly NoteFinder $noteFinder,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly NotePermissionVerifier $notePermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -37,7 +37,7 @@ class NoteDeleter
             throw new InvalidOperationException('The main note cannot be deleted.');
         }
 
-        if ($this->noteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)) {
+        if ($this->notePermissionVerifier->isGrantedToDelete($noteFromDb->userId)) {
             $deleted = $this->noteDeleterRepository->deleteNote($noteId);
             if ($deleted) {
                 $this->userActivityLogger->logUserActivity(

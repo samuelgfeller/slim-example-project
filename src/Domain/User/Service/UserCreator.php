@@ -12,7 +12,7 @@ use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Repository\UserCreatorRepository;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -21,7 +21,7 @@ final class UserCreator
     public function __construct(
         private readonly UserValidator $userValidator,
         private readonly SecurityEmailChecker $emailSecurityChecker,
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly UserCreatorRepository $userCreatorRepository,
         private readonly VerificationTokenCreator $verificationTokenCreator,
         private readonly RegistrationMailSender $registrationMailer,
@@ -44,7 +44,7 @@ final class UserCreator
     public function createUser(array $userValues, ?string $captcha = null, array $queryParams = []): bool|int
     {
         // Before validation, check if authenticated user is authorized to create user with the given data
-        if ($this->userAuthorizationChecker->isGrantedToCreate($userValues)) {
+        if ($this->userPermissionVerifier->isGrantedToCreate($userValues)) {
             // * Validation has to be done AFTER authorization check
             // to not reveal potential sensitive infos such as from the validation messages
             $this->userValidator->validateUserValues($userValues);

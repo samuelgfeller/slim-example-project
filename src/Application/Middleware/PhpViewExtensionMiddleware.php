@@ -3,7 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Common\JsImportVersionAdder;
-use App\Domain\User\Service\Authorization\UserAuthorizationChecker;
+use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\Utility\Settings;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
@@ -28,7 +28,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         private readonly SessionInterface $session,
         private readonly JsImportVersionAdder $jsImportVersionAdder,
         Settings $settings,
-        private readonly UserAuthorizationChecker $userAuthorizationChecker,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly RouteParserInterface $routeParser
     ) {
         $this->publicSettings = $settings->get('public');
@@ -60,7 +60,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             try {
                 $this->phpRenderer->addAttribute(
                     'userListAuthorization',
-                    $this->userAuthorizationChecker->isGrantedToRead($loggedInUserId + 1, false)
+                    $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false)
                 );
             } catch (DatabaseException $databaseException) {
                 // Mysql connection not working. Caught here to prevent error page from crashing

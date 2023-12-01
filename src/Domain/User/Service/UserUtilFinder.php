@@ -4,12 +4,12 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
-use App\Domain\User\Service\Authorization\UserAuthorizationGetter;
+use App\Domain\User\Service\Authorization\AuthorizedUserRoleFilterer;
 
 class UserUtilFinder
 {
     public function __construct(
-        private readonly UserAuthorizationGetter $userAuthorizationGetter,
+        private readonly AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
     ) {
     }
 
@@ -21,7 +21,7 @@ class UserUtilFinder
     public function findUserDropdownValues(): array
     {
         return [
-            'userRoles' => $this->userAuthorizationGetter->getAuthorizedUserRoles(),
+            'userRoles' => $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(),
             'statuses' => UserStatus::toTranslatedNamesArray(),
             'languages' => UserLang::toArray(),
         ];

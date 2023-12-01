@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Repository\NoteCreatorRepository;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
+use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\UserActivity\Service\UserActivityLogger;
@@ -16,7 +16,7 @@ class NoteCreator
     public function __construct(
         private readonly NoteValidator $noteValidator,
         private readonly NoteCreatorRepository $noteCreatorRepository,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly NotePermissionVerifier $notePermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
         private readonly UserNetworkSessionData $userNetworkSessionData,
         private readonly UserFinder $userFinder,
@@ -37,7 +37,7 @@ class NoteCreator
         // Exception thrown if validation fails
         $this->noteValidator->validateNoteValues($noteValues, true);
 
-        if ($this->noteAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
+        if ($this->notePermissionVerifier->isGrantedToCreate((int)$noteValues['is_main'])) {
             $noteId = $this->noteCreatorRepository->insertNote($noteValues);
             if (!empty($noteId)) {
                 $this->userActivityLogger->logUserActivity(

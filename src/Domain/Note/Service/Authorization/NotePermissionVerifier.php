@@ -7,7 +7,7 @@ use App\Domain\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-class NoteAuthorizationChecker
+class NotePermissionVerifier
 {
     public function __construct(
         private readonly SessionInterface $session,
@@ -17,7 +17,7 @@ class NoteAuthorizationChecker
     }
 
     /**
-     * Check if authenticated user is allowed to read note.
+     * Check if the authenticated user is allowed to read note.
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
@@ -35,17 +35,17 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes
-            if (($authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
+            if (($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
                 && ( // When hidden is not null or 0, user has to be advisor to read note
                     in_array($isHidden, [null, 0, false], true)
-                    || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]
+                    || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]
                     // If authenticated user is client owner or note owner -> granted to read hidden notes
                     || $loggedInUserId === $clientOwnerId || $loggedInUserId === $noteOwnerId
                 )
@@ -74,16 +74,16 @@ class NoteAuthorizationChecker
     public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             if (($isMain === 0 // newcomers may see create notes for any client
-                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
+                    && $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
                 || ($isMain === 1 // only advisors and higher may create main notes
-                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])) {
+                    && $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])) {
                 return true;
             }
         }
@@ -114,7 +114,7 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
@@ -123,10 +123,10 @@ class NoteAuthorizationChecker
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
             if (($isMain === 0 && ($loggedInUserId === $noteOwnerId
-                        || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]))
+                        || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]))
                 // If it's a main note, advisors and higher may edit it and $clientOwnerId could be relevant here
                 || ($isMain === 1 // Should be identical to client update basic info authorization
-                    && $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])
+                    && $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value])
             ) {
                 return true;
             }
@@ -158,7 +158,7 @@ class NoteAuthorizationChecker
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser(
+            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
@@ -167,7 +167,7 @@ class NoteAuthorizationChecker
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
             if ($loggedInUserId === $noteOwnerId
-                || $authenticatedUserRoleData->hierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
+                || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 return true;
             }
         }

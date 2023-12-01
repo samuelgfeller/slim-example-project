@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Repository\NoteUpdaterRepository;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationChecker;
+use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
@@ -15,7 +15,7 @@ class NoteUpdater
         private readonly NoteValidator $noteValidator,
         private readonly NoteUpdaterRepository $noteUpdaterRepository,
         private readonly NoteFinder $noteFinder,
-        private readonly NoteAuthorizationChecker $noteAuthorizationChecker,
+        private readonly NotePermissionVerifier $notePermissionVerifier,
         private readonly UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -40,7 +40,7 @@ class NoteUpdater
 
         $note = new NoteData($noteValues);
 
-        if ($this->noteAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain ?? 0, $noteFromDb->userId)) {
+        if ($this->notePermissionVerifier->isGrantedToUpdate($noteFromDb->isMain ?? 0, $noteFromDb->userId)) {
             $updateData = [];
             // Change message
             if (null !== $note->message) {
@@ -51,11 +51,13 @@ class NoteUpdater
             if (null !== $note->hidden) {
                 $updateData['hidden'] = $note->hidden;
             }
-
-            $updated = $this->noteUpdaterRepository->updateNote($updateData, $noteId);
-            if ($updated) {
-                $this->userActivityLogger->logUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
+            $updated = false;
+            // $updateData empty string if request body is empty
+            if ($updateData !== []) {
+                $updated = $this->noteUpdaterRepository->updateNote($updateData, $noteId);
             }
+            $this->userActivityLogger->logUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
+
 
             return $updated;
         }

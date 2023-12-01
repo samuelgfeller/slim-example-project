@@ -37,13 +37,9 @@ final class LoginSubmitAction
 
         try {
             // Throws InvalidCredentialsException if not allowed
-            $userId = $this->loginVerifier->getUserIdIfAllowedToLogin(
-                $submitValues,
-                $submitValues['g-recaptcha-response'] ?? null,
-                $queryParams
-            );
+            $userId = $this->loginVerifier->verifyLoginAndGetUserId($submitValues, $queryParams);
 
-            // Clear all session data and regenerate session ID
+            // Regenerate session ID
             $this->sessionManager->regenerateId();
             // Add user to session
             $this->session->set('user_id', $userId);
@@ -107,7 +103,7 @@ final class LoginSubmitAction
                 ['email' => $submitValues['email']],
             );
         } catch (UnableToLoginStatusNotActiveException $unableToLoginException) {
-            // When user doesn't have status active
+            // When user status is not "active"
             $this->templateRenderer->addPhpViewAttribute('formError', true);
             // Add form error message
             $this->templateRenderer->addPhpViewAttribute('formErrorMessage', $unableToLoginException->getMessage());

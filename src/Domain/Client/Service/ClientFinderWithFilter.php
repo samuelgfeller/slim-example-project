@@ -4,7 +4,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientListResultCollection;
 use App\Domain\Client\Exception\InvalidClientFilterException;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
 
@@ -13,7 +13,7 @@ class ClientFinderWithFilter
     public function __construct(
         private readonly ClientFinder $clientFinder,
         private readonly ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
         private readonly FilterSettingSaver $filterSettingSaver,
     ) {
     }
@@ -101,7 +101,7 @@ class ClientFinderWithFilter
         );
         $clientListResultCollection = $this->clientFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
-        $clientListResultCollection->clients = $this->clientAuthorizationChecker->removeNonAuthorizedClientsFromList(
+        $clientListResultCollection->clients = $this->clientPermissionVerifier->removeNonAuthorizedClientsFromList(
             $clientListResultCollection->clients
         );
 

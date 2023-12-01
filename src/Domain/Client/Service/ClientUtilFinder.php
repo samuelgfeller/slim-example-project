@@ -4,7 +4,7 @@ namespace App\Domain\Client\Service;
 
 use App\Domain\Client\Data\ClientDropdownValuesData;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
-use App\Domain\Client\Service\Authorization\ClientAuthorizationChecker;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 
@@ -14,7 +14,7 @@ class ClientUtilFinder
         private readonly UserFinderRepository $userFinderRepository,
         private readonly UserNameAbbreviator $userNameAbbreviator,
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly ClientAuthorizationChecker $clientAuthorizationChecker,
+        private readonly ClientPermissionVerifier $clientPermissionVerifier,
     ) {
     }
 
@@ -36,7 +36,7 @@ class ClientUtilFinder
                 // for it to be visible in GUI even if select is greyed out
                 ($alreadyAssignedUserId !== null && $userData->id === $alreadyAssignedUserId)
                 // Check if authenticated user is allowed to assign the currently iterating user to a client
-                || $this->clientAuthorizationChecker->isGrantedToAssignUserToClient($userData->id)
+                || $this->clientPermissionVerifier->isGrantedToAssignUserToClient($userData->id)
             ) {
                 $grantedAssignableUsers[] = $userData;
             }

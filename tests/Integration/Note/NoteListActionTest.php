@@ -125,7 +125,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             'updatedAt' => $dateFormatter->format(new \DateTime($noteData['updated_at'])),
             'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
             'clientFullName' => null,
-            // Has to match privilege from NoteAuthorizationGetter.php (rules are in NoteAuthorizationChecker.php)
+            // Has to match privilege from notePrivilegeDeterminer.php (rules are in notePermissionVerifier.php)
             'privilege' => $expectedResult['privilege']->value,
             'isClientMessage' => 0,
         ];

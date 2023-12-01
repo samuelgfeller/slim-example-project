@@ -7,13 +7,13 @@ use App\Domain\Client\Repository\ClientFinderRepository;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Repository\NoteFinderRepository;
-use App\Domain\Note\Service\Authorization\NoteAuthorizationGetter;
+use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
 
 class NoteFinder
 {
     public function __construct(
         private readonly NoteFinderRepository $noteFinderRepository,
-        private readonly NoteAuthorizationGetter $noteAuthorizationGetter,
+        private readonly NotePrivilegeDeterminer $notePrivilegeDeterminer,
         private readonly ClientFinderRepository $clientFinderRepository,
     ) {
     }
@@ -75,7 +75,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         foreach ($notes as $noteResultData) {
             // Privilege only create possible if user may not see the note but may create one
-            $noteResultData->privilege = $this->noteAuthorizationGetter->getNotePrivilege(
+            $noteResultData->privilege = $this->notePrivilegeDeterminer->getNotePrivilege(
                 (int)$noteResultData->userId,
                 $clientOwnerId,
                 $noteResultData->hidden,

@@ -7,6 +7,7 @@
  * */
 export function displayValidationErrorMessage(fieldName, errorMessage, domFieldId = null) {
     let field;
+    console.log('displayValidationErrorMessage', fieldName, errorMessage, domFieldId);
     if (domFieldId !== null) {
         field = document.querySelector('#' + domFieldId);
     } else {

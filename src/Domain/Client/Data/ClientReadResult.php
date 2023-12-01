@@ -19,8 +19,8 @@ class ClientReadResult extends ClientData
     // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
     public ?NoteData $mainNoteData = null; // Main note data
 
-    // Client main data privilege (first-, second name, phone, email, location)
-    public ?Privilege $mainDataPrivilege = null;
+    // Client personal info privilege (first-, second name, phone, email, location)
+    public ?Privilege $generalPrivilege = null;
     public ?Privilege $clientStatusPrivilege = null;
     public ?Privilege $assignedUserPrivilege = null;
     public ?Privilege $noteCreatePrivilege = null;
@@ -48,7 +48,7 @@ class ClientReadResult extends ClientData
             'notesAmount' => $this->notesAmount,
             'mainNoteData' => $this->mainNoteData,
 
-            'mainDataPrivilege' => $this->mainDataPrivilege?->value,
+            'personalInfoPrivilege' => $this->generalPrivilege?->value,
             'clientStatusPrivilege' => $this->clientStatusPrivilege?->value,
             'assignedUserPrivilege' => $this->assignedUserPrivilege?->value,
             'noteCreatePrivilege' => $this->noteCreatePrivilege?->value,
