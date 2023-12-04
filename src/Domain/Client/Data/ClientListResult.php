@@ -2,16 +2,14 @@
 
 namespace App\Domain\Client\Data;
 
-use App\Domain\Authorization\Privilege;
-
 /**
  * Aggregate DTO to store ClientData combined with
  * client status and assigned user privileges.
  */
 class ClientListResult extends ClientData
 {
-    public ?Privilege $clientStatusPrivilege = null;
-    public ?Privilege $assignedUserPrivilege = null;
+    public ?string $clientStatusPrivilege = null;
+    public ?string $assignedUserPrivilege = null;
 
     public function __construct(array $clientResultData = [])
     {
@@ -24,8 +22,8 @@ class ClientListResult extends ClientData
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'clientStatusPrivilege' => $this->clientStatusPrivilege?->value,
-            'assignedUserPrivilege' => $this->assignedUserPrivilege?->value,
+            'clientStatusPrivilege' => $this->clientStatusPrivilege,
+            'assignedUserPrivilege' => $this->assignedUserPrivilege,
         ]);
     }
     // No need for toArrayForDatabase() as this is a result DTO

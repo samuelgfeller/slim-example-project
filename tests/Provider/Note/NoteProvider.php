@@ -29,7 +29,7 @@ class NoteProvider
                 'authenticated_user' => $newcomerRow,
                 'note_hidden' => null,
                 'expected_result' => [
-                    'privilege' => Privilege::READ,
+                    'privilege' => Privilege::R,
                 ],
             ],
             [// ? newcomer not owner of note - note hidden - not allowed to read
@@ -37,7 +37,7 @@ class NoteProvider
                 'authenticated_user' => $newcomerRow,
                 'note_hidden' => 1,
                 'expected_result' => [
-                    'privilege' => Privilege::NONE,
+                    'privilege' => Privilege::N,
                 ],
             ],
             [// ? newcomer owner of note - note hidden - allowed to delete
@@ -45,7 +45,7 @@ class NoteProvider
                 'authenticated_user' => $newcomerRow,
                 'note_hidden' => 1,
                 'expected_result' => [
-                    'privilege' => Privilege::DELETE,
+                    'privilege' => Privilege::CRUD,
                 ],
             ],
             [// ? advisor not owner of note - note hidden - allowed to read
@@ -53,7 +53,7 @@ class NoteProvider
                 'authenticated_user' => $advisorRow,
                 'note_hidden' => 1,
                 'expected_result' => [
-                    'privilege' => Privilege::READ,
+                    'privilege' => Privilege::R,
                 ],
             ],
             [// ? managing advisor not owner of note - note hidden - allowed to do everything
@@ -62,7 +62,7 @@ class NoteProvider
                 'note_hidden' => 1,
                 'expected_result' => [
                     // Full privilege, so it must not be tested further
-                    'privilege' => Privilege::DELETE,
+                    'privilege' => Privilege::CRUD,
                 ],
             ],
         ];

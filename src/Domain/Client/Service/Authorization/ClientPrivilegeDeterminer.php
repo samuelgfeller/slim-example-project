@@ -21,21 +21,21 @@ class ClientPrivilegeDeterminer
      * @param int|null $clientOwnerId
      * @param string|null $column
      *
-     * @return Privilege
+     * @return string
      */
-    public function determineMutationPrivilege(?int $clientOwnerId, ?string $column = null): Privilege
+    public function determineMutationPrivilege(?int $clientOwnerId, ?string $column = null): string
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->clientPermissionVerifier->isGrantedToDelete($clientOwnerId, false)) {
-            return Privilege::DELETE;
+            return Privilege::CRUD->name;
         }
         // Value does not matter as keys are relevant
         if ($column !== null
             && $this->clientPermissionVerifier->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
         ) {
-            return Privilege::UPDATE;
+            return Privilege::CRU->name;
         }
 
-        return Privilege::NONE;
+        return Privilege::N->name;
     }
 }

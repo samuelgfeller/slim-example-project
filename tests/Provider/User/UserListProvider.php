@@ -30,8 +30,8 @@ class UserListProvider
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     // Each owner (authenticated user) is allowed to read his user data
                     'own' => [
-                        'statusPrivilege' => Privilege::READ,
-                        'userRolePrivilege' => Privilege::READ,
+                        'statusPrivilege' => Privilege::R,
+                        'userRolePrivilege' => Privilege::R,
                         'availableUserRoles' => [UserRole::ADVISOR],
                     ],
                     'other' => false,
@@ -44,13 +44,13 @@ class UserListProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::DELETE,
-                        'userRolePrivilege' => Privilege::READ,
+                        'statusPrivilege' => Privilege::CRUD,
+                        'userRolePrivilege' => Privilege::R,
                         'availableUserRoles' => [UserRole::MANAGING_ADVISOR],
                     ],
                     'other' => [
-                        'statusPrivilege' => Privilege::DELETE,
-                        'userRolePrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::CRUD,
+                        'userRolePrivilege' => Privilege::CRU,
                         'availableUserRoles' => [UserRole::ADVISOR, UserRole::NEWCOMER],
                     ],
                 ],
@@ -61,13 +61,13 @@ class UserListProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::DELETE,
-                        'userRolePrivilege' => Privilege::READ,
+                        'statusPrivilege' => Privilege::CRUD,
+                        'userRolePrivilege' => Privilege::R,
                         'availableUserRoles' => [UserRole::MANAGING_ADVISOR],
                     ],
                     'other' => [
-                        'statusPrivilege' => Privilege::READ,
-                        'userRolePrivilege' => Privilege::READ,
+                        'statusPrivilege' => Privilege::R,
+                        'userRolePrivilege' => Privilege::R,
                         'availableUserRoles' => [UserRole::MANAGING_ADVISOR],
                     ],
                 ],
@@ -78,8 +78,8 @@ class UserListProvider
                 'expected_result' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
-                        'statusPrivilege' => Privilege::DELETE,
-                        'userRolePrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::CRUD,
+                        'userRolePrivilege' => Privilege::CRU,
                         'availableUserRoles' => [
                             UserRole::ADMIN,
                             UserRole::MANAGING_ADVISOR,
@@ -88,8 +88,8 @@ class UserListProvider
                         ],
                     ],
                     'other' => [
-                        'statusPrivilege' => Privilege::DELETE,
-                        'userRolePrivilege' => Privilege::UPDATE,
+                        'statusPrivilege' => Privilege::CRUD,
+                        'userRolePrivilege' => Privilege::CRU,
                         'availableUserRoles' => [
                             UserRole::ADMIN,
                             UserRole::MANAGING_ADVISOR,

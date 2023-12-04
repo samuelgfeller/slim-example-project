@@ -39,7 +39,7 @@ $this->addAttribute(
 <div class="vertical-center">
     <h1><?= __('Clients') ?></h1>
     <?php
-    if ($clientCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
+    if (str_contains($clientCreatePrivilege, 'C')) { ?>
         <div class="plus-btn" id="create-client-btn"></div>
         <?php
     } ?>

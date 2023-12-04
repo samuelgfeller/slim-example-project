@@ -2,8 +2,6 @@
 
 namespace App\Domain\Note\Data;
 
-use App\Domain\Authorization\Privilege;
-
 /**
  * Note with user and client full name and privilege.
  */
@@ -14,7 +12,7 @@ class NoteResultData extends NoteData
     public ?bool $isClientMessage = false;
 
     // Populated in NoteUserRightSetter
-    public Privilege $privilege; // json_encode automatically takes $enum->value
+    public string $privilege; // json_encode automatically takes $enum->value
 
     public function __construct(array $noteValues = [])
     {
@@ -29,7 +27,7 @@ class NoteResultData extends NoteData
         return array_merge(parent::jsonSerialize(), [
             'userFullName' => $this->userFullName,
             'clientFullName' => $this->clientFullName,
-            'privilege' => $this->privilege->value,
+            'privilege' => $this->privilege,
             'isClientMessage' => (int)$this->isClientMessage,
         ]);
     }

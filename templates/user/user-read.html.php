@@ -8,8 +8,6 @@
  * @var $isOwnProfile bool if authenticated user is viewing his own profile
  */
 
-use App\Domain\Authorization\Privilege;
-
 $this->setLayout('layout.html.php');
 ?>
 
@@ -42,7 +40,7 @@ $this->addAttribute(
         <div id="full-header-edit-icon-container">
             <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
                 <?php
-                if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                if (str_contains($user->generalPrivilege, 'U')) { ?>
                     <!-- Img has to be before title because we are only able to style next sibling in css -->
                     <img src="assets/general/general-img/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
@@ -55,7 +53,7 @@ $this->addAttribute(
             </div>
             <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
                 <?php
-                if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                if (str_contains($user->generalPrivilege, 'U')) { ?>
                     <img src="assets/general/general-img/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
@@ -73,7 +71,7 @@ $this->addAttribute(
             <div>
                 <label for="user-status" class="bigger-select-label"><?= __('Status') ?></label>
                 <select name="status" class="default-select bigger-select" id="user-status"
-                    <?= $user->statusPrivilege->hasPrivilege(Privilege::UPDATE)
+                    <?= str_contains($user->statusPrivilege, 'U')
                         ? '' : 'disabled' ?>>
                     <?php
                     // User status select options
@@ -90,7 +88,7 @@ $this->addAttribute(
             <div>
                 <label for="user-role-select" class="bigger-select-label"><?= __('User role') ?> </label>
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
-                    <?= $user->userRolePrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
+                    <?= str_contains($user->userRolePrivilege, 'U') ? '' : 'disabled' ?>>
                     <?php
                     foreach ($user->availableUserRoles as $id => $userRole) {
                         $selected = $id === $user->userRoleId ? 'selected' : '';
@@ -104,7 +102,7 @@ $this->addAttribute(
         <h3 class="label-h3"><?= __('E-Mail') ?></h3>
         <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
-            if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if (str_contains($user->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
@@ -116,12 +114,11 @@ $this->addAttribute(
         </div>
         <div>
             <?php
-            if ($user->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if (str_contains($user->generalPrivilege, 'U')) { ?>
                 <h3 class="label-h3"><?= __('Password') ?></h3>
                 <button class="btn btn-orange" id="change-password-btn"
-                        data-old-password-requested="<?= $user->passwordWithoutVerificationPrivilege->hasPrivilege(
-                            Privilege::UPDATE
-                        ) ? 'false' : 'true' ?>"><?= __('Change password') ?>
+                        data-old-password-requested="<?= str_contains($user->passwordWithoutVerificationPrivilege, 'U')
+                            ? 'false' : 'true' ?>"><?= __('Change password') ?>
                 </button>
                 <?php
             } ?>
@@ -147,7 +144,7 @@ $this->addAttribute(
             <?php
         }
         $lang = $user->language?->value;
-        $langRadioButtonDisabled = $user->generalPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled';
+        $langRadioButtonDisabled = str_contains($user->generalPrivilege, 'U') ? '' : 'disabled';
         ?>
         <div id="language-switch-div">
             <h3 class="label-h3"><?= __('Language') ?></h3>
@@ -178,7 +175,7 @@ $this->addAttribute(
             <b><?= __('Updated') ?>:</b> <?= $dateFormatter->format($user->updatedAt) ?>
         </p>
         <?php
-        if ($user->generalPrivilege->hasPrivilege(Privilege::DELETE)) { ?>
+        if (str_contains($user->generalPrivilege, 'D')) { ?>
             <button class="btn btn-red" id="delete-user-btn">
                 <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
                 <?= $isOwnProfile ? __('Delete profile') : __('Delete user') ?>

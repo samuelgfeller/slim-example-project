@@ -2,7 +2,6 @@
 
 namespace App\Domain\Client\Data;
 
-use App\Domain\Authorization\Privilege;
 use App\Domain\Note\Data\NoteData;
 
 /**
@@ -20,10 +19,10 @@ class ClientReadResult extends ClientData
     public ?NoteData $mainNoteData = null; // Main note data
 
     // Client personal info privilege (first-, second name, phone, email, location)
-    public ?Privilege $generalPrivilege = null;
-    public ?Privilege $clientStatusPrivilege = null;
-    public ?Privilege $assignedUserPrivilege = null;
-    public ?Privilege $noteCreatePrivilege = null;
+    public ?string $generalPrivilege = null;
+    public ?string $clientStatusPrivilege = null;
+    public ?string $assignedUserPrivilege = null;
+    public ?string $noteCreatePrivilege = null;
 
     public function __construct(array $clientResultData = [])
     {
@@ -48,10 +47,10 @@ class ClientReadResult extends ClientData
             'notesAmount' => $this->notesAmount,
             'mainNoteData' => $this->mainNoteData,
 
-            'personalInfoPrivilege' => $this->generalPrivilege?->value,
-            'clientStatusPrivilege' => $this->clientStatusPrivilege?->value,
-            'assignedUserPrivilege' => $this->assignedUserPrivilege?->value,
-            'noteCreatePrivilege' => $this->noteCreatePrivilege?->value,
+            'personalInfoPrivilege' => $this->generalPrivilege,
+            'clientStatusPrivilege' => $this->clientStatusPrivilege,
+            'assignedUserPrivilege' => $this->assignedUserPrivilege,
+            'noteCreatePrivilege' => $this->noteCreatePrivilege,
         ]);
     }
     // No need for toArrayForDatabase() as this is a result DTO

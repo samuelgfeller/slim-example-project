@@ -38,7 +38,7 @@ class NotePermissionVerifier
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes
@@ -77,7 +77,7 @@ class NotePermissionVerifier
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
             if (($isMain === 0 // newcomers may see create notes for any client
@@ -117,7 +117,7 @@ class NotePermissionVerifier
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -161,7 +161,7 @@ class NotePermissionVerifier
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 

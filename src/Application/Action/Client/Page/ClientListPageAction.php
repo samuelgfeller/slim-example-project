@@ -41,7 +41,7 @@ final class ClientListPageAction
         $this->templateRenderer->addPhpViewAttribute('clientListFilters', $clientListFilters);
         $this->templateRenderer->addPhpViewAttribute(
             'clientCreatePrivilege',
-            $this->clientPermissionVerifier->isGrantedToCreate() ? Privilege::CREATE : Privilege::NONE
+            $this->clientPermissionVerifier->isGrantedToCreate() ? Privilege::CR->name : Privilege::N->name
         );
 
         return $this->templateRenderer->render($response, 'client/clients-list.html.php');

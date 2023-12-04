@@ -44,7 +44,7 @@ class UserPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -106,7 +106,7 @@ class UserPermissionVerifier
             );
         }
         if ($userRoleHierarchies === null) {
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
         }
@@ -162,7 +162,7 @@ class UserPermissionVerifier
             $this->loggedInUserId
         );
         $userToUpdateRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser((int)$userIdToUpdate);
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -176,7 +176,7 @@ class UserPermissionVerifier
             || $this->loggedInUserId === (int)$userIdToUpdate
         ) {
             // Things that managing advisor and owner user are allowed to change
-            // Personal info is the "main" data like first name, last name and email
+            // Personal info are values such as first name, last name and email
             $grantedUpdateKeys[] = 'personal_info';
             $grantedUpdateKeys[] = 'first_name';
             $grantedUpdateKeys[] = 'surname';
@@ -262,7 +262,7 @@ class UserPermissionVerifier
         );
         $userToDeleteRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId($userIdToDelete);
 
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -305,7 +305,7 @@ class UserPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -348,7 +348,7 @@ class UserPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 

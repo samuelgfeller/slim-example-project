@@ -117,7 +117,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             'userId' => $noteData['user_id'],
             'clientId' => $clientRow['id'],
             // Note message either plain text or replaced with lorem ipsum if not allowed to read
-            'message' => $expectedResult['privilege'] === Privilege::NONE ?
+            'message' => $expectedResult['privilege'] === Privilege::N ?
                 substr($loremIpsum, 0, mb_strlen($noteData['message'])) : $noteData['message'],
             'hidden' => $noteHidden,
             // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
@@ -126,7 +126,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
             'clientFullName' => null,
             // Has to match privilege from notePrivilegeDeterminer.php (rules are in notePermissionVerifier.php)
-            'privilege' => $expectedResult['privilege']->value,
+            'privilege' => $expectedResult['privilege']->name,
             'isClientMessage' => 0,
         ];
 

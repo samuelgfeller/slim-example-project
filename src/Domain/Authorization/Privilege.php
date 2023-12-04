@@ -2,52 +2,35 @@
 
 namespace App\Domain\Authorization;
 
-enum Privilege: string
+enum Privilege
 {
-    // The case values are the first letter of the privilege name.
-    // These are returned on a JSON Ajax request and used by the frontend to determine if the user has
-    // a certain privilege because JS doesn't have access to the hasPrivilege() function.
+    // The case names and values correspond to the following privileges:
+    // R: Read, C: Create, U: Update, D: Delete
+    // They can be combined or used individually depending on the needs of the application.
+    // To check if a privilege is allowed, the frontend can check if the letter of the privilege is in the value.
     // For instance, if update privilege is required, the client will check if privilege value contains "U".
 
     // No rights
-    case NONE = 'NONE';
-    // Allowed to read
-    case READ = 'R';
-    // Allowed to read and create
-    case CREATE = 'CR';
-    // Allowed only to create (needed when the user is not allowed to see hidden notes but may create some)
-    case ONLY_CREATE = 'C';
-    // Allowed to read, create and update
-    case UPDATE = 'CRU';
-    // Allowed to read, create, update and delete
-    case DELETE = 'CRUD';
-    // Allowed to do everything on each note
-    // case ALL = 'ALL';
+    case N;
+    // Allowed to Read
+    case R;
+    // Allowed to Create and Read
+    case CR;
+    // Allowed only to Create (needed when the user is not allowed to see hidden notes but may create some)
+    case C;
+    // Allowed to Read, Create and Update
+    case CRU;
+    // Allowed to Read, Create, Update and Delete
+    case CRUD;
 
-    /**
-     * Checks if the current privilege allows for the required privilege.
-     *
-     * This method uses a match expression to check if the current privilege ($this) allows for the required privilege.
-     * The match expression checks the required privilege against each possible privilege case.
-     * For each case, it checks if the current privilege is in an array of privileges that allow for the required privilege.
-     * If the current privilege is in the array, the method returns true, indicating that the required privilege is allowed.
-     * If the current privilege is not in the array, the method continues to the next case.
-     * If no cases match the required privilege, the method returns false,
-     * indicating that the required privilege is not allowed.
-     *
-     * @param Privilege $requiredPrivilege The required privilege.
-     * @return bool True if the current privilege allows for the required privilege, false otherwise.
-     */
-    public function hasPrivilege(Privilege $requiredPrivilege): bool
-    {
-        return match ($requiredPrivilege) {
-            // Privilege READ is true if $this is either READ, CREATE, UPDATE or DELETE
-            self::READ => in_array($this, [self::READ, self::CREATE, self::UPDATE, self::DELETE], true),
-            self::CREATE => in_array($this, [self::CREATE, self::ONLY_CREATE, self::UPDATE, self::DELETE], true),
-            self::ONLY_CREATE => in_array($this, [self::CREATE, self::ONLY_CREATE], true),
-            self::UPDATE => in_array($this, [self::UPDATE, self::DELETE], true),
-            self::DELETE => $this === self::DELETE,
-            self::NONE => true,
-        };
-    }
+
+    // Initially, the Privilege Enum was the datatype in result objects that was passed to the PHP templates.
+    // The case names were the name of the highest privilege (Read, Create, Update, Delete).
+    // The values were the letters of the associated permissions meaning Delete was 'CRUD', Update was 'CRU' and so on.
+    // This was needed for data returned via Ajax.
+    // The frontend could then check if the privilege value contained the letter of the required privilege and
+    // the PHP templates called `hasPrivilege()` on the Privilege Enum with the required privilege as argument.
+    // This meant that there were 2 different ways to check the same thing.
+    // Simplicity is key, so the privilege value that goes to the frontend is now a string even for PHP templates
+    // and the names of the Enum cases simply the letters with the permissions.
 }

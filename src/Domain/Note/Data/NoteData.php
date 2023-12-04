@@ -22,7 +22,7 @@ class NoteData implements \JsonSerializable
     public ?UserData $user;
 
     // User mutation rights from authenticated user
-    public Privilege $privilege = Privilege::NONE; // json_encode automatically takes $enum->value
+    public string $privilege = Privilege::N->name; // json_encode automatically takes $enum->value
 
     public function __construct(?array $noteValues = null)
     {

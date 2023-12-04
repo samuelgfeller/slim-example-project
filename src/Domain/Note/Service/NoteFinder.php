@@ -81,7 +81,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
                 $noteResultData->hidden,
             );
             // If not allowed to read
-            if (!$noteResultData->privilege->hasPrivilege(Privilege::READ)) {
+            if (!str_contains($noteResultData->privilege, 'R')) {
                 // Change message of note to lorem ipsum
                 $noteResultData->message = substr($randomText, 0, strlen($noteResultData->message ?? ''));
                 // Remove line breaks and extra spaces from string
@@ -128,7 +128,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             $clientMessageNote->userFullName = $clientData->firstName . ' ' . $clientData->lastName;
             $clientMessageNote->createdAt = $clientData->createdAt;
             // Always READ privilege as same as client read right and this request is for client read
-            $clientMessageNote->privilege = Privilege::READ;
+            $clientMessageNote->privilege = Privilege::R->name;
             $clientMessageNote->isClientMessage = true;
             $allNotes[] = $clientMessageNote;
         }

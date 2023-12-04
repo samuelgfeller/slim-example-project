@@ -21,23 +21,23 @@ class NotePrivilegeDeterminer
      * @param int|null $noteOwnerId main note owner id (null if main note doesn't exist yet)
      * @param int|null $clientOwnerId
      *
-     * @return Privilege
+     * @return string
      */
-    public function getMainNotePrivilege(?int $noteOwnerId, ?int $clientOwnerId): Privilege
+    public function getMainNotePrivilege(?int $noteOwnerId, ?int $clientOwnerId): string
     {
         // Delete not possible with main note
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->notePermissionVerifier->isGrantedToUpdate(1, $noteOwnerId, $clientOwnerId, false)) {
-            return Privilege::UPDATE;
+            return Privilege::CRU->name;
         }
         if ($this->notePermissionVerifier->isGrantedToCreate(1, $clientOwnerId, false)) {
-            return Privilege::CREATE;
+            return Privilege::CR->name;
         }
         if ($this->notePermissionVerifier->isGrantedToRead(1, $noteOwnerId, $clientOwnerId, 0, false)) {
-            return Privilege::READ;
+            return Privilege::R->name;
         }
 
-        return Privilege::NONE;
+        return Privilege::N->name;
     }
 
     /**
@@ -47,23 +47,23 @@ class NotePrivilegeDeterminer
      * @param int|null $clientOwnerId
      * @param ?int $hidden
      *
-     * @return Privilege
+     * @return string
      */
-    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): Privilege
+    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): string
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->notePermissionVerifier->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
-            return Privilege::DELETE;
+            return Privilege::CRUD->name;
         }
         if ($this->notePermissionVerifier->isGrantedToUpdate(0, $noteOwnerId, $clientOwnerId, false)) {
-            return Privilege::UPDATE;
+            return Privilege::CRU->name;
         }
         // Create must NOT be included here as it's irrelevant on specific notes and has an impact on "READ" privilege as
         // read is lower than create in the hierarchy.
         if ($this->notePermissionVerifier->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
-            return Privilege::READ;
+            return Privilege::R->name;
         }
 
-        return Privilege::NONE;
+        return Privilege::N->name;
     }
 }

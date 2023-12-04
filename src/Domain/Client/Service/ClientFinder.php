@@ -142,7 +142,7 @@ class ClientFinder
                 0,
                 $clientResultAggregate->userId,
                 false
-            ) ? Privilege::CREATE : Privilege::NONE;
+            ) ? Privilege::CR->name : Privilege::N->name;
 
             $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
 

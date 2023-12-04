@@ -31,25 +31,12 @@ class UserListActionTest extends TestCase
      * @dataProvider \App\Test\Provider\User\UserListProvider::userListAuthorizationCases()
      *
      * @param array $userRow user attributes containing the user_role_id
-     * @param $authenticatedUserRow array{
-     *     Statuscodeinterface::class: string,
-     *     own: array{
-     *         statusPrivilege: Privilege,
-     *         userRolePrivilege: Privilege,
-     *         availableUserRoles: array<UserRole>
-     *     },
-     *     other: false|array{
-     *         statusPrivilege: Privilege,
-     *         userRolePrivilege: Privilege,
-     *         availableUserRoles: array<UserRole>
-     *     }
-     *    } authenticated user attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code and privilege
      *
+     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     *
-     * @return void
      */
     public function testUserListAuthorization(
         array $userRow,
@@ -84,12 +71,12 @@ class UserListActionTest extends TestCase
             'userRoleId' => $authenticatedUserRow['user_role_id'],
             'updatedAt' => $authenticatedUserRow['updated_at'],
             'createdAt' => $authenticatedUserRow['created_at'],
-            'statusPrivilege' => $expectedResult['own']['statusPrivilege']->value,
-            'userRolePrivilege' => $expectedResult['own']['userRolePrivilege']->value,
+            'statusPrivilege' => $expectedResult['own']['statusPrivilege']->name,
+            'userRolePrivilege' => $expectedResult['own']['userRolePrivilege']->name,
             'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['own']['availableUserRoles']),
         ];
 
-        // Add response array of other user if it is set
+        // Add response array of the other user if it is set
         if ($expectedResult['other'] !== false) {
             $expectedResponseArray['userResultDataArray'][] = [
                 'id' => $userRow['id'],
@@ -100,8 +87,8 @@ class UserListActionTest extends TestCase
                 'userRoleId' => $userRow['user_role_id'],
                 'updatedAt' => $userRow['updated_at'],
                 'createdAt' => $userRow['created_at'],
-                'statusPrivilege' => $expectedResult['other']['statusPrivilege']->value,
-                'userRolePrivilege' => $expectedResult['other']['userRolePrivilege']->value,
+                'statusPrivilege' => $expectedResult['other']['statusPrivilege']->name,
+                'userRolePrivilege' => $expectedResult['other']['userRolePrivilege']->name,
                 'availableUserRoles' => $this->formatAvailableUserRoles($expectedResult['other']['availableUserRoles']),
             ];
         }

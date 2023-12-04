@@ -41,35 +41,6 @@ export function getNoteHtml(note) {
             </div>`;
 }
 
-/**
- * Check if user has required privilege
- * If the received privilege contains one
- * of the following letters, it means:
- *  D - Delete - Highest privilege, may also do other actions
- *  U - Update - May also create and read but not delete
- *  C - Create - May also read
- *  R - Read - May only read but do nothing else
- *  *
- * @param {string} actualPrivilege
- * @param {string} requiredPrivilege
- * @return {boolean}
- */
-function userHasPrivilegeTo(actualPrivilege, requiredPrivilege) {
-    switch (requiredPrivilege) {
-        // Starting from the highest privilege to the lowest
-        case 'D':
-            return actualPrivilege.includes('D');
-        case 'U':
-            return actualPrivilege.includes('U');
-        case 'C':
-            return actualPrivilege.includes('C');
-        case 'R':
-            return actualPrivilege.includes('R');
-        default:
-            return false;
-    }
-}
-
 export function getClientNoteLoadingPlaceholderHtml() {
     return `<div class="client-note-loading-placeholder">
     <!-- Note label container-->

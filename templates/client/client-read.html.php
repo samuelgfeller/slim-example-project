@@ -6,8 +6,6 @@
  * @var $dropdownValues App\Domain\Client\Data\ClientDropdownValuesData all statuses, users and sexes to populate dropdown
  */
 
-use App\Domain\Authorization\Privilege;
-
 $this->setLayout('layout.html.php');
 ?>
 
@@ -38,7 +36,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="full-header-edit-icon-container" data-deleted="<?= $clientAggregate->deletedAt ? '1' : 0 ?>">
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                 <!-- Img has to be before title because we are only able to style next sibling in css -->
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
@@ -51,7 +49,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         </div>
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
@@ -68,7 +66,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="client-status" class="bigger-select-label"><?= __('Status') ?></label>
             <select name="client_status_id" class="default-select bigger-select"
-                <?= $clientAggregate->clientStatusPrivilege->hasPrivilege(Privilege::UPDATE)
+                <?= str_contains($clientAggregate->clientStatusPrivilege, 'U')
                     ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
@@ -85,7 +83,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="assigned-user-select" class="bigger-select-label"><?= __('Helper') ?></label>
             <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
-                <?= $clientAggregate->assignedUserPrivilege->hasPrivilege(Privilege::UPDATE) ? '' : 'disabled' ?>>
+                <?= str_contains($clientAggregate->assignedUserPrivilege, 'U') ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
                 // Linked user select options
@@ -103,8 +101,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-note-textarea"
                   minlength="0" maxlength="1000"
-                  data-editable="<?= $clientAggregate->mainNoteData
-                      ->privilege->hasPrivilege(Privilege::UPDATE) ? '1' : '0' ?>"
+                  data-editable="<?= str_contains($clientAggregate->mainNoteData
+                      ->privilege, 'U') ? '1' : '0' ?>"
                   data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
                   placeholder="<?= __('New main note') ?>"
         ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
@@ -120,7 +118,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div class="vertical-center" id="activity-header">
             <h2><?= __('Notes') ?></h2>
             <?php
-            if ($clientAggregate->noteCreatePrivilege->hasPrivilege(Privilege::ONLY_CREATE)) { ?>
+            if (str_contains($clientAggregate->noteCreatePrivilege, 'C')) { ?>
                 <div class="plus-btn" id="create-note-btn"></div>
                 <?php
             } ?>
@@ -132,7 +130,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
             <!-- Toggle edit icons on mobile if user has privilege to update something -->
             <?php
-            if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                      id="toggle-personal-info-edit-icons">
@@ -147,7 +145,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-birthdate-btn">
@@ -174,7 +172,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-sex-btn">
@@ -204,7 +202,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
@@ -223,7 +221,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
@@ -242,7 +240,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
@@ -262,7 +260,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-vigilance-level-btn">
@@ -286,13 +284,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         </div>
         <div class="clearfix"></div>
         <?php
-        if ($clientAggregate->generalPrivilege->hasPrivilege(Privilege::UPDATE)) { ?>
+        if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
             <div id="add-client-personal-info-div">
                 <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons"
                      class="default-icon" alt="add info">
 
                 <!-- Delete trash icon stays always there -->
-                <?= $clientAggregate->generalPrivilege->hasPrivilege(Privilege::DELETE) ?
+                <?= str_contains($clientAggregate->generalPrivilege, 'D') ?
                     ($clientAggregate->deletedAt ? '<img src="assets/general/general-img/action/undelete-icon.svg" 
                     class="personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
                         '<img src="assets/general/general-img/action/trash-icon.svg" 

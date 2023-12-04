@@ -46,7 +46,7 @@ class ClientPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -99,7 +99,7 @@ class ClientPermissionVerifier
             );
         }
         if ($userRoleHierarchies === null) {
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
         }
@@ -141,7 +141,7 @@ class ClientPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -222,7 +222,7 @@ class ClientPermissionVerifier
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+        // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
@@ -280,7 +280,7 @@ class ClientPermissionVerifier
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $this->loggedInUserId
             );
-            // Returns array with role name as key and hierarchy as value [role_name => hierarchy_int]
+            // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
