@@ -11,16 +11,16 @@ use App\Domain\User\Service\UserFinder;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use IntlDateFormatter;
 
-class NoteCreator
+readonly class NoteCreator
 {
     public function __construct(
-        private readonly NoteValidator $noteValidator,
-        private readonly NoteCreatorRepository $noteCreatorRepository,
-        private readonly NotePermissionVerifier $notePermissionVerifier,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly UserNetworkSessionData $userNetworkSessionData,
-        private readonly UserFinder $userFinder,
-        private readonly NoteFinder $noteFinder
+        private NoteValidator $noteValidator,
+        private NoteCreatorRepository $noteCreatorRepository,
+        private NotePermissionVerifier $notePermissionVerifier,
+        private UserActivityLogger $userActivityLogger,
+        private UserNetworkSessionData $userNetworkSessionData,
+        private UserFinder $userFinder,
+        private NoteFinder $noteFinder
     ) {
     }
 

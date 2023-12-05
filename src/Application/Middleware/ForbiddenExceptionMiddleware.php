@@ -11,11 +11,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ForbiddenExceptionMiddleware implements MiddlewareInterface
+readonly class ForbiddenExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly JsonResponder $jsonResponder,
+        private ResponseFactoryInterface $responseFactory,
+        private JsonResponder $jsonResponder,
     ) {
     }
 

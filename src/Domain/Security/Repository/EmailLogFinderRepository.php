@@ -4,10 +4,10 @@ namespace App\Domain\Security\Repository;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-class EmailLogFinderRepository
+readonly class EmailLogFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

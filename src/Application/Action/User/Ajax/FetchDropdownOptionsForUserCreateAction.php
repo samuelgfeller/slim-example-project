@@ -7,11 +7,11 @@ use App\Domain\User\Service\UserUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class FetchDropdownOptionsForUserCreateAction
+readonly class FetchDropdownOptionsForUserCreateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserUtilFinder $userUtilFinder,
+        private JsonResponder $jsonResponder,
+        private UserUtilFinder $userUtilFinder,
     ) {
     }
 

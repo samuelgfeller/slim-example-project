@@ -5,11 +5,11 @@ namespace App\Domain\Authentication\Service;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFinderRepository;
 
-final class VerificationTokenVerifier
+final readonly class VerificationTokenVerifier
 {
     public function __construct(
-        private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
-        private readonly VerificationTokenUpdater $verificationTokenUpdater,
+        private VerificationTokenFinderRepository $verificationTokenFinderRepository,
+        private VerificationTokenUpdater $verificationTokenUpdater,
     ) {
     }
 

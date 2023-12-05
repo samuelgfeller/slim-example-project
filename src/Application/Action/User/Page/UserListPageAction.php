@@ -8,11 +8,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpForbiddenException;
 
-final class UserListPageAction
+final readonly class UserListPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private TemplateRenderer $templateRenderer,
+        private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 

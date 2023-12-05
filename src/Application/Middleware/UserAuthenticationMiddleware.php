@@ -15,16 +15,16 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Interfaces\RouteParserInterface;
 
-final class UserAuthenticationMiddleware implements MiddlewareInterface
+final readonly class UserAuthenticationMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly JsonResponder $jsonResponder,
-        private readonly RedirectHandler $redirectHandler,
-        private readonly RouteParserInterface $routeParser,
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly UserFinder $userFinder,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private JsonResponder $jsonResponder,
+        private RedirectHandler $redirectHandler,
+        private RouteParserInterface $routeParser,
+        private ResponseFactoryInterface $responseFactory,
+        private UserFinder $userFinder,
     ) {
     }
 

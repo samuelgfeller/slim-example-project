@@ -8,11 +8,11 @@ use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UserFetchListAction
+final readonly class UserFetchListAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserFinder $userFinder,
+        private JsonResponder $jsonResponder,
+        private UserFinder $userFinder,
     ) {
     }
 

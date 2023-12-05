@@ -8,11 +8,11 @@ use App\Domain\Client\Data\ClientListResult;
 use App\Domain\Client\Data\ClientReadResult;
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-class ClientFinderRepository
+readonly class ClientFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory,
-        private readonly Hydrator $hydrator
+        private QueryFactory $queryFactory,
+        private Hydrator $hydrator
     ) {
     }
 

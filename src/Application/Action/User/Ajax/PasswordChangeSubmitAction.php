@@ -12,13 +12,13 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 /**
  * When user wants to change password being authenticated.
  */
-class PasswordChangeSubmitAction
+readonly class PasswordChangeSubmitAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly PasswordChanger $passwordChanger
+        private JsonResponder $jsonResponder,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private PasswordChanger $passwordChanger
     ) {
     }
 

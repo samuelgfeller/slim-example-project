@@ -7,12 +7,12 @@ use App\Domain\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-class NotePermissionVerifier
+readonly class NotePermissionVerifier
 {
     public function __construct(
-        private readonly SessionInterface $session,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly LoggerInterface $logger,
+        private SessionInterface $session,
+        private UserRoleFinderRepository $userRoleFinderRepository,
+        private LoggerInterface $logger,
     ) {
     }
 

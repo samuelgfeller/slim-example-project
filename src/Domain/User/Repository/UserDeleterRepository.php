@@ -4,10 +4,10 @@ namespace App\Domain\User\Repository;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-class UserDeleterRepository
+readonly class UserDeleterRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

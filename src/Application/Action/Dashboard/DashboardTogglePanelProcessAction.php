@@ -11,13 +11,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
 
-final class DashboardTogglePanelProcessAction
+final readonly class DashboardTogglePanelProcessAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly SessionInterface $session,
-        private readonly FilterSettingSaver $filterSettingSaver,
-        private readonly MalformedRequestBodyChecker $malformedRequestBodyChecker,
+        private JsonResponder $jsonResponder,
+        private SessionInterface $session,
+        private FilterSettingSaver $filterSettingSaver,
+        private MalformedRequestBodyChecker $malformedRequestBodyChecker,
     ) {
     }
 

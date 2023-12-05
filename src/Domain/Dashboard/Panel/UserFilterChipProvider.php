@@ -10,14 +10,14 @@ use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 
-class UserFilterChipProvider
+readonly class UserFilterChipProvider
 {
     public function __construct(
-        private readonly FilterSettingFinder $filterSettingFinder,
-        private readonly SessionInterface $session,
-        private readonly UserNameAbbreviator $userNameAbbreviator,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private FilterSettingFinder $filterSettingFinder,
+        private SessionInterface $session,
+        private UserNameAbbreviator $userNameAbbreviator,
+        private UserFinderRepository $userFinderRepository,
+        private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 

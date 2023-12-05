@@ -9,11 +9,11 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class FetchDropdownOptionsForClientCreateAction
+readonly class FetchDropdownOptionsForClientCreateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly ClientUtilFinder $clientUtilFinder,
+        private JsonResponder $jsonResponder,
+        private ClientUtilFinder $clientUtilFinder,
     ) {
     }
 

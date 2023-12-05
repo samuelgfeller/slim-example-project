@@ -9,11 +9,11 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class NoteFetchListAction
+final readonly class NoteFetchListAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly NoteFilterFinder $noteFilterFinder,
+        private JsonResponder $jsonResponder,
+        private NoteFilterFinder $noteFilterFinder,
     ) {
     }
 

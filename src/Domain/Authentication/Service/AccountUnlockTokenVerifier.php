@@ -11,14 +11,14 @@ use App\Domain\User\Repository\UserUpdaterRepository;
 use App\Domain\User\Service\UserFinder;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-final class AccountUnlockTokenVerifier
+final readonly class AccountUnlockTokenVerifier
 {
     public function __construct(
-        private readonly UserFinder $userFinder,
-        private readonly VerificationTokenFinderRepository $verificationTokenFinderRepository,
-        private readonly VerificationTokenUpdater $verificationTokenUpdater,
-        private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserActivityLogger $userActivityLogger,
+        private UserFinder $userFinder,
+        private VerificationTokenFinderRepository $verificationTokenFinderRepository,
+        private VerificationTokenUpdater $verificationTokenUpdater,
+        private UserUpdaterRepository $userUpdaterRepository,
+        private UserActivityLogger $userActivityLogger,
     ) {
     }
 

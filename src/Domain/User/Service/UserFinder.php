@@ -11,13 +11,13 @@ use App\Domain\User\Service\Authorization\AuthorizedUserRoleFilterer;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\User\Service\Authorization\UserPrivilegeDeterminer;
 
-class UserFinder
+readonly class UserFinder
 {
     public function __construct(
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserPrivilegeDeterminer $userPrivilegeDeterminer,
-        private readonly AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private UserFinderRepository $userFinderRepository,
+        private UserPrivilegeDeterminer $userPrivilegeDeterminer,
+        private AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
+        private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
@@ -35,12 +35,12 @@ class UserFinder
                 $userResultData->availableUserRoles = $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(
                     $userResultData->userRoleId
                 );
-                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->determineUserRoleAssignmentPrivilege(
+                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->getUserRoleAssignmentPrivilege(
                     $userResultData->availableUserRoles
                 );
 
                 // Check if user is allowed to change status
-                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
+                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->getMutationPrivilege(
                     (int)$userResultData->id,
                     'status',
                 );
@@ -82,7 +82,7 @@ class UserFinder
             if (!empty($userRow)) {
                 $userResultData = new UserResultData($userRow);
                 // Status privilege
-                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
+                $userResultData->statusPrivilege = $this->userPrivilegeDeterminer->getMutationPrivilege(
                     $id,
                     'status',
                 );
@@ -90,18 +90,18 @@ class UserFinder
                 $userResultData->availableUserRoles = $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(
                     $userResultData->userRoleId
                 );
-                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->determineUserRoleAssignmentPrivilege(
+                $userResultData->userRolePrivilege = $this->userPrivilegeDeterminer->getUserRoleAssignmentPrivilege(
                     $userResultData->availableUserRoles
                 );
 
                 // Personal info privilege like first name, email and so on
-                $userResultData->generalPrivilege = $this->userPrivilegeDeterminer->determineMutationPrivilege(
+                $userResultData->generalPrivilege = $this->userPrivilegeDeterminer->getMutationPrivilege(
                     $id,
                     'personal_info',
                 );
                 // Password change without verification of old password
                 $userResultData->passwordWithoutVerificationPrivilege = $this->userPrivilegeDeterminer->
-                determineMutationPrivilege($id, 'password_without_verification');
+                getMutationPrivilege($id, 'password_without_verification');
 
                 return $userResultData;
             }

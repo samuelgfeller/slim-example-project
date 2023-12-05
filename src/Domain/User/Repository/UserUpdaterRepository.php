@@ -5,10 +5,10 @@ namespace App\Domain\User\Repository;
 use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Enum\UserStatus;
 
-class UserUpdaterRepository
+readonly class UserUpdaterRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

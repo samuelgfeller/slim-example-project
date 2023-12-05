@@ -10,11 +10,11 @@ use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ClientFetchListAction
+final readonly class ClientFetchListAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly ClientFinderWithFilter $clientFilterFinder,
+        private JsonResponder $jsonResponder,
+        private ClientFinderWithFilter $clientFilterFinder,
     ) {
     }
 

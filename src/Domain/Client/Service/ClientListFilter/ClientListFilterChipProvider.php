@@ -12,15 +12,15 @@ use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 
-class ClientListFilterChipProvider
+readonly class ClientListFilterChipProvider
 {
     public function __construct(
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly UserNameAbbreviator $userNameAbbreviator,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly SessionInterface $session,
-        private readonly AuthorizationChecker $authorizationChecker,
-        private readonly FilterSettingFinder $filterSettingFinder
+        private ClientStatusFinderRepository $clientStatusFinderRepository,
+        private UserNameAbbreviator $userNameAbbreviator,
+        private UserFinderRepository $userFinderRepository,
+        private SessionInterface $session,
+        private AuthorizationChecker $authorizationChecker,
+        private FilterSettingFinder $filterSettingFinder
     ) {
     }
 

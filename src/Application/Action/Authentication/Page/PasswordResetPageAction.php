@@ -8,12 +8,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 
-class PasswordResetPageAction
+readonly class PasswordResetPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly SessionInterface $session,
-        private readonly LoggerInterface $logger,
+        private TemplateRenderer $templateRenderer,
+        private SessionInterface $session,
+        private LoggerInterface $logger,
     ) {
     }
 

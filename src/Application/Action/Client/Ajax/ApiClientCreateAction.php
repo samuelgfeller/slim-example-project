@@ -10,11 +10,11 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Api Action.
  */
-final class ApiClientCreateAction
+final readonly class ApiClientCreateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly ClientCreatorFromApi $clientCreatorFromClientSubmit,
+        private JsonResponder $jsonResponder,
+        private ClientCreatorFromApi $clientCreatorFromClientSubmit,
     ) {
     }
 

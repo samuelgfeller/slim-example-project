@@ -10,14 +10,14 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
-class PasswordChanger
+readonly class PasswordChanger
 {
     public function __construct(
-        private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserValidator $userValidator,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly LoggerInterface $logger,
+        private UserPermissionVerifier $userPermissionVerifier,
+        private UserUpdaterRepository $userUpdaterRepository,
+        private UserValidator $userValidator,
+        private UserActivityLogger $userActivityLogger,
+        private LoggerInterface $logger,
     ) {
     }
 

@@ -4,10 +4,10 @@ namespace App\Domain\Authentication\Repository\VerificationToken;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-class VerificationTokenDeleterRepository
+readonly class VerificationTokenDeleterRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

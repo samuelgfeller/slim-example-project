@@ -8,13 +8,13 @@ use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-class ClientCreatorFromApi
+readonly class ClientCreatorFromApi
 {
     public function __construct(
-        private readonly ClientValidator $clientValidator,
-        private readonly ClientCreatorRepository $clientCreatorRepository,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
+        private ClientValidator $clientValidator,
+        private ClientCreatorRepository $clientCreatorRepository,
+        private UserActivityLogger $userActivityLogger,
+        private ClientStatusFinderRepository $clientStatusFinderRepository,
     ) {
     }
 

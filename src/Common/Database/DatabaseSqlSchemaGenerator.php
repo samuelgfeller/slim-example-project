@@ -9,11 +9,11 @@ use UnexpectedValueException;
 /**
  * Generates schema.sql with current database.
  */
-class DatabaseSqlSchemaGenerator
+readonly class DatabaseSqlSchemaGenerator
 {
     public function __construct(
-        private readonly PDO $pdo,
-        private readonly string $rootPath
+        private PDO $pdo,
+        private string $rootPath
     ) {
     }
 

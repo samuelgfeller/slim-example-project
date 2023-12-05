@@ -10,11 +10,11 @@ use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 
-class UserValidator
+readonly class UserValidator
 {
     public function __construct(
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
+        private UserFinderRepository $userFinderRepository,
+        private UserRoleFinderRepository $userRoleFinderRepository,
     ) {
     }
 

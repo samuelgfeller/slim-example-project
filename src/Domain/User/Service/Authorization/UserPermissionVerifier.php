@@ -172,7 +172,7 @@ class UserPermissionVerifier
                     && $userToUpdateRoleData->hierarchy >= $userRoleHierarchies[UserRole::ADVISOR->value])
                 // if user role is higher privileged than managing advisor (admin) -> authorized
                 || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADMIN->value])
-            // or if the user edits his own profile
+            // or if the user edits his own profile, also authorized to the next section
             || $this->loggedInUserId === (int)$userIdToUpdate
         ) {
             // Things that managing advisor and owner user are allowed to change
@@ -193,7 +193,7 @@ class UserPermissionVerifier
             if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
                 $grantedUpdateKeys[] = 'status';
 
-                // Check that authenticated user is granted to attribute role if that's requested
+                // Check if the authenticated user is granted to attribute role if that's requested
                 if (array_key_exists('user_role_id', $userDataToUpdate)
                     && $this->userRoleIsGranted(
                         $userDataToUpdate['user_role_id'],
@@ -309,11 +309,11 @@ class UserPermissionVerifier
         // * Lower hierarchy number means higher privileged role
         $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
 
-        // Only managing advisor and higher privilege are allowed to see other users
+        // Only managing advisor and higher privileged are allowed to see other users
         // If the user role hierarchy of the authenticated user is lower or equal
-        // than from the managing advisor -> authorized
+        // than the one from the managing advisor -> authorized
         if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
-            // or user wants to view his own profile
+            // or user wants to view his own profile in which case also -> authorized
             || $this->loggedInUserId === $userIdToRead) {
             return true;
         }

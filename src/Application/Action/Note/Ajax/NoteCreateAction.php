@@ -7,11 +7,11 @@ use App\Domain\Note\Service\NoteCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class NoteCreateAction
+final readonly class NoteCreateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly NoteCreator $noteCreator,
+        private JsonResponder $jsonResponder,
+        private NoteCreator $noteCreator,
     ) {
     }
 

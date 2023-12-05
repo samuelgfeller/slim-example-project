@@ -319,13 +319,13 @@ found [here](https://github.com/samuelgfeller/slim-example-project/blob/master/s
 namespace App\Application\ErrorHandler;
 use App\Domain\Validation\ValidationException;use Fig\Http\Message\StatusCodeInterface;use Psr\Http\Message\ResponseFactoryInterface;use Psr\Http\Message\ResponseInterface;use Psr\Http\Message\ServerRequestInterface;use Psr\Log\LoggerInterface;use Slim\Exception\HttpException;use Slim\Views\PhpRenderer;use Throwable;
 
-class DefaultErrorHandler
+readonly class DefaultErrorHandler
 {
 
     public function __construct(
-        private readonly PhpRenderer $phpRenderer,
-        private readonly ResponseFactoryInterface $responseFactory,
-      private readonly LoggerInterface $logger,        
+        private PhpRenderer $phpRenderer,
+        private ResponseFactoryInterface $responseFactory,
+        private LoggerInterface $logger,        
     ) {
     }
 

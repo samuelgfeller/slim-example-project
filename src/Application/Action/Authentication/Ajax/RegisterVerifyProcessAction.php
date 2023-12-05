@@ -14,15 +14,15 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Interfaces\RouteParserInterface;
 
-final class RegisterVerifyProcessAction
+final readonly class RegisterVerifyProcessAction
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly RedirectHandler $redirectHandler,
-        private readonly RouteParserInterface $routeParser,
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly RegisterTokenVerifier $registerTokenVerifier
+        private LoggerInterface $logger,
+        private RedirectHandler $redirectHandler,
+        private RouteParserInterface $routeParser,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private RegisterTokenVerifier $registerTokenVerifier
     ) {
     }
 

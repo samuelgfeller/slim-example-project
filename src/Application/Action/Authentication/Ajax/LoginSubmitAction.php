@@ -16,16 +16,16 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 
-final class LoginSubmitAction
+final readonly class LoginSubmitAction
 {
     public function __construct(
-        private readonly RedirectHandler $redirectHandler,
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly LoggerInterface $logger,
-        private readonly LoginVerifier $loginVerifier,
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly UserFinder $userFinder,
+        private RedirectHandler $redirectHandler,
+        private TemplateRenderer $templateRenderer,
+        private LoggerInterface $logger,
+        private LoginVerifier $loginVerifier,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private UserFinder $userFinder,
     ) {
     }
 

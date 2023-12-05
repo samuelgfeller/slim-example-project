@@ -9,13 +9,13 @@ use App\Domain\Dashboard\Panel\UserFilterChipProvider;
 use App\Domain\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 
-class DashboardPanelProvider
+readonly class DashboardPanelProvider
 {
     public function __construct(
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly AuthorizationChecker $authorizationChecker,
-        private readonly SessionInterface $session,
-        private readonly UserFilterChipProvider $userFilterChipProvider,
+        private ClientStatusFinderRepository $clientStatusFinderRepository,
+        private AuthorizationChecker $authorizationChecker,
+        private SessionInterface $session,
+        private UserFilterChipProvider $userFilterChipProvider,
     ) {
     }
 

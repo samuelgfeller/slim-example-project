@@ -10,13 +10,13 @@ use InvalidArgumentException;
 use RuntimeException;
 use Slim\Interfaces\RouteParserInterface;
 
-class UserActivityFinder
+readonly class UserActivityFinder
 {
     public function __construct(
-        private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly RouteParserInterface $routeParser,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserActivityRepository $userActivityRepository,
+        private UserPermissionVerifier $userPermissionVerifier,
+        private RouteParserInterface $routeParser,
+        private UserFinderRepository $userFinderRepository,
+        private UserActivityRepository $userActivityRepository,
     ) {
     }
 

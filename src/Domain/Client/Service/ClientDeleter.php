@@ -9,14 +9,14 @@ use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-class ClientDeleter
+readonly class ClientDeleter
 {
     public function __construct(
-        private readonly ClientDeleterRepository $clientDeleterRepository,
-        private readonly ClientFinder $clientFinder,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly NoteDeleterRepository $noteDeleterRepository,
+        private ClientDeleterRepository $clientDeleterRepository,
+        private ClientFinder $clientFinder,
+        private ClientPermissionVerifier $clientPermissionVerifier,
+        private UserActivityLogger $userActivityLogger,
+        private NoteDeleterRepository $noteDeleterRepository,
     ) {
     }
 

@@ -10,13 +10,13 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class UserCreateAction
+final readonly class UserCreateAction
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserCreator $userCreator,
-        private readonly SessionInterface $session,
+        private LoggerInterface $logger,
+        private JsonResponder $jsonResponder,
+        private UserCreator $userCreator,
+        private SessionInterface $session,
     ) {
     }
 

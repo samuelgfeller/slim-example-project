@@ -10,12 +10,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class LocaleMiddleware implements MiddlewareInterface
+final readonly class LocaleMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly SessionInterface $session,
-        private readonly UserFinder $userFinder,
-        private readonly LocaleHelper $localeHelper,
+        private SessionInterface $session,
+        private UserFinder $userFinder,
+        private LocaleHelper $localeHelper,
     ) {
     }
 

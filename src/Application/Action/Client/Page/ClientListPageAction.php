@@ -9,12 +9,12 @@ use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ClientListPageAction
+final readonly class ClientListPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly ClientListFilterChipProvider $clientListFilterChipGetter,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier
+        private TemplateRenderer $templateRenderer,
+        private ClientListFilterChipProvider $clientListFilterChipGetter,
+        private ClientPermissionVerifier $clientPermissionVerifier
     ) {
     }
 

@@ -10,13 +10,13 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class DashboardPageAction
+final readonly class DashboardPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly SessionInterface $session,
-        private readonly FilterSettingFinder $filterSettingFinder,
-        private readonly DashboardPanelProvider $dashboardGetter,
+        private TemplateRenderer $templateRenderer,
+        private SessionInterface $session,
+        private FilterSettingFinder $filterSettingFinder,
+        private DashboardPanelProvider $dashboardGetter,
     ) {
     }
 

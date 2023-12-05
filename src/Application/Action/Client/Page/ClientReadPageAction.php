@@ -8,12 +8,12 @@ use App\Domain\Client\Service\ClientUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ClientReadPageAction
+final readonly class ClientReadPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly ClientFinder $clientFinder,
-        private readonly ClientUtilFinder $clientUtilFinder,
+        private TemplateRenderer $templateRenderer,
+        private ClientFinder $clientFinder,
+        private ClientUtilFinder $clientUtilFinder,
     ) {
     }
 

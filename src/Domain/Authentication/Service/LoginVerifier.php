@@ -11,15 +11,15 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class LoginVerifier
+readonly class LoginVerifier
 {
     public function __construct(
-        private readonly UserValidator $userValidator,
-        private readonly SecurityLoginChecker $loginSecurityChecker,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly LoginNonActiveUserHandler $loginNonActiveUserHandler,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly AuthenticationLogger $authenticationLogger,
+        private UserValidator $userValidator,
+        private SecurityLoginChecker $loginSecurityChecker,
+        private UserFinderRepository $userFinderRepository,
+        private LoginNonActiveUserHandler $loginNonActiveUserHandler,
+        private UserActivityLogger $userActivityLogger,
+        private AuthenticationLogger $authenticationLogger,
     ) {
     }
 

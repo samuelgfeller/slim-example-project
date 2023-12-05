@@ -7,10 +7,10 @@ use App\Domain\Authorization\Privilege;
 /**
  * This class is responsible for determining the level of privileges a user has.
  */
-class UserPrivilegeDeterminer
+readonly class UserPrivilegeDeterminer
 {
     public function __construct(
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
@@ -21,7 +21,7 @@ class UserPrivilegeDeterminer
      *
      * @return string
      */
-    public function determineUserRoleAssignmentPrivilege(array $grantedUserRoles): string
+    public function getUserRoleAssignmentPrivilege(array $grantedUserRoles): string
     {
         // If there are more available roles than the attributed one, it means that user has the privilege to update roles
         if (count($grantedUserRoles) > 1) {
@@ -40,7 +40,7 @@ class UserPrivilegeDeterminer
      *
      * @return string
      */
-    public function determineMutationPrivilege(int $userId, ?string $column = null): string
+    public function getMutationPrivilege(int $userId, ?string $column = null): string
     {
         // Usually I'd check first against the highest privilege and if allowed, directly return otherwise continue
         // down the chain. But some authorizations are limited per column, so when a $column is provided,

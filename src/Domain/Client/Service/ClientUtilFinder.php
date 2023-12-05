@@ -8,13 +8,13 @@ use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 
-class ClientUtilFinder
+readonly class ClientUtilFinder
 {
     public function __construct(
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserNameAbbreviator $userNameAbbreviator,
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier,
+        private UserFinderRepository $userFinderRepository,
+        private UserNameAbbreviator $userNameAbbreviator,
+        private ClientStatusFinderRepository $clientStatusFinderRepository,
+        private ClientPermissionVerifier $clientPermissionVerifier,
     ) {
     }
 

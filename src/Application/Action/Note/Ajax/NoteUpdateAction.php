@@ -7,11 +7,11 @@ use App\Domain\Note\Service\NoteUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class NoteUpdateAction
+final readonly class NoteUpdateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly NoteUpdater $noteUpdater,
+        private JsonResponder $jsonResponder,
+        private NoteUpdater $noteUpdater,
     ) {
     }
 

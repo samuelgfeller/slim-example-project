@@ -9,14 +9,14 @@ use App\Domain\Exception\InvalidOperationException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-class ClientUpdater
+readonly class ClientUpdater
 {
     public function __construct(
-        private readonly ClientUpdaterRepository $clientUpdaterRepository,
-        private readonly ClientValidator $clientValidator,
-        private readonly ClientFinder $clientFinder,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier,
-        private readonly UserActivityLogger $userActivityLogger,
+        private ClientUpdaterRepository $clientUpdaterRepository,
+        private ClientValidator $clientValidator,
+        private ClientFinder $clientFinder,
+        private ClientPermissionVerifier $clientPermissionVerifier,
+        private UserActivityLogger $userActivityLogger,
     ) {
     }
 

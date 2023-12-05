@@ -8,7 +8,7 @@ enum Privilege
     // R: Read, C: Create, U: Update, D: Delete
     // They can be combined or used individually depending on the needs of the application.
     // To check if a privilege is allowed, the frontend can check if the letter of the privilege is in the value.
-    // For instance, if update privilege is required, the client will check if privilege value contains "U".
+    // For instance, if update privilege is required, the client can check if privilege value contains "U".
 
     // No rights
     case N;

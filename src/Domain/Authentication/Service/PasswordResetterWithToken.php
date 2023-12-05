@@ -8,14 +8,14 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
-class PasswordResetterWithToken
+readonly class PasswordResetterWithToken
 {
     public function __construct(
-        private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserValidator $userValidator,
-        private readonly VerificationTokenVerifier $verificationTokenVerifier,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly LoggerInterface $logger,
+        private UserUpdaterRepository $userUpdaterRepository,
+        private UserValidator $userValidator,
+        private VerificationTokenVerifier $verificationTokenVerifier,
+        private UserActivityLogger $userActivityLogger,
+        private LoggerInterface $logger,
     ) {
     }
 

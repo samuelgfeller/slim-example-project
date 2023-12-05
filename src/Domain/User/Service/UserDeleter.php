@@ -10,14 +10,14 @@ use App\Domain\UserActivity\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 
-class UserDeleter
+readonly class UserDeleter
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly UserDeleterRepository $userDeleterRepository,
-        private readonly SessionInterface $session,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly UserActivityLogger $userActivityLogger,
+        private LoggerInterface $logger,
+        private UserDeleterRepository $userDeleterRepository,
+        private SessionInterface $session,
+        private UserPermissionVerifier $userPermissionVerifier,
+        private UserActivityLogger $userActivityLogger,
     ) {
     }
 

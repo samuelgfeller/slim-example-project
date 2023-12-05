@@ -7,11 +7,11 @@ use App\Domain\Client\Service\ClientCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ClientCreateAction
+final readonly class ClientCreateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly ClientCreator $clientCreator,
+        private JsonResponder $jsonResponder,
+        private ClientCreator $clientCreator,
     ) {
     }
 

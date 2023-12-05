@@ -7,11 +7,11 @@ use App\Domain\User\Service\UserUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UserUpdateAction
+final readonly class UserUpdateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserUpdater $userUpdater,
+        private JsonResponder $jsonResponder,
+        private UserUpdater $userUpdater,
     ) {
     }
 

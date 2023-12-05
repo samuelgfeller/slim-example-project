@@ -12,12 +12,12 @@ use Slim\Exception\HttpException;
 use Slim\Views\PhpRenderer;
 use Throwable;
 
-class DefaultErrorHandler
+readonly class DefaultErrorHandler
 {
     public function __construct(
-        private readonly PhpRenderer $phpRenderer,
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly LoggerInterface $logger,
+        private PhpRenderer $phpRenderer,
+        private ResponseFactoryInterface $responseFactory,
+        private LoggerInterface $logger,
     ) {
     }
 

@@ -17,18 +17,18 @@ use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 
-class ClientFinder
+readonly class ClientFinder
 {
     public function __construct(
-        private readonly ClientFinderRepository $clientFinderRepository,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly UserNameAbbreviator $userNameAbbreviator,
-        private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly NoteFinder $noteFinder,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier,
-        private readonly ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
-        private readonly NotePrivilegeDeterminer $notePrivilegeDeterminer,
-        private readonly NotePermissionVerifier $notePermissionVerifier,
+        private ClientFinderRepository $clientFinderRepository,
+        private UserFinderRepository $userFinderRepository,
+        private UserNameAbbreviator $userNameAbbreviator,
+        private ClientStatusFinderRepository $clientStatusFinderRepository,
+        private NoteFinder $noteFinder,
+        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
+        private NotePrivilegeDeterminer $notePrivilegeDeterminer,
+        private NotePermissionVerifier $notePermissionVerifier,
     ) {
     }
 
@@ -69,12 +69,12 @@ class ClientFinder
         // Add assigned user and client status privilege to each clientResultAggregate
         foreach ($clientResultsWithAggregates as $key => $client) {
             if ($this->clientPermissionVerifier->isGrantedToRead($client->userId, $client->deletedAt)) {
-                $client->assignedUserPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
+                $client->assignedUserPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                     $client->userId,
                     'user_id'
                 );
                 //  Set client status privilege
-                $client->clientStatusPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
+                $client->clientStatusPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                     $client->userId,
                     'client_status_id',
                 );
@@ -115,7 +115,7 @@ class ClientFinder
             )
         ) {
             // Set client mutation privilege
-            $clientResultAggregate->generalPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
+            $clientResultAggregate->generalPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                 $clientResultAggregate->userId,
                 'personal_info'
             );
@@ -128,12 +128,12 @@ class ClientFinder
             }
 
             // Set assigned user privilege
-            $clientResultAggregate->assignedUserPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
+            $clientResultAggregate->assignedUserPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                 $clientResultAggregate->userId,
                 'user_id',
             );
             //  Set client status privilege
-            $clientResultAggregate->clientStatusPrivilege = $this->clientPrivilegeDeterminer->determineMutationPrivilege(
+            $clientResultAggregate->clientStatusPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                 $clientResultAggregate->userId,
                 'client_status_id',
             );

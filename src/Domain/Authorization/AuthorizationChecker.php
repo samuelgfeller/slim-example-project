@@ -9,11 +9,11 @@ use App\Domain\User\Enum\UserRole;
 /**
  * Default authorization checker.
  */
-class AuthorizationChecker
+readonly class AuthorizationChecker
 {
     public function __construct(
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly UserNetworkSessionData $userNetworkSessionData,
+        private UserRoleFinderRepository $userRoleFinderRepository,
+        private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
 

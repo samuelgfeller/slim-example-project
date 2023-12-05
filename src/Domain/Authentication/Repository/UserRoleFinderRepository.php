@@ -6,10 +6,10 @@ use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 
-class UserRoleFinderRepository
+readonly class UserRoleFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

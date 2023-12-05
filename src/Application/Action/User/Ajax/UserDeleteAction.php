@@ -9,13 +9,13 @@ use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UserDeleteAction
+final readonly class UserDeleteAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserDeleter $userDeleter,
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
+        private JsonResponder $jsonResponder,
+        private UserDeleter $userDeleter,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
     ) {
     }
 

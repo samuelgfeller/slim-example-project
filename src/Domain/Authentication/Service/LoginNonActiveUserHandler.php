@@ -14,7 +14,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Logic on cases where user tries to log in but his status is not active
- * In separate class to not overload LoginVerifier.
+ *  In a separate class to not overload LoginVerifier.
  */
 class LoginNonActiveUserHandler
 {

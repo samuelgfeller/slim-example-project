@@ -13,14 +13,14 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
-final class AccountUnlockProcessAction
+final readonly class AccountUnlockProcessAction
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly RedirectHandler $redirectHandler,
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly AccountUnlockTokenVerifier $accountUnlockTokenVerifier
+        private LoggerInterface $logger,
+        private RedirectHandler $redirectHandler,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private AccountUnlockTokenVerifier $accountUnlockTokenVerifier
     ) {
     }
 

@@ -9,12 +9,12 @@ use App\Domain\UserActivity\Service\UserActivityFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UserActivityFetchListAction
+readonly class UserActivityFetchListAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserActivityFinder $userActivityFinder,
-        private readonly FilterSettingSaver $filterSettingSaver,
+        private JsonResponder $jsonResponder,
+        private UserActivityFinder $userActivityFinder,
+        private FilterSettingSaver $filterSettingSaver,
     ) {
     }
 

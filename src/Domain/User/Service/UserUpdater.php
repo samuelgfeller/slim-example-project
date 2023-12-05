@@ -10,14 +10,14 @@ use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
-final class UserUpdater
+final readonly class UserUpdater
 {
     public function __construct(
-        private readonly UserValidator $userValidator,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly UserUpdaterRepository $userUpdaterRepository,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly LoggerInterface $logger,
+        private UserValidator $userValidator,
+        private UserPermissionVerifier $userPermissionVerifier,
+        private UserUpdaterRepository $userUpdaterRepository,
+        private UserActivityLogger $userActivityLogger,
+        private LoggerInterface $logger,
     ) {
     }
 

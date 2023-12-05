@@ -12,14 +12,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 
-class NewPasswordResetSubmitAction
+readonly class NewPasswordResetSubmitAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly RedirectHandler $redirectHandler,
-        private readonly SessionInterface $session,
-        private readonly PasswordResetterWithToken $passwordResetterWithToken,
-        private readonly LoggerInterface $logger,
+        private TemplateRenderer $templateRenderer,
+        private RedirectHandler $redirectHandler,
+        private SessionInterface $session,
+        private PasswordResetterWithToken $passwordResetterWithToken,
+        private LoggerInterface $logger,
     ) {
     }
 

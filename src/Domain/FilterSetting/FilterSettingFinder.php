@@ -6,12 +6,12 @@ use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
 use Odan\Session\SessionInterface;
 
-class FilterSettingFinder
+readonly class FilterSettingFinder
 {
     public function __construct(
-        private readonly UserFilterHandlerRepository $userFilterHandlerRepository,
-        private readonly FilterSettingSaver $filterSettingSaver,
-        private readonly SessionInterface $session,
+        private UserFilterHandlerRepository $userFilterHandlerRepository,
+        private FilterSettingSaver $filterSettingSaver,
+        private SessionInterface $session,
     ) {
     }
 

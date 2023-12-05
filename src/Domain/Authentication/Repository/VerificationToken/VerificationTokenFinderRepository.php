@@ -7,10 +7,10 @@ use App\Domain\Exception\Persistence\PersistenceRecordNotFoundException;
 use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserData;
 
-class VerificationTokenFinderRepository
+readonly class VerificationTokenFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

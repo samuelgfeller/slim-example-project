@@ -8,12 +8,12 @@ use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
-final class LogoutPageAction
+final readonly class LogoutPageAction
 {
     public function __construct(
-        private readonly SessionManagerInterface $sessionManager,
-        private readonly SessionInterface $session,
-        private readonly RedirectHandler $redirectHandler,
+        private SessionManagerInterface $sessionManager,
+        private SessionInterface $session,
+        private RedirectHandler $redirectHandler,
     ) {
     }
 

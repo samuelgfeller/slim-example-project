@@ -7,12 +7,12 @@ use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenDele
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-class VerificationTokenCreator
+readonly class VerificationTokenCreator
 {
     public function __construct(
-        private readonly VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
-        private readonly VerificationTokenCreatorRepository $verificationTokenCreatorRepository,
-        private readonly UserActivityLogger $userActivityLogger,
+        private VerificationTokenDeleterRepository $verificationTokenDeleterRepository,
+        private VerificationTokenCreatorRepository $verificationTokenCreatorRepository,
+        private UserActivityLogger $userActivityLogger,
     ) {
     }
 

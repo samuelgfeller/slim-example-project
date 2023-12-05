@@ -13,13 +13,13 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-class InvalidOperationExceptionMiddleware implements MiddlewareInterface
+readonly class InvalidOperationExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly JsonResponder $jsonResponder,
-        private readonly UserNetworkSessionData $userNetworkSessionData,
-        private readonly LoggerInterface $logger,
+        private ResponseFactoryInterface $responseFactory,
+        private JsonResponder $jsonResponder,
+        private UserNetworkSessionData $userNetworkSessionData,
+        private LoggerInterface $logger,
     ) {
     }
 

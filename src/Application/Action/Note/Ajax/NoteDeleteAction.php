@@ -8,12 +8,12 @@ use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class NoteDeleteAction
+final readonly class NoteDeleteAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
-        private readonly NoteDeleter $noteDeleter,
-        private readonly SessionInterface $session,
+        private JsonResponder $jsonResponder,
+        private NoteDeleter $noteDeleter,
+        private SessionInterface $session,
     ) {
     }
 

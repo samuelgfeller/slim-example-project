@@ -9,13 +9,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\RouteParserInterface;
 
-final class LoginPageAction
+final readonly class LoginPageAction
 {
     public function __construct(
-        private readonly RedirectHandler $redirectHandler,
-        private readonly RouteParserInterface $routeParser,
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly SessionInterface $session,
+        private RedirectHandler $redirectHandler,
+        private RouteParserInterface $routeParser,
+        private TemplateRenderer $templateRenderer,
+        private SessionInterface $session,
     ) {
     }
 

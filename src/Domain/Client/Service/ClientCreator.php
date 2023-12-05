@@ -13,16 +13,16 @@ use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use App\Domain\Validation\ValidationException;
 
-class ClientCreator
+readonly class ClientCreator
 {
     public function __construct(
-        private readonly ClientValidator $clientValidator,
-        private readonly ClientCreatorRepository $clientCreatorRepository,
-        private readonly ClientPermissionVerifier $clientPermissionVerifier,
-        private readonly NoteCreator $noteCreator,
-        private readonly ClientDeleterRepository $clientDeleterRepository,
-        private readonly UserActivityLogger $userActivityLogger,
-        private readonly UserNetworkSessionData $userNetworkSessionData,
+        private ClientValidator $clientValidator,
+        private ClientCreatorRepository $clientCreatorRepository,
+        private ClientPermissionVerifier $clientPermissionVerifier,
+        private NoteCreator $noteCreator,
+        private ClientDeleterRepository $clientDeleterRepository,
+        private UserActivityLogger $userActivityLogger,
+        private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
 

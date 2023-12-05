@@ -6,10 +6,10 @@ use App\Application\Responder\JsonResponder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class TranslateAction
+final readonly class TranslateAction
 {
     public function __construct(
-        private readonly JsonResponder $jsonResponder,
+        private JsonResponder $jsonResponder,
     ) {
     }
 

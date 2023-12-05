@@ -11,12 +11,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
-final class UserReadPageAction
+final readonly class UserReadPageAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly UserFinder $userFinder,
-        private readonly SessionInterface $session,
+        private TemplateRenderer $templateRenderer,
+        private UserFinder $userFinder,
+        private SessionInterface $session,
     ) {
     }
 

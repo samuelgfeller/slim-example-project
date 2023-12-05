@@ -16,17 +16,17 @@ use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class UserCreator
+final readonly class UserCreator
 {
     public function __construct(
-        private readonly UserValidator $userValidator,
-        private readonly SecurityEmailChecker $emailSecurityChecker,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly UserCreatorRepository $userCreatorRepository,
-        private readonly VerificationTokenCreator $verificationTokenCreator,
-        private readonly RegistrationMailSender $registrationMailer,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly UserActivityLogger $userActivityLogger,
+        private UserValidator $userValidator,
+        private SecurityEmailChecker $emailSecurityChecker,
+        private UserPermissionVerifier $userPermissionVerifier,
+        private UserCreatorRepository $userCreatorRepository,
+        private VerificationTokenCreator $verificationTokenCreator,
+        private RegistrationMailSender $registrationMailer,
+        private UserRoleFinderRepository $userRoleFinderRepository,
+        private UserActivityLogger $userActivityLogger,
     ) {
     }
 

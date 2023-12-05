@@ -14,14 +14,14 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-final class PasswordForgottenEmailSubmitAction
+final readonly class PasswordForgottenEmailSubmitAction
 {
     public function __construct(
-        private readonly TemplateRenderer $templateRenderer,
-        private readonly RedirectHandler $redirectHandler,
-        private readonly SessionInterface $session,
-        private readonly PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
-        private readonly LoggerInterface $logger,
+        private TemplateRenderer $templateRenderer,
+        private RedirectHandler $redirectHandler,
+        private SessionInterface $session,
+        private PasswordRecoveryEmailSender $passwordRecoveryEmailSender,
+        private LoggerInterface $logger,
     ) {
     }
 

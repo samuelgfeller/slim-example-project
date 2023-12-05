@@ -4,10 +4,10 @@ namespace App\Domain\Authentication\Repository\VerificationToken;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-class VerificationTokenCreatorRepository
+readonly class VerificationTokenCreatorRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private QueryFactory $queryFactory
     ) {
     }
 

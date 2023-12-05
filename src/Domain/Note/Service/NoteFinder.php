@@ -9,12 +9,12 @@ use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Repository\NoteFinderRepository;
 use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
 
-class NoteFinder
+readonly class NoteFinder
 {
     public function __construct(
-        private readonly NoteFinderRepository $noteFinderRepository,
-        private readonly NotePrivilegeDeterminer $notePrivilegeDeterminer,
-        private readonly ClientFinderRepository $clientFinderRepository,
+        private NoteFinderRepository $noteFinderRepository,
+        private NotePrivilegeDeterminer $notePrivilegeDeterminer,
+        private ClientFinderRepository $clientFinderRepository,
     ) {
     }
 
