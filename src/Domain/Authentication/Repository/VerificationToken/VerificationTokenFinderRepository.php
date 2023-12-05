@@ -7,10 +7,11 @@ use App\Domain\Exception\Persistence\PersistenceRecordNotFoundException;
 use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserData;
 
-readonly class VerificationTokenFinderRepository
+// Class cannot be readonly as it's mocked (doubled) in tests
+class VerificationTokenFinderRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory
     ) {
     }
 

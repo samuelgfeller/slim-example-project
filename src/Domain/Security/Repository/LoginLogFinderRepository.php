@@ -4,10 +4,11 @@ namespace App\Domain\Security\Repository;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-readonly class LoginLogFinderRepository
+// Class cannot be readonly as it's mocked (doubled) in tests
+class LoginLogFinderRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory
     ) {
     }
 

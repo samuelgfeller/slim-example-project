@@ -11,13 +11,14 @@ use App\Domain\User\Service\Authorization\AuthorizedUserRoleFilterer;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use App\Domain\User\Service\Authorization\UserPrivilegeDeterminer;
 
-readonly class UserFinder
+// Class cannot be readonly as it's mocked (doubled) in tests
+class UserFinder
 {
     public function __construct(
-        private UserFinderRepository $userFinderRepository,
-        private UserPrivilegeDeterminer $userPrivilegeDeterminer,
-        private AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private readonly UserFinderRepository $userFinderRepository,
+        private readonly UserPrivilegeDeterminer $userPrivilegeDeterminer,
+        private readonly AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
+        private readonly UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
