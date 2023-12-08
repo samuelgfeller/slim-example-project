@@ -2,9 +2,9 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Common\LocaleHelper;
-use App\Domain\Service\Infrastructure\Mailer;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Service\LocaleConfigurator;
+use App\Infrastructure\Service\Mailer;
+use App\Infrastructure\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -23,7 +23,7 @@ class RegistrationMailSender
 
     public function __construct(
         private readonly Mailer $mailer,
-        private readonly LocaleHelper $localeHelper,
+        private readonly LocaleConfigurator $localeConfigurator,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
@@ -49,13 +49,13 @@ class RegistrationMailSender
     {
         // Change language to one the user is being registered with
         $originalLocale = setlocale(LC_ALL, 0);
-        $this->localeHelper->setLanguage($language);
+        $this->localeConfigurator->setLanguage($language);
 
         // Send verification mail in the language that was selected for the user
         $this->email->subject(__('Account created'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeConfigurator->getLanguageCodeForPath() .
                     'new-account.email.php',
                     ['userFullName' => $fullName, 'queryParams' => $queryParams]
                 )
@@ -64,6 +64,6 @@ class RegistrationMailSender
         $this->mailer->send($this->email);
 
         // Reset locale
-        $this->localeHelper->setLanguage($originalLocale);
+        $this->localeConfigurator->setLanguage($originalLocale);
     }
 }

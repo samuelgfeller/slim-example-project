@@ -2,9 +2,9 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Common\LocaleHelper;
-use App\Domain\Service\Infrastructure\Mailer;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Service\LocaleConfigurator;
+use App\Infrastructure\Service\Mailer;
+use App\Infrastructure\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -18,7 +18,7 @@ class LoginMailSender
 
     public function __construct(
         private readonly Mailer $mailer,
-        private readonly LocaleHelper $localeHelper,
+        private readonly LocaleConfigurator $localeConfigurator,
         Settings $settings
     ) {
         $settings = $settings->get('public')['email'];
@@ -45,7 +45,7 @@ class LoginMailSender
         $this->email->subject(__('Login failed because your account is unverified'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeConfigurator->getLanguageCodeForPath() .
                     'login-but-unverified.email.php',
                     ['userFullName' => $fullName, 'queryParams' => $queryParamsWithToken]
                 )
@@ -55,7 +55,7 @@ class LoginMailSender
     }
 
     /**
-     * When a user tries to log in but his status is suspended.
+     * When a user tries to log in but their status is suspended.
      *
      * @param string $email
      * @param string $fullName
@@ -68,7 +68,7 @@ class LoginMailSender
         $this->email->subject(__('Login failed because your account is suspended'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeConfigurator->getLanguageCodeForPath() .
                     'login-but-suspended.email.php',
                     ['userFullName' => $fullName]
                 )
@@ -92,7 +92,7 @@ class LoginMailSender
         $this->email->subject(__('Login failed because your account is locked'))
             ->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeConfigurator->getLanguageCodeForPath() .
                     'login-but-locked.email.php',
                     ['userFullName' => $fullName, 'queryParams' => $queryParamsWithToken]
                 )

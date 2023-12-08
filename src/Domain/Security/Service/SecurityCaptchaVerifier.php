@@ -4,7 +4,7 @@ namespace App\Domain\Security\Service;
 
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Utility\Settings;
 
 class SecurityCaptchaVerifier
 {

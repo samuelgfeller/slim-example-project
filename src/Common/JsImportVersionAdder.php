@@ -2,7 +2,7 @@
 
 namespace App\Common;
 
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Utility\Settings;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

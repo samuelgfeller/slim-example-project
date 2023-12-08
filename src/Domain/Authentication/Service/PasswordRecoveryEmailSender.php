@@ -2,14 +2,14 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Common\LocaleHelper;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Service\SecurityEmailChecker;
-use App\Domain\Service\Infrastructure\Mailer;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserValidator;
-use App\Domain\Utility\Settings;
 use App\Domain\Validation\ValidationException;
+use App\Infrastructure\Service\LocaleConfigurator;
+use App\Infrastructure\Service\Mailer;
+use App\Infrastructure\Utility\Settings;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -28,7 +28,7 @@ class PasswordRecoveryEmailSender
         private readonly VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
         private readonly SecurityEmailChecker $securityEmailChecker,
-        private readonly LocaleHelper $localeHelper,
+        private readonly LocaleConfigurator $localeConfigurator,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object
@@ -63,12 +63,12 @@ class PasswordRecoveryEmailSender
 
             // Change language to one the user chose in settings
             $originalLocale = setlocale(LC_ALL, 0);
-            $this->localeHelper->setLanguage($dbUser->language->value);
+            $this->localeConfigurator->setLanguage($dbUser->language->value);
 
             // Send verification mail
             $this->email->subject(__('Reset password'))->html(
                 $this->mailer->getContentFromTemplate(
-                    'authentication/email/' . $this->localeHelper->getLanguageCodeForPath() .
+                    'authentication/email/' . $this->localeConfigurator->getLanguageCodeForPath() .
                     'password-reset.email.php',
                     ['user' => $dbUser, 'queryParams' => $queryParamsWithToken]
                 )
@@ -76,7 +76,7 @@ class PasswordRecoveryEmailSender
             // Send email
             $this->mailer->send($this->email);
             // Reset locale
-            $this->localeHelper->setLanguage($originalLocale);
+            $this->localeConfigurator->setLanguage($originalLocale);
 
             // User activity entry is done when user verification token is created
             return;

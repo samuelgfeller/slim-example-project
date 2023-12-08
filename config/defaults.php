@@ -48,12 +48,8 @@ $settings['public'] = [
 
 $settings['locale'] = [
     'translations_path' => $settings['root_dir'] . '/resources/translations',
-    // Available languages in this format: ['language' => 'language_COUNTRY'] e.g. ['en' => 'en_US', 'de' => 'de_CH']
-    // 'available' => [
-    //     'en' => 'en_US',
-    //     'de' => 'de_CH',
-    //     'fr' => 'fr_CH',
-    // ],
+    // When adding new available locales, new translated email templates have to be added as well in their
+    // respective language subdirectory.
     'available' => ['en_US', 'de_CH', 'fr_CH'],
     'default' => 'en_US',
 ];

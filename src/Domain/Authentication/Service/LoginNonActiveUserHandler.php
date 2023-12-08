@@ -2,12 +2,12 @@
 
 namespace App\Domain\Authentication\Service;
 
-use App\Common\LocaleHelper;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Service\LocaleConfigurator;
+use App\Infrastructure\Utility\Settings;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -23,7 +23,7 @@ class LoginNonActiveUserHandler
     public function __construct(
         private readonly VerificationTokenCreator $verificationTokenCreator,
         private readonly LoginMailSender $loginMailer,
-        private readonly LocaleHelper $localeHelper,
+        private readonly LocaleConfigurator $localeConfigurator,
         private readonly SecurityEmailChecker $securityEmailChecker,
         private readonly LoggerInterface $logger,
         private readonly AuthenticationLogger $authenticationLogger,
@@ -73,7 +73,7 @@ class LoginNonActiveUserHandler
 
             // Change language to the one the user selected in settings (in case it differs from browser lang)
             $originalLocale = setlocale(LC_ALL, 0);
-            $this->localeHelper->setLanguage($dbUser->language->value);
+            $this->localeConfigurator->setLanguage($dbUser->language->value);
 
             if ($dbUser->status === UserStatus::Unverified) {
                 // Inform user via email that account is unverified, and he should click on the link in his inbox
@@ -96,10 +96,10 @@ class LoginNonActiveUserHandler
                 throw $unableToLoginException;
             }
             // Reset locale if sending the mail was successful
-            $this->localeHelper->setLanguage($originalLocale);
+            $this->localeConfigurator->setLanguage($originalLocale);
         } catch (TransportException $transportException) {
             // If exception is thrown reset locale as well. If $unableToLoginException
-            $this->localeHelper->setLanguage($originalLocale);
+            $this->localeConfigurator->setLanguage($originalLocale);
             // Exception while sending email
             throw new UnableToLoginStatusNotActiveException(
                 'Unable to login at the moment and there was an error when sending an email to you.' .
@@ -108,7 +108,7 @@ class LoginNonActiveUserHandler
         } // Catch exception to reset locale before throwing it again to be caught in the action
         catch (UnableToLoginStatusNotActiveException $unableToLoginStatusNotActiveException) {
             // Reset locale
-            $this->localeHelper->setLanguage($originalLocale);
+            $this->localeConfigurator->setLanguage($originalLocale);
             throw $unableToLoginStatusNotActiveException;
         }
 
