@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Utility;
+namespace App\Infrastructure\Utility;
 
 class Settings
 {

@@ -81,7 +81,7 @@ readonly class DefaultErrorHandler
             $errorMessage = $this->getExceptionDetailsAsHtml($exception, $statusCode, $reasonPhrase);
             $errorTemplate = 'error/error-details.html.php'; // If this path fails, the default exception is shown
         } else {
-            // If its a HttpException it's safe to show the error message to the user (used for custom )
+            // If it's a HttpException it's safe to show the error message to the user (used for custom )
             $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
             $errorMessage = [
                 'exceptionMessage' => $exceptionMessage,
@@ -218,7 +218,7 @@ readonly class DefaultErrorHandler
                 $nonVendorFileClass,
                 $key,
                 $nonVendorClassClass,
-                $classWithoutPath . $t['type'] . $t['function'] . "(<i style='color: #395186'>$args</i>)",
+                $classWithoutPath . $t['type'] . $t['function'] . "(<span style='color: #395186'>$args</span>)",
                 // only last 85 chars
                 $nonVendorFileClass,
                 $fileWithoutPath . ':<span class="lineSpan">' . $t['line'] . '</span>',

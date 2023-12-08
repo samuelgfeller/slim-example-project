@@ -4,7 +4,7 @@ namespace App\Application\Middleware;
 
 use App\Common\JsImportVersionAdder;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Utility\Settings;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

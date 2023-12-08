@@ -10,7 +10,7 @@ The framework main files are located inside the directory `config/`.
 The project environment configuration values are inside `config/env/`.
 
 ### Default values
-The default and non-sensitive config values are inside `config/env/defaults.php`.  
+The default and non-sensitive config values are inside `config/defaults.php`.  
 It should contain all keys even when values are null to act as template 
 that will be overwritten in the secret `env.php` file.
 
@@ -46,7 +46,7 @@ $_ENV['APP_ENV'] = 'prod';
 files values.  
 
 They are loaded in this order:  
-1. File `config/env/defaults.php`
+1. File `config/defaults.php`
 2. File `config/env/env.php`
 3. Depending on  what `APP_ENV` is defined, the environment specific file is loaded
    (if `APP_ENV` is "test", it will load `env.test.php`, if it is "dev" it'll load 

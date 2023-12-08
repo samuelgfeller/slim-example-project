@@ -25,8 +25,8 @@ $settings = [];
 // Simulate prod env
 $settings['dev'] = false;
 
-// Project root dir
-$settings['root_dir'] = dirname(__DIR__, 2);
+// Project root dir (1 parent)
+$settings['root_dir'] = dirname(__DIR__, 1);
 
 $settings['deployment'] = [
     // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
@@ -47,12 +47,14 @@ $settings['public'] = [
 ];
 
 $settings['locale'] = [
-    // Available languages format: ['language code' => 'locale code']
-    'available' => [
-        'en' => 'en_US',
-        'de' => 'de_CH',
-        'fr' => 'fr_CH',
-    ],
+    'translations_path' => $settings['root_dir'] . '/resources/translations',
+    // Available languages in this format: ['language' => 'language_COUNTRY'] e.g. ['en' => 'en_US', 'de' => 'de_CH']
+    // 'available' => [
+    //     'en' => 'en_US',
+    //     'de' => 'de_CH',
+    //     'fr' => 'fr_CH',
+    // ],
+    'available' => ['en_US', 'de_CH', 'fr_CH'],
     'default' => 'en_US',
 ];
 
@@ -156,6 +158,11 @@ $settings['session'] = [
     'name' => 'slim-example-project',
     // 5h session lifetime
     'lifetime' => 18000, // Time in seconds
+    // Sends cookie only over https
+    'cookie_secure' => true,
+    // Additional XSS protection
+    // Cookie is not accessible in JavaScript
+    'cookie_httponly' => false,
 ];
 
 $settings['logger'] = [

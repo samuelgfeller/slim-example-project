@@ -3,7 +3,7 @@
 // MUST be "require"; not require_once otherwise test settings are not included for the tests cases after the first one
 
 // Load default settings
-$settings = require __DIR__ . '/env/defaults.php';
+$settings = require __DIR__ . '/defaults.php';
 
 // Load secret configuration
 if (file_exists(__DIR__ . '/../../env.php')) {

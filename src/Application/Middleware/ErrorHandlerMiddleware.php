@@ -10,7 +10,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Middleware which sets set_error_handler() to custom DefaultErrorHandler
+ * Middleware, which sets set_error_handler() to custom DefaultErrorHandler
  * and logs warning and notices.
  */
 final class ErrorHandlerMiddleware implements MiddlewareInterface

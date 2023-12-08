@@ -7,20 +7,20 @@
     "slim/slim": "^4.7.1",
     "monolog/monolog": "^3",
     "php-di/php-di": "^7.0",
-    "ext-pdo": "*",
-    "ext-json": "*",
     "cakephp/database": "^5",
-    "odan/session": "^6",
     "slim/php-view": "^3.0",
+    "cakephp/validation": "^5.0",
     "selective/basepath": "^2.0",
     "symfony/mailer": "^6",
+    "odan/session": "^6",
     "nyholm/psr7": "^1.5",
-    "nyholm/psr7-server": "^1",
+    "nyholm/psr7-server": "^1.1",
     "fig/http-message-util": "^1.1",
-    "ext-gettext": "*",
-    "ext-intl": "*",
     "php": "^8.2",
-    "cakephp/validation": "^5.0"
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "ext-gettext": "*",
+    "ext-intl": "*"
   },
   "autoload": {
     "psr-4": {

@@ -2,7 +2,7 @@
 
 use App\Application\ErrorHandler\DefaultErrorHandler;
 use App\Application\Middleware\ErrorHandlerMiddleware;
-use App\Domain\Utility\Settings;
+use App\Infrastructure\Utility\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;

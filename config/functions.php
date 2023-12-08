@@ -13,18 +13,25 @@ function html(?string $text = null): string
 }
 
 /**
- * Text translation.
+ * This function is used for text translation.
+ * It takes a message string and an optional context.
+ * The message is passed to the gettext function for translation.
+ * If a context is provided, it is used to replace placeholders
+ * in the translated string.
  *
- * @param string $message The message
- * @param string|int|float|bool ...$context The context
+ * @param string $message The message to be translated.
+ * @param mixed ...$context Optional elements that should be inserted in the string with placeholders.
+ * The function can be called like this:
+ * __('The %s contains %d monkeys and %d birds.', 'tree', 5, 3);
+ * With the argument unpacking operator ...$context, they are accessible within the function as an array.
  *
- * @return string The translated string
+ * @return string The translated string.
  */
 function __(string $message, ...$context): string
 {
-    $locale = setlocale(LC_ALL, 0);
     $translated = gettext($message);
     if (!empty($context)) {
+        // If context is provided, replace placeholders in the translated string
         $translated = vsprintf($translated, $context);
     }
 
