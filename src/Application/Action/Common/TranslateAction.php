@@ -18,15 +18,11 @@ final readonly class TranslateAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     * @param array $args
      *
      * @return ResponseInterface The response
      */
-    public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        array $args
-    ): ResponseInterface {
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
         $queryParams = $request->getQueryParams();
         $translatedStrings = [];
         if (isset($queryParams['strings']) && is_array($queryParams['strings'])) {

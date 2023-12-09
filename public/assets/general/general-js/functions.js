@@ -41,7 +41,7 @@ export function escapeHtml(unsafeString) {
  * @param {boolean} upperCase
  * @return {string} string without special chars: -_ and first letter upper case if requested
  */
-export function removeSpecialChars(string, upperCase = false){
+export function removeSpecialChars(string, upperCase = false) {
     let outputString = string?.toString()
         .replace(/_/g, ' ')
         .replace(/-/g, ' ')
@@ -49,7 +49,7 @@ export function removeSpecialChars(string, upperCase = false){
         .replace(/id/g, ' ') // e.g. user_role_id -> user role
         // Remove extra whitespace from both ends
         .trim();
-    if (upperCase === true){
+    if (upperCase === true) {
         // Source: https://stackoverflow.com/a/3291856/9013718
         outputString = outputString.charAt(0).toUpperCase() + outputString.slice(1)
     }
@@ -63,6 +63,6 @@ export function removeSpecialChars(string, upperCase = false){
  * @param {string}string
  * @returns {string}
  */
-export function __(string){
+export function __(string) {
     return string;
 }

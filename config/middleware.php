@@ -19,8 +19,8 @@ return function (App $app) {
     // Language middleware has to be after PhpViewExtensionMiddleware as it needs the $route parameter
     $app->add(\App\Application\Middleware\LocaleMiddleware::class);
 
-    // ? Put everything possible before PhpViewExtensionMiddleware as if there is an error in a middleware,
-    // the error page (and layout as well as everything else) needs this middleware loaded to work.
+    // * Put everything possible before PhpViewExtensionMiddleware as if there is an error in a middleware,
+    // * the error page (and layout as well as everything else) needs this middleware loaded to work.
     $app->add(PhpViewExtensionMiddleware::class);
 
     // Retrieve and store ip address, user agent and user id (has to be BEFORE SessionStartMiddleware as it is using it
