@@ -59,8 +59,6 @@ class VerificationTokenFinderRepository
      *
      * @param int $verificationId
      *
-     * @throws \Exception
-     *
      * @return UserData
      */
     public function findUserDetailsByVerificationIncludingDeleted(int $verificationId): UserData

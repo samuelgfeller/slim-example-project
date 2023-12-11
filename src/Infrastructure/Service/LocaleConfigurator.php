@@ -27,7 +27,6 @@ final class LocaleConfigurator
     public function setLanguage(string|null|false $locale, string $domain = 'messages'): bool|string
     {
         $codeset = 'UTF-8';
-        $defaultLocale = $this->localeSettings['default'] ?? 'en_US';
         $directory = $this->localeSettings['translations_path'];
         // If locale has hyphen instead of underscore, replace it
         $locale = $locale && str_contains($locale, '-') ? str_replace('-', '_', $locale) : $locale;
@@ -89,7 +88,7 @@ final class LocaleConfigurator
         $availableLocales = $this->localeSettings['available'];
 
         // If locale is in available locales, return it
-        if (in_array($locale, $availableLocales, true)) {
+        if ($locale && in_array($locale, $availableLocales, true)) {
             return $locale;
         }
 
@@ -99,7 +98,7 @@ final class LocaleConfigurator
             $languageCode = $this->getLanguageCodeFromLocale($availableLocale);
             // If the language code is already in the result array, skip it (the first locale of the
             // language should be default)
-            if (!array_key_exists($languageCode, $localesMappedByLanguage)) {
+            if ($languageCode && !array_key_exists($languageCode, $localesMappedByLanguage)) {
                 $localesMappedByLanguage[$languageCode] = $availableLocale;
             }
         }
@@ -112,10 +111,10 @@ final class LocaleConfigurator
     /**
      * Get the language code part of a locale.
      *
-     * @param string|null $locale e.g. 'en_US'
+     * @param string|false|null $locale e.g. 'en_US'
      * @return string|null e.g. 'en'
      */
-    private function getLanguageCodeFromLocale(string|null $locale): ?string
+    private function getLanguageCodeFromLocale(string|null|false $locale): ?string
     {
         // If locale has hyphen instead of underscore, replace it
         if ($locale && str_contains($locale, '-')) {

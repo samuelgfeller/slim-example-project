@@ -170,7 +170,7 @@ $settings['logger'] = [
 
 // Email settings
 $settings['smtp'] = [
-    // use 'null' for the null adapter
+    // use type 'null' for the null adapter
     'type' => 'smtp',
     'host' => 'smtp.mailtrap.io',
     'port' => '587', // TLS: 587; SSL: 465

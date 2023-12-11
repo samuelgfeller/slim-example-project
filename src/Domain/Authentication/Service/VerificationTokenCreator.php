@@ -29,11 +29,11 @@ readonly class VerificationTokenCreator
         // Create token
         $token = bin2hex(random_bytes(50));
 
-        // Set token expiration because link automatically logs in
+        // Set token expiration datetime
         $expiresAt = new \DateTime('now');
         $expiresAt->add(new \DateInterval('PT02H')); // 2 hours
 
-        // Soft delete any existing tokens for this user
+        // Delete any existing tokens for this user
         $this->verificationTokenDeleterRepository->deleteVerificationToken($userId);
 
         // Insert verification token into database

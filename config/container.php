@@ -29,7 +29,6 @@ use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 
 return [
     'settings' => function () {
@@ -118,6 +117,7 @@ return [
         $driver = $container->get(Connection::class)->getDriver();
         $class = new ReflectionClass($driver);
         $method = $class->getMethod('getPdo');
+        // Make function getPdo() public
         $method->setAccessible(true);
 
         return $method->invoke($driver);
@@ -158,28 +158,21 @@ return [
 
     // SMTP transport
     MailerInterface::class => function (ContainerInterface $container) {
-        return new Mailer($container->get(TransportInterface::class));
-    },
-    // Mailer transport
-    TransportInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['smtp'];
-
         // smtp://user:pass@smtp.example.com:25
-        $dsn =
-            sprintf(
-                '%s://%s:%s@%s:%s',
-                $settings['type'],
-                $settings['username'],
-                $settings['password'],
-                $settings['host'],
-                $settings['port']
-            );
-
+        $dsn = sprintf(
+            '%s://%s:%s@%s:%s',
+            $settings['type'],
+            $settings['username'],
+            $settings['password'],
+            $settings['host'],
+            $settings['port']
+        );
         $eventDispatcher = $container->get(EventDispatcherInterface::class);
 
-        return Transport::fromDsn($dsn, $eventDispatcher);
+        return new Mailer(Transport::fromDsn($dsn, $eventDispatcher));
     },
-    // Event dispatcher for mailer
+    // Event dispatcher for mailer. Required to retrieve email when testing.
     EventDispatcherInterface::class => function () {
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addSubscriber(new MessageListener());

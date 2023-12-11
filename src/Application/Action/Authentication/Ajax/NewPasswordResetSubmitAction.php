@@ -29,9 +29,9 @@ readonly class NewPasswordResetSubmitAction
      * @param ServerRequest $request
      * @param Response $response
      *
+     * @return Response
      * @throws \Throwable
      *
-     * @return Response
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
@@ -64,11 +64,13 @@ sure to click on the most recent email we send you</a>.</b>'
                 'Invalid or expired token password reset user_verification id: ' . $parsedBody['id']
             );
 
-            // The login page is rendered but the url is reset-password. In login-main.js the url is replaced and
-            // the password forgotten form is shown instead of the login form.
+            // The login page is rendered, but the url is reset-password. In login-main.js the url is replaced, and
+            // the password-forgotten form is shown instead of the login form.
             return $this->templateRenderer->render($response, 'authentication/login.html.php');
-        } // Validation Exception has to be caught here and not middleware as we need to add token and id to php view
+        } // Validation Exception has to be caught here and not middleware as the token,
+            // and id have to be added to php view
         catch (ValidationException $validationException) {
+            // Render reset-password form with token, and id so that it can be submitted again
             $flash->add('error', $validationException->getMessage());
             // Add token and id to php view attribute like PasswordResetAction does
             $this->templateRenderer->addPhpViewAttribute('token', $parsedBody['token']);

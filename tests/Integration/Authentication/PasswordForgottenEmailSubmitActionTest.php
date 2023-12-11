@@ -55,12 +55,15 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Email assertions
+        // Assert email was sent
+        $this->assertEmailCount(1);
+        // Get email RawMessage
         $mailerMessage = $this->getMailerMessage();
         $this->assertEmailHtmlBodyContains(
             $mailerMessage,
             'If you recently requested to reset your password, click the link below to do so.'
         );
-        // Assert that right email has been sent to the right person
+        // Assert that the right email has been sent to the right person
         $this->assertEmailHeaderSame(
             $mailerMessage,
             'To',

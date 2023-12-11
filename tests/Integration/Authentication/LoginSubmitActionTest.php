@@ -16,7 +16,7 @@ use Selective\TestTrait\Traits\MailerTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 /**
- * Test login submit actions. Contents of this test:
+ * Test the login submit actions. Contents of this test:
  *  - normal login submit with correct credentials (302 Found redirect)
  *  - login request with incorrect password (401 Unverified)
  *  - login request with invalid values (400 Bad request)
@@ -152,7 +152,7 @@ class LoginSubmitActionTest extends TestCase
         // Assert that session user_id is not set
         self::assertNull($session->get('user_id'));
 
-        // When account is unverified, a verification link is sent to the user via the email
+        // When the account is unverified, a verification link is sent to the user via the email
         // Assert that correct email was sent (email body contains string)
         $email = $this->getMailerMessage();
         $this->assertEmailHtmlBodyContains(

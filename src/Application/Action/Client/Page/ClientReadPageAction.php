@@ -33,7 +33,7 @@ final readonly class ClientReadPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id'], false);
+        $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
         $dropdownValues = $this->clientUtilFinder->findClientDropdownValues($clientAggregate->userId);
 
         return $this->templateRenderer->render(

@@ -40,7 +40,7 @@ class PasswordRecoveryEmailSender
     }
 
     /**
-     * When user requests a new password for email.
+     * When a user requests a new password for email.
      *
      * @param array $userValues
      * @param string|null $captcha
@@ -58,7 +58,7 @@ class PasswordRecoveryEmailSender
         $dbUser = $this->userFinderRepository->findUserByEmail($email);
 
         if (isset($dbUser->email, $dbUser->id)) {
-            // Create verification token, so he doesn't have to register again
+            // Create a verification token, so they don't have to register again
             $queryParamsWithToken = $this->verificationTokenCreator->createUserVerification($dbUser->id);
 
             // Change language to one the user chose in settings
@@ -75,10 +75,10 @@ class PasswordRecoveryEmailSender
             )->to(new Address($dbUser->email, $dbUser->getFullName()));
             // Send email
             $this->mailer->send($this->email);
-            // Reset locale
+            // Reset locale to browser language
             $this->localeConfigurator->setLanguage($originalLocale);
 
-            // User activity entry is done when user verification token is created
+            // User activity entry is done when a user verification token is created
             return;
         }
 

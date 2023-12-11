@@ -32,7 +32,7 @@ final readonly class LocaleMiddleware implements MiddlewareInterface
         // Get authenticated user id from session
         $loggedInUserId = $this->session->get('user_id');
         // If there is an authenticated user, find their language in the database
-        $locale = $loggedInUserId ? $this->userFinder->findUserById($loggedInUserId)->language : null;
+        $locale = $loggedInUserId ? $this->userFinder->findUserById($loggedInUserId)->language->value : null;
         // Get browser language if no user language is set
         if (!$locale) {
             // Result is something like: en-GB,en;q=0.9,de;q=0.8,de-DE;q=0.7,en-US;q=0.6,pt;q=0.5,fr;q=0.4

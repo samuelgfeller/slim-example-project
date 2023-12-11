@@ -26,7 +26,7 @@ readonly class ClientFinderRepository
      *
      * @param array $whereArray
      *
-     * @return ClientReadResult[]
+     * @return ClientListResult[]
      */
     public function findClientsWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {

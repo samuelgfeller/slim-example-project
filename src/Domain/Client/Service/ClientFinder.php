@@ -5,6 +5,7 @@ namespace App\Domain\Client\Service;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Data\ClientData;
+use App\Domain\Client\Data\ClientListResult;
 use App\Domain\Client\Data\ClientListResultCollection;
 use App\Domain\Client\Data\ClientReadResult;
 use App\Domain\Client\Repository\ClientFinderRepository;
@@ -61,7 +62,7 @@ readonly class ClientFinder
      *
      * @param array $whereArray cake query builder where array -> ['table.field' => 'value']
      *
-     * @return ClientReadResult[]
+     * @return ClientListResult[]
      */
     private function findClientsWhereWithResultAggregate(array $whereArray = ['client.deleted_at IS' => null]): array
     {

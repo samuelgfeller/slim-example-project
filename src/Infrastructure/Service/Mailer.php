@@ -5,13 +5,11 @@ namespace App\Infrastructure\Service;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Security\Repository\EmailLoggerRepository;
 use Slim\Views\PhpRenderer;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
 /**
- * Mailer class with added method to get the html string from a template and added request audit in the send() function
- * This class in not defined in the container and therefore is autowired. Configuration is defined in MailerInterface
+ * Mailer class with added method to get the html string from a template and added logging in the send() function.
  * Test sender score: https://www.mail-tester.com/.
  */
 class Mailer
@@ -24,18 +22,16 @@ class Mailer
         private readonly EmailLoggerRepository $emailLoggerRepository,
         private readonly UserNetworkSessionData $userNetworkSessionData
     ) {
-        // Fix error $userId must not be accessed before initialization
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
     }
 
     /**
-     * Define content by template path that will be parsed by PHP-View
-     * The advantage from using PHP-View is that we have the helper functions
-     * like uri and route and being able to use the template path defined in config.
-     * Remember to set subject too when working with this function.
+     * Returns rendered HTML of given template path.
+     * Using PHP-View template parser allows access to the attributes from PhpViewExtensionMiddleware
+     * like uri and route.
      *
      * @param string $templatePath PHP-View path relative to template path defined in config
-     * @param array $templateData ['varName' => 'data', 'otherVarName' => 'otherData',]
+     * @param array $templateData ['varName' => 'data', 'otherVarName' => 'otherData', ]
      *
      * @return string html email content
      */
@@ -51,13 +47,10 @@ class Mailer
     }
 
     /**
-     * Function to send email and add insert to request tracking table.
-     *
-     * @param Email $email
-     *
-     * @throws TransportExceptionInterface
-     *
-     * @return void
+    * Send and log email
+    *
+    * @param Email $email
+    * @return void
      */
     public function send(Email $email): void
     {
@@ -65,7 +58,7 @@ class Mailer
         $cc = $email->getCc();
         $bcc = $email->getBcc();
 
-        // Insert that there was an email request for security checks
+        // Log email request
         $this->emailLoggerRepository->logEmailRequest(
             $email->getFrom()[0]->getAddress(),
             $email->getTo()[0]->getAddress(),
