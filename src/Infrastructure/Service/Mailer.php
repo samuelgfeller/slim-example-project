@@ -55,8 +55,8 @@ class Mailer
     public function send(Email $email): void
     {
         $this->mailer->send($email);
-        $cc = $email->getCc();
-        $bcc = $email->getBcc();
+        // $cc = $email->getCc();
+        // $bcc = $email->getBcc();
 
         // Log email request
         $this->emailLoggerRepository->logEmailRequest(

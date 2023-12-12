@@ -202,13 +202,13 @@ They are then added to the HTML in `layout.php` with the current version number.
 **JS modules included via import**  
 One of the remarkable aspects of ES6 is the `import` statement, as it simplifies the utilization 
 of code from other JavaScript files without the need for explicit requirement in the template.   
-To address the versioning issue, the script `JsImportVersionAdder.php` 
+To address the versioning issue, the script `JsImportCacheBuster.php` 
 (called in `PhpViewExtensionMiddleware.php`) traverses through all JavaScript files and updates
 the version GET parameter in the import statements.   
 So after a version bump in the config file,
 it is important to load any page (doesn't matter which one) on the development machine before 
 pushing / deploying in order for every JS module to be updated.  
-`JsImportVersionAdder.php` is disabled in production since the deployed files are supposed to 
+`JsImportCacheBuster.php` is disabled in production since the deployed files are supposed to 
 contain the correct versioning information in their import declarations already.
 
 **Other asset paths**  

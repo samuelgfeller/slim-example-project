@@ -48,7 +48,7 @@ CREATE TABLE `email_log` (
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `email_log_user_id_fk` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -65,7 +65,7 @@ CREATE TABLE `note` (
   KEY `FK_note_client` (`client_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE `phinxlog` (
+CREATE TABLE `phinx_migrations_log` (
   `version` bigint(20) NOT NULL,
   `migration_name` varchar(100) DEFAULT NULL,
   `start_time` timestamp NULL DEFAULT NULL,
@@ -129,4 +129,4 @@ CREATE TABLE `user_verification` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK__user_table` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

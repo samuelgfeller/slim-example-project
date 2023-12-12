@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Common;
+namespace App\Infrastructure\Utility;
 
-use App\Infrastructure\Utility\Settings;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-final class JsImportVersionAdder
+/**
+ * Adds version number to js imports to break cache on version change.
+ */
+final class JsImportCacheBuster
 {
     private ?string $version;
     private string $assetsPath;

@@ -63,7 +63,7 @@ jobs:
           script: |
             cd ${{ secrets.DEMO_PROJECT_ROOT }}
             chmod +x vendor/bin/phinx 
-            composer migrate
+            composer migrate-prod
 
       - name: ♥️ Sync files with care-point
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
@@ -90,4 +90,4 @@ jobs:
           script: |
             cd ${{ secrets.CARE_POINT_PROJECT_ROOT }}
             chmod +x vendor/bin/phinx
-            composer migrate
+            composer migrate-prod

@@ -123,8 +123,8 @@ return [
         return $method->invoke($driver);
     },
     // Used by command line to generate `schema.sql` for integration testing
-    'DatabaseSqlSchemaGenerator' => function (ContainerInterface $container) {
-        return new \App\Common\Database\DatabaseSqlSchemaGenerator(
+    'SqlSchemaGenerator' => function (ContainerInterface $container) {
+        return new \App\Infrastructure\Console\SqlSchemaGenerator(
             $container->get(PDO::class),
             $container->get('settings')['root_dir']
         );

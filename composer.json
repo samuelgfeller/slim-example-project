@@ -22,6 +22,15 @@
     "ext-gettext": "*",
     "ext-intl": "*"
   },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^10",
+    "selective/test-traits": "^4",
+    "phpstan/phpstan": "^1",
+    "jetbrains/phpstorm-attributes": "^1.0",
+    "friendsofphp/php-cs-fixer": "^3",
+    "odan/phinx-migrations-generator": "^6"
+  },
   "autoload": {
     "psr-4": {
       "App\\": "src/"
@@ -35,31 +44,25 @@
       "App\\Test\\": "tests/"
     }
   },
-  "require-dev": {
-    "roave/security-advisories": "dev-latest",
-    "phpunit/phpunit": "^10",
-    "selective/test-traits": "^4",
-    "phpstan/phpstan": "^1",
-    "jetbrains/phpstorm-attributes": "^1.0",
-    "friendsofphp/php-cs-fixer": "^3",
-    "odan/phinx-migrations-generator": "^6"
-  },
   "scripts": {
     "stan": "phpstan analyse -c phpstan.neon --no-progress --ansi",
-    "schema:generate": [
-      "php bin/console.php DatabaseSqlSchemaGenerator generateSqlSchema",
-      "@add-migrations-to-git"
-    ],
     "test": "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always",
     "test:coverage": "vendor/bin/phpunit --coverage-clover=coverage.xml",
     "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
     "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi --verbose",
-    "migration:create": "phinx create -c config/env/env.phinx.php --ansi",
     "migration:generate": [
       "phinx-migrations generate --overwrite -c config/env/env.phinx.php --ansi",
       "@schema:generate"
     ],
-    "migrate": "phinx migrate -c config/env/env.phinx.php --ansi -vvv",
+    "migrate-prod": "phinx migrate -c config/env/env.phinx.php --ansi -vvv",
+    "migrate": [
+      "@migrate-prod",
+      "@schema:generate"
+    ],
+    "schema:generate": [
+      "php bin/console.php SqlSchemaGenerator generateSqlSchema",
+      "@add-migrations-to-git"
+    ],
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",
     "seed:minimal": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
     "seed": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php"

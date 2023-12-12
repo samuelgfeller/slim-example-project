@@ -29,9 +29,9 @@ $settings['dev'] = false;
 $settings['root_dir'] = dirname(__DIR__, 1);
 
 $settings['deployment'] = [
-    // Version `null` or string. If JsImportVersionAdder is enabled, `null` removes all query param versions from js imports
+    // Version `null` or string. If JsImportCacheBuster is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
-    // When true, JsImportVersionAdder is enabled and goes through all js files and changes the version number from the imports
+    // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number from the imports
     'update_js_imports_version' => true,
     // Disable in prod
     'assets_path' => $settings['root_dir'] . '/public/assets',
@@ -132,14 +132,14 @@ $settings['phinx'] = [
         'migrations' => $settings['root_dir'] . '/resources/migrations',
         'seeds' => $settings['root_dir'] . '/resources/seeds',
     ],
-    // Fix "Invalid migration file" error if schema.php is in migrations
     'schema_file' => $settings['root_dir'] . '/resources/schema/schema.php',
     'default_migration_prefix' => 'db_change_',
     'generate_migration_name' => true,
     'environments' => [
-        'default_migration_table' => 'phinxlog',
+        // Table that keeps track of the migrations
+        'default_migration_table' => 'phinx_migrations_log',
         'default_environment' => 'local',
-        'local' => [/* Environment specifics such as db creds are added in phinx.php */],
+        'local' => [/* Environment specifics such as db credentials are added in env.phinx.php */],
     ],
 ];
 

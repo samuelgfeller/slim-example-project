@@ -2,8 +2,8 @@
 
 namespace App\Application\Middleware;
 
-use App\Common\JsImportVersionAdder;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
+use App\Infrastructure\Utility\JsImportCacheBuster;
 use App\Infrastructure\Utility\Settings;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
@@ -26,7 +26,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         private readonly App $app,
         private readonly PhpRenderer $phpRenderer,
         private readonly SessionInterface $session,
-        private readonly JsImportVersionAdder $jsImportVersionAdder,
+        private readonly JsImportCacheBuster $jsImportCacheBuster,
         Settings $settings,
         private readonly UserPermissionVerifier $userPermissionVerifier,
         private readonly RouteParserInterface $routeParser
@@ -69,7 +69,7 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
 
         // Add version number to js imports
         if ($this->deploymentSettings['update_js_imports_version'] === true) {
-            $this->jsImportVersionAdder->addVersionToJsImports();
+            $this->jsImportCacheBuster->addVersionToJsImports();
         }
 
         return $handler->handle($request);
