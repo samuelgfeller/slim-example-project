@@ -12,7 +12,7 @@ $app = require __DIR__ . '/../config/bootstrap.php';
 $container = $app->getContainer();
 
 // The $argv variable is an array that contains the command-line arguments passed to the script.
-// The first element of the $argv array is always the name of the script itself (bin/console.php).
+// The first element of the $argv array is always the name of the script itself ('bin/console.php').
 // array_shift($argv) removes this first element that is not relevant here.
 array_shift($argv);
 
