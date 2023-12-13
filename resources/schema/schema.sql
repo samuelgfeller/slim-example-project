@@ -65,7 +65,7 @@ CREATE TABLE `note` (
   KEY `FK_note_client` (`client_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE `phinx_migrations_log` (
+CREATE TABLE `phinx_migration_log` (
   `version` bigint(20) NOT NULL,
   `migration_name` varchar(100) DEFAULT NULL,
   `start_time` timestamp NULL DEFAULT NULL,

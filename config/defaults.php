@@ -137,7 +137,7 @@ $settings['phinx'] = [
     'generate_migration_name' => true,
     'environments' => [
         // Table that keeps track of the migrations
-        'default_migration_table' => 'phinx_migrations_log',
+        'default_migration_table' => 'phinx_migration_log',
         'default_environment' => 'local',
         'local' => [/* Environment specifics such as db credentials are added in env.phinx.php */],
     ],

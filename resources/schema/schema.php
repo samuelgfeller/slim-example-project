@@ -1690,11 +1690,11 @@ return array (
       ),
       'foreign_keys' => NULL,
     ),
-    'phinx_migrations_log' => 
+    'phinx_migration_log' =>
     array (
       'table' => 
       array (
-        'table_name' => 'phinx_migrations_log',
+        'table_name' => 'phinx_migration_log',
         'engine' => 'InnoDB',
         'table_comment' => '',
         'table_collation' => 'utf8mb4_unicode_ci',
@@ -1706,7 +1706,7 @@ return array (
         'version' => 
         array (
           'TABLE_CATALOG' => 'def',
-          'TABLE_NAME' => 'phinx_migrations_log',
+          'TABLE_NAME' => 'phinx_migration_log',
           'COLUMN_NAME' => 'version',
           'ORDINAL_POSITION' => 1,
           'COLUMN_DEFAULT' => NULL,
@@ -1730,7 +1730,7 @@ return array (
         'migration_name' => 
         array (
           'TABLE_CATALOG' => 'def',
-          'TABLE_NAME' => 'phinx_migrations_log',
+          'TABLE_NAME' => 'phinx_migration_log',
           'COLUMN_NAME' => 'migration_name',
           'ORDINAL_POSITION' => 2,
           'COLUMN_DEFAULT' => 'NULL',
@@ -1754,7 +1754,7 @@ return array (
         'start_time' => 
         array (
           'TABLE_CATALOG' => 'def',
-          'TABLE_NAME' => 'phinx_migrations_log',
+          'TABLE_NAME' => 'phinx_migration_log',
           'COLUMN_NAME' => 'start_time',
           'ORDINAL_POSITION' => 3,
           'COLUMN_DEFAULT' => 'NULL',
@@ -1778,7 +1778,7 @@ return array (
         'end_time' => 
         array (
           'TABLE_CATALOG' => 'def',
-          'TABLE_NAME' => 'phinx_migrations_log',
+          'TABLE_NAME' => 'phinx_migration_log',
           'COLUMN_NAME' => 'end_time',
           'ORDINAL_POSITION' => 4,
           'COLUMN_DEFAULT' => 'NULL',
@@ -1802,7 +1802,7 @@ return array (
         'breakpoint' => 
         array (
           'TABLE_CATALOG' => 'def',
-          'TABLE_NAME' => 'phinx_migrations_log',
+          'TABLE_NAME' => 'phinx_migration_log',
           'COLUMN_NAME' => 'breakpoint',
           'ORDINAL_POSITION' => 5,
           'COLUMN_DEFAULT' => '0',
@@ -1830,7 +1830,7 @@ return array (
         array (
           1 => 
           array (
-            'Table' => 'phinx_migrations_log',
+            'Table' => 'phinx_migration_log',
             'Non_unique' => 0,
             'Key_name' => 'PRIMARY',
             'Seq_in_index' => 1,
