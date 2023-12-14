@@ -10,20 +10,15 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Middleware, which sets set_error_handler() to custom DefaultErrorHandler
- * and logs warning and notices.
+ * Handles non-fatal errors such as warnings and notices.
  */
-final class ErrorHandlerMiddleware implements MiddlewareInterface
+final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
 {
     private bool $displayErrorDetails;
-
     private bool $logErrors;
 
-    public function __construct(
-        bool $displayErrorDetails,
-        bool $logErrors,
-        private readonly LoggerInterface $logger,
-    ) {
+    public function __construct(bool $displayErrorDetails, bool $logErrors, private readonly LoggerInterface $logger)
+    {
         $this->displayErrorDetails = $displayErrorDetails;
         $this->logErrors = $logErrors;
     }
@@ -34,19 +29,19 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
      * @param ServerRequestInterface $request The request
      * @param RequestHandlerInterface $handler The handler
      *
+     * @return ResponseInterface The response
      * @throws ErrorException
      *
-     * @return ResponseInterface The response
      */
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         // Only make notices / wantings to ErrorException's if error details should be displayed
-        // SLE-57 Making warnings and notices to exceptions in dev
-        // set_error_handler does not handle fatal errors so this function gets not called by fatal errors
+        // SLE-57 Making warnings and notices to exceptions for development
+        // set_error_handler only handles non-fatal errors, this function is not called by fatal errors.
         set_error_handler(
             function ($severity, $message, $file, $line) {
+                // Don't throw exception if error reporting is turned off.
+                // '&' checks if a particular error level is included in the result of error_reporting().
                 if (error_reporting() & $severity) {
                     // Log all non fatal errors
                     if ($this->logErrors) {
@@ -55,24 +50,22 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
                             $this->logger->warning(
                                 "Warning [$severity] $message on line $line in file $file"
                             );
-                        } // If error is non-fatal but not warning (default)
+                        } // If error is non-fatal and is not a warning
                         else {
                             $this->logger->notice(
                                 "Notice [$severity] $message on line $line in file $file"
                             );
                         }
                     }
-                    // Throwing an exception allows us to have a stack trace and more error details useful in dev
+                    // Throw ErrorException to have a stack trace and more error details for development
                     if ($this->displayErrorDetails === true) {
                         // Logging for fatal errors happens in DefaultErrorHandler.php
                         throw new ErrorException($message, 0, $severity, $file, $line);
                     }
                 }
-
                 return true;
             }
         );
-
         return $handler->handle($request);
     }
 }

@@ -11,7 +11,6 @@
 // Set false to show production error pages
 $settings['dev'] = true;
 
-error_reporting(E_ALL);
 // In case error is not caught by error handler (below)
 ini_set('display_errors', $settings['dev'] ? '1' : '0');
 

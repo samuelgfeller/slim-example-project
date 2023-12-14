@@ -10,7 +10,7 @@
  */
 
 // Error reporting
-error_reporting(0);
+error_reporting(E_ALL);
 ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
 
@@ -22,7 +22,17 @@ setlocale(LC_ALL, 'en_US.utf8', 'en_US');
 // Init settings var
 $settings = [];
 
-// Simulate prod env
+// Error handler
+$settings['error'] = [
+    // Should be set to false in production. When set to true, it will throw an ErrorException for notices and warnings.
+    'display_error_details' => false,
+    // Should be set to false for unit tests
+    'log_errors' => true,
+    // Display error details in error log
+    'log_error_details' => true,
+];
+
+// Set false for production env
 $settings['dev'] = false;
 
 // Project root dir (1 parent)
@@ -81,16 +91,6 @@ $settings['security'] = [
     // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
     'global_monthly_email_threshold' => 1000,
     // optional
-];
-
-// Error handler
-$settings['error'] = [
-    // Should be set to false in production
-    'display_error_details' => false,
-    // Should be set to false for unit tests
-    'log_errors' => true,
-    // Display error details in error log
-    'log_error_details' => true,
 ];
 
 // Secret values are overwritten in env.php

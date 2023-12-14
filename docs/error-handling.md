@@ -176,9 +176,10 @@ final class ErrorHandlerMiddleware implements MiddlewareInterface
 }
 ```
 Add the container definition.  
-File: `config/container.php`  
+File: `config/container.php`
+
 ```php
-use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -186,10 +187,10 @@ return [
 
     // ... 
 
-    ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
+    NonFatalErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
         $logger = $container->get(LoggerInterface::class);
-        return new ErrorHandlerMiddleware(
+        return new NonFatalErrorHandlerMiddleware(
             (bool)$config['display_error_details'],
             (bool)$config['log_errors'],
             $logger,
@@ -199,14 +200,15 @@ return [
 ```
 Add to the middleware stack.  
 File: `config/middleware.php`
+
 ```php
 use Slim\App;
-use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 
 return function (App $app) {
 
     // ...
-    $app->add(ErrorHandlerMiddleware::class); // <-- here
+    $app->add(NonFatalErrorHandlerMiddleware::class); // <-- here
 };
 ```
 
@@ -236,10 +238,11 @@ File: `vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php`
 ```
 
 Add the container definition with the right arguments.   
-File: `config/container.php`  
+File: `config/container.php`
+
 ```php
 use App\Application\Handler\DefaultErrorHandler;
-use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use Psr\Container\ContainerInterface;
 use Slim\Middleware\ErrorMiddleware;
 use Psr\Log\LoggerInterface;
@@ -250,7 +253,7 @@ return [
     // ...
 
     // Added previously
-    ErrorHandlerMiddleware::class => function (ContainerInterface $container) {...},
+    NonFatalErrorHandlerMiddleware::class => function (ContainerInterface $container) {...},
     
     // New 
     ErrorMiddleware::class => function (ContainerInterface $container) {
@@ -278,16 +281,17 @@ return [
 This should be the last middleware added since anything that happens afterwards will not
 be handled by this middleware.   
 File: `config/middleware.php`
+
 ```php
 use Slim\App;
-use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use Slim\Middleware\ErrorMiddleware;
 
 return function (App $app) {
 
     // ...
 
-    $app->add(ErrorHandlerMiddleware::class); 
+    $app->add(NonFatalErrorHandlerMiddleware::class); 
     $app->add(ErrorMiddleware::class); // <-- last middleware 
 };
 ``` 

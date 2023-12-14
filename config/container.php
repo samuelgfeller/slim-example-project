@@ -1,7 +1,6 @@
 <?php
 
-use App\Application\ErrorHandler\DefaultErrorHandler;
-use App\Application\Middleware\ErrorHandlerMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use App\Infrastructure\Utility\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
@@ -77,16 +76,17 @@ return [
     },
 
     // Error middlewares
-    ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
+    NonFatalErrorHandlerMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
         $logger = $container->get(LoggerInterface::class);
 
-        return new ErrorHandlerMiddleware(
+        return new NonFatalErrorHandlerMiddleware(
             (bool)$config['display_error_details'],
             (bool)$config['log_errors'],
             $logger,
         );
     },
+    // Set error handler to custom DefaultErrorHandler
     ErrorMiddleware::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['error'];
         $app = $container->get(App::class);
@@ -102,7 +102,9 @@ return [
             $logger
         );
 
-        $errorMiddleware->setDefaultErrorHandler($container->get(DefaultErrorHandler::class));
+        $errorMiddleware->setDefaultErrorHandler(
+            $container->get(\App\Application\ErrorHandler\DefaultErrorHandler::class)
+        );
 
         return $errorMiddleware;
     },

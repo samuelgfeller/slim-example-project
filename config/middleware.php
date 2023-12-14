@@ -1,8 +1,8 @@
 <?php
 
-use App\Application\Middleware\ErrorHandlerMiddleware;
 use App\Application\Middleware\ForbiddenExceptionMiddleware;
 use App\Application\Middleware\InvalidOperationExceptionMiddleware;
+use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewExtensionMiddleware;
 use App\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
@@ -45,6 +45,8 @@ return function (App $app) {
     $app->add(ForbiddenExceptionMiddleware::class);
     $app->add(InvalidOperationExceptionMiddleware::class);
 
-    $app->add(ErrorHandlerMiddleware::class);
+    // Handle and log notices and warnings (throws ErrorException if displayErrorDetails is true)
+    $app->add(NonFatalErrorHandlerMiddleware::class);
+    // Set error handler to custom DefaultErrorHandler (defined in container.php)
     $app->add(ErrorMiddleware::class);
 };

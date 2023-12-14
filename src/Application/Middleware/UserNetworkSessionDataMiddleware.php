@@ -24,8 +24,8 @@ readonly class UserNetworkSessionDataMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // Server params will be null in testing
-        $ipAddress = $request->getServerParams()['REMOTE_ADDR'];
-        $userAgent = $request->getServerParams()['HTTP_USER_AGENT'];
+        $ipAddress = $request->getServerParams()['REMOTE_ADDR'] ?? null;
+        $userAgent = $request->getServerParams()['HTTP_USER_AGENT'] ?? null;
 
         // Add ip address to the ipAddressData DTO object
         $this->clientNetworkData->ipAddress = $ipAddress;

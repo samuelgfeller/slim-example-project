@@ -28,6 +28,7 @@ readonly class DefaultErrorHandler
      * @param Throwable $exception The exception
      * @param bool $displayErrorDetails Show error details
      * @param bool $logErrors Log errors
+     * @param bool $logErrorDetails Log errors with details
      *
      * @throws Throwable
      *
@@ -37,12 +38,13 @@ readonly class DefaultErrorHandler
         ServerRequestInterface $request,
         Throwable $exception,
         bool $displayErrorDetails,
-        bool $logErrors
+        bool $logErrors,
+        bool $logErrorDetails
     ): ResponseInterface {
         // Log error
         // ErrorException was configured to be thrown with set_error_handler which is for non-fatal errors
         // They are logged in ErrorHandlerMiddleware.php and not here because if displayErrorDetails is false
-        // ErrorException is not thrown and they wouldn't be logged in prod
+        // ErrorException is not thrown, and they wouldn't be logged in prod
         if ($logErrors && !$exception instanceof \ErrorException) {
             // Error with no stack trace https://stackoverflow.com/a/2520056/9013718
             $this->logger->error(
