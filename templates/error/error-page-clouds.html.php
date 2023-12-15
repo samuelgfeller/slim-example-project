@@ -9,7 +9,7 @@ $this->setLayout('layout.html.php');
 ?>
 <?php
 // Define assets that should be included
-$this->addAttribute('css', ['assets/error/error.css']); ?>
+$this->addAttribute('css', ['assets/error/error-clouds.css']); ?>
 
 
 <section id="cloud-section" class="">

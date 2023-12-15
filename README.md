@@ -193,7 +193,7 @@ JS modules are added as attributes to the `PhpRenderer` (`$this` in the template
 // CSS
 $this->addAttribute('css', ['assets/general/page-component/form/form.css',]);  
 // JS
-$this->addAttribute('js', ['assets/error/error.js',]);  
+$this->addAttribute('js', ['assets/error/generic-error-page.js',]);  
 // JS module
 $this->addAttribute('jsModules', ['assets/general/dark-mode/dark-mode.js',]);  
 ```

@@ -150,7 +150,8 @@ class UserCreateProvider
                             'surname' => [0 => 'Required'],
                             'email' => [0 => 'Invalid email'],
                             'status' => [0 => 'Invalid option'],
-                            // Same error message twice because not numeric and not existing
+                            // Same error message twice because not numeric and not existing.
+                            // Authenticated user is admin which means allowed to assign any role hence not failed authorization
                             'user_role_id' => [0 => 'Invalid option', 1 => 'Invalid option'],
                             'password' => [0 => 'Password required'],
                             'password2' => [0 => 'Password required'],

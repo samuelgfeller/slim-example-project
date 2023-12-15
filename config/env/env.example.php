@@ -10,8 +10,8 @@
  * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
-// ONLY in the env.php that is used in production, set the APP_ENV to "prod". Default is "dev" env, set in settings.php.
-// $_ENV['APP_ENV'] = 'prod';
+// $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file of the prod server.
+// APP_ENV should NOT be set to "dev" in dev env because that would override the phpunit.xml APP_ENV setting.
 
 // Database
 $settings['db']['host'] = 'localhost';

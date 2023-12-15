@@ -52,9 +52,8 @@ class UserPermissionVerifier
         // Managing advisor may change users
         if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
             // Managing advisors can do everything with users except setting a role higher than advisor
-            if ($userValues['user_role_id'] !== null
-                && $this->userRoleIsGranted(
-                    $userValues['user_role_id'],
+            if ($this->userRoleIsGranted(
+                    $userValues['user_role_id'] ?? null,
                     null,
                     $authenticatedUserRoleHierarchy,
                     $userRoleHierarchies
@@ -63,6 +62,8 @@ class UserPermissionVerifier
                 return true;
             }
 
+            // If the user role of the user managing advisors or higher wants to change is empty, allowed
+            // It's the validation's job to check if the value is valid
             if ($userValues['user_role_id'] === null) {
                 return true;
             }
@@ -77,17 +78,18 @@ class UserPermissionVerifier
     }
 
     /**
-     * Check if the authenticated user is allowed to assign user role.
+     * Check if the authenticated user is allowed to assign a user role.
      *
-     * @param string|int $userRoleId
-     * @param string|int|null $userRoleIdOfUserToMutate whenever possible user role of user to be changed has to be provided
+     * @param string|int|null $newUserRoleId (New) user role id to be assigned. Nullable as admins are authorized to
+     * set any role, validation should check if the value is valid.
+     * @param string|int|null $userRoleIdOfUserToMutate (Existing) user role of user to be changed
      * @param int|null $authenticatedUserRoleHierarchy optional so that it can be called outside this class
      * @param array|null $userRoleHierarchies optional so that it can be called outside this class
      *
      * @return bool
      */
     public function userRoleIsGranted(
-        string|int $userRoleId,
+        string|int|null $newUserRoleId,
         null|string|int $userRoleIdOfUserToMutate,
         ?int $authenticatedUserRoleHierarchy = null,
         ?array $userRoleHierarchies = null,
@@ -113,14 +115,15 @@ class UserPermissionVerifier
 
         $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
 
-        // Role higher (lower hierarchy number) than managing advisor may assign any role
+        // Role higher (lower hierarchy number) than managing advisor may assign any role (admin)
         if ($authenticatedUserRoleHierarchy < $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
             return true;
         }
 
-        if ( // Managing advisor can only attribute roles with lower or equal privilege than advisor
-            $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
-            && $userRoleHierarchiesById[$userRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value]
+        if (// Managing advisor can only attribute roles with lower or equal privilege than advisor
+            !empty($newUserRoleId)
+            && $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
+            && $userRoleHierarchiesById[$newUserRoleId] >= $userRoleHierarchies[UserRole::ADVISOR->value]
             // And managing advisor may only change advisors or newcomers
             && ($userRoleIdOfUserToMutate === null
                 || $userRoleHierarchiesById[$userRoleIdOfUserToMutate] >=

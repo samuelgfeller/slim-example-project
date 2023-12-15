@@ -46,7 +46,7 @@ final readonly class UserCreator
         // Before validation, check if authenticated user is authorized to create user with the given data
         if ($this->userPermissionVerifier->isGrantedToCreate($userValues)) {
             // * Validation has to be done AFTER authorization check
-            // to not reveal potential sensitive infos such as from the validation messages
+            // to not reveal potential sensitive infos such as from the validation messages (e.g. email already exists)
             $this->userValidator->validateUserValues($userValues);
 
             $user = new UserData($userValues);

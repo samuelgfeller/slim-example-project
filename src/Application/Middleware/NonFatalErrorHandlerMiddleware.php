@@ -47,14 +47,10 @@ final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
                     if ($this->logErrors) {
                         // If error is warning
                         if ($severity === E_WARNING | E_CORE_WARNING | E_COMPILE_WARNING | E_USER_WARNING) {
-                            $this->logger->warning(
-                                "Warning [$severity] $message on line $line in file $file"
-                            );
+                            $this->logger->warning("Warning [$severity] $message on line $line in file $file");
                         } // If error is non-fatal and is not a warning
                         else {
-                            $this->logger->notice(
-                                "Notice [$severity] $message on line $line in file $file"
-                            );
+                            $this->logger->notice("Notice [$severity] $message on line $line in file $file");
                         }
                     }
                     // Throw ErrorException to have a stack trace and more error details for development

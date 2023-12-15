@@ -45,9 +45,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
+     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
@@ -156,9 +156,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -169,7 +169,8 @@ class ClientCreateActionTest extends TestCase
         )['id'];
         $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
         // To test note message validation when submitted in client creation form the client values have to be valid
-        if ($requestBody['user_id'] === 'valid' && $requestBody['client_status_id'] === 'valid') {
+        if (isset($requestBody['user_id']) && $requestBody['user_id'] === 'valid'
+            && $requestBody['client_status_id'] === 'valid') {
             $requestBody['user_id'] = $userId;
             $requestBody['client_status_id'] = $clientStatusId;
         }
@@ -209,9 +210,9 @@ class ClientCreateActionTest extends TestCase
      *
      * @param array $requestBody
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {

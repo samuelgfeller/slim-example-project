@@ -38,8 +38,8 @@ readonly class NoteValidator
             ->requirePresence('client_id', $isCreateMode, __('Field is required'))
         ;
 
-
-        if ((int)$noteValues['is_main'] === 1) {
+        // $noteValues could be an empty array if request body is empty
+        if ((int)($noteValues['is_main'] ?? 0) === 1) {
             // If main note, the min length can be 0 as we can't delete it
             $validator->allowEmptyString('message');
             // Validate that main note doesn't already exist for client on creation

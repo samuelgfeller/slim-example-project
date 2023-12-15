@@ -37,7 +37,7 @@ final readonly class DashboardPageAction
         array $args
     ): ResponseInterface {
         $dashboards = $this->dashboardGetter->getAuthorizedDashboards();
-
+        $o->s();
         return $this->templateRenderer->render(
             $response,
             'dashboard/dashboard.html.php',

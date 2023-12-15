@@ -35,7 +35,7 @@ class UserCreateActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * User create authorization test with different user roles.
+     * Create user authorization test with different user roles.
      *
      * @dataProvider \App\Test\Provider\User\UserCreateProvider::userCreateAuthorizationCases()
      *
@@ -47,7 +47,7 @@ class UserCreateActionTest extends TestCase
      */
     public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
-        UserRole $newUserRole,
+        ?UserRole $newUserRole,
         array $expectedResult
     ): void {
         $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
@@ -63,7 +63,7 @@ class UserCreateActionTest extends TestCase
             'email' => 'daniel.riccardo@notmclaren.com',
             'password' => '12345678',
             'password2' => '12345678',
-            'user_role_id' => $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value),
+            'user_role_id' => $newUserRole ? $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value) : $newUserRole,
             'status' => 'unverified',
             'language' => 'en_US',
         ];
@@ -152,6 +152,7 @@ class UserCreateActionTest extends TestCase
     public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
+        // Even if user_role_id is empty string or null
         $userRow = $this->insertFixturesWithAttributes(
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
             new UserFixture()
@@ -165,9 +166,12 @@ class UserCreateActionTest extends TestCase
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
-        // Assert 422 Unprocessable Entity which means validation error
-        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-        // Database must be unchanged - only 1 rows (authenticated user) expected in user table
+        // Assert 422 Unprocessable Entity, which means validation error if request body contains user_role_id
+        // even if it's an empty string
+            self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+
+        // Database must be unchanged - only one row (authenticated user) expected in user table
         $this->assertTableRowCount(1, 'user');
         $this->assertJsonData($jsonResponse, $response);
     }

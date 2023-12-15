@@ -1,0 +1,157 @@
+@font-face {
+    font-family: Poppins;
+    src: url(Poppins-Regular.ttf);
+    font-weight: normal;
+}
+
+* {
+    /*white-space: break-spaces;*/
+    overflow-wrap: anywhere;
+}
+
+body {
+    margin: 0;
+    background: #ffd9d0;
+    font-family: Poppins, Geneva, AppleGothic, sans-serif;
+}
+
+body.warning {
+    background: #ffead0;
+}
+
+body.error {
+    background: #ffd9d0;
+}
+
+#title-div {
+    padding: 5px 10%;
+    color: black;
+    margin: 30px;
+    background: tomato;
+    border-radius: 0 35px;
+    box-shadow: 0 0 17px tomato;
+}
+
+#title-div h1 {
+    margin-top: 4px;
+}
+
+#title-div.warning {
+    background: orange;
+    box-shadow: 0 0 17px orange;
+}
+
+#title-div.error {
+    background: tomato;
+    box-shadow: 0 0 17px tomato;
+}
+
+#first-path-chunk {
+    font-size: 0.7em;
+}
+
+#trace-div {
+    width: 80%;
+    margin: auto auto 40px;
+    min-width: 350px;
+    padding: 20px;
+    background: #ff9e88;
+    border-radius: 0 35px;
+    box-shadow: 0 0 10px #ff856e;
+}
+
+#trace-div.warning {
+    background: #ffc588;
+    box-shadow: 0 0 10px #ffad6e;
+}
+
+#trace-div.error {
+    background: #ff9e88;
+    box-shadow: 0 0 10px #ff856e;
+}
+
+#trace-div h2 {
+    margin-top: 0;
+    padding-top: 19px;
+    text-align: center;
+}
+
+#trace-div table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow-x: auto;
+}
+
+#trace-div table td, #trace-div table th { /*border-top: 6px solid red;*/
+    padding: 8px;
+    text-align: left;
+}
+
+#trace-div table tr td:nth-child(3) {
+    min-width: 100px;
+}
+
+#num-th {
+    font-size: 2em;
+    color: #a46856;
+    margin-right: 50px;
+}
+
+.non-vendor {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.non-vendor .lineSpan {
+    font-weight: bold;
+    color: #b00000;
+    font-size: 1.1em;
+}
+
+.is-vendor {
+    font-weight: normal;
+}
+
+.args-span {
+    color: #395186;
+}
+
+#exception-name {
+    float: right
+}
+
+.function-td{
+    font-size: 0.9em;
+}
+
+/* When screen smaller than 1000px */
+@media screen and (max-width: 1000px) {
+    #trace-div {
+        font-size: 0.8em;
+    }
+
+    #title-div h1 {
+        font-size: 1.6em;
+    }
+}
+
+/* When screen smaller than 810px */
+@media screen and (max-width: 810px) {
+    #trace-div table {
+        font-size: 1.1em;
+    }
+
+    #title-div {
+        box-sizing: border-box;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
+/* When screen bigger than 810px */
+@media screen and (min-width: 810px) {
+    #trace-div table tr td:first-child, #trace-div table tr th:first-child {
+        padding-left: 20px;
+    }
+}

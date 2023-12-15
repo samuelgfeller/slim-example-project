@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\Dashboard;
 
+use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFilterSettingFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Traits\AppTestTrait;
@@ -34,6 +35,9 @@ class DashboardPageActionTest extends TestCase
         );
         // Insert another inactive user
         $this->insertFixturesWithAttributes(['first_name' => 'Mike'], new UserFixture());
+
+        // A dashboard panel is for the status "action pending" and its id is retrieved by the code
+        $this->insertFixturesWithAttributes(['name' => 'Action pending'], new ClientStatusFixture());
 
         // Simulate logged-in user with logged-in user id
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
