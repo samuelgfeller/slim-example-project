@@ -1,6 +1,6 @@
 <?php
 /**
- * @var string $severityClassName 'error' fatal errors or 'warning' for notices and warnings
+ * @var string $severityCssClassName 'error' fatal errors or 'warning' for notices and warnings
  * @var int|null $statusCode http status code e.g. 404
  * @var string|null $reasonPhrase http reason phrase e.g. 'Not Found'
  * @var string|null $exceptionClassName e.g. 'HttpNotFoundException'
@@ -28,8 +28,8 @@ $this->setLayout('');
     <title>Error</title>
 </head>
 
-<body class="<?= $severityClassName ?>">
-<div id="title-div" class="<?= $severityClassName ?>">
+<body class="<?= $severityCssClassName ?>">
+<div id="title-div" class="<?= $severityCssClassName ?>">
     <p><span><?= $statusCode ?> | <?= $reasonPhrase ?></span>
         <span id="exception-name"><?= $exceptionClassName ?></span>
     </p>
@@ -38,7 +38,7 @@ $this->setLayout('');
         on line <?= $errorLineNumber ?>.
     </h1>
 </div>
-<div id="trace-div" class="<?= $severityClassName ?>">
+<div id="trace-div" class="<?= $severityCssClassName ?>">
     <table>
         <tr class="non-vendor">
             <th id="num-th">#</th>
@@ -50,15 +50,22 @@ $this->setLayout('');
             <tr>
                 <td class="<?= $entry['nonVendorClass'] ?>"><?= $key ?></td>
                 <td class="function-td <?= $entry['nonVendorFunctionCallClass'] ?>">
-                    <?= $entry['classAndFunction'] ?>(<span class="args-span"><?= $entry['args'] ?></span>)
+                    <?= $entry['classAndFunction'] ?>(
+                    <?php
+                    foreach ($entry['args'] as $argument) { ?>
+                        <span class="args-span" data-full-details="<?= $argument['detailed'] ?>">
+                            <?= $argument['formatted'] ?></span>,
+                    <?php
+                    } ?>
+                    )
                 </td>
                 <td class="stack-trace-file-name <?= $entry['nonVendorClass'] ?>">
                     <?= $entry['fileName'] ?>:<span class="lineSpan"><?= $entry['line'] ?></span>
                 </td>
             </tr>
-        <?php
+            <?php
         }
-?>
+        ?>
     </table>
 </div>
 <script src="assets/error/error-details.js"></script>

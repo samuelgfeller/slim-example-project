@@ -1,7 +1,30 @@
-window.onload = function() {
+window.onload = function () {
+    // Camel-wrap all stack trace file names
     let elements = document.querySelectorAll('.stack-trace-file-name');
-    elements.forEach(function(element) {
+    elements.forEach(function (element) {
         camelWrap(element);
+    });
+
+    // Show full details when clicking on an argument
+    // Select all spans with the class 'args-span'
+    var spans = document.querySelectorAll('.args-span');
+
+    // Add a click event listener to each span
+    spans.forEach(function (span) {
+        let spanExpanded = false;
+        let formatted;
+        span.addEventListener('click', function () {
+            // Get the full details from the data attribute
+            let fullDetails = this.getAttribute('data-full-details');
+            // Display the full details and store the formatted text
+            if (!spanExpanded) {
+                formatted = this.innerText;
+                span.innerText = fullDetails;
+            } else {
+                span.innerText = formatted;
+            }
+            spanExpanded = !spanExpanded;
+        });
     });
 }
 

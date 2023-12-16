@@ -114,6 +114,7 @@ body.error {
 
 .args-span {
     color: #395186;
+    cursor: pointer;
 }
 
 #exception-name {

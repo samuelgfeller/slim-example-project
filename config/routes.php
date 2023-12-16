@@ -12,6 +12,7 @@ return function (App $app) {
     $app->get('/', \App\Application\Action\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
+    $app->get('/test', \App\Application\Action\TestAction::class)->setName('test-page');
 
     $app->group('/api', function (RouteCollectorProxy $group) {
         // Client creation API call
