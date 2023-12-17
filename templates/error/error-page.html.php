@@ -10,8 +10,8 @@ $this->setLayout('layout.html.php');
 ?>
 <?php
 // Define assets that should be included
-$this->addAttribute('css', ['assets/error/generic-error-page.css']);
-$this->addAttribute('js', ['assets/error/generic-error-page.js']);
+$this->addAttribute('css', ['assets/error/prod-error-page.css']);
+$this->addAttribute('js', ['assets/error/prod-error-page.js']);
 ?>
 
 <section id="error-inner-section">

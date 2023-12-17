@@ -7,7 +7,7 @@ CREATE TABLE `authentication_log` (
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `authentication_log_user_id_fk` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `client` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -29,14 +29,14 @@ CREATE TABLE `client` (
   PRIMARY KEY (`id`),
   KEY `FK_client_user` (`user_id`),
   KEY `FK_client_status` (`client_status_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Advisors help and consult clients';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Advisors help and consult clients';
 
 CREATE TABLE `client_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
   `deleted_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Client status';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='Client status';
 
 CREATE TABLE `email_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE `note` (
   PRIMARY KEY (`id`),
   KEY `FK__user` (`user_id`),
   KEY `FK_note_client` (`client_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `phinx_migration_log` (
   `version` bigint(20) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `user` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_user_user_role` (`user_role_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_activity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -103,7 +103,7 @@ CREATE TABLE `user_activity` (
   `user_agent` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_activity_user_id_fk` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_filter_setting` (
   `user_id` int(11) NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE `user_role` (
   `name` varchar(30) NOT NULL,
   `hierarchy` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `user_verification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

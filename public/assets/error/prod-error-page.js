@@ -1,5 +1,6 @@
 const statusCode = document.getElementById('error-status-code');
 
+// Make the linear gradient direction of the status code follow the cursor
 document.documentElement.addEventListener("mousemove", function(event) {
   // Retrieve the bounding rectangle of the "statusCode" element
   const { left, top, width, height } = statusCode.getBoundingClientRect();
@@ -18,5 +19,8 @@ document.documentElement.addEventListener("mousemove", function(event) {
   const gradientDirection = degrees + 90;
 
   // Apply the linear gradient background to the "statusCode" element
-  statusCode.style.backgroundImage = `linear-gradient(${gradientDirection}deg, #2acaff 0%, #ff86c0 100%)`;
+  const style = getComputedStyle(document.body);
+  const color1 = style.getPropertyValue('--error-status-code-gradient-color-1');
+  const color2 = style.getPropertyValue('--error-status-code-gradient-color-2');
+  statusCode.style.backgroundImage = `linear-gradient(${gradientDirection}deg, ${color1} 0%, ${color2} 100%)`;
 });

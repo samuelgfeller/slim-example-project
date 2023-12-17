@@ -55,7 +55,7 @@ $this->setLayout('');
                     foreach ($entry['args'] as $argument) { ?>
                         <span class="args-span" data-full-details="<?= $argument['detailed'] ?>">
                             <?= $argument['formatted'] ?></span>,
-                    <?php
+                        <?php
                     } ?>
                     )
                 </td>

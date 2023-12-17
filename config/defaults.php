@@ -26,9 +26,7 @@ $settings = [];
 $settings['error'] = [
     // Should be set to false in production. When set to true, it will throw an ErrorException for notices and warnings.
     'display_error_details' => false,
-    // Should be set to false for unit tests
     'log_errors' => true,
-    // Display error details in error log
     'log_error_details' => true,
 ];
 

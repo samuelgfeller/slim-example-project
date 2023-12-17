@@ -104,9 +104,10 @@ readonly class DefaultErrorHandler
      */
     private function getHttpStatusCode(Throwable $exception): int
     {
-        // Detect status code
+        // Default status code
         $statusCode = StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR; // 500
 
+        // HttpExceptions have a status code
         if ($exception instanceof HttpException) {
             $statusCode = (int)$exception->getCode();
         }
