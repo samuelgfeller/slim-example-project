@@ -65,6 +65,7 @@
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* #error-status-code */
     #error-inner-section h1 {
         font-size: clamp(100px, 18vw, 200px);
         font-family: Poppins, Helvetica, sans-serif;

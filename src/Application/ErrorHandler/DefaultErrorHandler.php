@@ -8,13 +8,13 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Selective\BasePath\BasePathDetector;
 use Slim\Exception\HttpException;
 use Slim\Views\PhpRenderer;
 use Throwable;
 
 readonly class DefaultErrorHandler
 {
-    // The filesystem path to the project root folder will be removed in the error details page
     private string $fileSystemPath;
 
     public function __construct(
@@ -22,6 +22,7 @@ readonly class DefaultErrorHandler
         private ResponseFactoryInterface $responseFactory,
         private LoggerInterface $logger,
     ) {
+        // The filesystem path to the project root folder will be removed in the error details page
         $this->fileSystemPath = 'C:\xampp\htdocs\\';
     }
 
@@ -37,9 +38,11 @@ readonly class DefaultErrorHandler
         bool $logErrorDetails
     ): ResponseInterface {
         // Log error
-        // ErrorException was configured to be thrown with set_error_handler which is for non-fatal errors
-        // They are logged in ErrorHandlerMiddleware.php and not here because if displayErrorDetails is false
-        // ErrorException is not thrown, and they wouldn't be logged in prod
+        // If exception is an instance of ErrorException it means that the NonFatalErrorHandlerMiddleware
+        // threw the exception for a warning or notice.
+        // That middleware already logged the message, so it doesn't have to be done here.
+        // The reason it is logged there is that if displayErrorDetails is false, ErrorException is not
+        // thrown and the warnings and notices still have to be logged in prod.
         if ($logErrors && !$exception instanceof \ErrorException) {
             // Error with no stack trace https://stackoverflow.com/a/2520056/9013718
             $this->logger->error(
@@ -58,8 +61,7 @@ readonly class DefaultErrorHandler
         // Error output if script is called via cli (e.g. testing)
         if (PHP_SAPI === 'cli') {
             // If the column is not found and the request is coming from the command line, it probably means
-            // that the database and code was changed and `composer migration:generate` and `composer schema:generate`
-            // were not executed after the change.
+            // that the database schema.sql was not updated after a change.
             if ($exception instanceof \PDOException && str_contains($exception->getMessage(), 'Column not found')) {
                 echo "Column not existing. Try running `composer schema:generate` in the console and run tests again. \n";
             }
@@ -73,27 +75,33 @@ readonly class DefaultErrorHandler
         // Detect status code
         $statusCode = $this->getHttpStatusCode($exception);
         $response = $response->withStatus($statusCode);
+        // Reason phrase is the text that describes the status code e.g. 404 => Not found
         $reasonPhrase = $response->getReasonPhrase();
+
+        $phpRendererAttributes['statusCode'] = $statusCode;
+        $phpRendererAttributes['reasonPhrase'] = $reasonPhrase;
 
         // If $displayErrorDetails is true, display exception details
         if ($displayErrorDetails === true) {
-            $detailsAttributes = $this->getExceptionDetailsAttributes($exception, $statusCode, $reasonPhrase);
-
+            // Add exception details to template attributes
+            $phpRendererAttributes = array_merge(
+                $phpRendererAttributes,
+                $this->getExceptionDetailsAttributes($exception)
+            );
+            // The error-details template does not include the default layout,
+            // so the base path to the project root folder is required to load assets
+            $phpRendererAttributes['basePath'] = (new BasePathDetector($request->getServerParams()))->getBasePath();
             // Render template if the template path fails, the default webserver exception is shown
-            return $this->phpRenderer->render($response, 'error/error-details.html.php', $detailsAttributes);
+            return $this->phpRenderer->render($response, 'error/error-details.html.php', $phpRendererAttributes);
         }
 
         // Display generic error page
         // If it's a HttpException it's safe to show the error message to the user
         $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
-        $errorMessage = [
-            'exceptionMessage' => $exceptionMessage,
-            'statusCode' => $statusCode,
-            'reasonPhrase' => $reasonPhrase,
-        ];
+        $phpRendererAttributes['exceptionMessage'] = $exceptionMessage;
 
         // Render template
-        return $this->phpRenderer->render($response, 'error/error-page.html.php', ['errorMessage' => $errorMessage]);
+        return $this->phpRenderer->render($response, 'error/error-page.html.php', $phpRendererAttributes);
     }
 
     /**
@@ -125,18 +133,13 @@ readonly class DefaultErrorHandler
     }
 
     /**
-     * Build the attribute array for the renderer.
+     * Build the attribute array for the detailed error page.
      *
-     * @param Throwable $exception Error
-     * @param int|null $statusCode
-     * @param string|null $reasonPhrase
+     * @param Throwable $exception
      * @return array
      */
-    private function getExceptionDetailsAttributes(
-        Throwable $exception,
-        ?int $statusCode = null,
-        ?string $reasonPhrase = null
-    ): array {
+    private function getExceptionDetailsAttributes(Throwable $exception): array
+    {
         $file = $exception->getFile();
         $lineNumber = $exception->getLine();
         $exceptionMessage = $exception->getMessage();
@@ -177,7 +180,7 @@ readonly class DefaultErrorHandler
             $args = [];
             foreach ($t['args'] ?? [] as $argKey => $argument) {
                 // Get argument as string not longer than 15 characters
-                $args[$argKey]['formatted'] = $this->getTraceArgumentAsTruncatedString($argument);
+                $args[$argKey]['truncated'] = $this->getTraceArgumentAsTruncatedString($argument);
                 // Get full length of argument as string
                 $fullArgument = $this->getTraceArgumentAsString($argument);
                 // Replace double backslash with single backslash
@@ -196,8 +199,6 @@ readonly class DefaultErrorHandler
 
         return [
             'severityCssClassName' => $severityCssClassName,
-            'statusCode' => $statusCode,
-            'reasonPhrase' => $reasonPhrase,
             'exceptionClassName' => get_class($exception),
             'exceptionMessage' => $exceptionMessage,
             'pathToMainErrorFile' => $pathToMainErrorFile,
@@ -208,8 +209,8 @@ readonly class DefaultErrorHandler
     }
 
     /**
-     * The stack trace contains the functions that are called during script execution
-     * with function arguments which can be of any type (objects, arrays, strings or null).
+     * The stack trace contains the functions that are called during script execution with
+     * function arguments that can be any type (objects, arrays, strings or null).
      * This function returns the argument as a string.
      *
      * @param mixed $argument
@@ -222,14 +223,12 @@ readonly class DefaultErrorHandler
             return get_class($argument);
         }
 
-        // If the variable is an array, iterate over its elements.
-        // For each element, if it's an object, get its class name.
-        // If it's an array, represent it as 'Array'.
-        // Otherwise, keep the original value.
-        // Finally, return the array converted to a string using var_export.
+        // If the variable is an array, iterate over its elements
         if (is_array($argument)) {
             $result = [];
             foreach ($argument as $key => $value) {
+                // if it's an object, get its class name if it's an array represent it as 'Array'
+                // otherwise, keep the original value.
                 if (is_object($value)) {
                     $result[$key] = get_class($value);
                 } elseif (is_array($value)) {
@@ -238,6 +237,7 @@ readonly class DefaultErrorHandler
                     $result[$key] = $value;
                 }
             }
+            // Return the array converted to a string using var_export
             return var_export($result, true);
         }
 
@@ -246,7 +246,7 @@ readonly class DefaultErrorHandler
     }
 
     /**
-     * Converts the given argument to a string not longer than 15 chars
+     * Convert the given argument to a string not longer than 15 chars
      * except if it's a file or a class name.
      *
      * @param mixed $argument The variable to be converted to a string.
@@ -257,9 +257,8 @@ readonly class DefaultErrorHandler
         if ($argument === null) {
             $formatted = 'NULL';
         } elseif (is_string($argument)) {
-            // If string contains backslashes keep part after the last backslash
+            // If string contains backslashes keep part after the last backslash, otherwise keep the first 15 chars
             if (str_contains($argument, '\\')) {
-                // Remove everything before the last \
                 $argument = $this->removeEverythingBeforeLastBackslash($argument);
             } elseif (strlen($argument) > 15) {
                 $argument = substr($argument, 0, 15) . '...';

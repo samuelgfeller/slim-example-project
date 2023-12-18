@@ -1,9 +1,14 @@
 :root {
     --nav-icon-scale: 85%; /*Percentage*/
     --nav-background-color: white;
+    --mobile-nav-toggle-btn-background-color: #2e3e50;
+    --mobile-nav-toggle-burger-bars-color: #d3e0ff;
 }
 [data-theme="dark"] {
     --nav-background-color: #282e31;
+    /*Switch colors for dark mode*/
+    --mobile-nav-toggle-btn-background-color: #aab4cc;
+    --mobile-nav-toggle-burger-bars-color: #2e3e50;
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -17,11 +22,13 @@
     nav {
         /*height: 50px; !* fixed height to center nav-icon and bypass transition movement when opened*!*/
         display: inline-block;
-        max-width: 0; /* 0 on mobile, 80px on desktop for icons */
-        border-radius: 32px;
+        border-radius: 20px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         margin-left: 15px;
-        transition: max-width .5s ease-out, background-color 250ms;
+        /*max-height must not be limited and max-width must be 80px on desktop for icons */
+        max-height: 0;
+        /*On mobile the expand animation is growing to the top and on desktop it's expanding sideways*/
+        transition: max-height .5s ease-out, max-width .5s ease-out, background-color 250ms;
         white-space: nowrap;
         overflow: hidden;
         z-index: 99;
@@ -33,7 +40,8 @@
     /* Show menu when mobile nav is open */
     #nav-container.open nav{
         max-width: 230px;
-        outline: 3px solid #2e3e50;
+        max-height: 500px;
+        outline: 3px solid var(--mobile-nav-toggle-btn-background-color);
     }
 
     nav a {
@@ -97,11 +105,11 @@
 
     /* Container */
     #nav-mobile-toggle-icon {
-        background: #2e3e50;
+        background: var(--mobile-nav-toggle-btn-background-color);
         border-radius: 99px;
         position: fixed;
         z-index: 99;
-        bottom: 30px;
+        bottom: 35px;
         left: 15px;
         width: 70px;
         height: 70px;
@@ -127,7 +135,7 @@
         position: absolute;
         height: 4px;
         width: 100%;
-        background: #d3e0ff;
+        background: var(--mobile-nav-toggle-burger-bars-color);
         border-radius: 6px;
         opacity: 1;
         left: 0;
@@ -192,7 +200,9 @@
         position: relative;
         bottom: initial;
         max-width: 80px;
+        max-height: initial;
         width: auto;
+        border-radius: 32px;
     }
     /* Hide nav label until hover */
     nav a span {

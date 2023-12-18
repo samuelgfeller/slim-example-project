@@ -37,13 +37,13 @@ final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
     {
         // Only make notices / wantings to ErrorException's if error details should be displayed
         // SLE-57 Making warnings and notices to exceptions for development
-        // set_error_handler only handles non-fatal errors, this function is not called by fatal errors.
+        // set_error_handler only handles non-fatal errors. The function callback is not called by fatal errors.
         set_error_handler(
             function ($severity, $message, $file, $line) {
                 // Don't throw exception if error reporting is turned off.
                 // '&' checks if a particular error level is included in the result of error_reporting().
                 if (error_reporting() & $severity) {
-                    // Log all non fatal errors
+                    // Log non fatal errors if logging is enabled
                     if ($this->logErrors) {
                         // If error is warning
                         if ($severity === E_WARNING | E_CORE_WARNING | E_COMPILE_WARNING | E_USER_WARNING) {
@@ -53,8 +53,8 @@ final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
                             $this->logger->notice("Notice [$severity] $message on line $line in file $file");
                         }
                     }
-                    // Throw ErrorException to have a stack trace and more error details for development
                     if ($this->displayErrorDetails === true) {
+                        // Throw ErrorException to stop script execution and have access to more error details
                         // Logging for fatal errors happens in DefaultErrorHandler.php
                         throw new ErrorException($message, 0, $severity, $file, $line);
                     }

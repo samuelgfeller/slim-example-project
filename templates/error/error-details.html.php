@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var string $basePath
  * @var string $severityCssClassName 'error' fatal errors or 'warning' for notices and warnings
  * @var int|null $statusCode http status code e.g. 404
  * @var string|null $reasonPhrase http reason phrase e.g. 'Not Found'
@@ -17,28 +18,28 @@
 
 // Remove layout if there was a default
 $this->setLayout('');
-// echo $errorMessage;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="<?= $basePath ?>/"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/error/error-details.css">
     <title>Error</title>
 </head>
 
-<body class="<?= $severityCssClassName ?>">
-<div id="title-div" class="<?= $severityCssClassName ?>">
-    <p><span><?= $statusCode ?> | <?= $reasonPhrase ?></span>
-        <span id="exception-name"><?= $exceptionClassName ?></span>
+<body class="<?= html($severityCssClassName) ?>">
+<div id="title-div" class="<?= html($severityCssClassName) ?>">
+    <p><span><?= html($statusCode) ?> | <?= html($reasonPhrase) ?></span>
+        <span id="exception-name"><?= html($exceptionClassName) ?></span>
     </p>
-    <h1><?= $exceptionMessage ?> in <span id="first-path-chunk"><?= $pathToMainErrorFile ?></span>
-        <?= $mainErrorFile ?>
-        on line <?= $errorLineNumber ?>.
+    <h1><?= html($exceptionMessage) ?> in <span id="first-path-chunk"><?= html($pathToMainErrorFile) ?></span>
+        <?= html($mainErrorFile) ?>
+        on line <?= html($errorLineNumber) ?>.
     </h1>
 </div>
-<div id="trace-div" class="<?= $severityCssClassName ?>">
+<div id="trace-div" class="<?= html($severityCssClassName) ?>">
     <table>
         <tr class="non-vendor">
             <th id="num-th">#</th>
@@ -48,19 +49,19 @@ $this->setLayout('');
         <?php
         foreach ($traceEntries as $key => $entry) { ?>
             <tr>
-                <td class="<?= $entry['nonVendorClass'] ?>"><?= $key ?></td>
-                <td class="function-td <?= $entry['nonVendorFunctionCallClass'] ?>">
-                    <?= $entry['classAndFunction'] ?>(
+                <td class="<?= html($entry['nonVendorClass']) ?>"><?= html($key) ?></td>
+                <td class="function-td <?= html($entry['nonVendorFunctionCallClass']) ?>">
+                    <?= html($entry['classAndFunction']) ?>(
                     <?php
                     foreach ($entry['args'] as $argument) { ?>
-                        <span class="args-span" data-full-details="<?= $argument['detailed'] ?>">
-                            <?= $argument['formatted'] ?></span>,
+                        <span class="args-span" data-full-details="<?= html($argument['detailed']) ?>">
+                            <?= html($argument['truncated']) ?></span>,
                         <?php
                     } ?>
                     )
                 </td>
-                <td class="stack-trace-file-name <?= $entry['nonVendorClass'] ?>">
-                    <?= $entry['fileName'] ?>:<span class="lineSpan"><?= $entry['line'] ?></span>
+                <td class="stack-trace-file-name <?= html($entry['nonVendorClass']) ?>">
+                    <?= html($entry['fileName']) ?>:<span class="lineSpan"><?= html($entry['line']) ?></span>
                 </td>
             </tr>
             <?php

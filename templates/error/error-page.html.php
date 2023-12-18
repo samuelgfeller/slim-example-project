@@ -3,6 +3,9 @@
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
+ * @var string|null $statusCode e.g. 403
+ * @var string|null $reasonPhrase e.g. Forbidden
+ * @var string|null $exceptionMessage e.g. You are not allowed to access this page.
  * @var \Slim\Views\PhpRenderer $this
  * @var array $config public config values
  */
@@ -15,11 +18,11 @@ $this->addAttribute('js', ['assets/error/prod-error-page.js']);
 ?>
 
 <section id="error-inner-section">
-    <h1 id="error-status-code"><?= html($errorMessage['statusCode']) ?></h1>
+    <h1 id="error-status-code"><?= html($statusCode) ?></h1>
 
     <section id="error-description-section">
         <?php
-        switch ($errorMessage['statusCode']) {
+        switch ($statusCode) {
             case 404:
                 $title = 'Page not found';
                 $message = __("Looks like you've ventured into uncharted territory. Please report the issue!");
@@ -57,20 +60,20 @@ $this->addAttribute('js', ['assets/error/prod-error-page.js']);
                 );
                 break;
         }
-        $emailSubject = strip_tags(str_replace('"', '', $errorMessage['exceptionMessage']))
-            ?? $errorMessage['statusCode'] . ' ' . $title;
-        $emailBody = __('Please explain what you did prior to the error happening.');
+        $emailSubject = strip_tags(str_replace('"', '', $exceptionMessage))
+            ?? $statusCode . ' ' . $title;
+        $emailBody = __('This is what I did before the error happened:');
         ?>
         <h2 id="error-reason-phrase">OOPS! <?= html($title) ?></h2>
         <p id="error-message"><?= $message /* Not escape with html() because $message is safe and has html tags */ ?></p>
-        <?= $errorMessage['exceptionMessage'] !== null ?
-            '<p id="server-message">Server message: ' . $errorMessage['exceptionMessage'] . '</p>' : '' ?>
+        <?= $exceptionMessage !== null ?
+            '<p id="server-message">Server message: ' . html($exceptionMessage) . '</p>' : '' ?>
 
     </section>
     <section id="error-btn-section">
         <a href="<?= $route?->urlFor('home-page') ?>" class="btn"><?= __('Go back home') ?></a>
         <a href="mailto:<?= ($config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch')
-        . '?subject=' . $emailSubject . '&body=' . $emailBody ?>" target="_blank" class="btn">
+        . '?subject=' . html($emailSubject) . '&body=' . html($emailBody) ?>" target="_blank" class="btn">
             <?= __('Report the issue') ?></a>
     </section>
 </section>
