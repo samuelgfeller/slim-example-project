@@ -48,17 +48,19 @@ return [
 
         $logger = new Logger('app');
 
-        // Check if config file contains the key 'path' env.test.php removes this key to prevent logging
-        if (isset($loggerSettings['path'])) {
-            $filename = sprintf('%s/app.log', $loggerSettings['path']);
-            $level = $loggerSettings['level'];
-            $rotatingFileHandler = new RotatingFileHandler($filename, 0, $level, true, 0777);
-            // The last "true" here tells monolog to remove empty []'s
-            $rotatingFileHandler->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s', false, true));
-            $logger->pushHandler($rotatingFileHandler);
+        // When testing, 'test' value is true which means the monolog test handler should be used
+        if (isset($loggerSettings['test']) && $loggerSettings['test'] === true) {
+            return $logger->pushHandler(new \Monolog\Handler\TestHandler());
         }
 
-        return $logger;
+        // Instantiate logger with rotating file handler
+        $filename = sprintf('%s/app.log', $loggerSettings['path']);
+        $level = $loggerSettings['level'];
+        // With the RotatingFileHandler, a new log file is created every day
+        $rotatingFileHandler = new RotatingFileHandler($filename, 0, $level, true, 0777);
+        // The last "true" here tells monolog to remove empty []'s
+        $rotatingFileHandler->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s', false, true));
+        return $logger->pushHandler($rotatingFileHandler);
     },
 
     // HTTP factories

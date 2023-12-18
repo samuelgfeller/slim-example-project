@@ -40,8 +40,8 @@ class UserCreateActionTest extends TestCase
      * @dataProvider \App\Test\Provider\User\UserCreateProvider::userCreateAuthorizationCases()
      *
      * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
-     * @param UserRole $newUserRole user role id of new user
-     * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     * @param UserRole|null $newUserRole user role id of new user
+     * @param array $expectedResult HTTP status code, bool if db entry is created and json_response
      *
      * @return void
      */
@@ -63,7 +63,9 @@ class UserCreateActionTest extends TestCase
             'email' => 'daniel.riccardo@notmclaren.com',
             'password' => '12345678',
             'password2' => '12345678',
-            'user_role_id' => $newUserRole ? $userRoleFinderRepository->findUserRoleIdByName($newUserRole->value) : $newUserRole,
+            'user_role_id' => $newUserRole ? $userRoleFinderRepository->findUserRoleIdByName(
+                $newUserRole->value
+            ) : $newUserRole,
             'status' => 'unverified',
             'language' => 'en_US',
         ];
@@ -168,7 +170,7 @@ class UserCreateActionTest extends TestCase
         $response = $this->app->handle($request);
         // Assert 422 Unprocessable Entity, which means validation error if request body contains user_role_id
         // even if it's an empty string
-            self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
 
         // Database must be unchanged - only one row (authenticated user) expected in user table
@@ -177,10 +179,7 @@ class UserCreateActionTest extends TestCase
     }
 
     /**
-     * Test that user with same email as existing user cannot be created.
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * Test that user with the same email as existing user cannot be created.
      *
      * @return void
      */
