@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - develop
   pull_request:
     types: [ opened, synchronize, reopened ]
 
@@ -23,7 +24,7 @@ jobs:
       mysql:
         image: mysql:8.0.23
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: rootroot
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: test
         ports:
