@@ -58,13 +58,13 @@ jobs:
         run: sudo systemctl start mysql
 
       - name: Check MySQL variables
-        run: mysql -uroot -proot -e "SHOW VARIABLES LIKE 'version%';"
+        run: mysql -uroot -prootroot -e "SHOW VARIABLES LIKE 'version%';"
 
       - name: Set MySQL timezone to swiss time
-        run: mysql -uroot -proot -e "SET GLOBAL time_zone = '+01:00';"
+        run: mysql -uroot -prootroot -e "SET GLOBAL time_zone = '+01:00';"
 
       - name: Create database
-        run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS ${{ matrix.test-database }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
+        run: mysql -uroot -prootroot -e 'CREATE DATABASE IF NOT EXISTS ${{ matrix.test-database }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -76,7 +76,7 @@ jobs:
         run: composer migrate-prod
 
       - name: Show test db tables
-        run: mysql -uroot -proot -D ${{ matrix.test-database }} -e "SHOW TABLES;"
+        run: mysql -uroot -prootroot -D ${{ matrix.test-database }} -e "SHOW TABLES;"
 
       - name: Run test suite
         run: composer test:coverage

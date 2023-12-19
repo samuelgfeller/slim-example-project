@@ -14,7 +14,7 @@ if (file_exists(__DIR__ . '/../../env.php')) {
 
 // Set APP_ENV if not already set
 $_ENV['APP_ENV'] = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'dev';
-var_dump($_ENV['APP_ENV']);
+
 // Overwrite previous config with APP_ENV specific values ("env", "test" or "github")
 if (isset($_ENV['APP_ENV'])) {
     $appEnvConfigFile = __DIR__ . '/env/env.' . $_ENV['APP_ENV'] . '.php';
