@@ -7,7 +7,7 @@ on:
     types: [ opened, synchronize, reopened ]
 
 env:
-  APP_ENV: github
+  APP_ENV: github2
 
 jobs:
   run:
