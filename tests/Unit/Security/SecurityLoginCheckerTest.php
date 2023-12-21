@@ -6,6 +6,7 @@ use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Repository\LoginLogFinderRepository;
 use App\Domain\Security\Service\SecurityLoginChecker;
+use App\Infrastructure\Utility\Settings;
 use App\Test\Traits\AppTestTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -15,7 +16,7 @@ use Selective\TestTrait\Traits\MockTestTrait;
 /**
  * Threats:
  *  - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
- *  - Distributed brute force attacks (try to log in 1000 different users with most common password).
+ *  - Password spraying attacks (try to log in 1000 different users with most common password).
  *
  * Testing whole function performLoginSecurityCheck() and performEmailAbuseCheck() and not sub-functions directly as
  * they are private mainly because here (https://stackoverflow.com/a/2798203/9013718 comments), they say:
@@ -48,22 +49,28 @@ class SecurityLoginCheckerTest extends TestCase
      *     logins_by_email: array{successes: int, failures: int},
      *     logins_by_ip: array{successes: int, failures: int},
      * } $ipAndEmailLogSummary
-     *
+     * @param array $securitySettings
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testPerformLoginSecurityCheckIndividual(int|string $delay, array $ipAndEmailLogSummary): void
-    {
+    public function testPerformLoginSecurityCheckIndividual(
+        int|string $delay,
+        array $ipAndEmailLogSummary,
+        array $securitySettings
+    ): void {
         $loginLogFinderRepository = $this->mock(LoginLogFinderRepository::class);
 
-        // Very important to return summary of requests otherwise global check fails
+        // Settings for login throttling
+        $this->mock(Settings::class)->method('get')->willReturn($securitySettings);
+
+        // Very important to return global summary of requests otherwise global check fails
         $loginLogFinderRepository->method('getGlobalLoginAmountSummary')->willReturn(
             ['login_total' => 21, 'login_failures' => 0] // 0 percent failures so global check won't fail
         );
 
         // Actual test
         // Provider alternates between ip stats with content exceeding threshold (new threshold on each run)
-        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($ipAndEmailLogSummary);
+        $loginLogFinderRepository->method('getLoginLogSummaryFromEmailAndIp')->willReturn($ipAndEmailLogSummary);
 
         // lastRequest has to be defined here. In the provider "created_at" seconds often differs from assertion
         $loginLogFinderRepository->method('findLatestLoginTimestampFromUserOrIp')->willReturn(date('Y-m-d H:i:s'));
@@ -88,10 +95,10 @@ class SecurityLoginCheckerTest extends TestCase
     }
 
     /**
-     * Threat: Distributed brute force attacks (try to log in 1000 different users with most common password).
+     * Threat: Password spraying attacks (try to log in 1000 different users with the most common password).
      *
      * Covered in this test:
-     *  - Global login failures exceeding allowed threshold
+     *  - Global login failures exceeding the allowed threshold
      */
     public function testPerformLoginSecurityCheckGlobal(): void
     {
@@ -103,7 +110,7 @@ class SecurityLoginCheckerTest extends TestCase
             'logins_by_email' => ['successes' => 0, 'failures' => 0],
             'logins_by_ip' => ['successes' => 0, 'failures' => 0],
         ];
-        $loginLogFinderRepository->method('getLoginSummaryFromEmailAndIp')->willReturn($emptyLogSummary);
+        $loginLogFinderRepository->method('getLoginLogSummaryFromEmailAndIp')->willReturn($emptyLogSummary);
 
         // Actual test starts here
         // Login amount stats used to calculate threshold

@@ -4,30 +4,32 @@ namespace App\Test\Provider\Security;
 
 class LoginRequestProvider
 {
-    // Placed on top to easily change.
-    // ! This should be the same as the config values $settings['security']['login_throttle_rule'] for integration tests
-    // ? Example values as I can't take the values from settings because I can't access container in provider
-    // (Error: Typed property $container must not be accessed before initialization)
-    // Change provider return values too if different from 3
-    private const userLoginThrottle = [4 => 10, 9 => 120, 12 => 'captcha'];
+    // ! This must be the same as the mocked config values in the unit test case
+    private const userLoginThrottleThresholds = [4 => 10, 9 => 120, 12 => 'captcha'];
+
+    private const securitySettings = [
+        'throttle_login' => true,
+        'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],
+        'timespan' => 3600,
+    ];
 
     /**
-     * Provides all login request amounts in each different threshold where an exception must be thrown
-     *  - Too many login failures in each threshold from same ip or specific user
-     *  - Too many login success requests (also for each threshold) from same ip or specific user.
+     * Provides all login request amounts for each different threshold where an exception must be thrown.
+     *  - Too many login failures in each threshold from the same ip or specific user
+     *  - Too many login success requests (also for each threshold) from the same ip or specific user.
      *
      * @return array[]
      */
     public static function individualLoginThrottlingTestCases(): array
     {
         // Values for logins (L)
-        [$firstL, $secondL, $thirdL] = array_keys(self::userLoginThrottle);
-        [$firstDelayL, $secondDelayL, $thirdDelayL] = array_values(self::userLoginThrottle);
+        [$firstL, $secondL, $thirdL] = array_keys(self::securitySettings['login_throttle_rule']);
+        [$firstDelayL, $secondDelayL, $thirdDelayL] = array_values(self::securitySettings['login_throttle_rule']);
 
         return [
-            // ! LOGIN FAILURE VALUES
-            // ? First three are to test ip request stats
-            // Failed or successful login requests coming from the same ip. Throttled same as rapid fire on user.
+            // ! LOGIN FAILURES
+            // ? Login requests coming from the same ip address
+            // Failed or successful login requests coming from the same ip.
             [
                 // ip test
                 'delay' => $firstDelayL,
@@ -35,6 +37,7 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $firstL],
                 ],
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
@@ -42,6 +45,7 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $secondL],
                 ],
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
@@ -49,8 +53,9 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $thirdL],
                 ],
+                'security_settings' => self::securitySettings,
             ],
-            // ? Next are to test login requests made on one user account
+            // ? Login requests made on one user account
             [
                 // logins by email test
                 'delay' => $firstDelayL,
@@ -58,6 +63,7 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => $firstL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
@@ -65,6 +71,7 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => $secondL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
@@ -72,6 +79,62 @@ class LoginRequestProvider
                     'logins_by_email' => ['successes' => 0, 'failures' => $thirdL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
+                'security_settings' => self::securitySettings,
+            ],
+
+            // ! LOGIN SUCCESSES
+            // ? Login requests coming from the same ip address
+            // Successful login requests coming from the same ip.
+            [
+                // ip test
+                'delay' => $firstDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $firstL, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
+            ],
+            [
+                'delay' => $secondDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $secondL, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
+            ],
+            [
+                'delay' => $thirdDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => 0, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => $thirdL, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
+            ],
+            // ? Login requests made on one user account
+            [
+                // logins by email test
+                'delay' => $firstDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $firstL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
+            ],
+            [
+                'delay' => $secondDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $secondL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
+            ],
+            [
+                'delay' => $thirdDelayL,
+                'log_summary' => [
+                    'logins_by_email' => ['successes' => $thirdL, 'failures' => 0],
+                    'logins_by_ip' => ['successes' => 0, 'failures' => 0],
+                ],
+                'security_settings' => self::securitySettings,
             ],
         ];
     }

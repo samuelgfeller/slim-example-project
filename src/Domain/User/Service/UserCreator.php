@@ -34,14 +34,13 @@ final readonly class UserCreator
      * User creation logic.
      *
      * @param array $userValues
-     * @param string|null $captcha user captcha response if filled out
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
+     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
-     * @return int|bool insert id, false if user already exists
      */
-    public function createUser(array $userValues, ?string $captcha = null, array $queryParams = []): bool|int
+    public function createUser(array $userValues, array $queryParams = []): bool|int
     {
         // Before validation, check if authenticated user is authorized to create user with the given data
         if ($this->userPermissionVerifier->isGrantedToCreate($userValues)) {
@@ -51,7 +50,10 @@ final readonly class UserCreator
 
             $user = new UserData($userValues);
             // Verify that user (concerned email) or ip address doesn't spam email sending
-            $this->emailSecurityChecker->performEmailAbuseCheck($user->email, $captcha);
+            $this->emailSecurityChecker->performEmailAbuseCheck(
+                $user->email,
+                $userValues['g-recaptcha-response'] ?? null
+            );
 
             $user->passwordHash = password_hash($user->password ?? '', PASSWORD_DEFAULT);
 

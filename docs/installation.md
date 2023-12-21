@@ -59,9 +59,9 @@ composer seed:minimal
 **Deployment**   
 If you are not planning on 
 deploying your app at this time, delete or comment out the contents of the 
-`.github/workflows/master.yml` file.  
+`.github/workflows/deploy.yml` file.  
   
-To deploy your app, update the `.github/workflows/master.yml` file according to your needs and 
+To deploy your app, update the `.github/workflows/deploy.yml` file according to your needs and 
 add your server's credentials to GitHub's 
 [Actions secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 

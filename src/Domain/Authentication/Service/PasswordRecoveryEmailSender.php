@@ -43,19 +43,20 @@ class PasswordRecoveryEmailSender
      * When a user requests a new password for email.
      *
      * @param array $userValues
-     * @param string|null $captcha
      *
      * @throws ValidationException|TransportExceptionInterface
      */
-    public function sendPasswordRecoveryEmail(array $userValues, ?string $captcha = null): void
+    public function sendPasswordRecoveryEmail(array $userValues): void
     {
         $this->userValidator->validatePasswordResetEmail($userValues);
-        $email = $userValues['email'];
 
-        // Verify that user (concerned email) or ip address doesn't spam email sending
-        $this->securityEmailChecker->performEmailAbuseCheck($email, $captcha);
+        // Verify that user (concerned email) doesn't spam email sending
+        $this->securityEmailChecker->performEmailAbuseCheck(
+            $userValues['email'],
+            $userValues['g-recaptcha-response'] ?? null
+        );
 
-        $dbUser = $this->userFinderRepository->findUserByEmail($email);
+        $dbUser = $this->userFinderRepository->findUserByEmail($userValues['email']);
 
         if (isset($dbUser->email, $dbUser->id)) {
             // Create a verification token, so they don't have to register again

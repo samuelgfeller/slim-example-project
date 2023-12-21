@@ -28,15 +28,11 @@ final readonly class UserCreateAction
      */
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        $flash = $this->session->getFlash();
         $userValues = (array)$request->getParsedBody();
-
-        // Populate $captcha var if reCAPTCHA response is given
-        $captcha = $userValues['g-recaptcha-response'] ?? null;
 
         try {
             // Throws exception if there is error and returns false if user already exists
-            $insertId = $this->userCreator->createUser($userValues, $captcha, $request->getQueryParams());
+            $insertId = $this->userCreator->createUser($userValues, $request->getQueryParams());
 
             if ($insertId !== false) {
                 $this->logger->info('User "' . $userValues['email'] . '" created');

@@ -4,16 +4,14 @@ namespace App\Test\Provider\Security;
 
 class EmailRequestProvider
 {
-    // ! This should be the same as the config values $settings['security']['user_email_throttle_rule'] for integration tests
-    // ? Example values as I can't take the values from settings because I can't access container in provider
-
-    // Change provider return values too if different from 3
-    private const emailRequestThrottlingSetting = [5 => 2, 10 => 4, 20 => 'captcha'];
-
-    // ! This should be the same as the config values $settings['security']['global_daily_email_threshold']
-    private const globalDailyEmailThreshold = 300;
-    // ! And  $settings['security']['global_monthly_email_threshold']
-    private const globalMonthlyEmailThreshold = 1000;
+    // Settings.php is mocked with these config values in the unit test case
+    private const securitySettings = [
+        'throttle_email' => true,
+        'timespan' => 3600,
+        'user_email_throttle_rule' => [5 => 2, 10 => 4, 20 => 'captcha'],
+        'global_daily_email_threshold' => 300,
+        'global_monthly_email_threshold' => 900,
+    ];
 
     /**
      * Provides values for email abuse test concerning specific email or coming from ip.
@@ -24,22 +22,27 @@ class EmailRequestProvider
     public static function individualEmailThrottlingTestCases(): array
     {
         // Email thresholds for the throttling to take place
-        [$firstThreshold, $secondThreshold, $thirdThreshold] = array_keys(self::emailRequestThrottlingSetting);
-        [$firstDelay, $secondDelay, $thirdDelay] = array_values(self::emailRequestThrottlingSetting);
+        [$firstThreshold, $secondThreshold, $thirdThreshold] = array_keys(
+            self::securitySettings['user_email_throttle_rule']
+        );
+        [$firstDelay, $secondDelay, $thirdDelay] = array_values(self::securitySettings['user_email_throttle_rule']);
 
         return [
             [
                 'delay' => $firstDelay,
-                // Email security check should fail if threshold is reached
+                // Email security check should fail if the threshold is reached
                 'email_amount_in_timespan' => $firstThreshold,
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelay,
                 'email_amount_in_timespan' => $secondThreshold,
+                'security_settings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelay,
                 'email_amount_in_timespan' => $thirdThreshold,
+                'security_settings' => self::securitySettings,
             ],
         ];
     }
@@ -47,26 +50,29 @@ class EmailRequestProvider
     /**
      * Provides values for global emails abuse test.
      *
-     * The first time the provider sets the daily amount and leaves the monthly blank
-     * The second time this test is executed the provider sets monthly amount and lefts daily blank
+     * The first time the provider sets the amount for today to test the daily limit.
+     * For the second iteration, the provider returns email amount from this month to test monthly limit.
      *
-     * Values same as threshold as exception is thrown if it equals or is greater than threshold
+     * The values are the same as the thresholds as the exception is thrown if it equals or is greater than the threshold.
      *
      * @return array[]
      */
     public static function globalEmailStatsProvider(): array
     {
         return [
+            // Daily threshold test
             [
-                // Values same as threshold as exception is thrown if it equals or is greater than threshold
-                // string cake query builder also returns string
-                'daily_email_amount' => self::globalDailyEmailThreshold,
-                // Daily amount given here as it wouldn't make sense to have X amount in a day but 0 in last month
-                'monthly_email_amount' => self::globalDailyEmailThreshold, // At least same as daily amount
+                // The values are the same as threshold as exception is thrown if it equals or is greater than threshold
+                'today_email_amount' => self::securitySettings['global_daily_email_threshold'],
+                // The amount for this month has to be at least the same as from today
+                'this_month_email_amount' => self::securitySettings['global_daily_email_threshold'],
+                'security_settings' => self::securitySettings,
             ],
+            // Monthly threshold test
             [
                 'daily_email_amount' => 0,
-                'monthly_email_amount' => self::globalMonthlyEmailThreshold,
+                'monthly_email_amount' => self::securitySettings['global_monthly_email_threshold'],
+                'security_settings' => self::securitySettings,
             ],
         ];
     }

@@ -17,19 +17,20 @@ class EmailRequestFinder
     }
 
     /**
-     * Retrieve email requests from given email and client ip.
+     * Retrieve email requests from given email or user.
      *
      * @param string $email
-     *
+     * @param int|null $userId
      * @return int
      */
-    public function findEmailAmountInSetTimespan(string $email): int
+    public function findEmailAmountInSetTimespan(string $email, ?int $userId): int
     {
         // This service should be called when retrieving ip stats as this class loads the settings it
         // Stats concerning given email in last timespan
         return $this->emailRequestFinderRepository->getLoggedEmailCountInTimespan(
             $email,
-            $this->securitySettings['timespan']
+            $this->securitySettings['timespan'],
+            $userId
         );
     }
 

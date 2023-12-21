@@ -18,10 +18,10 @@ class EmailLogFinderRepository
      * @param string $email
      * @param int $seconds
      * Throws PersistenceRecordNotFoundException if entry not found
-     *
+     * @param int|null $userId
      * @return int
      */
-    public function getLoggedEmailCountInTimespan(string $email, int $seconds): int
+    public function getLoggedEmailCountInTimespan(string $email, int $seconds, ?int $userId): int
     {
         $query = $this->queryFactory->selectQuery();
         $query->select(
@@ -30,10 +30,11 @@ class EmailLogFinderRepository
             ]
         )->from('email_log')->where(
             [
-                // Return all between now and x amount of minutes
+                // Return all between now and x number of minutes
                 'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
-                'to_email' => $email,
             ]
+        )->where( // Where to_email is $email or user_id is $userId if it's set
+            $userId ? ['OR' => ['to_email' => $email], 'user_id' => $userId] : ['to_email' => $email]
         )->bind(':sec', $seconds, 'integer');
 
         // Only fetch and not fetchAll as result will be one row with the counts

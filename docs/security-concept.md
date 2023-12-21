@@ -16,13 +16,14 @@ the function `escapeHtml()` serves the same purpose.
 ### Login requests on specific user or coming from specific IP
 
 * `$settings['security']['login_throttle'] => [4 => 10, 9 => 120, 12 => 'captcha']` defines the threshold values (key)
+* 
   and delay in seconds (value) when threshold is reached
 * Above thresholds are for login failures within the given timespan `$settings['security']['timespan']`. 
   After waiting the time specified in `[timespan]`, the user is able to log in again without throttling.
 * When retrieving the user and ip logs, the failed login attempts in the last `[timespan]` are summed meaning 
   that if there were 5 fails, 1 success and then 2 fails, it counts as 7 fails. 
 
-### Global login rules (distributed brute force)
+### Global login rules (password spraying)
 
 * `$settings['security']['login_failure_percentage'] => 20` is the login failure threshold ratio in percentage 
   meaning that the ratio of failed in comparaison to total login requests has to be less than the given percentage.

@@ -24,7 +24,7 @@ class SecurityLoginChecker
     /**
      * Threats:
      * - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
-     * - Distributed brute force attacks (try to log in 1000 different users with most common password).
+     * - Password spraying (try to log in 1000 different users with most common password).
      *
      * Perform security check for login requests:
      * - coming from the same ip address
@@ -47,14 +47,15 @@ class SecurityLoginChecker
             // Standard verification has to be done before captcha check as the captcha may be needed for email
             // verification when email is sent to a non-active user for instance
             try {
-                $summary = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
-                // Most strict. Very low limit on failed requests for specific user or coming from an ip
-                $this->performLoginCheck($summary['logins_by_ip'], $summary['logins_by_email'], $email);
+                $loginEntries = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
+                // Perform login check on single user
+                $this->performLoginCheck($loginEntries['logins_by_ip'], $loginEntries['logins_by_email'], $email);
                 // Global login check
                 $this->performGlobalLoginCheck();
             } catch (SecurityException $securityException) {
-                // reCAPTCHA check done AFTER standard login checks as captcha can be verified only once, and it
-                // may be required later for the email verification (to send email to a non-active user)
+                // reCAPTCHA check done AFTER other login checks.
+                // A captcha can be verified only once, and it may be required later in the login process when security
+                // check did not fail (e.g. for the email verification to send email to a non-active user).
                 if ($reCaptchaResponse !== null) {
                     $this->captchaVerifier->verifyReCaptcha(
                         $reCaptchaResponse,
@@ -71,7 +72,7 @@ class SecurityLoginChecker
     /**
      * Check that login requests in last [timespan] do not exceed the set threshold.
      *
-     * Global threshold is calculated with a ratio from unsuccessful logins to total logins.
+     * The global threshold is calculated with a ratio from unsuccessful logins to total logins.
      * In order for bots not to increase the total login requests and thus manipulating the global threshold,
      * the same limit of failed login attempts per user is used also in place for successful logins.
      * If the user has 4 unsuccessful login attempts before throttling, he has also 4 successful login requests in
@@ -91,8 +92,12 @@ class SecurityLoginChecker
             if (
                 ($loginsByIp['failures'] >= $requestLimit && $loginsByIp['failures'] !== 0)
                 || ($loginsByEmail['failures'] >= $requestLimit && $loginsByEmail['failures'] !== 0)
+                // To prevent bots from increasing the total login requests and thus manipulating the global threshold,
+                // the same limit of failed login attempts per user is used is also enforced for successful logins.
+                || ($loginsByIp['successes'] >= $requestLimit && $loginsByIp['successes'] !== 0)
+                || ($loginsByEmail['successes'] >= $requestLimit && $loginsByEmail['successes'] !== 0)
             ) {
-                // If truthy means: too many ip fails OR too many ip successes
+                // If truthy means: too many ip failures OR too many ip successes
                 // OR too many failed login tries on specific user OR too many succeeding login requests on specific user
 
                 // Retrieve the latest email sent for specific email or coming from ip
@@ -157,7 +162,7 @@ class SecurityLoginChecker
         // at least 20 failed login attempts are allowed no matter the percentage
         // If percentage is 10, throttle begins at 200 login requests
         if (!($loginAmountSummary['failures'] < $failureThreshold) && $failureThreshold > 20) {
-            // If changed, update SecurityServiceTest distributed brute force test expected error message
+            // If changed, update SecurityServiceTest password spraying test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';
             throw new SecurityException('captcha', SecurityType::GLOBAL_LOGIN, $msg);
         }

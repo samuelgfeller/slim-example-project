@@ -63,32 +63,29 @@ $settings['locale'] = [
 ];
 
 // Security
+
+// Protection against rapid fire and password spraying force attacks
 $settings['security'] = [
     // Bool if login requests should be throttled
     'throttle_login' => true,
     // Bool if email requests should be throttled
-    'throttle_user_email' => true,
-
-    /** Protection against rapid fire and distributed brute force attacks */
-    // Seconds in the past relevant for global, user and ip request throttle
+    'throttle_email' => true,
+    // Seconds in the past relevant for global, user and ip login and email request throttle
     // If 3600, the requests in the past hour will be evaluated and compared to the set thresholds below
     'timespan' => 3600,
-    // key = request amount (fail: x + 1 as check is done at beginning of next request); value = delay; Lowest to highest
-    /** When changed, update @see \App\Test\Provider\Security\LoginRequestProvider */
-    // Login threshold and matching throttle concerning specific user or coming from same ip (successes and failures)
-    // If threshold is 4, there need to be already 4 failures for the check to fail as it's done before evaluating the
-    // login request, the next check will be at the beginning of the 5th
-    'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],
-    'user_email_throttle_rule' => [5 => 2, 10 => 4, 20 => 'captcha'],
 
-    // Percentage of login requests that may be failures (threshold) in last month (change timespan in getGlobalLoginAmountSummary)
+    // Key = sent email amount for throttling to apply; value = delay in seconds or 'captcha'; Lowest to highest
+    'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],
+    // Percentage of login requests that may be failures (threshold) in the past month
     'login_failure_percentage' => 20,
 
-    'global_daily_email_threshold' => 300,
-    // optional
-    // Mailgun offer 1250 free emails per month so 1k before throttling seems reasonable
-    'global_monthly_email_threshold' => 1000,
-    // optional
+    // Email configurations can be omitted if specific rule shouldn't be throttled
+    // Key = sent email amount for throttling to apply; value = delay in seconds or 'captcha'; Lowest to highest
+    // 'user_email_throttle_rule' => [5 => 2, 10 => 4, 20 => 'captcha'],
+    // // Daily site-wide limit before throttling begins
+    // 'global_daily_email_threshold' => 300,
+    // // Mailgun offers 1000 free emails per month. Throttling should begin at 900.
+    // 'global_monthly_email_threshold' => 900,
 ];
 
 // Secret values are overwritten in env.php

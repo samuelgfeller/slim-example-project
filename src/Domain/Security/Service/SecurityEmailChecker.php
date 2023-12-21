@@ -39,10 +39,11 @@ class SecurityEmailChecker
      *
      * @param string|null $email
      * @param string|null $reCaptchaResponse
+     * @param int|null $userId
      */
-    public function performEmailAbuseCheck(?string $email, ?string $reCaptchaResponse = null): void
+    public function performEmailAbuseCheck(?string $email, ?string $reCaptchaResponse = null, ?int $userId = null): void
     {
-        if ($this->securitySettings['throttle_user_email'] === true && isset($email)) {
+        if ($this->securitySettings['throttle_email'] === true && isset($email)) {
             $validCaptcha = false;
             // reCAPTCHA verification
             if ($reCaptchaResponse !== null) {
@@ -51,9 +52,9 @@ class SecurityEmailChecker
                     SecurityType::USER_EMAIL
                 );
             }
-            // If captcha is valid the other security checks don't have to be made
+            // If captcha is valid, the other security checks don't have to be made
             if ($validCaptcha !== true) {
-                $emailsAmount = $this->emailRequestFinder->findEmailAmountInSetTimespan($email);
+                $emailsAmount = $this->emailRequestFinder->findEmailAmountInSetTimespan($email, $userId);
                 // Email checks (register, password recovery, other with email)
                 $this->performEmailRequestsCheck($emailsAmount, $email);
                 // Global email check
@@ -73,29 +74,31 @@ class SecurityEmailChecker
         int $emailsAmount,
         string $email
     ): void {
-        // Reverse order to compare fails the longest delay first and then go down from there
-        krsort($this->securitySettings['user_email_throttle_rule']);
-        // Fails on specific user or coming from specific IP
-        foreach ($this->securitySettings['user_email_throttle_rule'] as $requestLimit => $delay) {
-            // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
-            if ($emailsAmount >= $requestLimit) {
-                // Retrieve the latest email sent created_at in seconds
-                $latestEmailTimestamp = $this->emailRequestFinder->findLastEmailRequestTimestamp($email);
+        if (isset($this->securitySettings['user_email_throttle_rule'])) {
+            // Reverse order to compare fails the longest delay first and then go down from there
+            krsort($this->securitySettings['user_email_throttle_rule']);
+            // Fails on specific user or coming from specific IP
+            foreach ($this->securitySettings['user_email_throttle_rule'] as $requestLimit => $delay) {
+                // If sent emails in the last given timespan is greater than the tolerated amount of requests with email per timespan
+                if ($emailsAmount >= $requestLimit) {
+                    // Retrieve the latest email sent created_at in seconds
+                    $latestEmailTimestamp = $this->emailRequestFinder->findLastEmailRequestTimestamp($email);
 
-                $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
-                if (is_numeric($delay)) {
-                    // Check that time is in the future by comparing actual time with forced delay + to the latest request
-                    if (time() < ($timeForNextRequest = $delay + $latestEmailTimestamp)) {
-                        $remainingDelay = (int)($timeForNextRequest - time());
-                        throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);
+                    $errMsg = 'Exceeded maximum of tolerated emails.'; // Change in SecurityServiceTest as well
+                    if (is_numeric($delay)) {
+                        // Check that time is in the future by comparing actual time with forced delay + to the latest request
+                        if (time() < ($timeForNextRequest = $delay + $latestEmailTimestamp)) {
+                            $remainingDelay = (int)($timeForNextRequest - time());
+                            throw new SecurityException($remainingDelay, SecurityType::USER_EMAIL, $errMsg);
+                        }
+                    } elseif ($delay === 'captcha') {
+                        throw new SecurityException($delay, SecurityType::USER_EMAIL, $errMsg);
                     }
-                } elseif ($delay === 'captcha') {
-                    throw new SecurityException($delay, SecurityType::USER_EMAIL, $errMsg);
                 }
             }
+            // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['user_email_throttle_rule']
+            ksort($this->securitySettings['user_email_throttle_rule']);
         }
-        // Revert krsort() done earlier to prevent unexpected behaviour later when working with ['login_throttle_rule']
-        ksort($this->securitySettings['login_throttle_rule']);
     }
 
     /**

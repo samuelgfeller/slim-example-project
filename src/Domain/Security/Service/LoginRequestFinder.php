@@ -31,7 +31,7 @@ class LoginRequestFinder
     public function findLoginLogEntriesInTimeLimit(string $email): array
     {
         // Stats concerning given email in last timespan
-        return $this->loginRequestFinderRepository->getLoginSummaryFromEmailAndIp(
+        return $this->loginRequestFinderRepository->getLoginLogSummaryFromEmailAndIp(
             $email,
             $this->ipAddressData->ipAddress,
             $this->securitySettings['timespan']

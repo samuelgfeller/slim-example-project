@@ -8,8 +8,8 @@ on:
       - completed
 jobs:
   run:
-    # Run job only on success of the build test workflow
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # Run job only on success of the build test workflow, and if the event was a push to the master branch
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master' }}
     runs-on: ubuntu-latest
     name: Deploy PHP application
     steps:

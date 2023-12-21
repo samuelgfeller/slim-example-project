@@ -4,7 +4,7 @@ namespace App\Domain\Security\Repository;
 
 use App\Domain\Factory\Infrastructure\QueryFactory;
 
-// Class cannot be readonly as it's mocked (doubled) in tests
+// ?Class cannot be readonly as it's mocked (doubled) in tests
 class LoginLogFinderRepository
 {
     public function __construct(
@@ -24,7 +24,7 @@ class LoginLogFinderRepository
      *     logins_by_ip: array{successes: int, failures: int},
      * }
      */
-    public function getLoginSummaryFromEmailAndIp(string $email, ?string $ip, int $seconds): array
+    public function getLoginLogSummaryFromEmailAndIp(string $email, ?string $ip, int $seconds): array
     {
         $summary = [
             'logins_by_email' => ['successes' => 0, 'failures' => 0],
