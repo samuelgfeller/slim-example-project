@@ -11,11 +11,13 @@ use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class DashboardTogglePanelActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
     use RouteTestTrait;

@@ -6,7 +6,7 @@ use App\Test\Fixture\FixtureInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
- * Util. trait to better deal with fixtures in tests.
+ * Util trait to better deal with fixtures in tests.
  */
 trait FixtureTestTrait
 {

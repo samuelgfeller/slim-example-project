@@ -1,11 +1,6 @@
 <?php
 /**
  * Development specific configuration values.
- *
- * How to set values
- * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
- * good $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
- * It's mandatory to set every key individually and not remap the entire array
  */
 
 // Set false to show production error pages

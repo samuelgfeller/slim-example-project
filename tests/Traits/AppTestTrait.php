@@ -8,20 +8,15 @@ use DI\Container;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
-use Selective\TestTrait\Traits\HttpTestTrait;
 use Slim\App;
 use UnexpectedValueException;
 
 /**
- * Handles slim app for testing
- * What are traits?
- * Traits basically "extend" the class that include them with their content.
- * Or simply "language assisted copy and paste" (from PHP docs comments).
+ * Initialize slim app for testing.
+ * Traits "extend" the class that include them (via "use TraitName;") with their content.
  */
 trait AppTestTrait
 {
-    use HttpTestTrait;
-
     protected ContainerInterface $container;
 
     protected App $app;
@@ -46,17 +41,17 @@ trait AppTestTrait
 
         // If setUp() is called in a testClass that uses DatabaseTestTrait, the method setUpDatabase() exists
         if (method_exists($this, 'setUpDatabase')) {
-            // Check that database name in config contains the word "test"
+            // Check that database name from config contains the word "test"
             // This is a double security check to prevent unwanted use of dev db for testing
             if (!str_contains($container->get('settings')['db']['database'], 'test')) {
                 throw new UnexpectedValueException('Test database name MUST contain the word "test"');
             }
 
-            // Create tables, truncate old ones
+            // Create tables
             $this->setUpDatabase($container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
 
             if (method_exists($this, 'insertFixtures')) {
-                // Always insert user roles so that it doesn't have to be done inside each test function that uses users
+                // Automatically insert user roles
                 $this->insertFixtures([UserRoleFixture::class]);
             }
         }

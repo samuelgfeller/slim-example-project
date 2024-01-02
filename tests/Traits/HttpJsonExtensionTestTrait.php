@@ -12,7 +12,7 @@ trait HttpJsonExtensionTestTrait
     /**
      * Assert that key => values of given expected JSON are
      * present in the response body.
-     * Expected json array doesn't have to contain all the keys
+     * The expected json array doesn't have to contain all the keys
      * returned in response. Only the ones provided are verified.
      *
      * @param array $expectedJson expected json array

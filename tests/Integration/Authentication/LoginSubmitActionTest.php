@@ -12,6 +12,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
@@ -29,6 +30,7 @@ use Selective\TestTrait\Traits\RouteTestTrait;
 class LoginSubmitActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use DatabaseTestTrait;
     use DatabaseExtensionTestTrait;
     use RouteTestTrait;

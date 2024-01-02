@@ -117,6 +117,10 @@ class RegisterVerifyActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         // Here it's important that no exception is thrown when user is already verified. There is only a flash info.
 
+        // Assert that info flash message is set that informs user that they are already verified
+        $flash = $this->container->get(SessionInterface::class)->getFlash()->all();
+        self::assertSame('You are already verified. Please log in.', $flash['info'][0]);
+
         // Assert that user is NOT authenticated
         $session = $this->container->get(SessionInterface::class);
         self::assertNull($session->get('user_id'));

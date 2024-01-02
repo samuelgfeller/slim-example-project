@@ -8,11 +8,13 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class LoginPageActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use RouteTestTrait;
     use FixtureTestTrait;
 

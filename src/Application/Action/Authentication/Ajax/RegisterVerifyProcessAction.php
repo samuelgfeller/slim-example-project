@@ -68,6 +68,7 @@ final readonly class RegisterVerifyProcessAction
                 // Check if already logged in
                 if ($this->session->get('user_id') === null) {
                     // If not logged in, redirect to login page with correct further redirect query param
+                    // Flash message asserted in RegisterVerifyActionTest.php
                     $flash->add('info', __('You are already verified. Please log in.'));
                     $newQueryParam = isset($queryParams['redirect']) ? ['redirect' => $queryParams['redirect']] : [];
 
@@ -77,7 +78,7 @@ final readonly class RegisterVerifyProcessAction
                 $flash->add(
                     'info',
                     sprintf(
-                        __('You are already logged-in.<br>Would you like to %slogout%s?'),
+                        __('You are already logged in.<br>Would you like to %slogout%s?'),
                         '<a href="' . $this->routeParser->urlFor('logout') . '">',
                         '</a>'
                     )

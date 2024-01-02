@@ -13,11 +13,13 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class UserListActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
@@ -60,7 +62,7 @@ class UserListActionTest extends TestCase
             'statuses' => UserStatus::toTranslatedNamesArray(),
         ];
 
-        // Add response array of authenticated user to expected userResultDataArray
+        // Add response array of authenticated user to the expected userResultDataArray
         $expectedResponseArray['userResultDataArray'][] = [
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
             'id' => $authenticatedUserRow['id'],

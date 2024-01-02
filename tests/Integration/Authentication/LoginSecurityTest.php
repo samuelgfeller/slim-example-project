@@ -13,11 +13,13 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class LoginSecurityTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use DatabaseTestTrait;
     use FixtureTestTrait;
     use RouteTestTrait;

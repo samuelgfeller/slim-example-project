@@ -7,11 +7,13 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class TranslateActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use RouteTestTrait;
     use FixtureTestTrait;
     use HttpJsonTestTrait;

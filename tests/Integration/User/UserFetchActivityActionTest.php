@@ -15,11 +15,13 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
+use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\RouteTestTrait;
 
 class UserFetchActivityActionTest extends TestCase
 {
     use AppTestTrait;
+    use HttpTestTrait;
     use RouteTestTrait;
     use HttpJsonTestTrait;
     use DatabaseTestTrait;
