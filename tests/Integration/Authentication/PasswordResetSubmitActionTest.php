@@ -107,17 +107,22 @@ class PasswordResetSubmitActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that token had NOT been used (except if already used)
-        self::assertSame(
-            $verification->usedAt,
-            $this->getTableRowById('user_verification', (int)$verification->id, ['used_at'])['used_at']
-        );
+        $this->assertTableRowValue($verification->usedAt, 'user_verification', $verification->id, 'used_at');
 
-        // Assert that password was not changed to the new one
+        // Assert that the password was not changed to the new one
         $this->assertTableRowValue(UserStatus::Unverified->value, 'user', $userRow['id'], 'status');
 
         // Assert that password was NOT changed
         $dbPasswordHash = $this->getTableRowById('user', $userRow['id'])['password_hash'];
         self::assertFalse(password_verify($newPassword, $dbPasswordHash));
+
+        // Get response body as string from stream
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        // Assert that response body contains validation error
+        self::assertStringContainsString('Invalid, used or expired link', $body);
     }
 
     /**
@@ -154,7 +159,14 @@ class PasswordResetSubmitActionTest extends TestCase
 
         // Assert that response has error status 422
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-        // As form is directly rendered with validation errors it's not possible to test them as response is a stream
+
+        // Get response body as string from stream
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        // Assert that response body contains validation error
+        self::assertStringContainsString('Minimum length is 3', $body);
     }
 
     /**

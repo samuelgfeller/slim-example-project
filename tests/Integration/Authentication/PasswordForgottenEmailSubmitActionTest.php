@@ -44,10 +44,13 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('password-forgotten-email-submit'), [
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('password-forgotten-email-submit'),
+            [
                 'email' => $email,
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
@@ -108,10 +111,13 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     {
         // Not inserting user as it shouldn't exist
 
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('password-forgotten-email-submit'), [
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('password-forgotten-email-submit'),
+            [
                 'email' => 'user@example.com',
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
@@ -135,17 +141,25 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
-        $request = $this->createFormRequest('POST', // Request to change password
-            $this->urlFor('password-forgotten-email-submit'), [
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('password-forgotten-email-submit'),
+            [
                 'email' => 'inval$d@ema$l.com',
-            ]);
+            ]
+        );
 
         $response = $this->app->handle($request);
 
         // Assert that response has error status 422
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
-        // As form is directly rendered with validation errors it's not possible to test them as response is a stream
-        // There is a visual test in insomnia for this, but I couldn't manage to keep the login session
+        // Get response body as string from stream
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        // Assert that response body contains validation error
+        self::assertStringContainsString('Invalid email', $body);
     }
 }

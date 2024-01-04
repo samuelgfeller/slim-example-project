@@ -4,9 +4,6 @@ namespace App\Test\Provider\Security;
 
 class LoginRequestProvider
 {
-    // ! This must be the same as the mocked config values in the unit test case
-    private const userLoginThrottleThresholds = [4 => 10, 9 => 120, 12 => 'captcha'];
-
     private const securitySettings = [
         'throttle_login' => true,
         'login_throttle_rule' => [4 => 10, 9 => 120, 12 => 'captcha'],

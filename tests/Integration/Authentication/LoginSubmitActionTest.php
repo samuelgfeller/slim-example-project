@@ -96,6 +96,14 @@ class LoginSubmitActionTest extends TestCase
 
         // Assert that session user_id is not set
         self::assertNull($this->container->get(SessionInterface::class)->get('user_id'));
+
+        // Get response body as string from stream
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        // Assert that response body contains validation error
+        self::assertStringContainsString('Invalid credentials', $body);
     }
 
     /**
@@ -104,8 +112,9 @@ class LoginSubmitActionTest extends TestCase
      * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::invalidLoginCredentialsProvider()
      *
      * @param array $invalidLoginValues valid credentials
+     * @param string $errorMessage validation message that should be in response body
      */
-    public function testLoginSubmitActionInvalidValues(array $invalidLoginValues): void
+    public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
         $this->insertFixturesWithAttributes([], new UserFixture());
 
@@ -119,6 +128,14 @@ class LoginSubmitActionTest extends TestCase
         $session = $this->container->get(SessionInterface::class);
         // Assert that session user_id is not set
         self::assertNull($session->get('user_id'));
+
+        // Get response body as string from stream
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        // Assert that response body contains validation error
+        self::assertStringContainsString($errorMessage, $body);
     }
 
     /**

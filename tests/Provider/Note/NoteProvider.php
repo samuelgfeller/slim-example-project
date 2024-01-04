@@ -75,7 +75,7 @@ class NoteProvider
      */
     public static function noteListWithFilterProvider(): array
     {
-        // Users linked to notes to insert (authenticated user not relevant for this test, he is inserted in test case)
+        // Users linked to notes to insert (authenticated user not relevant for this test, inserted in test case)
         $usersToInsert = [
             ['id' => 10],
             ['id' => 11],

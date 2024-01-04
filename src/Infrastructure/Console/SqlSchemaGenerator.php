@@ -69,7 +69,7 @@ readonly class SqlSchemaGenerator
         $statement = $this->pdo->query($sql);
 
         if (!$statement) {
-            throw new UnexpectedValueException('Query failed: ' . $sql . ' Error: ' . $this->pdo->errorInfo()[2] ?? '');
+            throw new UnexpectedValueException('Query failed: ' . $sql . ' Error: ' . $this->pdo->errorInfo()[2]);
         }
 
         return $statement;

@@ -81,26 +81,27 @@ class AuthenticationProvider
     public static function invalidLoginCredentialsProvider(): array
     {
         return [
-            [
+            'Invalid email' => [
                 [
-                    // Invalid email
                     'email' => 'admin@exam$ple.com',
                     'password' => '12345678',
                 ],
+                'validationErrorMessage' => 'Invalid email',
             ],
-            [
+            'Missing email' => [
                 [
                     // Missing email
                     'email' => '',
                     'password' => '12345678',
                 ],
+                'validationErrorMessage' => 'Invalid email',
             ],
-            [
+            'Missing password' => [
                 [
-                    // Missing password
                     'email' => 'admin@example.com',
                     'password' => '',
                 ],
+                'validationErrorMessage' => 'Invalid password',
             ],
         ];
     }

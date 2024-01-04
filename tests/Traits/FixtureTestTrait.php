@@ -13,48 +13,6 @@ trait FixtureTestTrait
     use DatabaseTestTrait;
 
     /**
-     * Takes default record and modifies it to suit given attributes.
-     * This makes a lot more sense than storing all different kinds
-     * of records in each fixture and then searching them as the test
-     * function can control fixtures and there is no dependencies.
-     *
-     * @param array $attributes
-     * @param FixtureInterface $fixture
-     * @param int $amount amount rows that will be returned
-     *
-     * @return array either one row of requested fixture or array of rows if $amount is higher than 1
-     */
-    protected function getFixtureRecordsWithAttributes(array $attributes, FixtureInterface $fixture, int $amount = 1): array
-    {
-        $rows = $fixture->getRecords();
-        $returnArray = [];
-        $rowKey = 0;
-        // To have a pool of different data; instead of taking one basic record when multiple records are asked,
-        // this iterates over the existing records
-        for ($i = 0; $i <= $amount; $i++) {
-            // If there are no more rows for the row key, reset it to 0
-            if (!isset($rows[$rowKey])) {
-                $rowKey = 0;
-            }
-            // Remove id from row key before setting new values as id might be a given attribute
-            unset($rows[$rowKey]['id']);
-            // Add given attributes to row
-            foreach ($attributes as $colum => $value) {
-                // Set value to given attribute value
-                $rows[$rowKey][$colum] = $value;
-            }
-            $returnArray[] = $rows[$rowKey];
-            $rowKey++;
-        }
-
-        if ($amount === 1) {
-            return $returnArray[0];
-        }
-
-        return $returnArray;
-    }
-
-    /**
      * Inserts fixtures with given attributes and returns rows with id
      * This has to advantage to remove the dependency of each fixtures'
      * records as the relevant values are passed by the given $attributes.
@@ -109,81 +67,47 @@ trait FixtureTestTrait
     }
 
     /**
-     * Insert multiple given fixture rows.
+     * Takes the default record and modifies it to suit given attributes.
+     * This makes a lot more sense than storing all different kinds
+     * of records in each fixture and then searching them as the test
+     * function can control fixtures, and there are no dependencies.
      *
-     * @param string $table
-     * @param array $rows
-     *
-     * @return array rows with id
-     */
-    protected function insertFixtureRows(string $table, array $rows): array
-    {
-        foreach ($rows as $key => $row) {
-            $rows[$key]['id'] = (int)$this->insertFixture($table, $row);
-        }
-
-        return $rows;
-    }
-
-    /**
-     * Returns fixture rows where given condition matches
-     * Note: this relies on the function of selective/test-traits DatabaseTestTrait.php.
-     *
-     * @param array<string, mixed> $conditions array of db field name and the expected value. Example:
-     *  ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
+     * @param array $attributes
      * @param FixtureInterface $fixture
-     * @param array $oppositeConditions optional NOT conditions. If ['id' => 1] is provided -> user 1 will NOT be returned
+     * @param int $amount amount rows that will be returned
      *
-     * @return array[] records matching the conditions
+     * @return array either one row of requested fixture or array of rows if $amount is higher than 1
      */
-    protected function findRecordsFromFixtureWhere(
-        array $conditions,
+    private function getFixtureRecordsWithAttributes(
+        array $attributes,
         FixtureInterface $fixture,
-        array $oppositeConditions = []
+        int $amount = 1
     ): array {
         $rows = $fixture->getRecords();
-        $matchingRecords = [];
-        // Loop over all records (rows)
-        foreach ($rows as $row) {
-            // Check if condition matches on row columns
-            foreach ($conditions as $columnToCheck => $expectedColumnValue) {
-                // If the current condition (in loop) is about the field, check the value
-                if ($row[$columnToCheck] !== $expectedColumnValue) {
-                    // If one value of the row does not match the condition, the rest of the current rows iteration is skipped
-                    continue 2;
-                }
+        $returnArray = [];
+        $rowKey = 0;
+        // To have a pool of different data; instead of taking one basic record when multiple records are asked,
+        // this iterates over the existing records
+        for ($i = 0; $i <= $amount; $i++) {
+            // If there are no more rows for the row key, reset it to 0
+            if (!isset($rows[$rowKey])) {
+                $rowKey = 0;
             }
-            // Check if opposite condition matches rows that should NOT be returned
-            foreach ($oppositeConditions as $columnToCheck => $expectedColumnValue) {
-                // If the current opposite condition (in loop) concerns the $columnToCheck, check if the value matches
-                if ($row[$columnToCheck] === $expectedColumnValue) {
-                    // If one value of the row matches the condition, the rest of the current rows iteration is skipped
-                    continue 2;
-                }
+            // Remove id from row key before setting new values as id might be a given attribute
+            unset($rows[$rowKey]['id']);
+            // Add given attributes to row
+            foreach ($attributes as $colum => $value) {
+                // Set value to given attribute value
+                $rows[$rowKey][$colum] = $value;
             }
-
-            // If all conditions matched, this part is not skipped (with continue) and row is added to matching records
-            $matchingRecords[] = $row;
+            $returnArray[] = $rows[$rowKey];
+            $rowKey++;
         }
 
-        return $matchingRecords;
-    }
-
-    /**
-     * If only specific fixtures should be inserted for instance
-     * linked to a specific resource.
-     *
-     * @param array<string, mixed> $conditions array of db column name and the expected value.
-     * Shape: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value',]
-     * @param FixtureInterface $fixture
-     *
-     * @return void
-     */
-    protected function insertFixtureWhere(array $conditions, FixtureInterface $fixture): void
-    {
-        $filteredRecords = $this->findRecordsFromFixtureWhere($conditions, $fixture);
-        foreach ($filteredRecords as $row) {
-            $this->insertFixture($fixture->getTable(), $row);
+        if ($amount === 1) {
+            return $returnArray[0];
         }
+
+        return $returnArray;
     }
 }

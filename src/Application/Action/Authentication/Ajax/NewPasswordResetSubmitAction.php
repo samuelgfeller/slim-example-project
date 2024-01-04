@@ -50,7 +50,7 @@ readonly class NewPasswordResetSubmitAction
         } catch (InvalidTokenException $ite) {
             $this->templateRenderer->addPhpViewAttribute(
                 'formErrorMessage',
-                __(
+                __( // Message below asserted in PasswordResetSubmitActionTest
                     '<b>Invalid, used or expired link. <br> Please request a new link below and make 
 sure to click on the most recent email we send you</a>.</b>'
                 )

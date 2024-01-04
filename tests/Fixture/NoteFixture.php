@@ -3,8 +3,7 @@
 namespace App\Test\Fixture;
 
 /**
- * Post values that can be inserted into the database
- * UserFixture HAS to be inserted first.
+ * Note values that can be inserted into the database
  */
 class NoteFixture implements FixtureInterface
 {

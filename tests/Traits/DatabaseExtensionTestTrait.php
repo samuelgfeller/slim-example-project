@@ -6,7 +6,7 @@ use PDO;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 
 /**
- * Slim App Route Test Trait.
+ * Extension of DatabaseTestTrait to add more functionality.
  */
 trait DatabaseExtensionTestTrait
 {

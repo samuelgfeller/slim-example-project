@@ -4,7 +4,6 @@ namespace App\Application\Action\User\Ajax;
 
 use App\Application\Responder\JsonResponder;
 use App\Domain\User\Service\UserCreator;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Log\LoggerInterface;
@@ -16,7 +15,6 @@ final readonly class UserCreateAction
         private LoggerInterface $logger,
         private JsonResponder $jsonResponder,
         private UserCreator $userCreator,
-        private SessionInterface $session,
     ) {
     }
 
