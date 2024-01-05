@@ -35,7 +35,7 @@ class DashboardTogglePanelActionTest extends TestCase
         // Insert linked and authenticated user
         $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(

@@ -40,7 +40,7 @@ class UserReadPageActionTest extends TestCase
         // Insert tested and authenticated user
         $this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
 
         $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => $userData['id']]));

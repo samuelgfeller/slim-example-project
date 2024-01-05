@@ -48,7 +48,7 @@ class UserListActionTest extends TestCase
         // Change user attributes to user data
         $this->insertUserFixturesWithAttributes($userRow, $authenticatedUserRow);
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         // Make request
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));

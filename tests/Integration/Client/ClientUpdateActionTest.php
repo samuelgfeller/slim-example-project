@@ -90,7 +90,7 @@ class ClientUpdateActionTest extends TestCase
             $this->insertFixturesWithAttributes(['id' => $requestData['client_status_id']], new ClientStatusFixture());
         }
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $request = $this->createJsonRequest(
@@ -186,8 +186,8 @@ class ClientUpdateActionTest extends TestCase
             $requestBody
         );
 
-        // Simulate logged-in user with logged-in user id
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+        // Simulate logged-in user by setting the user_id session variable
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $response = $this->app->handle($request);
         // Assert 200 OK
@@ -247,7 +247,7 @@ class ClientUpdateActionTest extends TestCase
         );
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(
             'PUT',

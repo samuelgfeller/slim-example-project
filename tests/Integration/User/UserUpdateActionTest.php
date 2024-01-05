@@ -66,7 +66,7 @@ class UserUpdateActionTest extends TestCase
             $this->urlFor('user-update-submit', ['user_id' => $userToChangeRow['id']]),
             $requestData
         );
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         $response = $this->app->handle($request);
         // Assert status code
@@ -131,6 +131,7 @@ class UserUpdateActionTest extends TestCase
     {
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixturesWithAttributes(
+            // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
             new UserFixture()
         );
@@ -140,7 +141,7 @@ class UserUpdateActionTest extends TestCase
             $this->urlFor('user-update-submit', ['user_id' => $userRow['id']]),
             $requestBody
         );
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
         // Assert 200 OK

@@ -3,12 +3,10 @@
 namespace App\Test\Provider\User;
 
 use App\Domain\User\Enum\UserRole;
-use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserUpdateProvider
 {
-    use FixtureTestTrait;
 
     /**
      * @return array[]

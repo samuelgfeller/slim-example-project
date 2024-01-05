@@ -46,7 +46,7 @@ class UserFetchActivityActionTest extends TestCase
         // Insert user activity to cover most possible code with this test
         $this->insertFixturesWithAttributes(['user_id' => $userId], new UserActivityFixture());
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest('GET', $this->urlFor('user-get-activity'))
@@ -78,7 +78,7 @@ class UserFetchActivityActionTest extends TestCase
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
             new UserFixture()
         )['id'];
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest('GET', $this->urlFor('user-get-activity'));

@@ -42,7 +42,7 @@ class UserListPageActionTest extends TestCase
             new UserFixture()
         );
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $request = $this->createRequest('GET', $this->urlFor('user-list-page'));
@@ -67,7 +67,7 @@ class UserListPageActionTest extends TestCase
             new UserFixture()
         );
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $request = $this->createRequest('GET', $this->urlFor('user-list-page'));

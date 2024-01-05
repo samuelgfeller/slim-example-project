@@ -75,7 +75,7 @@ class UserCreateActionTest extends TestCase
             $this->urlFor('user-create-submit'),
             $requestData
         );
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         $response = $this->app->handle($request);
         // Assert status code
@@ -165,7 +165,7 @@ class UserCreateActionTest extends TestCase
             $this->urlFor('user-create-submit'),
             $requestBody
         );
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
         // Assert 422 Unprocessable Entity, which means validation error if request body contains user_role_id
@@ -190,7 +190,7 @@ class UserCreateActionTest extends TestCase
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
             new UserFixture()
         );
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $adminRow['id']);
 
         $existingEmail = 'email@address.com';

@@ -45,7 +45,7 @@ class ClientReadPageActionTest extends TestCase
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $clientRow['user_id']);
 
         $response = $this->app->handle($request);

@@ -39,7 +39,7 @@ class DashboardPageActionTest extends TestCase
         // A dashboard panel is for the status "action pending" and its id is retrieved by the code
         $this->insertFixturesWithAttributes(['name' => 'Action pending'], new ClientStatusFixture());
 
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createRequest('GET', $this->urlFor('home-page'));

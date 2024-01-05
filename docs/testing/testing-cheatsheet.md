@@ -87,7 +87,7 @@ public function testClientReadPageAction_authenticated(): void
     // Add needed database values to correctly display the page
     $clientRow = $this->insertFixturesWithAttributes(['user_id' => $userId, 'client_status_id' => $clientStatusId],
     
-    // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
     $this->container->get(SessionInterface::class)->set('user_id', $userId);
         
     $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => '1']));
@@ -382,7 +382,7 @@ public function testNoteListAction(
         ['is_main' => 0, 'client_id' => $clientRow['id'], 'user_id' => $userLinkedToNoteRow['id']],
         new NoteFixture()
     );
-    // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
     $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
     // Make request
     $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))->withQueryParams(['client_id' => '1']);

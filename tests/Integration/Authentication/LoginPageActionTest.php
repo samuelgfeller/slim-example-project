@@ -40,7 +40,7 @@ class LoginPageActionTest extends TestCase
     {
         // Insert authenticated user
         $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
         // Prepare route to test the case when the user clicks on a login link with a redirect route
         $requestRouteAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);

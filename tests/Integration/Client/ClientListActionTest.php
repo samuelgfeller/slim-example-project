@@ -66,7 +66,7 @@ class ClientListActionTest extends TestCase
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
-        // Simulate logged-in user with logged-in user id
+        // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $response = $this->app->handle($request);
