@@ -3,12 +3,10 @@
 namespace App\Test\Provider\Client;
 
 use App\Domain\User\Enum\UserRole;
-use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientCreateProvider
 {
-    use FixtureTestTrait;
 
     /**
      * Provides test cases for client creation dropdown options.
@@ -54,7 +52,7 @@ class ClientCreateProvider
 
     /**
      * Client creation authorization
-     * Provides combination of different user roles with expected result.
+     * Provides a combination of different user roles with expected result.
      * This tests the rules in ClientAuthorizationChecker.
      *
      * @return array

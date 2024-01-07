@@ -44,8 +44,8 @@ class UserUpdateProvider
             // Password hash change tested in UserChangePasswordActionTest
         ];
 
-        // To avoid testing each column separately for each user role, the most basic change is taken to test
-        // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database
+        // To avoid testing each column separately for each user role, the most basic changes are taken to test.
+        // [foreign_key => 'new'] will be replaced in test function as user has to be added to the database.
         return [
             // * Newcomer
             // "owner" means from the perspective of the authenticated user

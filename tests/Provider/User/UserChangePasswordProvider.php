@@ -3,13 +3,10 @@
 namespace App\Test\Provider\User;
 
 use App\Domain\User\Enum\UserRole;
-use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserChangePasswordProvider
 {
-    use FixtureTestTrait;
-
     /**
      * User update authorization cases
      * Provides combination of different user roles with expected result.

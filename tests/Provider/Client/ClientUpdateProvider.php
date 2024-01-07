@@ -3,13 +3,10 @@
 namespace App\Test\Provider\Client;
 
 use App\Domain\User\Enum\UserRole;
-use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientUpdateProvider
 {
-    use FixtureTestTrait;
-
     /**
      * Client creation authorization
      * Provides combination of different user roles with expected result.

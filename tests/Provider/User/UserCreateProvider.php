@@ -4,16 +4,10 @@ namespace App\Test\Provider\User;
 
 use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
-use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserCreateProvider
 {
-    use FixtureTestTrait;
-
-    /**
-     * @return array[]
-     */
     public static function userCreateAuthorizationCases(): array
     {
         // Set different user role attributes
@@ -42,7 +36,7 @@ class UserCreateProvider
         // Lower privilege must not be tested as authorization is hierarchical meaning if given privilege is
         // not allowed to do action, lower will not be able to too. Same is for higher privilege but reversed.
         return [
-            // * Advisor is the highest privilege that is not allowed to create user
+            // * Advisor is the highest privilege not allowed to create user
             [ // ? Advisor - create newcomer - not allowed
                 'authenticated_user' => $advisorAttr,
                 'user_role_of_new_user' => UserRole::NEWCOMER,

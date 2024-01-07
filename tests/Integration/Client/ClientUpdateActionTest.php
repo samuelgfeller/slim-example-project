@@ -51,9 +51,9 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
+     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
@@ -78,7 +78,7 @@ class ClientUpdateActionTest extends TestCase
             new ClientFixture()
         );
 
-        // Insert other user and client status that are used for the modification request if needed
+        // Insert other user and client status used for the modification request if needed
         if (isset($requestData['user_id'])) {
             // Add 1 to user_id linked to client
             $requestData['user_id'] = $clientRow['user_id'] + 1;
@@ -100,6 +100,7 @@ class ClientUpdateActionTest extends TestCase
         );
 
         $response = $this->app->handle($request);
+
         // Assert status code
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
@@ -120,7 +121,7 @@ class ClientUpdateActionTest extends TestCase
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
                     'data' => json_encode(
-                        // Add the missing "assigned_at" that is added while updating the client with a current timestamp
+                    // Add the missing "assigned_at" that is added while updating the client with a current timestamp
                         $updateActivityData ?? $requestData,
                         JSON_THROW_ON_ERROR
                     ),
@@ -162,9 +163,9 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -228,9 +229,9 @@ class ClientUpdateActionTest extends TestCase
      * Test that if user makes update request but the content has not changed
      * compared to what's in the database, the response contains the warning.
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitUpdateActionUnchangedContent(): void
     {
