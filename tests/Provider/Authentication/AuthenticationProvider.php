@@ -75,8 +75,6 @@ class AuthenticationProvider
 
     /**
      * Invalid login credentials provider that should fail validation.
-     *
-     * @return string[][][]
      */
     public static function invalidLoginCredentialsProvider(): array
     {

@@ -107,7 +107,7 @@ class PasswordResetSubmitActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that token had NOT been used (except if already used)
-        $this->assertTableRowValue($verification->usedAt, 'user_verification', $verification->id, 'used_at');
+        $this->assertTableRowValue($verification->usedAt, 'user_verification', (int)$verification->id, 'used_at');
 
         // Assert that the password was not changed to the new one
         $this->assertTableRowValue(UserStatus::Unverified->value, 'user', $userRow['id'], 'status');
