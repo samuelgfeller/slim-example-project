@@ -64,28 +64,28 @@ class NoteListActionTest extends TestCase
         // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
         // because note read rights change (e.g. that newcomers may not see the notes from everyone), the
         // client owner id has to be added to the provider
-        $clientOwnerId = $this->insertFixturesWithAttributes(
+        $clientOwnerId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            new UserFixture()
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
 
         // Insert client row
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-            new ClientFixture()
         );
 
         // Insert linked note. Only one per test to simplify assertions with different privileges
-        $noteData = $this->insertFixturesWithAttributes(
+        $noteData = $this->insertFixtureWithAttributes(
+            new NoteFixture(),
             [
                 'is_main' => 0,
                 'client_id' => $clientRow['id'],
                 'user_id' => $userLinkedToNoteRow['id'],
                 'hidden' => $noteHidden,
             ],
-            new NoteFixture()
         );
 
         // Simulate logged-in user by setting the user_id session variable
@@ -155,18 +155,18 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         array $notesAttrToInsert,
     ): void {
         // Authenticated user role not relevant here, and it should not cause issues (authorization tested above)
-        $loggedInUserId = $this->insertFixturesWithAttributes(
+        $loggedInUserId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            new UserFixture()
         )['id'];
 
         // Insert users without specific user role
-        $users = $this->insertFixturesWithAttributes($usersAttrToInsert, new UserFixture());
+        $users = $this->insertFixtureWithAttributes(new UserFixture(), $usersAttrToInsert);
         // Insert client status and client
-        $statusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $statusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         $clientAttrToInsert['client_status_id'] = $statusId;
-        $clientId = $this->insertFixturesWithAttributes($clientAttrToInsert, new ClientFixture())['id'];
-        $notes = $this->insertFixturesWithAttributes($notesAttrToInsert, new NoteFixture());
+        $clientId = $this->insertFixtureWithAttributes(new ClientFixture(), $clientAttrToInsert)['id'];
+        $notes = $this->insertFixtureWithAttributes(new NoteFixture(), $notesAttrToInsert);
 
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
@@ -226,7 +226,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         array $filterQueryParams,
         string $exceptionMessage,
     ): void {
-        $loggedInUserId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

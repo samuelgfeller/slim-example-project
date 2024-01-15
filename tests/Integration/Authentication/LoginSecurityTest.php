@@ -28,10 +28,10 @@ class LoginSecurityTest extends TestCase
      * Test thresholds and according delays of login failures
      * If login request amount exceeds threshold, the user has to wait a certain delay.
      *
-     * @throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     public function testLoginThrottlingWrongCredentials(): void
     {
@@ -43,10 +43,10 @@ class LoginSecurityTest extends TestCase
         $correctLoginRequestBody = ['email' => $email, 'password' => $password];
 
         // Insert user fixture
-        $user = $this->insertFixturesWithAttributes([
+        $user = $this->insertFixtureWithAttributes(new UserFixture(), [
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-        ], new UserFixture());
+        ],);
 
         // Login request body with invalid credentials
         $loginRequestBody = ['email' => 'wrong@email.com', 'password' => 'wrong_password'];

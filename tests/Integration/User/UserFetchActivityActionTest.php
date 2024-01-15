@@ -39,12 +39,12 @@ class UserFetchActivityActionTest extends TestCase
     public function testUserListActivityFetchAction(): void
     {
         // Insert authenticated but unauthorized user newcomer
-        $userId = $this->insertFixturesWithAttributes(
+        $userId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            new UserFixture()
         )['id'];
         // Insert user activity to cover most possible code with this test
-        $this->insertFixturesWithAttributes(['user_id' => $userId], new UserActivityFixture());
+        $this->insertFixtureWithAttributes(new UserActivityFixture(), ['user_id' => $userId]);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
@@ -74,9 +74,9 @@ class UserFetchActivityActionTest extends TestCase
     public function testUserListActivityFetchActionWithoutQueryParams(): void
     {
         // Insert authenticated but unauthorized user newcomer
-        $userId = $this->insertFixturesWithAttributes(
+        $userId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            new UserFixture()
         )['id'];
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);

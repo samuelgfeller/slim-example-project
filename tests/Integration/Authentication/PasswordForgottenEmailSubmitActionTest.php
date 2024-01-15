@@ -37,7 +37,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     public function testPasswordForgottenEmailSubmit(): void
     {
         // Insert user
-        $userRow = $this->insertFixturesWithAttributes([], new UserFixture());
+        $userRow = $this->insertFixtureWithAttributes(new UserFixture());
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
@@ -136,7 +136,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     public function testPasswordForgottenEmailSubmitInvalidData(): void
     {
         // Insert user
-        $userRow = $this->insertFixturesWithAttributes([], new UserFixture());
+        $userRow = $this->insertFixtureWithAttributes(new UserFixture());
 
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);

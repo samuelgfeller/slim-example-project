@@ -130,10 +130,10 @@ class UserUpdateActionTest extends TestCase
     public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
             // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            new UserFixture()
         );
 
         $request = $this->createJsonRequest(

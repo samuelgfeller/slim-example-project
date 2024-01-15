@@ -140,9 +140,9 @@ class PasswordChangeSubmitActionTest extends TestCase
     public function testChangePasswordSubmitActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            new UserFixture()
         );
 
         $request = $this->createJsonRequest(

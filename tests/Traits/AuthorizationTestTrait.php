@@ -60,9 +60,9 @@ trait AuthorizationTestTrait
     {
         $authenticatedUserAttrOriginal = $authenticatedUserAttr;
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserAttr = $this->insertFixturesWithAttributes(
+        $authenticatedUserAttr = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttr),
-            new UserFixture()
         );
         if ($authenticatedUserAttrOriginal === $userAttr) {
             $userAttr = $authenticatedUserAttr;
@@ -71,9 +71,9 @@ trait AuthorizationTestTrait
             $userAttr['id'] = null;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userAttr = $this->insertFixturesWithAttributes(
+            $userAttr = $this->insertFixtureWithAttributes(
+                new UserFixture(),
                 $this->addUserRoleId($userAttr),
-                new UserFixture()
             );
         }
     }

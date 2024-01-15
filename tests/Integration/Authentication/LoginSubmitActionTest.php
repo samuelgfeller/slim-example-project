@@ -43,12 +43,12 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction(): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
                 'email' => $loginValues['email'],
             ],
-            new UserFixture()
         );
 
         // Create request
@@ -80,7 +80,7 @@ class LoginSubmitActionTest extends TestCase
      */
     public function testLoginSubmitActionWrongPassword(): void
     {
-        $this->insertFixturesWithAttributes([], new UserFixture());
+        $this->insertFixtureWithAttributes(new UserFixture());
 
         $invalidCredentials = [
             'email' => 'admin@test.com',
@@ -116,7 +116,7 @@ class LoginSubmitActionTest extends TestCase
      */
     public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
-        $this->insertFixturesWithAttributes([], new UserFixture());
+        $this->insertFixtureWithAttributes(new UserFixture());
 
         // Create request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $invalidLoginValues);
@@ -150,13 +150,13 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitActionNotActiveAccount(UserStatus $status, string $partialEmailBody): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
                 'email' => $loginValues['email'],
                 'status' => $status->value,
             ],
-            new UserFixture()
         );
 
         // Create request

@@ -58,7 +58,7 @@ class ClientCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Client status is not authorization relevant for client creation
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
 
         $clientCreationValues = [
             'first_name' => 'New',
@@ -163,11 +163,11 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userId = $this->insertFixturesWithAttributes(
+        $userId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            new UserFixture()
         )['id'];
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // To test note message validation when submitted in client creation form the client values have to be valid
         if (isset($requestBody['user_id']) && $requestBody['user_id'] === 'valid'
             && $requestBody['client_status_id'] === 'valid') {
@@ -217,12 +217,12 @@ class ClientCreateActionTest extends TestCase
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {
         // Insert managing advisor user which is allowed to create clients
-        $userId = $this->insertFixturesWithAttributes(
+        $userId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
-            new UserFixture()
         )['id'];
         // Insert mandatory field client status id
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Add valid client status id to request body
         $requestBody['client_status_id'] = $clientStatusId;
 

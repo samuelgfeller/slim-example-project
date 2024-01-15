@@ -52,17 +52,17 @@ class ClientListActionTest extends TestCase
     /**
      * Normal page action while having an active session.
      *
-     * @throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     public function testClientListPageActionAuthorization(): void
     {
         // Insert logged-in user with the lowest privilege
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
-            new UserFixture()
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
@@ -105,10 +105,10 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
-     * @throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     public function testClientListWithFilterAction(
         array $filterQueryParamsArr,
@@ -118,15 +118,15 @@ class ClientListActionTest extends TestCase
         array $usersToInsert,
         array $clientStatusesToInsert,
     ): void {
-        $users = $this->insertFixturesWithAttributes($usersToInsert, new UserFixture());
-        $statuses = $this->insertFixturesWithAttributes($clientStatusesToInsert, new ClientStatusFixture());
+        $users = $this->insertFixtureWithAttributes(new UserFixture(), $usersToInsert);
+        $statuses = $this->insertFixtureWithAttributes(new ClientStatusFixture(), $clientStatusesToInsert);
         // Insert authenticated user before client
-        $loggedInUserId = $this->insertFixturesWithAttributes(
+        $loggedInUserId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttributes),
-            new UserFixture()
         )['id'];
         // Insert clients
-        $clients = $this->insertFixturesWithAttributes($clientsToInsert, new ClientFixture());
+        $clients = $this->insertFixtureWithAttributes(new ClientFixture(), $clientsToInsert);
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
@@ -201,14 +201,14 @@ class ClientListActionTest extends TestCase
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     * @throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
     {
-        $loggedInUserId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

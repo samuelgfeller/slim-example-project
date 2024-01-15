@@ -81,7 +81,7 @@ use FixtureTestTrait; // Custom
 public function testClientReadPageAction_authenticated(): void
 {
     // Insert linked and authenticated user
-    $userId = $this->insertFixturesWithAttributes([], new UserFixture())['id'];
+    $userId = $this->insertFixturesWithAttributes(new UserFixture())['id'];
     // Insert linked client status
     $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
     // Add needed database values to correctly display the page

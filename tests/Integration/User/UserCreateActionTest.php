@@ -52,9 +52,9 @@ class UserCreateActionTest extends TestCase
     ): void {
         $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixturesWithAttributes(
+        $authenticatedUserRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttr),
-            new UserFixture()
         );
 
         $requestData = [
@@ -155,9 +155,9 @@ class UserCreateActionTest extends TestCase
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
         // Even if user_role_id is empty string or null
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
-            new UserFixture()
         );
 
         $request = $this->createJsonRequest(
@@ -186,16 +186,16 @@ class UserCreateActionTest extends TestCase
     public function testUserSubmitCreateEmailAlreadyExists(): void
     {
         // Insert authenticated admin
-        $adminRow = $this->insertFixturesWithAttributes(
+        $adminRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
-            new UserFixture()
         );
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $adminRow['id']);
 
         $existingEmail = 'email@address.com';
         // Insert user with email that will be used in request to create a new one
-        $this->insertFixturesWithAttributes(['email' => $existingEmail], new UserFixture());
+        $this->insertFixtureWithAttributes(new UserFixture(), ['email' => $existingEmail]);
 
         $request = $this->createJsonRequest(
             'POST',

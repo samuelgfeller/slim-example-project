@@ -42,7 +42,7 @@ class PasswordResetSubmitActionTest extends TestCase
     {
         $newPassword = 'new password';
         // Insert user
-        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], new UserFixture());
+        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId],);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 
@@ -83,9 +83,9 @@ class PasswordResetSubmitActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -140,7 +140,7 @@ class PasswordResetSubmitActionTest extends TestCase
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = $this->insertFixturesWithAttributes(['id' => $verification->userId], new UserFixture());
+        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId]);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 

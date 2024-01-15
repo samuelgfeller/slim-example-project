@@ -32,7 +32,7 @@ class UserReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageActionAuthorization(
+    public function testUserReadPageActionAuthorization(
         array $userData,
         array $authenticatedUserData,
         array $expectedResult,
@@ -56,10 +56,10 @@ class UserReadPageActionTest extends TestCase
      *
      * @return void
      */
-    public function testClientReadPageActionUnauthenticated(): void
+    public function testUserReadPageActionUnauthenticated(): void
     {
-        // Request route to client read page while not being logged in
-        $requestRoute = $this->urlFor('client-read-page', ['client_id' => '1']);
+        // Request route to user read page while not being logged in
+        $requestRoute = $this->urlFor('user-read-page', ['user_id' => '1']);
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url

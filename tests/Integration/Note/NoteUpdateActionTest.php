@@ -58,23 +58,23 @@ class NoteUpdateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
 
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
-            new ClientFixture()
         );
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteRow = $this->insertFixturesWithAttributes(
+        $mainNoteRow = $this->insertFixtureWithAttributes(
+            new NoteFixture(),
             ['is_main' => 1, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
-            new NoteFixture()
         );
 
         // Insert normal non-hidden note attached to client and given "owner" user
-        $normalNoteRow = $this->insertFixturesWithAttributes(
+        $normalNoteRow = $this->insertFixtureWithAttributes(
+            new NoteFixture(),
             ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
-            new NoteFixture()
         );
 
         // Simulate logged-in user
@@ -185,22 +185,22 @@ class NoteUpdateActionTest extends TestCase
     public function testNoteSubmitUpdateActionInvalid(array $requestBody, array $expectedResponseData): void
     {
         // Insert authorized user
-        $userId = $this->insertFixturesWithAttributes(
+        $userId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            new UserFixture()
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert client row
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
-            new ClientFixture()
         );
 
         // Insert note linked to client and user
-        $noteData = $this->insertFixturesWithAttributes(
+        $noteData = $this->insertFixtureWithAttributes(
+            new NoteFixture(),
             ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
-            new NoteFixture()
         );
 
         // Simulate logged-in user with same user as linked to client

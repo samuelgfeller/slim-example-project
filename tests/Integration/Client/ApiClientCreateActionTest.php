@@ -43,9 +43,9 @@ class ApiClientCreateActionTest extends TestCase
     public function testApiClientSubmitCreateAction(): void
     {
         // Insert required client status
-        $clientStatusId = $this->insertFixturesWithAttributes(
+        $clientStatusId = $this->insertFixtureWithAttributes(
+            new ClientStatusFixture(),
             ['name' => ClientStatus::ACTION_PENDING->value],
-            new ClientStatusFixture()
         )['id'];
 
         $clientCreationValues = [
@@ -115,9 +115,9 @@ class ApiClientCreateActionTest extends TestCase
         array $jsonResponse
     ): void {
         // Insert action pending client status because it's needed by the service function
-        $this->insertFixturesWithAttributes(
+        $this->insertFixtureWithAttributes(
+            new ClientStatusFixture(),
             ['name' => ClientStatus::ACTION_PENDING->value],
-            new ClientStatusFixture()
         );
 
         $request = $this->createJsonRequest(

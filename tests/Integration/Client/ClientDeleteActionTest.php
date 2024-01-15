@@ -53,11 +53,11 @@ class ClientDeleteActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert client status
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert client linked to given user
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
-            new ClientFixture()
         );
 
         // Simulate logged-in user

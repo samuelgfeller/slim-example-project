@@ -42,9 +42,9 @@ class RegisterVerifyActionTest extends TestCase
     public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -90,9 +90,9 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Active->value],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -140,9 +140,9 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());

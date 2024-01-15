@@ -59,11 +59,11 @@ class NoteCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
 
         // Insert needed client status fixture
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
-            new ClientFixture()
         );
 
         // Create request
@@ -163,16 +163,16 @@ class NoteCreateActionTest extends TestCase
         array $expectedResponseData
     ): void {
         // Insert user that is authorized to create
-        $clientOwnerId = $this->insertFixturesWithAttributes(
+        $clientOwnerId = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
-            new UserFixture()
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixturesWithAttributes([], new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert client row
-        $clientRow = $this->insertFixturesWithAttributes(
+        $clientRow = $this->insertFixtureWithAttributes(
+            new ClientFixture(),
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
-            new ClientFixture()
         );
 
         // Insert main note linked to client and user if data provider $existingMainNote is true

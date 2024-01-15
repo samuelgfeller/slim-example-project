@@ -3,7 +3,7 @@
 // Enable display_error_details for testing as this will throw an ErrorException for notices and warnings
 $settings['error']['display_error_details'] = true;
 
-// Change database name for integration testing (must include the word "test")
+// Database for integration testing must include the word "test"
 $settings['db']['database'] = 'slim_example_project_test';
 
 // Optional setting but used in unit test

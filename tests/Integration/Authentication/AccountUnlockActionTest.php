@@ -45,9 +45,9 @@ class AccountUnlockActionTest extends TestCase
     public function testAccountUnlockAction(UserVerificationData $verification, string $clearTextToken): void
     {
         // Insert locked user
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -94,9 +94,9 @@ class AccountUnlockActionTest extends TestCase
         string $clearTextToken
     ): void {
         // Insert locked user
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
@@ -147,9 +147,9 @@ class AccountUnlockActionTest extends TestCase
         string $clearTextToken
     ): void {
         // Insert locked user
-        $userRow = $this->insertFixturesWithAttributes(
+        $userRow = $this->insertFixtureWithAttributes(
+            new UserFixture(),
             ['status' => UserStatus::Active->value, 'id' => $verification->userId],
-            new UserFixture()
         );
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
