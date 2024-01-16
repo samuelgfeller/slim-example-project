@@ -52,7 +52,7 @@ class NoteDeleteActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToNoteRow);
 
         // Insert linked status
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];

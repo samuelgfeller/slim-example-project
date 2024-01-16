@@ -59,7 +59,7 @@ class NoteListActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($userLinkedToNoteRow, $authenticatedUserRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToNoteRow);
 
         // As the client owner is not relevant, another user (advisor) is taken. If this test fails in the future
         // because note read rights change (e.g. that newcomers may not see the notes from everyone), the

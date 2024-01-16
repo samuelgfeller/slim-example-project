@@ -44,7 +44,7 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test client values update when authenticated with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::clientUpdateUsersAndExpectedResultProvider()
+     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::clientUpdateAuthorizationCases()
      *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
@@ -62,7 +62,7 @@ class ClientUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($userLinkedToClientRow, $authenticatedUserRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
 
         // Insert client status
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
@@ -73,19 +73,17 @@ class ClientUpdateActionTest extends TestCase
             // Add deleted at to client attributes
             $clientAttributes = array_merge($clientAttributes, ['deleted_at' => date('Y-m-d H:i:s')]);
         }
-        $clientRow = $this->insertFixtureWithAttributes(
-            new ClientFixture(),
-            $clientAttributes,
-        );
+        $clientRow = $this->insertFixtureWithAttributes(new ClientFixture(), $clientAttributes);
 
-        // Insert other user and client status used for the modification request if needed
+        // Insert other user and client status used for the modification request if needed.
         if (isset($requestData['user_id'])) {
-            // Add 1 to user_id linked to client
+            // Replace the value "new" from the data to be changed array with a new,
+            // different user id (user linked previously + 1)
             $requestData['user_id'] = $clientRow['user_id'] + 1;
             $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $requestData['user_id']]);
         }
         if (isset($requestData['client_status_id'])) {
-            // Add 1 to client status id
+            // Add previously not existing client status to request data (previous client status + 1)
             $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
             $this->insertFixtureWithAttributes(new ClientStatusFixture(), ['id' => $requestData['client_status_id']]);
         }
@@ -106,8 +104,9 @@ class ClientUpdateActionTest extends TestCase
 
         // Assert database
         if ($expectedResult['db_changed'] === true) {
-            // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
-            // Check that data in request body was changed
+            // HTML form element names are the same as the database columns, the same request array can be taken
+            // to assert the db
+            // Check that changes requested in the request body are reflected in the database
             $this->assertTableRowEquals($requestData, 'client', $clientRow['id']);
             // Get client row from db to have the assigned_at timestamp to assert user activity entry json data
             $clientRow = $this->findTableRowById('client', $clientRow['id']);
@@ -121,7 +120,7 @@ class ClientUpdateActionTest extends TestCase
                     'table' => 'client',
                     'row_id' => $clientRow['id'],
                     'data' => json_encode(
-                    // Add the missing "assigned_at" that is added while updating the client with a current timestamp
+                        // Add the missing "assigned_at" that is added while updating the client with a current timestamp
                         $updateActivityData ?? $requestData,
                         JSON_THROW_ON_ERROR
                     ),

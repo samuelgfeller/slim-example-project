@@ -39,10 +39,10 @@ class ClientReadPageActionTest extends TestCase
         $userId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
         // Insert linked client status
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
-        // Insert client
+        // Insert client linked to user to be sure that the user is permitted to see the client read page
         $clientRow = $this->insertFixtureWithAttributes(
             new ClientFixture(),
-            ['client_status_id' => $clientStatusId],
+            ['user_id' => $userId, 'client_status_id' => $clientStatusId],
         );
 
         $request = $this->createRequest('GET', $this->urlFor('client-read-page', ['client_id' => $clientRow['id']]));

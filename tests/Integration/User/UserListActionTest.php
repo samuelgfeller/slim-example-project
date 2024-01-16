@@ -46,7 +46,7 @@ class UserListActionTest extends TestCase
         array $expectedResult,
     ): void {
         // Change user attributes to user data
-        $this->insertUserFixturesWithAttributes($userRow, $authenticatedUserRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userRow);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
@@ -97,6 +97,25 @@ class UserListActionTest extends TestCase
 
         // Assert response data
         $this->assertJsonData($expectedResponseArray, $response);
+    }
+
+    /**
+     * Change array of UserRole Enum cases to expected availableUserRoles
+     * array from the server with id and capitalized role name [{id} => {Role name}].
+     *
+     * @param array $userRoles user roles with Enum cases array
+     *
+     * @return array
+     */
+    protected function formatAvailableUserRoles(array $userRoles): array
+    {
+        $formattedRoles = [];
+        foreach ($userRoles as $userRole) {
+            // Key is role id and value the name for the dropdown
+            $formattedRoles[$this->getUserRoleIdByEnum($userRole)] = $userRole->roleNameForDropdown();
+        }
+
+        return $formattedRoles;
     }
 
     /**
