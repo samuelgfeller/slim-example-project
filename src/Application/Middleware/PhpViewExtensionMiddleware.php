@@ -54,17 +54,10 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
             'config' => $this->publicSettings,
             'authenticatedUser' => $loggedInUserId,
         ]);
-        // Check if granted to read user that is different then the authenticated user itself (hence check with id + 1)
-        // this determines if the nav point "users" is visible in the layout
+
+        // Check and set user list authorization for "users" nav point
         if ($loggedInUserId) {
-            try {
-                $this->phpRenderer->addAttribute(
-                    'userListAuthorization',
-                    $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false)
-                );
-            } catch (DatabaseException $databaseException) {
-                // Mysql connection not working. Caught here to prevent error page from crashing
-            }
+            $this->checkAndSetUserListAuthorization($loggedInUserId);
         }
 
         // Add version number to js imports
@@ -73,5 +66,27 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         }
 
         return $handler->handle($request);
+    }
+
+    /**
+     * Check if the user is allowed to see the user list and set the result as an attribute for the PhpRenderer.
+     *
+     * @param int $loggedInUserId
+     */
+    private function checkAndSetUserListAuthorization(int $loggedInUserId): void
+    {
+        // If the session already contains the information, the permission check can be skipped
+        if ($this->session->get('isAllowedToSeeUserList') === null) {
+            try {
+                $isAllowedToSeeUserList = $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false);
+                $this->session->set('isAllowedToSeeUserList', $isAllowedToSeeUserList);
+            } catch (DatabaseException $databaseException) {
+                // Mysql connection not working. Caught here to prevent error page from crashing
+                return;
+            }
+        }
+
+        // Add the user list authorization as an attribute to the PhpRenderer
+        $this->phpRenderer->addAttribute('userListAuthorization', $this->session->get('isAllowedToSeeUserList'));
     }
 }
