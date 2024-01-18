@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class UserFetchListAction
 {
     public function __construct(
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private UserFinder $userFinder,
     ) {
     }
@@ -36,7 +36,7 @@ final readonly class UserFetchListAction
         // $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
         $userResultDataArray = $this->userFinder->findAllUsersResultDataForList();
 
-        return $this->jsonResponder->respondWithJson($response, [
+        return $this->jsonEncoder->encodeAndAddToResponse($response, [
             'userResultDataArray' => $userResultDataArray,
             'statuses' => UserStatus::toTranslatedNamesArray(),
         ]);

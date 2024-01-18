@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Page;
 
-use App\Application\Responder\TemplateRenderer;
+use App\Application\Renderer\TemplateRenderer;
 use App\Domain\Client\Service\ClientFinder;
 use App\Domain\Client\Service\ClientUtilFinder;
 use Psr\Http\Message\ResponseInterface;

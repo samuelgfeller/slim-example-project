@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Page;
 
-use App\Application\Responder\TemplateRenderer;
+use App\Application\Renderer\TemplateRenderer;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;

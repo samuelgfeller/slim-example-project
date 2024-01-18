@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\User\Service\UserDeleter;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class UserDeleteAction
 {
     public function __construct(
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private UserDeleter $userDeleter,
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
@@ -58,10 +58,10 @@ final readonly class UserDeleteAction
                 );
             }
 
-            return $this->jsonResponder->respondWithJson($response, ['status' => 'success']);
+            return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success']);
         }
 
-        $response = $this->jsonResponder->respondWithJson(
+        $response = $this->jsonEncoder->encodeAndAddToResponse(
             $response,
             // response json body asserted in UserDeleteActionTest
             ['status' => 'warning', 'message' => 'User not deleted.']

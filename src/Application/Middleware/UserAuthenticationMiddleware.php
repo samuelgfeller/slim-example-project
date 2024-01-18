@@ -2,8 +2,8 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Responder\JsonResponder;
-use App\Application\Responder\RedirectHandler;
+use App\Application\Renderer\JsonEncoder;
+use App\Application\Renderer\RedirectHandler;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
@@ -20,7 +20,7 @@ final readonly class UserAuthenticationMiddleware implements MiddlewareInterface
     public function __construct(
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private RedirectHandler $redirectHandler,
         private RouteParserInterface $routeParser,
         private ResponseFactoryInterface $responseFactory,
@@ -70,7 +70,7 @@ final readonly class UserAuthenticationMiddleware implements MiddlewareInterface
 
         // If it's a JSON request, return 401 with the login url and its possible query params
         if ($request->getHeaderLine('Content-Type') === 'application/json') {
-            return $this->jsonResponder->respondWithJson(
+            return $this->jsonEncoder->encodeAndAddToResponse(
                 $response,
                 ['loginUrl' => $this->routeParser->urlFor('login-page', [], $queryParams)],
                 401

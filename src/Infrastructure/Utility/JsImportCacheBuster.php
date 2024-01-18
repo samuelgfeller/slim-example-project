@@ -12,13 +12,13 @@ use RecursiveIteratorIterator;
 final class JsImportCacheBuster
 {
     private ?string $version;
-    private string $assetsPath;
+    private string $assetPath;
 
     public function __construct(Settings $settings)
     {
         $deploymentSettings = $settings->get('deployment');
         $this->version = $deploymentSettings['version'];
-        $this->assetsPath = $deploymentSettings['assets_path'];
+        $this->assetPath = $deploymentSettings['asset_path'];
     }
 
     /**
@@ -26,20 +26,18 @@ final class JsImportCacheBuster
      * are modified so that the imports have the version number at the
      * end of the file name as query parameters to break cache on
      * version change.
-     * This is far from an ideal solution as all files are reloaded on the client,
-     * but it is good enough for now especially if function is called only on
-     * actual not too frequent changes or on development.
-     * Performance wise, this function takes 10 and 20ms when content is unchanged
-     * and between 30 and 50ms when content is replaced.
+     * This function is called in PhpRendererMiddleware only on dev env.
+     * Performance wise, this function takes between 10 and 20ms when content
+     * is unchanged and between 30 and 50ms when content is replaced.
      *
      * @return void
      */
     public function addVersionToJsImports(): void
     {
         // $start = hrtime(true);
-        if (is_dir($this->assetsPath)) {
+        if (is_dir($this->assetPath)) {
             $rii = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->assetsPath, FilesystemIterator::SKIP_DOTS)
+                new RecursiveDirectoryIterator($this->assetPath, FilesystemIterator::SKIP_DOTS)
             );
 
             foreach ($rii as $file) {
@@ -81,7 +79,7 @@ final class JsImportCacheBuster
                 }
             }
         }
-        // Divided by a million gets ms and a billion (+9) seconds
+        // Divided by a million gets milliseconds and a billion (+9) seconds
         // var_dump('Time used: ' . (hrtime(true) - $start) / 1e+6 . ' ms');
     }
 }

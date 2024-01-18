@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Responder\RedirectHandler;
+use App\Application\Renderer\RedirectHandler;
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\AccountUnlockTokenVerifier;

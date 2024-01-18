@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Responder;
+namespace App\Application\Renderer;
 
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;
@@ -23,11 +23,8 @@ readonly class TemplateRenderer
      *
      * @return ResponseInterface The response
      */
-    public function render(
-        ResponseInterface $response,
-        string $template,
-        array $data = []
-    ): ResponseInterface {
+    public function render(ResponseInterface $response, string $template, array $data = []): ResponseInterface
+    {
         return $this->phpRenderer->render($response, $template, $data);
     }
 
@@ -84,9 +81,9 @@ readonly class TemplateRenderer
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      *
+     * @return ResponseInterface
      * @throws \Throwable
      *
-     * @return ResponseInterface
      */
     public function respondWithFormThrottle(
         ResponseInterface $response,

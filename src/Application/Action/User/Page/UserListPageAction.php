@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Page;
 
-use App\Application\Responder\TemplateRenderer;
+use App\Application\Renderer\TemplateRenderer;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

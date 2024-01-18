@@ -32,21 +32,21 @@
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',
     ];
-$layoutJs = ['assets/navbar/navbar.js',];
-$layoutJsModules = ['assets/general/general-js/default.js',];
+    $layoutJs = ['assets/navbar/navbar.js',];
+    $layoutJsModules = ['assets/general/general-js/default.js',];
 
-// fetch() includes another template into the current template
-// Include template which contains HTML to include assets
-echo $this->fetch(
-    'layout/assets.html.php', // Merge layout assets and from sub templates
-    [
-        'stylesheets' => array_merge($layoutCss, $css ?? []),
-        'scripts' => array_merge($layoutJs, $js ?? []),
-        // The type="module" allows the use of import and export inside a JS file.
-        'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
-    ]
-);
-?>
+    // fetch() includes another template in the current template
+    // Include template that renders the asset paths
+    echo $this->fetch(
+        'layout/assets.html.php',
+        [ // Merge layout assets and assets required by templates (added via $this->addAttribute())
+            'stylesheets' => array_merge($layoutCss, $css ?? []),
+            'scripts' => array_merge($layoutJs, $js ?? []),
+            // The type="module" allows the use of import and export inside a JS file.
+            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
+        ]
+    );
+    ?>
 
     <title><?= $config['app_name'] ?></title>
     <script>
@@ -64,18 +64,18 @@ echo $this->fetch(
 </head>
 <body>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
-<!-- Wrapper should englobe entire body content as its height is 100vh -->
+<!-- Wrapper should encompass entire body content as its height is 100vh -->
 <div id="wrapper">
     <header>
-        <!-- Application name -->
+        <!-- Application name displayed on mobile -->
         <span><?= $config['app_name'] ?></span>
     </header>
     <?= $this->fetch('layout/flash-messages.html.php') ?>
 
     <!-- Navbar -->
     <?php
-// Not displaying nav menu if user is not authenticated (error page outside protected area)
-if ($authenticatedUser) { ?>
+    // Not displaying nav menu if user is not authenticated (error page outside protected area)
+    if ($authenticatedUser) { ?>
         <aside id="nav-container">
             <nav>
                 <a href="<?= $route->urlFor('home-page') ?>"
@@ -86,7 +86,7 @@ if ($authenticatedUser) { ?>
                 </a>
                 <a href="<?= $route->urlFor('client-list-page') ?>"
                     <?= in_array($currRouteName, ['client-list-page', 'client-read-page'], true) ?
-                    'class="is-active"' : '' ?>>
+                        'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/people.svg" alt="Non-assigned">
                     <img src="assets/navbar/img/people-filled.svg" alt="People">
                     <span class="nav-span"><?= __('Clients') ?></span>
@@ -98,7 +98,7 @@ if ($authenticatedUser) { ?>
                     <span class="nav-span"><?= __('Profile') ?></span>
                 </a>
                 <?php
-            if (isset($userListAuthorization) && $userListAuthorization === true) { ?>
+                if (isset($userListAuthorization) && $userListAuthorization === true) { ?>
                     <a href="<?= $route->urlFor('user-list-page') ?>"
                         <?= in_array(
                             $currRouteName,
@@ -109,7 +109,7 @@ if ($authenticatedUser) { ?>
                         <span class="nav-span"><?= __('Users') ?></span>
                     </a>
                     <?php
-            } ?>
+                } ?>
                 <a href="<?= $route->urlFor('logout') ?>"
                     <?= $currRouteName === 'logout' ? 'class="is-active"' : '' ?>>
                     <img src="assets/navbar/img/logout.svg" alt="Logout">
@@ -127,7 +127,7 @@ if ($authenticatedUser) { ?>
             </div>
         </aside>
         <?php
-} ?>
+    } ?>
     <main>
         <?= $content ?>
         <?= $this->fetch('layout/request-throttle.html.php') ?>

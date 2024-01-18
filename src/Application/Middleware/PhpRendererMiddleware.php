@@ -16,7 +16,7 @@ use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
-final class PhpViewExtensionMiddleware implements MiddlewareInterface
+final class PhpRendererMiddleware implements MiddlewareInterface
 {
     private array $publicSettings;
     private bool $devSetting;
@@ -36,10 +36,8 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
         $this->deploymentSettings = $settings->get('deployment');
     }
 
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         $loggedInUserId = $this->session->get('user_id');
         // The following has to work even with no connection to mysql to display the error page (layout needs those attr)
         $this->phpRenderer->setAttributes([
@@ -57,7 +55,10 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
 
         // Check and set user list authorization for "users" nav point
         if ($loggedInUserId) {
-            $this->checkAndSetUserListAuthorization($loggedInUserId);
+            // Check if the authenticated user is allowed to see user list and save the result to the session
+            $this->checkUserListAuthorization($loggedInUserId);
+            // Add the user list authorization as an attribute to the PhpRenderer
+            $this->phpRenderer->addAttribute('userListAuthorization', $this->session->get('isAllowedToSeeUserList'));
         }
 
         // Add version number to js imports
@@ -69,11 +70,11 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Check if the user is allowed to see the user list and set the result as an attribute for the PhpRenderer.
+     * Check if the user is allowed to see the user list and save the result to the session.
      *
      * @param int $loggedInUserId
      */
-    private function checkAndSetUserListAuthorization(int $loggedInUserId): void
+    private function checkUserListAuthorization(int $loggedInUserId): void
     {
         // If the session already contains the information, the permission check can be skipped
         if ($this->session->get('isAllowedToSeeUserList') === null) {
@@ -85,8 +86,5 @@ final class PhpViewExtensionMiddleware implements MiddlewareInterface
                 return;
             }
         }
-
-        // Add the user list authorization as an attribute to the PhpRenderer
-        $this->phpRenderer->addAttribute('userListAuthorization', $this->session->get('isAllowedToSeeUserList'));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\Note\Service\NoteUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class NoteUpdateAction
 {
     public function __construct(
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private NoteUpdater $noteUpdater,
     ) {
     }
@@ -35,9 +35,9 @@ final readonly class NoteUpdateAction
         $updated = $this->noteUpdater->updateNote($noteIdToChange, $noteValues);
 
         if ($updated) {
-            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null]);
         }
-        $response = $this->jsonResponder->respondWithJson($response, [
+        $response = $this->jsonEncoder->encodeAndAddToResponse($response, [
             'status' => 'warning',
             'message' => 'The note was not updated.',
         ]);

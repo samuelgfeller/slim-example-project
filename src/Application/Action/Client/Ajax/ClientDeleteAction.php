@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\Client\Service\ClientDeleter;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class ClientDeleteAction
 {
     public function __construct(
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private ClientDeleter $clientDeleter,
         private SessionInterface $session,
     ) {
@@ -42,10 +42,10 @@ final readonly class ClientDeleteAction
             // Add flash here as user gets redirected to client list after deletion
             $flash->add('success', __('Successfully deleted client.'));
 
-            return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+            return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null]);
         }
 
-        $response = $this->jsonResponder->respondWithJson(
+        $response = $this->jsonEncoder->encodeAndAddToResponse(
             $response,
             ['status' => 'warning', 'message' => 'Client not deleted.']
         );

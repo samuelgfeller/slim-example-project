@@ -3,7 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Data\UserNetworkSessionData;
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\Exception\InvalidOperationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -17,7 +17,7 @@ readonly class InvalidOperationExceptionMiddleware implements MiddlewareInterfac
 {
     public function __construct(
         private ResponseFactoryInterface $responseFactory,
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private UserNetworkSessionData $userNetworkSessionData,
         private LoggerInterface $logger,
     ) {
@@ -35,7 +35,7 @@ readonly class InvalidOperationExceptionMiddleware implements MiddlewareInterfac
                 $request->getUri()->getPath() . ' with message: ' . $exception->getMessage()
             );
 
-            return $this->jsonResponder->respondWithJson(
+            return $this->jsonEncoder->encodeAndAddToResponse(
                 $response,
                 [
                     'status' => 'error',

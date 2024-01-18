@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\Responder;
+namespace App\Application\Renderer;
 
 use Psr\Http\Message\ResponseInterface;
 
-class JsonResponder
+class JsonEncoder
 {
     /**
      * Write JSON to the response body.
@@ -18,7 +18,7 @@ class JsonResponder
      *
      * @return ResponseInterface The response
      */
-    public function respondWithJson(
+    public function encodeAndAddToResponse(
         ResponseInterface $response,
         mixed $data = null,
         int $status = 200

@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\JsonResponder;
+use App\Application\Renderer\JsonEncoder;
 use App\Domain\Authentication\Service\PasswordChanger;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 readonly class PasswordChangeSubmitAction
 {
     public function __construct(
-        private JsonResponder $jsonResponder,
+        private JsonEncoder $jsonEncoder,
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
         private PasswordChanger $passwordChanger
@@ -43,6 +43,6 @@ readonly class PasswordChangeSubmitAction
             $this->sessionManager->regenerateId();
         }
 
-        return $this->jsonResponder->respondWithJson($response, ['status' => 'success', 'data' => null]);
+        return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null]);
     }
 }

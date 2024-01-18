@@ -37,12 +37,13 @@ $settings['dev'] = false;
 $settings['root_dir'] = dirname(__DIR__, 1);
 
 $settings['deployment'] = [
-    // Version `null` or string. If JsImportCacheBuster is enabled, `null` removes all query param versions from js imports
+    // Version string or null.
+    // If JsImportCacheBuster is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
     // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number from the imports
     'update_js_imports_version' => true,
     // Disable in prod
-    'assets_path' => $settings['root_dir'] . '/public/assets',
+    'asset_path' => $settings['root_dir'] . '/public/assets',
 ];
 
 $settings['public'] = [

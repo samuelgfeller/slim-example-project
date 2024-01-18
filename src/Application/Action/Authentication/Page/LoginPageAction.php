@@ -2,8 +2,8 @@
 
 namespace App\Application\Action\Authentication\Page;
 
-use App\Application\Responder\RedirectHandler;
-use App\Application\Responder\TemplateRenderer;
+use App\Application\Renderer\RedirectHandler;
+use App\Application\Renderer\TemplateRenderer;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

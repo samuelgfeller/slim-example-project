@@ -23,7 +23,7 @@ function html(?string $text = null): string
  * @param mixed ...$context Optional elements that should be inserted in the string with placeholders.
  * The function can be called like this:
  * __('The %s contains %d monkeys and %d birds.', 'tree', 5, 3);
- * With the argument unpacking operator ...$context, they are accessible within the function as an array.
+ * With the argument unpacking operator ...$context, the arguments are accessible within the function as an array.
  *
  * @return string The translated string.
  */
