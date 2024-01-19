@@ -4,13 +4,10 @@ namespace App\Application\Renderer;
 
 use Psr\Http\Message\ResponseInterface;
 
-class JsonEncoder
+readonly class JsonEncoder
 {
     /**
      * Write JSON to the response body.
-     *
-     * This method prepares the response object to return an HTTP JSON
-     * response to the client.
      *
      * @param ResponseInterface $response The response
      * @param mixed $data The data

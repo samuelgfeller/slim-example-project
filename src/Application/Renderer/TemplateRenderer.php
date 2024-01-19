@@ -9,13 +9,12 @@ use Slim\Views\PhpRenderer;
 
 readonly class TemplateRenderer
 {
-    public function __construct(
-        private PhpRenderer $phpRenderer,
-    ) {
+    public function __construct(private PhpRenderer $phpRenderer)
+    {
     }
 
     /**
-     * Output rendered template.
+     * Render template.
      *
      * @param ResponseInterface $response The response
      * @param string $template Template pathname relative to templates directory
