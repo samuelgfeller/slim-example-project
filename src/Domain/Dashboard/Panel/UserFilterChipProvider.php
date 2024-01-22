@@ -31,7 +31,7 @@ readonly class UserFilterChipProvider
         $filters = $this->getActiveAndInactiveUserFilters();
         $activeFilterChips = '';
         foreach ($filters['active'] as $filterCategory => $filtersInCategory) {
-            /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
+            /** @var FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) {
                 $activeFilterChips .= "<div class='filter-chip filter-chip-active'>\n
                                <span data-filter-id='$filterId' data-param-name='$filterData->paramName'
@@ -44,7 +44,7 @@ readonly class UserFilterChipProvider
         foreach ($filters['inactive'] as $filterCategory => $filtersInCategory) {
             $inactiveFilterChips .=
                 "<span class='filter-chip-container-label' data-category='$filterCategory'>$filterCategory</span>";
-            /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
+            /** @var FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) {
                 $inactiveFilterChips .= "<div class='filter-chip'>
                 <span data-filter-id='$filterId' data-param-name='$filterData->paramName'

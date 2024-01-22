@@ -47,10 +47,11 @@ class Mailer
     }
 
     /**
-    * Send and log email
-    *
-    * @param Email $email
-    * @return void
+     * Send and log email.
+     *
+     * @param Email $email
+     *
+     * @return void
      */
     public function send(Email $email): void
     {

@@ -69,6 +69,7 @@ readonly class UserRoleFinderRepository
             ->leftJoin('user_role', ['user.user_role_id = user_role.id'])
             ->where(['user.deleted_at IS' => null, 'user.id' => $userId]);
         $roleResultRow = $query->execute()->fetch('assoc');
+
         // If no role found, return highest hierarchy which means lowest privileged role
         return (int)($roleResultRow['hierarchy'] ?? 1000);
     }

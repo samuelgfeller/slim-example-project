@@ -29,9 +29,9 @@ final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
      * @param ServerRequestInterface $request The request
      * @param RequestHandlerInterface $handler The handler
      *
-     * @return ResponseInterface The response
      * @throws ErrorException
      *
+     * @return ResponseInterface The response
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -59,9 +59,11 @@ final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
                         throw new ErrorException($message, 0, $severity, $file, $line);
                     }
                 }
+
                 return true;
             }
         );
+
         return $handler->handle($request);
     }
 }

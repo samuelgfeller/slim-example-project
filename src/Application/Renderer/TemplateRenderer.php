@@ -80,9 +80,9 @@ readonly class TemplateRenderer
      * @param array|null $preloadValues
      * @param array $queryParams same query params passed to page to be added again to form after validation error
      *
-     * @return ResponseInterface
      * @throws \Throwable
      *
+     * @return ResponseInterface
      */
     public function respondWithFormThrottle(
         ResponseInterface $response,

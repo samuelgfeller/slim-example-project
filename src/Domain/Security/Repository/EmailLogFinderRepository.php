@@ -19,6 +19,7 @@ class EmailLogFinderRepository
      * @param int $seconds
      * Throws PersistenceRecordNotFoundException if entry not found
      * @param int|null $userId
+     *
      * @return int
      */
     public function getLoggedEmailCountInTimespan(string $email, int $seconds, ?int $userId): int

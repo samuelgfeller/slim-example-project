@@ -4,6 +4,7 @@ namespace App\Test\Fixture;
 
 /**
  * Fixture classes contain the properties $table and $records.
+ *
  * @property string $table
  * @property array $records
  */

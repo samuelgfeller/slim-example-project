@@ -27,6 +27,12 @@ readonly class DefaultErrorHandler
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param Throwable $exception
+     * @param bool $displayErrorDetails
+     * @param bool $logErrors
+     * @param bool $logErrorDetails
+     *
      * @throws Throwable
      * @throws \ErrorException
      */
@@ -91,6 +97,7 @@ readonly class DefaultErrorHandler
             // The error-details template does not include the default layout,
             // so the base path to the project root folder is required to load assets
             $phpRendererAttributes['basePath'] = (new BasePathDetector($request->getServerParams()))->getBasePath();
+
             // Render template if the template path fails, the default webserver exception is shown
             return $this->phpRenderer->render($response, 'error/error-details.html.php', $phpRendererAttributes);
         }
@@ -108,6 +115,7 @@ readonly class DefaultErrorHandler
      * Determine http status code.
      *
      * @param Throwable $exception The exception
+     *
      * @return int The http code
      */
     private function getHttpStatusCode(Throwable $exception): int
@@ -136,6 +144,7 @@ readonly class DefaultErrorHandler
      * Build the attribute array for the detailed error page.
      *
      * @param Throwable $exception
+     *
      * @return array
      */
     private function getExceptionDetailsAttributes(Throwable $exception): array
@@ -214,6 +223,7 @@ readonly class DefaultErrorHandler
      * This function returns the argument as a string.
      *
      * @param mixed $argument
+     *
      * @return string
      */
     private function getTraceArgumentAsString(mixed $argument): string
@@ -237,6 +247,7 @@ readonly class DefaultErrorHandler
                     $result[$key] = $value;
                 }
             }
+
             // Return the array converted to a string using var_export
             return var_export($result, true);
         }
@@ -249,8 +260,9 @@ readonly class DefaultErrorHandler
      * Convert the given argument to a string not longer than 15 chars
      * except if it's a file or a class name.
      *
-     * @param mixed $argument The variable to be converted to a string.
-     * @return string The string representation of the variable.
+     * @param mixed $argument the variable to be converted to a string
+     *
+     * @return string the string representation of the variable
      */
     private function getTraceArgumentAsTruncatedString(mixed $argument): string
     {
@@ -288,6 +300,7 @@ readonly class DefaultErrorHandler
      * If a string is 'App\Domain\Example\Class', this function returns 'Class'.
      *
      * @param string $string
+     *
      * @return string
      */
     private function removeEverythingBeforeLastBackslash(string $string): string

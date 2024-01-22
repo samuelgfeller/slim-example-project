@@ -41,6 +41,7 @@ class ClientPermissionVerifier
                 'loggedInUserId not set while isGrantedToCreate authorization check $client: '
                 . json_encode($client, JSON_PARTIAL_OUTPUT_ON_ERROR)
             );
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -89,6 +90,7 @@ class ClientPermissionVerifier
                 'loggedInUserId not set while isGrantedToAssignUserToClient authorization check $assignedUserId: '
                 . $assignedUserId
             );
+
             return false;
         }
 
@@ -136,6 +138,7 @@ class ClientPermissionVerifier
                 'loggedInUserId not set while isGrantedToUpdate authorization check $clientDataToUpdate: '
                 . json_encode($clientDataToUpdate, JSON_PARTIAL_OUTPUT_ON_ERROR)
             );
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -217,6 +220,7 @@ class ClientPermissionVerifier
     {
         if (!$this->loggedInUserId) {
             $this->logger->error('loggedInUserId not set while isGrantedToDelete authorization check');
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(

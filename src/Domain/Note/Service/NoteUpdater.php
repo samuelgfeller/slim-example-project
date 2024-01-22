@@ -58,7 +58,6 @@ readonly class NoteUpdater
             }
             $this->userActivityLogger->logUserActivity(UserActivity::UPDATED, 'note', $noteId, $updateData);
 
-
             return $updated;
         }
 

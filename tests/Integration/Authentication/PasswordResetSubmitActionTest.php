@@ -42,7 +42,7 @@ class PasswordResetSubmitActionTest extends TestCase
     {
         $newPassword = 'new password';
         // Insert user
-        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId],);
+        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId]);
 
         $this->insertFixture('user_verification', $verification->toArrayForDatabase());
 

@@ -21,7 +21,7 @@ return (new Config())
             'array_syntax' => ['syntax' => 'short'],
             'cast_spaces' => ['space' => 'none'],
             'concat_space' => ['spacing' => 'one'],
-            'compact_nullable_typehint' => true,
+            'compact_nullable_type_declaration' => true,
             'nullable_type_declaration' => true,
             'nullable_type_declaration_for_default_null_value' => true,
             'declare_equal_normalize' => ['space' => 'single'],

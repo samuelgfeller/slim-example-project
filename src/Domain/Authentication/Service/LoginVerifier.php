@@ -28,12 +28,12 @@ readonly class LoginVerifier
      *
      * @param array $userLoginValues An associative array containing the user's login credentials.
      * Expected keys are 'email' and 'password' and optionally 'g-recaptcha-response'.
-     * @param array $queryParams An associative array containing any additional query parameters.
+     * @param array $queryParams an associative array containing any additional query parameters
      *
-     * @throws TransportExceptionInterface If an error occurs while sending an email to a non-active user.
-     * @throws InvalidCredentialsException If the user does not exist or the password is incorrect.
+     * @throws TransportExceptionInterface if an error occurs while sending an email to a non-active user
+     * @throws InvalidCredentialsException if the user does not exist or the password is incorrect
      *
-     * @return int The ID of the user if the login is successful.
+     * @return int the ID of the user if the login is successful
      */
     public function verifyLoginAndGetUserId(array $userLoginValues, array $queryParams = []): int
     {

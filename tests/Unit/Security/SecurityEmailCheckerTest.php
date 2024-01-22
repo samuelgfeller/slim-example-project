@@ -31,11 +31,13 @@ class SecurityEmailCheckerTest extends TestCase
      *
      * The Data Provider calls this function with all the different variation of email
      * request amounts where an exception must be thrown.
+     *
      * @dataProvider \App\Test\Provider\Security\EmailRequestProvider::individualEmailThrottlingTestCases()
      *
      * @param int|string $delay
      * @param int $emailLogAmountInTimeSpan
      * @param array $securitySettings
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -91,6 +93,7 @@ class SecurityEmailCheckerTest extends TestCase
      * @param int $todayEmailAmount too many emails for today
      * @param int $thisMonthEmailAmount too many emails for this month
      * @param array $securitySettings
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

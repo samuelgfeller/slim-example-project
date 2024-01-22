@@ -43,11 +43,11 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     *
      * @throws \JsonException
+     *
+     * @return void
      */
     public function testUserSubmitUpdateAuthorization(
         array $userToChangeRow,
@@ -131,7 +131,7 @@ class UserUpdateActionTest extends TestCase
     {
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixtureWithAttributes(
-        // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
+            // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         );

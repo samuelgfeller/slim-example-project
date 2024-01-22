@@ -3,7 +3,7 @@
 namespace App\Test\Fixture;
 
 /**
- * Note values that can be inserted into the database
+ * Note values that can be inserted into the database.
  */
 class NoteFixture implements FixtureInterface
 {

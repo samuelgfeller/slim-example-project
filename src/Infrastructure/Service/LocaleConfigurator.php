@@ -16,13 +16,13 @@ final class LocaleConfigurator
     /**
      * Sets the locale and language settings for the application.
      *
-     * @param string|null|false $locale The locale or language code (e.g. 'en_US' or 'en').
+     * @param string|false|null $locale The locale or language code (e.g. 'en_US' or 'en').
      * If null or false, the default locale from the settings is used.
-     * @param string $domain The text domain (default 'messages') for gettext translations.
+     * @param string $domain the text domain (default 'messages') for gettext translations
      *
-     * @return false|string The new locale string, or false on failure.
+     * @throws \UnexpectedValueException if the locale is not 'en_US' and no translation file exists for the locale
      *
-     * @throws \UnexpectedValueException If the locale is not 'en_US' and no translation file exists for the locale.
+     * @return false|string the new locale string, or false on failure
      */
     public function setLanguage(string|null|false $locale, string $domain = 'messages'): bool|string
     {
@@ -81,6 +81,7 @@ final class LocaleConfigurator
      * if the language is not available.
      *
      * @param false|string|null $locale
+     *
      * @return string
      */
     private function getAvailableLocale(null|false|string $locale): string
@@ -104,6 +105,7 @@ final class LocaleConfigurator
         }
         // Get the language code from the "target" locale
         $localeLanguageCode = $this->getLanguageCodeFromLocale($locale);
+
         // Take the locale from the same language if available or the default one
         return $localesMappedByLanguage[$localeLanguageCode] ?? $this->localeSettings['default'] ?? 'en_US';
     }
@@ -112,6 +114,7 @@ final class LocaleConfigurator
      * Get the language code part of a locale.
      *
      * @param string|false|null $locale e.g. 'en_US'
+     *
      * @return string|null e.g. 'en'
      */
     private function getLanguageCodeFromLocale(string|null|false $locale): ?string
@@ -120,6 +123,7 @@ final class LocaleConfigurator
         if ($locale && str_contains($locale, '-')) {
             $locale = str_replace('-', '_', $locale);
         }
+
         // The language code is the first part of the locale string
         return $locale ? explode('_', $locale)[0] : null;
     }

@@ -45,9 +45,9 @@ class UserFinder
                     (int)$userResultData->id,
                     'status',
                 );
-            // Personal info privilege like first name, email and so on no needed for list
-            // $userResultData->generalPrivilege = $this->userPermissionVerifier->getUpdatePrivilegeForUserColumn(
-            // 'personal_info', $userResultData->id );
+                // Personal info privilege like first name, email and so on no needed for list
+                // $userResultData->generalPrivilege = $this->userPermissionVerifier->getUpdatePrivilegeForUserColumn(
+                // 'personal_info', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
             }
@@ -72,9 +72,9 @@ class UserFinder
      *
      * @param int $id
      *
-     * @return UserResultData
      * @throws \Exception
      *
+     * @return UserResultData
      */
     public function findUserReadResult(int $id): UserResultData
     {

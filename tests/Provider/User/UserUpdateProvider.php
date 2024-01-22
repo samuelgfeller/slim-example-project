@@ -7,7 +7,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class UserUpdateProvider
 {
-
     /**
      * @return array[]
      */

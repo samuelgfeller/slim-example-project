@@ -131,7 +131,6 @@ $this->addAttribute(
                     <input id='dark-mode-toggle-checkbox' type='checkbox'>
                     <div id='dark-mode-toggle-slot'>
                         <div id='dark-mode-sun-icon-wrapper'>
-                            <!--<div class="iconify" id="dark-mode-sun-icon" data-icon="feather-sun" data-inline="false"></div>-->
                             <img src="assets/general/dark-mode/sun-icon.svg" alt="sun" id="dark-mode-sun-icon">
                         </div>
                         <div id="dark-mode-toggle-button"></div>

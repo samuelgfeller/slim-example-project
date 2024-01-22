@@ -7,7 +7,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class ClientCreateProvider
 {
-
     /**
      * Provides test cases for client creation dropdown options.
      *

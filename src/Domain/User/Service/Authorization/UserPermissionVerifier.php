@@ -39,6 +39,7 @@ class UserPermissionVerifier
                 'loggedInUserId not set while authorization check isGrantedToCreate: '
                 . json_encode($userValues, JSON_PARTIAL_OUTPUT_ON_ERROR)
             );
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -53,11 +54,11 @@ class UserPermissionVerifier
         if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
             // Managing advisors can do everything with users except setting a role higher than advisor
             if ($this->userRoleIsGranted(
-                    $userValues['user_role_id'] ?? null,
-                    null,
-                    $authenticatedUserRoleHierarchy,
-                    $userRoleHierarchies
-                ) === true
+                $userValues['user_role_id'] ?? null,
+                null,
+                $authenticatedUserRoleHierarchy,
+                $userRoleHierarchies
+            ) === true
             ) {
                 return true;
             }
@@ -99,6 +100,7 @@ class UserPermissionVerifier
                 'loggedInUserId not set while authorization check that user role is granted $userRoleIdOfUserToMutate: '
                 . $userRoleIdOfUserToMutate
             );
+
             return false;
         }
         // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
@@ -157,6 +159,7 @@ class UserPermissionVerifier
                 'loggedInUserId not while user update authorization check' .
                 json_encode($userDataToUpdate, JSON_PARTIAL_OUTPUT_ON_ERROR)
             );
+
             return false;
         }
         $grantedUpdateKeys = [];
@@ -222,7 +225,6 @@ class UserPermissionVerifier
             // Owner user (profile edit) is not allowed to change its user role or status
         }
 
-
         // Check that the data that the user wanted to update is in $grantedUpdateKeys array
         foreach ($userDataToUpdate as $key => $value) {
             // If at least one array key doesn't exist in $grantedUpdateKeys it means that user is not permitted
@@ -237,6 +239,7 @@ class UserPermissionVerifier
                 return false;
             }
         }
+
         // All keys in $userDataToUpdate are in $grantedUpdateKeys
         return true;
     }
@@ -258,6 +261,7 @@ class UserPermissionVerifier
                 'loggedInUserId not set while authorization check isGrantedToDelete $userIdToDelete: '
                 . $userIdToDelete
             );
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -277,7 +281,6 @@ class UserPermissionVerifier
             || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADMIN->value]) {
             return true;
         }
-
 
         if ($log === true) {
             $this->logger->notice(
@@ -303,6 +306,7 @@ class UserPermissionVerifier
                 'loggedInUserId not set while authorization check isGrantedToRead $userIdToRead: '
                 . $userIdToRead
             );
+
             return false;
         }
         $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -345,6 +349,7 @@ class UserPermissionVerifier
                 'loggedInUserId not set while authorization check isGrantedToReadUserActivity $userIdToRead: '
                 . $userIdToRead
             );
+
             return false;
         }
 

@@ -9,7 +9,7 @@ This project showcases a real-world-example of a backend and frontend built usin
 [Slim](https://www.slimframework.com/) micro-framework.
 
 The primary goal is to provide a modern codebase with a scalable project structure and 
-a range of practical feature implementations.
+the implementation of a range of practical features.
 These can serve as learning examples or be adapted for developing new 
 applications. 
 
@@ -26,18 +26,18 @@ Project components:
 * Authentication (login) and authorization (permissions)
 * Account verification and password reset via email link and token
 * Protection against rapid fire brute force and password spraying attacks (time throttling and
-  captcha) - [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/security-concept.md)
+  captcha)
 * Localization — English, German and French
 * Flash messages
 * Request body and input validation
 * Template rendering with native PHP syntax
 * An intuitive method for editing values in the browser using "contenteditable"
 * Dark theme
-* Custom error handler - [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/error-handling.md)
-* Integration testing with fixtures and data providers [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/testing/testing-cheatsheet.md)
-* Database migrations and seeding [docs](https://github.com/samuelgfeller/slim-example-project/blob/master/docs/cheatsheet.md#database-migrations)
+* Custom error handler
+* Integration testing with fixtures and data providers
+* Database migrations and seeding
 
-Application components demonstrating real-world features as examples:
+Application components demonstrating examples for real-world features:
 * Users with 4 different roles and different permissions
 * User management for administrators
 * User activity history
@@ -95,9 +95,8 @@ The database is reset every half-hour.
 
 **Frontend**
 * [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering)
-* [Dark mode - (coming soon)]()
-* [JS Modules - (coming soon)]()
-* [Ajax - (coming soon)](https://github.com/samuelgfeller/slim-example-project/wiki/Ajax)
+* [JavaScript - (coming soon)](https://github.com/samuelgfeller/slim-example-project/wiki/JavaScript)
+* [Dark mode](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Mode)
 
 **Other**
  * [Directory structure](https://github.com/samuelgfeller/slim-example-project/wiki/Directory-structure)
@@ -157,6 +156,8 @@ so that it's long living and can be adapted to different needs and preferences.
 Basically, this is my take on what a modern and efficient web app could look like with today's
 tech.
 
+## Credits
+
 I worked closely with the software architect 
 [Daniel Opitz](https://odan.github.io/about.html), who also reviewed this project.
 I learned a lot during 
@@ -164,8 +165,6 @@ I learned a lot during
 and was inspired by his books, articles, tutorials and his slim 
 [skeleton-project](https://github.com/odan/slim4-skeleton).  
 I'm grateful for his support and the time he took to help me improve this project.
-
-## Credits
 
 Special thanks to [JetBrains](https://jb.gg/OpenSource) for supporting this project.
 

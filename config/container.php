@@ -60,6 +60,7 @@ return [
         $rotatingFileHandler = new RotatingFileHandler($filename, 0, $level, true, 0777);
         // The last "true" here tells monolog to remove empty []'s
         $rotatingFileHandler->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s', false, true));
+
         return $logger->pushHandler($rotatingFileHandler);
     },
 
@@ -153,6 +154,7 @@ return [
 
     SessionInterface::class => function (ContainerInterface $container) {
         $options = $container->get('settings')['session'];
+
         return new PhpSession($options);
     },
 

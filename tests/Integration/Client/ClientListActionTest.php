@@ -52,10 +52,10 @@ class ClientListActionTest extends TestCase
     /**
      * Normal page action while having an active session.
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testClientListPageActionAuthorization(): void
     {
@@ -105,10 +105,10 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testClientListWithFilterAction(
         array $filterQueryParamsArr,
@@ -201,10 +201,10 @@ class ClientListActionTest extends TestCase
      * @param array $queryParams Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
     {

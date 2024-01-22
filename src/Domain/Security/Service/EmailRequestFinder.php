@@ -21,6 +21,7 @@ class EmailRequestFinder
      *
      * @param string $email
      * @param int|null $userId
+     *
      * @return int
      */
     public function findEmailAmountInSetTimespan(string $email, ?int $userId): int

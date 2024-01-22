@@ -51,9 +51,9 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
@@ -162,9 +162,9 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -228,9 +228,9 @@ class ClientUpdateActionTest extends TestCase
      * Test that if user makes update request but the content has not changed
      * compared to what's in the database, the response contains the warning.
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitUpdateActionUnchangedContent(): void
     {

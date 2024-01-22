@@ -172,7 +172,6 @@ class UserCreateActionTest extends TestCase
         // even if it's an empty string
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
-
         // Database must be unchanged - only one row (authenticated user) expected in user table
         $this->assertTableRowCount(1, 'user');
         $this->assertJsonData($jsonResponse, $response);

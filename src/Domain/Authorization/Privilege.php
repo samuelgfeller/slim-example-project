@@ -23,7 +23,6 @@ enum Privilege
     // Allowed to Read, Create, Update and Delete
     case CRUD;
 
-
     // Initially, the Privilege Enum was the datatype in result objects that was passed to the PHP templates.
     // The case names were the name of the highest privilege (Read, Create, Update, Delete).
     // The values were the letters of the associated permissions meaning Delete was 'CRUD', Update was 'CRU' and so on.

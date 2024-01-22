@@ -16,6 +16,7 @@ trait FixtureTestTrait
      * @param array $attributes attributes to override in the fixture
      * Format: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value', ] -> one insert
      * alternatively [['field_name' => 'expected_value'], ['field_name' => 'expected_value'], ] -> two insets
+     *
      * @return array inserted row values
      */
     protected function insertFixtureWithAttributes(FixtureInterface $fixture, array $attributes = []): array

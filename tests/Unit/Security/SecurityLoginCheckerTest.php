@@ -50,6 +50,7 @@ class SecurityLoginCheckerTest extends TestCase
      *     logins_by_ip: array{successes: int, failures: int},
      * } $ipAndEmailLogSummary
      * @param array $securitySettings
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

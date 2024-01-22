@@ -36,9 +36,9 @@ final readonly class UserCreator
      * @param array $userValues
      * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
-     * @return int|bool insert id, false if user already exists
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
+     * @return int|bool insert id, false if user already exists
      */
     public function createUser(array $userValues, array $queryParams = []): bool|int
     {

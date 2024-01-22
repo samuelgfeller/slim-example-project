@@ -36,9 +36,10 @@ class UserListActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code and privilege
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testUserListAuthorization(
         array $userRow,
