@@ -4,39 +4,28 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 /**
  * Sends a GET request and returns result in promise
  *
- * @param {string} route only the part after base path ('users/1'). Query params have to be added with ?param=value
+ * @param {string} route only the part after base path (e.g. 'users/1'). Query params have to be added with ?param=value
  * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
  * If true, the redirect url is the same as the given route
  * @return {Promise<JSON>}
  */
 export function fetchData(route, redirectToRouteIfUnauthenticated = false) {
-    return new Promise(function (resolve, reject) {
-        let xHttp = new XMLHttpRequest();
-        xHttp.onreadystatechange = function () {
-            if (xHttp.readyState === XMLHttpRequest.DONE) {
-                // Fail
-                if (xHttp.status !== 200) {
-                    // Default fail handler
-                    handleFail(xHttp);
-                }
-                // Success
-                else {
-                    // Resolve with json response
-                    resolve(JSON.parse(xHttp.responseText));
-                }
+    let headers = new Headers();
+    headers.append("Content-type", "application/json");
+
+    if (redirectToRouteIfUnauthenticated === true) {
+        headers.append("Redirect-to-url-if-unauthorized", basePath + route);
+    } else if (typeof redirectToRouteIfUnauthenticated === "string") {
+        headers.append("Redirect-to-url-if-unauthorized", basePath + redirectToRouteIfUnauthenticated);
+    }
+
+    return fetch(basePath + route, { method: 'GET', headers: headers })
+        .then(async response => {
+            if (!response.ok) {
+                await handleFail(response);
+                throw response;
             }
-        };
-
-        // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-        xHttp.open('GET', basePath + route, true);
-        xHttp.setRequestHeader("Content-type", "application/json");
-
-        if (redirectToRouteIfUnauthenticated === true) {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + route);
-        } else if (typeof redirectToRouteIfUnauthenticated === "string") {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + redirectToRouteIfUnauthenticated);
-        }
-
-        xHttp.send();
-    });
+            return response.json();
+        });
+        // Without catch block as it is implemented by the function calling it
 }

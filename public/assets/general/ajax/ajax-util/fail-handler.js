@@ -21,38 +21,37 @@ fetchTranslations(wordsToTranslate).then(response => {
  * If a request fails this function can be called which gives the user
  * information about which error it is
  *
- * @param {XMLHttpRequest} xhr
+ * @param {Response} response
  * @param {null|string} domFieldId css id of dom field the fail is about
  */
-export function handleFail(xhr, domFieldId = null) {
+export async function handleFail(response, domFieldId = null) {
    // Example: 404 Not Found
-    let errorMsg = xhr.status + ' ' + xhr.statusText;
+    let errorMsg = response.status + ' ' + response.statusText;
+    let responseData = await response.json();
 
-    if (xhr.status === 401) {
+    if (response.status === 401) {
         // Overwriting general error message to unauthorized
         errorMsg += `<br>${translated['Access denied please log in and try again']}.`;
-        let responseData = JSON.parse(xhr.responseText);
         // If login url is provided by the server, redirect client to it
         if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
             window.location.href = responseData.loginUrl;
         }
     }
 
-    if (xhr.status === 403) {
+    if (response.status === 403) {
         errorMsg += `<br>${translated['Forbidden. Not allowed to access this area or function']}.`;
     }
 
-    if (xhr.status === 500) {
+    if (response.status === 500) {
         errorMsg += `<br>${translated['Please try again and report the error to an administrator']}.`;
     }
 
     // If validation error ignore the default message and create specific one
     let noFlashMessage = false;
-    if (xhr.status === 422) {
-        if (xhr.getResponseHeader('Content-type') === 'application/json') {
+    if (response.status === 422) {
+        if (response.headers.get('Content-type') === 'application/json' && responseData?.data?.errors) {
             errorMsg = '';
-            let validationResponse = JSON.parse(xhr.response);
-            const validationErrors = validationResponse.data.errors;
+            const validationErrors = responseData.data.errors;
             removeValidationErrorMessages();
             // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
             for (const fieldName in validationErrors) {
@@ -66,6 +65,7 @@ export function handleFail(xhr, domFieldId = null) {
                 errorMsg += fieldMessages[0] + '.<br>Field "<b>' + fieldName.replace(/[^a-zA-Z0-9 ]/g, ' ')
                     + '</b>".<br>';
             }
+            // No flash message if the message is already shown in the form
             noFlashMessage = true;
         } else {
             // Default error message when server returns 422 but not json
