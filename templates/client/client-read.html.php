@@ -33,7 +33,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 <data id="client-id" value="<?= $clientAggregate->id ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
-    <div id="full-header-edit-icon-container" data-deleted="<?= $clientAggregate->deletedAt ? '1' : 0 ?>">
+    <div id="full-header-edit-icon-container" data-deleted="<?= $clientAggregate->deletedAt ? 1 : 0 ?>">
         <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
             <?php
             if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
@@ -292,7 +292,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 <!-- Delete trash icon stays always there -->
                 <?= str_contains($clientAggregate->generalPrivilege, 'D') ?
                     ($clientAggregate->deletedAt ? '<img src="assets/general/general-img/action/undelete-icon.svg" 
-                    class="personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
+                    class="default-icon personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
                         '<img src="assets/general/general-img/action/trash-icon.svg" 
                         class="personal-info-icon permanently-in-available-icon-div default-icon" 
                         id="delete-client-btn" alt="delete">') : '' ?>

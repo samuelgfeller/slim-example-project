@@ -12,9 +12,9 @@ use App\Domain\Client\Repository\ClientFinderRepository;
 use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Client\Service\Authorization\ClientPrivilegeDeterminer;
+use App\Domain\Note\Repository\NoteFinderRepository;
 use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
-use App\Domain\Note\Service\NoteFinder;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 
@@ -25,7 +25,7 @@ readonly class ClientFinder
         private UserFinderRepository $userFinderRepository,
         private UserNameAbbreviator $userNameAbbreviator,
         private ClientStatusFinderRepository $clientStatusFinderRepository,
-        private NoteFinder $noteFinder,
+        private NoteFinderRepository $noteFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
@@ -91,12 +91,13 @@ readonly class ClientFinder
      * Find one client in the database.
      *
      * @param int $id
+     * @param mixed $includeDeleted
      *
      * @return ClientData
      */
-    public function findClient(int $id): ClientData
+    public function findClient(int $id, $includeDeleted = false): ClientData
     {
-        return $this->clientFinderRepository->findClientById($id);
+        return $this->clientFinderRepository->findClientById($id, $includeDeleted);
     }
 
     /**
@@ -145,7 +146,7 @@ readonly class ClientFinder
                 false
             ) ? Privilege::CR->name : Privilege::N->name;
 
-            $clientResultAggregate->notesAmount = $this->noteFinder->findClientNotesAmount($clientId);
+            $clientResultAggregate->notesAmount = $this->noteFinderRepository->findClientNotesAmount($clientId);
 
             return $clientResultAggregate;
         }

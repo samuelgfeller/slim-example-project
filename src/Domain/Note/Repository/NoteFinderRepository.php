@@ -17,6 +17,7 @@ class NoteFinderRepository
         'hidden' => 'note.hidden',
         'updated_at' => 'note.updated_at',
         'created_at' => 'note.created_at',
+        'deleted_at' => 'note.deleted_at',
         'user_id' => 'note.user_id',
     ];
 
@@ -133,12 +134,16 @@ class NoteFinderRepository
 
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
             ->join(['user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'note.user_id = user.id']])
+            ->join(['client' => ['table' => 'client', 'type' => 'LEFT', 'conditions' => 'note.client_id = client.id']])
             ->where(
                 [
                     // Not unsafe as it's not an expression and thus escaped by querybuilder
                     'note.client_id' => $clientId,
                     'note.is_main' => 0,
-                    'note.deleted_at IS' => null,
+                    'OR' => [
+                        'note.deleted_at IS' => null,
+                        'note.deleted_at' => $query->identifier('client.deleted_at'),
+                    ],
                 ]
             )->orderByDesc('note.created_at');
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];

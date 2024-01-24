@@ -46,11 +46,16 @@ readonly class NotePrivilegeDeterminer
      * @param int $noteOwnerId
      * @param int|null $clientOwnerId
      * @param ?int $hidden
+     * @param bool $noteDeleted
      *
      * @return string
      */
-    public function getNotePrivilege(int $noteOwnerId, ?int $clientOwnerId = null, ?int $hidden = null): string
-    {
+    public function getNotePrivilege(
+        int $noteOwnerId,
+        ?int $clientOwnerId = null,
+        ?int $hidden = null,
+        bool $noteDeleted = false,
+    ): string {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
         if ($this->notePermissionVerifier->isGrantedToDelete($noteOwnerId, $clientOwnerId, false)) {
             return Privilege::CRUD->name;
@@ -60,7 +65,14 @@ readonly class NotePrivilegeDeterminer
         }
         // Create must NOT be included here as it's irrelevant on specific notes and has an impact on "READ" privilege as
         // read is lower than create in the hierarchy.
-        if ($this->notePermissionVerifier->isGrantedToRead(0, $noteOwnerId, $clientOwnerId, $hidden, false)) {
+        if ($this->notePermissionVerifier->isGrantedToRead(
+            0,
+            $noteOwnerId,
+            $clientOwnerId,
+            $hidden,
+            $noteDeleted,
+            false
+        )) {
             return Privilege::R->name;
         }
 

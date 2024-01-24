@@ -79,9 +79,15 @@ readonly class ClientUpdater
             if (isset($updateData['user_id'])) {
                 $updateData['assigned_at'] = date('Y-m-d H:i:s');
             }
+
             // Update client
             $updated = $this->clientUpdaterRepository->updateClient($updateData, $clientId);
             if ($updated) {
+                // If client is undeleted, the notes should also be restored
+                if (array_key_exists('deleted_at', $updateData) && $updateData['deleted_at'] === null) {
+                    $this->clientUpdaterRepository->restoreNotesFromClient($clientId);
+                }
+
                 $this->userActivityLogger->logUserActivity(
                     UserActivity::UPDATED,
                     'client',

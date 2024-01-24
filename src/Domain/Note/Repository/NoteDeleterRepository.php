@@ -34,7 +34,8 @@ readonly class NoteDeleterRepository
      */
     public function deleteNotesFromClient(int $clientId): bool
     {
-        $query = $this->queryFactory->softDeleteQuery('note')->where(['client_id' => $clientId]);
+        $query = $this->queryFactory->softDeleteQuery('note')
+            ->where(['client_id' => $clientId, 'deleted_at IS' => null]);
 
         return $query->execute()->rowCount() > 0;
     }

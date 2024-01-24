@@ -3,7 +3,8 @@
 namespace App\Domain\Note\Service;
 
 use App\Domain\Authorization\Privilege;
-use App\Domain\Client\Repository\ClientFinderRepository;
+use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
+use App\Domain\Client\Service\ClientFinder;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Repository\NoteFinderRepository;
@@ -14,7 +15,8 @@ readonly class NoteFinder
     public function __construct(
         private NoteFinderRepository $noteFinderRepository,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
-        private ClientFinderRepository $clientFinderRepository,
+        private ClientFinder $clientFinder,
+        private ClientPermissionVerifier $clientPermissionVerifier,
     ) {
     }
 
@@ -70,15 +72,16 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         // Get client owner id if not given
         if ($clientOwnerId === null && $clientId !== null) {
-            $clientOwnerId = $this->clientFinderRepository->findClientById($clientId)->userId;
+            $clientOwnerId = $this->clientFinder->findClient($clientId)->userId;
         }
 
         foreach ($notes as $noteResultData) {
-            // Privilege only create possible if user may not see the note but may create one
+            // Privilege "only create" possible if user may not see the note but may create one
             $noteResultData->privilege = $this->notePrivilegeDeterminer->getNotePrivilege(
                 (int)$noteResultData->userId,
                 $clientOwnerId,
                 $noteResultData->hidden,
+                (bool)$noteResultData->deletedAt
             );
             // If not allowed to read
             if (!str_contains($noteResultData->privilege, 'R')) {
@@ -86,6 +89,8 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
                 $noteResultData->message = substr($randomText, 0, strlen($noteResultData->message ?? ''));
                 // Remove line breaks and extra spaces from string
                 $noteResultData->message = preg_replace('/\s\s+/', ' ', $noteResultData->message);
+                // If user has no read right, set note to hidden
+                $noteResultData->hidden = 1;
             }
         }
     }
@@ -119,9 +124,14 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // meaning the reference is passed and changes are made on the original reference that can be used further
         // https://www.php.net/manual/en/language.oop5.references.php; https://stackoverflow.com/a/65805372/9013718
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
-        // Add client message as last note (it's always the "oldest" as it's the same age as the client  entry itself)
-        $clientData = $this->clientFinderRepository->findClientById($clientId);
-        if (!empty($clientData->clientMessage)) {
+
+        // Add client message as last note (it's always the "oldest" as it's the same age as the client entry itself)
+        $clientData = $this->clientFinder->findClient($clientId, true);
+        // The authorization for each note is verified, but the client message is added to the request
+        // separately
+        if (!empty($clientData->clientMessage)
+            && $this->clientPermissionVerifier->isGrantedToRead($clientData->userId, $clientData->deletedAt)
+        ) {
             $clientMessageNote = new NoteResultData();
             $clientMessageNote->message = $clientData->clientMessage;
             // The "userFullName" has to be the client itself as it's his client_message that is being displayed as note
@@ -134,17 +144,5 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         }
 
         return $allNotes;
-    }
-
-    /**
-     * Return the number of notes attached to a client.
-     *
-     * @param int $clientId
-     *
-     * @return int
-     */
-    public function findClientNotesAmount(int $clientId): int
-    {
-        return $this->noteFinderRepository->findClientNotesAmount($clientId);
     }
 }

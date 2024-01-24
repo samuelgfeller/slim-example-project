@@ -49,7 +49,6 @@ readonly class ClientFinderRepository
             'client_status_name' => 'client_status.name',
         ])// Multiple joins doc: https://book.cakephp.org/4/en/orm/query-builder.html#adding-joins
         ->join([
-            // `user` is alias and has to be the same as $this->clientListAggregateSelectFields
             'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'client.user_id = user.id'],
             'client_status' => [
                 'table' => 'client_status',
@@ -69,17 +68,21 @@ readonly class ClientFinderRepository
      * otherwise null.
      *
      * @param string|int $id
+     * @param bool $includeDeleted
      *
      * @return ClientData
      */
-    public function findClientById(string|int $id): ClientData
+    public function findClientById(string|int $id, bool $includeDeleted = false): ClientData
     {
         $query = $this->queryFactory->selectQuery()->select(['*'])->from('client')->where(
-            ['deleted_at IS' => null, 'id' => $id]
+            ['id' => $id]
         );
-        $postRow = $query->execute()->fetch('assoc') ?: [];
+        if ($includeDeleted === false) {
+            $query->andWhere(['deleted_at IS' => null]);
+        }
+        $clientRow = $query->execute()->fetch('assoc') ?: [];
 
-        return new ClientData($postRow);
+        return new ClientData($clientRow);
     }
 
     /**
@@ -123,7 +126,6 @@ readonly class ClientFinderRepository
             'note_updated_at' => 'note.updated_at',
         ])
             ->join([
-                // `user` is alias and has to be the same as $this->clientListAggregateSelectFields
                 'user' => ['table' => 'user', 'type' => 'LEFT', 'conditions' => 'client.user_id = user.id'],
                 'client_status' => [
                     'table' => 'client_status',
@@ -133,7 +135,9 @@ readonly class ClientFinderRepository
                 'note' => [
                     'table' => 'note',
                     'type' => 'LEFT',
-                    'conditions' => 'client.id = note.client_id AND note.deleted_at IS NULL AND note.is_main = 1',
+                    // If there is a deleted main note and a non-deleted one, it creates a conflict,
+                    // but this should not happen as there is no way to delete the main note.
+                    'conditions' => 'client.id = note.client_id AND note.is_main = 1',
                 ],
             ])
             ->andWhere(

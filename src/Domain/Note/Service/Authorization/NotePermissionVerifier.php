@@ -21,8 +21,9 @@ readonly class NotePermissionVerifier
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note
-     * @param int|null $clientOwnerId client owner might become relevant
+     * @param int|null $clientOwnerId client owner user id might become relevant
      * @param int|null $isHidden when note message is hidden
+     * @param bool $isDeleted note is deleted
      * @param bool $log
      *
      * @return bool
@@ -32,6 +33,7 @@ readonly class NotePermissionVerifier
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
         ?int $isHidden = null,
+        bool $isDeleted = false,
         bool $log = true
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
@@ -41,8 +43,12 @@ readonly class NotePermissionVerifier
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
             $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
-            // newcomers may see all notes and main notes
+            // newcomers may see all notes and main notes except deleted ones that only managing advisors can see
             if (($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
+                && ( // If the note is deleted, authenticated user must be managing advisors or higher
+                    $isDeleted === false
+                    || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
+                )
                 && ( // When hidden is not null or 0, user has to be advisor to read note
                     in_array($isHidden, [null, 0, false], true)
                     || $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::ADVISOR->value]
