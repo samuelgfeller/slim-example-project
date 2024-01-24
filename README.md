@@ -158,7 +158,7 @@ tech.
 
 ## Credits
 
-I worked closely with the software architect 
+I closely worked with the software architect 
 [Daniel Opitz](https://odan.github.io/about.html), who also reviewed this project.
 I learned a lot during 
 [our exchanges](https://github.com/samuelgfeller/slim-example-project/wiki/Sources-of-knowledge#discussions)
@@ -166,7 +166,7 @@ and was inspired by his books, articles, tutorials and his slim
 [skeleton-project](https://github.com/odan/slim4-skeleton).  
 I'm grateful for his support and the time he took to help me improve this project.
 
-Special thanks to [JetBrains](https://jb.gg/OpenSource) for supporting this project.
+Special thanks to [JetBrains](https://jb.gg/OpenSource) as well for supporting this project.
 
 ## Licence
 

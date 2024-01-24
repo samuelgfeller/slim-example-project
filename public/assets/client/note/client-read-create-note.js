@@ -78,53 +78,55 @@ function removeNewNoteTextareaIfEmpty() {
 }
 
 export function insertNewNoteToDb(textarea, isMainNote = false) {
-    // By using querySelector on the targeted textarea parent it's certain that the right circleLoader is targeted
+    // By using querySelector on the targeted textarea parent, it's certain that the right circleLoader is targeted
     let circleLoader = textarea.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
 
     textarea.removeEventListener('focusout', removeNewNoteTextareaIfEmpty);
 
-    // Make ajax call
-    let xHttp = new XMLHttpRequest();
-    xHttp.onreadystatechange = function () {
-        if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // Fail
-            if (xHttp.status !== 201 && xHttp.status !== 200) {
-                // Default fail handler
-                handleFail(xHttp, textarea.id);
-                hideCheckmarkLoader(circleLoader, 'create new note fail');
-            }
-            // Success
-            else {
-                removeValidationErrorMessages();
-                let response = JSON.parse(xHttp.responseText);
-                // Here it's not important to check if user is still typing as new note can be saved as soon as possible
-                // Show checkmark only on status success and if user is not typing
-                if (response.status === 'success') {
-                    populateNewNoteDomAttributes(textarea, response.data);
-                } else {
-                    // Hide checkmark loader "cleanly" so that it's not broken on the next input
-                    hideCheckmarkLoader(circleLoader, 'Client create note after non success creation');
-                }
-            }
-        }
-    };
-
-    xHttp.open('POST', basePath + 'notes', true);
-    xHttp.setRequestHeader("Content-type", "application/json");
-    // Important to add content type json and "Redirect-to-route-name-if-unauthorized" header for the UserAuthenticationMiddleware
-    // to know to send the login url in the json response body and where to redirect back after a successful login
-    xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "client/" +
-        document.getElementById('client-id').value);
-
-    // Data format: "fname=Henry&lname=Ford"
-    // In [square brackets] to be evaluated
-    xHttp.send(JSON.stringify({
+    // Prepare the data
+    let data = {
+        // In [square brackets] to be evaluated
         [textarea.name]: textarea.value,
-        // Not camelCase as html form names are underline too
         client_id: document.getElementById('client-id').value,
         is_main: isMainNote ? 1 : 0,
-    }));
+    };
+
+    // Make fetch call
+    fetch(basePath + 'notes', {
+        method: 'POST',
+        headers: {
+            "Content-type": "application/json",
+            // Important to add content type json and "Redirect-to-url-if-unauthorized"
+            // header for the UserAuthenticationMiddleware to know to send the login url in
+            // a json response body and where to redirect back after a successful login
+            "Redirect-to-url-if-unauthorized": window.location.href
+        },
+        // Data format: "fname=Henry&lname=Ford"
+        body: JSON.stringify(data)
+    })
+    .then(async response => {
+        if (!response.ok) {
+            await handleFail(response, textarea.id);
+            hideCheckmarkLoader(circleLoader, 'create new note fail');
+            throw new Error('Response was not "ok"');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        removeValidationErrorMessages();
+        // Here it's not important to check if user is still typing as new note can be saved as soon as possible
+        // Show checkmark only on status success and if user is not typing
+        if (responseData.status === 'success') {
+            populateNewNoteDomAttributes(textarea, responseData.data);
+        } else {
+            // Hide checkmark loader "cleanly" so that it's not broken on the next input
+            hideCheckmarkLoader(circleLoader, 'Client create note after non success creation');
+        }
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
 }
 
 /**

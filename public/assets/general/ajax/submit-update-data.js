@@ -15,37 +15,30 @@ import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handle
  * @return Promise with as content server response as JSON
  */
 export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauthenticated = false, domFieldId = null) {
-    return new Promise(function (resolve, reject) {
-        // Make ajax call
-        let xHttp = new XMLHttpRequest();
-        xHttp.onreadystatechange = function () {
-            if (xHttp.readyState === XMLHttpRequest.DONE) {
-                // Fail
-                if (xHttp.status !== 201 && xHttp.status !== 200) {
-                    // Default fail handler
-                    handleFail(xHttp, domFieldId);
-                    // reject() only needed if promise is caught with .catch()
-                    reject(JSON.parse(xHttp.responseText));
-                }
-                // Success
-                else {
-                    removeValidationErrorMessages();
-                    resolve(JSON.parse(xHttp.responseText));
-                }
+    let headers = {
+        "Content-type": "application/json"
+    };
+
+    // If redirectToRouteIfUnauthenticated is true, redirect to the same route
+    if (redirectToRouteIfUnauthenticated === true) {
+        headers["Redirect-to-url-if-unauthorized"] = basePath + route;
+    } else if (typeof redirectToRouteIfUnauthenticated === "string") {
+        // Else if it's a string, redirect to the given route
+        headers["Redirect-to-url-if-unauthorized"] = basePath + redirectToRouteIfUnauthenticated;
+    }
+
+    return fetch(basePath + route, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify(formFieldsAndValues)
+    })
+        .then(async response => {
+            if (!response.ok) {
+                await handleFail(response, domFieldId);
+                throw new Error('Response was not "ok"');
             }
-        };
-
-        xHttp.open('PUT', basePath + route, true);
-        xHttp.setRequestHeader("Content-type", "application/json");
-
-        if (redirectToRouteIfUnauthenticated === true) {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + route);
-        } else if (typeof redirectToRouteIfUnauthenticated === "string") {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + redirectToRouteIfUnauthenticated);
-        }
-
-        // Data format: "fname=Henry&lname=Ford"
-        xHttp.send(JSON.stringify(formFieldsAndValues));
-
-    });
+            // Remove validation error messages if there are any
+            removeValidationErrorMessages();
+            return response.json();
+        });
 }

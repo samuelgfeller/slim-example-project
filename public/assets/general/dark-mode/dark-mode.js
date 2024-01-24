@@ -45,7 +45,7 @@ function switchTheme(e) {
     let userId = document.getElementById('user-id').value;
     submitUpdate({theme: theme}, `users/${userId}`, true)
         .then(r => {
-        }).catch(r => {
+        }).catch(errorMsg => {
         displayFlashMessage('error', 'Failed to change the theme in the database.')
     });
 }

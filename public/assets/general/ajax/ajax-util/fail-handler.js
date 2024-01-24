@@ -18,65 +18,80 @@ fetchTranslations(wordsToTranslate).then(response => {
 });
 
 /**
- * If a request fails this function can be called which gives the user
- * information about which error it is
+ * This function can be called with the Response or a TypeError
+ * If response is TypeError, only a flash message is shown
+ * If response is Response, the status code is checked and a flash message is shown or
+ * validation errors are highlighted in the form.
  *
- * @param {Response} response
+ * @param {Response|TypeError} response
  * @param {null|string} domFieldId css id of dom field the fail is about
  */
 export async function handleFail(response, domFieldId = null) {
-   // Example: 404 Not Found
-    let errorMsg = response.status + ' ' + response.statusText;
-    let responseData = await response.json();
+    // If response is TypeError, only a flash message is shown
+    if (response instanceof TypeError) {
+        displayFlashMessage('error', response.message);
+        return;
+    }
 
+    // Example: 404 Not Found
+    let errorMsg = response.status + ' ' + response.statusText;
+    // If response is json, parse it, else get text
+    let responseData = response.headers.get('Content-type') === 'application/json'
+        ? await response.json() : await response.text();
+
+    // If user wasn't authenticated, the response contains the login url with correct redirect back params
     if (response.status === 401) {
-        // Overwriting general error message to unauthorized
-        errorMsg += `<br>${translated['Access denied please log in and try again']}.`;
         // If login url is provided by the server, redirect client to it
         if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
             window.location.href = responseData.loginUrl;
         }
+        // If response data doesn't contain login url
+        errorMsg += `<br>${translated['Access denied please log in and try again']}.`;
     }
 
-    if (response.status === 403) {
-        errorMsg += `<br>${translated['Forbidden. Not allowed to access this area or function']}.`;
+    const statusMessageMap = {
+        403: translated['Forbidden. Not allowed to access this area or function'],
+        500: translated['Please try again and report the error to an administrator']
+    };
+
+    // Check if response status is in the map
+    if (statusMessageMap.hasOwnProperty(response.status)) {
+        errorMsg += `<br>${statusMessageMap[response.status]}.`;
     }
 
-    if (response.status === 500) {
-        errorMsg += `<br>${translated['Please try again and report the error to an administrator']}.`;
-    }
-
-    // If validation error ignore the default message and create specific one
-    let noFlashMessage = false;
+    // Validation error
     if (response.status === 422) {
-        if (response.headers.get('Content-type') === 'application/json' && responseData?.data?.errors) {
-            errorMsg = '';
-            const validationErrors = responseData.data.errors;
-            removeValidationErrorMessages();
-            // Best foreach loop method according to https://stackoverflow.com/a/9329476/9013718
-            for (const fieldName in validationErrors) {
-                const fieldMessages = validationErrors[fieldName];
-                // There may be the case that there are multiple error messages for a single field. In such case,
-                // the previous error message is simply replaced by the newer one which isn't ideal but acceptable in
-                // this scope especially since its so rare and the worst case would be that user has to submit form once
-                // more to get the updated (other) error message (that he couldn't see before)
-                displayValidationErrorMessage(fieldName, fieldMessages[0], domFieldId);
-                // Flash error message with details
-                errorMsg += fieldMessages[0] + '.<br>Field "<b>' + fieldName.replace(/[^a-zA-Z0-9 ]/g, ' ')
-                    + '</b>".<br>';
-            }
-            // No flash message if the message is already shown in the form
-            noFlashMessage = true;
-        } else {
-            // Default error message when server returns 422 but not json
-            errorMsg = 'Validation error. Something could not be validated on the server.';
-        }
+        errorMsg = handleValidationError(response, responseData, domFieldId, errorMsg);
     }
 
-    // Output error to user
-    if (noFlashMessage === false) {
+    // Output error to user except if handleValidationError() added a noFlashMessage to the responseData
+    if (!responseData.noFlashMessage) {
         displayFlashMessage('error', errorMsg);
     }
+}
+
+function handleValidationError(response, responseData, domFieldId, errorMsg) {
+    if (response.headers.get('Content-type') === 'application/json' && responseData?.data?.errors) {
+        errorMsg = '';
+        const validationErrors = responseData.data.errors;
+        removeValidationErrorMessages();
+        for (const fieldName in validationErrors) {
+            const fieldMessages = validationErrors[fieldName];
+            // There may be a case where there are multiple error messages for a single field.
+            // If that happens, the previous error message is simply replaced by the newer one, which isn't
+            // ideal but acceptable as its so rare and a minor inconvenience to the user. The form would have
+            // to be submitted again to get the updated (other) error message (that wasn't visible before).
+            displayValidationErrorMessage(fieldName, fieldMessages[0], domFieldId);
+            // Flash error message with details
+            // errorMsg += fieldMessages[0] + '.<br>Field "<b>' + fieldName.replace(/[^a-zA-Z0-9 ]/g, ' ')
+            //     + '</b>".<br>';
+        }
+        // No flash message if the message is already shown in the form
+        responseData.noFlashMessage = true;
+    } else {
+        errorMsg = 'Validation error. Something could not be validated on the server.';
+    }
+    return errorMsg;
 }
 
 /**

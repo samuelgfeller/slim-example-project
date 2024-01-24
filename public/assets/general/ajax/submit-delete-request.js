@@ -10,35 +10,27 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
  * If true, the redirect url is the same as the given route
  * @return Promise with as content server response as JSON
  */
+
 export function submitDelete(route, redirectToRouteIfUnauthenticated = false) {
-    return new Promise(function (resolve, reject) {
-        // Make ajax call
-        let xHttp = new XMLHttpRequest();
-        xHttp.onreadystatechange = function () {
-            if (xHttp.readyState === XMLHttpRequest.DONE) {
-                // Fail
-                if (xHttp.status !== 200) {
-                    // Default fail handler
-                    handleFail(xHttp);
-                    // reject() only needed if promise is caught with .catch()
-                    reject(JSON.parse(xHttp.responseText));
-                }
-                // Success
-                else {
-                    resolve(JSON.parse(xHttp.responseText));
-                }
+    let headers = {
+        "Content-type": "application/json"
+    };
+
+    if (redirectToRouteIfUnauthenticated === true) {
+        headers["Redirect-to-url-if-unauthorized"] = basePath + route;
+    } else if (typeof redirectToRouteIfUnauthenticated === "string") {
+        headers["Redirect-to-url-if-unauthorized"] = basePath + redirectToRouteIfUnauthenticated;
+    }
+
+    return fetch(basePath + route, {
+        method: 'DELETE',
+        headers: headers
+    })
+        .then(async response => {
+            if (!response.ok) {
+                await handleFail(response);
+                throw new Error('Response was not "ok"');
             }
-        };
-
-        xHttp.open('DELETE', basePath + route, true);
-        xHttp.setRequestHeader("Content-type", "application/json");
-
-        if (redirectToRouteIfUnauthenticated === true) {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + route);
-        } else if (typeof redirectToRouteIfUnauthenticated === "string") {
-            xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + redirectToRouteIfUnauthenticated);
-        }
-
-        xHttp.send();
-    });
+            return response.json();
+        });
 }

@@ -55,35 +55,28 @@ function checkIfPasswordIsBreached() {
 function makeHIBPRequest(passwordHash) {
     return new Promise((resolve, reject) => {
         let hashPrefix = passwordHash.substring(0, 5);
-
         let hashSuffix = passwordHash.substring(5);
 
-        let xHttp = new XMLHttpRequest();
-        xHttp.onreadystatechange = function () {
-            if (xHttp.readyState === XMLHttpRequest.DONE) {
-                // Fail
-                if (xHttp.status !== 200) {
-                    // Default fail handler
-                    handleFail(xHttp);
-                    removeWarning();
+        fetch(`https://api.pwnedpasswords.com/range/${hashPrefix}`)
+            .then(async response => {
+                if (!response.ok) {
+                    await handleFail(response);
+                    reject();
                 }
-                // Success
-                else {
-                    let hashFound = xHttp.responseText.toLowerCase().includes(hashSuffix);
-                    if (hashFound === true) {
-                        // Resolve that calls showWarning() inside .then
-                        resolve();
-                    } else {
-                        // Reject that calls showWarning() inside .then
-                        reject();
-                    }
+                return response.text();
+            })
+            .then(text => {
+                let hashFound = text.toLowerCase().includes(hashSuffix);
+                if (hashFound) {
+                    resolve();
+                } else {
+                    reject();
                 }
-            }
-        };
-        // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-        xHttp.open('GET', `https://api.pwnedpasswords.com/range/${hashPrefix}`, false);
-
-        xHttp.send();
+            })
+            .catch(async error => {
+                await handleFail(error);
+                reject();
+            });
     });
 }
 

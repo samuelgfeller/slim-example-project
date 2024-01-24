@@ -54,7 +54,7 @@
       "phinx-migrations generate --overwrite -c config/env/env.phinx.php --ansi",
       "@schema:generate"
     ],
-    "migrate-prod": "phinx migrate -c config/env/env.phinx.php --ansi -vvv",
+    "migrate-prod": "vendor/bin/phinx migrate -c config/env/env.phinx.php --ansi -vvv",
     "migrate": [
       "@migrate-prod",
       "@schema:generate"

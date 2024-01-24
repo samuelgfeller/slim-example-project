@@ -104,7 +104,7 @@ if (personalInfoEditIconsToggle) {
 }
 
 /**
- * Client select change event handler
+ * Client <select> change event handler
  */
 function submitClientDropdownChange() {
     // "this" is the select element

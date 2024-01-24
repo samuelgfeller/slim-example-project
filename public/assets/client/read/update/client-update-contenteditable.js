@@ -34,7 +34,7 @@ export function makeClientFieldEditable() {
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
 
 
-    // fieldElement is usually the html tag of the field but there are special cases like when the parent is <a>
+    // fieldElement is usually the html tag of the field. But are special cases like when the parent is <a>
     // in which case the link opening has to be disabled and the field var has to be populated with the right span
     if (fieldElement === 'a-span') {
         field = fieldContainer.querySelector('span');
@@ -140,7 +140,7 @@ function saveClientValueAndDisableContentEditable(field) {
                 field.closest('a').href = `tel:${submitValue}`;
             }
         }
-    }).catch(responseJson => {
+    }).catch(errorMsg => {
         // If request not successful, make field editable again
         makeClientFieldEditable.call(field);
     });

@@ -8,7 +8,7 @@ import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
 
 /**
  * Make text value as editable and attach event listeners
- * The functions reassemble client-update-contenteditable but e
+ * The functions reassemble client-update-contenteditable, but e
  * there are too many module specificities, so some things are duplicate
  */
 export function makeUserFieldEditable() {
@@ -55,8 +55,8 @@ function saveUserValueAndDisableContentEditable(field) {
         true
     ).then(responseJson => {
         // Field disabled before save request and re enabled on error
-    }).catch(responseJson => {
-        // If request not successful, keep field editable and focus it
+    }).catch(errorMsg => {
+        // If request not successful, keep the field editable and focus it
         makeFieldEditable(field);
     });
 }

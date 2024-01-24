@@ -196,7 +196,7 @@ export function addHideNoteBtnEventListener(btn) {
         submitUpdate(
             {hidden: newHiddenValue}, `notes/${noteId}`,
             `notes/${noteId}`, btn.closest('.note-container').id
-        ).then(r => {}).catch(r => {
+        ).then(r => {}).catch(errorMsg => {
             // Revert eye to how it was before on failure
             toggleEyeIcon();
         });

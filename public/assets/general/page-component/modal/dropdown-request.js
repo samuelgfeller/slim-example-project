@@ -2,33 +2,28 @@ import {basePath} from "../../general-js/config.js?v=0.4.0";
 import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.4.0";
 
 /**
- * @param {string} moduleRoute name of the module for the route preceding "/dropdown-options"
+ * This function is used to request dropdown options from a specific module route.
  *
- * @return {object}
+ * @param {string} moduleRoute - The name of the module for the route preceding "/dropdown-options".
+ *
+ * @returns {Promise} - A Promise that resolves to the response of the fetch request.
+ * If the response is not "ok", it will call the `handleFail`
+ * function with the response as an argument and throw an error.
+ * If the response is "ok", it will return the response as a JSON object.
  */
 export function requestDropdownOptions(moduleRoute) {
-    return new Promise(function (resolve, reject) {
-        let xHttp = new XMLHttpRequest();
-        xHttp.onreadystatechange = function () {
-            if (xHttp.readyState === XMLHttpRequest.DONE) {
-                // Fail
-                if (xHttp.status !== 200) {
-                    // Default fail handler
-                    handleFail(xHttp);
-                    // reject() only needed if promise is caught with .catch()
-                }
-                // Success
-                else {
-                    let response = JSON.parse(xHttp.responseText);
-                    resolve(response);
-                }
-            }
-        };
+    let headers = {
+        "Content-type": "application/json"
+    };
 
-        // For GET requests, query params have to be passed in the url directly. They are ignored in send()
-        xHttp.open('GET', basePath + moduleRoute + '/dropdown-options', true);
-        xHttp.setRequestHeader("Content-type", "application/json");
-
-        xHttp.send();
+    return fetch(basePath + moduleRoute + '/dropdown-options', {
+        method: 'GET',
+        headers: headers
+    }).then(async response => {
+        if (!response.ok) {
+            await handleFail(response);
+            throw new Error('Response was not "ok"');
+        }
+        return response.json();
     });
 }
