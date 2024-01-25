@@ -109,7 +109,7 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
         if (!response.ok) {
             await handleFail(response, textarea.id);
             hideCheckmarkLoader(circleLoader, 'create new note fail');
-            throw new Error('Response was not "ok"');
+            throw new Error('Response status not 2xx. Status: ' + response.status);
         }
         return response.json();
     })

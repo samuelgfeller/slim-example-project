@@ -42,7 +42,7 @@ class SecurityException extends \RuntimeException
             ),
             SecurityType::GLOBAL_LOGIN, SecurityType::GLOBAL_EMAIL => __(
                 'The site is under a too high request load. 
-            <br> Therefore a general throttling is in place. Please fill out the captcha and try again.'
+            <br> Therefore, a general throttling is in place. Please fill out the captcha and try again.'
             ),
             default => 'Please wait or fill out the captcha and repeat the action.',
         };

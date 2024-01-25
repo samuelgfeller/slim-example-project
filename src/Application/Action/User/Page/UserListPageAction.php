@@ -16,15 +16,6 @@ final readonly class UserListPageAction
     ) {
     }
 
-    /**
-     * Action.
-     *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args
-     *
-     * @return ResponseInterface The response
-     */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,

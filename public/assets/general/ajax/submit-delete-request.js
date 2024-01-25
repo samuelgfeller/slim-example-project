@@ -29,7 +29,8 @@ export function submitDelete(route, redirectToRouteIfUnauthenticated = false) {
         .then(async response => {
             if (!response.ok) {
                 await handleFail(response);
-                throw new Error('Response was not "ok"');
+                // Throw error so it can be caught in catch block
+                throw new Error('Response status not 2xx. Status: ' + response.status);
             }
             return response.json();
         });

@@ -12,10 +12,10 @@ use Symfony\Component\Mime\Email;
 /**
  * This class manages the emails sent in relation to registration.
  *
- * This is a centralised Service class containing email content and sending action.
- * Advantages:
- *  - Prevents other service classes of having the email responsibility (Single-responsibility principle)
- *  - Contents are centralised and can be changed easier without having to search them all over the code
+ * This is a centralized Service class containing email content and sending action.
+ * Advantages (compared to having the email content and sending action in the service class that calls this class):
+ *  - Prevents other service classes from having the email responsibility (Single-responsibility principle)
+ *  - Contents are centralized and can be changed easier without having to search them all over the code
  */
 class RegistrationMailSender
 {

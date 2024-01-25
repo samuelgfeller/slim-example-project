@@ -13,14 +13,6 @@ final readonly class TranslateAction
     ) {
     }
 
-    /**
-     * Action.
-     *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     *
-     * @return ResponseInterface The response
-     */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $queryParams = $request->getQueryParams();

@@ -16,17 +16,6 @@ final readonly class UserFetchListAction
     ) {
     }
 
-    /**
-     * User fetch list action.
-     *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args
-     *
-     * @throws \JsonException
-     *
-     * @return ResponseInterface The response
-     */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,

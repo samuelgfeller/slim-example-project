@@ -24,7 +24,7 @@ export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), not
     if (queryParams.toString() === '') {
         let clientId = document.getElementById('client-id').value;
         queryParams.append('client_id', clientId);
-        redirectIfUnauthenticatedUrl = "client/" + clientId
+        redirectIfUnauthenticatedUrl = "clients/" + clientId
     }
 
     fetchData('notes?' + queryParams.toString(), redirectIfUnauthenticatedUrl)

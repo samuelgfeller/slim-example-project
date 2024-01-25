@@ -22,15 +22,6 @@ readonly class PasswordChangeSubmitAction
     ) {
     }
 
-    /**
-     * Password change submit action.
-     *
-     * @param ServerRequest $request
-     * @param Response $response
-     * @param array $args
-     *
-     * @return Response
-     */
     public function __invoke(ServerRequest $request, Response $response, array $args): Response
     {
         $parsedBody = (array)$request->getParsedBody();

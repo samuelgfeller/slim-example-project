@@ -1,6 +1,6 @@
 import {disableHideCheckMarkTimeoutOnUpdate, saveNoteChangeToDb} from "./client-read-save-existing-note.js?v=0.4.0";
 import {disableHideCheckMarkTimeoutOnCreation, insertNewNoteToDb} from "./client-read-create-note.js?v=0.4.0";
-import {deleteNoteRequestToDb} from "./client-read-delete-note.js?v=0.4.0";
+import {makeDeleteNoteRequest} from "./client-read-delete-note.js?v=0.4.0";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.4.0";
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
 
@@ -152,7 +152,7 @@ export function addDeleteNoteBtnEventListener(deleteNoteBtn) {
         let noteId = deleteNoteBtn.closest('label').dataset.noteId;
         let title = 'Are you sure that you want to delete this note?';
         createAlertModal(title, '', () => {
-            deleteNoteRequestToDb(noteId, document.getElementById(
+            makeDeleteNoteRequest(noteId, document.getElementById(
                 'note-' + noteId + '-container'
             ));
         });

@@ -17,15 +17,6 @@ final readonly class NoteFetchListAction
     ) {
     }
 
-    /**
-     * Fetch note list with given params action.
-     *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args
-     *
-     * @return ResponseInterface The response
-     */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,

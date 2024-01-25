@@ -35,7 +35,7 @@ export function submitUpdate(formFieldsAndValues, route, redirectToRouteIfUnauth
         .then(async response => {
             if (!response.ok) {
                 await handleFail(response, domFieldId);
-                throw new Error('Response was not "ok"');
+                throw new Error('Response status not 2xx. Status: ' + response.status);
             }
             // Remove validation error messages if there are any
             removeValidationErrorMessages();
