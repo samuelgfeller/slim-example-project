@@ -4,13 +4,13 @@ import {
     hideCheckmarkLoader,
     userIsTypingOnNoteId
 } from "./client-read-note-event-listener-setup.js?v=0.4.0";
-import {handleFail, removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
+import {handleFail} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
 
 let noteSaveHideCheckMarkTimeout = [];
 
 /**
- * When note is saved, the checkmark loader is displayed 3 seconds later
- * it gets hidden but this should not happen if the user typed in the
+ * When a note is saved, the checkmark loader is displayed.
+ * Three seconds later, it's hidden, but this should not happen if the user typed in the
  * meantime as it could hide the checkmark loader that should be displayed
  * for the next save request.
  */
@@ -33,58 +33,60 @@ export function saveNoteChangeToDb(noteId) {
     let circleLoader = this.parentNode.querySelector('.circle-loader');
     circleLoader.style.display = 'inline-block';
 
-    // The textarea id is needed in the ajax call but "this" is the xHttp request inside the call
+    // The textarea id is needed in the fetch call but "this" is the textarea inside the call
     let textareaId = this.id;
-    // Make ajax call
-    let xHttp = new XMLHttpRequest();
-    xHttp.onreadystatechange = function () {
-        if (xHttp.readyState === XMLHttpRequest.DONE) {
-            // Fail
-            if (xHttp.status !== 201 && xHttp.status !== 200) {
-                // Default fail handler
-                handleFail(xHttp, textareaId);
-                hideCheckmarkLoader(circleLoader, 'Save existing fail');
-            }
-            // Success
-            else {
-                removeValidationErrorMessages();
-                let textStatus = JSON.parse(xHttp.responseText).status;
-                // Only show checkmark loader if user didn't type on the same note in the meantime
-                if (userIsTypingOnNoteId === false || userIsTypingOnNoteId !== noteId) {
-                    // Show checkmark only on status success and if user is not typing
-                    if (textStatus === 'success') {
-                        // Show checkmark in loader
-                        circleLoader.classList.add('load-complete');
-                        circleLoader.querySelector('.checkmark').style.display = 'block';
 
-                        noteSaveHideCheckMarkTimeout['noteId'] = noteId;
-                        // Remove checkmark after 1 sec
-                        noteSaveHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
-                            // Hide circle loader and its child the checkmark
-                            // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
-                            hideCheckmarkLoader(circleLoader, '3s after successful save');
-                        }, 3000);
-                    } else {
-                        // Hide checkmark loader "cleanly" so that it's not broken on the next input
-                        hideCheckmarkLoader(circleLoader, 'Non success note save');
-                    }
-                }
-            }
-        }
-    };
+    let headers = {"Content-type": "application/json"};
 
-    xHttp.open('PUT', basePath + 'notes' + '/' + noteId, true);
-    xHttp.setRequestHeader("Content-type", "application/json");
     let clientId = document.getElementById('client-id')?.value;
-    // When notes loaded in dashboard there is no client id
+    // When notes loaded in dashboard, there is no client id
     if (clientId) {
-        xHttp.setRequestHeader("Redirect-to-url-if-unauthorized", basePath + "clients/" + clientId);
+        headers["Redirect-to-url-if-unauthorized"] = basePath + "clients/" + clientId;
     }
 
-    // Data format: "fname=Henry&lname=Ford"
+    // Data format: "firstname=Henry&lastname=Ford"
     // In [square brackets] to be evaluated
-    xHttp.send(JSON.stringify({
+    let body = JSON.stringify({
         [this.name]: this.value,
         // is_main: this.classList.contains('main-note-textarea') ? 1 : 0,
-    })); // "this" is the textarea
+    }); // "this" is the textarea
+
+    fetch(basePath + 'notes' + '/' + noteId, {
+        method: 'PUT',
+        headers: headers,
+        body: body
+    })
+        .then(async response => {
+            if (!response.ok) {
+                // Default fail handler
+                await handleFail(response, textareaId);
+                hideCheckmarkLoader(circleLoader, 'Save existing fail');
+                // Throw error so it can be caught in catch block
+                throw new Error('Response status not 2xx. Status: ' + response.status);
+            }
+            let textStatus = (await response.json()).status;
+            // Only show checkmark loader if user didn't type on the same note in the meantime
+            if (userIsTypingOnNoteId === false || userIsTypingOnNoteId !== noteId) {
+                // Show checkmark only on status success and if user is not typing
+                if (textStatus === 'success') {
+                    // Show checkmark in loader
+                    circleLoader.classList.add('load-complete');
+                    circleLoader.querySelector('.checkmark').style.display = 'block';
+
+                    noteSaveHideCheckMarkTimeout['noteId'] = noteId;
+                    // Remove checkmark after 1 sec
+                    noteSaveHideCheckMarkTimeout['timeoutId'] = setTimeout(function () {
+                        // Hide circle loader and its child the checkmark
+                        // circleLoader.style.animation = 'loader-spin 1.2s infinite linear';
+                        hideCheckmarkLoader(circleLoader, '3s after successful save');
+                    }, 3000);
+                } else {
+                    // Hide checkmark loader "cleanly" so that it's not broken on the next input
+                    hideCheckmarkLoader(circleLoader, 'Non success note save');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
