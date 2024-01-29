@@ -92,7 +92,7 @@ class UserDeleteActionTest extends TestCase
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
      * and that the authentication middleware provides the correct login url
-     * if Redirect-to-route-name-if-unauthorized header is set.
+     * if Redirect-to-url-if-unauthorized header is set.
      *
      * @return void
      */
@@ -104,8 +104,8 @@ class UserDeleteActionTest extends TestCase
         );
 
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginRouteName = 'user-list-page';
-        $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
+        $redirectAfterLoginUrl = $this->urlFor('user-list-page');
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectAfterLoginUrl);
 
         $response = $this->app->handle($request);
 
@@ -116,7 +116,7 @@ class UserDeleteActionTest extends TestCase
         $expectedLoginUrl = $this->urlFor(
             'login-page',
             [],
-            ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
+            ['redirect' => $redirectAfterLoginUrl]
         );
 
         // Assert that response contains correct login url

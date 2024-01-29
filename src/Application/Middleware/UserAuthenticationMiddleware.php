@@ -57,12 +57,8 @@ final readonly class UserAuthenticationMiddleware implements MiddlewareInterface
         $this->session->getFlash()->add('info', 'Please login to access this page.');
 
         $queryParams = [];
-        // If header Redirect-to-route-name-if-unauthorized is set, add it to the query params of the login route
-        if (($routeName = $request->getHeaderLine('Redirect-to-route-name-if-unauthorized')) !== '') {
-            // Redirect to after login
-            $queryParams['redirect'] = $this->routeParser->urlFor($routeName);
-        }
-        // If header Redirect-to-route-name-if-unauthorized is set, add it to the query params of the login route
+
+        // If header Redirect-to-url-if-unauthorized is set, add it to the query params of the login route
         if (($routeName = $request->getHeaderLine('Redirect-to-url-if-unauthorized')) !== '') {
             // Redirect to after login
             $queryParams['redirect'] = $routeName;

@@ -256,8 +256,8 @@ class ClientCreateActionTest extends TestCase
         // Create request (body not needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
         // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginRouteName = 'client-list-page';
-        $request = $request->withAddedHeader('Redirect-to-route-name-if-unauthorized', $redirectAfterLoginRouteName);
+        $redirectAfterLoginUrl = $this->urlFor('client-list-page');
+        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectAfterLoginUrl);
         // Make request
         $response = $this->app->handle($request);
         // Assert response HTTP status code: 401 Unauthorized
@@ -266,7 +266,7 @@ class ClientCreateActionTest extends TestCase
         $expectedLoginUrl = $this->urlFor(
             'login-page',
             [],
-            ['redirect' => $this->urlFor($redirectAfterLoginRouteName)]
+            ['redirect' => $redirectAfterLoginUrl]
         );
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
