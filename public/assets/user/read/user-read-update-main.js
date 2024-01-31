@@ -1,13 +1,13 @@
 import {makeUserFieldEditable} from "./user-update-contenteditable.js?v=0.4.0";
 import {displayChangePasswordModal} from "../update/change-password-modal.html.js?v=0.4.0";
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.4.0";
-import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.4.0";
 import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.4.0";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.4.0";
 import {loadUserActivities} from "./user-activity/activity-main.js?v=0.4.0";
 import {__} from "../../general/general-js/functions.js?v=0.4.0";
 import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
+import {submitModalForm} from "../../general/ajax/modal-submit-request.js?v=0.4.0";
 
 const userId = document.getElementById('user-id').value;
 const isOwnProfile = document.getElementById('is-own-profile').value;
@@ -32,7 +32,7 @@ document.querySelector('select[name="user_role_id"]:not([disabled])')
 const langRadioButtons = document.querySelectorAll('input[name="language"]');
 langRadioButtons.forEach((radio) => {
     radio.addEventListener('change', (e) => {
-        submitUpdate({[radio.name]: radio.value}, `users/${userId}`, true)
+        submitUpdate({[radio.name]: radio.value}, `users/${userId}`)
             .then(r => {
                 // Reload page if user changed its own language
                 if (isOwnProfile === '1') {
@@ -67,7 +67,7 @@ userDeleteBtn?.addEventListener('click', () => {
         info = translated['You will be logged out and not be able to log in again.'];
     }
     createAlertModal(title, info, () => {
-        submitDelete(`users/${userId}`, true).then(() => {
+        submitDelete(`users/${userId}`).then(() => {
             if (isOwnProfile === '1') {
                 location.href = `login`;
             } else {
@@ -83,7 +83,7 @@ userDeleteBtn?.addEventListener('click', () => {
 function submitUserDropdownChange() {
     // "this" is the select element
     // Submit field change
-    submitUpdate({[this.name]: this.value}, `users/${userId}`, true)
+    submitUpdate({[this.name]: this.value}, `users/${userId}`)
         .then(r => {
         });
 }
@@ -104,7 +104,7 @@ document.getElementById('change-password-btn')?.addEventListener('click', displa
 document.addEventListener('click', e => {
     if (e.target && e.target.id === 'change-password-submit-btn') {
         let userId = document.getElementById('user-id').value;
-        submitModalForm('change-password-modal-form', `change-password/${userId}`, 'PUT', `users/${userId}`)
+        submitModalForm('change-password-modal-form', `change-password/${userId}`, 'PUT')
             .then(() => {
                 displayFlashMessage('success', translated['Successfully changed password.']);
             });

@@ -1,10 +1,10 @@
 import {displayClientCreateModal} from "./client-create-modal.html.js?v=0.4.0";
-import {submitModalForm} from "../../general/page-component/modal/modal-submit-request.js?v=0.4.0";
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.4.0";
 import {displayValidationErrorMessage} from "../../general/validation/form-validation.js?v=0.4.0";
 import {fetchAndLoadClients} from "../list/client-list-loading.js?v=0.4.0";
 import {__} from "../../general/general-js/functions.js?v=0.4.0";
 import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
+import {submitModalForm} from "../../general/ajax/modal-submit-request.js?v=0.4.0";
 
 // Init event listeners if button is present
 document.getElementById('create-client-btn')?.addEventListener('click', displayClientCreateModal);
@@ -37,9 +37,12 @@ document.addEventListener('click', e => {
             return;
         }
         // Submit modal form and execute promise "then()" only if available (nothing is returned on validation error)
-        submitModalForm('create-client-modal-form', 'clients', 'POST')?.then(() => {
-            displayFlashMessage('success', translated['Client created successfully.']);
-            fetchAndLoadClients();
-        })
+        submitModalForm('create-client-modal-form', 'clients', 'POST')
+            ?.then(responseJson => {
+                displayFlashMessage('success', translated['Client created successfully.']);
+                fetchAndLoadClients();
+            }).catch(error => {
+            console.error(error);
+        });
     }
 });

@@ -19,15 +19,14 @@ import {__} from "../../general/general-js/functions.js?v=0.4.0";
 export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), noteWrapperId = null) {
 
     displayClientNoteLoadingPlaceholder(noteWrapperId);
-    let redirectIfUnauthenticatedUrl = '';
+
     // If no query params provided take <data id="client-id"> value
     if (queryParams.toString() === '') {
         let clientId = document.getElementById('client-id').value;
         queryParams.append('client_id', clientId);
-        redirectIfUnauthenticatedUrl = "clients/" + clientId
     }
 
-    fetchData('notes?' + queryParams.toString(), redirectIfUnauthenticatedUrl)
+    fetchData('notes?' + queryParams.toString())
         .then(notesFromResponse => {
             removeClientNoteContentPlaceholder(noteWrapperId);
             addNotesToDom(notesFromResponse, noteWrapperId);

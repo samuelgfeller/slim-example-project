@@ -7,9 +7,8 @@ import {initCollapsible} from "../../../general/page-component/collapsible/colla
  * Fetch and load user activities into dom
  * @param {string} queryParams `user=${userId}` or `user[]=${userId}` user id or array of user ids
  * in query string format without trailing question mark
- * @param {boolean} multipleUsers if multiple users activities are loaded
  */
-export function loadUserActivities(queryParams, multipleUsers = false) {
+export function loadUserActivities(queryParams) {
     if (queryParams) {
         queryParams = '?' + queryParams;
     }

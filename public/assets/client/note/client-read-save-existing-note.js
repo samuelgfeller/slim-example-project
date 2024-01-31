@@ -62,7 +62,7 @@ export function saveNoteChangeToDb(noteId) {
                 await handleFail(response, textareaId);
                 hideCheckmarkLoader(circleLoader, 'Save existing fail');
                 // Throw error so it can be caught in catch block
-                throw new Error('Response status not 2xx. Status: ' + response.status);
+                throw new Error('Response status: ' + response.status);
             }
             let textStatus = (await response.json()).status;
             // Only show checkmark loader if user didn't type on the same note in the meantime

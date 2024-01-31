@@ -63,7 +63,7 @@ fetchTranslations(wordsToTranslate).then(response => {
 document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
     let title = translated['Are you sure that you want to delete this client?'];
     createAlertModal(title, '', () => {
-        submitDelete(`clients/${clientId}`, true).then(() => {
+        submitDelete(`clients/${clientId}`).then(() => {
             location.href = `clients/list`;
         });
     });
@@ -72,8 +72,7 @@ document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
 document.querySelector('#undelete-client-btn')?.addEventListener('click', () => {
     let title = translated['Are you sure that you want to restore this client?'];
     createAlertModal(title, '', () => {
-        submitUpdate({'deleted_at': null}, `clients/${clientId}`,
-            `clients/${clientId}`).then(() => {
+        submitUpdate({'deleted_at': null}, `clients/${clientId}`).then(() => {
             location.reload();
         });
     }, translated['Yes undelete']);
@@ -109,7 +108,7 @@ if (personalInfoEditIconsToggle) {
 function submitClientDropdownChange() {
     // "this" is the select element
     // Submit field change with flash message indicating that change was successful
-    submitUpdate({[this.name]: this.value}, `clients/${clientId}`, true)
+    submitUpdate({[this.name]: this.value}, `clients/${clientId}`)
         .then(r => {
         });
 }

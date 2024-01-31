@@ -96,7 +96,6 @@ function saveClientValueAndDisableContentEditable(field) {
     submitUpdate(
         {[field.dataset.name]: submitValue},
         `clients/${clientId}`,
-        `clients/${clientId}`
     ).then(responseJson => {
         // Reset min width of personal info container
         document.querySelector('#client-personal-info-flex-container').style.minWidth = null;

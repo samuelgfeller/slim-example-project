@@ -22,10 +22,8 @@ export function makeDeleteNoteRequest(noteId, noteContainer) {
     // Dim note to indicate that it is being deleted
     noteContainer.style.opacity = '0.5';
 
-    // Make delete request
-    let clientId = document.getElementById('client-id').value;
-
-    submitDelete('notes/' + noteId, "clients/" + clientId)
+    // Send delete request
+    submitDelete('notes/' + noteId)
     .then(jsonResponse => {
         if (jsonResponse && jsonResponse.status === 'success') {
             noteContainer.remove();

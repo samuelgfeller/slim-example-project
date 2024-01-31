@@ -33,7 +33,6 @@ export function makeFieldSelectValueEditable() {
                 submitUpdate(
                     {[select.name]: select.value},
                     `clients/${clientId}`,
-                    `clients/${clientId}`,
                 ).then(responseJson => {
                     let availableIcon = document.querySelector('#add-client-personal-info-div img[alt="' + select.name + '"]');
                     // If success is true and select value was empty string, remove dropdown from client personal infos

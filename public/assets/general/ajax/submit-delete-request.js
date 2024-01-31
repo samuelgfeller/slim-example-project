@@ -5,32 +5,20 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 /**
  * Send DELETE request.
  *
- * @param {string} route after base path
- * @param {boolean|string} redirectToRouteIfUnauthenticated true or redirect route url after base path.
- * If true, the redirect url is the same as the given route
+ * @param {string} route after base path (e.g. 'users/1')
  * @return Promise with as content server response as JSON
  */
 
-export function submitDelete(route, redirectToRouteIfUnauthenticated = false) {
-    let headers = {
-        "Content-type": "application/json"
-    };
-
-    if (redirectToRouteIfUnauthenticated === true) {
-        headers["Redirect-to-url-if-unauthorized"] = basePath + route;
-    } else if (typeof redirectToRouteIfUnauthenticated === "string") {
-        headers["Redirect-to-url-if-unauthorized"] = basePath + redirectToRouteIfUnauthenticated;
-    }
-
+export function submitDelete(route) {
     return fetch(basePath + route, {
         method: 'DELETE',
-        headers: headers
+        headers: {"Content-type": "application/json"}
     })
         .then(async response => {
             if (!response.ok) {
                 await handleFail(response);
                 // Throw error so it can be caught in catch block
-                throw new Error('Response status not 2xx. Status: ' + response.status);
+                throw new Error('Response status: ' + response.status);
             }
             return response.json();
         });

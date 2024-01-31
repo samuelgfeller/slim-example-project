@@ -19,7 +19,7 @@ export function getFormData(form) {
 }
 
 /**
- * After saving the user should know that something is happening
+ * After saving, the user should know that something is happening
  * and to indicate that the form is disabled
  *
  * @param formId

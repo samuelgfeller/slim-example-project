@@ -43,7 +43,7 @@ function switchTheme(e) {
 
     // Make ajax call to change value in database
     let userId = document.getElementById('user-id').value;
-    submitUpdate({theme: theme}, `users/${userId}`, true)
+    submitUpdate({theme: theme}, `users/${userId}`)
         .then(r => {
         }).catch(errorMsg => {
         displayFlashMessage('error', 'Failed to change the theme in the database.')

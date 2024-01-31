@@ -23,7 +23,7 @@ export function loadUserList(userWrapperId = null) {
     // Display content placeholder
     displayUserCardLoadingPlaceholder(userWrapperId);
     // Fetch users
-    fetchData('users', 'users/list').then(jsonResponse => {
+    fetchData('users').then(jsonResponse => {
         removeUserCardContentPlaceholder();
         addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses, userWrapperId);
         // Add event listeners to cards
@@ -66,7 +66,7 @@ function submitUserCardDropdownChange() {
     // Search upwards the closest user-card that contains the data-user-id attribute
     let userId = this.closest('.user-card').dataset.userId;
 
-    submitUpdate({[this.name]: this.value}, `users/${userId}`, true)
+    submitUpdate({[this.name]: this.value}, `users/${userId}`)
         .then(r => {
         });
 }

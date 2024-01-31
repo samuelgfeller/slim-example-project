@@ -27,7 +27,7 @@ fetchTranslations(wordsToTranslate).then(response => {
  * @param {null|string} domFieldId css id of dom field the fail is about
  */
 export async function handleFail(response, domFieldId = null) {
-    // If response is TypeError, only a flash message is shown
+    // If fetch() response is TypeError (e.g. network error), only a flash message is shown
     if (response instanceof TypeError) {
         displayFlashMessage('error', response.message);
         return;
@@ -41,12 +41,16 @@ export async function handleFail(response, domFieldId = null) {
 
     // If user wasn't authenticated, the response contains the login url with correct redirect back params
     if (response.status === 401) {
+
         // If login url is provided by the server, redirect client to it
         if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
-            window.location.href = responseData.loginUrl;
+            // window.location.href = responseData.loginUrl;
+            // Redirect user to login page with redirect back GET param to the current page
+            window.location.href =  responseData.loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
         }
+
         // If response data doesn't contain login url
-        errorMsg += `<br>${translated['Access denied please log in and try again']}.`;
+        errorMsg += `<br>${translated['Access denied please refresh the page and try again']}.`;
     }
 
     const statusMessageMap = {
@@ -56,6 +60,7 @@ export async function handleFail(response, domFieldId = null) {
 
     // Check if response status is in the map
     if (statusMessageMap.hasOwnProperty(response.status)) {
+        // Set error message according to status code
         errorMsg += `<br>${statusMessageMap[response.status]}.`;
     }
 
@@ -64,7 +69,8 @@ export async function handleFail(response, domFieldId = null) {
         errorMsg = handleValidationError(response, responseData, domFieldId, errorMsg);
     }
 
-    // Output error to user except if handleValidationError() added a noFlashMessage to the responseData
+    // Output error to user
+    // handleValidationError() may add noFlashMessage to the responseData
     if (!responseData.noFlashMessage) {
         displayFlashMessage('error', errorMsg);
     }

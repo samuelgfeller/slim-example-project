@@ -131,7 +131,7 @@ function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) 
     const queryString = searchParams.toString() !== '' ? '?' + searchParams.toString() : '';
     // Add 1 to the request id
     requestId++;
-    return fetchData('clients' + queryString, 'clients/list');
+    return fetchData('clients' + queryString);
 }
 
 /**

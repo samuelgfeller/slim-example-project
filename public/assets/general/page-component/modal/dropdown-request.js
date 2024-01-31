@@ -22,7 +22,7 @@ export function requestDropdownOptions(moduleRoute) {
     }).then(async response => {
         if (!response.ok) {
             await handleFail(response);
-            throw new Error('Response status not 2xx. Status: ' + response.status);
+            throw new Error('Response status: ' + response.status);
         }
         return response.json();
     });
