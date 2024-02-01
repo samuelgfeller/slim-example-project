@@ -61,7 +61,7 @@ fetchTranslations(wordsToTranslate).then(response => {
 });
 // Delete button
 document.querySelector('#delete-client-btn')?.addEventListener('click', () => {
-    let title = translated['Are you sure that you want to delete this client?'];
+    const title = translated['Are you sure that you want to delete this client?'];
     createAlertModal(title, '', () => {
         submitDelete(`clients/${clientId}`).then(() => {
             location.href = `clients/list`;

@@ -113,21 +113,13 @@ class ClientDeleteActionTest extends TestCase
             $this->urlFor('client-delete-submit', ['client_id' => '1']),
         );
 
-        // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginUrl = $this->urlFor('client-list-page');
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectAfterLoginUrl);
-
         $response = $this->app->handle($request);
 
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
         // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor(
-            'login-page',
-            [],
-            ['redirect' => $redirectAfterLoginUrl]
-        );
+        $expectedLoginUrl = $this->urlFor('login-page');
 
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);

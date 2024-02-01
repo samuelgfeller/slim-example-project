@@ -16,7 +16,7 @@ export function scrollToAnchor() {
             // the upper border of the element will be aligned at the top of the visible part of the window of the scrollable area.
             block: 'start'
         });
-        // Store hash in anchor var in case there are ressources that are loaded via xhr after initial page load (e.g. notes)
+        // Store hash in anchor var in case there are resources that are loaded via xhr after initial page load (e.g. notes)
         anchor = hash;
         // Remove hash sign but keep history entry (to replace history entry: replaceState)
         history.pushState("", document.title, window.location.pathname + window.location.search);

@@ -211,16 +211,14 @@ class ClientUpdateActionTest extends TestCase
         $requestRoute = $this->urlFor('client-update-submit', ['client_id' => '1']);
         // Request body not important as it shouldn't be taken into account when unauthenticated
         $request = $this->createJsonRequest('PUT', $requestRoute, ['user_id' => 2]);
-        // Create url where client should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+
         // Make request
         $response = $this->app->handle($request);
         // Assert 302 Found redirect to login url
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
         // Build expected login url with redirect to initial request route as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $requestRoute]);
+        $expectedLoginUrl = $this->urlFor('login-page');
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
 

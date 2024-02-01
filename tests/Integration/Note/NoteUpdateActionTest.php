@@ -159,15 +159,13 @@ class NoteUpdateActionTest extends TestCase
             $this->urlFor('note-submit-modification', ['note_id' => '1']),
             ['message' => 'New test message']
         );
-        // Create url where client should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+
         // Make request
         $response = $this->app->handle($request);
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
         // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+        $expectedLoginUrl = $this->urlFor('login-page');
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
