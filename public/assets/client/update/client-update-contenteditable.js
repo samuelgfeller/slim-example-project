@@ -1,15 +1,15 @@
-import {removeValidationErrorMessages} from "../../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
 import {
     addIconToAvailableDiv,
     removeIconFromAvailableDiv,
     showPersonalInfoContainerIfHidden
-} from "../client-read-personal-info.js?v=0.4.0";
+} from "../read/client-read-personal-info.js?v=0.4.0";
+import {removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
-} from "../../../general/page-component/contenteditable/contenteditable-main.js?v=0.4.0";
-import {submitUpdate} from "../../../general/ajax/submit-update-data.js?v=0.4.0";
+} from "../../general/page-component/contenteditable/contenteditable-main.js?v=0.4.0";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */
@@ -34,7 +34,7 @@ export function makeClientFieldEditable() {
     personalInfoContainer.style.minWidth = personalInfoContainer.offsetWidth + 'px';
 
 
-    // fieldElement is usually the html tag of the field. But are special cases like when the parent is <a>
+    // fieldElement is usually the html tag of the field. But there are special cases like when the parent is <a>
     // in which case the link opening has to be disabled and the field var has to be populated with the right span
     if (fieldElement === 'a-span') {
         field = fieldContainer.querySelector('span');
@@ -73,8 +73,6 @@ function validateContentEditableAndSaveClientValue() {
 
         saveClientValueAndDisableContentEditable(this);
     } else {
-        // Re-enable contenteditable if field is invalid in case this function was called after save button press
-        this.contentEditable = 'true';
         // No idea why but contenteditable stays false if the focus is not made here
         // It has an additional benefit of locking the focus on the field until the input is valid
         this.focus();

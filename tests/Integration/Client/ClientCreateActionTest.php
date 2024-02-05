@@ -45,9 +45,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
+     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
@@ -156,9 +156,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -210,9 +210,9 @@ class ClientCreateActionTest extends TestCase
      *
      * @param array $requestBody
      *
+     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
-     * @return void
      */
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {
@@ -255,20 +255,13 @@ class ClientCreateActionTest extends TestCase
     {
         // Create request (body not needed as it shouldn't be interpreted anyway)
         $request = $this->createJsonRequest('POST', $this->urlFor('client-create-submit'), []);
-        // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginUrl = $this->urlFor('client-list-page');
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectAfterLoginUrl);
+
         // Make request
         $response = $this->app->handle($request);
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
-        // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor(
-            'login-page',
-            [],
-            ['redirect' => $redirectAfterLoginUrl]
-        );
+
         // Assert that response contains correct login url
-        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+        $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
 }

@@ -128,22 +128,13 @@ class UserListActionTest extends TestCase
     {
         $request = $this->createJsonRequest('GET', $this->urlFor('user-list'));
 
-        $redirectToUrlAfterLogin = $this->urlFor('user-list-page');
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
-
         // Make request
         $response = $this->app->handle($request);
 
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
-        // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor(
-            'login-page',
-            [],
-            ['redirect' => $redirectToUrlAfterLogin]
-        );
         // Assert that response contains correct login url
-        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+        $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
 }

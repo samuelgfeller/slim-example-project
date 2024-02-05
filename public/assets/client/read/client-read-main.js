@@ -1,5 +1,3 @@
-import {makeClientFieldEditable} from "./update/client-update-contenteditable.js?v=0.4.0";
-import {makeFieldSelectValueEditable} from "./update/client-update-dropdown.js?v=0.4.0";
 import {loadAvailablePersonalInfoIconsDiv} from "./client-read-personal-info.js?v=0.4.0";
 import {createAlertModal} from "../../general/page-component/modal/alert-modal.js?v=0.4.0";
 import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.4.0";
@@ -8,6 +6,8 @@ import {fetchAndLoadClientNotes} from "../note/client-read-note-loading.js?v=0.4
 import {addNewNoteTextarea} from "../note/client-read-create-note.js?v=0.4.0";
 import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
 import {__} from "../../general/general-js/functions.js?v=0.4.0";
+import {makeClientFieldEditable} from "../update/client-update-contenteditable.js?v=0.4.0";
+import {makeFieldSelectValueEditable} from "../update/client-update-dropdown.js?v=0.4.0";
 
 const clientId = document.getElementById('client-id').value;
 

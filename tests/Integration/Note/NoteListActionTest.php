@@ -254,22 +254,13 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         $request = $this->createJsonRequest('GET', $this->urlFor('note-list'))
             ->withQueryParams(['client_id' => '1']);
 
-        $redirectToUrlAfterLogin = $this->urlFor('client-read-page', ['client_id' => '1']);
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
-
         // Make request
         $response = $this->app->handle($request);
 
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
-        // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor(
-            'login-page',
-            [],
-            ['redirect' => $redirectToUrlAfterLogin]
-        );
         // Assert that response contains correct login url
-        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+        $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
 }

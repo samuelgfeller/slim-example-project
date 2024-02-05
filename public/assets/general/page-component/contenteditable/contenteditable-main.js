@@ -3,8 +3,7 @@ import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.4.0";
 import {__} from "../../general-js/functions.js?v=0.4.0";
 
 /**
- * Make field value editable
- * "this" is the edit icon
+ * Make field value editable, add save button and focus it.
  */
 export function makeFieldEditable(field) {
     let editIcon = field.parentNode.querySelector('.contenteditable-edit-icon');
@@ -36,7 +35,9 @@ export function makeFieldEditable(field) {
             // Prevent new line on enter key press
             e.preventDefault();
             // Triggers focusout event that is caught in event listener and saves client value
-            field.contentEditable = 'false';
+            // field.contentEditable = 'false';
+            field.dispatchEvent(new Event('focusout'));
+
         }
     });
     // Display save button after the first input
@@ -85,7 +86,6 @@ fetchTranslations(wordsToTranslate).then(response => {
  * @return boolean
  */
 export function contentEditableFieldValueIsValid(field) {
-    // "this" is the field
     let textContent = field.textContent.trim();
     let fieldName = field.dataset.name;
 

@@ -1,10 +1,10 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
-    #full-header-edit-icon-container {
+    #outer-contenteditable-heading-container {
         margin-bottom: 25px;
     }
 
-    #full-header-edit-icon-container h1 {
+    #outer-contenteditable-heading-container h1 {
         display: inline-block;
         /*Remove bottom margin on h1 and put it on h1 container in case first and last name wrap*/
         margin-bottom: 0;
@@ -13,19 +13,19 @@
         white-space: break-spaces;
     }
 
-    #full-header-edit-icon-container[data-deleted="1"] h1 {
+    #outer-contenteditable-heading-container[data-deleted="1"] h1 {
         color: orangered;
     }
 
     /*Clear float*/
-    #full-header-edit-icon-container::after {
+    #outer-contenteditable-heading-container::after {
         content: "";
         clear: both;
         display: table;
     }
 
     /*Div containing first or last name header*/
-    .partial-header-edit-icon-div {
+    .partial-contenteditable-heading-div {
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
 
@@ -59,7 +59,7 @@
     /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
         have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
     /* Display outline on h1 when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover ~ h1, .partial-header-edit-icon-div h1[contenteditable="true"] {
+    .contenteditable-edit-icon:hover ~ h1, .partial-contenteditable-heading-div h1[contenteditable="true"] {
         outline: 3px solid var(--primary-color);
         border-radius: 10px;
         background: var(--background-accent-color);

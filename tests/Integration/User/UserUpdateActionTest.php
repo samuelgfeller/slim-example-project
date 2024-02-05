@@ -106,17 +106,14 @@ class UserUpdateActionTest extends TestCase
     {
         // Request body doesn't have to be passed as missing session is caught in a middleware before the action
         $request = $this->createJsonRequest('PUT', $this->urlFor('user-update-submit', ['user_id' => '1']));
-        // Create url where user should be redirected to after login
-        $redirectToUrlAfterLogin = $this->urlFor('user-read-page', ['user_id' => '1']);
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectToUrlAfterLogin);
+
         // Make request
         $response = $this->app->handle($request);
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
-        // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor('login-page', [], ['redirect' => $redirectToUrlAfterLogin]);
+
         // Assert that response contains correct login url
-        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+        $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
 
     /**

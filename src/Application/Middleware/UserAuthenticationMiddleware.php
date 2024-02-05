@@ -56,14 +56,6 @@ final readonly class UserAuthenticationMiddleware implements MiddlewareInterface
         // Inform the user that he/she has to log in before accessing the page
         $this->session->getFlash()->add('info', 'Please login to access this page.');
 
-        // $queryParams = [];
-
-        // If header Redirect-to-url-if-unauthorized is set, add it to the query params of the login route
-        // if (($routeName = $request->getHeaderLine('Redirect-to-url-if-unauthorized')) !== '') {
-        //     // Redirect to after login
-        //     $queryParams['redirect'] = $routeName;
-        // }
-
         // If it's a JSON request, return 401 with the login url and its possible query params
         if ($request->getHeaderLine('Content-Type') === 'application/json') {
             return $this->jsonEncoder->encodeAndAddToResponse(

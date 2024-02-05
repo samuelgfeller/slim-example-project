@@ -101,8 +101,6 @@ class ClientDeleteActionTest extends TestCase
 
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
-     * and that the authentication middleware provides the correct login url
-     * if Redirect-to-url-if-unauthorized header is set.
      *
      * @return void
      */

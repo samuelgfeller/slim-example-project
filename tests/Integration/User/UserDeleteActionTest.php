@@ -91,8 +91,6 @@ class UserDeleteActionTest extends TestCase
 
     /**
      * Test that when user is not logged in 401 Unauthorized is returned
-     * and that the authentication middleware provides the correct login url
-     * if Redirect-to-url-if-unauthorized header is set.
      *
      * @return void
      */
@@ -103,24 +101,13 @@ class UserDeleteActionTest extends TestCase
             $this->urlFor('user-delete-submit', ['user_id' => '1']),
         );
 
-        // Provide redirect to if unauthorized header to test if UserAuthenticationMiddleware returns correct login url
-        $redirectAfterLoginUrl = $this->urlFor('user-list-page');
-        $request = $request->withAddedHeader('Redirect-to-url-if-unauthorized', $redirectAfterLoginUrl);
-
         $response = $this->app->handle($request);
 
         // Assert response HTTP status code: 401 Unauthorized
         self::assertSame(StatusCodeInterface::STATUS_UNAUTHORIZED, $response->getStatusCode());
 
-        // Build expected login url as UserAuthenticationMiddleware.php does
-        $expectedLoginUrl = $this->urlFor(
-            'login-page',
-            [],
-            ['redirect' => $redirectAfterLoginUrl]
-        );
-
         // Assert that response contains correct login url
-        $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
+        $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
 
     // Unchanged content test not done as it's not being used by the frontend

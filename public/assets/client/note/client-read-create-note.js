@@ -95,38 +95,32 @@ export function insertNewNoteToDb(textarea, isMainNote = false) {
     // Make fetch call
     fetch(basePath + 'notes', {
         method: 'POST',
-        headers: {
-            "Content-type": "application/json",
-            // Important to add content type json and "Redirect-to-url-if-unauthorized"
-            // header for the UserAuthenticationMiddleware to know to send the login url in
-            // a json response body and where to redirect back after a successful login
-            "Redirect-to-url-if-unauthorized": window.location.href
-        },
+        headers: {"Content-type": "application/json",},
         // Data format: "fname=Henry&lname=Ford"
         body: JSON.stringify(data)
     })
-    .then(async response => {
-        if (!response.ok) {
-            await handleFail(response, textarea.id);
-            hideCheckmarkLoader(circleLoader, 'create new note fail');
-            throw new Error('Response status: ' + response.status);
-        }
-        return response.json();
-    })
-    .then(responseData => {
-        removeValidationErrorMessages();
-        // Here it's not important to check if user is still typing as new note can be saved as soon as possible
-        // Show checkmark only on status success and if user is not typing
-        if (responseData.status === 'success') {
-            populateNewNoteDomAttributes(textarea, responseData.data);
-        } else {
-            // Hide checkmark loader "cleanly" so that it's not broken on the next input
-            hideCheckmarkLoader(circleLoader, 'Client create note after non success creation');
-        }
-    })
-    .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-    });
+        .then(async response => {
+            if (!response.ok) {
+                await handleFail(response, textarea.id);
+                hideCheckmarkLoader(circleLoader, 'create new note fail');
+                throw new Error('Response status: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            removeValidationErrorMessages();
+            // Here it's not important to check if user is still typing as new note can be saved as soon as possible
+            // Show checkmark only on status success and if user is not typing
+            if (responseData.status === 'success') {
+                populateNewNoteDomAttributes(textarea, responseData.data);
+            } else {
+                // Hide checkmark loader "cleanly" so that it's not broken on the next input
+                hideCheckmarkLoader(circleLoader, 'Client create note after non success creation');
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
 }
 
 /**

@@ -36,14 +36,6 @@ export function saveNoteChangeToDb(noteId) {
     // The textarea id is needed in the fetch call but "this" is the textarea inside the call
     let textareaId = this.id;
 
-    let headers = {"Content-type": "application/json"};
-
-    let clientId = document.getElementById('client-id')?.value;
-    // When notes loaded in dashboard, there is no client id
-    if (clientId) {
-        headers["Redirect-to-url-if-unauthorized"] = basePath + "clients/" + clientId;
-    }
-
     // Data format: "firstname=Henry&lastname=Ford"
     // In [square brackets] to be evaluated
     let body = JSON.stringify({
@@ -53,7 +45,7 @@ export function saveNoteChangeToDb(noteId) {
 
     fetch(basePath + 'notes' + '/' + noteId, {
         method: 'PUT',
-        headers: headers,
+        headers: {"Content-type": "application/json"},
         body: body
     })
         .then(async response => {

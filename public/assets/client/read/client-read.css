@@ -158,7 +158,7 @@
         display: none;
     }
 
-    #client-personal-info-flex-container strong.err-msg, #full-header-edit-icon-container strong.err-msg {
+    #client-personal-info-flex-container strong.err-msg, #outer-contenteditable-heading-container strong.err-msg {
         /*Remove padding left on non-form fields*/
         padding-left: 0;
     }

@@ -37,11 +37,11 @@ $this->addAttribute(
 
 <div id="user-page-content-flexbox">
     <div id="user-profile-content">
-        <div id="full-header-edit-icon-container">
-            <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
+        <div id="outer-contenteditable-heading-container">
+            <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
                 <?php
                 if (str_contains($user->generalPrivilege, 'U')) { ?>
-                    <!-- Img has to be before title because we are only able to style next sibling in css -->
+                    <!-- Img has to be before title because only the next sibling can be styled in css -->
                     <img src="assets/general/general-img/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
@@ -51,7 +51,7 @@ $this->addAttribute(
                 <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                     !empty($user->firstName) ? html($user->firstName) : '&nbsp;' ?></h1>
             </div>
-            <div class="partial-header-edit-icon-div contenteditable-field-container" data-field-element="h1">
+            <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
                 <?php
                 if (str_contains($user->generalPrivilege, 'U')) { ?>
                     <img src="assets/general/general-img/material-edit-icon.svg"
