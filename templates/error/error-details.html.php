@@ -40,7 +40,7 @@ $this->setLayout('');
     </h1>
 </div>
 <div id="trace-div" class="<?= html($severityCssClassName) ?>">
-    <table>
+    <table aria-hidden="true">
         <tr class="non-vendor">
             <th id="num-th">#</th>
             <th>Function</th>
