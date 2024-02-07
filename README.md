@@ -72,7 +72,7 @@ The database is reset every half-hour.
  * [Single Responsibility Principle](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))
  * [Action](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Action-Controller)
  * [Domain](https://github.com/samuelgfeller/slim-example-project/wiki/Domain)
- * [Repository](https://github.com/samuelgfeller/slim-example-project/wiki/Repository)
+ * [Repository and Query Builder](https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder)
 
 **Features**
  * [Logging](https://github.com/samuelgfeller/slim-example-project/wiki/Logging)
@@ -95,8 +95,8 @@ The database is reset every half-hour.
 
 **Frontend**
 * [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering)
-* [JavaScript - (coming soon)](https://github.com/samuelgfeller/slim-example-project/wiki/JavaScript)
-* [Dark mode](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Mode)
+* [JavaScript frontend](https://github.com/samuelgfeller/slim-example-project/wiki/JavaScript-Frontend)
+* [Dark theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
 
 **Other**
  * [Directory structure](https://github.com/samuelgfeller/slim-example-project/wiki/Directory-structure)

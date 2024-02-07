@@ -19,7 +19,7 @@ export function makeFieldSelectValueEditable() {
         showPersonalInfoContainerIfHidden();
 
         showEditableSelect(editIcon, select, span);
-        // Focus select to catch focusout if click outside
+        // Focus select field to catch focusout if click outside
         select.focus();
 
         let alreadySubmittedByChangeEvent = false;

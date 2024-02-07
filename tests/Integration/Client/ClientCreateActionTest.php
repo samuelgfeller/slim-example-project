@@ -45,9 +45,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @return void
      * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
@@ -156,9 +156,9 @@ class ClientCreateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
@@ -210,9 +210,9 @@ class ClientCreateActionTest extends TestCase
      *
      * @param array $requestBody
      *
-     * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
+     * @return void
      */
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {

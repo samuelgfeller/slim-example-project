@@ -100,7 +100,7 @@ class ClientDeleteActionTest extends TestCase
     }
 
     /**
-     * Test that when user is not logged in 401 Unauthorized is returned
+     * Test that when user is not logged in 401 Unauthorized is returned.
      *
      * @return void
      */
