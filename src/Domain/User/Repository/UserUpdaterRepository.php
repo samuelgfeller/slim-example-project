@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Enum\UserStatus;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class UserUpdaterRepository
 {

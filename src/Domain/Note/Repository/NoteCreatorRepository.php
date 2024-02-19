@@ -2,7 +2,7 @@
 
 namespace App\Domain\Note\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class NoteCreatorRepository
 {

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Security\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 
 // ?Class cannot be readonly as it's mocked (doubled) in tests
 class LoginLogFinderRepository

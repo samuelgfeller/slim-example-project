@@ -63,7 +63,7 @@ class ClientData implements \JsonSerializable
      */
     public function toArrayForDatabase(): array
     {
-        $clientArray = [
+        return [
             // id set below
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
@@ -78,19 +78,12 @@ class ClientData implements \JsonSerializable
             'user_id' => $this->userId,
             'client_status_id' => $this->clientStatusId,
         ];
-
-        // Not include required, from db non-nullable values if they are null -> for update
-        // Needed for update but if value null it is not included in return array as it's a non-nullable AUTO_INCREMENT col
-        if ($this->id !== null) {
-            $clientArray['id'] = $this->id;
-        }
-
-        return $clientArray;
     }
 
     /**
-     * Output for json_encode
+     * Define how json_encode() should serialize the object
      * camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718.
+     * @return array in the format expected by the frontend
      */
     public function jsonSerialize(): array
     {

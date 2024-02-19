@@ -2,8 +2,8 @@
 
 namespace App\Domain\UserActivity\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserActivityData;
+use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
 readonly class UserActivityRepository

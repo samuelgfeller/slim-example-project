@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Factory\Infrastructure;
+namespace App\Infrastructure\Factory;
 
 use Cake\Database\Connection;
 use Cake\Database\Query;
@@ -11,9 +11,9 @@ use Cake\Database\Query\UpdateQuery;
 /**
  * Factory.
  */
-final class QueryFactory
+final readonly class QueryFactory
 {
-    public function __construct(public readonly Connection $connection)
+    public function __construct(public Connection $connection)
     {
     }
 

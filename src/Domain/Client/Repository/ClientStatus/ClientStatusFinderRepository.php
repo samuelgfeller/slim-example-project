@@ -3,7 +3,7 @@
 namespace App\Domain\Client\Repository\ClientStatus;
 
 use App\Domain\Client\Enum\ClientStatus;
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class ClientStatusFinderRepository
 {

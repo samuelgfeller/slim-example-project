@@ -4,8 +4,8 @@ namespace App\Domain\Authentication\Repository\VerificationToken;
 
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\Exception\Persistence\PersistenceRecordNotFoundException;
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserData;
+use App\Infrastructure\Factory\QueryFactory;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
 class VerificationTokenFinderRepository

@@ -2,9 +2,9 @@
 
 namespace App\Domain\Note\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\Note\Data\NoteData;
 use App\Domain\Note\Data\NoteResultData;
+use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
 class NoteFinderRepository

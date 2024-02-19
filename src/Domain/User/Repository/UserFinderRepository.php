@@ -2,9 +2,9 @@
 
 namespace App\Domain\User\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Data\UserResultData;
+use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
 class UserFinderRepository

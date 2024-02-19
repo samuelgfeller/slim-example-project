@@ -2,7 +2,7 @@
 
 namespace App\Domain\Client\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class ClientCreatorRepository
 {
@@ -14,7 +14,7 @@ readonly class ClientCreatorRepository
     /**
      * Insert client in database.
      *
-     * @param array $data key is column name
+     * @param array $data keys are the column names
      *
      * @return int lastInsertId
      */

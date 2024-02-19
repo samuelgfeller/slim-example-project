@@ -2,9 +2,9 @@
 
 namespace App\Domain\Authentication\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
 use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class UserRoleFinderRepository
 {

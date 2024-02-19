@@ -5,7 +5,7 @@ namespace App\Domain\Client\Repository;
 use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Data\ClientListResult;
 use App\Domain\Client\Data\ClientReadResult;
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
 readonly class ClientFinderRepository

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Security\Repository;
 
-use App\Domain\Factory\Infrastructure\QueryFactory;
+use App\Infrastructure\Factory\QueryFactory;
 
 readonly class AuthenticationLoggerRepository
 {
