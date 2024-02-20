@@ -9,7 +9,7 @@ use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class NoteDeleter
+final readonly class NoteDeleter
 {
     public function __construct(
         private NoteDeleterRepository $noteDeleterRepository,

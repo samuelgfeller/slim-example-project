@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-readonly class ValidationExceptionMiddleware implements MiddlewareInterface
+final readonly class ValidationExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private ResponseFactoryInterface $responseFactory,

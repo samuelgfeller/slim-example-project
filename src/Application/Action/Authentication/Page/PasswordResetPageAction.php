@@ -3,11 +3,11 @@
 namespace App\Application\Action\Authentication\Page;
 
 use App\Application\Renderer\TemplateRenderer;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-readonly class PasswordResetPageAction
+final readonly class PasswordResetPageAction
 {
     public function __construct(
         private TemplateRenderer $templateRenderer,
@@ -18,14 +18,14 @@ readonly class PasswordResetPageAction
     /**
      * Check if the token is valid and if yes display password form.
      *
-     * @param ServerRequest $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
      * @throws \Throwable
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $queryParams = $request->getQueryParams();
 

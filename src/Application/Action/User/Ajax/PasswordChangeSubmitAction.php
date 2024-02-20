@@ -6,13 +6,13 @@ use App\Application\Renderer\JsonEncoder;
 use App\Domain\Authentication\Service\PasswordChanger;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * When user wants to change password being authenticated.
  */
-readonly class PasswordChangeSubmitAction
+final readonly class PasswordChangeSubmitAction
 {
     public function __construct(
         private JsonEncoder $jsonEncoder,
@@ -22,7 +22,7 @@ readonly class PasswordChangeSubmitAction
     ) {
     }
 
-    public function __invoke(ServerRequest $request, Response $response, array $args): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $parsedBody = (array)$request->getParsedBody();
         $userId = $args['user_id'];

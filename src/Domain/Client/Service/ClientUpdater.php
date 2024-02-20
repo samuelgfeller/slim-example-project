@@ -9,7 +9,7 @@ use App\Domain\Exception\InvalidOperationException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class ClientUpdater
+final readonly class ClientUpdater
 {
     public function __construct(
         private ClientUpdaterRepository $clientUpdaterRepository,

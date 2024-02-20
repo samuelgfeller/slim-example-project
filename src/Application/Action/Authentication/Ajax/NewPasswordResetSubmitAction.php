@@ -8,11 +8,11 @@ use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Service\PasswordResetterWithToken;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-readonly class NewPasswordResetSubmitAction
+final readonly class NewPasswordResetSubmitAction
 {
     public function __construct(
         private TemplateRenderer $templateRenderer,
@@ -24,16 +24,16 @@ readonly class NewPasswordResetSubmitAction
     }
 
     /**
-     * Check if token is valid and if yes display password form.
+     * Check if the token is valid and if yes display password form.
      *
-     * @param ServerRequest $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
+     * @return ResponseInterface
      * @throws \Throwable
      *
-     * @return Response
      */
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $parsedBody = (array)$request->getParsedBody();
         $flash = $this->session->getFlash();
@@ -43,7 +43,7 @@ readonly class NewPasswordResetSubmitAction
 
             $flash->add(
                 'success',
-                sprintf(__('Successfully changed password. <b>%s</b>'), __('Please log in.'))
+                __('Successfully changed password. <b>%s</b>', __('Please log in.'))
             );
 
             return $this->redirectHandler->redirectToRouteName($response, 'login-page');

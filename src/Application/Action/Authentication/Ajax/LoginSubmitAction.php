@@ -12,8 +12,8 @@ use App\Domain\User\Service\UserFinder;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 final readonly class LoginSubmitAction
@@ -29,7 +29,7 @@ final readonly class LoginSubmitAction
     ) {
     }
 
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $flash = $this->session->getFlash();
         $submitValues = (array)$request->getParsedBody();

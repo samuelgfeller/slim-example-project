@@ -5,7 +5,7 @@ namespace App\Domain\FilterSetting;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
 
-readonly class FilterSettingSaver
+final readonly class FilterSettingSaver
 {
     public function __construct(
         private UserFilterHandlerRepository $userFilterHandlerRepository,

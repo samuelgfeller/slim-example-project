@@ -4,7 +4,7 @@ namespace App\Domain\Authentication\Repository\VerificationToken;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class VerificationTokenCreatorRepository
+final readonly class VerificationTokenCreatorRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

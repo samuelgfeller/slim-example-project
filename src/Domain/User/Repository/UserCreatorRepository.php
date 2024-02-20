@@ -4,7 +4,7 @@ namespace App\Domain\User\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class UserCreatorRepository
+final readonly class UserCreatorRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

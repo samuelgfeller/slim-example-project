@@ -9,7 +9,7 @@ use App\Domain\Dashboard\Panel\UserFilterChipProvider;
 use App\Domain\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 
-readonly class DashboardPanelProvider
+final readonly class DashboardPanelProvider
 {
     public function __construct(
         private ClientStatusFinderRepository $clientStatusFinderRepository,

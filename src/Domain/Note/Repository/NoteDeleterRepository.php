@@ -4,7 +4,7 @@ namespace App\Domain\Note\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class NoteDeleterRepository
+final readonly class NoteDeleterRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

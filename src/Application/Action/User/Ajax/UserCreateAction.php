@@ -4,8 +4,8 @@ namespace App\Application\Action\User\Ajax;
 
 use App\Application\Renderer\JsonEncoder;
 use App\Domain\User\Service\UserCreator;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -19,12 +19,12 @@ final readonly class UserCreateAction
     }
 
     /**
-     * @param ServerRequest $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
      * @throws \Throwable
      */
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $userValues = (array)$request->getParsedBody();
 

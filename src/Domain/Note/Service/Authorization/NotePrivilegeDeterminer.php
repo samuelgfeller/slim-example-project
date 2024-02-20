@@ -8,7 +8,7 @@ use App\Domain\Authorization\Privilege;
  * The client should know when to display edit and delete icons
  * Admins can edit all notes, users only their own.
  */
-readonly class NotePrivilegeDeterminer
+final readonly class NotePrivilegeDeterminer
 {
     public function __construct(
         private NotePermissionVerifier $notePermissionVerifier,

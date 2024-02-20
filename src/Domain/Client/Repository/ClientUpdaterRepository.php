@@ -4,7 +4,7 @@ namespace App\Domain\Client\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class ClientUpdaterRepository
+final readonly class ClientUpdaterRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

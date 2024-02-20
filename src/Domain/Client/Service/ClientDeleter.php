@@ -9,7 +9,7 @@ use App\Domain\Note\Repository\NoteDeleterRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class ClientDeleter
+final readonly class ClientDeleter
 {
     public function __construct(
         private ClientDeleterRepository $clientDeleterRepository,

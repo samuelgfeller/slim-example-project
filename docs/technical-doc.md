@@ -16,7 +16,7 @@ Lets say we expect the required elements `name`,`email`,`password`,`password2`
 Get elements from request as array and give this data to the corresponding validation class which 
 will return the result
 ```php
-public function register(Request $request, Response $response): Response
+public function register(Request $request, ResponseInterface $response): Response
 {
     $parsedBody = $request->getParsedBody();
     $validationResult = $this->userValidation->validateUserRegistration($parsedBody);

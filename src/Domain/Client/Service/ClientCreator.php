@@ -13,7 +13,7 @@ use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use App\Domain\Validation\ValidationException;
 
-readonly class ClientCreator
+final readonly class ClientCreator
 {
     public function __construct(
         private ClientValidator $clientValidator,

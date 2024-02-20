@@ -5,7 +5,7 @@ namespace App\Domain\Client\Repository\ClientStatus;
 use App\Domain\Client\Enum\ClientStatus;
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class ClientStatusFinderRepository
+final readonly class ClientStatusFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

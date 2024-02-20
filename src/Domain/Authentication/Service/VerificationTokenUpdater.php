@@ -6,7 +6,7 @@ use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenUpda
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class VerificationTokenUpdater
+final readonly class VerificationTokenUpdater
 {
     public function __construct(
         private VerificationTokenUpdaterRepository $verificationTokenUpdaterRepository,

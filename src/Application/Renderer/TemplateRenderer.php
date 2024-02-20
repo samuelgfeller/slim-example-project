@@ -7,7 +7,7 @@ use App\Domain\Validation\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\PhpRenderer;
 
-readonly class TemplateRenderer
+final readonly class TemplateRenderer
 {
     public function __construct(private PhpRenderer $phpRenderer)
     {

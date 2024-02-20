@@ -10,7 +10,7 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
-readonly class PasswordChanger
+final readonly class PasswordChanger
 {
     public function __construct(
         private UserPermissionVerifier $userPermissionVerifier,

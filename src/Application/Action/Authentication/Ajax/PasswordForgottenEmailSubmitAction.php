@@ -9,8 +9,8 @@ use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;
 use Odan\Session\SessionInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -26,14 +26,14 @@ final readonly class PasswordForgottenEmailSubmitAction
     }
 
     /**
-     * @param ServerRequest $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
      * @throws \Throwable
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $flash = $this->session->getFlash();
         $userValues = (array)$request->getParsedBody();

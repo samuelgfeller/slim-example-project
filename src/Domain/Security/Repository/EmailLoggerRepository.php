@@ -4,7 +4,7 @@ namespace App\Domain\Security\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class EmailLoggerRepository
+final readonly class EmailLoggerRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

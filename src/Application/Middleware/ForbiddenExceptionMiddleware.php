@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-readonly class ForbiddenExceptionMiddleware implements MiddlewareInterface
+final readonly class ForbiddenExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private ResponseFactoryInterface $responseFactory,

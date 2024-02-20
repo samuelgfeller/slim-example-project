@@ -5,7 +5,7 @@ namespace App\Domain\Authentication\Service;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Security\Repository\AuthenticationLoggerRepository;
 
-readonly class AuthenticationLogger
+final readonly class AuthenticationLogger
 {
     public function __construct(
         private UserNetworkSessionData $userNetworkSessionData,

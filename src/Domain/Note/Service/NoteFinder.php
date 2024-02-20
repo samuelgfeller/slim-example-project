@@ -10,7 +10,7 @@ use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Repository\NoteFinderRepository;
 use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
 
-readonly class NoteFinder
+final readonly class NoteFinder
 {
     public function __construct(
         private NoteFinderRepository $noteFinderRepository,

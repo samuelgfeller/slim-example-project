@@ -13,7 +13,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-readonly class InvalidOperationExceptionMiddleware implements MiddlewareInterface
+final readonly class InvalidOperationExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private ResponseFactoryInterface $responseFactory,

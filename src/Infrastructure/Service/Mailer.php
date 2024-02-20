@@ -12,15 +12,15 @@ use Symfony\Component\Mime\Email;
  * Mailer class with added method to get the html string from a template and added logging in the send() function.
  * Test sender score: https://www.mail-tester.com/.
  */
-class Mailer
+final readonly class Mailer
 {
     private ?int $loggedInUserId;
 
     public function __construct(
-        private readonly MailerInterface $mailer,
-        private readonly PhpRenderer $phpRenderer,
-        private readonly EmailLoggerRepository $emailLoggerRepository,
-        private readonly UserNetworkSessionData $userNetworkSessionData
+        private MailerInterface $mailer,
+        private PhpRenderer $phpRenderer,
+        private EmailLoggerRepository $emailLoggerRepository,
+        private UserNetworkSessionData $userNetworkSessionData
     ) {
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
     }

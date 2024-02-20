@@ -4,7 +4,7 @@ namespace App\Application\Renderer;
 
 use Psr\Http\Message\ResponseInterface;
 
-readonly class JsonEncoder
+final readonly class JsonEncoder
 {
     /**
      * Write JSON to the response body.

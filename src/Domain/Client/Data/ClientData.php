@@ -83,6 +83,7 @@ class ClientData implements \JsonSerializable
     /**
      * Define how json_encode() should serialize the object
      * camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718.
+     *
      * @return array in the format expected by the frontend
      */
     public function jsonSerialize(): array

@@ -9,7 +9,7 @@ use App\Domain\User\Enum\UserRole;
 /**
  * Default authorization checker.
  */
-readonly class AuthorizationChecker
+final readonly class AuthorizationChecker
 {
     public function __construct(
         private UserRoleFinderRepository $userRoleFinderRepository,

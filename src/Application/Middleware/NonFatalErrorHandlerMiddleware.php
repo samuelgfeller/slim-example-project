@@ -12,12 +12,12 @@ use Psr\Log\LoggerInterface;
 /**
  * Handles non-fatal errors such as warnings and notices.
  */
-final class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
+final readonly class NonFatalErrorHandlerMiddleware implements MiddlewareInterface
 {
     private bool $displayErrorDetails;
     private bool $logErrors;
 
-    public function __construct(bool $displayErrorDetails, bool $logErrors, private readonly LoggerInterface $logger)
+    public function __construct(bool $displayErrorDetails, bool $logErrors, private LoggerInterface $logger)
     {
         $this->displayErrorDetails = $displayErrorDetails;
         $this->logErrors = $logErrors;

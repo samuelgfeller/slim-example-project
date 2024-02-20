@@ -8,8 +8,8 @@ use App\Domain\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Domain\Authentication\Service\AccountUnlockTokenVerifier;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
@@ -24,7 +24,7 @@ final readonly class AccountUnlockProcessAction
     ) {
     }
 
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $queryParams = $request->getQueryParams();
         $flash = $this->session->getFlash();

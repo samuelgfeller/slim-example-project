@@ -6,7 +6,7 @@ use App\Domain\User\Data\UserRoleData;
 use App\Domain\User\Enum\UserRole;
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class UserRoleFinderRepository
+final readonly class UserRoleFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

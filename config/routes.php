@@ -27,9 +27,8 @@ return function (App $app) {
         ->setName('dashboard-toggle-panel');
 
     $app->get('/login', \App\Application\Action\Authentication\Page\LoginPageAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)->setName(
-        'login-submit'
-    );
+    $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)
+        ->setName('login-submit');
     $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
         \Odan\Session\Middleware\SessionStartMiddleware::class
     );
@@ -50,10 +49,10 @@ return function (App $app) {
         '/password-forgotten',
         \App\Application\Action\Authentication\Ajax\PasswordForgottenEmailSubmitAction::class
     )->setName('password-forgotten-email-submit');
-    // Set new password page after clicking on email link with token
+    // Set the new password page after clicking on email link with token
     $app->get('/reset-password', \App\Application\Action\Authentication\Page\PasswordResetPageAction::class)
         ->setName('password-reset-page');
-    // Submit new password (reset-password hardcoded in login-main.js)
+    // Submit new password after clicking on email link with token (reset-password hardcoded in login-main.js)
     $app->post(
         '/reset-password',
         \App\Application\Action\Authentication\Ajax\NewPasswordResetSubmitAction::class

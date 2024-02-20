@@ -7,7 +7,7 @@ use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 
-readonly class NoteValidator
+final readonly class NoteValidator
 {
     public function __construct(
         private NoteValidatorRepository $noteValidatorRepository,

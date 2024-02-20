@@ -11,7 +11,7 @@ use App\Domain\User\Service\UserFinder;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use IntlDateFormatter;
 
-readonly class NoteCreator
+final readonly class NoteCreator
 {
     public function __construct(
         private NoteValidator $noteValidator,

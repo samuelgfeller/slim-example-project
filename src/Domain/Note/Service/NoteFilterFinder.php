@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service;
 use App\Domain\Note\Data\NoteResultData;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 
-readonly class NoteFilterFinder
+final readonly class NoteFilterFinder
 {
     public function __construct(
         private NoteFinder $noteFinder,

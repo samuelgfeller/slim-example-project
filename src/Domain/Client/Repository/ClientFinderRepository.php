@@ -8,7 +8,7 @@ use App\Domain\Client\Data\ClientReadResult;
 use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
-readonly class ClientFinderRepository
+final readonly class ClientFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

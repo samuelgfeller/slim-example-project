@@ -7,7 +7,7 @@ use App\Domain\Authorization\Privilege;
 /**
  * This class is responsible for determining the level of privileges a user has.
  */
-readonly class UserPrivilegeDeterminer
+final readonly class UserPrivilegeDeterminer
 {
     public function __construct(
         private UserPermissionVerifier $userPermissionVerifier,

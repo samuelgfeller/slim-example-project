@@ -4,7 +4,7 @@ namespace App\Domain\Note\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class NoteValidatorRepository
+final readonly class NoteValidatorRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

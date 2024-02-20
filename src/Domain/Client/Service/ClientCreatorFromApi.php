@@ -8,7 +8,7 @@ use App\Domain\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class ClientCreatorFromApi
+final readonly class ClientCreatorFromApi
 {
     public function __construct(
         private ClientValidator $clientValidator,

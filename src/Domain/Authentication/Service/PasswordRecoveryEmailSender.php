@@ -10,25 +10,24 @@ use App\Domain\Validation\ValidationException;
 use App\Infrastructure\Service\LocaleConfigurator;
 use App\Infrastructure\Service\Mailer;
 use App\Infrastructure\Utility\Settings;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
  * This class manages the emails sent in relation to login.
  */
-class PasswordRecoveryEmailSender
+final readonly class PasswordRecoveryEmailSender
 {
     private Email $email;
 
     public function __construct(
-        private readonly Mailer $mailer,
-        private readonly UserValidator $userValidator,
-        private readonly UserFinderRepository $userFinderRepository,
-        private readonly VerificationTokenCreator $verificationTokenCreator,
+        private Mailer $mailer,
+        private UserValidator $userValidator,
+        private UserFinderRepository $userFinderRepository,
+        private VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
-        private readonly SecurityEmailChecker $securityEmailChecker,
-        private readonly LocaleConfigurator $localeConfigurator,
+        private SecurityEmailChecker $securityEmailChecker,
+        private LocaleConfigurator $localeConfigurator,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object
@@ -44,7 +43,7 @@ class PasswordRecoveryEmailSender
      *
      * @param array $userValues
      *
-     * @throws ValidationException|TransportExceptionInterface
+     * @throws ValidationException
      */
     public function sendPasswordRecoveryEmail(array $userValues): void
     {

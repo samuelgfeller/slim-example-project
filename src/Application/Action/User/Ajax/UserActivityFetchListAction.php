@@ -9,7 +9,7 @@ use App\Domain\UserActivity\Service\UserActivityFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-readonly class UserActivityFetchListAction
+final readonly class UserActivityFetchListAction
 {
     public function __construct(
         private JsonEncoder $jsonEncoder,

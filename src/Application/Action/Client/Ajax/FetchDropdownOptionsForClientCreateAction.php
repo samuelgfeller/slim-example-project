@@ -7,7 +7,7 @@ use App\Domain\Client\Service\ClientUtilFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-readonly class FetchDropdownOptionsForClientCreateAction
+final readonly class FetchDropdownOptionsForClientCreateAction
 {
     public function __construct(
         private JsonEncoder $jsonEncoder,

@@ -4,7 +4,7 @@ namespace App\Domain\Security\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class AuthenticationLoggerRepository
+final readonly class AuthenticationLoggerRepository
 {
     public function __construct(
         private QueryFactory $queryFactory

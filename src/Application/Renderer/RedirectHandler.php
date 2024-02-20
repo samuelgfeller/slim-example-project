@@ -5,7 +5,7 @@ namespace App\Application\Renderer;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface;
 
-readonly class RedirectHandler
+final readonly class RedirectHandler
 {
     public function __construct(private RouteParserInterface $routeParser)
     {

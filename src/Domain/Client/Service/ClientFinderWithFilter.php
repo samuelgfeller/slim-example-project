@@ -8,7 +8,7 @@ use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
 
-readonly class ClientFinderWithFilter
+final readonly class ClientFinderWithFilter
 {
     public function __construct(
         private ClientFinder $clientFinder,

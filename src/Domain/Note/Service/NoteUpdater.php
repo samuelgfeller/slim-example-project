@@ -9,7 +9,7 @@ use App\Domain\Note\Service\Authorization\NotePermissionVerifier;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 
-readonly class NoteUpdater
+final readonly class NoteUpdater
 {
     public function __construct(
         private NoteValidator $noteValidator,

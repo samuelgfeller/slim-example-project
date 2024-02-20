@@ -6,7 +6,7 @@ use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\Authorization\AuthorizedUserRoleFilterer;
 
-readonly class UserUtilFinder
+final readonly class UserUtilFinder
 {
     public function __construct(
         private AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,

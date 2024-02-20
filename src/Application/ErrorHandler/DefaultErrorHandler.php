@@ -13,7 +13,7 @@ use Slim\Exception\HttpException;
 use Slim\Views\PhpRenderer;
 use Throwable;
 
-readonly class DefaultErrorHandler
+final readonly class DefaultErrorHandler
 {
     private string $fileSystemPath;
 

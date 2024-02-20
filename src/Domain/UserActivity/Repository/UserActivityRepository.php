@@ -6,7 +6,7 @@ use App\Domain\User\Data\UserActivityData;
 use App\Infrastructure\Factory\QueryFactory;
 use App\Infrastructure\Utility\Hydrator;
 
-readonly class UserActivityRepository
+final readonly class UserActivityRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Middleware that adds client network data such as IP address and user agent
  * as well as user identity id to the clientNetworkData DTO.
  */
-readonly class UserNetworkSessionDataMiddleware implements MiddlewareInterface
+final readonly class UserNetworkSessionDataMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private UserNetworkSessionData $clientNetworkData,

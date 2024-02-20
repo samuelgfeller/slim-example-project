@@ -18,7 +18,7 @@ use App\Domain\Note\Service\Authorization\NotePrivilegeDeterminer;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 
-readonly class ClientFinder
+final readonly class ClientFinder
 {
     public function __construct(
         private ClientFinderRepository $clientFinderRepository,

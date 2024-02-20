@@ -8,7 +8,7 @@ use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 
-readonly class ClientValidator
+final readonly class ClientValidator
 {
     public function __construct(
         private ClientStatusFinderRepository $clientStatusFinderRepository,

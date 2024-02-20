@@ -4,7 +4,7 @@ namespace App\Domain\FilterSetting\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-readonly class UserFilterHandlerRepository
+final readonly class UserFilterHandlerRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

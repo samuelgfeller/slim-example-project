@@ -7,7 +7,7 @@ use App\Domain\User\Data\UserActivityData;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Repository\UserActivityRepository;
 
-readonly class UserActivityLogger
+final readonly class UserActivityLogger
 {
     public function __construct(
         private UserActivityRepository $userActivityRepository,

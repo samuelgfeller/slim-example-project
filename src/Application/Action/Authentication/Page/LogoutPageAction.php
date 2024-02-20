@@ -5,8 +5,8 @@ namespace App\Application\Action\Authentication\Page;
 use App\Application\Renderer\RedirectHandler;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class LogoutPageAction
 {
@@ -17,7 +17,7 @@ final readonly class LogoutPageAction
     ) {
     }
 
-    public function __invoke(ServerRequest $request, Response $response): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         // Logout user
         $this->sessionManager->destroy();

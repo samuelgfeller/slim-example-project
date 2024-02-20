@@ -11,7 +11,7 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-readonly class LoginVerifier
+final readonly class LoginVerifier
 {
     public function __construct(
         private UserValidator $userValidator,
@@ -24,7 +24,7 @@ readonly class LoginVerifier
     }
 
     /**
-     * Verifies the user's login credentials and returns the user's ID if the login is successful.
+     * Verifies the user's login credentials and returns the user id if the login is successful.
      *
      * @param array $userLoginValues An associative array containing the user's login credentials.
      * Expected keys are 'email' and 'password' and optionally 'g-recaptcha-response'.
@@ -46,7 +46,7 @@ readonly class LoginVerifier
 
         $dbUser = $this->userFinderRepository->findUserByEmail($userLoginValues['email']);
 
-        // Check if user exists and verify if the password is correct
+        // Check if the user exists and check if the password is correct
         if (isset($dbUser->email, $dbUser->passwordHash)
             && password_verify($userLoginValues['password'], $dbUser->passwordHash)) {
             // If password correct and status active, log user in by
@@ -70,11 +70,12 @@ readonly class LoginVerifier
             // captcha needed if email security check requires captcha
             $this->loginNonActiveUserHandler->handleLoginAttemptFromNonActiveUser($dbUser, $queryParams, $captcha);
         }
-        // Password is not correct or user not existing - insert login request
+        // Password is not correct or user not existing
+        // Log failed login request
         $this->authenticationLogger->logLoginRequest($userLoginValues['email'], false, $dbUser->id);
 
-        // Perform second login request check after additional verification to display the correct error
-        // message to the user if throttle is in place
+        // Perform second login security request check after additional verification to display
+        // the correct error message to the user if throttle is in place
         $this->loginSecurityChecker->performLoginSecurityCheck($userLoginValues['email'], $captcha);
 
         // Throw exception if the user doesn't exist or wrong password

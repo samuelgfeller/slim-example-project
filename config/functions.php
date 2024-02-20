@@ -19,7 +19,7 @@ function html(?string $text = null): string
  * If a context is provided, it is used to replace placeholders
  * in the translated string.
  *
- * @param string $message the message to be translated
+ * @param string $message the message to be translated (may contain sprintf placeholders e.g. %s, %d)
  * @param mixed ...$context Optional elements that should be inserted in the string with placeholders.
  * The function can be called like this:
  * __('The %s contains %d monkeys and %d birds.', 'tree', 5, 3);

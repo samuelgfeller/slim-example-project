@@ -12,7 +12,7 @@ use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 
-readonly class ClientListFilterChipProvider
+final readonly class ClientListFilterChipProvider
 {
     public function __construct(
         private ClientStatusFinderRepository $clientStatusFinderRepository,
