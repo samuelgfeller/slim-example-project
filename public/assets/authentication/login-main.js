@@ -1,3 +1,5 @@
+import {removeValidationErrorMessages} from "../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
+
 const passwordForgottenBtn = document.getElementById('password-forgotten-btn');
 const passwordInputDiv = document.getElementById('password-input-div');
 const passwordInput = passwordInputDiv.querySelector('input');
@@ -15,16 +17,21 @@ passwordInput.dataset.name = passwordInput.name;
  * Remove password field and change form to submit password forgotten request
  */
 passwordForgottenBtn.addEventListener('click', () => {
+    changeFormToPasswordForgotten();
+    removeValidationErrorMessages();
+});
+
+function changeFormToPasswordForgotten() {
     // Remove max height on element and let CSS animation take over
     passwordInputDiv.style.maxHeight = null;
     passwordInputDiv.classList.remove('input-div-expanded');
     passwordInputDiv.classList.add('input-div-collapsed');
-    // Remove name from input to prevent it from being submitted
-    passwordInput.removeAttribute('name');
+    // Disable input to prevent it from being submitted and remove frontend validation
+    passwordInput.disabled = true;
     submitBtn.value = submitBtn.dataset.requestPasswordLabel ?? 'Request password';
     form.action = 'password-forgotten';
     logInBtn.style.maxHeight = logInBtn.scrollHeight + 'px';
-});
+}
 
 /**
  * Add password field and change form to submit login request
@@ -36,16 +43,18 @@ logInBtn.addEventListener('click', () => {
     submitBtn.value = 'Login';
     form.action = 'login';
     // Add name to input
-    passwordInput.name = passwordInput.dataset.name;
+    passwordInput.disabled = false;
     // logInBtn.style.display = 'none';
     logInBtn.style.maxHeight = '0';
+    removeValidationErrorMessages();
 });
 
-// If validation failed or there was a security exception the backend renders the login page. The submition url is kept
-// however so when the url is password-forgotten or reset-password (when invalid token) show password forgotten form
+// If validation failed or there was a security exception, the backend renders the login page without making
+// a redirect. This means the POST submit url is kept, so if it comes back with an error (e.g. invalid token),
+// it has to be changed to the login url and the password forgotten btn clicked to show the correct form fields.
 const route = window.location.pathname.split("/").pop();
-if (route === 'password-forgotten' || route === 'reset-password'){
-    passwordForgottenBtn.click();
+if (route === 'password-forgotten' || route === 'reset-password') {
+    changeFormToPasswordForgotten();
     window.history.replaceState(null, '', 'login');
 }
 

@@ -16,7 +16,7 @@ $this->setLayout('');
 <html lang="en">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
-    <base href="<?= $basePath ?>/"/>
+    <base href="<?= html($basePath) ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
@@ -40,13 +40,13 @@ $this->setLayout('');
     );
     ?>
 
-    <title>Login - <?= $config['app_name'] ?></title>
+    <title>Login - <?= html($config['app_name']) ?></title>
 
 </head>
 <body>
 <?= $this->fetch('layout/flash-messages.html.php') ?>
 
-<h2><?= $config['app_name'] ?></h2>
+<h2><?= html($config['app_name']) ?></h2>
 
 <!-- If error flash array is not empty, error class is added to div -->
 <div class="page-form-container <?= isset($formError) ? ' invalid-form' : '' ?>" id="login-form-container">
@@ -62,8 +62,8 @@ $this->setLayout('');
             <label for="email-input"><?= __('E-Mail') ?></label>
             <input type="email" name="email"
                    maxlength="254" id="email-input"
-                   required value="<?= $preloadValues['email'] ?? '' ?>">
-            <?= isset($validation['email']) ? '<strong class="err-msg">' . $validation['email'][0] . '</strong>' : '' ?>
+                   required value="<?= html($preloadValues['email'] ?? '') ?>">
+            <?= isset($validation['email']) ? '<strong class="err-msg">' . html($validation['email'][0]) . '</strong>' : '' ?>
             <span class="discrete-text content-below-input cursor-pointer" id="discrete-login-btn">
                 <?= __('Login') ?></span>
         </div>
@@ -74,7 +74,8 @@ $this->setLayout('');
              isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password-input"><?= __('Password') ?></label>
             <input type="password" id="password-input" name="password" minlength="3" required>
-            <?= isset($validation['password']) ? '<strong class="err-msg">' . $validation['password'][0] . '</strong>' : '' ?>
+            <?= isset($validation['password']) ?
+                '<strong class="err-msg">' . html($validation['password'][0]) . '</strong>' : '' ?>
             <span class="discrete-text content-below-input cursor-pointer"
                   id="password-forgotten-btn"><?= __('Password forgotten') ?></span>
         </div>

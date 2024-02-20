@@ -82,6 +82,9 @@ final readonly class LoginSubmitAction
                 'formErrorMessage',
                 __('Invalid credentials. Please try again.')
             );
+            if (!empty($submitValues['email'])) {
+                $this->templateRenderer->addPhpViewAttribute('preloadValues', ['email' => $submitValues['email']]);
+            }
 
             return $this->templateRenderer->render(
                 $response->withStatus(401),

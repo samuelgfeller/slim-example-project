@@ -46,7 +46,7 @@ export async function handleFail(response, domFieldId = null) {
         if (responseData.hasOwnProperty('loginUrl') && responseData.loginUrl !== '') {
             // window.location.href = responseData.loginUrl;
             // Redirect user to login page with redirect back GET param to the current page
-            window.location.href =  responseData.loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
+            window.location.href = responseData.loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
         }
 
         // If response data doesn't contain login url
@@ -112,5 +112,12 @@ export function removeValidationErrorMessages() {
     for (const elementWithInvalidInput of document.querySelectorAll('.invalid-input')) {
         elementWithInvalidInput.classList.remove('invalid-input');
     }
+    // Remove the classname input-group-error on any element that had it
+    for (const elementWithInputGroupError of document.querySelectorAll('.input-group-error')) {
+        elementWithInputGroupError.classList.remove('input-group-error');
+    }
+
+    document.querySelector('#form-general-error-msg')?.remove();
+
 }
 
