@@ -22,13 +22,13 @@ final readonly class ClientReadPageAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $clientAggregate = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
-        $dropdownValues = $this->clientUtilFinder->findClientDropdownValues($clientAggregate->userId);
+        $clientReadResult = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
+        $dropdownValues = $this->clientUtilFinder->findClientDropdownValues($clientReadResult->userId);
 
         return $this->templateRenderer->render(
             $response,
             'client/client-read.html.php',
-            ['clientAggregate' => $clientAggregate, 'dropdownValues' => $dropdownValues]
+            ['clientReadData' => $clientReadResult, 'dropdownValues' => $dropdownValues]
         );
     }
 }

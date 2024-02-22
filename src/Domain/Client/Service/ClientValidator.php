@@ -46,26 +46,34 @@ final readonly class ClientValidator
             ->email('email', false, __('Invalid email'))
             ->requirePresence('birthdate', $isCreateMode, __('Field is required'))
             ->allowEmptyDate('birthdate')
-            ->date('birthdate', ['ymd', 'mdy', 'dmy'], __('Invalid date value'))
-            ->add('birthdate', 'validateNotInFuture', [
-                'rule' => function ($value, $context) {
-                    $today = new \DateTime();
-                    $birthdate = new \DateTime($value);
+            ->add('birthdate', [
+                'date' => [
+                    'rule' => ['date', ['ymd', 'mdy', 'dmy']],
+                    'message' => __('Invalid date value'),
+                    // This rule must succeed before proceeding to the next one
+                    // Date must be valid as DateTime objects are created in the next rules
+                    'last' => true,
+                ],
+                'validateNotInFuture' => [
+                    'rule' => function ($value, $context) {
+                        $today = new \DateTime();
+                        $birthdate = new \DateTime($value);
 
-                    // check that birthdate is not in the future
-                    return $birthdate <= $today;
-                },
-                'message' => __('Cannot be in the future'),
-            ])
-            ->add('birthdate', 'validateOldestAge', [
-                'rule' => function ($value, $context) {
-                    $birthdate = new \DateTime($value);
-                    // check that birthdate is not older than 130 years
-                    $oldestBirthdate = new \DateTime('-130 years');
+                        // Check that birthdate is not in the future
+                        return $birthdate <= $today;
+                    },
+                    'message' => __('Cannot be in the future'),
+                ],
+                'validateOldestAge' => [
+                    'rule' => function ($value, $context) {
+                        $birthdate = new \DateTime($value);
+                        // check that birthdate is not older than 130 years
+                        $oldestBirthdate = new \DateTime('-130 years');
 
-                    return $birthdate >= $oldestBirthdate;
-                },
-                'message' => __('Cannot be older than 130 years'),
+                        return $birthdate >= $oldestBirthdate;
+                    },
+                    'message' => __('Cannot be older than 130 years'),
+                ],
             ])
             ->requirePresence('location', $isCreateMode, __('Field is required'))
             ->allowEmptyString('location')
