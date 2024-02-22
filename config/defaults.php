@@ -47,11 +47,11 @@ $settings['deployment'] = [
 ];
 
 $settings['public'] = [
-    'app_name' => 'Slim example Project',
+    'app_name' => 'Slim Example Project',
     'email' => [
         'main_contact_address' => 'slim-example-project@samuel-gfeller.ch',
         'main_sender_address' => 'no-reply@samuel-gfeller.ch',
-        'main_sender_name' => 'Slim example Project',
+        'main_sender_name' => 'Slim Example Project',
     ],
 ];
 

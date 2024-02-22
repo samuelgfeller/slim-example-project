@@ -23,7 +23,7 @@
  * @param {string|number} unsafeString
  * @return {string}
  */
-export function escapeHtml(unsafeString) {
+export function html(unsafeString) {
     // Number has not the function replace() hence toString()
     return unsafeString?.toString()
         .replace(/&/g, "&amp;")

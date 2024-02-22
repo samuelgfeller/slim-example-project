@@ -28,24 +28,38 @@ export function makeFieldEditable(field) {
     }
     let saveBtn = document.getElementById(saveBtnId);
 
-    // Save on enter key press
-    fieldContainer.addEventListener('keypress', function (e) {
-        // Save on enter keypress or ctrl enter / cmd enter
-        if (e.key === 'Enter' || (e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
-            // Prevent new line on enter key press
-            e.preventDefault();
-            // Triggers focusout event that is caught in event listener and saves client value
-            // field.contentEditable = 'false';
-            field.dispatchEvent(new Event('focusout'));
+    // Save on enter key press (js does not add identical event listeners when the same handler function is used)
+    fieldContainer.addEventListener('keypress', saveFieldOnEnterKeyPressEventHandler);
 
-        }
-    });
     // Display save button after the first input
     fieldContainer.addEventListener('input', () => {
         if (saveBtn.style.display === 'none') {
             saveBtn.style.display = 'inline-block';
         }
     });
+}
+
+/**
+ * Save field on enter key press or ctrl enter / cmd enter.
+ * Must be in separate function so that event listener is added only once.
+ * @param e event
+ */
+function saveFieldOnEnterKeyPressEventHandler(e) {
+    // Save on enter keypress or ctrl enter / cmd enter
+    if (e.key === 'Enter' || (e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
+        // Prevent new line on enter key press
+        e.preventDefault();
+
+        // Create a focusable dummy input element
+        let dummyInput = document.createElement('input');
+        document.body.appendChild(dummyInput);
+
+        // Triggers focusout event that is caught in event listener and saves value
+        dummyInput.focus();
+
+        // Remove the dummy input element
+        document.body.removeChild(dummyInput);
+    }
 }
 
 export function disableEditableField(field) {

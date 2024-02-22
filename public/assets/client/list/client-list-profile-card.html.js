@@ -1,5 +1,5 @@
 import {getAvatarPath} from "../util/client-template-util.js?v=0.4.0";
-import {escapeHtml} from "../../general/general-js/functions.js?v=0.4.0";
+import {html} from "../../general/general-js/functions.js?v=0.4.0";
 import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.4.0";
 
 /**
@@ -11,27 +11,27 @@ import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?
  * @return {string} html card
  */
 export function getClientProfileCardHtml(client, allUsers, allStatuses) {
-    return `<div class="client-profile-card" tabindex="0" data-client-id="${client.id}">
+    return `<div class="client-profile-card" tabindex="0" data-client-id="${html(client.id)}">
     <div class="profile-card-header">
             <!-- other div needed to attach bubble to img -->
             <div class="profile-card-avatar">
                 <img src=${getAvatarPath(client.sex)} alt="avatar">
         ${// Display age if content not empty
-        client.age !== null && client.age !== '' ? `<span class="profile-card-age">${escapeHtml(client.age)}</span>` : ''
+        client.age !== null && client.age !== '' ? `<span class="profile-card-age">${html(client.age)}</span>` : ''
     }
             </div>
         </div>
         <div class="profile-card-content">
             <h3 data-deleted="${client.deletedAt !== null ? '1' : '0'}"
-            >${client.firstName !== null ? escapeHtml(client.firstName) : ''} ${
-        client.lastName !== null ? escapeHtml(client.lastName) : ''}</h3>
+            >${client.firstName !== null ? html(client.firstName) : ''} ${
+        client.lastName !== null ? html(client.lastName) : ''}</h3>
             <div class="profile-card-infos-flexbox">
         ${// Display location icon and content if not empty 
         client.location !== null && client.location !== '' ?
             `<div>
                      <img src="assets/general/general-img/personal-data-icons/location-icon.svg" 
                             class="profile-card-content-icon default-icon" alt="location">
-                     <span>${escapeHtml(client.location)}</span>
+                     <span>${html(client.location)}</span>
                  </div>` : ''
     }
         ${// Display location icon and content if not empty 
@@ -39,7 +39,7 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
             `<div>
                      <img src="assets/general/general-img/personal-data-icons/phone-icon.svg" 
                             class="profile-card-content-icon default-icon" alt="phone">
-                     <span>${escapeHtml(client.phone)}</span>
+                     <span>${html(client.phone)}</span>
                  </div>` : ''
     }
             </div>

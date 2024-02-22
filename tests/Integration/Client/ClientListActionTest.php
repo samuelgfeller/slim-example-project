@@ -169,7 +169,7 @@ class ClientListActionTest extends TestCase
                 // 'personalInfoPrivilege' => null
                 // 'clientStatusPrivilege' => 'NONE'
                 // 'assignedUserPrivilege' => 'NONE'
-                // 'noteCreatePrivilege' => null
+                // 'noteCreationPrivilege' => null
             ];
         }
         $clientStatuses = $this->findTableRowsWhere('client_status', 'deleted_at IS NULL');

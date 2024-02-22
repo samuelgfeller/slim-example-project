@@ -1,4 +1,4 @@
-import {escapeHtml} from "../../general/general-js/functions.js?v=0.4.0";
+import {html} from "../../general/general-js/functions.js?v=0.4.0";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax
@@ -20,7 +20,7 @@ export function getNoteHtml(note) {
                     ${/*Show delete button */ privilege.includes('D') ? `<img 
                         class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
                     <span class="discrete-text note-right-side-label-span 
-                    ${isClientMessage === 1 ? 'client-message-label' : ''}">${escapeHtml(userFullName)}</span>
+                    ${isClientMessage === 1 ? 'client-message-label' : ''}">${html(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
@@ -33,7 +33,7 @@ export function getNoteHtml(note) {
                               data-note-id="${id}"
                               minlength="4" maxlength="1000" required
                               data-editable="${privilege.includes('U') ? '1' : '0'}"
-                              name="message">${escapeHtml(message)}</textarea>
+                              name="message">${html(message)}</textarea>
                     <div class="circle-loader client-note" data-note-id="${id}">
                         <div class="checkmark draw"></div>
                     </div>

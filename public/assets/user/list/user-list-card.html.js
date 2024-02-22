@@ -1,5 +1,5 @@
 import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.4.0";
-import {escapeHtml} from "../../general/general-js/functions.js?v=0.4.0";
+import {html} from "../../general/general-js/functions.js?v=0.4.0";
 
 /**
  * HTML code for client profile card
@@ -14,7 +14,7 @@ export function getUserCardHtml(user, statuses) {
         <h3>${user.firstName !== null ? user.firstName : ''} ${user.surname !== null ? user.surname : ''}</h3>
         <div class="card-icon-and-span-div">
             <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="card-icon default-icon" alt="email">
-            <a href="mailto:${escapeHtml(user.email)}">${escapeHtml(user.email)}</a>
+            <a href="mailto:${html(user.email)}">${html(user.email)}</a>
         </div>
         <div class="user-card-dropdown-flexbox">
             <select name="status" class="default-select" 

@@ -58,6 +58,7 @@ export function makeClientFieldEditable() {
     makeFieldEditable(field);
 
     // Save btn event listener is not needed as by clicking on the button the focus goes out of the edited field
+    // JS doesn't add duplicate event listeners when they're using the same function
     field.addEventListener('focusout', validateContentEditableAndSaveClientValue);
     // Add event listener on email in
 }
@@ -66,7 +67,7 @@ export function makeClientFieldEditable() {
  * Validate frontend, disable contenteditable and make
  * update request.
  */
-function validateContentEditableAndSaveClientValue() {
+function validateContentEditableAndSaveClientValue(e) {
     // "this" is the field
     if (contentEditableFieldValueIsValid(this)) {
         removeValidationErrorMessages();
@@ -118,10 +119,11 @@ function saveClientValueAndDisableContentEditable(field) {
                 removeIconFromAvailableDiv(availableIcon);
             }
 
-            // Do actions after specific field changes. At this point its certain that values are not empty
-            // Add age to birthdate if
+            // Do actions after specific field changes. At this point, it is certain that values are not empty
+            // Add age to birthdate
             if (field.dataset.name === 'birthdate') {
                 // If birthdate field and not empty, add span with age
+                console.log('age added', responseJson.data.age);
                 field.insertAdjacentHTML(
                     'beforeend',
                     `<span id="age-sub-span">&nbsp; •&nbsp; ${responseJson.data.age}</span>`

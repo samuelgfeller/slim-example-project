@@ -5,7 +5,7 @@
  * @param {number|string} selectedKey optional selected key. If not found, no option is selected
  * @return {string}
  */
-import {escapeHtml} from "../general-js/functions.js?v=0.4.0";
+import {html} from "../general-js/functions.js?v=0.4.0";
 
 /**
  * @param {Object} allEntries
@@ -20,7 +20,7 @@ export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable =
     }
     for (const [entryKey, name] of Object.entries(allEntries)) {
         let selected = entryKey === selectedKey?.toString() ? `selected="selected"` : '';
-        optionsHtml += `<option value="${entryKey}" ${selected}>${escapeHtml(name)}</option>\n`;
+        optionsHtml += `<option value="${html(entryKey)}" ${selected}>${html(name)}</option>\n`;
     }
     return optionsHtml;
 }
