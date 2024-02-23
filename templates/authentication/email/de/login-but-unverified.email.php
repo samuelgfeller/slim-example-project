@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Guten Tag <?= $userFullName ?> <br>
+Guten Tag <?= html($userFullName) ?> <br>
 <br>
 Wenn Sie gerade versucht haben, sich anzumelden, beachten Sie bitte, dass Sie zunächst Ihre E-Mail-Adresse
 bestätigen müssen. <br>
@@ -19,4 +19,4 @@ Um zu überprüfen, dass diese E-Mail-Adresse Ihnen gehört, klicken Sie bitte a
 Dieser Link wird in 2 Stunden ablaufen.<br>
 <br>
 Freundliche Grüsse<br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

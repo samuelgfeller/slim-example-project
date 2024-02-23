@@ -12,7 +12,7 @@ if (isset($throttleDelay)) { ?>
         // Display throttle message if there is not already a formErrorMessage
         if (!isset($formErrorMessage)) {
             $userThrottleMessage = is_numeric($throttleDelay) ?
-                sprintf(__('wait %s'), '<span class="throttle-time-span">' . $throttleDelay . '</span>s')
+                sprintf(__('wait %s'), '<span class="throttle-time-span">' . html($throttleDelay) . '</span>s')
                 : __('fill out the captcha');
             ?>
             <strong class="err-msg" id="throttle-delay-msg">Please <?= $userThrottleMessage ?> and try again.</strong>

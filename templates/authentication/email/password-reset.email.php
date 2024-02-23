@@ -21,4 +21,4 @@ If you recently requested to reset your password, click the link below to do so.
 The link will expire in 2 hours. <br>
 <br>
 Best regards <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

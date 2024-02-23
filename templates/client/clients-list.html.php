@@ -13,6 +13,8 @@ use App\Domain\Authorization\Privilege;
 
 $this->setLayout('layout.html.php');
 
+$this->addAttribute('libs', ['fontawesome.css']);
+
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
@@ -53,9 +55,9 @@ $this->addAttribute(
             /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) { ?>
                 <div class="filter-chip filter-chip-active">
-                <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterData->paramName ?>"
-                      data-param-value="<?= $filterData->paramValue ?>"
-                      data-category="<?= $filterData->category ?>"><?= $filterData->name ?></span>
+                <span data-filter-id="<?= html($filterId) ?>" data-param-name="<?= html($filterData->paramName) ?>"
+                      data-param-value="<?= html($filterData->paramValue) ?>"
+                      data-category="<?= html($filterData->category) ?>"><?= html($filterData->name) ?></span>
                 </div>
                 <?php
             }
@@ -67,13 +69,15 @@ $this->addAttribute(
         <?php
         foreach ($clientListFilters['inactive'] as $filterCategory => $filtersInCategory) {
             echo $filterCategory ?
-                "<span class='filter-chip-container-label' data-category='$filterCategory'>$filterCategory</span>" : '';
+                '<span class="filter-chip-container-label" data-category="' . html($filterCategory) .
+                '">' . html($filterCategory) . '</span>' : '';
             /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) { ?>
                 <div class="filter-chip">
-            <span data-filter-id="<?= $filterId ?>" data-param-name="<?= $filterData->paramName ?>"
-                  data-param-value="<?= $filterData->paramValue ?>" data-category="<?= $filterData->category ?>"
-            ><?= $filterData->name ?></span>
+            <span data-filter-id="<?= html($filterId) ?>" data-param-name="<?= html($filterData->paramName) ?>"
+                  data-param-value="<?= html($filterData->paramValue) ?>"
+                  data-category="<?= html($filterData->category) ?>"
+            ><?= html($filterData->name) ?></span>
                 </div>
                 <?php
             }

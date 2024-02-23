@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Guten Tag <?= $userFullName ?> <br>
+Guten Tag <?= html($userFullName) ?> <br>
 <br>
 Wenn Sie vor kurzem Ihr Passwort zurückgesetzt haben, klicken Sie auf den unten stehenden Link, um dies zu tun. <br>
 <br>
@@ -17,4 +17,4 @@ Wenn Sie vor kurzem Ihr Passwort zurückgesetzt haben, klicken Sie auf den unten
 Der Link wird in 2 Stunden ablaufen. <br>
 <br>
 Freundliche Grüsse <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

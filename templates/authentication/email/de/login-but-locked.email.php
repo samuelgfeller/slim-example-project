@@ -8,7 +8,7 @@
  */
 
 ?>
-Guten Tag <?= $userFullName ?> <br>
+Guten Tag <?= html($userFullName) ?> <br>
 <br>
 Wenn Sie gerade versucht haben, sich einzuloggen, beachten Sie bitte, dass Ihr Konto gesperrt ist. <br>
 Dies kann bedeuten, dass jemand wiederholt versucht hat, sich mit einem falschen Passwort bei Ihrem Konto anzumelden.
@@ -21,4 +21,4 @@ Sie können Ihr Konto freischalten, indem Sie auf den folgenden Link klicken:
 Der Link wird in 2 Stunden ablaufen. <br>
 <br>
 Freundliche Grüsse<br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

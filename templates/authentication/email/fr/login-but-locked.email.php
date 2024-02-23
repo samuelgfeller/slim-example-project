@@ -8,7 +8,7 @@
  */
 
 ?>
-Bonjour <?= $userFullName ?> <br>
+Bonjour <?= html($userFullName) ?> <br>
 <br>
 Si vous venez d'essayer de vous connecter, veuillez noter que votre compte est bloqué. <br>
 Cela peut signifier que quelqu'un a essayé de se connecter à votre compte à plusieurs reprises avec un mot de passe
@@ -22,4 +22,4 @@ Vous pouvez débloquer votre compte en cliquant sur le lien suivant :
 Ce lien expirera dans 2 heures. <br>
 <br>
 Meilleures salutations <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

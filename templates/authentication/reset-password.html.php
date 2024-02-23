@@ -21,12 +21,12 @@ $this->setLayout('');
 <html lang="<?= setlocale(LC_ALL, 0) ?>">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
-    <base href="<?= $basePath ?>/"/>
+    <base href="<?= html($basePath) ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
     <?php
-    // fetch() includes another template into the current template
+    // fetch() includes another template in the current template
     // Include template which contains HTML to include assets
     echo $this->fetch(
         'layout/assets.html.php',
@@ -43,9 +43,9 @@ $this->setLayout('');
             'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/password-reset-main.js'],
         ]
     );
-?>
+    ?>
 
-    <title>Reset password - <?= $config['app_name'] ?></title>
+    <title>Reset password - <?= html($config['app_name']) ?></title>
 
 </head>
 <body>
@@ -58,30 +58,34 @@ $this->setLayout('');
           class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-    isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
-        '</strong>' : '' ?>
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">'
+            . html($formErrorMessage) . '</strong>' : '' ?>
 
         <!--   Password 1    -->
         <div class="form-input-div <?= isset($validation['password']) ? ' input-group-error' : '' ?>">
             <label for="password1-input"><?= __('Password') ?></label>
-            <input type="password" name="password" id="password1-input" minlength="3" required autocomplete="new-password">
-            <?= isset($validation['password']) ? '<strong class="err-msg">' . $validation['password'][0] . '</strong>' : '' ?>
+            <input type="password" name="password" id="password1-input" minlength="3" required
+                   autocomplete="new-password">
+            <?= isset($validation['password']) ? '<strong class="err-msg">'
+                . html($validation['password'][0]) . '</strong>' : '' ?>
         </div>
 
         <!--   Password 2     -->
         <div class="form-input-div <?= isset($validation['password2']) ? ' input-group-error' : '' ?>"
              style="margin-bottom: 0;">
             <label for="password2-input"><?= __('Repeat password') ?></label>
-            <input type="password" name="password2" id="password2-input" minlength="3" required autocomplete="new-password">
+            <input type="password" name="password2" id="password2-input" minlength="3" required
+                   autocomplete="new-password">
             <?= isset($validation['password2']) ?
-            '<strong class="err-msg">' . $validation['password2'][0] . '</strong>' : '' ?>
+                '<strong class="err-msg">' . html($validation['password2'][0]) . '</strong>' : '' ?>
         </div>
         <?= /*In case passwords not match there may be a second error for password2 */
-    isset($validation['password2'][1]) ? '<strong class="err-msg">' . $validation['password2'][1] . '</strong>' : '' ?>
+        isset($validation['password2'][1]) ? '<strong class="err-msg">' . html($validation['password2'][1])
+            . '</strong>' : '' ?>
         <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
 
-        <input type="hidden" name="token" value="<?= $token ?? null ?>">
-        <input type="hidden" name="id" value="<?= $id ?? null ?>">
+        <input type="hidden" name="token" value="<?= html($token ?? '') ?>">
+        <input type="hidden" name="id" value="<?= html($id ?? '') ?>">
         <input type="submit" id="password-reset-submit-btn" class="submit-btn" style="margin-top: 20px"
                value="<?= __('Set new password') ?>">
         <?= $this->fetch('layout/request-throttle.html.php') ?>

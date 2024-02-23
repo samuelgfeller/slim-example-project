@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Hello <?= $userFullName ?> <br>
+Hello <?= html($userFullName) ?> <br>
 <br>
 <?php /** Following sentence asserted at @see LoginSubmitActionTest */?>
 If you just tried to log in, please take note that your account is suspended. <br>
@@ -15,4 +15,4 @@ Please <b><a href="mailto:<?= $config['email']['main_contact_address'] ?>">conta
 your account. <br>
 <br>
 Kind regards <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

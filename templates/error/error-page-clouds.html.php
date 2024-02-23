@@ -50,7 +50,9 @@ Please try again and then <a href="mailto:contact@samuel-gfeller.ch">contact me<
     ?>
     <h2 id="title"><?= html($title) ?></h2>
     <p><?= $message /* Not escape with html() because message contains html that should be interpreted*/ ?></p>
-    <?= $errorMessage['exceptionMessage'] !== null ? '<p>Error message: <b>' . $errorMessage['exceptionMessage'] . '</b></p>' : '' ?>
+    <?= $errorMessage['exceptionMessage'] !== null ? '<p>Error message: <b>' . html(
+            $errorMessage['exceptionMessage']
+        ) . '</b></p>' : '' ?>
 </section>
 <section id="home-btn-section">
     <a href="<?= $route->urlFor('home-page') ?>" class="btn">Go back home</a>

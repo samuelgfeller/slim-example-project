@@ -2,7 +2,7 @@
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $clientAggregate \App\Domain\Client\Data\ClientReadResult client
+ * @var $clientReadData \App\Domain\Client\Data\ClientReadResult client
  * @var $dropdownValues App\Domain\Client\Data\ClientDropdownValuesData all statuses, users and sexes to populate dropdown
  */
 
@@ -20,7 +20,7 @@ $this->addAttribute('css', [
     'assets/general/page-component/content-placeholder/content-placeholder.css',
     'assets/general/page-component/content-placeholder/client-read-note-placeholder.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
-    // page specific css has to come last to overwrite other styles
+    // page-specific css has to come last to overwrite other styles
     'assets/client/note/client-note.css',
     'assets/client/read/client-read.css',
 ]);
@@ -30,13 +30,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
 // Store client id on the page in <data> element for js to read it
 ?>
-<data id="client-id" value="<?= $clientAggregate->id ?>"></data>
+<data id="client-id" value="<?= html($clientReadData->id) ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
-    <div id="outer-contenteditable-heading-container" data-deleted="<?= $clientAggregate->deletedAt ? 1 : 0 ?>">
+    <div id="outer-contenteditable-heading-container" data-deleted="<?= $clientReadData->deletedAt ? 1 : 0 ?>">
         <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+            if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <!-- Img has to be before title because only the next sibling can be styled in css -->
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
@@ -45,11 +45,11 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 <?php
             } ?>
             <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                !empty($clientAggregate->firstName) ? html($clientAggregate->firstName) : '&nbsp;' ?></h1>
+                !empty($clientReadData->firstName) ? html($clientReadData->firstName) : '&nbsp;' ?></h1>
         </div>
         <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
             <?php
-            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+            if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
@@ -57,7 +57,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 <?php
             } ?>
             <h1 data-name="last_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                !empty($clientAggregate->lastName) ? html($clientAggregate->lastName) : '&nbsp;' ?></h1>
+                !empty($clientReadData->lastName) ? html($clientReadData->lastName) : '&nbsp;' ?></h1>
         </div>
     </div>
     <!-- Status and assigned user select options containers -->
@@ -66,14 +66,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="client-status" class="bigger-select-label"><?= __('Status') ?></label>
             <select name="client_status_id" class="default-select bigger-select"
-                <?= str_contains($clientAggregate->clientStatusPrivilege, 'U')
+                <?= str_contains($clientReadData->clientStatusPrivilege, 'U')
                     ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
                 // Client status select options
                 foreach ($dropdownValues->statuses as $statusId => $statusName) {
-                    $selected = $statusId === $clientAggregate->clientStatusId ? 'selected' : '';
-                    echo "<option value='$statusId' $selected>$statusName</option>";
+                    $selected = $statusId === $clientReadData->clientStatusId ? 'selected' : '';
+                    echo '<option value="' . html($statusId) . '" ' . $selected . '>' . html($statusName) . '</option>';
                 }
                 ?>
             </select>
@@ -83,13 +83,13 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="assigned-user-select" class="bigger-select-label"><?= __('Helper') ?></label>
             <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
-                <?= str_contains($clientAggregate->assignedUserPrivilege, 'U') ? '' : 'disabled' ?>>
+                <?= str_contains($clientReadData->assignedUserPrivilege, 'U') ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
                 // Linked user select options
                 foreach ($dropdownValues->users as $id => $name) {
-                    $selected = $id === $clientAggregate->userId ? 'selected' : '';
-                    echo "<option value='$id' $selected>$name</option>";
+                    $selected = $id === $clientReadData->userId ? 'selected' : '';
+                    echo '<option value="' . html($id) . '" ' . $selected . '>' . html($name) . '</option>';
                 }
                 ?>
             </select>
@@ -101,11 +101,10 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
     <div id="main-note-textarea-div">
         <textarea name="message" class="auto-resize-textarea main-note-textarea"
                   minlength="0" maxlength="1000"
-                  data-editable="<?= str_contains($clientAggregate->mainNoteData
-                      ->privilege, 'U') ? '1' : '0' ?>"
-                  data-note-id="<?= $clientAggregate->mainNoteData->id ?? 'new-main-note' ?>"
+                  data-editable="<?= str_contains($clientReadData->mainNoteData->privilege, 'U') ? '1' : '0' ?>"
+                  data-note-id="<?= html($clientReadData->mainNoteData->id ?? 'new-main - note') ?>"
                   placeholder="<?= __('New main note') ?>"
-        ><?= html($clientAggregate->mainNoteData->message) ?></textarea>
+        ><?= html($clientReadData->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-note">
             <div class="checkmark draw"></div>
         </div>
@@ -114,11 +113,12 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 </div>
 
 <div id="client-activity-personal-info-container">
-    <div id="client-note-wrapper" class="client-note-wrapper" data-notes-amount="<?= $clientAggregate->notesAmount ?>">
+    <div id="client-note-wrapper" class="client-note-wrapper"
+         data-notes-amount="<?= html($clientReadData->notesAmount) ?>">
         <div class="vertical-center" id="activity-header">
             <h2><?= __('Notes') ?></h2>
             <?php
-            if (str_contains($clientAggregate->noteCreatePrivilege, 'C')) { ?>
+            if (str_contains($clientReadData->noteCreationPrivilege, 'C')) { ?>
                 <div class="plus-btn" id="create-note-btn"></div>
                 <?php
             } ?>
@@ -126,18 +126,18 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <!--  Notes are populated here via ajax  -->
     </div>
     <div id="client-personal-info-container">
-        <div id="client-personal-info-flex-container" style="<?= $clientAggregate->birthdate || $clientAggregate->sex ||
-        $clientAggregate->location || $clientAggregate->phone || $clientAggregate->email ? '' : 'opacity: 0;' ?>">
+        <div id="client-personal-info-flex-container" style="<?= $clientReadData->birthdate || $clientReadData->sex ||
+        $clientReadData->location || $clientReadData->phone || $clientReadData->email ? '' : 'opacity: 0;' ?>">
             <!-- Toggle edit icons on mobile if user has privilege to update something -->
             <?php
-            if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+            if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                      id="toggle-personal-info-edit-icons">
                 <?php
             } ?>
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
-            <div id="birthdate-container" style="<?= $clientAggregate->birthdate ? '' : 'display: none;' ?>">
+            <div id="birthdate-container" style="<?= $clientReadData->birthdate ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/birthdate-icon.svg"
                      class="personal-info-icon default-icon" alt="birthdate">
@@ -145,7 +145,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-birthdate-btn">
@@ -154,17 +154,16 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                     <span spellcheck="false" data-name="birthdate" data-maxlength="254"
                           class="contenteditable-placeholder" data-placeholder="dd.mm.yyyy"
                     ><?php
-                        if ($clientAggregate->birthdate) {
-                            echo $clientAggregate->birthdate->format('d.m.Y') ?><span id="age-sub-span"
-                            >&nbsp; • &nbsp;<?= (new DateTime())->diff(
-                            $clientAggregate->birthdate
-                        )->y ?></span><?php
+                        if ($clientReadData->birthdate) {
+                            echo html($clientReadData->birthdate->format('d.m.Y')) ?><span id="age-sub-span"
+                            >&nbsp; • &nbsp;<?=
+                        html((new DateTime())->diff($clientReadData->birthdate)->y) ?></span><?php
                         } else {
-                            echo '&nbsp;';
+                            echo ' & nbsp;';
                         } ?></span>
                 </div>
             </div>
-            <div id="sex-container" style="<?= $clientAggregate->sex ? '' : 'display: none;' ?>">
+            <div id="sex-container" style="<?= $clientReadData->sex ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/gender-icon.svg"
                      class="personal-info-icon default-icon" alt="sex">
@@ -172,7 +171,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-sex-btn">
@@ -181,8 +180,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                             <?php
                             // Linked user select options
                             foreach ($dropdownValues->sexes as $id => $name) {
-                                $selected = $id === $clientAggregate->sex ? 'selected' : '';
-                                echo "<option value='$id' $selected>$name</option>";
+                                $selected = $id === $clientReadData->sex ? 'selected' : '';
+                                echo '<option value="' . html($id) . '" ' . $selected . '>' . html($name) . '</option>';
                             }
                             ?>
                         </select>
@@ -190,11 +189,11 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                     } ?>
 
                     <span spellcheck="false" data-name="sex" data-maxlength="254"
-                    ><?= $clientAggregate->sex ? $dropdownValues->sexes[$clientAggregate->sex] : '' ?></span>
+                    ><?= $clientReadData->sex ? html($dropdownValues->sexes[$clientReadData->sex]) : '' ?></span>
                 </div>
             </div>
-            <a href="https://www.google.ch/maps/search/<?= $clientAggregate->location ?>" target="_blank"
-               id="location-container" style="<?= $clientAggregate->location ? '' : 'display: none;' ?>">
+            <a href="https://www.google.ch/maps/search/<?= html($clientReadData->location) ?>" target="_blank"
+               id="location-container" style="<?= $clientReadData->location ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/location-icon.svg"
                      class="personal-info-icon default-icon" alt="location">
@@ -202,18 +201,18 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
                         <?php
                     } ?>
                     <span data-name="location" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                        html($clientAggregate->location) ?></span>
+                        html($clientReadData->location) ?></span>
                 </div>
             </a>
-            <a href="tel:<?= $clientAggregate->phone ?>" target="_blank" rel="noopener"
-               id="phone-container" style="<?= $clientAggregate->phone ? '' : 'display: none;' ?>">
+            <a href="tel:<?= html($clientReadData->phone) ?>" target="_blank" rel="noopener"
+               id="phone-container" style="<?= $clientReadData->phone ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/phone-icon.svg"
                      class="personal-info-icon default-icon" alt="phone">
@@ -221,18 +220,18 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
                         <?php
                     } ?>
                     <span data-name="phone" data-minlength="3" data-maxlength="20" spellcheck="false"><?=
-                        html($clientAggregate->phone) ?></span>
+                        html($clientReadData->phone) ?></span>
                 </div>
             </a>
-            <a href="mailto:<?= $clientAggregate->email ?>" target="_blank" rel="noopener"
-               id="email-container" style="<?= $clientAggregate->email ? '' : 'display: none;' ?>">
+            <a href="mailto:<?= html($clientReadData->email) ?>" target="_blank" rel="noopener"
+               id="email-container" style="<?= $clientReadData->email ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/email-icon.svg"
                      class="personal-info-icon default-icon" alt="email">
@@ -240,19 +239,19 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="a-span"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
                         <?php
                     } ?>
                     <?php
-                    $emailParts = $clientAggregate->email ? explode('@', $clientAggregate->email) : null; ?>
+                    $emailParts = $clientReadData->email ? explode('@', $clientReadData->email) : null; ?>
                     <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
-                    ><?= $emailParts ? html($emailParts[0]) . '<br>@' . html($emailParts[1]) : '' ?></span>
+                    ><?= $emailParts ? html($emailParts[0]) . ' <br>@' . html($emailParts[1]) : '' ?></span>
                 </div>
             </a>
-            <div id="vigilance_level-container" style="<?= $clientAggregate->vigilanceLevel ? '' : 'display: none;' ?>">
+            <div id="vigilance_level-container" style="<?= $clientReadData->vigilanceLevel ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
                 <img src="assets/general/general-img/personal-data-icons/warning-icon.svg"
                      class="personal-info-icon default-icon" alt="vigilance_level">
@@ -260,7 +259,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-field-element="select"
                      data-hide-if-empty="true">
                     <?php
-                    if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+                    if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                         <img src="assets/general/general-img/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-vigilance-level-btn">
@@ -269,33 +268,33 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                             <?php
                             // Linked user select options
                             foreach ($dropdownValues->vigilanceLevel as $id => $name) {
-                                $selected = $id === $clientAggregate->vigilanceLevel?->value ? 'selected' : '';
-                                echo "<option value='$id' $selected>$name</option>";
+                                $selected = $id === $clientReadData->vigilanceLevel?->value ? 'selected' : '';
+                                echo '<option value="' . html($id) . '" ' . $selected . '>' . html($name) . '</option>';
                             }
                             ?>
                         </select>
                         <?php
                     } ?>
                     <span spellcheck="false" data-maxlength="254"
-                    ><?= $clientAggregate->vigilanceLevel ? $clientAggregate->vigilanceLevel->prettyName()
+                    ><?= $clientReadData->vigilanceLevel ? html($clientReadData->vigilanceLevel->prettyName())
                             : '' ?></span>
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
         <?php
-        if (str_contains($clientAggregate->generalPrivilege, 'U')) { ?>
+        if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
             <div id="add-client-personal-info-div">
                 <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons"
                      class="default-icon" alt="add info">
 
                 <!-- Delete trash icon stays always there -->
-                <?= str_contains($clientAggregate->generalPrivilege, 'D') ?
-                    ($clientAggregate->deletedAt ? '<img src="assets/general/general-img/action/undelete-icon.svg" 
-                    class="default-icon personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" alt="undelete">' :
-                        '<img src="assets/general/general-img/action/trash-icon.svg" 
+                <?= str_contains($clientReadData->generalPrivilege, 'D') ?
+                    ($clientReadData->deletedAt ? ' < img src = "assets/general/general-img/action/undelete-icon.svg" 
+                    class="default-icon personal-info-icon permanently-in-available-icon-div" id = "undelete-client-btn" alt = "undelete" > ' :
+                        '<img src = "assets/general/general-img/action/trash-icon.svg" 
                         class="personal-info-icon permanently-in-available-icon-div default-icon" 
-                        id="delete-client-btn" alt="delete">') : '' ?>
+                        id = "delete-client-btn" alt = "delete" > ') : '' ?>
 
                 <!-- alt has to be exactly the same as the field name.
                 The field container id has to be "[alt]-container".

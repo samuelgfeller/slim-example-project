@@ -24,8 +24,9 @@
                  display in DOM -->
                 <div class="flash-message"><h3><?= html(ucfirst($flashCategory)) /* Serves as default, is overwritten in  */
             ?> message</h3><p><?= // No line break between h3 and p
-            /* Flash messages are hardcoded strings on the server, and html is used to format them,
-                   so it should be interpreted. This is the only exception where html() for escaping is not used*/
+            /* Flash messages are always hardcoded strings on the server, and html tags are used to format them,
+            so it should be interpreted.
+            This is the only exception where html() for escaping is not used */
             $msg ?></p></div>
                 <span class="flash-close-btn">&times;</span>
             </dialog>

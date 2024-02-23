@@ -18,7 +18,7 @@
 <html lang="<?= str_replace('_', '-', setlocale(LC_ALL, 0)) ?>">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
-    <base href="<?= $basePath ?>/"/>
+    <base href="<?= html($basePath) ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
@@ -48,7 +48,7 @@
     );
     ?>
 
-    <title><?= $config['app_name'] ?></title>
+    <title><?= html($config['app_name']) ?></title>
     <script>
         // Add the theme immediately to the <html> element before everything is done loading to prevent delay
         const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
@@ -68,7 +68,7 @@
 <div id="wrapper">
     <header>
         <!-- Application name displayed on mobile -->
-        <span><?= $config['app_name'] ?></span>
+        <span><?= html($config['app_name']) ?></span>
     </header>
     <?= $this->fetch('layout/flash-messages.html.php') ?>
 

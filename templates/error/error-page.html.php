@@ -65,7 +65,9 @@ $this->addAttribute('js', ['assets/error/prod-error-page.js']);
         $emailBody = __('This is what I did before the error happened:');
         ?>
         <h2 id="error-reason-phrase">OOPS! <?= html($title) ?></h2>
-        <p id="error-message"><?= $message /* Not escape with html() because $message is safe and has html tags */ ?></p>
+        <p id="error-message"><?=
+            /* Not escape with html() because $message is safe as it is created above and has html tags */
+            $message ?></p>
         <?= $exceptionMessage !== null ?
             '<p id="server-message">Server message: ' . html($exceptionMessage) . '</p>' : '' ?>
 

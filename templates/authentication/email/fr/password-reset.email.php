@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Bonjour <?= $userFullName ?> <br>
+Bonjour <?= html($userFullName) ?> <br>
 <br>
 Si vous avez récemment demandé à réinitialiser votre mot de passe, cliquez sur le lien ci-dessous. <br>
 <br>
@@ -18,4 +18,4 @@ Si vous avez récemment demandé à réinitialiser votre mot de passe, cliquez s
 Ce lien expirera dans 2 heures. <br>
 <br>
 Meilleures salutations <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

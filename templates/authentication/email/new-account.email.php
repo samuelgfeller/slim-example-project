@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Hello <?= $userFullName ?> <br>
+Hello <?= html($userFullName) ?> <br>
 <br>
 Your account has been created. <br> <br>
 To verify that this email address belongs to you, please click on the following link: <br>
@@ -16,4 +16,4 @@ To verify that this email address belongs to you, please click on the following 
 Note: this link will expire in 2 hours. To get a new link, try logging in.<br>
 <br><br>
 Kind regards <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

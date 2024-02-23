@@ -32,7 +32,7 @@ $this->addAttribute(
 
 // Store client id on the page in <data> element for js to read it
 ?>
-<data id="user-id" value="<?= $user->id ?>"></data>
+<data id="user-id" value="<?= html($user->id) ?>"></data>
 <data id="is-own-profile" value="<?= $isOwnProfile ? '1' : '0' ?>"></data>
 
 <div id="user-page-content-flexbox">
@@ -77,8 +77,8 @@ $this->addAttribute(
                     // User status select options
                     foreach ($userStatuses as $userStatus) {
                         $selected = $userStatus === $user->status ? 'selected' : '';
-                        echo "<option value='$userStatus->value' $selected>" .
-                            __(ucfirst($userStatus->value)) . "</option>";
+                        echo '<option value="' . html($userStatus->value) . '" ' . $selected . '>' .
+                            __(ucfirst(html($userStatus->value))) . '</option>';
                     }
                     ?>
                 </select>
@@ -92,7 +92,7 @@ $this->addAttribute(
                     <?php
                     foreach ($user->availableUserRoles as $id => $userRole) {
                         $selected = $id === $user->userRoleId ? 'selected' : '';
-                        echo "<option value='$id' $selected>" . $userRole . "</option>";
+                        echo '<option value="' . html($id) . '" ' . $selected . '>' . html($userRole) . '</option>';
                     }
                     ?>
                 </select>
@@ -161,7 +161,7 @@ $this->addAttribute(
             </label>
         </div>
         <h3 class="label-h3"><?= __('Metadata') ?></h3>
-        <p class="secondary-text"><b>ID:</b> <?= $user->id ?><br>
+        <p class="secondary-text"><b>ID:</b> <?= html($user->id) ?><br>
             <?php
             // Create date formatter that outputs the date in the correct lang in a format like February 12, 2023 at 8:45 PM
             $dateFormatter = new \IntlDateFormatter(
@@ -170,8 +170,8 @@ $this->addAttribute(
                 \IntlDateFormatter::SHORT
             );
             ?>
-            <b><?= __('Created') ?>:</b> <?= $dateFormatter->format($user->createdAt) ?><br>
-            <b><?= __('Updated') ?>:</b> <?= $dateFormatter->format($user->updatedAt) ?>
+            <b><?= __('Created') ?>:</b> <?= $dateFormatter->format(html($user->createdAt)) ?><br>
+            <b><?= __('Updated') ?>:</b> <?= $dateFormatter->format(($user->updatedAt)) ?>
         </p>
         <?php
         if (str_contains($user->generalPrivilege, 'D')) { ?>

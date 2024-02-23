@@ -32,23 +32,23 @@ $this->addAttribute('jsModules', [
     <?php
     foreach ($dashboards as $dashboard) {
         $checked = in_array($dashboard->panelId, $enabledDashboards, true) ? 'checked' : '';
-        echo "<label class='checkbox-label dashboard-panel-toggle-btn' data-panel-id='$dashboard->panelId'>
-                <input type='checkbox' $checked><span>$dashboard->title</span>
-              </label>";
+        echo '<label class="checkbox-label dashboard-panel-toggle-btn" data-panel-id="'.html($dashboard->panelId).'">
+                <input type="checkbox" '.$checked.'><span>'.html($dashboard->title).'</span>
+              </label>';
     }
     ?>
 </div>
 <div class="dashboard-panel-container">
     <?php
     foreach ($dashboards as $dashboard) { ?>
-        <div class="panel-container <?= $dashboard->panelClass ?>" id="<?= $dashboard->panelId ?>">
+        <div class="panel-container <?= html($dashboard->panelClass) ?>" id="<?= html($dashboard->panelId) ?>">
             <div class="panel-header">
-                <h2><?= $dashboard->title ?></h2>
+                <h2><?= html($dashboard->title) ?></h2>
                 <img class="toggle-panel-icon" src="assets/general/general-img/action/arrow-icon.svg"
                      alt="toggle-open-close">
             </div>
             <div class="panel-content">
-                <?= $dashboard->panelHtmlContent ?>
+                <?= html($dashboard->panelHtmlContent) ?>
             </div>
         </div>
         <?php

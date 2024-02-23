@@ -54,8 +54,8 @@ $this->setLayout('');
           id="login-form" class="form" method="post" autocomplete="on">
 
         <?= // General form error message if there is one
-        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' . $formErrorMessage .
-            '</strong>' : '' ?>
+        isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' .
+            html($formErrorMessage) . '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
         <div class="form-input-div <?= isset($validation['email']) ? ' input-group-error' : '' ?>">
@@ -63,7 +63,8 @@ $this->setLayout('');
             <input type="email" name="email"
                    maxlength="254" id="email-input"
                    required value="<?= html($preloadValues['email'] ?? '') ?>">
-            <?= isset($validation['email']) ? '<strong class="err-msg">' . html($validation['email'][0]) . '</strong>' : '' ?>
+            <?= isset($validation['email']) ? '<strong class="err-msg">'
+                . html($validation['email'][0]) . '</strong>' : '' ?>
             <span class="discrete-text content-below-input cursor-pointer" id="discrete-login-btn">
                 <?= __('Login') ?></span>
         </div>

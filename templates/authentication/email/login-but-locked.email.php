@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Hello <?= $userFullName ?> <br>
+Hello <?= html($userFullName) ?> <br>
 <br>
 <?php /** Following sentence asserted at @see LoginSubmitActionTest */?>
 If you just tried to log in, please take note that your account is locked. <br>
@@ -20,4 +20,4 @@ You can unlock your account by clicking on the following link:
 The link will expire in 2 hours. <br>
 <br>
 Kind regards <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

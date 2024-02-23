@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Bonjour <?= $userFullName ?> <br>
+Bonjour <?= html($userFullName) ?> <br>
 <br>
 Votre compte a été créé. <br>
 <br>
@@ -18,4 +18,4 @@ Pour vérifier que cette adresse mail vous appartient, veuillez cliquer sur le l
 Ce lien expirera dans 2 heures. Pour recevoir un nouveau lien, essayez de vous connecter.<br>
 <br>
 Meilleures salutations <br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>

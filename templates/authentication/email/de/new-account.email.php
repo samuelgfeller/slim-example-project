@@ -7,7 +7,7 @@
  * @var array $config public configuration values
  */
 ?>
-Guten Tag <?= $userFullName ?> <br>
+Guten Tag <?= html($userFullName) ?> <br>
 <br>
 Ihr Konto wurde erstellt. <br> <br>
 Um zu überprüfen, ob diese E-Mail-Adresse Ihnen gehört, klicken Sie bitte auf den folgenden Link: <br>
@@ -17,4 +17,4 @@ Um zu überprüfen, ob diese E-Mail-Adresse Ihnen gehört, klicken Sie bitte auf
 Hinweis: Dieser Link wird in 2 Stunden ablaufen. Um einen neuen Link zu erhalten, versuchen Sie sich einzuloggen.<br>
 <br>
 Freundliche Grüsse<br><br>
-<?= $config['email']['main_sender_name'] ?>
+<?= html($config['email']['main_sender_name']) ?>
