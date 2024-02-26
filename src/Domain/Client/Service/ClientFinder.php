@@ -140,7 +140,7 @@ final readonly class ClientFinder
                 'client_status_id',
             );
             //  Set create note privilege
-            $clientResultAggregate->noteCreatePrivilege = $this->notePermissionVerifier->isGrantedToCreate(
+            $clientResultAggregate->noteCreationPrivilege = $this->notePermissionVerifier->isGrantedToCreate(
                 0,
                 $clientResultAggregate->userId,
                 false

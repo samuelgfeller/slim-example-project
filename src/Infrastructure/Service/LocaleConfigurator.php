@@ -75,10 +75,9 @@ final class LocaleConfigurator
     }
 
     /**
-     * Locale has a language code and a country code.
-     * If the language exists but with another country code, this function
-     * returns the locale with the same language - or the default one
-     * if the language is not available.
+     * Returns the locale if available, if not searches for the same
+     * language with a different region and if not found,
+     * returns the default locale.
      *
      * @param false|string|null $locale
      *

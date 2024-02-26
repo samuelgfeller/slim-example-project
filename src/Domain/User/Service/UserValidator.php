@@ -35,13 +35,13 @@ final readonly class UserValidator
         $validator
             // First name and surname are required to have values if they're given so no allowEmptyString
             ->requirePresence('first_name', $isCreateMode, __('Field is required'))
-            ->minLength('first_name', 2, __('Minimum length is 2'))
-            ->maxLength('first_name', 100, __('Maximum length is 100'))
+            ->minLength('first_name', 2, __('Minimum length is %d', 2))
+            ->maxLength('first_name', 100, __('Maximum length is %d', 100))
             // Disallow empty strings as field is required
             ->notEmptyString('first_name', __('Required'))
             ->requirePresence('surname', $isCreateMode, __('Field is required'))
-            ->minLength('surname', 2, __('Minimum length is 2'))
-            ->maxLength('surname', 100, __('Maximum length is 100'))
+            ->minLength('surname', 2, __('Minimum length is %d', 2))
+            ->maxLength('surname', 100, __('Maximum length is %d', 100))
             ->notEmptyString('surname', __('Required'))
             ->requirePresence('email', $isCreateMode, __('Field is required'))
             // email() automatically disallows empty strings
@@ -161,12 +161,12 @@ final readonly class UserValidator
         $validator
             ->requirePresence('password', $required, __('Field is required'))
             ->notEmptyString('password', __('Password required'))
-            ->minLength('password', 3, __('Minimum length is 3'))
-            ->maxLength('password', 1000, __('Maximum length is 1000'))
+            ->minLength('password', 3, __('Minimum length is %d', 3))
+            ->maxLength('password', 1000, __('Maximum length is %d', 1000))
             ->requirePresence('password2', $required, __('Field is required'))
             ->notEmptyString('password2', __('Password required'))
-            ->minLength('password2', 3, __('Minimum length is 3'))
-            ->maxLength('password2', 1000, __('Maximum length is 1000'))
+            ->minLength('password2', 3, __('Minimum length is %d', 3))
+            ->maxLength('password2', 1000, __('Maximum length is %d', 1000))
             ->add('password2', 'passwordsMatch', [
                 'rule' => function ($value, $context) {
                     // Check if passwords match

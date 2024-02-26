@@ -25,7 +25,7 @@ final readonly class NoteValidator
     {
         $validator = new Validator();
         $validator = $validator->requirePresence('message', $isCreateMode, __('Field is required'))
-            ->maxLength('message', 1000, __('Maximum length is 1000', 1000))
+            ->maxLength('message', 1000, __('Maximum length is %d', 1000))
             // is_main and client_id keys only required on creation
             ->requirePresence('is_main', $isCreateMode, __('Field is required'))
             // When update or create request is called and all fields except is_main, something is wrong
@@ -61,7 +61,7 @@ final readonly class NoteValidator
         } else {
             // If not main note, min length is 4
             $validator
-                ->minLength('message', 4, __('Minimum length is 4', 4));
+                ->minLength('message', 4, __('Minimum length is %d', 4));
         }
 
         $errors = $validator->validate($noteValues);

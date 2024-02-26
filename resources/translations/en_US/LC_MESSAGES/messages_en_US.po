@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Slim-example-project\n"
-"POT-Creation-Date: 2023-06-27 18:54+0200\n"
-"PO-Revision-Date: 2023-06-27 18:55+0200\n"
+"POT-Creation-Date: 2024-02-23 11:19+0100\n"
+"PO-Revision-Date: 2024-02-23 11:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -10,14 +10,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: public\n"
 "X-Poedit-SearchPath-1: src\n"
 "X-Poedit-SearchPath-2: templates\n"
 
-#: public/assets/authentication/password-strength-checker.js:91
+#: public/assets/authentication/password-strength-checker.js:84
 msgid "This password is known to have been leaked and is unsafe to use"
 msgstr "This password is known to have been leaked and is unsafe to use"
 
@@ -66,7 +66,7 @@ msgstr "Phone number"
 #: public/assets/client/create/client-create-modal.html.js:18
 #: public/assets/user/create/user-create-modal.html.js:14
 #: templates/authentication/login.html.php:62
-#: templates/user/user-read.html.php:104
+#: templates/user/user-read.html.php:102
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -76,8 +76,8 @@ msgstr "Assigned user"
 
 #: public/assets/client/create/client-create-modal.html.js:20
 #: public/assets/user/create/user-create-modal.html.js:18
-#: templates/client/client-read.html.php:69
-#: templates/user/user-read.html.php:74
+#: templates/client/client-read.html.php:67
+#: templates/user/user-read.html.php:72
 msgid "Status"
 msgstr "Status"
 
@@ -85,19 +85,19 @@ msgstr "Status"
 msgid "Main note about client."
 msgstr "Main note about client."
 
-#: public/assets/client/note/client-read-note-loading.js:50
+#: public/assets/client/note/client-read-note-loading.js:49
 msgid "No notes were found"
 msgstr "No notes were found"
 
-#: public/assets/client/read/client-read-main.js:49
+#: public/assets/client/read/client-read-main.js:51
 msgid "Are you sure that you want to delete this client?"
 msgstr "Are you sure that you want to delete this client?"
 
-#: public/assets/client/read/client-read-main.js:50
+#: public/assets/client/read/client-read-main.js:52
 msgid "Are you sure that you want to restore this client?"
 msgstr "Are you sure that you want to restore this client?"
 
-#: public/assets/client/read/client-read-main.js:51
+#: public/assets/client/read/client-read-main.js:53
 msgid "Yes undelete"
 msgstr "Yes undelete"
 
@@ -113,31 +113,19 @@ msgstr "Forbidden. Not allowed to access this area or function"
 msgid "Please try again and report the error to an administrator"
 msgstr "Please try again and report the error to an administrator"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:69
-#: src/Domain/Client/Service/ClientValidator.php:143
-#: src/Domain/Client/Service/ClientValidator.php:166
-#: src/Domain/Client/Service/ClientValidator.php:186
-#: src/Domain/Client/Service/ClientValidator.php:206
-#: src/Domain/Client/Service/ClientValidator.php:227
-#: src/Domain/Client/Service/ClientValidator.php:247
-#: src/Domain/Note/Service/NoteValidator.php:110
-#: src/Domain/User/Service/UserValidator.php:248
-#: src/Domain/User/Service/UserValidator.php:272
-#: src/Domain/User/Service/UserValidator.php:300
-#: src/Domain/Validation/Validator.php:109
-#: src/Domain/Validation/Validator.php:133
-#: src/Domain/Validation/Validator.php:178
-#: src/Domain/Validation/Validator.php:213
-#: src/Domain/Validation/Validator.php:239
-#: src/Domain/Validation/Validator.php:273
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:84
+#: src/Domain/Client/Service/ClientValidator.php:106
+#: src/Domain/Client/Service/ClientValidator.php:116
+#: src/Domain/User/Service/UserValidator.php:41
+#: src/Domain/User/Service/UserValidator.php:45
 msgid "Required"
 msgstr "Required"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:70
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:85
 msgid "Minimum length is"
 msgstr "Minimum length is"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:71
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:86
 msgid "Maximum length is"
 msgstr "Maximum length is"
 
@@ -158,7 +146,7 @@ msgid "Create user"
 msgstr "Create user"
 
 #: public/assets/user/create/user-create-modal.html.js:15
-#: templates/user/user-read.html.php:153
+#: templates/user/user-read.html.php:149
 msgid "Language"
 msgstr "Language"
 
@@ -173,28 +161,28 @@ msgid "Repeat new password"
 msgstr "Repeat new password"
 
 #: public/assets/user/create/user-create-modal.html.js:19
-#: templates/user/user-read.html.php:91
+#: templates/user/user-read.html.php:89
 msgid "User role"
 msgstr "User role"
 
-#: public/assets/user/read/user-read-update-main.js:44
+#: public/assets/user/read/user-read-update-main.js:47
 msgid "Are you sure that you want to delete this user?"
 msgstr "Are you sure that you want to delete this user?"
 
-#: public/assets/user/read/user-read-update-main.js:45
+#: public/assets/user/read/user-read-update-main.js:48
 msgid "Are you sure that you want to delete your profile?"
 msgstr "Are you sure that you want to delete your profile?"
 
-#: public/assets/user/read/user-read-update-main.js:46
+#: public/assets/user/read/user-read-update-main.js:49
 msgid "You will be logged out and not be able to log in again."
 msgstr "You will be logged out and not be able to log in again."
 
-#: public/assets/user/read/user-read-update-main.js:47
+#: public/assets/user/read/user-read-update-main.js:50
 msgid "Successfully changed password."
 msgstr "Successfully changed password."
 
 #: public/assets/user/update/change-password-modal.html.js:8
-#: templates/user/user-read.html.php:125
+#: templates/user/user-read.html.php:121
 msgid "Change password"
 msgstr "Change password"
 
@@ -202,75 +190,49 @@ msgstr "Change password"
 msgid "Old password"
 msgstr "Old password"
 
-#: src/Application/Actions/Authentication/Page/LoginPageAction.php:45
-#, php-format
-msgid "You are already logged-in.<br>Would you like to %slogout%s?"
-msgstr "You are already logged-in.<br>Would you like to %slogout%s?"
-
-#: src/Application/Actions/Authentication/Page/LogoutPageAction.php:31
-msgid "Logged out successfully."
-msgstr "Logged out successfully."
-
-#: src/Application/Actions/Authentication/Page/PasswordResetPageAction.php:58
-#: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:86
-#: src/Application/Actions/Authentication/Submit/PasswordResetSubmitAction.php:109
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:86
-msgid "Token not found. Please click on the link you received via email."
-msgstr "Token not found. Please click on the link you received via email."
-
-#: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:51
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:44
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:49
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:44
 #, php-format
 msgid "Congratulations!<br>Your account has been %s! <br><b>%s</b>"
 msgstr "Congratulations!<br>Your account has been %s! <br><b>%s</b>"
 
-#: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:52
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:50
 msgid "unlocked"
 msgstr "unlocked"
 
-#: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:53
-#: src/Application/Actions/Authentication/Submit/PasswordResetSubmitAction.php:71
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:46
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:76
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:51
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:46
 msgid "You are now logged in."
 msgstr "You are now logged in."
 
-#: src/Application/Actions/Authentication/Submit/AccountUnlockAction.php:64
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:62
 msgid "Invalid or expired link. Please <b>log in</b> to receive a new link."
 msgstr "Invalid or expired link. Please <b>log in</b> to receive a new link."
 
-#: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:60
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:85
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:95
+#: src/Application/Action/Authentication/Page/PasswordResetPageAction.php:47
+msgid "Token not found. Please click on the link you received via email."
+msgstr "Token not found. Please click on the link you received via email."
+
+#: src/Application/Action/Authentication/Ajax/LoginSubmitAction.php:48
 msgid "Login successful"
 msgstr "Login successful"
 
-#: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:92
+#: src/Application/Action/Authentication/Ajax/LoginSubmitAction.php:83
 msgid "Invalid credentials. Please try again."
 msgstr "Invalid credentials. Please try again."
 
-#: src/Application/Actions/Authentication/Submit/LoginSubmitAction.php:127
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:101
-#: src/Application/Actions/Dashboard/DashboardTogglePanelAction.php:61
-msgid "Malformed request body syntax. Please contact an administrator."
-msgstr "Malformed request body syntax. Please contact an administrator."
+#: src/Application/Action/Authentication/Ajax/NewPasswordResetSubmitAction.php:46
+msgid "Please log in."
+msgstr "Please log in."
 
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:82
-msgid "There was an error when sending the email."
-msgstr "There was an error when sending the email."
-
-#: src/Application/Actions/Authentication/Submit/PasswordForgottenEmailSubmitAction.php:93
-msgid ""
-"Password recovery email is sent to you.<br>\n"
-"Please also check the spam folder if you don't see it in the inbox."
-msgstr ""
-"Password recovery email is sent to you.<br>\n"
-"Please also check the spam folder if you don't see it in the inbox."
-
-#: src/Application/Actions/Authentication/Submit/PasswordResetSubmitAction.php:71
+#: src/Application/Action/Authentication/Ajax/NewPasswordResetSubmitAction.php:46
 #, php-format
 msgid "Successfully changed password. <b>%s</b>"
 msgstr "Successfully changed password. <b>%s</b>"
 
-#: src/Application/Actions/Authentication/Submit/PasswordResetSubmitAction.php:79
+#: src/Application/Action/Authentication/Ajax/NewPasswordResetSubmitAction.php:54
 msgid ""
 "<b>Invalid, used or expired link. <br> Please request a new link below and "
 "make \n"
@@ -280,65 +242,94 @@ msgstr ""
 "make \n"
 "sure to click on the most recent email we send you</a>.</b>"
 
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:45
+#: src/Application/Action/Authentication/Ajax/PasswordForgottenEmailSubmitAction.php:66
+msgid "There was an error when sending the email."
+msgstr "There was an error when sending the email."
+
+#: src/Application/Action/Authentication/Ajax/PasswordForgottenEmailSubmitAction.php:77
+msgid ""
+"Password recovery email is being sent to you.<br>\n"
+"Please check the spam folder if you don't see it in the inbox."
+msgstr ""
+"Password recovery email is sent to you.<br>\n"
+"Please also check the spam folder if you don't see it in the inbox."
+
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:45
 msgid "verified"
 msgstr "verified"
 
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:61
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:61
 msgid "Invalid or expired link. Please log in to receive a new link."
 msgstr "Invalid or expired link. Please log in to receive a new link."
 
-#: src/Application/Actions/Authentication/Submit/RegisterVerifySubmitAction.php:70
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:72
 msgid "You are already verified. Please log in."
 msgstr "You are already verified. Please log in."
 
-#: src/Application/Actions/Client/Ajax/ClientDeleteAction.php:66
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:81
+#, php-format
+msgid "You are already logged in.<br>Would you like to %slogout%s?"
+msgstr "You are already logged-in.<br>Would you like to %slogout%s?"
+
+#: src/Application/Action/Authentication/Page/LoginPageAction.php:32
+#, php-format
+msgid "You are already logged-in.<br>Would you like to %slogout%s?"
+msgstr "You are already logged-in.<br>Would you like to %slogout%s?"
+
+#: src/Application/Action/Authentication/Page/LogoutPageAction.php:27
+msgid "Logged out successfully."
+msgstr "Logged out successfully."
+
+#: src/Application/Action/Client/Ajax/ClientDeleteAction.php:34
 msgid "Successfully deleted client."
 msgstr "Successfully deleted client."
 
-#: src/Application/Actions/Note/Ajax/NoteCreateSubmitAction.php:81
-msgid "note"
-msgstr "note"
+#: src/Application/Action/Dashboard/DashboardTogglePanelProcessAction.php:40
+msgid "Malformed request body syntax. Please contact an administrator."
+msgstr "Malformed request body syntax. Please contact an administrator."
 
-#: src/Application/Actions/Note/Ajax/NoteDeleteSubmitAction.php:74
-msgid "The note was not deleted"
-msgstr "The note was not deleted"
-
-#: src/Application/Actions/Note/Page/NoteReadPageAction.php:55
+#: src/Application/Action/Note/Page/NoteReadPageAction.php:38
 msgid "The note was not not found."
 msgstr "The note was not not found."
 
-#: src/Application/Actions/User/Ajax/UserSubmitCreateAction.php:81
+#: src/Application/Action/User/Ajax/UserCreateAction.php:49
 msgid "Email error. Please contact an administrator."
 msgstr "Email error. Please contact an administrator."
 
-#: src/Application/Actions/User/Ajax/UserSubmitDeleteAction.php:65
+#: src/Application/Action/User/Ajax/UserDeleteAction.php:57
 msgid "Successfully deleted user."
 msgstr "Successfully deleted user."
 
-#: src/Domain/Authentication/Service/AccountUnlockTokenVerifier.php:48
+#: src/Domain/Authentication/Service/AccountUnlockTokenVerifier.php:49
 msgid "User account not locked."
 msgstr "User account not locked."
 
-#: src/Domain/Authentication/Service/LoginMailer.php:52
+#: src/Domain/Authentication/Service/LoginMailSender.php:45
 msgid "Login failed because your account is unverified"
 msgstr "Login failed because your account is unverified"
 
-#: src/Domain/Authentication/Service/LoginMailer.php:74
+#: src/Domain/Authentication/Service/LoginMailSender.php:68
 msgid "Login failed because your account is suspended"
 msgstr "Login failed because your account is suspended"
 
-#: src/Domain/Authentication/Service/LoginMailer.php:97
+#: src/Domain/Authentication/Service/LoginMailSender.php:92
 msgid "Login failed because your account is locked"
 msgstr "Login failed because your account is locked"
 
-#: src/Domain/Authentication/Service/LoginVerifier.php:82
+#: src/Domain/Authentication/Service/LoginNonActiveUserHandler.php:63
 msgid ""
 "Unable to login at the moment, please check your email inbox for a more "
 "detailed message."
 msgstr ""
+"Unable to login at the moment, please check your email inbox for a more "
+"detailed message."
 
-#: src/Domain/Authentication/Service/RegistrationMailer.php:61
+#: src/Domain/Authentication/Service/PasswordRecoveryEmailSender.php:69
+#: templates/authentication/reset-password.html.php:53
+msgid "Reset password"
+msgstr "Reset password"
+
+#: src/Domain/Authentication/Service/RegistrationMailSender.php:55
 msgid "Account created"
 msgstr "Account created"
 
@@ -359,16 +350,16 @@ msgid "Cannot help"
 msgstr "Cannot help"
 
 #: src/Domain/Client/Enum/ClientVigilanceLevel.php:26
-msgid "Moderate"
-msgstr "Moderate"
+msgid "Low"
+msgstr "Low"
 
 #: src/Domain/Client/Enum/ClientVigilanceLevel.php:27
-msgid "Caution"
-msgstr "Caution"
+msgid "Medium"
+msgstr "Medium"
 
 #: src/Domain/Client/Enum/ClientVigilanceLevel.php:28
-msgid "Extra caution"
-msgstr "Extra caution"
+msgid "High"
+msgstr "High"
 
 #: src/Domain/Client/Service/ClientListFilter/ClientListFilterChipProvider.php:56
 msgid "Unassigned"
@@ -390,12 +381,95 @@ msgstr "Assigned to"
 msgid "Deleted assigned user"
 msgstr "Deleted assigned user"
 
-#: src/Domain/Client/Service/ClientValidator.php:223
-#: src/Domain/User/Service/UserValidator.php:296
-#: src/Domain/Validation/Validator.php:207
-#: src/Domain/Validation/Validator.php:266
+#: src/Domain/Client/Service/ClientValidator.php:34
+#: src/Domain/Client/Service/ClientValidator.php:40
+#: src/Domain/Client/Service/ClientValidator.php:44
+#: src/Domain/Client/Service/ClientValidator.php:47
+#: src/Domain/Client/Service/ClientValidator.php:78
+#: src/Domain/Client/Service/ClientValidator.php:82
+#: src/Domain/Client/Service/ClientValidator.php:105
+#: src/Domain/Note/Service/NoteValidator.php:27
+#: src/Domain/Note/Service/NoteValidator.php:30
+#: src/Domain/Note/Service/NoteValidator.php:38
+#: src/Domain/User/Service/UserValidator.php:37
+#: src/Domain/User/Service/UserValidator.php:42
+#: src/Domain/User/Service/UserValidator.php:46
+#: src/Domain/User/Service/UserValidator.php:59
+#: src/Domain/User/Service/UserValidator.php:68
+#: src/Domain/User/Service/UserValidator.php:76
+#: src/Domain/User/Service/UserValidator.php:86
+#: src/Domain/User/Service/UserValidator.php:139
+#: src/Domain/User/Service/UserValidator.php:141
+#: src/Domain/User/Service/UserValidator.php:162
+#: src/Domain/User/Service/UserValidator.php:166
+#: src/Domain/User/Service/UserValidator.php:193
+#: src/Domain/User/Service/UserValidator.php:195
+#: src/Domain/User/Service/UserValidator.php:218
+msgid "Field is required"
+msgstr "Field is required"
+
+#: src/Domain/Client/Service/ClientValidator.php:38
+#: src/Domain/Client/Service/ClientValidator.php:42
+#: src/Domain/Client/Service/ClientValidator.php:80
+#: src/Domain/Client/Service/ClientValidator.php:84
+#: src/Domain/Client/Service/ClientValidator.php:103
+#: src/Domain/Note/Service/NoteValidator.php:64
+#: src/Domain/User/Service/UserValidator.php:38
+#: src/Domain/User/Service/UserValidator.php:43
+#: src/Domain/User/Service/UserValidator.php:164
+#: src/Domain/User/Service/UserValidator.php:168
+#, php-format
+msgid "Minimum length is %d"
+msgstr "Minimum length is %d"
+
+#: src/Domain/Client/Service/ClientValidator.php:39
+#: src/Domain/Client/Service/ClientValidator.php:43
+#: src/Domain/Client/Service/ClientValidator.php:81
+#: src/Domain/Client/Service/ClientValidator.php:85
+#: src/Domain/Client/Service/ClientValidator.php:104
+#: src/Domain/Note/Service/NoteValidator.php:28
+#: src/Domain/User/Service/UserValidator.php:39
+#: src/Domain/User/Service/UserValidator.php:44
+#: src/Domain/User/Service/UserValidator.php:165
+#: src/Domain/User/Service/UserValidator.php:169
+#, php-format
+msgid "Maximum length is %d"
+msgstr "Maximum length is %d"
+
+#: src/Domain/Client/Service/ClientValidator.php:46
+#: src/Domain/User/Service/UserValidator.php:48
+#: src/Domain/User/Service/UserValidator.php:194
+#: src/Domain/User/Service/UserValidator.php:219
+msgid "Invalid email"
+msgstr "Invalid email"
+
+#: src/Domain/Client/Service/ClientValidator.php:52
+msgid "Invalid date value"
+msgstr "Invalid date value"
+
+#: src/Domain/Client/Service/ClientValidator.php:65
+msgid "Cannot be in the future"
+msgstr "Cannot be in the future"
+
+#: src/Domain/Client/Service/ClientValidator.php:75
+msgid "Cannot be older than 130 years"
+msgstr "Cannot be older than 130 years"
+
+#: src/Domain/Client/Service/ClientValidator.php:98
+#: src/Domain/Client/Service/ClientValidator.php:112
+#: src/Domain/Client/Service/ClientValidator.php:122
+#: src/Domain/User/Service/UserValidator.php:65
+#: src/Domain/User/Service/UserValidator.php:74
+#: src/Domain/User/Service/UserValidator.php:77
+#: src/Domain/User/Service/UserValidator.php:83
+#: src/Domain/User/Service/UserValidator.php:92
 msgid "Invalid option"
 msgstr "Invalid option"
+
+#: src/Domain/Client/Service/ClientValidator.php:107
+#: src/Domain/Client/Service/ClientValidator.php:117
+msgid "Invalid option format"
+msgstr "Invalid option format"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:55
 msgid "Unassigned clients"
@@ -406,7 +480,7 @@ msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Clients assigned to me &nbsp; — &nbsp;  action pending"
 
 #: src/Domain/Dashboard/DashboardPanelProvider.php:72
-#: templates/user/user-read.html.php:192
+#: templates/user/user-read.html.php:188
 msgid "User activity"
 msgstr "User activity"
 
@@ -430,6 +504,18 @@ msgstr "Female"
 msgid "Other"
 msgstr "Other"
 
+#: src/Domain/Note/Service/NoteCreator.php:66
+msgid "note"
+msgstr "note"
+
+#: src/Domain/Note/Service/NoteValidator.php:36
+msgid "Request body is empty"
+msgstr "Request body is empty"
+
+#: src/Domain/Note/Service/NoteValidator.php:58
+msgid "Main note already exists"
+msgstr "Main note already exists"
+
 #: src/Domain/Security/Exception/SecurityException.php:36
 #: templates/layout/request-throttle.html.php:15
 #, php-format
@@ -450,12 +536,12 @@ msgstr ""
 #: src/Domain/Security/Exception/SecurityException.php:44
 msgid ""
 "The site is under a too high request load. \n"
-"            <br> Therefore a general throttling is in place. Please fill out "
-"the captcha and try again."
+"            <br> Therefore, a general throttling is in place. Please fill "
+"out the captcha and try again."
 msgstr ""
 "The site is under a too high request load. \n"
-"            <br> Therefore a general throttling is in place. Please fill out "
-"the captcha and try again."
+"            <br> Therefore, a general throttling is in place. Please fill "
+"out the captcha and try again."
 
 #: src/Domain/User/Enum/UserActivity.php:23
 msgid "created"
@@ -505,113 +591,108 @@ msgstr "Locked"
 msgid "Suspended"
 msgstr "Suspended"
 
-#: src/Domain/User/Service/UserValidator.php:51
-msgid "User with this email already exists"
-msgstr "User with this email already exists"
+#: src/Domain/User/Service/UserValidator.php:57
+msgid "Email already exists"
+msgstr "Email already exists"
 
-#: src/Domain/User/Service/UserValidator.php:185
+#: src/Domain/User/Service/UserValidator.php:140
+msgid "Token id is not numeric"
+msgstr "Token id is not numeric"
+
+#: src/Domain/User/Service/UserValidator.php:142
+msgid "Token is required"
+msgstr "Token is required"
+
+#: src/Domain/User/Service/UserValidator.php:163
+#: src/Domain/User/Service/UserValidator.php:167
+msgid "Password required"
+msgstr "Password required"
+
+#: src/Domain/User/Service/UserValidator.php:175
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
-#: src/Domain/User/Service/UserValidator.php:216
+#: src/Domain/User/Service/UserValidator.php:196
+msgid "Invalid password"
+msgstr "Invalid password"
+
+#: src/Domain/User/Service/UserValidator.php:244
+msgid "Old password required"
+msgstr "Old password required"
+
+#: src/Domain/User/Service/UserValidator.php:253
 msgid "Incorrect password"
 msgstr "Incorrect password"
 
-#: src/Domain/User/Service/UserValidator.php:222
-msgid "is required"
-msgstr "is required"
-
-#: src/Domain/Validation/Validator.php:67
-#, php-format
-msgid "Minimum length is %s"
-msgstr "Minimum length is %s"
-
-#: src/Domain/Validation/Validator.php:86
-#, php-format
-msgid "Maximum length is %s"
-msgstr "Maximum length is %s"
-
-#: src/Domain/Validation/Validator.php:129
-#: src/Domain/Validation/Validator.php:158
-#: src/Domain/Validation/Validator.php:169
-msgid "Invalid value"
-msgstr "Invalid value"
-
-#: src/Domain/Validation/Validator.php:235
-msgid "Value should be numeric."
-msgstr "Value should be numeric."
-
-#: templates/authentication/login.html.php:68
-#: templates/authentication/login.html.php:84
-#: templates/authentication/reset-password.html.php:86
+#: templates/authentication/login.html.php:69
+#: templates/authentication/login.html.php:86
+#: templates/authentication/reset-password.html.php:85
 msgid "Login"
 msgstr "Login"
 
-#: templates/authentication/login.html.php:75
-#: templates/authentication/reset-password.html.php:72
-#: templates/user/user-read.html.php:121
+#: templates/authentication/login.html.php:76
+#: templates/authentication/reset-password.html.php:66
+#: templates/user/user-read.html.php:118
 msgid "Password"
 msgstr "Password"
 
-#: templates/authentication/login.html.php:79
+#: templates/authentication/login.html.php:81
 msgid "Password forgotten"
 msgstr "Password forgotten"
 
-#: templates/authentication/login.html.php:85
+#: templates/authentication/login.html.php:87
 msgid "Request password"
 msgstr "Request password"
 
-#: templates/authentication/reset-password.html.php:52
-msgid "Reset password"
-msgstr "Reset password"
-
-#: templates/authentication/reset-password.html.php:81
+#: templates/authentication/reset-password.html.php:76
 msgid "Repeat password"
 msgstr "Repeat password"
 
-#: templates/authentication/reset-password.html.php:91
+#: templates/authentication/reset-password.html.php:90
 msgid "Set new password"
 msgstr "Set new password"
 
-#: templates/client/client-read.html.php:86
+#: templates/client/client-read.html.php:84
 msgid "Helper"
 msgstr "Helper"
 
-#: templates/client/client-read.html.php:109
+#: templates/client/client-read.html.php:106
 msgid "New main note"
 msgstr "New main note"
 
-#: templates/client/client-read.html.php:121
+#: templates/client/client-read.html.php:119
 msgid "Notes"
 msgstr "Notes"
 
-#: templates/client/clients-list.html.php:40 templates/layout.html.php:96
+#: templates/client/clients-list.html.php:42
+#: templates/layout/navbar.html.php:22
 msgid "Clients"
 msgstr "Clients"
 
-#: templates/client/clients-list.html.php:47
+#: templates/client/clients-list.html.php:49
 msgid "Search by name"
 msgstr "Search by name"
 
-#: templates/client/clients-list.html.php:50
+#: templates/client/clients-list.html.php:52
 msgid "Filter"
 msgstr "Filter"
 
-#: templates/client/clients-list.html.php:66
+#: templates/client/clients-list.html.php:68
 msgid "No more filters"
 msgstr "No more filters"
 
-#: templates/dashboard/dashboard.html.php:30 templates/layout.html.php:89
+#: templates/dashboard/dashboard.html.php:30
+#: templates/layout/navbar.html.php:15
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/error/error-page.html.php:25
+#: templates/error/error-page.html.php:28
 msgid ""
 "Looks like you've ventured into uncharted territory. Please report the issue!"
 msgstr ""
 "Looks like you've ventured into uncharted territory. Please report the issue!"
 
-#: templates/error/error-page.html.php:30
+#: templates/error/error-page.html.php:33
 msgid ""
 "You are not allowed to access this page. Please report the issue if you "
 "think this is \n"
@@ -621,13 +702,13 @@ msgstr ""
 "think this is \n"
 "                an error."
 
-#: templates/error/error-page.html.php:36
+#: templates/error/error-page.html.php:39
 msgid ""
 "There is something wrong with the request syntax. Please report the issue."
 msgstr ""
 "There is something wrong with the request syntax. Please report the issue."
 
-#: templates/error/error-page.html.php:41
+#: templates/error/error-page.html.php:44
 msgid ""
 "The server could not interpret the data it received. Please try again with "
 "valid data and\n"
@@ -637,7 +718,7 @@ msgstr ""
 "valid data and\n"
 "                report the issue if it persists."
 
-#: templates/error/error-page.html.php:48
+#: templates/error/error-page.html.php:51
 msgid ""
 "It's not your fault! The server has an internal error. <br> Please try again "
 "and \n"
@@ -647,7 +728,7 @@ msgstr ""
 "and \n"
 "                    report the issue if the problem persists."
 
-#: templates/error/error-page.html.php:55
+#: templates/error/error-page.html.php:58
 msgid ""
 "While it's unfortunate that an error exists, the silver lining is that it "
 "can be rectified! \n"
@@ -657,53 +738,68 @@ msgstr ""
 "can be rectified! \n"
 "<br>Please try again and then contact us."
 
-#: templates/error/error-page.html.php:62
-msgid "Please explain what you did prior to the error happening."
-msgstr "Please explain what you did prior to the error happening."
+#: templates/error/error-page.html.php:65
+msgid "This is what I did before the error happened:"
+msgstr "This is what I did before the error happened:"
 
-#: templates/error/error-page.html.php:71
+#: templates/error/error-page.html.php:74
 msgid "Go back home"
 msgstr "Go back home"
 
-#: templates/error/error-page.html.php:74
+#: templates/error/error-page.html.php:77
 msgid "Report the issue"
 msgstr "Report the issue"
 
-#: templates/layout.html.php:102
+#: templates/layout/navbar.html.php:28
 msgid "Profile"
 msgstr "Profile"
 
-#: templates/layout.html.php:111 templates/user/user-list.html.php:30
+#: templates/layout/navbar.html.php:39 templates/user/user-list.html.php:30
 msgid "Users"
 msgstr "Users"
 
-#: templates/layout.html.php:119
+#: templates/layout/navbar.html.php:47
 msgid "Logout"
 msgstr "Logout"
 
-#: templates/user/user-read.html.php:133
+#: templates/user/user-read.html.php:129
 msgid "Dark mode"
 msgstr "Dark mode"
 
-#: templates/user/user-read.html.php:167
+#: templates/user/user-read.html.php:163
 msgid "Metadata"
 msgstr "Metadata"
 
-#: templates/user/user-read.html.php:177
+#: templates/user/user-read.html.php:173
 msgid "Created"
 msgstr "Created"
 
-#: templates/user/user-read.html.php:178
+#: templates/user/user-read.html.php:174
 msgid "Updated"
 msgstr "Updated"
 
-#: templates/user/user-read.html.php:184
+#: templates/user/user-read.html.php:180
 msgid "Delete profile"
 msgstr "Delete profile"
 
-#: templates/user/user-read.html.php:184
+#: templates/user/user-read.html.php:180
 msgid "Delete user"
 msgstr "Delete user"
+
+#~ msgid "The note was not deleted"
+#~ msgstr "The note was not deleted"
+
+#~ msgid "Moderate"
+#~ msgstr "Moderate"
+
+#~ msgid "Caution"
+#~ msgstr "Caution"
+
+#~ msgid "Extra caution"
+#~ msgstr "Extra caution"
+
+#~ msgid "Value should be numeric."
+#~ msgstr "Value should be numeric."
 
 #~| msgid "Email error. Please contact an administrator."
 #~ msgid "Malformed request body syntax. Please contact an administrator"

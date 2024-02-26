@@ -4,31 +4,26 @@ namespace App\Domain\Client\Data;
 
 use App\Domain\Note\Data\NoteData;
 
-/**
- * Aggregate DTO to store ClientData combined with
- * some linked (aggregate) tables.
- * Used as a result DTO when access to aggregate
- * details is relevant like client read.
- */
+/** Aggregate DTO to store data for client read page */
 class ClientReadResult extends ClientData
 {
     // Amount of notes for the client to know how many content placeholders to display
     public ?int $notesAmount = null;
-    // As this below is only relevant for client read, this ClientResult data class could be renamed into ClientListResult
-    // and a new class ClientReadResultAggregateData could be created extending this one as it contains more attributes
-    public ?NoteData $mainNoteData = null; // Main note data
 
-    // Client personal info privilege (first-, second name, phone, email, location)
+    // Main note data
+    public ?NoteData $mainNoteData = null;
+
+    // If allowed to change personal client values i.e. first name, last name, location, birthdate
     public ?string $generalPrivilege = null;
     public ?string $clientStatusPrivilege = null;
     public ?string $assignedUserPrivilege = null;
-    public ?string $noteCreatePrivilege = null;
+    public ?string $noteCreationPrivilege = null;
 
     public function __construct(array $clientResultData = [])
     {
         parent::__construct($clientResultData);
 
-        // Populate mainNote if set (only when read)
+        // Populate mainNote if set
         $this->mainNoteData = new NoteData([
             'id' => $clientResultData['main_note_id'] ?? null,
             'message' => $clientResultData['note_message'] ?? null,
@@ -39,7 +34,8 @@ class ClientReadResult extends ClientData
     }
 
     /**
-     * Output for json_encode.
+     * Define how json_encode() should serialize the object
+     * @return array in the format expected by the frontend
      */
     public function jsonSerialize(): array
     {
@@ -50,7 +46,7 @@ class ClientReadResult extends ClientData
             'personalInfoPrivilege' => $this->generalPrivilege,
             'clientStatusPrivilege' => $this->clientStatusPrivilege,
             'assignedUserPrivilege' => $this->assignedUserPrivilege,
-            'noteCreatePrivilege' => $this->noteCreatePrivilege,
+            'noteCreationPrivilege' => $this->noteCreationPrivilege,
         ]);
     }
     // No need for toArrayForDatabase() as this is a result DTO

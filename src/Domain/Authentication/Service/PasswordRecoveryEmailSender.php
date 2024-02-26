@@ -39,7 +39,7 @@ final readonly class PasswordRecoveryEmailSender
     }
 
     /**
-     * When a user requests a new password for email.
+     * When a user requests a new password.
      *
      * @param array $userValues
      *

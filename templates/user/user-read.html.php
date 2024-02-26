@@ -170,8 +170,8 @@ $this->addAttribute(
                 \IntlDateFormatter::SHORT
             );
             ?>
-            <b><?= __('Created') ?>:</b> <?= $dateFormatter->format(html($user->createdAt)) ?><br>
-            <b><?= __('Updated') ?>:</b> <?= $dateFormatter->format(($user->updatedAt)) ?>
+            <b><?= __('Created') ?>:</b> <?= $dateFormatter->format($user->createdAt) ?><br>
+            <b><?= __('Updated') ?>:</b> <?= $dateFormatter->format($user->updatedAt) ?>
         </p>
         <?php
         if (str_contains($user->generalPrivilege, 'D')) { ?>

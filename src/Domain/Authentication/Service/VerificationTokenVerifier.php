@@ -16,8 +16,6 @@ final readonly class VerificationTokenVerifier
     /**
      * Most simple form of verifying token and return user id.
      *
-     * Token also verified @param int $verificationId
-     *
      * @param string $token
      * @param int $verificationId
      *
