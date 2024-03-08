@@ -85,10 +85,10 @@
         background: var(--background-accent-2-color);
         border-radius: 99px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        padding: 5px;
     }
 
     .profile-card-avatar img {
-        padding: 5px;
         border-radius: 99px;
         filter: var(--accent-2-filter);
     }

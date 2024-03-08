@@ -32,8 +32,10 @@ $this->addAttribute('jsModules', [
     <?php
     foreach ($dashboards as $dashboard) {
         $checked = in_array($dashboard->panelId, $enabledDashboards, true) ? 'checked' : '';
-        echo '<label class="checkbox-label dashboard-panel-toggle-btn" data-panel-id="'.html($dashboard->panelId).'">
-                <input type="checkbox" '.$checked.'><span>'.html($dashboard->title).'</span>
+        echo '<label class="checkbox-label dashboard-panel-toggle-btn" data-panel-id="' . html($dashboard->panelId) . '">
+                <input type="checkbox" ' . $checked . '><span>' .
+            /* The html panel title is hardcoded html from the server and needs to be interpreted */
+            $dashboard->title . '</span>
               </label>';
     }
     ?>
@@ -43,12 +45,14 @@ $this->addAttribute('jsModules', [
     foreach ($dashboards as $dashboard) { ?>
         <div class="panel-container <?= html($dashboard->panelClass) ?>" id="<?= html($dashboard->panelId) ?>">
             <div class="panel-header">
-                <h2><?= html($dashboard->title) ?></h2>
+                <h2><?= /* The html panel title is hardcoded html from the server and needs to be interpreted */
+                    $dashboard->title ?></h2>
                 <img class="toggle-panel-icon" src="assets/general/general-img/action/arrow-icon.svg"
                      alt="toggle-open-close">
             </div>
             <div class="panel-content">
-                <?= html($dashboard->panelHtmlContent) ?>
+                <?= // The html panel content is hardcoded html from the server and needs to be interpreted
+                $dashboard->panelHtmlContent ?>
             </div>
         </div>
         <?php

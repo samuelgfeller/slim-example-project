@@ -4,7 +4,7 @@
  *
  * This file should contain all keys even secret ones to serve as template
  *
- * This is the first file loaded in settings.php and can as such safely define arrays
+ * This is the first file loaded in settings.php and can safely define arrays
  * without the risk of overwriting something.
  * Permitted to do the following: $settings['db'] = ['key' => 'val', 'nextKey' => 'nextVal',];
  */
@@ -135,7 +135,9 @@ $settings['phinx'] = [
         // Table that keeps track of the migrations
         'default_migration_table' => 'phinx_migration_log',
         'default_environment' => 'local',
-        'local' => [/* Environment specifics such as db credentials are added in env.phinx.php */],
+        'local' => [
+            /* Environment specifics such as db credentials from the secret config are added in env.phinx.php */
+        ],
     ],
 ];
 

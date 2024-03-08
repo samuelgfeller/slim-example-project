@@ -52,6 +52,7 @@ export function fetchAndLoadClients(
                 card.addEventListener('click', openClientReadPageOnCardClick);
                 // Middle mouse wheel click
                 card.addEventListener('auxclick', openClientReadPageOnCardClick);
+
                 card.addEventListener('mousedown', disableMouseWheelClickScrolling);
                 // Enter or space bar key press
                 card.addEventListener('keypress', triggerClickOnHtmlElementEnterKeypress);
@@ -160,6 +161,10 @@ function addClientsToDom(clients, allUsers, allStatuses, clientWrapperId = null)
  * @param event
  */
 function openClientReadPageOnCardClick(event) {
+    // Don't open client read if not left-click, or middle mouse wheel, or select option click
+    if ((event.type === 'auxclick' && event.button !== 1) || event.target.tagName === 'OPTION') {
+        return;
+    }
     // "this" is the card
     openLinkOnHtmlElement(event, this, `clients/${this.dataset.clientId}`);
 }

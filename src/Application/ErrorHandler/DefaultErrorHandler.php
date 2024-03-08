@@ -10,10 +10,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Selective\BasePath\BasePathDetector;
 use Slim\Exception\HttpException;
+use Slim\Interfaces\ErrorHandlerInterface;
 use Slim\Views\PhpRenderer;
 use Throwable;
 
-final readonly class DefaultErrorHandler
+final readonly class DefaultErrorHandler implements ErrorHandlerInterface
 {
     private string $fileSystemPath;
 

@@ -93,7 +93,7 @@ class SecurityLoginChecker
                 ($loginsByIp['failures'] >= $requestLimit && $loginsByIp['failures'] !== 0)
                 || ($loginsByEmail['failures'] >= $requestLimit && $loginsByEmail['failures'] !== 0)
                 // To prevent bots from increasing the total login requests and thus manipulating the global threshold,
-                // the same limit of failed login attempts per user is used is also enforced for successful logins.
+                // the same limit is enforced for failed and successful login attempts
                 || ($loginsByIp['successes'] >= $requestLimit && $loginsByIp['successes'] !== 0)
                 || ($loginsByEmail['successes'] >= $requestLimit && $loginsByEmail['successes'] !== 0)
             ) {

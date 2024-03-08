@@ -18,7 +18,7 @@ final readonly class SqlSchemaGenerator
     }
 
     /**
-     * Generates schema.sql from current database.
+     * Generates schema.sql with the current database.
      * Used by the command line.
      *
      * @return int
@@ -36,6 +36,7 @@ final readonly class SqlSchemaGenerator
             // Changes the case of the keys in the fetched row to lower case
             $row = array_change_key_case($row);
             // Execute SQL query to get the 'CREATE TABLE' statement for the current table
+            // SHOW CREATE TABLE is specific to MySQL
             $statement2 = $this->query(sprintf('SHOW CREATE TABLE `%s`;', (string)$row['table_name']));
             // Fetch the 'CREATE TABLE' statement and remove the 'AUTO_INCREMENT' part
             $createTableSql = $statement2->fetch()['Create Table'];
@@ -60,16 +61,18 @@ final readonly class SqlSchemaGenerator
      *
      * @param string $sql The sql
      *
+     * @return PDOStatement The statement
      * @throws UnexpectedValueException
      *
-     * @return PDOStatement The statement
      */
     private function query(string $sql): PDOStatement
     {
         $statement = $this->pdo->query($sql);
 
         if (!$statement) {
-            throw new UnexpectedValueException('Query failed: ' . $sql . ' Error: ' . $this->pdo->errorInfo()[2]);
+            throw new UnexpectedValueException(
+                'Query failed: ' . $sql . ' Error: ' . $this->pdo->errorInfo()[2]
+            );
         }
 
         return $statement;
