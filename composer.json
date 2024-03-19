@@ -24,7 +24,7 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "phpunit/phpunit": "^10",
+    "phpunit/phpunit": "^11",
     "selective/test-traits": "^4",
     "phpstan/phpstan": "^1",
     "jetbrains/phpstorm-attributes": "^1.0",

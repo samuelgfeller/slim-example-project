@@ -40,15 +40,15 @@ class AuthenticationProvider
         return [
             [
                 'status' => UserStatus::Unverified,
-                'partial_email_body' => 'If you just tried to log in, please take note that you have to validate your email address first.',
+                'partialEmailBody' => 'If you just tried to log in, please take note that you have to validate your email address first.',
             ],
             [
                 'status' => UserStatus::Locked,
-                'partial_email_body' => 'If you just tried to log in, please take note that your account is locked.',
+                'partialEmailBody' => 'If you just tried to log in, please take note that your account is locked.',
             ],
             [
                 'status' => UserStatus::Suspended,
-                'partial_email_body' => 'If you just tried to log in, please take note that your account is suspended.',
+                'partialEmailBody' => 'If you just tried to log in, please take note that your account is suspended.',
             ],
         ];
     }
@@ -84,7 +84,7 @@ class AuthenticationProvider
                     'email' => 'admin@exam$ple.com',
                     'password' => '12345678',
                 ],
-                'validationErrorMessage' => 'Invalid email',
+                'errorMessage' => 'Invalid email',
             ],
             'Missing email' => [
                 [
@@ -92,14 +92,14 @@ class AuthenticationProvider
                     'email' => '',
                     'password' => '12345678',
                 ],
-                'validationErrorMessage' => 'Invalid email',
+                'errorMessage' => 'Invalid email',
             ],
             'Missing password' => [
                 [
                     'email' => 'admin@example.com',
                     'password' => '',
                 ],
-                'validationErrorMessage' => 'Invalid password',
+                'errorMessage' => 'Invalid password',
             ],
         ];
     }

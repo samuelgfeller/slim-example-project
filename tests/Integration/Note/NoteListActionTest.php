@@ -15,6 +15,7 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use IntlDateFormatter;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -41,7 +42,6 @@ class NoteListActionTest extends TestCase
      * Tests notes that are loaded with ajax on client read page.
      * One note at a time is tested for the sake of simplicity.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteListUserAttributesAndExpectedResultProvider()
      * Different privileges of notes depending on authenticated user and
      * note owner are tested with the provider.
      *
@@ -52,6 +52,7 @@ class NoteListActionTest extends TestCase
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'noteListUserAttributesAndExpectedResultProvider')]
     public function testNoteListActionAuthorization(
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
@@ -137,8 +138,6 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     /**
      * Test note list action with filter.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteListWithFilterProvider()
-     *
      * @param array $filterQueryParams
      * @param string $expectedNotesWhereString
      * @param array $usersAttrToInsert
@@ -147,6 +146,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'noteListWithFilterProvider')]
     public function testNoteListFilter(
         array $filterQueryParams,
         string $expectedNotesWhereString,
@@ -215,13 +215,12 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      * (e.g. numeric) otherwise an exception should be thrown. This is
      * tested here.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteListFilterProvider()
-     *
      * @param array $filterQueryParams
      * @param string $exceptionMessage
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'invalidNoteListFilterProvider')]
     public function testNoteListFilterInvalid(
         array $filterQueryParams,
         string $exceptionMessage,

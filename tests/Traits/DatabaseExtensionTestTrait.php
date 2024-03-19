@@ -93,7 +93,7 @@ trait DatabaseExtensionTestTrait
     }
 
     /**
-     * Asserts that results of given table are the same as the given row.
+     * Asserts that result row of given table is the same as the given row.
      *
      * @param array $expectedRow Row expected to find
      * @param string $table Table to look into

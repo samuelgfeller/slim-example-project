@@ -91,7 +91,7 @@ class UserPermissionVerifier
      */
     public function userRoleIsGranted(
         string|int|null $newUserRoleId,
-        null|string|int $userRoleIdOfUserToMutate,
+        string|int|null $userRoleIdOfUserToMutate,
         ?int $authenticatedUserRoleHierarchy = null,
         ?array $userRoleHierarchies = null,
     ): bool {

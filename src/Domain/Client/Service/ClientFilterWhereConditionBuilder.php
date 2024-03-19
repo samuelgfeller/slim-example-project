@@ -97,7 +97,7 @@ class ClientFilterWhereConditionBuilder
      * @param string $column column reference
      * @param string|int|array|null $value value reference
      */
-    private function adaptColumnValueToQueryBuilder(string &$column, null|string|int|array &$value): void
+    private function adaptColumnValueToQueryBuilder(string &$column, string|int|array|null &$value): void
     {
         // If empty string it means that value should be null
         if ($value === '') {

@@ -64,6 +64,12 @@ final readonly class NonFatalErrorHandlerMiddleware implements MiddlewareInterfa
             }
         );
 
-        return $handler->handle($request);
+        $response = $handler->handle($request);
+
+        // Restore previous error handler in post-processing to satisfy PHPUnit 11 that checks for any
+        // leftover error handlers https://github.com/sebastianbergmann/phpunit/pull/5619
+        restore_error_handler();
+
+        return $response;
     }
 }

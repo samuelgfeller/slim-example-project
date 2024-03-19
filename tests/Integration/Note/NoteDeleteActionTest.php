@@ -12,6 +12,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -38,28 +39,27 @@ class NoteDeleteActionTest extends TestCase
      * Test normal and main note deletion on client-read page
      * while being authenticated with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCreateUpdateDeleteProvider()
-     *
-     * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+     * @param array $linkedUserRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'noteCreateUpdateDeleteProvider')]
     public function testNoteSubmitDeleteActionAuthorization(
-        array $userLinkedToNoteRow,
+        array $linkedUserRow,
         array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToNoteRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert linked status
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixtureWithAttributes(
             new ClientFixture(),
-            ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+            ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Insert main note attached to client and given "owner" user
@@ -67,7 +67,7 @@ class NoteDeleteActionTest extends TestCase
             new NoteFixture(),
             [
                 'is_main' => 1,
-                'user_id' => $userLinkedToNoteRow['id'],
+                'user_id' => $linkedUserRow['id'],
                 'client_id' => $clientRow['id'],
             ],
         );
@@ -77,7 +77,7 @@ class NoteDeleteActionTest extends TestCase
             new NoteFixture(),
             [
                 'is_main' => 0,
-                'user_id' => $userLinkedToNoteRow['id'],
+                'user_id' => $linkedUserRow['id'],
                 'client_id' => $clientRow['id'],
             ],
         );
@@ -93,14 +93,14 @@ class NoteDeleteActionTest extends TestCase
         // Make request
         $normalNoteResponse = $this->app->handle($normalNoteRequest);
         self::assertSame(
-            $expectedResult['deletion']['normal_note'][StatusCodeInterface::class],
+            $expectedResult['deletion']['normalNote'][StatusCodeInterface::class],
             $normalNoteResponse->getStatusCode()
         );
 
         // Assert database
         $noteDeletedAtValue = $this->findTableRowById('note', $normalNoteData['id'])['deleted_at'];
         // If db is expected to change assert the new message (when provided authenticated user is allowed to do action)
-        if ($expectedResult['deletion']['normal_note']['db_changed'] === true) {
+        if ($expectedResult['deletion']['normalNote']['dbChanged'] === true) {
             // Test that deleted at is not null
             self::assertNotNull($noteDeletedAtValue);
             // Assert that user activity is inserted
@@ -120,7 +120,7 @@ class NoteDeleteActionTest extends TestCase
             $this->assertTableRowCount(0, 'user_activity');
         }
 
-        $this->assertJsonData($expectedResult['deletion']['normal_note']['json_response'], $normalNoteResponse);
+        $this->assertJsonData($expectedResult['deletion']['normalNote']['jsonResponse'], $normalNoteResponse);
 
         // --- *MAIN note request ---
         // Create request to edit main note

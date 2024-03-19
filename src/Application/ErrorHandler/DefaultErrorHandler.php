@@ -72,7 +72,14 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
             if ($exception instanceof \PDOException && str_contains($exception->getMessage(), 'Column not found')) {
                 echo "Column not existing. Try running `composer schema:generate` in the console and run tests again. \n";
             }
-            // The exception is thrown to have the standard behaviour (important for testing)
+
+            // Restore previous error handler when the exception has been thrown to satisfy PHPUnit v11
+            // It is restored in the post-processing of the NonFatalErrorHandlerMiddleware, but the code doesn't
+            // reach it when there's an exception (especially needed for tests expecting an exception).
+            // Related PR: https://github.com/sebastianbergmann/phpunit/pull/5619
+            restore_error_handler();
+
+            // The exception is thrown to have the standard behaviour (important for testing).
             throw $exception;
         }
 

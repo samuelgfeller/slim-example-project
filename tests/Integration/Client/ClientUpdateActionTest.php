@@ -13,6 +13,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -44,17 +45,16 @@ class ClientUpdateActionTest extends TestCase
     /**
      * Test client values update when authenticated with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::clientUpdateAuthorizationCases()
-     *
      * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
+     *@throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientUpdateProvider::class, 'clientUpdateAuthorizationCases')]
     public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
@@ -103,7 +103,7 @@ class ClientUpdateActionTest extends TestCase
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
         // Assert database
-        if ($expectedResult['db_changed'] === true) {
+        if ($expectedResult['dbChanged'] === true) {
             // HTML form element names are the same as the database columns, the same request array can be taken
             // to assert the db
             // Check that changes requested in the request body are reflected in the database
@@ -146,26 +146,25 @@ class ClientUpdateActionTest extends TestCase
 
         // If birthdate is in request body, age is returned in response data
         if (array_key_exists('birthdate', $requestData)) {
-            $expectedResult['json_response']['data'] = [
+            $expectedResult['jsonResponse']['data'] = [
                 'age' => (new \DateTime())->diff(new \DateTime($requestData['birthdate']))->y,
             ];
         }
 
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**
      * Test client validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientUpdateProvider::invalidClientUpdateProvider()
-     *
      * @param array $requestBody
      * @param array $jsonResponse
      *
-     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     *@throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientUpdateProvider::class, 'invalidClientUpdateProvider')]
     public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content

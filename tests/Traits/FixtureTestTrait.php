@@ -10,12 +10,12 @@ trait FixtureTestTrait
     use DatabaseTestTrait;
 
     /**
-     * Inserts fixtures with given attributes or sets of attributes and returns rows with id.
+     * Inserts fixtures, with given attributes or sets of attributes and returns rows with id.
      *
      * @param FixtureInterface $fixture the fixture instance
      * @param array $attributes attributes to override in the fixture
      * Format: ['field_name' => 'expected_value', 'other_field_name' => 'other expected value', ] -> one insert
-     * alternatively [['field_name' => 'expected_value'], ['field_name' => 'expected_value'], ] -> two insets
+     * alternatively [['field_name' => 'value', 'other_field_name',], ['field_name' => 'value',], ] -> two insets
      *
      * @return array inserted row values
      */

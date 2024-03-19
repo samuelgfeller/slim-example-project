@@ -27,7 +27,7 @@ final readonly class UserActivityFinder
      *
      * @return array
      */
-    public function findUserActivityReport(null|array|int|string $userIds): array
+    public function findUserActivityReport(array|int|string|null $userIds): array
     {
         if ($userIds) {
             return $this->findUserActivitiesGroupedByDate($userIds);

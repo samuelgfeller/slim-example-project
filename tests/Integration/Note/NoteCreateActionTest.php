@@ -15,6 +15,7 @@ use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use IntlDateFormatter;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -42,28 +43,27 @@ class NoteCreateActionTest extends TestCase
      * Test main note and normal note update on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCreateUpdateDeleteProvider()
-     *
-     * @param array $userLinkedToClientRow client owner attributes containing the user_role_id
+     * @param array $linkedUserRow client owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'noteCreateUpdateDeleteProvider')]
     public function testNoteSubmitCreateActionAuthorization(
-        array $userLinkedToClientRow,
+        array $linkedUserRow,
         array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert needed client status fixture
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixtureWithAttributes(
             new ClientFixture(),
-            ['user_id' => $userLinkedToClientRow['id'], 'client_status_id' => $clientStatusId],
+            ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Create request
@@ -144,20 +144,19 @@ class NoteCreateActionTest extends TestCase
     /**
      * Test note creation on client-read page with invalid data.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteCreationProvider()
-     *
      * @param array $invalidRequestBody
      * @param bool $existingMainNote
      * @param array $expectedResponseData
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'invalidNoteCreationProvider')]
     public function testNoteCreateSubmitActionInvalid(
         array $invalidRequestBody,
         bool $existingMainNote,
         array $expectedResponseData
     ): void {
-        // Insert user that is authorized to create
+        // Insert user authorized to create
         $clientOwnerId = $this->insertFixtureWithAttributes(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),

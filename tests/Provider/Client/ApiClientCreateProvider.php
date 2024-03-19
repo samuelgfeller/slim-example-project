@@ -16,7 +16,7 @@ class ApiClientCreateProvider
         return [
             [
                 // Most values too short
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => 'T',
                     'last_name' => 'A',
                     'birthdate' => '1850-01-01', // too old
@@ -26,7 +26,7 @@ class ApiClientCreateProvider
                     'sex' => 'A', // invalid value
                     'client_message' => 'A',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -61,7 +61,7 @@ class ApiClientCreateProvider
             ],
             [
                 // Most values too long
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => str_repeat('i', 101), // 101 chars
                     'last_name' => str_repeat('i', 101),
                     'birthdate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'), // 1 day in the future
@@ -70,7 +70,7 @@ class ApiClientCreateProvider
                     'email' => 'test$.@test.ch', // invalid email
                     'client_message' => str_repeat('i', 1001),
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -102,9 +102,9 @@ class ApiClientCreateProvider
             ],
             [ // Keys missing, check for request body key presence (previously done via malformedBodyRequestChecker)
                 // Empty request body
-                'request_body' => [
+                'requestBody' => [
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [

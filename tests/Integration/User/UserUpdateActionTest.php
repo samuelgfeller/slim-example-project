@@ -11,6 +11,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -36,19 +37,18 @@ class UserUpdateActionTest extends TestCase
     /**
      * User update process with valid data.
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateProvider::userUpdateAuthorizationCases()
-     *
      * @param array $userToChangeRow user to change attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     *@throws NotFoundExceptionInterface
      * @throws \JsonException
+     * @throws ContainerExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserUpdateProvider::class, 'userUpdateAuthorizationCases')]
     public function testUserSubmitUpdateAuthorization(
         array $userToChangeRow,
         array $authenticatedUserRow,
@@ -72,7 +72,7 @@ class UserUpdateActionTest extends TestCase
         // Assert status code
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
         // Assert database
-        if ($expectedResult['db_changed'] === true) {
+        if ($expectedResult['dbChanged'] === true) {
             // HTML form element names are the same as the database columns, the same request array can be taken to assert the db
             // Check that data in request body was changed
             $this->assertTableRowEquals($requestData, 'user', $userToChangeRow['id']);
@@ -93,7 +93,7 @@ class UserUpdateActionTest extends TestCase
             $this->assertTableRowEquals($userToChangeRow, 'user', $userToChangeRow['id']);
             $this->assertTableRowCount(0, 'user_activity');
         }
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**
@@ -119,11 +119,10 @@ class UserUpdateActionTest extends TestCase
     /**
      * Test user submit invalid update data.
      *
-     * @dataProvider \App\Test\Provider\User\UserUpdateProvider::invalidUserUpdateCases()
-     *
      * @param array $requestBody
      * @param array $jsonResponse
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserUpdateProvider::class, 'invalidUserUpdateCases')]
     public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)

@@ -22,42 +22,42 @@ class NoteProvider
 
         return [
             [// ? newcomer not owner of note - note NOT hidden - allowed to read
-                'note_owner' => $advisorRow,
-                'authenticated_user' => $newcomerRow,
-                'note_hidden' => null,
-                'expected_result' => [
+                'userLinkedToNoteRow' => $advisorRow,
+                'authenticatedUserRow' => $newcomerRow,
+                'noteHidden' => null,
+                'expectedResult' => [
                     'privilege' => Privilege::R,
                 ],
             ],
             [// ? newcomer not owner of note - note hidden - not allowed to read
-                'note_owner' => $advisorRow,
-                'authenticated_user' => $newcomerRow,
-                'note_hidden' => 1,
-                'expected_result' => [
+                'userLinkedToNoteRow' => $advisorRow,
+                'authenticatedUserRow' => $newcomerRow,
+                'noteHidden' => 1,
+                'expectedResult' => [
                     'privilege' => Privilege::N,
                 ],
             ],
             [// ? newcomer owner of note - note hidden - allowed to delete
-                'note_owner' => $newcomerRow,
-                'authenticated_user' => $newcomerRow,
-                'note_hidden' => 1,
-                'expected_result' => [
+                'userLinkedToNoteRow' => $newcomerRow,
+                'authenticatedUserRow' => $newcomerRow,
+                'noteHidden' => 1,
+                'expectedResult' => [
                     'privilege' => Privilege::CRUD,
                 ],
             ],
             [// ? advisor not owner of note - note hidden - allowed to read
-                'note_owner' => $managingAdvisorRow,
-                'authenticated_user' => $advisorRow,
-                'note_hidden' => 1,
-                'expected_result' => [
+                'userLinkedToNoteRow' => $managingAdvisorRow,
+                'authenticatedUserRow' => $advisorRow,
+                'noteHidden' => 1,
+                'expectedResult' => [
                     'privilege' => Privilege::R,
                 ],
             ],
             [// ? managing advisor not owner of note - note hidden - allowed to do everything
-                'note_owner' => $advisorRow,
-                'authenticated_user' => $managingAdvisorRow,
-                'note_hidden' => 1,
-                'expected_result' => [
+                'userLinkedToNoteRow' => $advisorRow,
+                'authenticatedUserRow' => $managingAdvisorRow,
+                'noteHidden' => 1,
+                'expectedResult' => [
                     // Full privilege, so it must not be tested further
                     'privilege' => Privilege::CRUD,
                 ],
@@ -105,31 +105,31 @@ class NoteProvider
         return [
             // * Filter "client_id"
             [ // client 1 (not tested with other clients)
-                'get_params' => ['client_id' => '1'],
+                'filterQueryParams' => ['client_id' => '1'],
                 // Expected where string to search in the note table
-                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 AND client_id = 1',
-                'user_to_insert' => $usersToInsert,
-                'client_to_insert' => $clientToInsert,
-                'notes_to_insert' => $notesToInsert,
+                'expectedNotesWhereString' => 'deleted_at IS NULL AND is_main = 0 AND client_id = 1',
+                'usersAttrToInsert' => $usersToInsert,
+                'clientAttrToInsert' => $clientToInsert,
+                'notesAttrToInsert' => $notesToInsert,
             ],
             // * Filter "most-recent"
             [ // most-recent value is the amount recent notes that should be returned
-                'get_params' => ['most-recent' => 3],
+                'filterQueryParams' => ['most-recent' => 3],
                 // Expected where string to search in the note table (order and desc added in the where string
                 // may break and has to be adapted if DatabaseExtensionTestTrait->findTableRowsWhere() changes)
-                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 ORDER BY updated_at DESC LIMIT 3',
-                'user_to_insert' => $usersToInsert,
-                'client_to_insert' => $clientToInsert,
-                'notes_to_insert' => $notesToInsert,
+                'expectedNotesWhereString' => 'deleted_at IS NULL AND is_main = 0 ORDER BY updated_at DESC LIMIT 3',
+                'usersAttrToInsert' => $usersToInsert,
+                'clientAttrToInsert' => $clientToInsert,
+                'notesAttrToInsert' => $notesToInsert,
             ],
             // * Filter "user_id"
             [ // user 2
-                'get_params' => ['user' => 11],
+                'filterQueryParams' => ['user' => 11],
                 // Expected where string to search in the note table
-                'expected_where_string' => 'deleted_at IS NULL AND is_main = 0 AND user_id = 11',
-                'user_to_insert' => $usersToInsert,
-                'client_to_insert' => $clientToInsert,
-                'notes_to_insert' => $notesToInsert,
+                'expectedNotesWhereString' => 'deleted_at IS NULL AND is_main = 0 AND user_id = 11',
+                'usersAttrToInsert' => $usersToInsert,
+                'clientAttrToInsert' => $clientToInsert,
+                'notesAttrToInsert' => $notesToInsert,
             ],
         ];
     }
@@ -147,20 +147,20 @@ class NoteProvider
 
         return [
             [
-                'get_params' => ['client_id' => ''],
-                'exception_message' => $exceptionMessage,
+                'filterQueryParams' => ['client_id' => ''],
+                'exceptionMessage' => $exceptionMessage,
             ],
             [
-                'get_params' => ['client_id' => 'abc'],
-                'exception_message' => $exceptionMessage,
+                'filterQueryParams' => ['client_id' => 'abc'],
+                'exceptionMessage' => $exceptionMessage,
             ],
             [
-                'get_params' => ['most-recent' => 'abc'],
-                'exception_message' => $exceptionMessage,
+                'filterQueryParams' => ['most-recent' => 'abc'],
+                'exceptionMessage' => $exceptionMessage,
             ],
             [
-                'get_params' => ['user' => 'abc'],
-                'exception_message' => $exceptionMessage,
+                'filterQueryParams' => ['user' => 'abc'],
+                'exceptionMessage' => $exceptionMessage,
             ],
         ];
     }
@@ -173,9 +173,9 @@ class NoteProvider
      *
      * @return array{
      *     array{
-     *         owner_user: array,
-     *         authenticated_user: array,
-     *         expected_result: array{
+     *         userLinkedToNoteRow: array,
+     *         authenticatedUserRow: array,
+     *         expectedResult: array{
      *             creation: array,
      *             modification: array,
      *             deletion: array,
@@ -195,110 +195,110 @@ class NoteProvider
             // https://stackoverflow.com/a/2342589/9013718
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
             // Is db supposed to change
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to change note.',
             ],
         ];
         $unauthorizedUpdateResult = $unauthorizedResult;
-        $unauthorizedUpdateResult['json_response']['message'] = 'Not allowed to change note.';
+        $unauthorizedUpdateResult['jsonResponse']['message'] = 'Not allowed to change note.';
         $unauthorizedDeleteResult = $unauthorizedResult;
-        $unauthorizedDeleteResult['json_response']['message'] = 'Not allowed to delete note.';
+        $unauthorizedDeleteResult['jsonResponse']['message'] = 'Not allowed to delete note.';
         $authorizedCreateResult = [StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED];
 
         return [
             [ // ? newcomer not owner
-                // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorAttributes,
-                'authenticated_user' => $newcomerAttributes,
-                'expected_result' => [
+                // User to whom the note (or client for creation) is linked (owner)
+                'linkedUserRow' => $advisorAttributes,
+                'authenticatedUserRow' => $newcomerAttributes,
+                'expectedResult' => [
                     // Allowed to create note on client where user is not owner
                     'creation' => $authorizedCreateResult,
                     'modification' => [
-                        'main_note' => $unauthorizedUpdateResult,
-                        'normal_note' => $unauthorizedResult,
+                        'mainNote' => $unauthorizedUpdateResult,
+                        'normalNote' => $unauthorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $unauthorizedDeleteResult,
+                        'normalNote' => $unauthorizedDeleteResult,
                     ],
                 ],
             ],
             [ // ? newcomer owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $newcomerAttributes,
-                'authenticated_user' => $newcomerAttributes,
-                'expected_result' => [
+                'linkedUserRow' => $newcomerAttributes,
+                'authenticatedUserRow' => $newcomerAttributes,
+                'expectedResult' => [
                     'creation' => [
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
                     ],
                     'modification' => [
                         // Newcomer may not edit client basic data which has the same rights as the main note
-                        'main_note' => $unauthorizedUpdateResult,
-                        'normal_note' => $authorizedResult,
+                        'mainNote' => $unauthorizedUpdateResult,
+                        'normalNote' => $authorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult,
+                        'normalNote' => $authorizedResult,
                     ],
                 ],
             ],
             [ // ? advisor owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => [
+                'linkedUserRow' => $advisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => [
                     'creation' => [ // Allowed to create note on client where user is not owner
                         StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
                     ],
                     'modification' => [
-                        'main_note' => $authorizedResult,
-                        'normal_note' => $authorizedResult,
+                        'mainNote' => $authorizedResult,
+                        'normalNote' => $authorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult,
+                        'normalNote' => $authorizedResult,
                     ],
                 ],
             ],
             [ // ? advisor not owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $managingAdvisorAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => [
+                'linkedUserRow' => $managingAdvisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => [
                     'creation' => $authorizedCreateResult,
                     'modification' => [
-                        'main_note' => $authorizedResult,
-                        'normal_note' => $unauthorizedUpdateResult,
+                        'mainNote' => $authorizedResult,
+                        'normalNote' => $unauthorizedUpdateResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $unauthorizedDeleteResult,
+                        'normalNote' => $unauthorizedDeleteResult,
                     ],
                 ],
             ],
             [ // ? managing advisor not owner
                 // User to whom the note (or client for creation) is linked
-                'owner_user' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => [
+                'linkedUserRow' => $advisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => [
                     'creation' => $authorizedCreateResult,
                     'modification' => [
-                        'main_note' => $authorizedResult,
-                        'normal_note' => $authorizedResult,
+                        'mainNote' => $authorizedResult,
+                        'normalNote' => $authorizedResult,
                     ],
                     'deletion' => [
                         // Delete main note request is expected to produce 405 HttpMethodNotAllowedException
-                        'normal_note' => $authorizedResult,
+                        'normalNote' => $authorizedResult,
                     ],
                 ],
             ],
@@ -316,9 +316,9 @@ class NoteProvider
         return [
             [
                 // Already existing main note (message as string shorter than 4 chars is allowed)
-                'request_body' => ['message' => 'as', 'is_main' => 1, 'client_id' => 1],
-                'existing_main_note' => true,
-                'json_response' => [
+                'invalidRequestBody' => ['message' => 'as', 'is_main' => 1, 'client_id' => 1],
+                'existingMainNote' => true,
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -332,9 +332,9 @@ class NoteProvider
             ],
             [
                 // Note message too short
-                'request_body' => ['message' => 'as', 'is_main' => 0, 'client_id' => 1],
-                'existing_main_note' => true,
-                'json_response' => [
+                'invalidRequestBody' => ['message' => 'as', 'is_main' => 0, 'client_id' => 1],
+                'existingMainNote' => true,
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -348,9 +348,9 @@ class NoteProvider
             ],
             [
                 // Too long
-                'request_body' => ['message' => str_repeat('i', 1001), 'is_main' => 0, 'client_id' => 1],
-                'existing_main_note' => false,
-                'json_response' => [
+                'invalidRequestBody' => ['message' => str_repeat('i', 1001), 'is_main' => 0, 'client_id' => 1],
+                'existingMainNote' => false,
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -364,9 +364,9 @@ class NoteProvider
             ],
             [
                 // Check keys in request body (previously done via malformedBodyRequestChecker)
-                'request_body' => [],
-                'existing_main_note' => false,
-                'date' => [
+                'invalidRequestBody' => [],
+                'existingMainNote' => false,
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -398,8 +398,8 @@ class NoteProvider
         return [
             [
                 // Message too short
-                'request_body' => ['message' => 'M'],
-                'json_response' => [
+                'invalidRequestBody' => ['message' => 'M'],
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -413,8 +413,8 @@ class NoteProvider
             ],
             [
                 // Message too long
-                'request_body' => ['message' => str_repeat('i', 1001)],
-                'json_response' => [
+                'invalidRequestBody' => ['message' => str_repeat('i', 1001)],
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -428,8 +428,8 @@ class NoteProvider
             ],
             [
                 // Missing message key
-                'request_body' => [],
-                'json_response' => [
+                'invalidRequestBody' => [],
+                'expectedResponseData' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [

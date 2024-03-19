@@ -29,9 +29,9 @@ final readonly class NewPasswordResetSubmitAction
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      *
-     * @return ResponseInterface
      * @throws \Throwable
      *
+     * @return ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
@@ -68,7 +68,7 @@ sure to click on the most recent email we send you</a>.</b>'
             // the password-forgotten form is shown instead of the login form.
             return $this->templateRenderer->render($response, 'authentication/login.html.php');
         } // Validation Exception has to be caught here and not middleware as the token,
-            // and id have to be added to php view
+        // and id have to be added to php view
         catch (ValidationException $validationException) {
             // Render reset-password form with token, and id so that it can be submitted again
             $flash->add('error', $validationException->getMessage());

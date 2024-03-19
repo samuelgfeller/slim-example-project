@@ -8,6 +8,7 @@ use App\Domain\Security\Repository\EmailLogFinderRepository;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Infrastructure\Utility\Settings;
 use App\Test\Traits\AppTestTrait;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -32,8 +33,6 @@ class SecurityEmailCheckerTest extends TestCase
      * The Data Provider calls this function with all the different variation of email
      * request amounts where an exception must be thrown.
      *
-     * @dataProvider \App\Test\Provider\Security\EmailRequestProvider::individualEmailThrottlingTestCases()
-     *
      * @param int|string $delay
      * @param int $emailLogAmountInTimeSpan
      * @param array $securitySettings
@@ -41,6 +40,7 @@ class SecurityEmailCheckerTest extends TestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[DataProviderExternal(\App\Test\Provider\Security\EmailRequestProvider::class, 'individualEmailThrottlingTestCases')]
     public function testPerformEmailAbuseCheckIndividual(
         int|string $delay,
         int $emailLogAmountInTimeSpan,
@@ -86,9 +86,7 @@ class SecurityEmailCheckerTest extends TestCase
      *  - First iteration: email amount reaching DAILY threshold (and thus fail)
      *  - Second iteration: email amount reaching MONTHLY threshold (and thus fail).
      *
-     * @dataProvider \App\Test\Provider\Security\EmailRequestProvider::globalEmailStatsProvider()
-     *
-     * Values same as threshold as exception is thrown if it equals or is greater than threshold
+     * Values same as threshold, as exception is thrown if it equals or is greater than threshold
      *
      * @param int $todayEmailAmount too many emails for today
      * @param int $thisMonthEmailAmount too many emails for this month
@@ -97,6 +95,7 @@ class SecurityEmailCheckerTest extends TestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[DataProviderExternal(\App\Test\Provider\Security\EmailRequestProvider::class, 'globalEmailStatsProvider')]
     public function testPerformEmailAbuseCheckGlobal(
         int $todayEmailAmount,
         int $thisMonthEmailAmount,

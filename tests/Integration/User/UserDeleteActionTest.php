@@ -9,6 +9,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -34,14 +35,13 @@ class UserDeleteActionTest extends TestCase
     /**
      * Test delete user submit with different authenticated user roles.
      *
-     * @dataProvider \App\Test\Provider\User\UserDeleteProvider::userDeleteAuthorizationCases()
-     *
      * @param array $userToDeleteRow user to delete attributes containing user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db is supposed to change and json_response
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserDeleteProvider::class, 'userDeleteAuthorizationCases')]
     public function testUserSubmitDeleteActionAuthorization(
         array $userToDeleteRow,
         array $authenticatedUserRow,
@@ -65,7 +65,7 @@ class UserDeleteActionTest extends TestCase
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
         // Assert database
-        if ($expectedResult['db_changed'] === true) {
+        if ($expectedResult['dbChanged'] === true) {
             // Assert that deleted_at is NOT null
             self::assertNotNull($this->getTableRowById('user', $userToDeleteRow['id'], ['deleted_at']));
             // Assert that user activity is inserted
@@ -86,7 +86,7 @@ class UserDeleteActionTest extends TestCase
         }
 
         // Assert response json content
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**

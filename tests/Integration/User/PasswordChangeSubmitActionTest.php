@@ -11,6 +11,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -37,12 +38,11 @@ class PasswordChangeSubmitActionTest extends TestCase
     /**
      * Test user password change with different user roles.
      *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::userPasswordChangeAuthorizationCases()
-     *
      * @param array $userToUpdateRow
      * @param array $authenticatedUserRow
      * @param array $expectedResult
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserChangePasswordProvider::class, 'userPasswordChangeAuthorizationCases')]
     public function testChangePasswordSubmitActionAuthorization(
         array $userToUpdateRow,
         array $authenticatedUserRow,
@@ -73,7 +73,7 @@ class PasswordChangeSubmitActionTest extends TestCase
 
         // Assert that password was changed or not changed
         $dbPasswordHash = $this->getTableRowById('user', $userToUpdateRow['id'])['password_hash'];
-        if ($expectedResult['db_changed'] === true) {
+        if ($expectedResult['dbChanged'] === true) {
             // Assert that password_hash starts with the beginning of a BCRYPT hash.
             // Hash algo may change in the future, but it's not a big deal to update if tests fail
             self::assertStringStartsWith(
@@ -101,7 +101,7 @@ class PasswordChangeSubmitActionTest extends TestCase
             $this->assertTableRowCount(0, 'user_activity');
         }
 
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**
@@ -128,13 +128,12 @@ class PasswordChangeSubmitActionTest extends TestCase
     /**
      * Test that backend validation fails when new passwords are invalid.
      *
-     * @dataProvider \App\Test\Provider\User\UserChangePasswordProvider::invalidPasswordChangeCases()
-     *
      * @param array $requestBody
      * @param array $jsonResponse
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserChangePasswordProvider::class, 'invalidPasswordChangeCases')]
     public function testChangePasswordSubmitActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content

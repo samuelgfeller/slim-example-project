@@ -5,9 +5,11 @@ namespace App\Test\Integration\Authentication;
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
+use App\Test\Provider\Authentication\UserVerificationProvider;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -33,11 +35,11 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Request to reset password with token.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testResetPasswordSubmit(UserVerificationData $verification, string $clearTextToken): void
     {
         $newPassword = 'new password';
@@ -73,11 +75,10 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Test password submit reset with invalid, used or expired token.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testResetPasswordSubmitInvalidToken(
         UserVerificationData $verification,
         string $clearTextToken
@@ -128,11 +129,10 @@ class PasswordResetSubmitActionTest extends TestCase
     /**
      * Test that backend validation fails when new passwords are invalid.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testResetPasswordSubmitInvalidData(
         UserVerificationData $verification,
         string $clearTextToken

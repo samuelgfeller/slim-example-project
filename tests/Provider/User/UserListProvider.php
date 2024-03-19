@@ -24,9 +24,9 @@ class UserListProvider
         // General testing rule: test allowed with the lowest privilege and not allowed with highest not allowed
         return [ // User owner is the user itself
             [// ? advisor owner and newcomer other - not allowed to read other - only allowed to read own status and role
-                'other_user' => $newcomerAttr,
-                'authenticated_user' => $advisorAttr,
-                'expected_result' => [
+                'userRow' => $newcomerAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                'expectedResult' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     // Each owner (authenticated user) is allowed to read his user data
                     'own' => [
@@ -39,9 +39,9 @@ class UserListProvider
             ],
             [// ? managing advisor and advisor other - allowed to read and update own status but not available roles -
                 // ? allowed to read and update other status and limited user role
-                'other_user' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [
+                'userRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
                         'statusPrivilege' => Privilege::CRUD,
@@ -56,9 +56,9 @@ class UserListProvider
                 ],
             ],
             [// ? managing advisor - other is also managing advisor - allowed to read but not change anything on other
-                'other_user' => ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'Josh'],
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [
+                'userRow' => ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'Josh'],
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
                         'statusPrivilege' => Privilege::CRUD,
@@ -73,9 +73,9 @@ class UserListProvider
                 ],
             ],
             [// ? admin not owner - everything allowed even to other admins
-                'other_user' => ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Josh'],
-                'authenticated_user' => $adminAttr,
-                'expected_result' => [
+                'userRow' => ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Josh'],
+                'authenticatedUserRow' => $adminAttr,
+                'expectedResult' => [
                     StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
                     'own' => [
                         'statusPrivilege' => Privilege::CRUD,

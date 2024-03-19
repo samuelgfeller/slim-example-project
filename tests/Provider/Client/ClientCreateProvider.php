@@ -11,7 +11,7 @@ class ClientCreateProvider
      * Provides test cases for client creation dropdown options.
      *
      * Each test case is an array with the following structure:
-     * - 'authenticated_user': An array of attributes for the authenticated user. This includes 'first_name' and 'user_role_id'.
+     * - 'authenticatedUserRow': An array of attributes for the authenticated user. This includes 'first_name' and 'user_role_id'.
      * - 'other_user': An array of attributes for another user. This includes 'first_name' and 'user_role_id'.
      * - 'expected_user_names': An array of expected user names. This is used to verify the output of the function being tested.
      *
@@ -30,18 +30,18 @@ class ClientCreateProvider
         return [
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer - not allowed so nothing should be returned
-                'authenticated_user' => $newcomerAttributes,
+                'authenticatedUserRow' => $newcomerAttributes,
                 'other_user' => $advisorAttributes,
                 'expected_user_names' => [],
             ],
             [ // ? Advisor - should return only himself
-                'authenticated_user' => $advisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
                 'other_user' => $newcomerAttributes,
                 // id not relevant only name
                 'expected_user_names' => [$advisorAttributes['first_name']],
             ],
             [ // ? Managing advisor - should return all available users
-                'authenticated_user' => $managingAdvisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
                 'other_user' => $newcomerAttributes,
                 // All available users are authenticated manager advisor and newcomer as the "other" user
                 'expected_user_names' => [$managingAdvisorAttributes['first_name'], $newcomerAttributes['first_name']],
@@ -66,7 +66,7 @@ class ClientCreateProvider
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
             'db_entry_created' => true,
-            'json_response' => [
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
@@ -74,7 +74,7 @@ class ClientCreateProvider
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
             'db_entry_created' => false,
-            'json_response' => [
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to create client.',
             ],
@@ -83,29 +83,29 @@ class ClientCreateProvider
         return [
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - not allowed
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $newcomerAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $newcomerAttributes,
+                'authenticatedUserRow' => $newcomerAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Advisor owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => $advisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Advisor - client assigned to no one - allowed
-                'user_linked_to_client' => null,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => null,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Advisor not owner - not allowed
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $newcomerAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Managing not owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => $advisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }
@@ -123,7 +123,7 @@ class ClientCreateProvider
         return [
             [
                 // Most values too short, birthdate too old and user_id has 2 validation error messages
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => 'T',
                     'last_name' => 'A',
                     'birthdate' => '1850-01-01', // over 130 years old
@@ -135,7 +135,7 @@ class ClientCreateProvider
                     'client_status_id' => 'a', // wrong format and non-existing status
                     'message' => '', // valid vor now as note validation is done only if all client values are valid
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -155,7 +155,7 @@ class ClientCreateProvider
             ],
             [
                 // Most values too long, birthdate in the future
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => str_repeat('i', 101), // 101 chars
                     'last_name' => str_repeat('i', 101),
                     'birthdate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'), // 1 day in the future
@@ -169,7 +169,7 @@ class ClientCreateProvider
                     'client_status_id' => '999', // non-existing status
                     'message' => '', // valid vor now as note validation is done only if all client values are valid
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -187,7 +187,7 @@ class ClientCreateProvider
             ],
             [ // Main note validation when user creates a new client directly with a main note
                 // All client values valid but not main note message
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => 'Test',
                     'last_name' => 'test',
                     'birthdate' => '1950-01-01',
@@ -199,7 +199,7 @@ class ClientCreateProvider
                     'client_status_id' => 'valid', // 'valid' replaced by inserted client status id in test function
                     'message' => str_repeat('i', 1001), // invalid
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -211,8 +211,8 @@ class ClientCreateProvider
             ],
             [ // Check for request body key presence (previously done via malformedBodyRequestChecker)
                 // Empty request body
-                'request_body' => [],
-                'json_response' => [
+                'requestBody' => [],
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -249,7 +249,7 @@ class ClientCreateProvider
         return [
             [
                 // Test with null values on all optional fields (either first_name or last_name has to be set)
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => 'First name',
                     'last_name' => null,
                     'birthdate' => null,
@@ -264,7 +264,7 @@ class ClientCreateProvider
             ],
             [
                 // Test with empty string values on all optional fields (either first_name or last_name has to be set)
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => '',
                     'last_name' => '',
                     'birthdate' => '',

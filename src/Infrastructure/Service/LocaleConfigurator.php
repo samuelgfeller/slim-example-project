@@ -24,7 +24,7 @@ final class LocaleConfigurator
      *
      * @return false|string the new locale string, or false on failure
      */
-    public function setLanguage(string|null|false $locale, string $domain = 'messages'): bool|string
+    public function setLanguage(string|false|null $locale, string $domain = 'messages'): bool|string
     {
         $codeset = 'UTF-8';
         $directory = $this->localeSettings['translations_path'];
@@ -83,7 +83,7 @@ final class LocaleConfigurator
      *
      * @return string
      */
-    private function getAvailableLocale(null|false|string $locale): string
+    private function getAvailableLocale(false|string|null $locale): string
     {
         $availableLocales = $this->localeSettings['available'];
 
@@ -116,7 +116,7 @@ final class LocaleConfigurator
      *
      * @return string|null e.g. 'en'
      */
-    private function getLanguageCodeFromLocale(string|null|false $locale): ?string
+    private function getLanguageCodeFromLocale(string|false|null $locale): ?string
     {
         // If locale has hyphen instead of underscore, replace it
         if ($locale && str_contains($locale, '-')) {

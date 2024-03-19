@@ -34,7 +34,8 @@ class ClientReadResult extends ClientData
     }
 
     /**
-     * Define how json_encode() should serialize the object
+     * Define how json_encode() should serialize the object.
+     *
      * @return array in the format expected by the frontend
      */
     public function jsonSerialize(): array

@@ -19,16 +19,16 @@ class ClientDeleteProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to delete client.',
             ],
@@ -38,21 +38,21 @@ class ClientDeleteProvider
         return [
             // * Newcomer
             [ // ? Newcomer owner - not allowed
-                'user_linked_to_client' => $newcomerAttributes,
-                'authenticated_user' => $newcomerAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $newcomerAttributes,
+                'authenticatedUserRow' => $newcomerAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Advisor
             [ // ? Advisor owner - not allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $advisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor not owner - allowed
-                'user_linked_to_client' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => $advisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }

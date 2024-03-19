@@ -18,16 +18,16 @@ class UserCreateProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_CREATED,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to create user.',
             ],
@@ -38,26 +38,26 @@ class UserCreateProvider
         return [
             // * Advisor is the highest privilege not allowed to create user
             [ // ? Advisor - create newcomer - not allowed
-                'authenticated_user' => $advisorAttr,
-                'user_role_of_new_user' => UserRole::NEWCOMER,
-                'expected_result' => $unauthorizedResult,
+                'authenticatedUserAttr' => $advisorAttr,
+                'newUserRole' => UserRole::NEWCOMER,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor - create user with role advisor (the highest allowed role) - allowed
-                'authenticated_user' => $managingAdvisorAttr,
-                'user_role_of_new_user' => UserRole::ADVISOR,
-                'expected_result' => $authorizedResult,
+                'authenticatedUserAttr' => $managingAdvisorAttr,
+                'newUserRole' => UserRole::ADVISOR,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Managing advisor - create user with role managing advisor (the lowest not allowed) - not allowed
-                'authenticated_user' => $managingAdvisorAttr,
-                'user_role_of_new_user' => UserRole::MANAGING_ADVISOR,
-                'expected_result' => $unauthorizedResult,
+                'authenticatedUserAttr' => $managingAdvisorAttr,
+                'newUserRole' => UserRole::MANAGING_ADVISOR,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Admin
             [ // ? Admin - create user with role admin - allowed
-                'authenticated_user' => $adminAttr,
-                'user_role_of_new_user' => UserRole::ADMIN,
-                'expected_result' => $authorizedResult,
+                'authenticatedUserAttr' => $adminAttr,
+                'newUserRole' => UserRole::ADMIN,
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }
@@ -73,7 +73,7 @@ class UserCreateProvider
         // Including as many values as possible that trigger validation errors in each case
         return [
             [
-                'request_body' => [
+                'requestBody' => [
                     // Values too short
                     'first_name' => 'n',
                     'surname' => 'n',
@@ -83,7 +83,7 @@ class UserCreateProvider
                     'password' => '12',
                     'password2' => '1',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -101,7 +101,7 @@ class UserCreateProvider
             ],
             [
                 // Values too long
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => str_repeat('i', 101),
                     'surname' => str_repeat('i', 101),
                     'email' => 'new.email.@test.ch',
@@ -111,7 +111,7 @@ class UserCreateProvider
                     'password' => '12345678',
                     'password2' => '12345678',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -125,7 +125,7 @@ class UserCreateProvider
             ],
             [
                 // Required values not given
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => '',
                     'surname' => '',
                     'email' => '',
@@ -135,7 +135,7 @@ class UserCreateProvider
                     'password' => '',
                     'password2' => '',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -154,8 +154,8 @@ class UserCreateProvider
                 ],
             ],
             [// Test with empty request body
-                'request_body' => [],
-                'json_response' => [
+                'requestBody' => [],
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [

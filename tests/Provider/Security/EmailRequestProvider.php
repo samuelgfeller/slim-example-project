@@ -31,18 +31,18 @@ class EmailRequestProvider
             [
                 'delay' => $firstDelay,
                 // Email security check should fail if the threshold is reached
-                'email_amount_in_timespan' => $firstThreshold,
-                'security_settings' => self::securitySettings,
+                'emailLogAmountInTimeSpan' => $firstThreshold,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelay,
-                'email_amount_in_timespan' => $secondThreshold,
-                'security_settings' => self::securitySettings,
+                'emailLogAmountInTimeSpan' => $secondThreshold,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelay,
-                'email_amount_in_timespan' => $thirdThreshold,
-                'security_settings' => self::securitySettings,
+                'emailLogAmountInTimeSpan' => $thirdThreshold,
+                'securitySettings' => self::securitySettings,
             ],
         ];
     }
@@ -63,16 +63,16 @@ class EmailRequestProvider
             // Daily threshold test
             [
                 // The values are the same as threshold as exception is thrown if it equals or is greater than threshold
-                'today_email_amount' => self::securitySettings['global_daily_email_threshold'],
+                'todayEmailAmount' => self::securitySettings['global_daily_email_threshold'],
                 // The amount for this month has to be at least the same as from today
-                'this_month_email_amount' => self::securitySettings['global_daily_email_threshold'],
-                'security_settings' => self::securitySettings,
+                'thisMonthEmailAmount' => self::securitySettings['global_daily_email_threshold'],
+                'securitySettings' => self::securitySettings,
             ],
             // Monthly threshold test
             [
-                'daily_email_amount' => 0,
-                'monthly_email_amount' => self::securitySettings['global_monthly_email_threshold'],
-                'security_settings' => self::securitySettings,
+                'todayEmailAmount' => 0,
+                'thisMonthEmailAmount' => self::securitySettings['global_monthly_email_threshold'],
+                'securitySettings' => self::securitySettings,
             ],
         ];
     }

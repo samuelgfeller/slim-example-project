@@ -50,7 +50,7 @@ return [
 
         // When testing, 'test' value is true which means the monolog test handler should be used
         if (isset($loggerSettings['test']) && $loggerSettings['test'] === true) {
-            return $logger->pushHandler(new \Monolog\Handler\TestHandler());
+            return $logger->pushHandler(new Monolog\Handler\TestHandler());
         }
 
         // Instantiate logger with rotating file handler

@@ -21,4 +21,4 @@ $settings['deployment']['update_js_imports_version'] = false;
 
 $settings['db']['database'] = 'samuelgfeller_demo_slim_example_project';
 
-$settings['logger']['level'] = \Monolog\Level::Info;
+$settings['logger']['level'] = Monolog\Level::Info;

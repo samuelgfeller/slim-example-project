@@ -10,6 +10,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -109,11 +110,10 @@ class LoginSubmitActionTest extends TestCase
     /**
      * Test login with invalid values that must not pass validation.
      *
-     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::invalidLoginCredentialsProvider()
-     *
      * @param array $invalidLoginValues valid credentials
      * @param string $errorMessage validation message that should be in response body
      */
+    #[DataProviderExternal(\App\Test\Provider\Authentication\AuthenticationProvider::class, 'invalidLoginCredentialsProvider')]
     public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
         $this->insertFixtureWithAttributes(new UserFixture());
@@ -142,11 +142,10 @@ class LoginSubmitActionTest extends TestCase
      * Test login with user status unverified.
      * When account is unverified, a verification link is sent to the user via the email.
      *
-     * @dataProvider \App\Test\Provider\Authentication\AuthenticationProvider::nonActiveAuthenticationRequestCases()
-     *
      * @param UserStatus $status
      * @param string $partialEmailBody
      */
+    #[DataProviderExternal(\App\Test\Provider\Authentication\AuthenticationProvider::class, 'nonActiveAuthenticationRequestCases')]
     public function testLoginSubmitActionNotActiveAccount(UserStatus $status, string $partialEmailBody): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];

@@ -95,7 +95,7 @@ $settings['db'] = [
     'database' => 'slim_example_project',
     'username' => 'root',
     'password' => '',
-    'driver' => \Cake\Database\Driver\Mysql::class,
+    'driver' => Cake\Database\Driver\Mysql::class,
     'encoding' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     // Enable identifier quoting
@@ -163,7 +163,7 @@ $settings['logger'] = [
     // Log file location
     'path' => $settings['root_dir'] . '/logs',
     // Default log level
-    'level' => \Monolog\Level::Debug,
+    'level' => Monolog\Level::Debug,
 ];
 
 // Email settings

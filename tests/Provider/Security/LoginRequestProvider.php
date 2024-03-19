@@ -30,53 +30,53 @@ class LoginRequestProvider
             [
                 // ip test
                 'delay' => $firstDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $firstL],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $secondL],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => $thirdL],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             // ? Login requests made on one user account
             [
                 // logins by email test
                 'delay' => $firstDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => $firstL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => $secondL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => $thirdL],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
 
             // ! LOGIN SUCCESSES
@@ -85,53 +85,53 @@ class LoginRequestProvider
             [
                 // ip test
                 'delay' => $firstDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => $firstL, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => $secondL, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => 0, 'failures' => 0],
                     'logins_by_ip' => ['successes' => $thirdL, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             // ? Login requests made on one user account
             [
                 // logins by email test
                 'delay' => $firstDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => $firstL, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $secondDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => $secondL, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
             [
                 'delay' => $thirdDelayL,
-                'log_summary' => [
+                'ipAndEmailLogSummary' => [
                     'logins_by_email' => ['successes' => $thirdL, 'failures' => 0],
                     'logins_by_ip' => ['successes' => 0, 'failures' => 0],
                 ],
-                'security_settings' => self::securitySettings,
+                'securitySettings' => self::securitySettings,
             ],
         ];
     }

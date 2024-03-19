@@ -19,15 +19,15 @@ class UserDeleteProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to delete user.',
             ],
@@ -36,30 +36,30 @@ class UserDeleteProvider
         return [
             // * Advisor
             [ // ? Advisor owner - not allowed - advisors and newcomers cannot delete their account
-                'user_to_delete' => $advisorAttributes,
-                'authenticated_user' => $advisorAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userToDeleteRow' => $advisorAttributes,
+                'authenticatedUserRow' => $advisorAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor not owner - other is also managing advisor - not allowed
-                'user_to_delete' => $otherManagingAdvisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => $unauthorizedResult,
+                'userToDeleteRow' => $otherManagingAdvisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Managing advisor not owner - other is advisor - allowed
-                'user_to_delete' => $advisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userToDeleteRow' => $advisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Managing advisor owner - allowed
-                'user_to_delete' => $managingAdvisorAttributes,
-                'authenticated_user' => $managingAdvisorAttributes,
-                'expected_result' => $authorizedResult,
+                'userToDeleteRow' => $managingAdvisorAttributes,
+                'authenticatedUserRow' => $managingAdvisorAttributes,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Admin not owner - other is also admin - allowed
-                'user_to_delete' => ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Bill'],
-                'authenticated_user' => ['user_role_id' => UserRole::ADMIN],
-                'expected_result' => $authorizedResult,
+                'userToDeleteRow' => ['user_role_id' => UserRole::ADMIN, 'first_name' => 'Bill'],
+                'authenticatedUserRow' => ['user_role_id' => UserRole::ADMIN],
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }

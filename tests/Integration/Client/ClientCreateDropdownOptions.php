@@ -8,6 +8,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -32,18 +33,17 @@ class ClientCreateDropdownOptions extends TestCase
      * client create form are the right ones for different
      * authenticated user roles.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationDropdownOptionsCases()
-     *
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $otherUserRow other user (that appears in dropdown) attributes containing the user_role_id
      * user role not relevant as if authorized every user can be selected
      * @param array $expectedUserNames
      *
+     *@throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'clientCreationDropdownOptionsCases')]
     public function testClientCreateAssignedUserDropdownOptionsAuthorization(
         array $authenticatedUserRow,
         array $otherUserRow,

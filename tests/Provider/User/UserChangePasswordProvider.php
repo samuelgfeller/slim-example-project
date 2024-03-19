@@ -32,16 +32,16 @@ class UserChangePasswordProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to change password.',
             ],
@@ -53,34 +53,34 @@ class UserChangePasswordProvider
             // * Newcomer
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - allowed
-                'user_to_change' => $newcomerAttr,
-                'authenticated_user' => $newcomerAttr,
-                'expected_result' => $authorizedResult,
+                'userToUpdateRow' => $newcomerAttr,
+                'authenticatedUserRow' => $newcomerAttr,
+                'expectedResult' => $authorizedResult,
             ],
             // Higher privilege than newcomer must not be tested as authorization is hierarchical meaning if
             // the lowest privilege is allowed to do action, higher will be able too.
             // * Advisor
             [ // ? Advisor not owner - user to change is newcomer - not allowed
-                'user_to_change' => $newcomerAttr,
-                'authenticated_user' => $advisorAttr,
-                'expected_result' => $unauthorizedResult,
+                'userToUpdateRow' => $newcomerAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor not owner - user to change is advisor - allowed
-                'user_to_change' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => $authorizedResult,
+                'userToUpdateRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Managing advisor not owner - user to change is other managing advisor - not allowed
-                'user_to_change' => $otherManagingAdvisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => $unauthorizedResult,
+                'userToUpdateRow' => $otherManagingAdvisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Admin
             [ // ? Admin not owner - user to change is managing advisor - allowed
-                'user_to_change' => $managingAdvisorAttr,
-                'authenticated_user' => $adminAttr,
-                'expected_result' => $authorizedResult,
+                'userToUpdateRow' => $managingAdvisorAttr,
+                'authenticatedUserRow' => $adminAttr,
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }
@@ -97,12 +97,12 @@ class UserChangePasswordProvider
         return [
             [
                 // Values too short
-                'request_body' => [
+                'requestBody' => [
                     'password' => '12',
                     'password2' => '1',
                     // Old password not relevant for string validation as it verified that it's the correct one
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -115,12 +115,12 @@ class UserChangePasswordProvider
             ],
             [
                 // Wrong old password
-                'request_body' => [
+                'requestBody' => [
                     'old_password' => 'wrong-old-password',
                     'password' => '12345678',
                     'password2' => '12345678',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -132,8 +132,8 @@ class UserChangePasswordProvider
             ],
             [
                 // Test with empty request body
-                'request_body' => [],
-                'json_response' => [
+                'requestBody' => [],
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [

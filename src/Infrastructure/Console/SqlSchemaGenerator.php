@@ -61,9 +61,9 @@ final readonly class SqlSchemaGenerator
      *
      * @param string $sql The sql
      *
-     * @return PDOStatement The statement
      * @throws UnexpectedValueException
      *
+     * @return PDOStatement The statement
      */
     private function query(string $sql): PDOStatement
     {

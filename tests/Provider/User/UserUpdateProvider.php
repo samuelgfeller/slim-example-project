@@ -20,16 +20,16 @@ class UserUpdateProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null,
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to update user.',
             ],
@@ -49,58 +49,66 @@ class UserUpdateProvider
             // * Newcomer
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer owner - basic data change - allowed
-                'user_to_change' => $newcomerAttr,
-                'authenticated_user' => $newcomerAttr,
-                'data_to_be_changed' => $basicDataChanges,
-                'expected_result' => $authorizedResult,
+                'userToChangeRow' => $newcomerAttr,
+                'authenticatedUserRow' => $newcomerAttr,
+                // Data to be changed
+                'requestData' => $basicDataChanges,
+                'expectedResult' => $authorizedResult,
             ],
 
             // * Advisor
             [ // ? Advisor owner - status change - not allowed
-                'user_to_change' => $advisorAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => ['status' => 'active'],
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $advisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => ['status' => 'active'],
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Advisor owner - user role change - not allowed even to newcomer
-                'user_to_change' => $advisorAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => ['user_role_id' => UserRole::ADMIN],
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $advisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => ['user_role_id' => UserRole::ADMIN],
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Advisor not owner - basic data - not allowed
-                'user_to_change' => $newcomerAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => $basicDataChanges,
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $newcomerAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => $basicDataChanges,
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             [ // ? Managing advisor not owner - user to change is advisor (to user role advisor) - allowed
-                'user_to_change' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => array_merge(
+                'userToChangeRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => array_merge(
                     $basicDataChanges,
                     ['user_role_id' => UserRole::ADVISOR, 'status' => 'active']
                 ),
-                'expected_result' => $authorizedResult,
+                'expectedResult' => $authorizedResult,
             ],
             [ // ? Managing advisor not owner - user to change is advisor (to user role managing advisor) - not allowed
-                'user_to_change' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => ['user_role_id' => UserRole::MANAGING_ADVISOR],
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => ['user_role_id' => UserRole::MANAGING_ADVISOR],
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Managing advisor not owner - user to change is managing advisor - not allowed even basic data
-                'user_to_change' => $otherManagingAdvisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => $basicDataChanges,
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $otherManagingAdvisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => $basicDataChanges,
+                'expectedResult' => $unauthorizedResult,
             ],
             [ // ? Managing advisor owner - own role to admin - not allowed
-                'user_to_change' => $managingAdvisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => ['user_role_id' => UserRole::ADMIN],
-                'expected_result' => $unauthorizedResult,
+                'userToChangeRow' => $managingAdvisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => ['user_role_id' => UserRole::ADMIN],
+                'expectedResult' => $unauthorizedResult,
             ],
         ];
     }
@@ -116,7 +124,7 @@ class UserUpdateProvider
         // Including as many values as possible that trigger validation errors in each case
         return [
             [
-                'request_body' => [
+                'requestBody' => [
                     // Values too short
                     'first_name' => 'n',
                     'surname' => 'n',
@@ -125,7 +133,7 @@ class UserUpdateProvider
                     'user_role_id' => 99,
                     'theme' => 'invalid',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -142,12 +150,12 @@ class UserUpdateProvider
             ],
             [
                 // Values too long
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => str_repeat('i', 101),
                     'surname' => str_repeat('i', 101),
                     'email' => 'new.email.@test.ch',
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [

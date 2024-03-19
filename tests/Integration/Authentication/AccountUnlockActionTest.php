@@ -5,13 +5,13 @@ namespace App\Test\Integration\Authentication;
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
+use App\Test\Provider\Authentication\UserVerificationProvider;
 use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
 use Selective\TestTrait\Traits\MailerTestTrait;
@@ -36,12 +36,8 @@ class AccountUnlockActionTest extends TestCase
 
     /**
      * Test that with given correct token the account status is set to active.
-     *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
-     * @param UserVerificationData $verification
-     * @param string $clearTextToken
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testAccountUnlockAction(UserVerificationData $verification, string $clearTextToken): void
     {
         // Insert locked user
@@ -83,12 +79,8 @@ class AccountUnlockActionTest extends TestCase
     /**
      * Test that with given used, invalid or expired token the account cannot be unlocked
      * This is a very important test for security.
-     *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
-     *
-     * @param UserVerificationData $verification
-     * @param string $clearTextToken
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testAccountUnlockActionInvalidExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken
@@ -131,17 +123,10 @@ class AccountUnlockActionTest extends TestCase
     }
 
     /**
-     * Test that if user has status already on active he gets redirected
+     * Test that if the user has status already on active he gets redirected
      * but not authenticated.
-     *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
-     * @param UserVerificationData $verification
-     * @param string $clearTextToken
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
+    #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testAccountUnlockActionAlreadyUnlocked(
         UserVerificationData $verification,
         string $clearTextToken

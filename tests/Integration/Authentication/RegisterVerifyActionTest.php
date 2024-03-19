@@ -9,6 +9,7 @@ use App\Test\Traits\AppTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -34,11 +35,10 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Test that with given correct token the account status is set to active.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationProvider')]
     public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
@@ -80,11 +80,10 @@ class RegisterVerifyActionTest extends TestCase
     /**
      * Check that user gets redirect to the home or wanted page and most importantly: that no error is thrown.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationProvider')]
     public function testRegisterVerificationAlreadyVerified(
         UserVerificationData $verification,
         string $clearTextToken
@@ -130,11 +129,10 @@ class RegisterVerifyActionTest extends TestCase
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
      * according exception should be thrown and user redirected to register page.
      *
-     * @dataProvider \App\Test\Provider\Authentication\UserVerificationProvider::userVerificationInvalidTokenProvider()
-     *
      * @param UserVerificationData $verification
      * @param string $clearTextToken
      */
+    #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testRegisterVerificationInvalidUsedExpiredToken(
         UserVerificationData $verification,
         string $clearTextToken

@@ -17,6 +17,7 @@ use App\Test\Traits\FixtureTestTrait;
 use App\Test\Traits\HttpJsonExtensionTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -96,8 +97,6 @@ class ClientListActionTest extends TestCase
     /**
      * Test list of clients with different kinds of filters.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListFilterCases()
-     *
      * @param array $filterQueryParamsArr
      * @param string $expectedClientsWhereString
      * @param array $authenticatedUserAttributes
@@ -105,11 +104,12 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
+     *@throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListFilterCases')]
     public function testClientListWithFilterAction(
         array $filterQueryParamsArr,
         string $expectedClientsWhereString,
@@ -196,24 +196,23 @@ class ClientListActionTest extends TestCase
     /**
      * Request list of clients but with invalid filter.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientListProvider::clientListInvalidFilterCases()
-     *
-     * @param array $queryParams Filter as GET paramets
+     * @param array $filterQueryParamsArr Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
+     *@return void
+     *@throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
-    public function testClientListActionInvalidFilters(array $queryParams, array $expectedBody): void
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
+    public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
     {
         $loggedInUserId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(
             'GET',
-            $this->urlFor('client-list', [], $queryParams)
+            $this->urlFor('client-list', [], $filterQueryParamsArr)
         );
 
         $response = $this->app->handle($request);

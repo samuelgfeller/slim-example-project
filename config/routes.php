@@ -30,7 +30,7 @@ return function (App $app) {
     $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)
         ->setName('login-submit');
     $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
-        \Odan\Session\Middleware\SessionStartMiddleware::class
+        Odan\Session\Middleware\SessionStartMiddleware::class
     );
 
     // Authentication - email verification - token

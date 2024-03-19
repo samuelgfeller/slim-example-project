@@ -12,6 +12,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -37,14 +38,13 @@ class UserCreateActionTest extends TestCase
     /**
      * Create user authorization test with different user roles.
      *
-     * @dataProvider \App\Test\Provider\User\UserCreateProvider::userCreateAuthorizationCases()
-     *
      * @param array $authenticatedUserAttr authenticated user attributes containing the user_role_id
      * @param UserRole|null $newUserRole user role id of new user
      * @param array $expectedResult HTTP status code, bool if db entry is created and json_response
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserCreateProvider::class, 'userCreateAuthorizationCases')]
     public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
         ?UserRole $newUserRole,
@@ -81,7 +81,7 @@ class UserCreateActionTest extends TestCase
         // Assert status code
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
         // Assert database
-        if ($expectedResult['db_changed'] === true) {
+        if ($expectedResult['dbChanged'] === true) {
             $userDbRow = $this->findLastInsertedTableRow('user');
             // Request data can be taken to assert database as keys correspond to database columns after removing passwords
             unset($requestData['password'], $requestData['password2']);
@@ -115,7 +115,7 @@ class UserCreateActionTest extends TestCase
             $this->assertTableRowCount(1, 'user');
             $this->assertTableRowCount(0, 'user_activity');
         }
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**
@@ -140,13 +140,12 @@ class UserCreateActionTest extends TestCase
     /**
      * Test user submit invalid update data.
      *
-     * @dataProvider \App\Test\Provider\User\UserCreateProvider::invalidUserCreateCases()
-     *
      * @param array $requestBody
      * @param array $jsonResponse
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserCreateProvider::class, 'invalidUserCreateCases')]
     public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)

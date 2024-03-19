@@ -26,7 +26,7 @@ class UserVerificationProvider
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s'),
                 ]),
-                'token' => $token,
+                'clearTextToken' => $token,
             ],
         ];
     }
@@ -54,7 +54,7 @@ class UserVerificationProvider
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s'),
                 ]),
-                'token' => 'invalid token', // test relevant
+                'clearTextToken' => 'invalid token', // test relevant
             ],
             // Expired token
             [
@@ -66,7 +66,7 @@ class UserVerificationProvider
                     'used_at' => null,
                     'created_at' => date('Y-m-d H:i:s', time() - 2), // Created 2 seconds ago
                 ]),
-                'token' => $token, // Valid token
+                'clearTextToken' => $token, // Valid token
             ],
             // Used token
             [
@@ -78,7 +78,7 @@ class UserVerificationProvider
                     'used_at' => date('Y-m-d H:i:s'), // Used
                     'created_at' => date('Y-m-d H:i:s'),
                 ]),
-                'token' => $token, // Valid token
+                'clearTextToken' => $token, // Valid token
             ],
         ];
     }

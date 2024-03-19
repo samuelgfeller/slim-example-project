@@ -8,6 +8,7 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -30,17 +31,16 @@ class UserListActionTest extends TestCase
      * Tests users that are loaded with ajax on user list page.
      * One authenticated user and only one other is tested at a time for clarity and simplicity.
      *
-     * @dataProvider \App\Test\Provider\User\UserListProvider::userListAuthorizationCases()
-     *
      * @param array $userRow user attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code and privilege
      *
+     *@throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserListProvider::class, 'userListAuthorizationCases')]
     public function testUserListAuthorization(
         array $userRow,
         array $authenticatedUserRow,

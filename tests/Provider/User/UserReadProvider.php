@@ -23,24 +23,24 @@ class UserReadProvider
         // General testing rule: test allowed with the lowest privilege and not allowed with highest not allowed
         return [ // User owner is the user itself
             [// ? newcomer owner - other is same user - allowed to read own
-                'other_user' => $newcomerAttr,
-                'authenticated_user' => $newcomerAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
+                'userRow' => $newcomerAttr,
+                'authenticatedUserRow' => $newcomerAttr,
+                'expectedResult' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
             ],
             [// ? advisor owner - other is newcomer - not allowed to read other
-                'other_user' => $newcomerAttr,
-                'authenticated_user' => $advisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN],
+                'userRow' => $newcomerAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                'expectedResult' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN],
             ],
             [// ? managing advisor - other also managing advisor other - allowed to read
-                'other_user' => ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'Josh'],
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
+                'userRow' => ['user_role_id' => UserRole::MANAGING_ADVISOR, 'first_name' => 'Josh'],
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
             ],
             [// ? managing advisor - other is admin - allowed to read
-                'other_user' => $adminAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'expected_result' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
+                'userRow' => $adminAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                'expectedResult' => [StatusCodeInterface::class => StatusCodeInterface::STATUS_OK],
             ],
         ];
     }

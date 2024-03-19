@@ -10,6 +10,7 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -103,13 +104,12 @@ class ApiClientCreateActionTest extends TestCase
     /**
      * Test api client creation validation.
      *
-     * @dataProvider \App\Test\Provider\Client\ApiClientCreateProvider::invalidApiClientCreationValues()
-     *
      * @param array $requestBody
      * @param array $jsonResponse
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ApiClientCreateProvider::class, 'invalidApiClientCreationValues')]
     public function testApiClientSubmitCreateActionInvalid(
         array $requestBody,
         array $jsonResponse

@@ -14,6 +14,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpJsonTestTrait;
@@ -41,40 +42,39 @@ class NoteUpdateActionTest extends TestCase
      * Test note modification on client-read page while being authenticated
      * with different user roles.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::noteCreateUpdateDeleteProvider()
-     *
-     * @param array $userLinkedToNoteRow note owner attributes containing the user_role_id
+     * @param array $linkedUserRow note owner attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, if db is supposed to change and json_response
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'noteCreateUpdateDeleteProvider')]
     public function testNoteSubmitUpdateActionAuthorization(
-        array $userLinkedToNoteRow,
+        array $linkedUserRow,
         array $authenticatedUserRow,
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToNoteRow);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert linked status
         $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixtureWithAttributes(
             new ClientFixture(),
-            ['user_id' => $userLinkedToNoteRow['id'], 'client_status_id' => $clientStatusId],
+            ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Insert main note attached to client and given "owner" user
         $mainNoteRow = $this->insertFixtureWithAttributes(
             new NoteFixture(),
-            ['is_main' => 1, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id']],
+            ['is_main' => 1, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id']],
         );
 
         // Insert normal non-hidden note attached to client and given "owner" user
         $normalNoteRow = $this->insertFixtureWithAttributes(
             new NoteFixture(),
-            ['is_main' => 0, 'user_id' => $userLinkedToNoteRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
+            ['is_main' => 0, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
         );
 
         // Simulate logged-in user
@@ -93,11 +93,11 @@ class NoteUpdateActionTest extends TestCase
 
         // Assert 200 OK note updated successfully
         self::assertSame(
-            $expectedResult['modification']['main_note'][StatusCodeInterface::class],
+            $expectedResult['modification']['mainNote'][StatusCodeInterface::class],
             $mainNoteResponse->getStatusCode()
         );
 
-        if ($expectedResult['modification']['main_note']['db_changed'] === true) {
+        if ($expectedResult['modification']['mainNote']['dbChanged'] === true) {
             $this->assertTableRow(['message' => $newNoteMessage], 'note', $mainNoteRow['id']);
         } else {
             // If db is not expected to change message should remain the same as when it was inserted first
@@ -105,7 +105,7 @@ class NoteUpdateActionTest extends TestCase
         }
 
         // Assert response
-        $this->assertJsonData($expectedResult['modification']['main_note']['json_response'], $mainNoteResponse);
+        $this->assertJsonData($expectedResult['modification']['mainNote']['jsonResponse'], $mainNoteResponse);
 
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
@@ -117,12 +117,12 @@ class NoteUpdateActionTest extends TestCase
         // Make request
         $normalNoteResponse = $this->app->handle($normalNoteRequest);
         self::assertSame(
-            $expectedResult['modification']['normal_note'][StatusCodeInterface::class],
+            $expectedResult['modification']['normalNote'][StatusCodeInterface::class],
             $normalNoteResponse->getStatusCode()
         );
 
         // If db is expected to change assert the new message
-        if ($expectedResult['modification']['normal_note']['db_changed'] === true) {
+        if ($expectedResult['modification']['normalNote']['dbChanged'] === true) {
             $this->assertTableRow(['message' => $newNoteMessage, 'hidden' => 1], 'note', $normalNoteRow['id']);
             // Assert that user activity is inserted
             $this->assertTableRow(
@@ -144,7 +144,7 @@ class NoteUpdateActionTest extends TestCase
             );
         }
 
-        $this->assertJsonData($expectedResult['modification']['normal_note']['json_response'], $normalNoteResponse);
+        $this->assertJsonData($expectedResult['modification']['normalNote']['jsonResponse'], $normalNoteResponse);
     }
 
     /**
@@ -173,14 +173,13 @@ class NoteUpdateActionTest extends TestCase
     /**
      * Test note modification on client-read page with invalid data.
      *
-     * @dataProvider \App\Test\Provider\Note\NoteProvider::invalidNoteUpdateProvider()
-     *
-     * @param array $requestBody
+     * @param array $invalidRequestBody
      * @param array $expectedResponseData
      *
      * @return void
      */
-    public function testNoteSubmitUpdateActionInvalid(array $requestBody, array $expectedResponseData): void
+    #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'invalidNoteUpdateProvider')]
+    public function testNoteSubmitUpdateActionInvalid(array $invalidRequestBody, array $expectedResponseData): void
     {
         // Insert authorized user
         $userId = $this->insertFixtureWithAttributes(
@@ -207,7 +206,7 @@ class NoteUpdateActionTest extends TestCase
         $request = $this->createJsonRequest(
             'PUT',
             $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
-            $requestBody
+            $invalidRequestBody
         );
         $response = $this->app->handle($request);
 

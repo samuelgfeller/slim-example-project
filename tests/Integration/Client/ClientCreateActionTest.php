@@ -12,6 +12,7 @@ use App\Test\Traits\DatabaseExtensionTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -39,8 +40,6 @@ class ClientCreateActionTest extends TestCase
     /**
      * Client creation with valid data.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::clientCreationAuthorizationProvider()
-     *
      * @param array|null $userLinkedToClientRow client owner attributes containing the user_role_id or null if none
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
@@ -49,6 +48,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'clientCreationAuthorizationProvider')]
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
         array $authenticatedUserRow,
@@ -144,14 +144,12 @@ class ClientCreateActionTest extends TestCase
             $this->assertTableRowCount(0, 'user_activity');
         }
 
-        $this->assertJsonData($expectedResult['json_response'], $response);
+        $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 
     /**
      * Test validation errors when user submits values that are invalid and when client
      * doesn't send the required keys (previously done via malformed body checker).
-     *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::invalidClientCreationProvider()
      *
      * @param array $requestBody
      * @param array $jsonResponse
@@ -160,6 +158,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'invalidClientCreationProvider')]
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
@@ -206,14 +205,13 @@ class ClientCreateActionTest extends TestCase
      * I did not expect this behaviour and ran into this when testing in the GUI so this test
      * makes sense to me in order to not forget to always add ->allow[Whatever] when value is optional.
      *
-     * @dataProvider \App\Test\Provider\Client\ClientCreateProvider::validClientCreationProvider()
-     *
      * @param array $requestBody
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'validClientCreationProvider')]
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {
         // Insert managing advisor user which is allowed to create clients

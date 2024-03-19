@@ -7,6 +7,7 @@ use App\Test\Traits\AuthorizationTestTrait;
 use App\Test\Traits\FixtureTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Selective\TestTrait\Traits\DatabaseTestTrait;
 use Selective\TestTrait\Traits\HttpTestTrait;
@@ -24,26 +25,25 @@ class UserReadPageActionTest extends TestCase
     /**
      * Normal page action while being authenticated.
      *
-     * @dataProvider \App\Test\Provider\User\UserReadProvider::userReadAuthorizationCases()
-     *
-     * @param array $userData user attributes containing the user_role_id
-     * @param array $authenticatedUserData authenticated user attributes containing the user_role_id
+     * @param array $userRow user attributes containing the user_role_id
+     * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult
      *
      * @return void
      */
+    #[DataProviderExternal(\App\Test\Provider\User\UserReadProvider::class, 'userReadAuthorizationCases')]
     public function testUserReadPageActionAuthorization(
-        array $userData,
-        array $authenticatedUserData,
+        array $userRow,
+        array $authenticatedUserRow,
         array $expectedResult,
     ): void {
         // Insert tested and authenticated user
-        $this->insertUserFixturesWithAttributes($authenticatedUserData, $userData);
+        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userRow);
 
         // Simulate logged-in user by setting the user_id session variable
-        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserData['id']);
+        $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
-        $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => $userData['id']]));
+        $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => $userRow['id']]));
 
         $response = $this->app->handle($request);
 

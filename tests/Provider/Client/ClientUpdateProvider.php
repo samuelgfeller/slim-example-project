@@ -33,16 +33,16 @@ class ClientUpdateProvider
 
         $authorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_OK,
-            'db_changed' => true,
-            'json_response' => [
+            'dbChanged' => true,
+            'jsonResponse' => [
                 'status' => 'success',
                 'data' => null, // age added in test function if present in request data
             ],
         ];
         $unauthorizedResult = [
             StatusCodeInterface::class => StatusCodeInterface::STATUS_FORBIDDEN,
-            'db_changed' => false,
-            'json_response' => [
+            'dbChanged' => false,
+            'jsonResponse' => [
                 'status' => 'error',
                 'message' => 'Not allowed to update client.',
             ],
@@ -54,59 +54,67 @@ class ClientUpdateProvider
             // * Newcomer
             // "owner" means from the perspective of the authenticated user
             'newcomer owner personal info' => [ // ? Newcomer owner - change first name - not allowed
-                'user_linked_to_client' => $newcomerAttr,
-                'authenticated_user' => $newcomerAttr,
-                'data_to_be_changed' => ['first_name' => 'value'],
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $newcomerAttr,
+                'authenticatedUserRow' => $newcomerAttr,
+                // Data to be changed
+                'requestData' => ['first_name' => 'value'],
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Advisor
             'advisor owner client status' => [ // ? Advisor owner - change client status - allowed
-                'user_linked_to_client' => $advisorAttr,
-                'authenticated_user' => $advisorAttr,
+                'userLinkedToClientRow' => $advisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
                 // client_status_id contains a temporary value replaced by the test function
-                'data_to_be_changed' => array_merge(['client_status_id' => 'new'], $personalInfoChanges),
-                'expected_result' => $authorizedResult,
+                // Data to be changed
+                'requestData' => array_merge(['client_status_id' => 'new'], $personalInfoChanges),
+                'expectedResult' => $authorizedResult,
             ],
             'advisor owner assigned user' => [ // ? Advisor owner - change assigned user - not allowed
-                'user_linked_to_client' => $advisorAttr,
-                'authenticated_user' => $advisorAttr,
+                'userLinkedToClientRow' => $advisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
                 // user_id contains a temporary value replaced by the test function
-                'data_to_be_changed' => ['user_id' => 'new'],
-                'expected_result' => $unauthorizedResult,
+                // Data to be changed
+                'requestData' => ['user_id' => 'new'],
+                'expectedResult' => $unauthorizedResult,
             ],
             'advisor not owner personal info' => [ // ? Advisor not owner - change personal info - allowed
-                'user_linked_to_client' => $managingAdvisorAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => $personalInfoChanges,
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => $managingAdvisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => $personalInfoChanges,
+                'expectedResult' => $authorizedResult,
             ],
             'advisor not owner client status' => [ // ? Advisor not owner - change client status - not allowed
-                'user_linked_to_client' => $managingAdvisorAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => ['client_status_id' => 'new'],
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $managingAdvisorAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => ['client_status_id' => 'new'],
+                'expectedResult' => $unauthorizedResult,
             ],
             'advisor owner undelete' => [ // ? Advisor owner - undelete client - not allowed
-                'user_linked_to_client' => $newcomerAttr,
-                'authenticated_user' => $advisorAttr,
-                'data_to_be_changed' => ['deleted_at' => null],
-                'expected_result' => $unauthorizedResult,
+                'userLinkedToClientRow' => $newcomerAttr,
+                'authenticatedUserRow' => $advisorAttr,
+                // Data to be changed
+                'requestData' => ['deleted_at' => null],
+                'expectedResult' => $unauthorizedResult,
             ],
             // * Managing advisor
             'managing advisor not owner all changes' => [ // ? Managing advisor not owner - change all data - allowed
-                'user_linked_to_client' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => array_merge(
+                'userLinkedToClientRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => array_merge(
                     $personalInfoChanges,
                     ['client_status_id' => 'new', 'user_id' => 'new']
                 ),
-                'expected_result' => $authorizedResult,
+                'expectedResult' => $authorizedResult,
             ],
             'managing advisor not owner undelete' => [ // ? Managing advisor not owner - undelete client - allowed
-                'user_linked_to_client' => $advisorAttr,
-                'authenticated_user' => $managingAdvisorAttr,
-                'data_to_be_changed' => ['deleted_at' => null],
-                'expected_result' => $authorizedResult,
+                'userLinkedToClientRow' => $advisorAttr,
+                'authenticatedUserRow' => $managingAdvisorAttr,
+                // Data to be changed
+                'requestData' => ['deleted_at' => null],
+                'expectedResult' => $authorizedResult,
             ],
         ];
     }
@@ -123,7 +131,7 @@ class ClientUpdateProvider
         return [
             [
                 // Most values too short
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => 'T',
                     'last_name' => 'A',
                     'birthdate' => '1850-01-01', // too old
@@ -134,7 +142,7 @@ class ClientUpdateProvider
                     'user_id' => '999', // non-existing user
                     'client_status_id' => '999', // non-existing status
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
@@ -172,7 +180,7 @@ class ClientUpdateProvider
             ],
             [
                 // Most values too long
-                'request_body' => [
+                'requestBody' => [
                     'first_name' => str_repeat('i', 101), // 101 chars
                     'last_name' => str_repeat('i', 101),
                     'birthdate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'), // 1 day in the future
@@ -185,7 +193,7 @@ class ClientUpdateProvider
                     'user_id' => '999', // non-existing user
                     'client_status_id' => '999', // non-existing status
                 ],
-                'json_response' => [
+                'jsonResponse' => [
                     'status' => 'error',
                     'message' => 'Validation error',
                     'data' => [
