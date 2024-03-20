@@ -199,10 +199,10 @@ class ClientListActionTest extends TestCase
      * @param array $filterQueryParamsArr Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     *@return void
      *@throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     *@return void
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
