@@ -50,7 +50,7 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     *@throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
+     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
@@ -160,7 +160,7 @@ class ClientUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      *
-     *@throws ContainerExceptionInterface|NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
