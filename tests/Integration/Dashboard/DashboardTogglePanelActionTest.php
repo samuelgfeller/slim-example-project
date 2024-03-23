@@ -3,16 +3,15 @@
 namespace App\Test\Integration\Dashboard;
 
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class DashboardTogglePanelActionTest extends TestCase
 {
@@ -22,7 +21,6 @@ class DashboardTogglePanelActionTest extends TestCase
     use FixtureTestTrait;
     use RouteTestTrait;
     use HttpJsonTestTrait;
-    use DatabaseExtensionTestTrait;
 
     /**
      * Test that when user clicks to enable 2 panels it is
@@ -33,7 +31,7 @@ class DashboardTogglePanelActionTest extends TestCase
     public function testDashboardTogglePanelActionAuthenticated(): void
     {
         // Insert linked and authenticated user
-        $userId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
+        $userId = $this->insertFixture(new UserFixture())['id'];
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);

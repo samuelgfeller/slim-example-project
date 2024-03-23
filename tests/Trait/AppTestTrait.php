@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Test\Traits;
+namespace App\Test\Trait;
 
 use App\Test\Fixture\UserRoleFixture;
 use Cake\Database\Connection;
 use DI\Container;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
-use Psr\Container\ContainerInterface;
 use Slim\App;
+use TestTraits\Trait\ContainerTestTrait;
 use UnexpectedValueException;
 
 /**
@@ -17,7 +17,7 @@ use UnexpectedValueException;
  */
 trait AppTestTrait
 {
-    protected ContainerInterface $container;
+    use ContainerTestTrait;
 
     protected App $app;
 
@@ -30,25 +30,21 @@ trait AppTestTrait
         $this->app = require __DIR__ . '/../../config/bootstrap.php';
 
         // Set $this->container to container instance
-        $container = $this->app->getContainer();
-        if ($container === null) {
-            throw new UnexpectedValueException('Container must be initialized');
-        }
-        $this->container = $container;
+        $this->setUpContainer($this->app->getContainer());
 
         // Set memory sessions
-        $this->container->set(SessionInterface::class, new MemorySession());
+        $this->setContainerValue(SessionInterface::class, new MemorySession());
 
         // If setUp() is called in a testClass that uses DatabaseTestTrait, the method setUpDatabase() exists
         if (method_exists($this, 'setUpDatabase')) {
             // Check that database name from config contains the word "test"
             // This is a double security check to prevent unwanted use of dev db for testing
-            if (!str_contains($container->get('settings')['db']['database'], 'test')) {
+            if (!str_contains($this->container->get('settings')['db']['database'], 'test')) {
                 throw new UnexpectedValueException('Test database name MUST contain the word "test"');
             }
 
             // Create tables
-            $this->setUpDatabase($container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
+            $this->setUpDatabase($this->container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
 
             if (method_exists($this, 'insertFixtures')) {
                 // Automatically insert user roles

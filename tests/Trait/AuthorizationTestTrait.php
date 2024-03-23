@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Traits;
+namespace App\Test\Trait;
 
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\User\Enum\UserRole;
@@ -59,7 +59,7 @@ trait AuthorizationTestTrait
     {
         $authenticatedUserAttrOriginal = $authenticatedUserAttr;
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserAttr = $this->insertFixtureWithAttributes(
+        $authenticatedUserAttr = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttr),
         );
@@ -70,7 +70,7 @@ trait AuthorizationTestTrait
             $userAttr['id'] = null;
         } else {
             // If authenticated user and owner user is not the same, insert owner
-            $userAttr = $this->insertFixtureWithAttributes(
+            $userAttr = $this->insertFixture(
                 new UserFixture(),
                 $this->addUserRoleId($userAttr),
             );

@@ -2,6 +2,8 @@
 
 namespace App\Test\Fixture;
 
+use TestTraits\Interface\FixtureInterface;
+
 /**
  * User values that can be inserted into the database
  * ! All user roles are inserted automatically for each test (in AppTestTrait).

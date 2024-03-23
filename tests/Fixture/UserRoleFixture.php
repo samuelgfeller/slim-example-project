@@ -2,6 +2,8 @@
 
 namespace App\Test\Fixture;
 
+use TestTraits\Interface\FixtureInterface;
+
 class UserRoleFixture implements FixtureInterface
 {
     // Table name

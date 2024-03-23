@@ -3,13 +3,13 @@
 namespace App\Test\Integration\Authentication;
 
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class LoginPageActionTest extends TestCase
 {
@@ -39,7 +39,7 @@ class LoginPageActionTest extends TestCase
     public function testLoginPageActionAlreadyLoggedIn(): void
     {
         // Insert authenticated user
-        $userId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
+        $userId = $this->insertFixture(new UserFixture())['id'];
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
         // Prepare route to test the case when the user clicks on a login link with a redirect route

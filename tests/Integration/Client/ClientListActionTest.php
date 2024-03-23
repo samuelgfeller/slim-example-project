@@ -10,21 +10,19 @@ use App\Infrastructure\Utility\Hydrator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
-use App\Test\Traits\HttpJsonExtensionTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Copied and pasted content from client for now.
@@ -43,10 +41,8 @@ class ClientListActionTest extends TestCase
     use AppTestTrait;
     use HttpTestTrait;
     use HttpJsonTestTrait;
-    use HttpJsonExtensionTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -61,7 +57,7 @@ class ClientListActionTest extends TestCase
     public function testClientListPageActionAuthorization(): void
     {
         // Insert logged-in user with the lowest privilege
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         );
@@ -118,15 +114,15 @@ class ClientListActionTest extends TestCase
         array $usersToInsert,
         array $clientStatusesToInsert,
     ): void {
-        $users = $this->insertFixtureWithAttributes(new UserFixture(), $usersToInsert);
-        $statuses = $this->insertFixtureWithAttributes(new ClientStatusFixture(), $clientStatusesToInsert);
+        $users = $this->insertFixture(new UserFixture(), $usersToInsert);
+        $statuses = $this->insertFixture(new ClientStatusFixture(), $clientStatusesToInsert);
         // Insert authenticated user before client
-        $loggedInUserId = $this->insertFixtureWithAttributes(
+        $loggedInUserId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttributes),
         )['id'];
         // Insert clients
-        $clients = $this->insertFixtureWithAttributes(new ClientFixture(), $clientsToInsert);
+        $clients = $this->insertFixture(new ClientFixture(), $clientsToInsert);
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
@@ -207,7 +203,7 @@ class ClientListActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
     {
-        $loggedInUserId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixture(new UserFixture())['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

@@ -7,17 +7,17 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class NoteReadPageActionTest extends TestCase
 {
@@ -41,7 +41,7 @@ class NoteReadPageActionTest extends TestCase
     public function testNoteReadPageActionAuthenticated(): void
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
-        $userId = $this->insertFixtureWithAttributes(
+        $userId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         )['id'];
@@ -61,12 +61,12 @@ class NoteReadPageActionTest extends TestCase
         self::assertSame($expectedClientReadUrl, $response->getHeaderLine('Location'));
 
         // *Test request on existing note
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
-        $clientId = $this->insertFixtureWithAttributes(
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientId = $this->insertFixture(
             new ClientFixture(),
             ['client_status_id' => $clientStatusId],
         )['id'];
-        $noteId = $this->insertFixtureWithAttributes(
+        $noteId = $this->insertFixture(
             new NoteFixture(),
             ['client_id' => $clientId, 'user_id' => $userId],
         )['id'];

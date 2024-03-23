@@ -8,7 +8,6 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
  * @param {string} route after base path (e.g. 'users/1')
  * @return Promise with as content server response as JSON
  */
-
 export function submitDelete(route) {
     return fetch(basePath + route, {
         method: 'DELETE',

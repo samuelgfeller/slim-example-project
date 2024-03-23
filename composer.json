@@ -25,11 +25,11 @@
   "require-dev": {
     "roave/security-advisories": "dev-latest",
     "phpunit/phpunit": "^11",
-    "selective/test-traits": "^4",
     "phpstan/phpstan": "^1",
     "jetbrains/phpstorm-attributes": "^1.0",
     "friendsofphp/php-cs-fixer": "^3",
-    "odan/phinx-migrations-generator": "^6"
+    "odan/phinx-migrations-generator": "^6",
+    "samuelgfeller/test-traits": "^5"
   },
   "autoload": {
     "psr-4": {

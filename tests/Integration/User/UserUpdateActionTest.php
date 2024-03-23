@@ -5,20 +5,19 @@ namespace App\Test\Integration\User;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Integration testing user update.
@@ -30,7 +29,6 @@ class UserUpdateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -126,7 +124,7 @@ class UserUpdateActionTest extends TestCase
     public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),

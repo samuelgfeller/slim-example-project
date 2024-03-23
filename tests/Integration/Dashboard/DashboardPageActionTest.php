@@ -5,14 +5,14 @@ namespace App\Test\Integration\Dashboard;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFilterSettingFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class DashboardPageActionTest extends TestCase
 {
@@ -25,19 +25,19 @@ class DashboardPageActionTest extends TestCase
     public function testDashboardPageActionAuthenticated(): void
     {
         // Insert authenticated user
-        $loggedInUserId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixture(new UserFixture())['id'];
         // Insert other users to have different user filter chips (to test logic for user activity panel)
-        $userId = $this->insertFixtureWithAttributes(new UserFixture(), ['first_name' => 'Andrew'])['id'];
+        $userId = $this->insertFixture(new UserFixture(), ['first_name' => 'Andrew'])['id'];
         // Set user Andrew to active filter
-        $this->insertFixtureWithAttributes(
+        $this->insertFixture(
             new UserFilterSettingFixture(),
             ['module' => 'dashboard-user-activity', 'filter_id' => "user_$userId", 'user_id' => $loggedInUserId],
         );
         // Insert another inactive user
-        $this->insertFixtureWithAttributes(new UserFixture(), ['first_name' => 'Mike']);
+        $this->insertFixture(new UserFixture(), ['first_name' => 'Mike']);
 
         // A dashboard panel is for the status "action pending" and its id is retrieved by the code
-        $this->insertFixtureWithAttributes(new ClientStatusFixture(), ['name' => 'Action pending']);
+        $this->insertFixture(new ClientStatusFixture(), ['name' => 'Action pending']);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

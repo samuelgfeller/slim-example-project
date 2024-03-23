@@ -5,18 +5,17 @@ namespace App\Test\Integration\Client;
 use App\Domain\User\Enum\UserActivity;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Client submit delete action tests
@@ -30,7 +29,6 @@ class ClientDeleteActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -53,9 +51,9 @@ class ClientDeleteActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
 
         // Insert client status
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert client linked to given user
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']],
         );

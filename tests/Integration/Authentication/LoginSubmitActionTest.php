@@ -5,17 +5,16 @@ namespace App\Test\Integration\Authentication;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\MailerTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\MailerTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test the login submit actions. Contents of this test:
@@ -33,7 +32,6 @@ class LoginSubmitActionTest extends TestCase
     use AppTestTrait;
     use HttpTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use RouteTestTrait;
     use MailerTestTrait;
     use FixtureTestTrait;
@@ -44,7 +42,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitAction(): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
@@ -81,7 +79,7 @@ class LoginSubmitActionTest extends TestCase
      */
     public function testLoginSubmitActionWrongPassword(): void
     {
-        $this->insertFixtureWithAttributes(new UserFixture());
+        $this->insertFixture(new UserFixture());
 
         $invalidCredentials = [
             'email' => 'admin@test.com',
@@ -116,7 +114,7 @@ class LoginSubmitActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Authentication\AuthenticationProvider::class, 'invalidLoginCredentialsProvider')]
     public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
-        $this->insertFixtureWithAttributes(new UserFixture());
+        $this->insertFixture(new UserFixture());
 
         // Create request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $invalidLoginValues);
@@ -149,7 +147,7 @@ class LoginSubmitActionTest extends TestCase
     public function testLoginSubmitActionNotActiveAccount(UserStatus $status, string $partialEmailBody): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),

@@ -6,15 +6,15 @@ use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Provider\Authentication\UserVerificationProvider;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Integration testing password change from authenticated user
@@ -44,9 +44,9 @@ class PasswordResetSubmitActionTest extends TestCase
     {
         $newPassword = 'new password';
         // Insert user
-        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId]);
+        $userRow = $this->insertFixture(new UserFixture(), ['id' => $verification->userId]);
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         $request = $this->createFormRequest(
             'POST', // Request to change password
@@ -84,12 +84,12 @@ class PasswordResetSubmitActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
         $newPassword = 'new password';
         $request = $this->createFormRequest(
             'POST', // Request to change password
@@ -140,9 +140,9 @@ class PasswordResetSubmitActionTest extends TestCase
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = $this->insertFixtureWithAttributes(new UserFixture(), ['id' => $verification->userId]);
+        $userRow = $this->insertFixture(new UserFixture(), ['id' => $verification->userId]);
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         $request = $this->createFormRequest(
             'POST', // Request to change password

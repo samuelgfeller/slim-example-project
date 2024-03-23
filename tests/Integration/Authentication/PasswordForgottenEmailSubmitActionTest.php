@@ -3,16 +3,15 @@
 namespace App\Test\Integration\Authentication;
 
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\MailerTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\MailerTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Integration testing email submit of forgotten password form
@@ -28,7 +27,6 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     use MailerTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
 
     /**
@@ -37,7 +35,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     public function testPasswordForgottenEmailSubmit(): void
     {
         // Insert user
-        $userRow = $this->insertFixtureWithAttributes(new UserFixture());
+        $userRow = $this->insertFixture(new UserFixture());
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
@@ -136,7 +134,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     public function testPasswordForgottenEmailSubmitInvalidData(): void
     {
         // Insert user
-        $userRow = $this->insertFixtureWithAttributes(new UserFixture());
+        $userRow = $this->insertFixture(new UserFixture());
 
         // Simulate logged-in user with id 2
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);

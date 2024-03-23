@@ -8,18 +8,17 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test cases for client read note modification
@@ -34,7 +33,6 @@ class NoteUpdateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -58,21 +56,21 @@ class NoteUpdateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert linked status
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Insert main note attached to client and given "owner" user
-        $mainNoteRow = $this->insertFixtureWithAttributes(
+        $mainNoteRow = $this->insertFixture(
             new NoteFixture(),
             ['is_main' => 1, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id']],
         );
 
         // Insert normal non-hidden note attached to client and given "owner" user
-        $normalNoteRow = $this->insertFixtureWithAttributes(
+        $normalNoteRow = $this->insertFixture(
             new NoteFixture(),
             ['is_main' => 0, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
         );
@@ -182,20 +180,20 @@ class NoteUpdateActionTest extends TestCase
     public function testNoteSubmitUpdateActionInvalid(array $invalidRequestBody, array $expectedResponseData): void
     {
         // Insert authorized user
-        $userId = $this->insertFixtureWithAttributes(
+        $userId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert client row
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
         );
 
         // Insert note linked to client and user
-        $noteData = $this->insertFixtureWithAttributes(
+        $noteData = $this->insertFixture(
             new NoteFixture(),
             ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
         );

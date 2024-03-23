@@ -5,16 +5,16 @@ namespace App\Test\Integration\Authentication;
 use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test that the link sent to user when creating an account
@@ -42,12 +42,12 @@ class RegisterVerifyActionTest extends TestCase
     public function testRegisterVerification(UserVerificationData $verification, string $clearTextToken): void
     {
         // User needed to insert verification (taking first record from userFixture)
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         $redirectLocation = $this->urlFor('user-list');
         $queryParams = [
@@ -89,12 +89,12 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Active->value],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
         // Any location to test that page that user visited before is in the redirect param
         $redirectLocation = $this->urlFor('profile-page');
         $queryParams = [
@@ -138,12 +138,12 @@ class RegisterVerifyActionTest extends TestCase
         string $clearTextToken
     ): void {
         // User needed to insert verification
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         $redirectLocation = $this->urlFor('user-list-page');
         $queryParams = [

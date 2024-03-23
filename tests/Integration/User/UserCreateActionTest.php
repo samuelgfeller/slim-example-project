@@ -6,20 +6,19 @@ use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Integration testing user creation.
@@ -31,7 +30,6 @@ class UserCreateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -52,7 +50,7 @@ class UserCreateActionTest extends TestCase
     ): void {
         $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $authenticatedUserRow = $this->insertFixtureWithAttributes(
+        $authenticatedUserRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId($authenticatedUserAttr),
         );
@@ -150,7 +148,7 @@ class UserCreateActionTest extends TestCase
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)
         // Even if user_role_id is empty string or null
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
         );
@@ -180,7 +178,7 @@ class UserCreateActionTest extends TestCase
     public function testUserSubmitCreateEmailAlreadyExists(): void
     {
         // Insert authenticated admin
-        $adminRow = $this->insertFixtureWithAttributes(
+        $adminRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
         );
@@ -189,7 +187,7 @@ class UserCreateActionTest extends TestCase
 
         $existingEmail = 'email@address.com';
         // Insert user with email that will be used in request to create a new one
-        $this->insertFixtureWithAttributes(new UserFixture(), ['email' => $existingEmail]);
+        $this->insertFixture(new UserFixture(), ['email' => $existingEmail]);
 
         $request = $this->createJsonRequest(
             'POST',

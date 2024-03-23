@@ -6,17 +6,17 @@ use App\Domain\Authentication\Data\UserVerificationData;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Provider\Authentication\UserVerificationProvider;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\MailerTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpBadRequestException;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\MailerTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test that the link sent to a locked user to unblock his account
@@ -41,12 +41,12 @@ class AccountUnlockActionTest extends TestCase
     public function testAccountUnlockAction(UserVerificationData $verification, string $clearTextToken): void
     {
         // Insert locked user
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         // Test redirect at the same time
         $redirectLocation = $this->urlFor('client-list-page');
@@ -86,12 +86,12 @@ class AccountUnlockActionTest extends TestCase
         string $clearTextToken
     ): void {
         // Insert locked user
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         // Test redirect at the same time
         $redirectLocation = $this->urlFor('client-list-page');
@@ -132,12 +132,12 @@ class AccountUnlockActionTest extends TestCase
         string $clearTextToken
     ): void {
         // Insert locked user
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             ['status' => UserStatus::Active->value, 'id' => $verification->userId],
         );
 
-        $this->insertFixture('user_verification', $verification->toArrayForDatabase());
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
         // Test redirect at the same time
         $redirectLocation = $this->urlFor('client-list-page');

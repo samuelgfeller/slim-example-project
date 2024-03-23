@@ -2,6 +2,8 @@
 
 namespace App\Test\Fixture;
 
+use TestTraits\Interface\FixtureInterface;
+
 /**
  * Note values that can be inserted into the database.
  */

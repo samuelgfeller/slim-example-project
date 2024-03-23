@@ -5,19 +5,18 @@ namespace App\Test\Integration\Client;
 use App\Domain\Client\Enum\ClientStatus;
 use App\Domain\User\Enum\UserActivity;
 use App\Test\Fixture\ClientStatusFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Client creation from public page submit tests.
@@ -29,7 +28,6 @@ class ApiClientCreateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -44,7 +42,7 @@ class ApiClientCreateActionTest extends TestCase
     public function testApiClientSubmitCreateAction(): void
     {
         // Insert required client status
-        $clientStatusId = $this->insertFixtureWithAttributes(
+        $clientStatusId = $this->insertFixture(
             new ClientStatusFixture(),
             ['name' => ClientStatus::ACTION_PENDING->value],
         )['id'];
@@ -115,7 +113,7 @@ class ApiClientCreateActionTest extends TestCase
         array $jsonResponse
     ): void {
         // Insert action pending client status because it's needed by the service function
-        $this->insertFixtureWithAttributes(
+        $this->insertFixture(
             new ClientStatusFixture(),
             ['name' => ClientStatus::ACTION_PENDING->value],
         );

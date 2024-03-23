@@ -5,14 +5,14 @@ namespace App\Test\Integration\Client;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test cases for client read page load
@@ -36,11 +36,11 @@ class ClientReadPageActionTest extends TestCase
     {
         // Add needed database values to correctly display the page
         // Insert authenticated user permitted to see client read page
-        $userId = $this->insertFixtureWithAttributes(new UserFixture())['id'];
+        $userId = $this->insertFixture(new UserFixture())['id'];
         // Insert linked client status
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert client linked to user to be sure that the user is permitted to see the client read page
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
         );

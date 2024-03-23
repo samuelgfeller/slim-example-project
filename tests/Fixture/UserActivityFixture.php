@@ -2,6 +2,8 @@
 
 namespace App\Test\Fixture;
 
+use TestTraits\Interface\FixtureInterface;
+
 class UserActivityFixture implements FixtureInterface
 {
     // Table name

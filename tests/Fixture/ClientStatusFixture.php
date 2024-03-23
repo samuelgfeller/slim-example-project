@@ -2,6 +2,8 @@
 
 namespace App\Test\Fixture;
 
+use TestTraits\Interface\FixtureInterface;
+
 /**
  * Client status values that can be inserted into the database
  * No fixture has to be inserted first.

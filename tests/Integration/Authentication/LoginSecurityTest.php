@@ -5,16 +5,16 @@ namespace App\Test\Integration\Authentication;
 use App\Domain\Security\Enum\SecurityType;
 use App\Domain\Security\Exception\SecurityException;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class LoginSecurityTest extends TestCase
 {
@@ -43,7 +43,7 @@ class LoginSecurityTest extends TestCase
         $correctLoginRequestBody = ['email' => $email, 'password' => $password];
 
         // Insert user fixture
-        $user = $this->insertFixtureWithAttributes(new UserFixture(), [
+        $user = $this->insertFixture(new UserFixture(), [
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
         ], );

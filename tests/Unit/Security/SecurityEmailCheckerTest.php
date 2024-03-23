@@ -7,12 +7,12 @@ use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Security\Repository\EmailLogFinderRepository;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Infrastructure\Utility\Settings;
-use App\Test\Traits\AppTestTrait;
+use App\Test\Trait\AppTestTrait;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\MockTestTrait;
+use TestTraits\Trait\MockTestTrait;
 
 /**
  * Threats:

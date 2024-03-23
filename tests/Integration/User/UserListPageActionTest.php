@@ -4,18 +4,18 @@ namespace App\Test\Integration\User;
 
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
 use Slim\Exception\HttpForbiddenException;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class UserListPageActionTest extends TestCase
 {
@@ -37,7 +37,7 @@ class UserListPageActionTest extends TestCase
     public function testUserListPageActionAuthenticatedUnauthorized(): void
     {
         // Insert authenticated but unauthorized user newcomer
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         );
@@ -62,7 +62,7 @@ class UserListPageActionTest extends TestCase
     public function testUserListPageActionAuthenticatedAuthorized(): void
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
-        $userRow = $this->insertFixtureWithAttributes(
+        $userRow = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         );

@@ -5,18 +5,18 @@ namespace App\Test\Integration\User;
 use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\UserActivityFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 class UserFetchActivityActionTest extends TestCase
 {
@@ -39,12 +39,12 @@ class UserFetchActivityActionTest extends TestCase
     public function testUserListActivityFetchAction(): void
     {
         // Insert authenticated but unauthorized user newcomer
-        $userId = $this->insertFixtureWithAttributes(
+        $userId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         )['id'];
         // Insert user activity to cover most possible code with this test
-        $this->insertFixtureWithAttributes(new UserActivityFixture(), ['user_id' => $userId]);
+        $this->insertFixture(new UserActivityFixture(), ['user_id' => $userId]);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
@@ -74,7 +74,7 @@ class UserFetchActivityActionTest extends TestCase
     public function testUserListActivityFetchActionWithoutQueryParams(): void
     {
         // Insert authenticated but unauthorized user newcomer
-        $userId = $this->insertFixtureWithAttributes(
+        $userId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         )['id'];

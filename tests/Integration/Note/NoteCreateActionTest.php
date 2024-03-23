@@ -8,19 +8,18 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\Traits\AppTestTrait;
-use App\Test\Traits\AuthorizationTestTrait;
-use App\Test\Traits\DatabaseExtensionTestTrait;
-use App\Test\Traits\FixtureTestTrait;
+use App\Test\Trait\AppTestTrait;
+use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use IntlDateFormatter;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
-use Selective\TestTrait\Traits\DatabaseTestTrait;
-use Selective\TestTrait\Traits\HttpJsonTestTrait;
-use Selective\TestTrait\Traits\HttpTestTrait;
-use Selective\TestTrait\Traits\RouteTestTrait;
+use TestTraits\Trait\DatabaseTestTrait;
+use TestTraits\Trait\FixtureTestTrait;
+use TestTraits\Trait\HttpJsonTestTrait;
+use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test cases for client read note creation
@@ -35,7 +34,6 @@ class NoteCreateActionTest extends TestCase
     use HttpJsonTestTrait;
     use RouteTestTrait;
     use DatabaseTestTrait;
-    use DatabaseExtensionTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
@@ -59,9 +57,9 @@ class NoteCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert needed client status fixture
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert one client linked to this user
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
@@ -157,14 +155,14 @@ class NoteCreateActionTest extends TestCase
         array $expectedResponseData
     ): void {
         // Insert user authorized to create
-        $clientOwnerId = $this->insertFixtureWithAttributes(
+        $clientOwnerId = $this->insertFixture(
             new UserFixture(),
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixtureWithAttributes(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
         // Insert client row
-        $clientRow = $this->insertFixtureWithAttributes(
+        $clientRow = $this->insertFixture(
             new ClientFixture(),
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
         );
@@ -176,7 +174,7 @@ class NoteCreateActionTest extends TestCase
             $mainNoteRow['is_main'] = 1;
             $mainNoteRow['client_id'] = $clientRow['id'];
             $mainNoteRow['user_id'] = $clientOwnerId;
-            $this->insertFixture('note', $mainNoteRow);
+            $this->insertFixtureRow('note', $mainNoteRow);
         }
 
         // Simulate logged-in user with same user as linked to client
