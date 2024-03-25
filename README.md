@@ -22,11 +22,12 @@ External library dependencies are kept to a minimum to facilitate maintenance an
 
 Current best practices and modern principles are applied throughout the project. 
 Extra care was taken to follow the 
-[Single Responsibility Principle](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP)).
+Single Responsibility Principle ([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))).
 
 A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-project/wiki) explains the project structure, components, design choices and features.
 
-[**Installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
+Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
+to get started.
 
 ## Features
 All the features were developed with an effort to ensure maximum user-friendliness. 

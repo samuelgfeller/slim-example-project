@@ -50,13 +50,13 @@
 
     <title><?= html($config['app_name']) ?></title>
     <script>
-        // Add the theme immediately to the <html> element before everything is done loading to prevent delay
+        // Add the theme immediately to the <html> element before everything else for the correct colors
         const theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-        // Get the theme provided from the server via query param (only after login)
+        // Get the theme provided from the server via query param (available only after login)
         const themeParam = new URLSearchParams(window.location.search).get('theme');
         // Finally, add the theme to the <html> element
         document.documentElement.setAttribute('data-theme', themeParam ?? theme ?? 'light');
-        // If a theme from the database is provided and not the same with localStorage, replace it
+        // If a theme from the database is provided and is different from localStorage, replace localStorage value
         if (themeParam && themeParam !== theme) {
             localStorage.setItem('theme', themeParam);
         }

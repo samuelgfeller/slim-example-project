@@ -25,7 +25,7 @@
     }
 
     /*Div containing first or last name header*/
-    .partial-contenteditable-heading-div {
+    .inner-contenteditable-heading-div {
         float: left; /* Prevent not hoverable whitespace between partial header divs*/
     }
 
@@ -59,7 +59,7 @@
     /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
         have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
     /* Display outline on h1 when hover on edit icon and when contenteditable is true */
-    .contenteditable-edit-icon:hover ~ h1, .partial-contenteditable-heading-div h1[contenteditable="true"] {
+    .contenteditable-edit-icon:hover ~ h1, .inner-contenteditable-heading-div h1[contenteditable="true"] {
         outline: 3px solid var(--primary-color);
         border-radius: 10px;
         background: var(--background-accent-color);

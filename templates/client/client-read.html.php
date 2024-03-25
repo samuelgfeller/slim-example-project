@@ -34,7 +34,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
 <div id="title-and-dropdown-flexbox">
     <div id="outer-contenteditable-heading-container" data-deleted="<?= $clientReadData->deletedAt ? 1 : 0 ?>">
-        <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
+        <div class="inner-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
             <?php
             if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <!-- Img has to be before title because only the next sibling can be styled in css -->
@@ -47,7 +47,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <h1 data-name="first_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
                 !empty($clientReadData->firstName) ? html($clientReadData->firstName) : '&nbsp;' ?></h1>
         </div>
-        <div class="partial-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
+        <div class="inner-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
             <?php
             if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <img src="assets/general/general-img/material-edit-icon.svg"
