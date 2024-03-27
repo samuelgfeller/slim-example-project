@@ -28,6 +28,8 @@ $settings['error'] = [
     'display_error_details' => false,
     'log_errors' => true,
     'log_error_details' => true,
+    // When true, the error response will be in json format for requests with content type application/json
+    'json_error_response' => false,
 ];
 
 // Set false for production env
@@ -40,9 +42,9 @@ $settings['deployment'] = [
     // Version string or null.
     // If JsImportCacheBuster is enabled, `null` removes all query param versions from js imports
     'version' => '0.4.0',
-    // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number from the imports
+    // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number
+    // from the imports. Should be disabled in env.prod.php.
     'update_js_imports_version' => true,
-    // Disable in prod
     'asset_path' => $settings['root_dir'] . '/public/assets',
 ];
 

@@ -3,6 +3,7 @@
 namespace App\Application\ErrorHandler;
 
 use App\Domain\Validation\ValidationException;
+use App\Infrastructure\Utility\Settings;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,14 +18,18 @@ use Throwable;
 final readonly class DefaultErrorHandler implements ErrorHandlerInterface
 {
     private string $fileSystemPath;
+    private bool $jsonErrorResponse;
 
     public function __construct(
         private PhpRenderer $phpRenderer,
         private ResponseFactoryInterface $responseFactory,
         private LoggerInterface $logger,
+        private Settings $settings,
     ) {
         // The filesystem path to the project root folder will be removed in the error details page
         $this->fileSystemPath = 'C:\xampp\htdocs\\';
+        // Return json error response if request is of type json
+        $this->jsonErrorResponse = $this->settings->get('error')['json_error_response'] ?? true;
     }
 
     /**
@@ -92,15 +97,46 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
         // Reason phrase is the text that describes the status code e.g. 404 => Not found
         $reasonPhrase = $response->getReasonPhrase();
 
+        // If it's a HttpException it's safe to show the error message to the user
+        $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
+
+        // If the request is JSON and json error response is enabled, return a JSON response with the exception details
+        if ($this->jsonErrorResponse === true &&
+            str_contains($request->getHeaderLine('Content-Type'), 'application/json')
+        ) {
+            // If $displayErrorDetails is true, return exception details in json
+            if ($displayErrorDetails === true) {
+                $jsonErrorResponse = [
+                    'status' => $statusCode,
+                    'message' => $exception->getMessage(),
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                    'trace' => $exception->getTrace(),
+                ];
+            } else {
+                $jsonErrorResponse = [
+                    'status' => $statusCode,
+                    'message' => $exceptionMessage ?? $reasonPhrase,
+                ];
+            }
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode($jsonErrorResponse, JSON_PARTIAL_OUTPUT_ON_ERROR));
+
+            return $response;
+        }
+
         $phpRendererAttributes['statusCode'] = $statusCode;
         $phpRendererAttributes['reasonPhrase'] = $reasonPhrase;
+        $phpRendererAttributes['exceptionMessage'] = $exceptionMessage;
+        $exceptionDetailsAttributes = $this->getExceptionDetailsAttributes($exception);
 
         // If $displayErrorDetails is true, display exception details
         if ($displayErrorDetails === true) {
             // Add exception details to template attributes
             $phpRendererAttributes = array_merge(
                 $phpRendererAttributes,
-                $this->getExceptionDetailsAttributes($exception)
+                $exceptionDetailsAttributes
             );
             // The error-details template does not include the default layout,
             // so the base path to the project root folder is required to load assets
@@ -111,10 +147,6 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
         }
 
         // Display generic error page
-        // If it's a HttpException it's safe to show the error message to the user
-        $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
-        $phpRendererAttributes['exceptionMessage'] = $exceptionMessage;
-
         // Render template
         return $this->phpRenderer->render($response, 'error/error-page.html.php', $phpRendererAttributes);
     }

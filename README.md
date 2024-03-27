@@ -13,12 +13,15 @@ a range of practical components and features.
 It showcases the implementation of a simple yet robust 
 [architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture) 
 with a variety of backend and
-frontend features built using the Slim 4 micro-framework.
+frontend features built using the Slim 4 micro-framework. 
+The base for this project was the official 
+[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton).
 
-It can serve as learning examples or be adapted for developing new
+This repository can serve as a learning example or be adapted for developing new
 applications.
 
-External library dependencies are kept to a minimum to facilitate maintenance and ensure long-term viability. 
+External library dependencies are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework) 
+to facilitate maintenance and ensure long-term viability. 
 
 Current best practices and modern principles are applied throughout the project. 
 Extra care was taken to follow the 
@@ -75,7 +78,8 @@ to manage and maintain a record of communication through notes of people they as
 
 
 <details>
-<summary><h2 id="demo">Demo</h2></summary>
+
+<summary><b>Click to see demo</b></summary>
 
 Link: [Login](https://demo.slim-example-project.samuel-gfeller.ch)  
 Usernames: `admin@user.com` | `managing-advisor@user.com` | `advisor@user.com` | `newcomer@user.com`  

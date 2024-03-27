@@ -14,7 +14,7 @@ return function (App $app) {
     $app->addBodyParsingMiddleware();
 
     // Slim middlewares are LIFO (last in, first out) so when responding, the order is backwards
-    // so BasePathMiddleware is invoked before routing and which is before PhpViewExtensionMiddleware
+    // https://github.com/samuelgfeller/slim-example-project/wiki/Middleware#order-of-execution
 
     // Language middleware has to be after PhpViewExtensionMiddleware as it needs the $route parameter
     $app->add(\App\Application\Middleware\LocaleMiddleware::class);
