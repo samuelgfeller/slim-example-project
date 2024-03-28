@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Page;
 
-use App\Application\Renderer\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;

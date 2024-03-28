@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Common;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

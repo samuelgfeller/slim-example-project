@@ -15,7 +15,7 @@ class UserRoleSeeder extends AbstractSeed
      */
     public function run(): void
     {
-        $userRoleData = [
+        $userRoleRows = [
             ['id' => 1, 'name' => 'admin', 'hierarchy' => 1],
             ['id' => 2, 'name' => 'managing_advisor', 'hierarchy' => 2],
             ['id' => 3, 'name' => 'advisor', 'hierarchy' => 3],
@@ -24,6 +24,6 @@ class UserRoleSeeder extends AbstractSeed
 
         $table = $this->table('user_role');
 
-        $table->insert($userRoleData)->saveData();
+        $table->insert($userRoleRows)->saveData();
     }
 }

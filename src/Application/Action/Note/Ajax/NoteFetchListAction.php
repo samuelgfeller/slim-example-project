@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;

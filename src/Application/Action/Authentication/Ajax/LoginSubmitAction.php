@@ -2,8 +2,8 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Renderer\RedirectHandler;
-use App\Application\Renderer\TemplateRenderer;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authentication\Exception\InvalidCredentialsException;
 use App\Domain\Authentication\Exception\UnableToLoginStatusNotActiveException;
 use App\Domain\Authentication\Service\LoginVerifier;

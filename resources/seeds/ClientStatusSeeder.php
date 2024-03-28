@@ -15,7 +15,7 @@ class ClientStatusSeeder extends AbstractSeed
      */
     public function run(): void
     {
-        $clientStatusData = [
+        $clientStatusRows = [
             ['name' => 'Action pending'],
             ['name' => 'Helped'],
             ['name' => 'In care'],
@@ -24,6 +24,6 @@ class ClientStatusSeeder extends AbstractSeed
 
         $table = $this->table('client_status');
 
-        $table->insert($clientStatusData)->saveData();
+        $table->insert($clientStatusRows)->saveData();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientFinderWithFilter;
 use App\Test\Integration\Client\ClientListActionTest;

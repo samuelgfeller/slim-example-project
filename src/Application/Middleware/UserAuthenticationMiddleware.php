@@ -2,8 +2,8 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Renderer\JsonEncoder;
-use App\Application\Renderer\RedirectHandler;
+use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\RedirectHandler;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Service\UserFinder;
 use Odan\Session\SessionInterface;

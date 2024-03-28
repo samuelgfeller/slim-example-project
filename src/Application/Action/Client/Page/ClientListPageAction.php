@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Page;
 
-use App\Application\Renderer\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authorization\Privilege;
 use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
 use App\Domain\Client\Service\ClientListFilter\ClientListFilterChipProvider;

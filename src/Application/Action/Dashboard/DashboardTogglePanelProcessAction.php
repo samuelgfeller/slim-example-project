@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Dashboard;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;

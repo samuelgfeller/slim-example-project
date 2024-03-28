@@ -2,8 +2,8 @@
 
 namespace App\Application\Action\Authentication\Ajax;
 
-use App\Application\Renderer\RedirectHandler;
-use App\Application\Renderer\TemplateRenderer;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Authentication\Service\PasswordRecoveryEmailSender;
 use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Security\Exception\SecurityException;

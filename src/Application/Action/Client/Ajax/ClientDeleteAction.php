@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Domain\Client\Service\ClientDeleter;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

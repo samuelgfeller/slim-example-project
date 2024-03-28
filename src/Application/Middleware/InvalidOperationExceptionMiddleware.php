@@ -3,7 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Data\UserNetworkSessionData;
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Domain\Exception\InvalidOperationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

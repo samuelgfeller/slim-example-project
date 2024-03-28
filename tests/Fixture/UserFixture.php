@@ -5,7 +5,7 @@ namespace App\Test\Fixture;
 use TestTraits\Interface\FixtureInterface;
 
 /**
- * User values that can be inserted into the database
+ * User values that can be inserted into the database.
  * ! All user roles are inserted automatically for each test (in AppTestTrait).
  */
 class UserFixture implements FixtureInterface
@@ -27,7 +27,7 @@ class UserFixture implements FixtureInterface
             'status' => 'active',
             'theme' => 'light',
             'language' => 'en_US',
-            // 'status' => UserStatus::ACTIVE->value, // Only possible after 8.2 and there is no xampp version yet
+            // 'status' => UserStatus::ACTIVE->value,
             'updated_at' => '2021-01-01 00:00:01',
             'created_at' => '2021-01-01 00:00:01',
             'deleted_at' => null,

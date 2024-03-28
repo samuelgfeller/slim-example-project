@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Dashboard;
 
-use App\Application\Renderer\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use App\Domain\Dashboard\DashboardPanelProvider;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingFinder;

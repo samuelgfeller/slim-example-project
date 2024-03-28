@@ -68,9 +68,6 @@ trait AppTestTrait
      */
     protected function tearDown(): void
     {
-        // Restore the previous error handler as PHPUnit v11 checks for any leftovers in error handlers
-        // restore_error_handler();
-
         // Disconnect from database to avoid "too many connections" errors
         if (method_exists($this, 'setUpDatabase')) {
             $connection = $this->container->get(Connection::class);

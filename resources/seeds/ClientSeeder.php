@@ -37,7 +37,7 @@ class ClientSeeder extends AbstractSeed
         $oneDayAgo = $now->sub(new \DateInterval('P01D'))->format('Y-m-d H:i:s');
         $oneWeekAgo = $now->sub(new \DateInterval('P08D'))->format('Y-m-d H:i:s');
 
-        $data = [
+        $rows = [
             [
                 'id' => 1,
                 'first_name' => 'Gary',
@@ -207,23 +207,23 @@ class ClientSeeder extends AbstractSeed
         ];
 
         $table = $this->table('client');
-        $table->insert($data)->saveData();
+        $table->insert($rows)->saveData();
 
         // Insert user_activity
-        $userActivityData = [];
+        $userActivityRows = [];
         // If user created client, an entry is made in user_activity table
-        foreach ($data as $clientData) {
+        foreach ($rows as $clientRows) {
             // If client_message is empty, it means that a user created the client entry
-            if ($clientData['client_message'] === null) {
-                $userActivityData[] = [
-                    'user_id' => $clientData['user_id'],
+            if ($clientRows['client_message'] === null) {
+                $userActivityRows[] = [
+                    'user_id' => $clientRows['user_id'],
                     'action' => 'created',
                     'table' => 'client',
-                    'row_id' => $clientData['id'],
+                    'row_id' => $clientRows['id'],
                     // json encode relevant keys (all of ClientData->toArrayForDatabase)
                     'data' => json_encode(
                         array_intersect_key(
-                            $clientData,
+                            $clientRows,
                             array_flip([
                                 'first_name',
                                 'last_name',
@@ -240,7 +240,7 @@ class ClientSeeder extends AbstractSeed
                         ),
                         JSON_THROW_ON_ERROR
                     ),
-                    'datetime' => $clientData['created_at'],
+                    'datetime' => $clientRows['created_at'],
                     'ip_address' => '127.0.0.1',
                     'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, ' .
                         'like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54',
@@ -249,6 +249,6 @@ class ClientSeeder extends AbstractSeed
         }
         // Insert user activity
         $table = $this->table('user_activity');
-        $table->insert($userActivityData)->saveData();
+        $table->insert($userActivityRows)->saveData();
     }
 }

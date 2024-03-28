@@ -33,8 +33,8 @@ class NoteSeeder extends AbstractSeed
         $oneDayAgo = $now->sub(new \DateInterval('P01D'))->format('Y-m-d H:i:s');
         $oneWeekAgo = $now->sub(new \DateInterval('P07D'))->format('Y-m-d H:i:s');
 
-        $data = [
-            // 1 Gary Preble 2  I have been struggling with addiction to drugs for a long time and I need help to overcome it.
+        $rows = [
+            // 1 Gary Preble 2 I have been struggling with addiction to drugs for a long time and I need help to overcome it.
             [
                 'id' => 1,
                 'user_id' => 2,
@@ -306,23 +306,23 @@ class NoteSeeder extends AbstractSeed
         ];
 
         $table = $this->table('note');
-        $table->insert($data)->saveData();
+        $table->insert($rows)->saveData();
 
         // Insert user_activity
-        $userActivityData = [];
+        $userActivityRows = [];
         // If user created client, an entry is made in user_activity table
-        foreach ($data as $noteData) {
-            $userActivityData[] = [
-                'user_id' => $noteData['user_id'],
+        foreach ($rows as $noteRows) {
+            $userActivityRows[] = [
+                'user_id' => $noteRows['user_id'],
                 'action' => 'created',
                 'table' => 'note',
-                'row_id' => $noteData['id'],
+                'row_id' => $noteRows['id'],
                 // json encode relevant keys (all of ClientData->toArrayForDatabase)
                 'data' => json_encode(
-                    array_intersect_key($noteData, array_flip(['message', 'client_id', 'user_id', 'is_main',])),
+                    array_intersect_key($noteRows, array_flip(['message', 'client_id', 'user_id', 'is_main',])),
                     JSON_THROW_ON_ERROR
                 ),
-                'datetime' => $noteData['created_at'] ?? $oneWeekAgo,
+                'datetime' => $noteRows['created_at'] ?? $oneWeekAgo,
                 'ip_address' => '127.0.0.1',
                 'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, ' .
                     'like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54',
@@ -330,6 +330,6 @@ class NoteSeeder extends AbstractSeed
         }
         // Insert user activity
         $table = $this->table('user_activity');
-        $table->insert($userActivityData)->saveData();
+        $table->insert($userActivityRows)->saveData();
     }
 }

@@ -30,7 +30,7 @@ class UserSeeder extends AbstractSeed
      */
     public function run(): void
     {
-        $userData = [
+        $userRows = [
             [
                 'id' => 2,
                 'first_name' => 'Managing-advisor',
@@ -65,6 +65,6 @@ class UserSeeder extends AbstractSeed
         ];
 
         $table = $this->table('user');
-        $table->insert($userData)->saveData();
+        $table->insert($userRows)->saveData();
     }
 }

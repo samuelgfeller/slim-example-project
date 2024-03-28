@@ -2,7 +2,7 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Renderer\JsonEncoder;
+use App\Application\Responder\JsonEncoder;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

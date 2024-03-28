@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Renderer;
+namespace App\Application\Responder;
 
 use App\Domain\Security\Exception\SecurityException;
 use App\Domain\Validation\ValidationException;

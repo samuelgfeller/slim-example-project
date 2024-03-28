@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Authentication\Page;
 
-use App\Application\Renderer\RedirectHandler;
+use App\Application\Responder\RedirectHandler;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;

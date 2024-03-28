@@ -1,6 +1,5 @@
 <?php
 
-use App\Application\Middleware\CorsMiddleware;
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
@@ -21,7 +20,7 @@ return function (App $app) {
         $group->options('/clients', function ($request, $response) {
             return $response;
         });
-    })->add(CorsMiddleware::class);
+    })->add(\App\Application\Middleware\CorsMiddleware::class);
 
     $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
@@ -139,12 +138,6 @@ return function (App $app) {
             ->setName('note-submit-delete');
     })->add(UserAuthenticationMiddleware::class);
 
-    //    $app->get( '/favicon.ico', function ($request, $response) {
-    //        $response->getBody()->write('https://samuel-gfeller.ch/wp-content/uploads/2020/08/cropped-favicon_small-32x32.png');
-    //
-    //        return $response;
-    //    });
-
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
      * NOTE: make sure this route is defined last.
@@ -155,9 +148,7 @@ return function (App $app) {
         function ($request, $response) {
             throw new HttpNotFoundException(
                 $request,
-                'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() .
-                '" not found.'
-                // <br>Basepath: "' . $app->getBasePath() . '"'
+                'Route "' . $request->getUri()->getHost() . $request->getUri()->getPath() . '" not found.'
             );
         }
     );

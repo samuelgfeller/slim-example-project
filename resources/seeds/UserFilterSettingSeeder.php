@@ -29,7 +29,7 @@ class UserFilterSettingSeeder extends AbstractSeed
     public function run(): void
     {
         // Insert dashboard user filter seeder so that the front page is less empty
-        $data = [
+        $rows = [
             [
                 'user_id' => 1,
                 'filter_id' => 'assigned-to-me-panel',
@@ -54,6 +54,6 @@ class UserFilterSettingSeeder extends AbstractSeed
         ];
 
         $table = $this->table('user_filter_setting');
-        $table->insert($data)->saveData();
+        $table->insert($rows)->saveData();
     }
 }
