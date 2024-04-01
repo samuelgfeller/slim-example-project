@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Service\ClientUpdater;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class ClientUpdateAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private ClientUpdater $clientUpdater,
     ) {
     }
@@ -25,12 +25,12 @@ final readonly class ClientUpdateAction
         $updateData = $this->clientUpdater->updateClient($clientId, $clientValues);
 
         if ($updateData['updated']) {
-            return $this->jsonEncoder->encodeAndAddToResponse(
+            return $this->jsonResponder->encodeAndAddToResponse(
                 $response,
                 ['status' => 'success', 'data' => $updateData['data']]
             );
         }
-        $response = $this->jsonEncoder->encodeAndAddToResponse($response, [
+        $response = $this->jsonResponder->encodeAndAddToResponse($response, [
             'status' => 'warning',
             'message' => 'The client was not updated.',
             'data' => $updateData['data'],

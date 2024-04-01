@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Note\Exception\InvalidNoteFilterException;
 use App\Domain\Note\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class NoteFetchListAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private NoteFilterFinder $noteFilterFinder,
     ) {
     }
@@ -26,7 +26,7 @@ final readonly class NoteFetchListAction
             // Retrieve notes with given filter values (or none)
             $filteredNotes = $this->noteFilterFinder->findNotesWithFilter($request->getQueryParams());
         } catch (InvalidNoteFilterException $invalidNoteFilterException) {
-            return $this->jsonEncoder->encodeAndAddToResponse(
+            return $this->jsonResponder->encodeAndAddToResponse(
                 $response,
                 // Response format tested in NoteFilterProvider.php
                 [
@@ -37,6 +37,6 @@ final readonly class NoteFetchListAction
             );
         }
 
-        return $this->jsonEncoder->encodeAndAddToResponse($response, $filteredNotes);
+        return $this->jsonResponder->encodeAndAddToResponse($response, $filteredNotes);
     }
 }

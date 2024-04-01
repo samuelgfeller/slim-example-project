@@ -2,8 +2,8 @@
 
 namespace App\Domain\Note\Service;
 
+use App\Domain\Exception\ValidationException;
 use App\Domain\Note\Repository\NoteValidatorRepository;
-use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 

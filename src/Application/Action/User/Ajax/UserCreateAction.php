@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\User\Service\UserCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +13,7 @@ final readonly class UserCreateAction
 {
     public function __construct(
         private LoggerInterface $logger,
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private UserCreator $userCreator,
     ) {
     }
@@ -30,7 +30,7 @@ final readonly class UserCreateAction
 
         try {
             // Throws exception if there is error and returns false if user already exists
-            $insertId = $this->userCreator->createUser($userValues, $request->getQueryParams());
+            $insertId = $this->userCreator->createUser($userValues);
 
             if ($insertId !== false) {
                 $this->logger->info('User "' . $userValues['email'] . '" created');
@@ -39,12 +39,12 @@ final readonly class UserCreateAction
                 $response = $response->withAddedHeader('Warning', 'The post could not be created');
             }
 
-            return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);
+            return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);
         } catch (TransportExceptionInterface $e) {
             // Flash message has to be added in the frontend as form is submitted via Ajax
             $this->logger->error('Mailer exception: ' . $e->getMessage());
 
-            return $this->jsonEncoder->encodeAndAddToResponse(
+            return $this->jsonResponder->encodeAndAddToResponse(
                 $response,
                 ['status' => 'error', 'message' => __('Email error. Please contact an administrator.')]
             );

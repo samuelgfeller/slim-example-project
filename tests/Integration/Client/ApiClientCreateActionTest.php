@@ -69,7 +69,7 @@ class ApiClientCreateActionTest extends TestCase
         // Assert response status code: 201 Created
         self::assertSame(StatusCodeInterface::STATUS_CREATED, $response->getStatusCode());
         // Get test allowed origin url for CORS test
-        $allowedOriginUrl = $this->container->get('settings')['api']['allowed_origin'] ?? '';
+        $allowedOriginUrl = $this->container->get('settings')['api']['allowed_origin'] ?? '*';
         // Test CORS header
         self::assertSame($allowedOriginUrl, $response->getHeaderLine('Access-Control-Allow-Origin'));
 

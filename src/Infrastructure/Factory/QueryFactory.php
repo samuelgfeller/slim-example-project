@@ -9,7 +9,9 @@ use Cake\Database\Query\SelectQuery;
 use Cake\Database\Query\UpdateQuery;
 
 /**
- * Factory.
+ * Query factory.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
+ * CakePHP: https://book.cakephp.org/5/en/orm/query-builder.html.
  */
 final readonly class QueryFactory
 {
@@ -19,11 +21,12 @@ final readonly class QueryFactory
 
     /**
      * Returns a select query instance.
-     ** Remember to exclude deleted_at records.
+     ** Exclude deleted_at records if soft-deleting.
      *
-     * SELECT Example:
+     * SELECT usage example:
      *     $query = $this->queryFactory->selectQuery()->select(['*'])->from('user')->where(
-     *         ['deleted_at IS' => null, 'name LIKE' => '%John%']);
+     *         ['deleted_at IS' => null, 'name LIKE' => '%John%']
+     *     );
      *     return $query->execute()->fetchAll('assoc');
      *
      * @return SelectQuery<mixed>
@@ -35,9 +38,9 @@ final readonly class QueryFactory
 
     /**
      * Returns an update query instance.
-     ** Remember to take into account deleted_at records.
+     * Include deleted_at in where clause if soft-deleting.
      *
-     * UPDATE Example:
+     * UPDATE usage example:
      *     $query = $this->queryFactory->updateQuery()->update('user')->set($data)->where(['id' => 1]);
      *     return $query->execute()->rowCount() > 0;
      *
@@ -61,7 +64,7 @@ final readonly class QueryFactory
     /**
      * Data is an assoc array of a row to insert where the key is the column name.
      *
-     * Usage:
+     * Insert row usage example:
      *     return (int)$this->queryFactory->insertQueryWithData($data)->into('user')->execute()->lastInsertId();.
      *
      * @param array $data ['col_name' => 'Value', 'other_col' => 'Other value']
@@ -74,11 +77,11 @@ final readonly class QueryFactory
     }
 
     /**
-     * Soft deletes entry from given table name.
+     * Set the deleted_at column of the entry to the current datetime.
      *
-     * Usage:
+     * Soft-delete usage example:
      *     $query = $this->queryFactory->softDeleteQuery('user')->where(['id' => $id]);
-     *     return $query->execute()->rowCount() > 0;.
+     *     return $query->execute()->rowCount() > 0;
      *
      * @param string $fromTable
      *
@@ -92,6 +95,10 @@ final readonly class QueryFactory
     /**
      * Returns a delete query instance for hard deletion.
      *
+     * Hard-delete usage example:
+     *     $this->queryFactory->hardDeleteQuery()->delete('table')->where(['id' => $id]);
+     *     return $query->execute()->rowCount() > 0;
+     *
      * @return Query\DeleteQuery the delete query object
      */
     public function hardDeleteQuery(): Query\DeleteQuery
@@ -101,9 +108,12 @@ final readonly class QueryFactory
     }
 
     /**
-     * Data is an assoc array of rows to insert where the key is the column name
-     * Example:
-     *     return (int)$this->queryFactory->newMultipleInsert($data)->into('user')->execute()->lastInsertId();.
+     * Inserts multiple rows into a table.
+     * Parameter is an array of rows to insert where each row is an array with the key
+     * being the column name and the value being the value to insert.
+     *
+     * Insert multiple rows usage example:
+     *     return (int)$this->queryFactory->newMultipleInsert($data)->into('user')->execute()->lastInsertId();
      *
      * @param array $arrayOfData [['col_name' => 'Value', 'other_col' => 'Other value'], ['col_name' => 'value']]
      *

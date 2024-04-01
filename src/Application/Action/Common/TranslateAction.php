@@ -2,14 +2,14 @@
 
 namespace App\Application\Action\Common;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class TranslateAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
     ) {
     }
 
@@ -22,9 +22,9 @@ final readonly class TranslateAction
                 $translatedStrings[$string] = __($string);
             }
 
-            return $this->jsonEncoder->encodeAndAddToResponse($response, $translatedStrings);
+            return $this->jsonResponder->encodeAndAddToResponse($response, $translatedStrings);
         }
 
-        return $this->jsonEncoder->encodeAndAddToResponse($response, ['error' => 'Wrong request body format.'], 400);
+        return $this->jsonResponder->encodeAndAddToResponse($response, ['error' => 'Wrong request body format.'], 400);
     }
 }

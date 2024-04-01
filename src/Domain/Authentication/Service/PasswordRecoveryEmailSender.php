@@ -3,13 +3,14 @@
 namespace App\Domain\Authentication\Service;
 
 use App\Domain\Exception\DomainRecordNotFoundException;
+use App\Domain\Exception\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Repository\UserFinderRepository;
 use App\Domain\User\Service\UserValidator;
-use App\Domain\Validation\ValidationException;
 use App\Infrastructure\Service\LocaleConfigurator;
 use App\Infrastructure\Service\Mailer;
 use App\Infrastructure\Utility\Settings;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -44,6 +45,8 @@ final readonly class PasswordRecoveryEmailSender
      * @param array $userValues
      *
      * @throws ValidationException
+     * @throws DomainRecordNotFoundException
+     * @throws TransportExceptionInterface
      */
     public function sendPasswordRecoveryEmail(array $userValues): void
     {

@@ -2,7 +2,7 @@
 
 namespace App\Application\ErrorHandler;
 
-use App\Domain\Validation\ValidationException;
+use App\Domain\Exception\ValidationException;
 use App\Infrastructure\Utility\Settings;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -101,8 +101,8 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
         $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
 
         // If the request is JSON and json error response is enabled, return a JSON response with the exception details
-        if ($this->jsonErrorResponse === true &&
-            str_contains($request->getHeaderLine('Content-Type'), 'application/json')
+        if ($this->jsonErrorResponse === true
+            && str_contains($request->getHeaderLine('Content-Type'), 'application/json')
         ) {
             // If $displayErrorDetails is true, return exception details in json
             if ($displayErrorDetails === true) {
@@ -121,7 +121,7 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
             }
 
             $response = $response->withHeader('Content-Type', 'application/json');
-            $response->getBody()->write(json_encode($jsonErrorResponse, JSON_PARTIAL_OUTPUT_ON_ERROR));
+            $response->getBody()->write(json_encode($jsonErrorResponse, JSON_PARTIAL_OUTPUT_ON_ERROR) ?: '');
 
             return $response;
         }

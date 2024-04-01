@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Note\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Note\Service\NoteDeleter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class NoteDeleteAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private NoteDeleter $noteDeleter,
     ) {
     }
@@ -26,10 +26,10 @@ final readonly class NoteDeleteAction
         $deleted = $this->noteDeleter->deleteNote($noteId);
 
         if ($deleted) {
-            return $this->jsonEncoder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null]);
+            return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null]);
         }
 
-        $response = $this->jsonEncoder->encodeAndAddToResponse(
+        $response = $this->jsonResponder->encodeAndAddToResponse(
             $response,
             ['status' => 'warning', 'message' => 'Note not deleted.']
         );

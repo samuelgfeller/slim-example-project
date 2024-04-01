@@ -1,6 +1,6 @@
 # Slim Example Project
 
-[![Latest Version on Packagist](https://img.shields.io/github/release/samuelgfeller/slim-example-project.svg)](https://packagist.org/packages/odan/slim4-skeleton)
+[![Latest Version on Packagist](https://img.shields.io/github/release/samuelgfeller/slim-example-project.svg)](https://packagist.org/packages/samuelgfeller/slim-example-project)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=coverage)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
@@ -153,7 +153,7 @@ and was inspired by his books, articles, tutorials and his slim
 
 ## Support
 Please read the [Support❤️](https://github.com/samuelgfeller/slim-example-project/wiki/Support❤️) page 
-if you value this project and want to support it.
+if you value this project and its documentation and want to support it.
 
 ## License
 This project is licensed under the MIT Licence — see the 

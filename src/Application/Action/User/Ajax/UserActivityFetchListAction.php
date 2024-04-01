@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\User\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
 use App\Domain\UserActivity\Service\UserActivityFinder;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class UserActivityFetchListAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private UserActivityFinder $userActivityFinder,
         private FilterSettingSaver $filterSettingSaver,
     ) {
@@ -47,6 +47,6 @@ final readonly class UserActivityFetchListAction
             );
         }
 
-        return $this->jsonEncoder->encodeAndAddToResponse($response, $userResultDataArray);
+        return $this->jsonResponder->encodeAndAddToResponse($response, $userResultDataArray);
     }
 }

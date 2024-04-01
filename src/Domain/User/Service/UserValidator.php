@@ -3,11 +3,11 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
+use App\Domain\Exception\ValidationException;
 use App\Domain\User\Enum\UserLang;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Enum\UserTheme;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\Validation\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class UserValidator

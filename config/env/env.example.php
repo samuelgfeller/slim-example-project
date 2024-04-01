@@ -6,8 +6,9 @@
  * the project root directory, to protect against overwriting at deployment.
  *
  * How to set values
- * good $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
- * bad $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * correct: $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
+ * incorrect $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * Every key must be set by its own to not overwrite the entire array.
  */
 
 // $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file of the prod server.

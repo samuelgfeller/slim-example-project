@@ -8,10 +8,10 @@ use App\Domain\Client\Data\ClientData;
 use App\Domain\Client\Repository\ClientCreatorRepository;
 use App\Domain\Client\Repository\ClientDeleterRepository;
 use App\Domain\Client\Service\Authorization\ClientPermissionVerifier;
+use App\Domain\Exception\ValidationException;
 use App\Domain\Note\Service\NoteCreator;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\UserActivity\Service\UserActivityLogger;
-use App\Domain\Validation\ValidationException;
 
 final readonly class ClientCreator
 {

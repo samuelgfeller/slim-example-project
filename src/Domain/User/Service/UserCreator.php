@@ -34,13 +34,12 @@ final readonly class UserCreator
      * User creation logic.
      *
      * @param array $userValues
-     * @param array $queryParams query params that should be added to email verification link (e.g. redirect)
      *
      * @throws TransportExceptionInterface|\JsonException|\Exception
      *
      * @return int|bool insert id, false if user already exists
      */
-    public function createUser(array $userValues, array $queryParams = []): bool|int
+    public function createUser(array $userValues): bool|int
     {
         // Before validation, check if authenticated user is authorized to create user with the given data
         if ($this->userPermissionVerifier->isGrantedToCreate($userValues)) {
@@ -71,7 +70,7 @@ final readonly class UserCreator
 
             // Create and insert token if unverified
             if ($user->status === UserStatus::Unverified) {
-                $queryParams = $this->verificationTokenCreator->createUserVerification($user->id, $queryParams);
+                $queryParams = $this->verificationTokenCreator->createUserVerification($user->id);
                 // Send token to user. Mailer errors caught in action
                 $this->registrationMailer->sendRegisterVerificationToken(
                     $user->email ?? '',

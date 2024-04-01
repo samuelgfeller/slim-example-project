@@ -40,6 +40,8 @@ class SecurityEmailChecker
      * @param string|null $email
      * @param string|null $reCaptchaResponse
      * @param int|null $userId
+     *
+     * @throws SecurityException
      */
     public function performEmailAbuseCheck(?string $email, ?string $reCaptchaResponse = null, ?int $userId = null): void
     {

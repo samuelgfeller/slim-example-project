@@ -2,6 +2,7 @@
 
 namespace App\Application\Middleware;
 
+use App\Infrastructure\Utility\Settings;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,11 +11,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class CorsMiddleware implements MiddlewareInterface
 {
-    private ResponseFactoryInterface $responseFactory;
+    private ?string $allowedOrigin;
 
-    public function __construct(ResponseFactoryInterface $responseFactory)
+    public function __construct(private readonly ResponseFactoryInterface $responseFactory, Settings $settings)
     {
-        $this->responseFactory = $responseFactory;
+        $this->allowedOrigin = $settings->get('api')['allowed_origin'] ?? null;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -32,7 +33,7 @@ final class CorsMiddleware implements MiddlewareInterface
         // https://github.com/samuelgfeller/slim-example-project/wiki/Middleware#order-of-execution
         $response = $response
             ->withHeader('Access-Control-Allow-Credentials', 'true')
-            ->withHeader('Access-Control-Allow-Origin', '*') // Replace '*' with the domain you want to allow
+            ->withHeader('Access-Control-Allow-Origin', $this->allowedOrigin ?? '*')
             ->withHeader('Access-Control-Allow-Headers', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

@@ -59,8 +59,7 @@ class UserData implements \JsonSerializable
     /**
      * Returns values of object as array for database (pw2 not included).
      *
-     * The array keys MUST match with the database column names since it can
-     * be used to modify a database entry
+     * The array keys MUST match with the database column names.
      *
      * @return array
      */

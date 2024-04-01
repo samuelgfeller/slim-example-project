@@ -5,6 +5,7 @@ namespace App\Infrastructure\Service;
 use App\Application\Data\UserNetworkSessionData;
 use App\Domain\Security\Repository\EmailLoggerRepository;
 use Slim\Views\PhpRenderer;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -52,6 +53,7 @@ final readonly class Mailer
      * @param Email $email
      *
      * @return void
+     * @throws TransportExceptionInterface
      */
     public function send(Email $email): void
     {

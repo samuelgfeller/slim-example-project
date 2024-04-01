@@ -2,7 +2,7 @@
 
 namespace App\Application\Middleware;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Authentication\Exception\ForbiddenException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -15,7 +15,7 @@ final readonly class ForbiddenExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private ResponseFactoryInterface $responseFactory,
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
     ) {
     }
 
@@ -27,7 +27,7 @@ final readonly class ForbiddenExceptionMiddleware implements MiddlewareInterface
             // Create response (status code and header are added later)
             $response = $this->responseFactory->createResponse();
 
-            return $this->jsonEncoder->encodeAndAddToResponse(
+            return $this->jsonResponder->encodeAndAddToResponse(
                 $response,
                 [
                     'status' => 'error',

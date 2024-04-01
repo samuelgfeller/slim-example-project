@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Dashboard;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Application\Validation\MalformedRequestBodyChecker;
 use App\Domain\FilterSetting\FilterModule;
 use App\Domain\FilterSetting\FilterSettingSaver;
@@ -14,7 +14,7 @@ use Slim\Exception\HttpBadRequestException;
 final readonly class DashboardTogglePanelProcessAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private SessionInterface $session,
         private FilterSettingSaver $filterSettingSaver,
         private MalformedRequestBodyChecker $malformedRequestBodyChecker,
@@ -34,7 +34,7 @@ final readonly class DashboardTogglePanelProcessAction
                 FilterModule::DASHBOARD_PANEL
             );
 
-            return $this->jsonEncoder->encodeAndAddToResponse($response, ['success' => true]);
+            return $this->jsonResponder->encodeAndAddToResponse($response, ['success' => true]);
         }
         $flash = $this->session->getFlash();
         $flash->add('error', __('Malformed request body syntax. Please contact an administrator.'));

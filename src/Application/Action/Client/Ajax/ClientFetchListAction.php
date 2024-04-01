@@ -2,7 +2,7 @@
 
 namespace App\Application\Action\Client\Ajax;
 
-use App\Application\Responder\JsonEncoder;
+use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Exception\InvalidClientFilterException;
 use App\Domain\Client\Service\ClientFinderWithFilter;
 use App\Test\Integration\Client\ClientListActionTest;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class ClientFetchListAction
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonResponder $jsonResponder,
         private ClientFinderWithFilter $clientFilterFinder,
     ) {
     }
@@ -27,9 +27,9 @@ final readonly class ClientFetchListAction
             // Retrieve clients with given filter values (or none)
             $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
 
-            return $this->jsonEncoder->encodeAndAddToResponse($response, $clientResultCollection);
+            return $this->jsonResponder->encodeAndAddToResponse($response, $clientResultCollection);
         } catch (InvalidClientFilterException $invalidClientFilterException) {
-            return $this->jsonEncoder->encodeAndAddToResponse(
+            return $this->jsonResponder->encodeAndAddToResponse(
                 $response,
                 /** @see ClientListActionTest::testClientListActionInvalidFilters() */
                 [

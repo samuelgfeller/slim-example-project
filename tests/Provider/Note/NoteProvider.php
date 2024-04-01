@@ -167,21 +167,9 @@ class NoteProvider
 
     /**
      * Provides logged-in user and user linked to note with the expected result.
-     * As the permissions are a lot more simple than for client for instance,
-     * Create Update Delete cases are all in this function but if it should
+     * As the permissions are a lot more simple than for client, for instance,
+     * Create Update Delete cases are all in this function, but if it should
      * get more complex, they should be split in different providers.
-     *
-     * @return array{
-     *     array{
-     *         userLinkedToNoteRow: array,
-     *         authenticatedUserRow: array,
-     *         expectedResult: array{
-     *             creation: array,
-     *             modification: array,
-     *             deletion: array,
-     *         },
-     *     },
-     * }
      */
     public static function noteCreateUpdateDeleteProvider(): array
     {

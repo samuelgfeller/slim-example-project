@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Validation;
+namespace App\Domain\Exception;
 
 use RuntimeException;
 
@@ -49,17 +49,6 @@ class ValidationException extends RuntimeException
      *        0 => 'Minimum length is 3',
      *    ],
      * ]
-     *
-     * Previously the output format was like this:
-     * [
-     *    0 => [
-     *      'field' => 'field_name',
-     *      'message' => 'Validation error message for that field',
-     *    ],
-     *    // ... and so on
-     * ]
-     * But this makes it unnecessarily harder to test as the keys are incrementing integers and
-     * the order of the error array elements is not guaranteed in the browser request.
      *
      * @param array $validationErrors The cakephp validation errors
      *
