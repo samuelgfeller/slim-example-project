@@ -1,0 +1,46 @@
+filter:
+  paths: [ "src/*" ]
+  excluded_paths: [ "vendor/*", "tests/*", "resources/", "public/", ]
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
+
+tools:
+  external_code_coverage: false
+
+build:
+  services:
+    mysql: 8.0.29
+  environment:
+    php:
+      version: 8.2
+      ini:
+        xdebug.mode: coverage
+    mysql: 5.7
+    node: false
+    postgresql: false
+    mongodb: false
+    elasticsearch: false
+    redis: false
+    memcached: false
+    neo4j: false
+    rabbitmq: false
+    variables:
+      APP_ENV: 'scrutinizer'
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+  dependencies:
+    before:
+      - composer self-update
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS slim_example_project_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+  tests:
+    before:
+      - command: composer test:coverage
+        coverage:
+          file: 'build/logs/clover.xml'
+          format: 'clover'

@@ -8,6 +8,7 @@ on:
     types: [ opened, synchronize, reopened ]
 
 env:
+  # Set APP_ENV to 'github' so that settings.php loads the correct configuration for database migrations and testing
   APP_ENV: github
 
 jobs:
@@ -41,7 +42,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, pdo, pdo_mysql, intl, zip
-          coverage: xdebug
+          coverage: none
 
       - name: Check PHP version
         run: php -v
@@ -80,12 +81,6 @@ jobs:
         run: mysql -uroot -proot -D ${{ matrix.test-database }} -e "SHOW TABLES;"
 
       - name: Run test suite
-        run: composer test:coverage
+        run: composer test
         env:
           PHP_CS_FIXER_IGNORE_ENV: 1
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
