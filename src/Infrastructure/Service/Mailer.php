@@ -52,8 +52,9 @@ final readonly class Mailer
      *
      * @param Email $email
      *
-     * @return void
      * @throws TransportExceptionInterface
+     *
+     * @return void
      */
     public function send(Email $email): void
     {

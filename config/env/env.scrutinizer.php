@@ -1,6 +1,6 @@
 <?php
 
-// Must be "require" and not require_once
+// Include testing configuration. Must be "require" and not require_once
 require __DIR__ . '/env.test.php';
 
 // Database

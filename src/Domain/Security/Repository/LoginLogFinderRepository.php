@@ -4,7 +4,7 @@ namespace App\Domain\Security\Repository;
 
 use App\Infrastructure\Factory\QueryFactory;
 
-// ?Class cannot be readonly as it's mocked (doubled) in tests
+// ?Class cannot be final or readonly as it's mocked (doubled) in tests
 class LoginLogFinderRepository
 {
     public function __construct(

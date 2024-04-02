@@ -13,23 +13,23 @@ use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
- * Logic on cases where user tries to log in but his status is not active
- *  In a separate class to not overload LoginVerifier.
+ * Logic cases where a user tries to log in but his status is not active
+ * Methods in this separate class to not overload LoginVerifier.
  */
-class LoginNonActiveUserHandler
+final readonly class LoginNonActiveUserHandler
 {
     private string $mainContactEmail;
 
     public function __construct(
-        private readonly VerificationTokenCreator $verificationTokenCreator,
-        private readonly LoginMailSender $loginMailer,
-        private readonly LocaleConfigurator $localeConfigurator,
-        private readonly SecurityEmailChecker $securityEmailChecker,
-        private readonly LoggerInterface $logger,
-        private readonly AuthenticationLogger $authenticationLogger,
-        readonly Settings $settings,
+        private VerificationTokenCreator $verificationTokenCreator,
+        private LoginMailSender $loginMailer,
+        private LocaleConfigurator $localeConfigurator,
+        private SecurityEmailChecker $securityEmailChecker,
+        private LoggerInterface $logger,
+        private AuthenticationLogger $authenticationLogger,
+        Settings $settings,
     ) {
-        $this->mainContactEmail = $this->settings->get(
+        $this->mainContactEmail = $settings->get(
             'public'
         )['email']['main_contact_address'] ?? 'slim-example-project@samuel-gfeller.ch';
     }
@@ -66,13 +66,14 @@ class LoginNonActiveUserHandler
         // Log failed login attempt
         $this->authenticationLogger->logLoginRequest($dbUser->email, false, $dbUser->id);
 
+        $originalLocale = setlocale(LC_ALL, 0);
+
         try {
             $userId = $dbUser->id;
             $email = $dbUser->email;
             $fullName = $dbUser->getFullName();
 
             // Change language to the one the user selected in settings (in case it differs from browser lang)
-            $originalLocale = setlocale(LC_ALL, 0);
             $this->localeConfigurator->setLanguage($dbUser->language->value);
 
             if ($dbUser->status === UserStatus::Unverified) {

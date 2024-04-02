@@ -34,7 +34,7 @@ class UserPermissionVerifier
      */
     public function isGrantedToCreate(array $userValues): bool
     {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while authorization check isGrantedToCreate: '
                 . json_encode($userValues, JSON_PARTIAL_OUTPUT_ON_ERROR)
@@ -95,7 +95,7 @@ class UserPermissionVerifier
         ?int $authenticatedUserRoleHierarchy = null,
         ?array $userRoleHierarchies = null,
     ): bool {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while authorization check that user role is granted $userRoleIdOfUserToMutate: '
                 . $userRoleIdOfUserToMutate
@@ -154,7 +154,7 @@ class UserPermissionVerifier
     {
         // Unset key id from data to update as is present in the array without the intention of being changed
         unset($userDataToUpdate['id']);
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not while user update authorization check' .
                 json_encode($userDataToUpdate, JSON_PARTIAL_OUTPUT_ON_ERROR)
@@ -256,7 +256,7 @@ class UserPermissionVerifier
         int $userIdToDelete,
         bool $log = true
     ): bool {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while authorization check isGrantedToDelete $userIdToDelete: '
                 . $userIdToDelete
@@ -301,7 +301,7 @@ class UserPermissionVerifier
      */
     public function isGrantedToRead(?int $userIdToRead = null, bool $log = true): bool
     {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while authorization check isGrantedToRead $userIdToRead: '
                 . $userIdToRead
@@ -344,7 +344,7 @@ class UserPermissionVerifier
         int $userIdToRead,
         bool $log = true
     ): bool {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while authorization check isGrantedToReadUserActivity $userIdToRead: '
                 . $userIdToRead

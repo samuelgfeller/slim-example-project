@@ -50,6 +50,7 @@ class NoteData implements \JsonSerializable
      */
     public function toArray(): array
     {
+        $note = [];
         // Not include required, from db non-nullable values if they are null -> for update
         if ($this->id !== null) {
             $note['id'] = $this->id;

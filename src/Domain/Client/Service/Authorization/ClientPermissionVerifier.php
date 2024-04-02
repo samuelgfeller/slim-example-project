@@ -27,7 +27,7 @@ class ClientPermissionVerifier
     }
 
     /**
-     * Check if authenticated user is allowed to create client.
+     * Check if the authenticated user is allowed to create client.
      *
      * @param ClientData|null $client null if check before actual client creation
      *  request otherwise it has to be provided
@@ -36,7 +36,7 @@ class ClientPermissionVerifier
      */
     public function isGrantedToCreate(?ClientData $client = null): bool
     {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while isGrantedToCreate authorization check $client: '
                 . json_encode($client, JSON_PARTIAL_OUTPUT_ON_ERROR)
@@ -85,7 +85,7 @@ class ClientPermissionVerifier
         ?int $authenticatedUserRoleHierarchy = null,
         ?array $userRoleHierarchies = null
     ) {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while isGrantedToAssignUserToClient authorization check $assignedUserId: '
                 . $assignedUserId
@@ -133,7 +133,7 @@ class ClientPermissionVerifier
     public function isGrantedToUpdate(array $clientDataToUpdate, ?int $ownerId, bool $log = true): bool
     {
         $grantedUpdateKeys = [];
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error(
                 'loggedInUserId not set while isGrantedToUpdate authorization check $clientDataToUpdate: '
                 . json_encode($clientDataToUpdate, JSON_PARTIAL_OUTPUT_ON_ERROR)
@@ -218,7 +218,7 @@ class ClientPermissionVerifier
      */
     public function isGrantedToDelete(?int $ownerId, bool $log = true): bool
     {
-        if (!$this->loggedInUserId) {
+        if ($this->loggedInUserId === null) {
             $this->logger->error('loggedInUserId not set while isGrantedToDelete authorization check');
 
             return false;
