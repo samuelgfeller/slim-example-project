@@ -1,14 +1,14 @@
 <?php
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
- * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $user \App\Domain\User\Data\UserResultData user
- * @var $userStatuses \App\Domain\User\Enum\UserStatus[] all user statuses
- * @var $userActivities \App\Domain\User\Data\UserActivityData[] all user activities
- * @var $isOwnProfile bool if authenticated user is viewing his own profile
+ * @var \Slim\Views\PhpRenderer $this Rendering engine
+ * @var \App\Domain\User\Data\UserResultData $user user
+ * @var \App\Domain\User\Enum\UserStatus[] $userStatuses all user statuses
+ * @var \App\Domain\User\Data\UserActivityData[] $userActivities all user activities
+ * @var bool $isOwnProfile if the authenticated user is viewing his own profile
  */
 
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 ?>
 
 <?php

@@ -6,7 +6,7 @@
  * @var $dropdownValues App\Domain\Client\Data\ClientDropdownValuesData all statuses, users and sexes to populate dropdown
  */
 
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 ?>
 
 <?php

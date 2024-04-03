@@ -1,10 +1,15 @@
 <?php
 /**
- * Development specific configuration values.
+ * Development-specific configuration values.
+ *
+ * How to set values:
+ * Every key must be set by its own to not overwrite the entire array.
+ * Correct: $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
+ * Incorrect $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
 // Set false to show production error pages
-$settings['dev'] = true;
+$settings['dev'] = false;
 
 // For the that the error is not caught by custom error handler (below)
 ini_set('display_errors', $settings['dev'] ? '1' : '0');

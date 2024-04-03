@@ -44,6 +44,7 @@ $settings['deployment'] = [
     'version' => '0.4.0',
     // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number
     // from the imports. Should be disabled in env.prod.php.
+    // https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering#js-import-cache-busting
     'update_js_imports_version' => true,
     'asset_path' => $settings['root_dir'] . '/public/assets',
 ];
@@ -64,8 +65,6 @@ $settings['locale'] = [
     'available' => ['en_US', 'de_CH', 'fr_CH'],
     'default' => 'en_US',
 ];
-
-// Security
 
 // Protection against rapid fire and password spraying force attacks
 $settings['security'] = [

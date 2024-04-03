@@ -1,12 +1,13 @@
 <?php
 
 /**
+ * @var \Slim\Views\PhpRenderer $this
  * @var int $authenticatedUserId
  * @var \App\Domain\Dashboard\Data\DashboardData[] $dashboards
  * @var array $enabledDashboards dashboard ids of enabled dashboards
  */
 
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 $this->addAttribute('css', [
     'assets/client/read/client-read.css',
     'assets/general/page-component/content-placeholder/content-placeholder.css',

@@ -1,9 +1,9 @@
 <?php
 /**
- * @var $this \Slim\Views\PhpRenderer Rendering engine
+ * @var \Slim\Views\PhpRenderer $this Rendering engine
  */
 
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets

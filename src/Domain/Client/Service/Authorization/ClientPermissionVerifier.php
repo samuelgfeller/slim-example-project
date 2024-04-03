@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
  * Check if authenticated user is permitted to do actions
  * Roles: newcomer < advisor < managing_advisor < administrator.
  */
-class ClientPermissionVerifier
+final class ClientPermissionVerifier
 {
     private ?int $loggedInUserId = null;
 
@@ -280,7 +280,7 @@ class ClientPermissionVerifier
         string|\DateTimeImmutable|null $deletedAt = null,
         bool $log = true
     ): bool {
-        if ($this->loggedInUserId) {
+        if ($this->loggedInUserId !== null) {
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
                 $this->loggedInUserId
             );

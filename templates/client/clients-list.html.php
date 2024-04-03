@@ -11,7 +11,7 @@
 
 use App\Domain\Authorization\Privilege;
 
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 
 $this->addAttribute('libs', ['fontawesome.css']);
 

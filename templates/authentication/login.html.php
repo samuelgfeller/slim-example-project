@@ -55,7 +55,8 @@ $this->setLayout('');
 
         <?= // General form error message if there is one
         isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' .
-            html($formErrorMessage) . '</strong>' : '' ?>
+            /*Form error message is hardcoded in the backend with styling html tags*/$formErrorMessage .
+            '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->
         <div class="form-input-div <?= isset($validation['email']) ? ' input-group-error' : '' ?>">

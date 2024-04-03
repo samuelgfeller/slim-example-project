@@ -9,7 +9,6 @@
 
 // CSS stylesheets
 foreach ($stylesheets ?? [] as $stylesheet) {
-    //
     echo '<link rel="stylesheet" type="text/css" href="' . $stylesheet . ($version ? '?v='. $version : '') . '">';
 }
 

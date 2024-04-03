@@ -1,5 +1,5 @@
 /* This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
-especially elements from the layout.html.php */
+especially elements from the layout/layout.html.php */
 
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
@@ -9,11 +9,11 @@ especially elements from the layout.html.php */
     #wrapper{
         display: flex;
         flex-direction: column;
-        /* No top/bottom margin on wrapper it makes body not touch the top */
-        /* --vh set by javascript file default.js
-        https://css-tricks.com/the-trick-to-viewport-units-on-mobile
-        if not found 1vh is fallback value, phpStorm warning can be ignored */
-        height: calc(var(--vh, 2vh) * 100);
+        /*Using new dvh unit for dynamic viewport height. svh (small vh) does not work as the footer would not stick
+        to the bottom when scrolling the mobile navbar height up, it has to reposition itself to the bottom
+        which works with dvh IF the navbar actually disappears on scrolling.
+        Previously used a js hack: https://css-tricks.com/the-trick-to-viewport-units-on-mobile*/
+        height: 100dvh;
     }
     header{
         flex: none;
@@ -106,7 +106,7 @@ especially elements from the layout.html.php */
 @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
     #wrapper{
         width: 100%;
-        height: 100vh;
+        /*height: 100vh;*/
         /*background: darkgrey;*/
         /*border-right: 8px solid #cc0033;*/
     }

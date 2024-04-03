@@ -5,7 +5,7 @@
  * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
  * @var \Slim\Views\PhpRenderer $this
  */
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 ?>
 <?php
 // Define assets that should be included

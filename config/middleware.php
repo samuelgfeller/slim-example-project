@@ -30,9 +30,6 @@ return function (App $app) {
     // Has to be after every middleware that needs a started session (LIFO)
     $app->add(SessionStartMiddleware::class);
 
-    // Cors middleware has to be before routing so that it is performed after routing (LIFO)
-    // $app->add(CorsOldMiddleware::class); // Middleware added in api group in routes.php
-
     // Has to be after phpViewExtensionMiddleware https://www.slimframework.com/docs/v4/cookbook/retrieving-current-route.html
     // The RoutingMiddleware should be added after our CORS middleware
     $app->addRoutingMiddleware();
@@ -49,7 +46,4 @@ return function (App $app) {
     $app->add(NonFatalErrorHandlerMiddleware::class);
     // Set error handler to custom DefaultErrorHandler (defined in container.php)
     $app->add(ErrorMiddleware::class);
-
-    // Cross-Origin Resource Sharing (CORS) middleware. Allow other domains to access the API
-    $app->add(\App\Application\Middleware\CorsMiddleware::class);
 };

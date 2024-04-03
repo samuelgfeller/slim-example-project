@@ -9,7 +9,7 @@
  * @var \Slim\Views\PhpRenderer $this
  * @var array $config public config values
  */
-$this->setLayout('layout.html.php');
+$this->setLayout('layout/layout.html.php');
 ?>
 <?php
 // Define assets that should be included

@@ -11,7 +11,6 @@ return function (App $app) {
     $app->get('/', \App\Application\Action\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
-    $app->get('/test', \App\Application\Action\TestAction::class)->setName('test-page');
 
     $app->group('/api', function (RouteCollectorProxy $group) {
         // Client creation API call
@@ -20,7 +19,8 @@ return function (App $app) {
         $group->options('/clients', function ($request, $response) {
             return $response;
         });
-    })->add(\App\Application\Middleware\CorsMiddleware::class);
+    })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes
+    ->add(\App\Application\Middleware\CorsMiddleware::class);
 
     $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
@@ -40,7 +40,10 @@ return function (App $app) {
         'register-verification'
     );
 
-    $app->get('/unlock-account', \App\Application\Action\Authentication\Ajax\AccountUnlockProcessAction::class)->setName(
+    $app->get(
+        '/unlock-account',
+        \App\Application\Action\Authentication\Ajax\AccountUnlockProcessAction::class
+    )->setName(
         'account-unlock-verification'
     );
 
@@ -140,8 +143,8 @@ return function (App $app) {
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match
-     * NOTE: make sure this route is defined last.
-     * //     */
+     * This route must be defined last.
+     */
     $app->map(
         ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
         '/{routes:.+}',

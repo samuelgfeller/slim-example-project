@@ -5,10 +5,10 @@
  * Make sure env.php file is added to .gitignore and ideally place the env.php outside
  * the project root directory, to protect against overwriting at deployment.
  *
- * How to set values
- * correct: $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
- * incorrect $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * How to set values:
  * Every key must be set by its own to not overwrite the entire array.
+ * Correct: $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
+ * Incorrect $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
 // $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file of the prod server.
