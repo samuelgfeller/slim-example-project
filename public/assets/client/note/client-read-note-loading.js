@@ -5,7 +5,9 @@ import {
 } from "./client-read-note-loading-placeholder.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.4.0";
-import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
+import {
+    initAutoResizingTextareaElements
+} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
 import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=0.4.0";
 import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
 import {__} from "../../general/general-js/functions.js?v=0.4.0";
@@ -39,7 +41,7 @@ export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), not
             // initAllButtonsAboveNotesEventListeners();
 
             // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
-            initAutoResizingTextareas();
+            initAutoResizingTextareaElements();
             scrollToAnchor();
         });
 }

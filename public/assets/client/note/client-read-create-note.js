@@ -7,7 +7,9 @@ import {
     toggleReadOnlyAndBtnAboveNote
 } from "./client-read-note-event-listener-setup.js?v=0.4.0";
 import {handleFail, removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
-import {initAutoResizingTextareas} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
+import {
+    initAutoResizingTextareaElements
+} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
 
 let noteCreationHideCheckMarkTimeout = [];
 
@@ -60,7 +62,7 @@ export function addNewNoteTextarea() {
         // duplicate events like saving but this simply adds event listener to targets textarea
         addTextareaInputEventListener(textarea);
         // Make that newly created textarea resize automatically as well
-        initAutoResizingTextareas();
+        initAutoResizingTextareaElements();
 
         textarea.addEventListener('focusout', removeNewNoteTextareaIfEmpty);
         // Has to be after textarea event listener init
