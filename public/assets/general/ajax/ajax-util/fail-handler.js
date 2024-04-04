@@ -5,7 +5,7 @@ import {fetchTranslations} from "../fetch-translation-data.js?v=0.4.0";
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [
-    __('Access denied please log in and try again'),
+    __('Access denied, please log in and try again'),
     __('Forbidden. Not allowed to access this area or function'),
     __('Please try again and report the error to an administrator'),
 ];
@@ -50,7 +50,7 @@ export async function handleFail(response, domFieldId = null) {
         }
 
         // If response data doesn't contain login url
-        errorMsg += `<br>${translated['Access denied please refresh the page and try again']}.`;
+        errorMsg += `<br>${translated['Access denied, please refresh the page and try again']}.`;
     }
 
     const statusMessageMap = {

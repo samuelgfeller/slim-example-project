@@ -1,9 +1,9 @@
 <?php
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
- * @var $this \Slim\Views\PhpRenderer Rendering engine
- * @var $clientReadData \App\Domain\Client\Data\ClientReadResult client
- * @var $dropdownValues App\Domain\Client\Data\ClientDropdownValuesData all statuses, users and sexes to populate dropdown
+ * @var \Slim\Views\PhpRenderer $this Rendering engine
+ * @var \App\Domain\Client\Data\ClientReadResult $clientReadData client
+ * @var App\Domain\Client\Data\ClientDropdownValuesData $dropdownValues all statuses, users and sexes to populate dropdown
  */
 
 $this->setLayout('layout/layout.html.php');
@@ -17,8 +17,8 @@ $this->addAttribute('css', [
     'assets/general/page-component/modal/alert-modal.css',
     'assets/general/page-component/loader/animated-checkmark.css',
     'assets/general/page-component/button/plus-button.css',
-    'assets/general/page-component/content-placeholder/content-placeholder.css',
-    'assets/general/page-component/content-placeholder/client-read-note-placeholder.css',
+    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+    'assets/client/read/client-read-note-skeleton-loader.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
     // page-specific css has to come last to overwrite other styles
     'assets/client/note/client-note.css',

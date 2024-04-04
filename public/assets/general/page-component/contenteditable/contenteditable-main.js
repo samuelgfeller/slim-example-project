@@ -17,6 +17,11 @@ export function makeFieldEditable(field) {
         field.innerHTML = '';
     }
 
+    // Disable drop of the field otherwise it'd be possible to drag the field and drop the html it in the same field
+    field.addEventListener('drop', (e) => {
+        e.preventDefault();
+    });
+
     // Slick would be to replace the word "edit" of the edit icon with "save" for the save button but that puts a dependency
     // on the id name that can be avoided when just appending a word
     let saveBtnId = editIcon.id + '-save';

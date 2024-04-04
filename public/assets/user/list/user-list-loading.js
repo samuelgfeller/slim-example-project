@@ -1,7 +1,7 @@
 import {
     displayUserCardLoadingPlaceholder,
     removeUserCardContentPlaceholder
-} from "./user-list-content-placeholder.js?v=0.4.0";
+} from "./user-list-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {addUsersToDom} from "./user-list-card-dom-appending.js?v=0.4.0";
 import {

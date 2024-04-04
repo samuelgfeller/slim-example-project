@@ -11,10 +11,10 @@ $this->addAttribute('css', [
     'assets/general/page-component/form/form.css',
     'assets/general/page-component/button/plus-button.css',
     'assets/general/page-component/modal/form-modal.css',
-    'assets/general/page-component/content-placeholder/content-placeholder.css',
-    'assets/user/list/user-list-content-placeholder.css',
+    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+    'assets/user/list/user-list-skeleton-loader.css',
     'assets/user/list/user-list.css',
-    // post.css has to come last to overwrite other styles
+    // user-list.css has to come last to overwrite other styles
 ]);
 // Js files that import things from other js files
 $this->addAttribute(

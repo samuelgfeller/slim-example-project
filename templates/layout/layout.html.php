@@ -27,7 +27,8 @@
     // Define layout assets
     $layoutCss = [
         'assets/general/general-css/general.css',
-        'assets/general/general-css/default.css',
+        'assets/general/general-css/colors.css',
+        'assets/general/general-font/fonts.css',
         'assets/general/general-css/layout.css',
         'assets/navbar/side-navbar.css',
         'assets/general/page-component/flash-message/flash-message.css',

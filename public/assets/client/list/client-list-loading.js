@@ -2,7 +2,7 @@ import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.4
 import {
     displayClientProfileCardLoadingPlaceholder,
     removeClientCardContentPlaceholder
-} from "./client-list-content-placeholder.js?v=0.4.0";
+} from "./client-list-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {
     disableMouseWheelClickScrolling,

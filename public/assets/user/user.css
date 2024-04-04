@@ -64,7 +64,7 @@
     }
 
     #user-activity-container a:hover {
-        /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
+        /* Without the important keyword it does not work. The specificity is in layout.css is too high because
          of the :not() selectors */
         text-decoration: none !important;
         background: var(--background-accent-3-color);
@@ -74,7 +74,6 @@
         margin-top: 0;
         margin-bottom: 0;
         padding: 12px 30px 20px 30px;
-        color: var(--primary-text-color);
         background: var(--background-accent-3-color);
         border-radius: 10px 10px 0 0;
         font-size: 1.7em;

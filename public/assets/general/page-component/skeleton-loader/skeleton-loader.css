@@ -1,5 +1,5 @@
 :root {
-    --content-placeholder-moving-part-colors: rgba(251, 251, 251, .05),
+    --skeleton-loader-moving-part-colors: rgba(251, 251, 251, .05),
     rgba(251, 251, 251, .3),
     rgba(251, 251, 251, .6),
     rgba(251, 251, 251, .3),
@@ -7,7 +7,7 @@
 }
 
 [data-theme="dark"] {
-    --content-placeholder-moving-part-colors: rgba(80, 80, 80, .05),
+    --skeleton-loader-moving-part-colors: rgba(80, 80, 80, .05),
     rgba(80, 80, 80, .3),
     rgba(80, 80, 80, 0.6),
     rgba(80, 80, 80, .3),
@@ -31,12 +31,12 @@
     height: 100%;
     width: 45%;
     background-image: linear-gradient(to left,
-    var(--content-placeholder-moving-part-colors));
+    var(--skeleton-loader-moving-part-colors));
     animation: loading 1s infinite;
     z-index: 9;
 }
 
-.text-line-content-placeholder {
+.text-line-skeleton-loader {
     height: 18px;
     margin-left: 25px;
     margin-right: 25px;

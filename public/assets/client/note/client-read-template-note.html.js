@@ -61,12 +61,12 @@ export function getClientNoteLoadingPlaceholderHtml() {
     <!-- Textarea container-->
     <div class="client-note-lower-placeholder-container">
         <!-- Text line inside textarea container -->
-        <div class="text-line-content-placeholder client-note-first-text-line-placeholder">
+        <div class="text-line-skeleton-loader client-note-first-text-line-placeholder">
             <div class="moving-loading-placeholder-part-wrapper">
                 <div class="moving-loading-placeholder-part"></div>
             </div>
         </div>
-        <div class="text-line-content-placeholder client-note-second-text-line-placeholder">
+        <div class="text-line-skeleton-loader client-note-second-text-line-placeholder">
             <div class="moving-loading-placeholder-part-wrapper">
                 <div class="moving-loading-placeholder-part"></div>
             </div>

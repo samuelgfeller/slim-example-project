@@ -32,12 +32,13 @@ $this->setLayout('');
         'layout/assets.html.php',
         [
             'stylesheets' => [
-                'assets/general/page-component/flash-message/flash-message.css',
-                'assets/general/page-component/form/form.css',
+                'assets/general/general-css/colors.css',
+                'assets/general/general-font/fonts.css',
                 'assets/general/general-css/layout.css',
                 'assets/general/general-css/general.css',
-                'assets/general/general-css/default.css',
-                'assets/authentication/login.css'
+                'assets/authentication/login.css',
+                'assets/general/page-component/flash-message/flash-message.css',
+                'assets/general/page-component/form/form.css',
             ],
             // The type="module" allows the use of import and export inside a JS file.
             'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/password-reset-main.js'],

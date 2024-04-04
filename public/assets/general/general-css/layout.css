@@ -3,9 +3,61 @@ especially elements from the layout/layout.html.php */
 
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width:100px)  {
-    body {
+    /* Default styles for common HTML elements (tag name as selectors) */
+    body, html {
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* Needed for flash messages sliding in */
         background: var(--background-color);
     }
+
+    * {
+        /* border-box specifies that the borders and padding should be attributed to element's width
+        and height and not overflowing to the parent.
+        https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
+        box-sizing: border-box;
+        /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
+        font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
+        /*letter-spacing: 2px;*/
+        transition: background-color 250ms, color 250ms, border-color 250ms;
+    }
+
+    a {
+        color: var(--primary-text-color);
+    }
+
+    h2, h1, h3 {
+        color: var(--title-color);
+        /*text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);*/
+        font-family: SF-Pro Display, Helvetica, sans-serif;
+        font-weight: bold;
+    }
+
+    h1 {
+        font-size: 3em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover:not(a.currently-editable):not(#nav-container a):not(a.btn) {
+        /*text-shadow: 0 0 1px black;*/
+        /*font-weight: bold;*/
+        /*text-decoration: none;*/
+        text-decoration: underline;
+        /*font-weight: 500;*//*The issue with making text bold is that it expands the container the link is in*/
+    }
+
     #wrapper{
         display: flex;
         flex-direction: column;

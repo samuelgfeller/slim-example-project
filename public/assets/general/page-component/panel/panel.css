@@ -28,7 +28,6 @@
         margin-bottom: 0;
         /*padding: 12px 20px 20px 20px;*/
         padding: 20px;
-        color: var(--primary-text-color);
         font-size: 1.5em;
         font-weight: 600;
         display: inline-block;
@@ -57,7 +56,7 @@
     }
 
     .panel-content a:hover {
-        /* Without the important keyword it does not work. I think the specificity is in default.css is too high because
+        /* Without the important keyword it does not work. The specificity is in layout.css is too high because
          of the :not() selectors */
         text-decoration: none !important;
         background: none;

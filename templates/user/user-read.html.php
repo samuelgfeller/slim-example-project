@@ -18,10 +18,10 @@ $this->addAttribute('css', [
     'assets/general/page-component/form/form.css',
     'assets/general/page-component/modal/alert-modal.css',
     'assets/general/page-component/modal/form-modal.css',
-    // profile.css has to come last to overwrite other styles
-    'assets/general/dark-mode/dark-mode-switch.css',
+    'assets/general/dark-mode/dark-mode-toggle-switch.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
     'assets/user/user.css',
+    // user.css has to come last to overwrite other styles
 ]);
 
 
@@ -30,7 +30,7 @@ $this->addAttribute(
     ['assets/user/read/user-read-update-main.js', 'assets/general/dark-mode/dark-mode.js',]
 );
 
-// Store client id on the page in <data> element for js to read it
+// Store user id on the page in <data> element for js to read it
 ?>
 <data id="user-id" value="<?= html($user->id) ?>"></data>
 <data id="is-own-profile" value="<?= $isOwnProfile ? '1' : '0' ?>"></data>

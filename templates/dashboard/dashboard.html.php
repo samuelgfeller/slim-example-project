@@ -10,15 +10,15 @@
 $this->setLayout('layout/layout.html.php');
 $this->addAttribute('css', [
     'assets/client/read/client-read.css',
-    'assets/general/page-component/content-placeholder/content-placeholder.css',
-    'assets/general/page-component/content-placeholder/client-read-note-placeholder.css',
+    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+    'assets/client/read/client-read-note-skeleton-loader.css',
     'assets/client/list/client-list-loading-placeholder.css',
     'assets/client/list/client-list.css', // For clients
     'assets/general/page-component/contenteditable/contenteditable.css', // For notes
     'assets/general/page-component/loader/animated-checkmark.css', // Note loader
     'assets/client/note/client-note.css', // Note css
     'assets/general/page-component/filter-chip/filter-chip.css', // User
-    'assets/user/list/user-list-content-placeholder.css', // User
+    'assets/user/list/user-list-skeleton-loader.css', // User
     'assets/user/list/user-list.css', // User
     'assets/general/page-component/panel/panel.css',
     'assets/dashboard/dashboard.css',

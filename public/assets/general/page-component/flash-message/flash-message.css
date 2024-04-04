@@ -187,12 +187,11 @@
     .flash-close-btn {
         position: absolute;
         display: none;
-        /*top: -10px; !* Large font size and time symbol retty small it has to be pushed upwards*!*/
         right: 10px;
         height: 20px;
         font-size: 30px;
         font-weight: 300;
-        color: #6e6e6e;
+        color: black;
         cursor: pointer;
         align-self: flex-start;
     }
@@ -283,6 +282,8 @@
         top: 30px;
         transform: initial;
         width: auto;
+        /*Make space behind moved 30px down flash container clickable*/
+        pointer-events: none;
     }
 
     .flash {
@@ -293,6 +294,8 @@
         margin: 15px 0 10px 0px;
         transform: translateX(130%);
         white-space: break-spaces;
+        /*Allow pointer events on the flash message after removing it on the container*/
+        pointer-events: auto;
     }
 
     .flash-slide-in {

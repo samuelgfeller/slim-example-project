@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @var \Slim\Views\PhpRenderer $this
  * @var \Odan\Session\FlashInterface $flash
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams query params that should be added to form submit (e.g. redirect)
@@ -31,7 +32,8 @@ $this->setLayout('');
                 'assets/general/page-component/form/form.css',
                 'assets/general/general-css/layout.css',
                 'assets/general/general-css/general.css',
-                'assets/general/general-css/default.css',
+                'assets/general/general-css/colors.css',
+                'assets/general/general-font/fonts.css',
                 'assets/authentication/login.css'
             ],
             // The type="module" allows the use of import and export inside a JS file.
@@ -55,7 +57,8 @@ $this->setLayout('');
 
         <?= // General form error message if there is one
         isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">' .
-            /*Form error message is hardcoded in the backend with styling html tags*/$formErrorMessage .
+            /*Form error message is hardcoded in the backend with styling html tags*/
+            $formErrorMessage .
             '</strong>' : '' ?>
 
         <!-- ===== Email ===== -->

@@ -22,7 +22,7 @@ $this->addAttribute('css', [
     // post.css has to come last to overwrite other styles
     'assets/general/page-component/form/form.css',
     'assets/general/page-component/filter-chip/filter-chip.css',
-    'assets/general/page-component/content-placeholder/content-placeholder.css',
+    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
     'assets/general/page-component/button/plus-button.css',
     'assets/general/page-component/modal/form-modal.css',
     'assets/client/list/client-list.css',

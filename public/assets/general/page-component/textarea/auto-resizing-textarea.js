@@ -30,7 +30,7 @@ export function initAutoResizingTextareaElements() {
     }
 
     function resizeTextarea() {
-        // Textareas have default 2px padding and if not set it returns 0px
+        // Textarea elements have default 2px padding and if not set it returns 0px
         let padding = window.getComputedStyle(this).getPropertyValue('padding-bottom');
         // getPropertyValue('padding-bottom') returns "px" at the end it needs to be removed to be added to scrollHeight
         padding = parseInt(padding.replace('px', ''));
