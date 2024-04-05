@@ -211,7 +211,7 @@
         height: 0;
         position: absolute;
         overflow: hidden;
-        color: var(--black-text-color);
+        color: var(--black-white-text-color);
     }
     nav:hover {
         max-width: 230px;

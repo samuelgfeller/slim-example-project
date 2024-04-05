@@ -27,7 +27,7 @@
         border: 5px solid var(--primary-color);
         font-size: 1.1em;
         text-align: center;
-        background-color: var(--background-accent-1-color);
+        background-color: var(--background-accent-3-color);
         padding: 27px;
 
         transform: translate(-50%, -50%) scale(1);
@@ -62,7 +62,7 @@
     /* Enhance buttons */
     #alert-modal-footer .btn {
         line-height: 1em;
-        color: var(--black-text-color);
+        color: var(--black-white-text-color);
         box-shadow: 2px 3px 11px rgba(0, 0, 0, 0.21);
         /*border-width: 2px;*/
     }

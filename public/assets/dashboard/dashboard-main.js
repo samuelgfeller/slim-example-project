@@ -113,7 +113,7 @@ if (userPanel) {
             userActivityFilterParam.append('filterIds[]', paramData.dataset.filterId);
         }
         // submitUpdate(userActivityFilterParam, 'dashboard-user-activity-filter-setting').then(r => {});
-        return loadUserActivities(userActivityFilterParam.toString(), true);
+        return loadUserActivities(userActivityFilterParam.toString());
     }
     curriedLoadUserActivityFunction();
 

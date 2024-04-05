@@ -33,7 +33,7 @@
         opacity: 1;
         overflow: hidden; /* Prevent color from overflowing rounded border */
         white-space: nowrap;
-        align-items: center;
+        align-items: start;
         display: none; /*Flash should only be displayed if it has class .flash-slide-in*/
         /* Revert default styling of <dialog> */
         position: relative;

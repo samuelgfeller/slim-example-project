@@ -1,17 +1,17 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     /*Client profile card*/
-    .user-card-loading-placeholder {
+    .user-card-skeleton-loader {
         height: 185px;
         width: 100%; /* Width for non-mobile set below */
         padding: 25px;
         border-radius: 30px;
         /* Change card to look good for preloading */
-        background: var(--background-light-accent-color)
+        background: var(--background-accent-1-color)
     }
 
     /*Name*/
-    .user-card-name-loading-placeholder {
+    .user-card-name-skeleton-loader {
         width: min(80%, 210px);
         /*margin: auto;*/
         margin-top: 6px;
@@ -56,7 +56,7 @@
     .user-card-dropdown-container {
         justify-content: space-between;
     }
-    .user-card-loading-placeholder {
+    .user-card-skeleton-loader {
         width: 314px;
     }
 }

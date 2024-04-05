@@ -143,7 +143,7 @@ return [
         $settings = $container->get('settings');
         $rendererSettings = $settings['renderer'];
 
-        /** Global attributes are set in @see PhpRendererMiddleware */
+        /** Global attributes are set in @see PhpViewMiddleware */
         return new PhpRenderer($rendererSettings['path']);
     },
 

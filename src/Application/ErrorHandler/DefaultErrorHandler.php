@@ -104,19 +104,18 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
         if ($this->jsonErrorResponse === true
             && str_contains($request->getHeaderLine('Content-Type'), 'application/json')
         ) {
+            $jsonErrorResponse = [
+                'status' => $statusCode,
+                'message' => $exceptionMessage ?? $reasonPhrase,
+            ];
+
             // If $displayErrorDetails is true, return exception details in json
             if ($displayErrorDetails === true) {
-                $jsonErrorResponse = [
-                    'status' => $statusCode,
-                    'message' => $exception->getMessage(),
+                $jsonErrorResponse['error'] = $exception->getMessage();
+                $jsonErrorResponse['details'] = [
                     'file' => $exception->getFile(),
                     'line' => $exception->getLine(),
                     'trace' => $exception->getTrace(),
-                ];
-            } else {
-                $jsonErrorResponse = [
-                    'status' => $statusCode,
-                    'message' => $exceptionMessage ?? $reasonPhrase,
                 ];
             }
 

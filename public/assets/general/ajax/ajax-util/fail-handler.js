@@ -69,6 +69,11 @@ export async function handleFail(response, domFieldId = null) {
         errorMsg = handleValidationError(response, responseData, domFieldId, errorMsg);
     }
 
+    // If the server provides error detail message, add it to the error message
+    if (responseData.hasOwnProperty('error')) {
+        errorMsg += '<br><br><b>Error:</b> ' + responseData.error;
+    }
+
     // Output error to user
     // handleValidationError() may add noFlashMessage to the responseData
     if (!responseData.noFlashMessage) {

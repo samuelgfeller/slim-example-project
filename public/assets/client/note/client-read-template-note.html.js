@@ -42,19 +42,19 @@ export function getNoteHtml(note) {
 }
 
 export function getClientNoteLoadingPlaceholderHtml() {
-    return `<div class="client-note-loading-placeholder">
+    return `<div class="client-note-skeleton-loader">
     <!-- Note label container-->
     <div class="client-note-upper-placeholder-container">
         <!-- Date and time -->
         <div class="client-note-top-left-placeholder">
-            <div class="moving-loading-placeholder-part-wrapper">
-                <div class="moving-loading-placeholder-part"></div>
+            <div class="moving-skeleton-loader-part-wrapper">
+                <div class="moving-skeleton-loader-part"></div>
             </div>
         </div>
         <!-- Note autor -->
         <div class="client-note-top-right-placeholder">
-            <div class="moving-loading-placeholder-part-wrapper">
-                <div class="moving-loading-placeholder-part"></div>
+            <div class="moving-skeleton-loader-part-wrapper">
+                <div class="moving-skeleton-loader-part"></div>
             </div>
         </div>
     </div>
@@ -62,13 +62,13 @@ export function getClientNoteLoadingPlaceholderHtml() {
     <div class="client-note-lower-placeholder-container">
         <!-- Text line inside textarea container -->
         <div class="text-line-skeleton-loader client-note-first-text-line-placeholder">
-            <div class="moving-loading-placeholder-part-wrapper">
-                <div class="moving-loading-placeholder-part"></div>
+            <div class="moving-skeleton-loader-part-wrapper">
+                <div class="moving-skeleton-loader-part"></div>
             </div>
         </div>
         <div class="text-line-skeleton-loader client-note-second-text-line-placeholder">
-            <div class="moving-loading-placeholder-part-wrapper">
-                <div class="moving-loading-placeholder-part"></div>
+            <div class="moving-skeleton-loader-part-wrapper">
+                <div class="moving-skeleton-loader-part"></div>
             </div>
         </div>
     </div>

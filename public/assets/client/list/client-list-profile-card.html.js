@@ -62,50 +62,50 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
 }
 
 export function getClientProfileCardLoadingPlaceholderHtml() {
-    return `<div class="client-profile-card-loading-placeholder">
-        <div class="client-profile-card-loading-placeholder-header">
-            <div class="client-profile-card-avatar-age-loading-placeholder">
-                <div class="client-profile-card-avatar-loading-placeholder">
+    return `<div class="client-profile-card-skeleton-loader">
+        <div class="client-profile-card-skeleton-loader-header">
+            <div class="client-profile-card-avatar-age-skeleton-loader">
+                <div class="client-profile-card-avatar-skeleton-loader">
                     <!-- Avatar-->
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
                 <!-- Age -->
-                <div class="client-profile-card-age-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+                <div class="client-profile-card-age-skeleton-loader">
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="client-profile-card-loading-placeholder-body">
+        <div class="client-profile-card-skeleton-loader-body">
             <!-- CSS Grid -->
-            <div class="client-profile-card-name-loading-placeholder">
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+            <div class="client-profile-card-name-skeleton-loader">
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
             </div>
-            <div class="client-profile-card-loading-placeholder-infos-container">
-                <div class="client-profile-card-location-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+            <div class="client-profile-card-skeleton-loader-infos-container">
+                <div class="client-profile-card-location-skeleton-loader">
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
-                <div class="client-profile-card-phone-nr-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+                <div class="client-profile-card-phone-nr-skeleton-loader">
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
-                <div class="client-profile-card-assignee-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+                <div class="client-profile-card-assignee-skeleton-loader">
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
-                <div class="client-profile-card-status-loading-placeholder">
-                    <div class="moving-loading-placeholder-part-wrapper">
-                        <div class="moving-loading-placeholder-part"></div>
+                <div class="client-profile-card-status-skeleton-loader">
+                    <div class="moving-skeleton-loader-part-wrapper">
+                        <div class="moving-skeleton-loader-part"></div>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
     /* dark pink #660066*/
 }
 [data-theme="dark"] {
-    --form-input-background-color: var(--background-accent-4-color);
+    --form-input-background-color: var(--background-accent-6-color);
 }
 
 /* mobile first min-width sets base and content is adapted to computers. */
@@ -39,7 +39,7 @@
     }
 
     .form-input-div label{
-        color: var(--black-text-color);
+        color: var(--black-white-text-color);
     }
 
     .form-input-div label:not(.form-radio-input) {
@@ -104,7 +104,7 @@
         box-sizing: border-box;
         padding: 10px 15px;
         border-radius: 60px;
-        color: var(--black-text-color);
+        color: var(--black-white-text-color);
         /*font-weight: 100;*/
         letter-spacing: 0.02em;
         position: relative;
@@ -127,7 +127,7 @@
     .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled,
     .form-input-div input:disabled, .form-input-div select:disabled, .form-input-div input[type="radio"]:disabled {
         /* Important needed as specificity is higher when setting the non-disabled value */
-        background-color: var(--background-accent-2-color) !important;
+        background-color: var(--background-accent-4-color) !important;
         color: grey;
     }
 
@@ -153,7 +153,7 @@
         min-width: 160px;
         /*max-width: 250px;*/
         float: right;
-        color: var(--black-text-color);
+        color: var(--black-white-text-color);
         border-radius: 99px;
         padding: 12px 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -179,7 +179,7 @@
     }
 
     .form input[type=submit]:disabled, .submit-btn:disabled {
-        background: var(--background-accent-2-color);
+        background: var(--background-accent-4-color);
         color: grey;
         cursor: default;
     }

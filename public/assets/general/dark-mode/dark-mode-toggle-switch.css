@@ -28,8 +28,8 @@
 }
 
 #dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot {
-  border-color: var(--background-accent-color);
-  background-color: var(--background-accent-color);
+  border-color: var(--background-accent-2-color);
+  background-color: var(--background-accent-2-color);
 }
 
 #dark-mode-toggle-button {

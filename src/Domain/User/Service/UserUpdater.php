@@ -44,7 +44,7 @@ final readonly class UserUpdater
         if ($this->userPermissionVerifier->isGrantedToUpdate($userValues, $userIdToChange)) {
             // User values to change (cannot use object as unset values would be "null" and remove values in db)
             $validUpdateData = [];
-            // Additional check (next to malformed body in action) to be sure that only columns that may be updated are sent to the database
+            // Additional check to be sure that only columns that may be updated are sent to the database
             foreach ($userValues as $column => $value) {
                 // Check that keys are one of the database columns that may be updated
                 if (in_array($column, [

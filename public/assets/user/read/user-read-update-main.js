@@ -105,7 +105,7 @@ document.addEventListener('click', e => {
     if (e.target && e.target.id === 'change-password-submit-btn') {
         let userId = document.getElementById('user-id').value;
         submitModalForm('change-password-modal-form', `change-password/${userId}`, 'PUT')
-            .then(() => {
+            ?.then(() => {
                 displayFlashMessage('success', translated['Successfully changed password.']);
             });
     }

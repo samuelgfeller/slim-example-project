@@ -2,7 +2,7 @@ import {getNoteHtml} from "./client-read-template-note.html.js?v=0.4.0";
 import {
     displayClientNoteLoadingPlaceholder,
     removeClientNoteContentPlaceholder
-} from "./client-read-note-loading-placeholder.js?v=0.4.0";
+} from "./client-read-note-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.4.0";
 import {

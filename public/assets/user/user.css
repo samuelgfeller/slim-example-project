@@ -44,7 +44,7 @@
 
     /* --- User activity report --- */
     #user-activity-container {
-        border: 8px solid var(--background-accent-3-color);
+        border: 8px solid var(--background-accent-5-color);
         border-radius: 30px;
         /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
         max-width: 100%;
@@ -57,7 +57,7 @@
     }
 
     #user-activity-container a {
-        background: var(--background-accent-2-color);
+        background: var(--background-accent-4-color);
         padding: 2px;
         border-radius: 5px;
         color: var(--primary-text-color);
@@ -67,14 +67,14 @@
         /* Without the important keyword it does not work. The specificity is in layout.css is too high because
          of the :not() selectors */
         text-decoration: none !important;
-        background: var(--background-accent-3-color);
+        background: var(--background-accent-5-color);
     }
 
     #user-activity-header h2 {
         margin-top: 0;
         margin-bottom: 0;
         padding: 12px 30px 20px 30px;
-        background: var(--background-accent-3-color);
+        background: var(--background-accent-5-color);
         border-radius: 10px 10px 0 0;
         font-size: 1.7em;
     }

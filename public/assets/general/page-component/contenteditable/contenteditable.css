@@ -62,14 +62,14 @@
     .contenteditable-edit-icon:hover ~ h1, .inner-contenteditable-heading-div h1[contenteditable="true"] {
         outline: 3px solid var(--primary-color);
         border-radius: 10px;
-        background: var(--background-accent-color);
+        background: var(--background-accent-1-color);
     }
 
     /* Display outline on span element */
     .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"] {
         outline: 2px solid var(--primary-color);
         border-radius: 5px;
-        background: var(--background-accent-color);
+        background: var(--background-accent-1-color);
     }
 
     .contenteditable-placeholder[contenteditable=true]:empty:before {

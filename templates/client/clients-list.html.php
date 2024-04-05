@@ -26,7 +26,7 @@ $this->addAttribute('css', [
     'assets/general/page-component/button/plus-button.css',
     'assets/general/page-component/modal/form-modal.css',
     'assets/client/list/client-list.css',
-    'assets/client/list/client-list-loading-placeholder.css',
+    'assets/client/list/client-list-skeleton-loader.css',
 ]);
 // Js files that import things from other js files
 $this->addAttribute(

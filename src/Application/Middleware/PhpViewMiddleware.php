@@ -16,7 +16,7 @@ use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
-final class PhpRendererMiddleware implements MiddlewareInterface
+final class PhpViewMiddleware implements MiddlewareInterface
 {
     private array $publicSettings;
     private bool $devSetting;

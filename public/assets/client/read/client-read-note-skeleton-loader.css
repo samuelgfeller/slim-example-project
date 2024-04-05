@@ -1,7 +1,7 @@
 /*This file is in the skeleton-loader folder and not the client-read folder to be found faster and serve as
 inspiration when creating new content placeholder*/
 
-.client-note-loading-placeholder {
+.client-note-skeleton-loader {
     width: 100%;
     min-width: 232px;
     border-radius: 30px;
@@ -29,7 +29,7 @@ inspiration when creating new content placeholder*/
     margin-top: 10px;
     height: 85px;
     width: 100%;
-    background: var(--background-light-accent-color);
+    background: var(--background-accent-1-color);
     border-radius: 30px;
 }
 

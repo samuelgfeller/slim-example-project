@@ -5,36 +5,36 @@
 /* mobile first min-width sets base and content is adapted to computers. */
 @media (min-width: 100px) {
     /*Client profile card*/
-    .client-profile-card-loading-placeholder {
+    .client-profile-card-skeleton-loader {
         height: calc(266px * var(--card-placeholder-scale));
         width: 100%;
         min-width: calc(232px * var(--card-placeholder-scale));
         padding: calc(20px * var(--card-placeholder-scale));
         border-radius: calc(30px * var(--card-placeholder-scale));
         /* Change card to look good for preloading */
-        background: var(--background-light-accent-color);
+        background: var(--background-accent-1-color);
     }
 
-    .client-profile-card-loading-placeholder-header {
+    .client-profile-card-skeleton-loader-header {
         height: calc(115px * var(--card-placeholder-scale));
     }
 
     /*Avatar and age container*/
-    .client-profile-card-avatar-age-loading-placeholder {
+    .client-profile-card-avatar-age-skeleton-loader {
         margin: auto;
         width: calc(100px * var(--card-placeholder-scale));
         height: calc(100px * var(--card-placeholder-scale));
         position: relative;
     }
 
-    .client-profile-card-avatar-loading-placeholder {
+    .client-profile-card-avatar-skeleton-loader {
         width: 100%;
         height: 100%;
         border-radius: 99px;
         overflow: hidden;
     }
 
-    .client-profile-card-age-loading-placeholder {
+    .client-profile-card-age-skeleton-loader {
         width: calc(35px * var(--card-placeholder-scale));
         height: calc(35px * var(--card-placeholder-scale));
         right: calc(-20px * var(--card-placeholder-scale));
@@ -45,19 +45,19 @@
         z-index: 11;
     }
 
-    .client-profile-card-loading-placeholder-body {
+    .client-profile-card-skeleton-loader-body {
         height: 94px;
         margin-bottom: 16px;
     }
 
     /*Name*/
-    .client-profile-card-name-loading-placeholder {
+    .client-profile-card-name-skeleton-loader {
         width: 75%;
         margin: auto;
         height: calc(27px * var(--card-placeholder-scale));
     }
 
-    .client-profile-card-loading-placeholder-infos-container {
+    .client-profile-card-skeleton-loader-infos-container {
         display: grid;
         grid-template-columns: 37% 55%;
         grid-template-rows: auto;
@@ -66,19 +66,19 @@
     }
 
     /*Location*/
-    .client-profile-card-location-loading-placeholder {
+    .client-profile-card-location-skeleton-loader {
         height: calc(25px * var(--card-placeholder-scale));
         margin-top: calc(15px * var(--card-placeholder-scale));
     }
 
     /*Phone nr*/
-    .client-profile-card-phone-nr-loading-placeholder {
+    .client-profile-card-phone-nr-skeleton-loader {
         height: calc(25px * var(--card-placeholder-scale));
         margin-top: calc(15px * var(--card-placeholder-scale));
     }
 
     /*Assignee select*/
-    .client-profile-card-assignee-loading-placeholder {
+    .client-profile-card-assignee-skeleton-loader {
         height: calc(30px * var(--card-placeholder-scale));
         margin-top: calc(11px * var(--card-placeholder-scale));
         border-radius: 99px;
@@ -86,7 +86,7 @@
     }
 
     /*Status select*/
-    .client-profile-card-status-loading-placeholder {
+    .client-profile-card-status-skeleton-loader {
         height: calc(30px * var(--card-placeholder-scale));
         margin-top: calc(11px * var(--card-placeholder-scale));
         border-radius: 99px;
@@ -96,17 +96,17 @@
 
 /* After very small phones (iPhone 4) for medium phones to big phones to bigger */
 @media (min-width: 337px) {
-    .client-profile-card-loading-placeholder-infos-container {
+    .client-profile-card-skeleton-loader-infos-container {
         grid-template-columns: 33% 49%;
     }
 }
 
 @media (min-width: 641px) {
-    .client-profile-card-loading-placeholder-infos-container {
+    .client-profile-card-skeleton-loader-infos-container {
         grid-template-columns: calc(90px * var(--card-placeholder-scale)) calc(120px * var(--card-placeholder-scale));
     }
 
-    .client-profile-card-loading-placeholder {
+    .client-profile-card-skeleton-loader {
         width: calc(280px * var(--card-placeholder-scale));
     }
 }

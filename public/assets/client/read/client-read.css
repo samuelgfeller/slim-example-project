@@ -10,7 +10,7 @@
     --vigilance-low: 0 0 5px 4px rgb(189, 177, 44);
     --vigilance-medium: 0 0 5px 4px rgb(178, 127, 18);
     --vigilance-high: 0 0 5px 4px rgb(169, 62, 26);
-    --add-personal-info-icon-background: var(--background-accent-color);
+    --add-personal-info-icon-background: var(--background-accent-2-color);
     --add-personal-info-icon-box-shadow: 0 0px 9px rgba(123, 197, 255, 0.12);
 }
 
@@ -71,7 +71,7 @@
         padding: 15px 45px 15px 25px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         /*box-shadow: 0 0px 20px 10px #ffdfa3;*/
-        background: var(--background-accent-color);
+        background: var(--background-accent-2-color);
         /*background: #2e3e50;*/
         color: var(--primary-text-color);
         font-size: 18px;

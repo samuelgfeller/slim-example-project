@@ -9,7 +9,7 @@
  */
 
 // Set false to show production error pages
-$settings['dev'] = false;
+$settings['dev'] = true;
 
 // For the that the error is not caught by custom error handler (below)
 ini_set('display_errors', $settings['dev'] ? '1' : '0');

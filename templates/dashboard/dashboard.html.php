@@ -12,7 +12,7 @@ $this->addAttribute('css', [
     'assets/client/read/client-read.css',
     'assets/general/page-component/skeleton-loader/skeleton-loader.css',
     'assets/client/read/client-read-note-skeleton-loader.css',
-    'assets/client/list/client-list-loading-placeholder.css',
+    'assets/client/list/client-list-skeleton-loader.css',
     'assets/client/list/client-list.css', // For clients
     'assets/general/page-component/contenteditable/contenteditable.css', // For notes
     'assets/general/page-component/loader/animated-checkmark.css', // Note loader

@@ -3,11 +3,11 @@
     --primary-color: #2e3e50;
     /* Background colors */
     --background-color: white;
-    --background-light-accent-color: #f5f5f5;
-    --background-accent-color: #efefef;
-    --background-accent-1-color: #eaeaea;
-    --background-accent-2-color: #e7e7e7;
-    --background-accent-3-color: #dcdcdc;
+    --background-accent-1-color: #f5f5f5;
+    --background-accent-2-color: #efefef;
+    --background-accent-3-color: #eaeaea;
+    --background-accent-4-color: #e7e7e7;
+    --background-accent-5-color: #dcdcdc;
     --border-accent-2-color: #d5d5d5;
     --accent-color-when-dark: white;
     /* Text */
@@ -15,7 +15,7 @@
     --secondary-text-color: rgba(46, 62, 80, 0.80);
     --grey-secondary-text-color: #575757;
     --title-color: black;
-    --black-text-color: black;
+    --black-white-text-color: black;
     /* Filters */
     /* Styles the black svg icons to the primary color #2e3e50 */
     --primary-color-filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);
@@ -37,22 +37,22 @@
     --primary-color: #4f6b8a;
     /* Background colors */
     --background-color: #101213;
-    --background-accent-color: #1f2425;
-    --background-accent-1-color: #262b31;
+    --background-accent-2-color: #1f2425;
     /* Accent 1 mainly for the client card header to be visible even on accent background */
-    --background-light-accent-color: var(--background-accent-1-color);
-    --background-accent-2-color: #2c343d;
-    --background-accent-3-color: #323a44;
-    --background-accent-4-color: #3c4652;
+    --background-accent-1-color: var(--background-accent-3-color);
+    --background-accent-3-color: #262b31;
+    --background-accent-4-color: #2c343d;
+    --background-accent-5-color: #323a44;
+    --background-accent-6-color: #3c4652;
     --border-accent-2-color: #3c4143;
-    --accent-color-when-dark: var(--background-accent-color);
-    --accent-color-2-when-dark: var(--background-accent-1-color);
+    --accent-color-when-dark: var(--background-accent-2-color);
+    --accent-color-2-when-dark: var(--background-accent-3-color);
     /* Text */
     --primary-text-color: #c3cad0;
     --secondary-text-color: #919fac;
     --grey-secondary-text-color: #acb1c2;
     --title-color: #c3cad0;
-    --black-text-color: white;
+        --black-white-text-color: white;
     /* Filters */
     /* Styles the black svg icons to a color similar to the primary color */
     --primary-color-filter: invert(45%) sepia(10%) saturate(1191%) hue-rotate(171deg) brightness(100%) contrast(100%);

@@ -15,17 +15,17 @@
 }
 
 
-.moving-loading-placeholder-part-wrapper {
+.moving-skeleton-loader-part-wrapper {
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: var(--background-accent-2-color);
+    background-color: var(--background-accent-4-color);
     z-index: 8;
     overflow: hidden;
     border-radius: 5px;
 }
 
-.moving-loading-placeholder-part {
+.moving-skeleton-loader-part {
     position: absolute;
     left: -45%;
     height: 100%;

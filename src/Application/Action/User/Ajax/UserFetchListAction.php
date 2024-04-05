@@ -21,8 +21,7 @@ final readonly class UserFetchListAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Retrieve clients with given filter values (or none)
-        // $clientResultCollection = $this->clientFilterFinder->findClientsWithFilter($request->getQueryParams());
+        // Retrieve users
         $userResultDataArray = $this->userFinder->findAllUsersResultDataForList();
 
         return $this->jsonResponder->encodeAndAddToResponse($response, [

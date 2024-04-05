@@ -47,7 +47,7 @@ export function displayUserCreateModal() {
         </div>
         <div class="form-input-div">
             <label for="email-input">${translated['E-Mail']}</label>
-            <input type="text" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
+            <input type="email" name="email" id="email-input" placeholder="mail@example.com" class="form-input" 
             maxlength="254" required autocomplete="off">
         </div>
         <div class="form-input-div" id="user-lang-input-group-div">

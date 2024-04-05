@@ -46,17 +46,23 @@ function saveUserValueAndDisableContentEditable(field) {
     disableEditableField(field);
     let userId = document.getElementById('user-id').value;
     let submitValue = field.textContent.trim();
-    // submitValue = submitValue === '' ? null : submitValue;
-    console.log(submitValue);
 
     submitUpdate(
         {[field.dataset.name]: submitValue},
         `users/${userId}`
     ).then(responseJson => {
         // Field disabled before save request and re enabled on error
-    }).catch(errorMsg => {
-        // If request not successful, make the field editable again and focus it
-        makeFieldEditable(field);
+    }).catch(exception => {
+        // If error message contains 422 in the string, make the field editable again
+        if (exception.message.includes('422')) {
+            makeFieldEditable(field);
+            return;
+        }
+
+        // If it's a server error, let the user read the error flash message and reloaded the page in 3 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 3000);
     });
 }
 

@@ -44,7 +44,7 @@
     }
     .active-filter-chips-div button:focus {
         /*background: transparent;*/
-        background: var(--background-accent-2-color);
+        background: var(--background-accent-4-color);
     }
 
     .filter-chip{
@@ -54,7 +54,7 @@
         font-size: 14px;
         font-weight: 500;
         margin: 5px 5px;
-        background: var(--background-accent-2-color);
+        background: var(--background-accent-4-color);
         /*display: inline-block;*/
         display: inline-flex;
         align-items: center;
@@ -75,7 +75,7 @@
         cursor: pointer;
     }
     .filter-chip-active {
-        background: var(--background-accent-3-color);
+        background: var(--background-accent-5-color);
         /*border: none;*/
     }
     .filter-chip-active::after{

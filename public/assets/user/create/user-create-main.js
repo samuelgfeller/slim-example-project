@@ -25,15 +25,16 @@ document.addEventListener('click', e => {
 
         // Submit modal form and execute promise "then()" only if available (nothing is returned on validation error)
         submitModalForm('create-user-modal-form', 'users', 'POST')
-            .then((responseJson) => {
+            ?.then((responseJson) => {
                 if (responseJson.status === 'error') {
                     displayFlashMessage('error', responseJson.message);
                 } else {
                     displayFlashMessage('success', translated['User created successfully']);
                 }
                 loadUserList();
-            }).catch(error => {
-            console.error(error);
-        })
+            })
+            ?.catch(error => {
+                console.error(error);
+            })
     }
 });

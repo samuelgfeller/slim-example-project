@@ -139,8 +139,14 @@ function saveClientValueAndDisableContentEditable(field) {
                 field.closest('a').href = `tel:${submitValue}`;
             }
         }
-    }).catch(errorMsg => {
-        // If request not successful, make field editable again
-        makeClientFieldEditable.call(field);
+    }).catch(exception => {
+        // If error message contains 422 in the string, make the field editable again
+        if (exception.message.includes('422')) {
+            makeClientFieldEditable.call(field);
+            return;
+        }
+
+        // If it's a server error, let the user read the error flash message and reloaded the page in 3 seconds
+        setTimeout(() => { location.reload(); }, 3000);
     });
 }

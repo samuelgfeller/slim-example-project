@@ -9,7 +9,7 @@
         align-items: center;
         gap: 0.5em;
         padding: 7px 15px;
-        background: var(--background-accent-color);
+        background: var(--background-accent-2-color);
         border: 3px solid var(--border-accent-2-color);
         border-radius: 20px;
         cursor: pointer;
@@ -124,7 +124,7 @@
     .dashboard-panel-container {
         grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
     }
-    /*.client-profile-card-loading-placeholder{*/
+    /*.client-profile-card-skeleton-loader{*/
     /*    transform: scale(70%);*/
     /*    width: 100px;*/
     /*}*/

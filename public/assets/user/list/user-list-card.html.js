@@ -32,27 +32,27 @@ export function getUserCardHtml(user, statuses) {
 }
 
 export function getUserCardLoadingPlaceholderHtml() {
-    return `<div class="user-card-loading-placeholder">
+    return `<div class="user-card-skeleton-loader">
             <!-- CSS Grid -->
-            <div class="user-card-name-loading-placeholder">
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+            <div class="user-card-name-skeleton-loader">
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
             </div>
             <div class="user-card-email-container">
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
             </div>
             <div class="user-card-dropdown-container">
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
-                <div class="moving-loading-placeholder-part-wrapper">
-                    <div class="moving-loading-placeholder-part"></div>
+                <div class="moving-skeleton-loader-part-wrapper">
+                    <div class="moving-skeleton-loader-part"></div>
                 </div>
             </div>
     </div>`;

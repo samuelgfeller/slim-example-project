@@ -26,7 +26,7 @@ final class JsImportCacheBuster
      * are modified so that the imports have the version number at the
      * end of the file name as query parameters to break cache on
      * version change.
-     * This function is called in PhpRendererMiddleware only on dev env.
+     * This function is called in PhpViewMiddleware only on dev env.
      * Performance wise, this function takes between 10 and 20ms when content
      * is unchanged and between 30 and 50ms when content is replaced.
      *

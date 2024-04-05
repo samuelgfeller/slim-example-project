@@ -3,7 +3,7 @@
 use App\Application\Middleware\ForbiddenExceptionMiddleware;
 use App\Application\Middleware\InvalidOperationExceptionMiddleware;
 use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
-use App\Application\Middleware\PhpRendererMiddleware;
+use App\Application\Middleware\PhpViewMiddleware;
 use App\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Selective\BasePath\BasePathMiddleware;
@@ -21,7 +21,7 @@ return function (App $app) {
 
     // * Put everything possible before PhpViewExtensionMiddleware as if there is an error in a middleware,
     // * the error page (and layout as well as everything else) needs this middleware loaded to work.
-    $app->add(PhpRendererMiddleware::class);
+    $app->add(PhpViewMiddleware::class);
 
     // Retrieve and store ip address, user agent and user id (has to be BEFORE SessionStartMiddleware as it is using it
     // but after PhpViewExtensionMiddleware as it needs the user id)
