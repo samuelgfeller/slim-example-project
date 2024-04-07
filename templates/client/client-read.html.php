@@ -288,13 +288,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons"
                      class="default-icon" alt="add info">
 
-                <!-- Delete trash icon stays always there -->
-                <?= str_contains($clientReadData->generalPrivilege, 'D') ?
-                    ($clientReadData->deletedAt ? ' < img src = "assets/general/general-img/action/undelete-icon.svg" 
-                    class="default-icon personal-info-icon permanently-in-available-icon-div" id = "undelete-client-btn" alt = "undelete" > ' :
-                        '<img src = "assets/general/general-img/action/trash-icon.svg" 
+                <?php
+                if (str_contains($clientReadData->generalPrivilege, 'D')) {
+                    echo $clientReadData->deletedAt ? '<img src = "assets/general/general-img/action/undelete-icon.svg" 
+                    class="default-icon personal-info-icon permanently-in-available-icon-div" id="undelete-client-btn" 
+                    alt="undelete">' : '<img src = "assets/general/general-img/action/trash-icon.svg" 
                         class="personal-info-icon permanently-in-available-icon-div default-icon" 
-                        id = "delete-client-btn" alt = "delete" > ') : '' ?>
+                        id="delete-client-btn" alt="delete">';
+                } ?>
 
                 <!-- alt has to be exactly the same as the field name.
                 The field container id has to be "[alt]-container".

@@ -51,8 +51,8 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
                 <p>${info}</p>
             </div>
             <div id="alert-modal-footer">
-                <button class="btn modal-btn" id="alert-modal-cancel-btn">${translated['Cancel']}</button>
-                <button class="btn modal-btn btn-red" id="alert-modal-confirm-btn">${btnString}</button>
+                <button class="btn" id="alert-modal-cancel-btn">${translated['Cancel']}</button>
+                <button class="btn btn-red" id="alert-modal-confirm-btn">${btnString}</button>
             </div>
         </div>    
     </div>`;

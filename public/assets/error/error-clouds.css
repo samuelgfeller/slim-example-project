@@ -8,7 +8,7 @@
     --big-cloud-size: 0.6;
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     main {
         background: lightblue;
@@ -35,12 +35,12 @@
         padding: 15px 15px;
         border: none;
         box-shadow: 0 5px 10px white;
-        display: inline-block; /* Needed to give the button a width */
+        display: inline-block; /*Needed to give the button a width*/
         text-decoration: none;
     }
     #home-btn-section a:hover {
         box-shadow: 0 0 10px white;
-        background: white; /* Default changes color */
+        background: white; /*Default changes color*/
         text-shadow: none;
     }
 
@@ -97,7 +97,7 @@
         box-shadow: calc(10px * var(--small-cloud-size)) calc(10px * var(--small-cloud-size)) rgba(0, 0, 0, 0.2);
         border-radius: calc(100px * var(--small-cloud-size));
         position: relative;
-        float: left; /* To allow big cloud to be above */
+        float: left; /*To allow big cloud to be above*/
     }
     .small-cloud::after, .cloud::before {
         content: "";
@@ -135,7 +135,7 @@
     }
 }
 
-/* breakpoint where clouds distort with flex*/
+/*breakpoint where clouds distort with flex*/
 @media (min-width:400px) {
     #cloud-section{
         display: flex;
@@ -156,7 +156,7 @@
     }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width:641px) {
     :root{
         --small-cloud-size: 0.5;
@@ -177,14 +177,14 @@
 }
 
 @media (min-width:710px) {
-    /* Increase cloud size*/
+    /*Increase cloud size*/
     :root{
         --small-cloud-size: 0.6;
         --big-cloud-size: 0.8;
     }
 }
 
-/* tablet, landscape iPad, lo-res laptops and desktops */
+/*tablet, landscape iPad, lo-res laptops and desktops*/
 @media (min-width: 961px) {
     #error-description-section h2 {
         font-size: 3em;

@@ -1,21 +1,6 @@
-/* General style of page components with a custom selector (class / id) */
-a.currently-editable {
-    cursor: default;
-}
+/*General style of page components with a custom selector (class / id)*/
 
-[contenteditable="true"] {
-    cursor: text;
-}
-
-.green-text {
-    color: limegreen;
-}
-
-.breakParagraph {
-    word-break: break-word;
-}
-
-/* Divs */
+/*Divs*/
 .clearfix::after {
     content: "";
     clear: both;
@@ -26,43 +11,34 @@ a.currently-editable {
     transition: none !important;
 }
 
-/*Center title and plus button next to it*/
+/*Example use-case: center title and plus button next to it*/
 .vertical-center {
     display: flex;
     align-items: center;
 }
 
-/* Button */
+/*Button*/
 .btn {
-    /*background-color: var(--layout-main-button-color);*/
-    /*background-color: #e1ecf9; light blueish*/
-
     background: var(--btn-color);
     color: black;
     padding: 13px 25px;
-
-    /*font-weight: 500;*/
     border: none;
-    /*padding: 8px 20px;*/
     margin: 15px 0 0;
     border-radius: 14px;
     cursor: pointer;
     font-size: 18px;
     box-shadow: 2px 3px 11px rgba(0, 0, 0, 0.2);
-    text-decoration: none; /* For when <a> is used as button */
-    display: inline-block; /* For when <a> is used as button and when icon is used */
+    text-decoration: none; /*For when <a> is used as button*/
+    display: inline-block; /*For when <a> is used as button and when icon is used*/
     letter-spacing: 0.5px;
     transition: filter 250ms;
 }
 
 .btn:hover {
-    /* Example: alert modal box cancel button or change password in profile */
-    /*background: var(--layout-main-button-hover-color);*/
-    /*background: #a2bad7;*/
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    font-weight: normal !important; /* For when <a> to behave as button */
+    font-weight: normal !important; /*For when <a> to behave as button*/
     filter: brightness(90%);
-    text-decoration: none; /* For when <a> is used as button */
+    text-decoration: none; /*For when <a> is used as button*/
 }
 
 .btn:focus {
@@ -77,21 +53,15 @@ a.currently-editable {
 
 .btn-red {
     background-color: var(--btn-red-color);
-    /*border: 1px solid #b2180e;*/
+
 }
 
 .btn-red:hover {
-    background-color: var(--btn-red-color);
     filter: brightness(95%) saturate(130%);
-    /*background-color: #f87f74;*/
-    /*border: 2px solid tomato;*/
-    /*background: initial;*/
 }
 
 .btn-red:focus {
-    background-color: var(--btn-red-color);
     filter: brightness(90%) saturate(140%);
-    /*background: #de6e5f;*/
 }
 
 .btn-orange {
@@ -99,37 +69,28 @@ a.currently-editable {
 }
 
 .btn-orange:hover {
-    background-color: var(--btn-orange-color);
     filter: brightness(95%) saturate(130%);
 }
 
 .btn-orange:focus {
-    background-color: var(--btn-orange-color);
     filter: brightness(90%) saturate(140%);
 }
 
-
-.icon-btn {
+.icon-in-btn {
     width: 18px;
     float: left;
     margin-right: 0.5em;
 }
 
-.modal-btn {
-    padding: 12px 20px;
-    border-radius: 99px;
-}
-
-.discrete-text {
+.subdued-text {
     text-decoration: none;
-    /*font-style: italic;*/
     color: var(--grey-secondary-text-color);
     font-size: 14px;
     margin-top: 10px;
     display: inline-block;
 }
 
-.discrete-text:hover {
+.subdued-text:hover {
     color: var(--primary-text-color);
     /*font-weight: 500;*/
     text-decoration: none !important;
@@ -137,10 +98,6 @@ a.currently-editable {
 
 .secondary-text {
     color: var(--secondary-text-color);
-}
-
-.display-newlines {
-    white-space: pre-line;
 }
 
 #recaptcha {
@@ -190,21 +147,6 @@ a.currently-editable {
     margin: 0 0 5px 7px;
 }
 
-/*Icon container with divs inside that contain the img and value span*/
-.default-icon-container div {
-    display: flex;
-    align-items: center;
-    justify-items: flex-start;
-    gap: 10px;
-    margin-top: 5px; /* space here for when wrapping */
-    height: 100%;
-}
-
-.default-icon-container div img, .default-icon {
-    height: 20px;
-    filter: var(--primary-color-filter);
-}
-
 /*disable resize on auto-resize-textareas*/
 .auto-resize-textarea {
     resize: none;
@@ -212,14 +154,6 @@ a.currently-editable {
 
 .relative {
     position: relative;
-}
-
-.main-color-text {
-    color: var(--primary-text-color);
-}
-
-.main-color-discrete-text {
-    color: #576381;
 }
 
 [data-deleted="1"] {
@@ -230,21 +164,7 @@ a.currently-editable {
     cursor: pointer;
 }
 
-/* Vertically align middle */
-.vertical-middle {
-    vertical-align: middle;
-}
-
-.vertical-middle h1, .vertical-middle h2 {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-/* Collapsible elements */
-.collapsible-button {
-    cursor: pointer;
-}
-
+/*Collapsible elements*/
 .collapsible-content {
     max-height: 0;
     overflow: hidden;
@@ -252,22 +172,4 @@ a.currently-editable {
 }
 
 @media (min-width: 961px) {
-
-    /*Scrollbar*/
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        border-radius: 20px;
-        background: var(--background-accent-1-color);
-        margin: 5px;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: var(--background-accent-5-color);
-        border-radius: 20px;
-    }
 }

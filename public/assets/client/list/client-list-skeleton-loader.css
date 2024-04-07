@@ -2,7 +2,7 @@
     --card-placeholder-scale: 1;
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     /*Client profile card*/
     .client-profile-card-skeleton-loader {
@@ -11,7 +11,7 @@
         min-width: calc(232px * var(--card-placeholder-scale));
         padding: calc(20px * var(--card-placeholder-scale));
         border-radius: calc(30px * var(--card-placeholder-scale));
-        /* Change card to look good for preloading */
+        /*Change card to look good for preloading*/
         background: var(--background-accent-1-color);
     }
 
@@ -94,7 +94,7 @@
     }
 }
 
-/* After very small phones (iPhone 4) for medium phones to big phones to bigger */
+/*After very small phones (iPhone 4) for medium phones to big phones to bigger*/
 @media (min-width: 337px) {
     .client-profile-card-skeleton-loader-infos-container {
         grid-template-columns: 33% 49%;

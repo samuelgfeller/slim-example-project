@@ -1,21 +1,21 @@
-/* This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
-especially elements from the layout/layout.html.php */
+/*This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
+especially elements from the layout/layout.html.php*/
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width:100px)  {
-    /* Default styles for common HTML elements (tag name as selectors) */
+    /*Default styles for common HTML elements (tag name as selectors)*/
     body, html {
         min-height: 100vh;
         margin: 0;
         padding: 0;
-        overflow-x: hidden; /* Needed for flash messages sliding in */
+        overflow-x: hidden; /*Needed for flash messages sliding in*/
         background: var(--background-color);
     }
 
     * {
-        /* border-box specifies that the borders and padding should be attributed to element's width
+        /*border-box specifies that the borders and padding should be attributed to element's width
         and height and not overflowing to the parent.
-        https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
+        https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing*/
         box-sizing: border-box;
         /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
         font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
@@ -83,8 +83,8 @@ especially elements from the layout/layout.html.php */
     }
     main {
         /*width: 100%;*/
-        padding: 1em 0.5em 1em 0.5em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
-        /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
+        padding: 1em 0.5em 1em 0.5em; /*Not margin, it creates a scrollbar because of wrapper 100vh*/
+        /*Prevent Browser from letting these items shrink to smaller than their content's default minimum size.*/
         flex: 1 0 auto;
         border-radius: 20px;
     }
@@ -95,11 +95,11 @@ especially elements from the layout/layout.html.php */
         font-weight: normal;
         text-decoration: none !important;
     }
-    /* Headers have have a margin too big on mobile */
+    /*Headers have have a margin too big on mobile*/
     main h1{
         margin-top: 0;
     }
-    /* Remove bottom margin as well when header is in vertical-center div to align all elements in the middle */
+    /*Remove bottom margin as well when header is in vertical-center div to align all elements in the middle*/
     .vertical-center h1{
         margin-bottom: 0;
     }
@@ -110,14 +110,14 @@ especially elements from the layout/layout.html.php */
 
     footer{
         flex: none;
-        /* Prevent Browser from letting these items shrink to smaller than their content's default minimum size. */
+        /*Prevent Browser from letting these items shrink to smaller than their content's default minimum size.*/
         flex-shrink: 0;
         background: var(--background-accent-2-color);
         padding: 10px;
         text-align: center;
         color: #9b9b9b;
         font-size: 0.9em;
-        margin-top: 1em; /* Same as margin-bottom on header */
+        margin-top: 1em; /*Same as margin-bottom on header*/
         border-radius: 999px 999px 0 0;
     }
     footer a{
@@ -141,21 +141,21 @@ especially elements from the layout/layout.html.php */
     }
 }
 @media (min-width: 340px) {
-    /* 340px enough wide to add letter-spacing*/
+    /*340px enough wide to add letter-spacing*/
     header span {
     }
 }
 @media (min-width:400px)  {
     main {
-        padding: 1em 1em 1em 1em; /* Not margin, it creates a scrollbar because of wrapper 100vh*/
+        padding: 1em 1em 1em 1em; /*Not margin, it creates a scrollbar because of wrapper 100vh*/
     }
 }
-@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width:641px)  { /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
     /*#wrapper{*/
-    /*    margin: 0 2em;*/
+    /*   margin: 0 2em;*/
     /*}*/
 }
-@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */
+@media (min-width:961px)  { /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #wrapper{
         width: 100%;
         /*height: 100vh;*/
@@ -170,10 +170,10 @@ especially elements from the layout/layout.html.php */
         margin-left: 100px;
     }
 }
-@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+@media (min-width:1025px) { /*big landscape tablets, laptops, and desktops*/
 
 }
-@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+@media (min-width:1281px) { /*hi-res laptops and desktops*/ }
 
 
 

@@ -1,12 +1,12 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     /*Client profile card*/
     .user-card-skeleton-loader {
         height: 185px;
-        width: 100%; /* Width for non-mobile set below */
+        width: 100%; /*Width for non-mobile set below*/
         padding: 25px;
         border-radius: 30px;
-        /* Change card to look good for preloading */
+        /*Change card to look good for preloading*/
         background: var(--background-accent-1-color)
     }
 
@@ -31,23 +31,23 @@
 
     .user-card-dropdown-container {
         display: grid;
-        grid-template-columns: repeat(2, min(45%, 140px)); /* Equals: min(45%, 140px) min(45%, 140px)*/
+        grid-template-columns: repeat(2, min(45%, 140px)); /*Equals: min(45%, 140px) min(45%, 140px)*/
         grid-template-rows: auto;
         justify-content: space-evenly;
         /*justify-items: end;*/
         height: 30px;
         gap: 10%;
     }
-    /* Add border radius to immediate div children */
+    /*Add border radius to immediate div children*/
     .user-card-dropdown-container > div {
         border-radius: 99px;
     }
 }
-/* After very small phones (iPhone 4) for medium phones to big phones to bigger */
+/*After very small phones (iPhone 4) for medium phones to big phones to bigger*/
 @media (min-width: 337px) {
     .user-card-dropdown-container {
-        /* This would be the correct width but to prevent overflow on smaller devices it is only fix after here */
-        /* Could probably be improved with minmax but I couldn't do it quickly minmax(45%, 140px) minmax(45%, 140px) */
+        /*This would be the correct width but to prevent overflow on smaller devices it is only fix after here*/
+        /*Could probably be improved with minmax but I couldn't do it quickly minmax(45%, 140px) minmax(45%, 140px)*/
         /*grid-template-columns: 140px 140px;*/
     }
 }

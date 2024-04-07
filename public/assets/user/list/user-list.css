@@ -1,9 +1,9 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #user-wrapper, .user-wrapper {
         width: 100%;
         display: flex;
-        /* Make items shrink if different height on same row */
+        /*Make items shrink if different height on same row*/
         align-items: flex-start;
         gap: 30px 40px;
         flex-wrap: wrap;
@@ -29,16 +29,16 @@
         margin-bottom: 20px;
     }
 
-    /* Personal info email address - Make divs inside flexbox also flexbox to align text with icon*/
+    /*Personal info email address - Make divs inside flexbox also flexbox to align text with icon*/
     .card-icon-and-span-div {
         display: flex;
         align-items: center;
-        margin-top: 10px; /* space here for when wrapping */
+        margin-top: 10px; /*space here for when wrapping*/
         margin-bottom: 10px;
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
-    /* Icon */
+    /*Icon*/
     .card-icon-and-span-div img {
         margin-right: 10px;
         height: 20px;
@@ -53,7 +53,7 @@
     }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
     .user-card {
         width: auto;

@@ -11,12 +11,12 @@
     --mobile-nav-toggle-burger-bars-color: #2e3e50;
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #nav-container {
-        /*height: 100%; takes entire remaining space putting content at the bottom */
+        /*height: 100%; takes entire remaining space putting content at the bottom*/
         left: 0;
-        position: relative; /* For z-index and ui to work, relative on mobile and fixed for desktop */
+        position: relative; /*For z-index and ui to work, relative on mobile and fixed for desktop*/
     }
 
     nav {
@@ -25,7 +25,7 @@
         border-radius: 20px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         margin-left: 15px;
-        /*max-height must not be limited and max-width must be 80px on desktop for icons */
+        /*max-height must not be limited and max-width must be 80px on desktop for icons*/
         max-height: 0;
         /*On mobile the expand animation is growing to the top and on desktop it's expanding sideways*/
         transition: max-height .5s ease-out, max-width .5s ease-out, background-color 250ms;
@@ -37,7 +37,7 @@
         bottom: 100px;
     }
 
-    /* Show menu when mobile nav is open */
+    /*Show menu when mobile nav is open*/
     #nav-container.open nav{
         max-width: 230px;
         max-height: 500px;
@@ -64,15 +64,15 @@
         font-weight: normal;
     }
 
-    /* Navigation icons */
+    /*Navigation icons*/
     nav a img {
         width: 30px;
         vertical-align: middle;
         filter: var(--invert-when-dark-filter);
     }
 
-    /* Toggle hover image */
-    /* Last of type is hover / focus image and first of type is normal icon*/
+    /*Toggle hover image*/
+    /*Last of type is hover / focus image and first of type is normal icon*/
     nav a img:last-of-type {
         display: none;
     }
@@ -85,7 +85,7 @@
         display: inline-block;
     }
 
-    /* If link is active, display hover / focus image and hide normal one */
+    /*If link is active, display hover / focus image and hide normal one*/
     nav a.is-active img:last-of-type {
         display: inline-block;
     }
@@ -94,7 +94,7 @@
         display: none;
     }
 
-    /* Show little background to emphasize active nav point except when hover */
+    /*Show little background to emphasize active nav point except when hover*/
     nav:not(:hover) a.is-active {
         background: rgba(0, 0, 0, .05);
     }
@@ -103,7 +103,7 @@
     }
 
 
-    /* Container */
+    /*Container*/
     #nav-mobile-toggle-icon {
         background: var(--mobile-nav-toggle-btn-background-color);
         border-radius: 99px;
@@ -182,13 +182,13 @@
 }
 
 @media (min-width: 641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 
 }
 
-/* Desktop / mobile nav breakpoint. If min-width changes, navbar.js should be updated as well */
+/*Desktop / mobile nav breakpoint. If min-width changes, navbar.js should be updated as well*/
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #nav-burger-icon {
         display: none;
     }
@@ -204,7 +204,7 @@
         width: auto;
         border-radius: 32px;
     }
-    /* Hide nav label until hover */
+    /*Hide nav label until hover*/
     nav a span {
         margin-left: 10px;
         opacity: 0;
@@ -216,7 +216,7 @@
     nav:hover {
         max-width: 230px;
     }
-    /* https://stackoverflow.com/a/47851820/9013718 */
+    /*https://stackoverflow.com/a/47851820/9013718*/
     nav:hover > a span {
         /*display: inline-block;*/
         opacity: 1;
@@ -234,10 +234,10 @@
 }
 
 @media (min-width: 1025px) {
-    /* big landscape tablets, laptops, and desktops */
+    /*big landscape tablets, laptops, and desktops*/
     /*nav a:before, #nav-indicator {*/
-    /*    width: auto;*/
-    /*    left: 0;*/
+    /*   width: auto;*/
+    /*   left: 0;*/
     /*}*/
 }
 

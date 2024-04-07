@@ -7,7 +7,7 @@
     --client-message-note-border-color: #988000;
 }
 /*Client notes CSS mainly for client read page but also dashboard note panels*/
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     /*Using relative positioned div for the checkmark loader to know to which element it has to position itself*/
     /*Using the > changes the description to: "Find any divs that are the direct descendents of section divs" which is what you want.*/
@@ -76,11 +76,11 @@
     }
 
     .hide-note-btn {
-        width: 14px; /* 13 is too small for the eye icon */
+        width: 14px; /*13 is too small for the eye icon*/
     }
 
     .not-clickable {
-        /* Remove pointer cursor of not clickable hide note button */
+        /*Remove pointer cursor of not clickable hide note button*/
         cursor: default;
     }
 

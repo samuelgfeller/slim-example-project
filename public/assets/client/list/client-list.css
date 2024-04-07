@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #create-client-btn{
         /*margin-top: 0;*/
@@ -8,7 +8,7 @@
     #client-wrapper, .client-wrapper {
         width: 100%;
         display: flex;
-        /* Make items shrink if different height on same row */
+        /*Make items shrink if different height on same row*/
         align-items: flex-start;
         gap: 30px 40px;
         flex-wrap: wrap;
@@ -38,7 +38,7 @@
         outline: none;
     }
 
-    /* Profile cards */
+    /*Profile cards*/
     .client-profile-card {
         width: 100%;
         min-width: 200px;
@@ -54,7 +54,7 @@
         max-width: 650px;
         /*overflow-wrap: anywhere;*/
         /*white-space: nowrap;*/
-        overflow: hidden; /* To prevent header and content overflowing border radius */
+        overflow: hidden; /*To prevent header and content overflowing border radius*/
         /*perspective-origin: 50% 50%;*/
         /*transform-style: preserve-3d;*/
     }
@@ -78,7 +78,7 @@
     .profile-card-avatar {
         width: 100px;
         height: 100px;
-        display: block; /* To center avatar image */
+        display: block; /*To center avatar image*/
         margin: auto;
         position: relative;
         /*background: rgba(0,0,0,.1);*/
@@ -93,7 +93,7 @@
         filter: var(--accent-2-filter);
     }
 
-    /* Age */
+    /*Age*/
     .profile-card-age {
         display: flex;
         justify-content: center;
@@ -115,7 +115,7 @@
         padding: 0 20px 20px 20px;
         background: var(--background-accent-5-color);
         width: 100%;
-        /*position: relative; makes outline hidden behind content which is unwanted */
+        /*position: relative; makes outline hidden behind content which is unwanted*/
         font-size: 16px;
         height: 100%;
         /*flex-shrink: 2;*/
@@ -124,27 +124,27 @@
     .client-profile-card h3 {
         padding-top: 18px;
         text-align: center;
-        margin-top: 0; /* To prevent gap between divs */
+        margin-top: 0; /*To prevent gap between divs*/
         margin-bottom: 7px;
     }
 
-    /* Two different flex boxes make the second one containing the dropdowns below the phone and location info */
+    /*Two different flex boxes make the second one containing the dropdowns below the phone and location info*/
     .profile-card-infos-flexbox, .profile-card-assignee-and-status {
         display: flex;
         flex-flow: row wrap;
-        justify-content: space-around; /* align flex box items so that there is equal space left right and center for mobile*/
+        justify-content: space-around; /*align flex box items so that there is equal space left right and center for mobile*/
         column-gap: 15px;
         margin-bottom: 5px;
     }
 
-    /* Make divs inside flexbox also flexbox to align text with icon*/
+    /*Make divs inside flexbox also flexbox to align text with icon*/
     .profile-card-infos-flexbox div {
         display: flex;
         align-items: center;
-        margin-top: 10px; /* space here for when wrapping */
+        margin-top: 10px; /*space here for when wrapping*/
     }
 
-    /* Name of the location */
+    /*Name of the location*/
     .profile-card-infos-flexbox div .profile-card-content-icon {
         margin-right: 10px;
         height: 20px;
@@ -201,9 +201,9 @@
         margin: 15px;
     }
 
-    /* Loader that replaces the delete icon after clicking on it */
+    /*Loader that replaces the delete icon after clicking on it*/
     .client-card-del-loader {
-        /*  Loader size changed in javascript  */
+        /* Loader size changed in javascript */
         position: absolute;
         right: 0;
         top: 0;
@@ -211,8 +211,8 @@
     }
 }
 
-/* After very small phones (fold) until iPhone 4 */
-/* Breakpoint: location and phone number and the 2 selects one below other
+/*After very small phones (fold) until iPhone 4*/
+/*Breakpoint: location and phone number and the 2 selects one below other
 for galaxy fold and very slim phones*/
 @media (min-width: 311px) {
     .profile-card-assignee-and-status div {
@@ -220,22 +220,22 @@ for galaxy fold and very slim phones*/
     }
 }
 
-/* After very small phones (iPhone 4) until medium phones to big phones */
-/* Breakpoint for the 2 select dropdowns to stay side by side
- and not one below the other */
+/*After very small phones (iPhone 4) until medium phones to big phones*/
+/*Breakpoint for the 2 select dropdowns to stay side by side
+ and not one below the other*/
 @media (min-width: 337px) {
     .profile-card-content {
         font-size: 18px;
     }
 
     .profile-card-content select {
-        font-size: 13px; /*From 12 to 13px */
+        font-size: 13px; /*From 12 to 13px*/
     }
 
 }
 /*Very big phones or small tablets*/
 @media (min-width: 420px) {
-    /* Increase font and gap size for small tablet or big phone*/
+    /*Increase font and gap size for small tablet or big phone*/
     .profile-card-content {
         font-size: 21px;
     }
@@ -247,7 +247,7 @@ for galaxy fold and very slim phones*/
     }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
     #client-wrapper, .client-wrapper {
         padding: 0 10px;
@@ -258,13 +258,13 @@ for galaxy fold and very slim phones*/
     }
 
     .profile-card-infos-flexbox, .profile-card-assignee-and-status {
-        justify-content: space-between; /* align the flex box items to the left and right*/
+        justify-content: space-between; /*align the flex box items to the left and right*/
     }
 
     .profile-card-avatar {
         /*width: 130px;*/
     }
-    /* Reset values after mobile */
+    /*Reset values after mobile*/
     .profile-card-content {
         font-size: initial;
     }
@@ -277,5 +277,5 @@ for galaxy fold and very slim phones*/
 }
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
 }

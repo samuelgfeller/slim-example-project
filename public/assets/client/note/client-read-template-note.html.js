@@ -19,7 +19,7 @@ export function getNoteHtml(note) {
                         <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg">` : ''}
                     ${/*Show delete button */ privilege.includes('D') ? `<img 
                         class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
-                    <span class="discrete-text note-right-side-label-span 
+                    <span class="subdued-text note-right-side-label-span 
                     ${isClientMessage === 1 ? 'client-message-label' : ''}">${html(userFullName)}</span>
                 </label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->

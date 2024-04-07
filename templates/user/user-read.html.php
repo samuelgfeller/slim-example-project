@@ -176,7 +176,7 @@ $this->addAttribute(
         <?php
         if (str_contains($user->generalPrivilege, 'D')) { ?>
             <button class="btn btn-red" id="delete-user-btn">
-                <img class="icon-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
+                <img class="icon-in-btn" src="assets/general/general-img/action/trash-icon.svg" alt="">
                 <?= $isOwnProfile ? __('Delete profile') : __('Delete user') ?>
             </button>
             <?php

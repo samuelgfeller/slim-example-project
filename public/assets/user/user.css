@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #user-page-content-flexbox {
         display: flex;
@@ -7,7 +7,7 @@
         column-gap: 60px;
     }
 
-    /* --- User profile values --- */
+    /*--- User profile values ---*/
     .user-field-value-container {
         padding-top: 8px;
         padding-bottom: 8px;
@@ -42,7 +42,7 @@
         /*margin-right: 40px;*/
     }
 
-    /* --- User activity report --- */
+    /*--- User activity report ---*/
     #user-activity-container {
         border: 8px solid var(--background-accent-5-color);
         border-radius: 30px;
@@ -64,8 +64,8 @@
     }
 
     #user-activity-container a:hover {
-        /* Without the important keyword it does not work. The specificity is in layout.css is too high because
-         of the :not() selectors */
+        /*Without the important keyword it does not work. The specificity is in layout.css is too high because
+         of the :not() selectors*/
         text-decoration: none !important;
         background: var(--background-accent-5-color);
     }
@@ -99,7 +99,7 @@
     }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
     #user-dropdown-container {
         width: auto;
@@ -114,7 +114,7 @@
 
 @media (min-width: 1200px) {
     /*Container queries would be exactly what I'd need here to add the following style only when container is not wrapped.
-    But it's not supported widely enough yet unfortunately https://caniuse.com/css-container-queries */
+    But it's not supported widely enough yet unfortunately https://caniuse.com/css-container-queries*/
     #user-activity-content {
         /*Enable scroll*/
         overflow-y: auto;

@@ -83,7 +83,7 @@ $this->setLayout('');
         <?= /*In case passwords not match there may be a second error for password2 */
         isset($validation['password2'][1]) ? '<strong class="err-msg">' . html($validation['password2'][1])
             . '</strong>' : '' ?>
-        <a href="login" class="discrete-text content-below-input cursor-pointer"><?= __('Login') ?></a>
+        <a href="login" class="subdued-text content-below-input cursor-pointer"><?= __('Login') ?></a>
 
         <input type="hidden" name="token" value="<?= html($token ?? '') ?>">
         <input type="hidden" name="id" value="<?= html($id ?? '') ?>">

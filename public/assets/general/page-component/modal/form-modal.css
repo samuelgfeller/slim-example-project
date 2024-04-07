@@ -1,21 +1,21 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    /* The Modal (background) */
+    /*The Modal (background)*/
     #modal {
-        position: fixed; /* Stay in place */
-        z-index: 100; /* Sit on top of content placeholder but below .flash */
-        padding: 20px 0; /* Location of the box */
+        position: fixed; /*Stay in place*/
+        z-index: 100; /*Sit on top of content placeholder but below .flash*/
+        padding: 20px 0; /*Location of the box*/
         left: 0;
         top: 0;
         width: 100%;
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(100, 100, 100); /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        height: 100%; /*Full height*/
+        overflow: auto; /*Enable scroll if needed*/
+        background-color: rgb(100, 100, 100); /*Fallback color*/
+        background-color: rgba(0, 0, 0, 0.4); /*Black w/ opacity*/
         backdrop-filter: blur(5px);
     }
 
-    /* Modal Content */
+    /*Modal Content*/
     #modal-box {
         position: relative;
         background-color: var(--background-accent-3-color);
@@ -32,7 +32,7 @@
         /*backdrop-filter: blur(20px);*/
     }
 
-    /* The Close Button */
+    /*The Close Button*/
     #close-modal {
         color: #aaaaaa;
         float: right;
@@ -49,45 +49,45 @@
         cursor: pointer;
     }
 
-    /* Modal Header */
+    /*Modal Header*/
     #modal-header {
         padding: 2px 0;
         /*background-color: #5cb85c;*/
         /*color: white;*/
     }
 
-    /* Modal Body */
+    /*Modal Body*/
     #modal-body {
         padding: 2px 0;
     }
 
-    /* Modal Footer */
+    /*Modal Footer*/
     #modal-footer {
         padding-top: 10px;
         /*background-color: #5cb85c;*/
         /*color: white;*/
     }
 
-    /*Wide form input group with label and input being max half wide and wrapping */
+    /*Wide form input group with label and input being max half wide and wrapping*/
     .wide-modal-form {
         display: grid;
         gap: 0px 40px;
-        /*Source for this awesome grid-template-columns setting: https://stackoverflow.com/a/69154193/9013718 */
+        /*Source for this awesome grid-template-columns setting: https://stackoverflow.com/a/69154193/9013718*/
         grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));
     }
 
     .double-width-form-input-div {
-        /* I would like the client create main note column to be twice the width of the other grid columns but don't know
-        how to implement it easily with the complex grid-template-columns setting */
+        /*I would like the client create main note column to be twice the width of the other grid columns but don't know
+        how to implement it easily with the complex grid-template-columns setting*/
     }
 }
 
 @media (min-width: 641px) {
     #modal {
-        padding-top: 50px; /* Location of the box */
+        padding-top: 50px; /*Location of the box*/
     }
 
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
     #alert-modal-box {
         padding: 40px;
     }
@@ -123,13 +123,13 @@
 }
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #modal-box:not(.wide-modal) {
         width: 50%;
     }
 }
 @media (min-width: 1200px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #modal-box:not(.wide-modal) {
         width: 40%;
     }
@@ -139,20 +139,20 @@
 }
 
 @media (min-width: 1500px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #modal-box.wide-modal {
         width: 60%;
     }
 }
 
 @media (min-width: 1700px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #modal-box.wide-modal {
         width: 50%;
     }
 }
 
-/* Add Animation */
+/*Add Animation*/
 @keyframes fade-in-modal {
     from {
         transform: scale(0.97);
@@ -165,20 +165,20 @@
 }
 
 /*@media only screen and (max-width: 1100px) {*/
-/*    #modal-box {*/
-/*        width: 60%;*/
-/*    }*/
+/*   #modal-box {*/
+/*       width: 60%;*/
+/*   }*/
 /*}*/
 
 /*@media only screen and (max-width: 700px) {*/
-/*    #modal-box {*/
-/*        width: 80%;*/
-/*    }*/
+/*   #modal-box {*/
+/*       width: 80%;*/
+/*   }*/
 /*}*/
 
 /*@media only screen and (max-width: 500px) {*/
-/*    #modal-box {*/
-/*        width: 95%;*/
-/*    }*/
+/*   #modal-box {*/
+/*       width: 95%;*/
+/*   }*/
 /*}*/
 

@@ -18,13 +18,13 @@ inspiration when creating new content placeholder*/
     /*justify-items: end;*/
 }
 
-/* Target only first divs with >*/
+/*Target only first divs with >*/
 .client-note-upper-placeholder-container > div {
     height: 18px;
 }
 
 .client-note-lower-placeholder-container {
-    /* Prevent the margin from parent and child to collapse https://stackoverflow.com/a/1939980/9013718 */
+    /*Prevent the margin from parent and child to collapse https://stackoverflow.com/a/1939980/9013718*/
     overflow: hidden;
     margin-top: 10px;
     height: 85px;

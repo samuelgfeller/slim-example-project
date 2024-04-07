@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     .filter-chip-container{
         position: relative;
@@ -9,19 +9,19 @@
         padding: 3px 10px 3px 10px;
         border-radius: 99px;
         border: 1px solid var(--border-accent-2-color);
-        height: 35px; /* 35 minus top and bottom border */
+        height: 35px; /*35 minus top and bottom border*/
         margin-top: 5px;
         cursor: pointer;
     }
     /*#available-filter-div-page-overlay{*/
-    /*    position: fixed; !* Stay in place *!*/
-    /*    z-index: 100;*/
-    /*    !*padding-top: 100px; !* Location of the box *!*!*/
-    /*    left: 0;*/
-    /*    top: 0;*/
-    /*    width: 100%;*/
-    /*    height: 100%; !* Full height *!*/
-    /*    display: none;*/
+    /*   position: fixed; !* Stay in place *!*/
+    /*   z-index: 100;*/
+    /*   !*padding-top: 100px; !* Location of the box *!*!*/
+    /*   left: 0;*/
+    /*   top: 0;*/
+    /*   width: 100%;*/
+    /*   height: 100%; !* Full height *!*/
+    /*   display: none;*/
     /*}*/
     #available-filter-div{
         /*display: inline-block;*/
@@ -35,7 +35,7 @@
         max-width: 480px;
         position: absolute;
         margin-top: 10px;
-        z-index: 20; /* Has to be on top of client in list but below nav menu */
+        z-index: 20; /*Has to be on top of client in list but below nav menu*/
         vertical-align: middle;
     }
     .active-filter-chips-div button:active{
@@ -62,10 +62,10 @@
         border-radius: 99px;
         /*line-height: 35px;*/
         min-height: 35px;
-        /* If vertical-align is middle, the selected filters slip one px downwards and are not aligned with + filters btn */
-        /*vertical-align: middle; */
+        /*If vertical-align is middle, the selected filters slip one px downwards and are not aligned with + filters btn*/
+        /*vertical-align: middle;*/
     }
-    /* Has to be in a span for the close button and label being centered both */
+    /*Has to be in a span for the close button and label being centered both*/
     .filter-chip span{
         color: var(--grey-secondary-text-color);
         font-weight: 500;
@@ -82,7 +82,7 @@
         content: '×';
         color: var(--secondary-text-color);
         font-size: 22px;
-        padding: 0 3px 3px 11px; /* 3px padding bottom to compensate non center alignment of lowercase letters */
+        padding: 0 3px 3px 11px; /*3px padding bottom to compensate non center alignment of lowercase letters*/
         font-weight: 400;
         margin: auto;
     }
@@ -104,16 +104,16 @@
 
 }
 
-/* After very small phones (fold) until iPhone 4 */
-/* Breakpoint: location and phone number and the 2 selects one below other
+/*After very small phones (fold) until iPhone 4*/
+/*Breakpoint: location and phone number and the 2 selects one below other
 for galaxy fold and very slim phones*/
 @media (min-width: 311px) {
 
 }
 
-/* After very small phones (iPhone 4) until medium phones to big phones */
-/* Breakpoint for the 2 select dropdowns to stay side by side
- and not one below the other */
+/*After very small phones (iPhone 4) until medium phones to big phones*/
+/*Breakpoint for the 2 select dropdowns to stay side by side
+ and not one below the other*/
 @media (min-width: 337px) {
 
 
@@ -123,11 +123,11 @@ for galaxy fold and very slim phones*/
 
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
 
 }
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
 }

@@ -14,7 +14,7 @@
     --add-personal-info-icon-box-shadow: 0 0px 9px rgba(123, 197, 255, 0.12);
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #title-and-dropdown-flexbox {
         display: flex;
@@ -54,9 +54,9 @@
         column-gap: 3vw;
         row-gap: 20px;
         /*height: min-content;*/
-        /* I wanted to do a nested flexbox (with both dropdowns) or grid that wraps before the container wraps
-        but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718 */
-        margin: 0 auto 30px auto; /* Make it be on the top of right flex container and centered for mobile */
+        /*I wanted to do a nested flexbox (with both dropdowns) or grid that wraps before the container wraps
+        but it seems to be impossible currently unfortunately https://stackoverflow.com/q/32661535/9013718*/
+        margin: 0 auto 30px auto; /*Make it be on the top of right flex container and centered for mobile*/
     }
 
     #main-note-textarea-div {
@@ -90,7 +90,7 @@
         min-width: 100%;
     }
 
-    /*Flex container containing notes under activity and personal infos */
+    /*Flex container containing notes under activity and personal infos*/
     #client-activity-personal-info-container {
         display: flex;
         flex-wrap: wrap-reverse;
@@ -104,7 +104,7 @@
     }
 
     #client-note-wrapper {
-        /* Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718 */
+        /*Style to add checkmark icon on save source: https://stackoverflow.com/a/53123267/9013718*/
         position: relative;
         display: inline-block;
     }
@@ -119,7 +119,7 @@
         border-radius: 30px;
         /*float: right;*/
         height: auto;
-        margin: 26px 0 0 0; /* For the wrapped main textarea to not be too narrow same height as title */
+        margin: 26px 0 0 0; /*For the wrapped main textarea to not be too narrow same height as title*/
         box-shadow: var(--default-box-shadow);
         align-self: start; /*Make it not expand to the same height as activity notes*/
         position: relative; /*For absolute edit icon on mobile*/
@@ -140,7 +140,7 @@
     }
 
     #client-personal-info-flex-container strong {
-        /*Validation error msg line break */
+        /*Validation error msg line break*/
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
@@ -164,7 +164,7 @@
     }
 
     #age-sub-span {
-        /*As its a nested span, the parent would have twice the padding */
+        /*As its a nested span, the parent would have twice the padding*/
         padding: 0 !important;
     }
 
@@ -222,7 +222,7 @@
         /*Along with js function openAvailableIconsDiv*/
     }
 
-    /*Always hide + icon to show available icons on mobile as its always expanded */
+    /*Always hide + icon to show available icons on mobile as its always expanded*/
     #toggle-personal-info-icons {
         display: none;
     }
@@ -262,7 +262,7 @@
     }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
     #main-note-textarea-div {
         /*For the flex items to wrap*/
@@ -274,9 +274,9 @@
     }
 }
 
-/* last iPad portrait breakpoint is at 768 */
+/*last iPad portrait breakpoint is at 768*/
 @media (min-width: 768px) {
-    /*If changed, breakpoint in */
+    /*If changed, breakpoint in*/
     #client-activity-personal-info-container {
         flex-wrap: nowrap;
         column-gap: 5vw;
@@ -293,7 +293,7 @@
 
     #client-personal-info-flex-container {
         flex-grow: 0;
-        display: block; /*From display flex (wrap elements the easiest way) to inline-block for desktop */
+        display: block; /*From display flex (wrap elements the easiest way) to inline-block for desktop*/
         max-width: 400px;
         float: right;
         width: fit-content;
@@ -336,14 +336,14 @@
 }
 
 /*@media (min-width: 818px) {*/
-/*    #status-and-assigned-user-select-container {*/
-/*        column-gap: 5vw;*/
-/*        margin-right: 4vw;*/
-/*    }*/
+/*   #status-and-assigned-user-select-container {*/
+/*       column-gap: 5vw;*/
+/*       margin-right: 4vw;*/
+/*   }*/
 /*}*/
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #client-activity-personal-info-container {
         /*column-gap: 10vw;*/
         margin-top: 0;

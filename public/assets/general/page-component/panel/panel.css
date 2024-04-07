@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     .panel-container {
         flex-grow: 1;
@@ -56,8 +56,8 @@
     }
 
     .panel-content a:hover {
-        /* Without the important keyword it does not work. The specificity is in layout.css is too high because
-         of the :not() selectors */
+        /*Without the important keyword it does not work. The specificity is in layout.css is too high because
+         of the :not() selectors*/
         text-decoration: none !important;
         background: none;
         /*background: #d0d2de;*/

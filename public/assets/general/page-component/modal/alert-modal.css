@@ -1,19 +1,19 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    /* The Modal (background) */
+    /*The Modal (background)*/
     #alert-modal {
-        position: fixed; /* Stay in place */
-        z-index: 100; /* Sit on top of content placeholder and flash message and nav menu */
+        position: fixed; /*Stay in place*/
+        z-index: 100; /*Sit on top of content placeholder and flash message and nav menu*/
         left: 0;
         top: 0;
         width: 100%;
-        height: 100vh; /* Full height also on mobile */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
+        height: 100vh; /*Full height also on mobile*/
+        overflow: auto; /*Enable scroll if needed*/
+        background-color: rgba(0, 0, 0, 0.3); /*Black w/ opacity*/
         opacity: 1;
     }
 
-    /* Modal Content */
+    /*Modal Content*/
     #alert-modal-box {
         display: flex;
         flex-direction: column;
@@ -39,19 +39,19 @@
         animation-duration: 0.3s;
     }
 
-    /* Modal Header */
+    /*Modal Header*/
     #alert-modal-header {
         /*padding: 2px 0;*/
     }
 
-    /* Modal Body */
+    /*Modal Body*/
     #alert-modal-body h3 {
         margin-top: 5px;
         margin-bottom: 10px;
         color: var(--primary-text-color);
     }
 
-    /* Modal Footer */
+    /*Modal Footer*/
     #alert-modal-footer {
         display: flex;
         justify-content: space-around;
@@ -59,35 +59,38 @@
         width: 100%;
     }
 
-    /* Enhance buttons */
+    /*Enhance buttons*/
     #alert-modal-footer .btn {
         line-height: 1em;
         color: var(--black-white-text-color);
         box-shadow: 2px 3px 11px rgba(0, 0, 0, 0.21);
-        /*border-width: 2px;*/
+        padding: 12px 20px;
+        border-radius: 99px;
     }
-    #alert-modal-cancel-btn{
+
+    #alert-modal-cancel-btn {
         background: var(--btn-color);
     }
 }
 
 
 @media (min-width: 641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
     #alert-modal-box {
         padding: 40px;
     }
-    #alert-modal-footer .btn{
+
+    #alert-modal-footer .btn {
         font-size: 1.2em;
     }
 }
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
 }
 
 
-/* Add Animation */
+/*Add Animation*/
 @keyframes fade-in-alert-modal {
     from {
         transform: translate(-50%, -50%) scale(0.97);

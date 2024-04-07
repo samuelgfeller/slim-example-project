@@ -4,7 +4,7 @@
     font-weight: normal;
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
 
     * {

@@ -32,6 +32,10 @@ A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-pro
 Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
 to get started.
 
+Stripped down versions of this repository are available as skeleton templates:
+[**slim-api-starter**](https://github.com/samuelgfeller/slim-api-starter) (only API) and 
+[**slim-starter**](https://github.com/samuelgfeller/slim-starter) (with frontend and API endpoint).
+
 ## Features
 All the features were developed with an effort to ensure maximum user-friendliness. 
 The frontend should be intuitive, aesthetically pleasing, minimalistic, and functional.

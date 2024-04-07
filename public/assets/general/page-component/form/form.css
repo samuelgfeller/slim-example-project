@@ -1,14 +1,14 @@
 :root {
     --form-input-background-color: rgba(255, 255, 255, 0.7);
-    /* dark pink #660066*/
+    /*dark pink #660066*/
 }
 [data-theme="dark"] {
     --form-input-background-color: var(--background-accent-6-color);
 }
 
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    /* Form design source: https://codepen.io/abergin/pen/vYmaPE */
+    /*Form design source: https://codepen.io/abergin/pen/vYmaPE*/
     .page-form-container {
         width: 100%;
         margin: 30px 0;
@@ -48,7 +48,7 @@
         letter-spacing: 0.02em;
     }
 
-    /*Radio button styling https://moderncss.dev/pure-css-custom-styled-radio-buttons/ */
+    /*Radio button styling https://moderncss.dev/pure-css-custom-styled-radio-buttons/*/
     .form-input-div label.form-radio-input, .form-radio-input {
         display: grid;
         grid-template-columns: 1em auto;
@@ -62,12 +62,12 @@
         appearance: none;
         background-color: var(--accent-color-when-dark);
         margin: 0;
-        font: inherit; /* Inherit font size */
+        font: inherit; /*Inherit font size*/
         width: 1.15em;
         height: 1.15em;
         border: 0.15em solid var(--primary-color);
         border-radius: 50%;
-        /* adjustments so the input stays horizontally centered in relation to the first line of the label text */
+        /*adjustments so the input stays horizontally centered in relation to the first line of the label text*/
         /*transform: translateY(-0.075em);*/
         display: grid;
         place-content: center;
@@ -113,20 +113,19 @@
 
     .form-input-div input:not(input[type="radio"]):hover, .form-input:not(input[type="radio"]):hover,
     .form-input-div textarea:hover, textarea.form-input:hover, .form-input-div select:hover, select.form-input:hover {
-        /* Keep the same box shadow on hover */
+        /*Keep the same box shadow on hover*/
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
         filter: brightness(110%);
     }
 
     .form-input-div input:not(input[type="radio"]):focus, .form-input:not(input[type="radio"]):focus {
         filter: brightness(120%);
-        outline: none;
         border-bottom: none;
     }
 
     .form-input:disabled, .form-select:disabled, .form-radio-input input:disabled,
     .form-input-div input:disabled, .form-input-div select:disabled, .form-input-div input[type="radio"]:disabled {
-        /* Important needed as specificity is higher when setting the non-disabled value */
+        /*Important needed as specificity is higher when setting the non-disabled value*/
         background-color: var(--background-accent-4-color) !important;
         color: grey;
     }
@@ -162,19 +161,15 @@
         border: none;
         cursor: pointer;
         font-size: 100%;
-        white-space: normal; /* Break when not enough space */
+        white-space: normal; /*Break when not enough space*/
+        transition: filter 250ms;
     }
 
     .modal-form input[type=submit]:hover:enabled, .submit-btn:hover:enabled {
-        /*background-color: #e1ecf9;*/
-        /*background-color: rgb(203 203 203);*/
-        /*background-color: var(--btn-color);*/
         filter: brightness(90%);
-        /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
     }
 
     .modal-form input[type=submit]:focus:enabled, .submit-btn:focus:enabled {
-        /*background-color: rgb(183, 183, 183);*/
         filter: brightness(80%) saturate(140%);
     }
 
@@ -184,7 +179,7 @@
         cursor: default;
     }
 
-    /* When form input group is faulty after submit (server response) */
+    /*When form input group is faulty after submit (server response)*/
     .input-group-error label, label.invalid-input {
         /*color: #9f0009;*/
         font-weight: bold;
@@ -230,7 +225,7 @@
 }
 
 @media (min-width: 641px) {
-    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
     .page-form-container {
         width: 90%;
         padding: 25px 25px;
@@ -238,7 +233,7 @@
 }
 
 @media (min-width: 961px) {
-    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
     .page-form-container {
         width: 60%;
         /*box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);*/
@@ -246,10 +241,10 @@
 }
 
 @media (min-width: 1025px) {
-    /* big landscape tablets, laptops, and desktops */
+    /*big landscape tablets, laptops, and desktops*/
 
 }
 
 @media (min-width: 1281px) {
-    /* hi-res laptops and desktops */
+    /*hi-res laptops and desktops*/
 }

@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #dashboard-panel-toggle-buttons-div {
         margin-bottom: 30px;
@@ -40,8 +40,8 @@
     }
 
     .dashboard-panel-container > div {
-        /*This "magically" fixes grid items expanding over 100% of the available space */
-        min-width: 0; /* Source https://stackoverflow.com/a/43312314/9013718 */
+        /*This "magically" fixes grid items expanding over 100% of the available space*/
+        min-width: 0; /*Source https://stackoverflow.com/a/43312314/9013718*/
         /*flex-grow: 1;*/
         /*flex-basis: calc(var(--modifier) * 999);*/
     }
@@ -118,15 +118,15 @@
         min-width: 90%;
     }
 
-    /*    .dashboard-panel-container > div{
+    /*   .dashboard-panel-container > div{
             min-width: 590px;
         }*/
     .dashboard-panel-container {
         grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
     }
     /*.client-profile-card-skeleton-loader{*/
-    /*    transform: scale(70%);*/
-    /*    width: 100px;*/
+    /*   transform: scale(70%);*/
+    /*   width: 100px;*/
     /*}*/
 }
 

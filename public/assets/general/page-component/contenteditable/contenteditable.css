@@ -1,5 +1,9 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
+    [contenteditable="true"] {
+        cursor: text;
+    }
+
     #outer-contenteditable-heading-container {
         margin-bottom: 25px;
     }
@@ -26,7 +30,7 @@
 
     /*Div containing first or last name header*/
     .inner-contenteditable-heading-div {
-        float: left; /* Prevent not hoverable whitespace between partial header divs*/
+        float: left; /*Prevent not hoverable whitespace between partial header divs*/
     }
 
     .contenteditable-field-container {
@@ -42,11 +46,11 @@
         width: 20px;
         padding: 2px;
         border-radius: 99px;
-        border: 1px solid black; /* The actual color is set by the filter*/
-        /* The filter here is so that the background is always correct (even if there is no filter otherwise) */
+        border: 1px solid black; /*The actual color is set by the filter*/
+        /*The filter here is so that the background is always correct (even if there is no filter otherwise)*/
         /*filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);*/
         filter: var(--primary-color-accent-filter);
-        background: rgba(93, 87, 29, 0.18); /* This is a recreation of this color #d8dee8; with the filter */
+        background: rgba(93, 87, 29, 0.18); /*This is a recreation of this color #d8dee8; with the filter*/
         right: -7px;
         top: -3px;
         z-index: 1;
@@ -56,16 +60,16 @@
         display: inline-block;
     }
 
-    /* Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
-        have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1) */
-    /* Display outline on h1 when hover on edit icon and when contenteditable is true */
+    /*Style next sibling https://stackoverflow.com/a/12574836/9013718 (~ works better than + actually as it doesn't
+        have to be immediate next sibling. LanguageTool extension puts a <lt-highlighter> element before h1)*/
+    /*Display outline on h1 when hover on edit icon and when contenteditable is true*/
     .contenteditable-edit-icon:hover ~ h1, .inner-contenteditable-heading-div h1[contenteditable="true"] {
         outline: 3px solid var(--primary-color);
         border-radius: 10px;
         background: var(--background-accent-1-color);
     }
 
-    /* Display outline on span element */
+    /*Display outline on span element*/
     .contenteditable-edit-icon:hover ~ span, .contenteditable-field-container span[contenteditable="true"] {
         outline: 2px solid var(--primary-color);
         border-radius: 5px;
@@ -76,9 +80,14 @@
         content: attr(data-placeholder);
         color: gray;
     }
+
+    /*When the editable field is a link element*/
+    a.currently-editable {
+        cursor: default;
+    }
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
 
 }

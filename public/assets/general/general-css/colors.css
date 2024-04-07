@@ -1,7 +1,7 @@
-/* Dark mode */
+/*Dark mode*/
 :root {
     --primary-color: #2e3e50;
-    /* Background colors */
+    /*Background colors*/
     --background-color: white;
     --background-accent-1-color: #f5f5f5;
     --background-accent-2-color: #efefef;
@@ -10,24 +10,24 @@
     --background-accent-5-color: #dcdcdc;
     --border-accent-2-color: #d5d5d5;
     --accent-color-when-dark: white;
-    /* Text */
+    /*Text*/
     --primary-text-color: #2e3e50;
     --secondary-text-color: rgba(46, 62, 80, 0.80);
     --grey-secondary-text-color: #575757;
     --title-color: black;
     --black-white-text-color: black;
-    /* Filters */
-    /* Styles the black svg icons to the primary color #2e3e50 */
+    /*Filters*/
+    /*Styles the black svg icons to the primary color #2e3e50*/
     --primary-color-filter: invert(20%) sepia(9%) saturate(2106%) hue-rotate(172deg) brightness(93%) contrast(86%);
-    --primary-color-accent-filter: var(--primary-color-filter); /* Accent only needed for dark mode */
+    --primary-color-accent-filter: var(--primary-color-filter); /*Accent only needed for dark mode*/
     --invert-when-dark-filter: none;
     --accent-2-filter: invert(17%) sepia(9%) saturate(1712%) hue-rotate(170deg) brightness(92%) contrast(94%);
-    /* Other values */
+    /*Other values*/
     --default-box-shadow: 0 2px 10px rgba(46, 62, 80, 0.24);
-    /* Hover */
+    /*Hover*/
     --hover-box-shadow: 0 2px 5px rgba(46, 66, 80, 0.12);
     --hover-background-color: rgba(46, 62, 80, 0.1);
-    /* Buttons */
+    /*Buttons*/
     --btn-color: #f5f5f5;
     --btn-orange-color: #ffc081;
     --btn-red-color: #ff8d81;
@@ -35,10 +35,10 @@
 
 [data-theme="dark"] {
     --primary-color: #4f6b8a;
-    /* Background colors */
+    /*Background colors*/
     --background-color: #101213;
     --background-accent-2-color: #1f2425;
-    /* Accent 1 mainly for the client card header to be visible even on accent background */
+    /*Accent 1 mainly for the client card header to be visible even on accent background*/
     --background-accent-1-color: var(--background-accent-3-color);
     --background-accent-3-color: #262b31;
     --background-accent-4-color: #2c343d;
@@ -47,24 +47,24 @@
     --border-accent-2-color: #3c4143;
     --accent-color-when-dark: var(--background-accent-2-color);
     --accent-color-2-when-dark: var(--background-accent-3-color);
-    /* Text */
+    /*Text*/
     --primary-text-color: #c3cad0;
     --secondary-text-color: #919fac;
     --grey-secondary-text-color: #acb1c2;
     --title-color: #c3cad0;
         --black-white-text-color: white;
-    /* Filters */
-    /* Styles the black svg icons to a color similar to the primary color */
+    /*Filters*/
+    /*Styles the black svg icons to a color similar to the primary color*/
     --primary-color-filter: invert(45%) sepia(10%) saturate(1191%) hue-rotate(171deg) brightness(100%) contrast(100%);
     --primary-color-accent-filter: invert(38%) sepia(10%) saturate(1591%) hue-rotate(171deg) brightness(140%) contrast(85%);
     --invert-when-dark-filter: invert(80%);
     --accent-2-filter: invert(38%) sepia(6%) saturate(1000%) hue-rotate(180deg) brightness(110%) contrast(80%);
-    /* Other values */
+    /*Other values*/
     --default-box-shadow: 0 2px 15px rgba(74, 91, 114, 0.5);
-    /* Hover */
+    /*Hover*/
     --hover-box-shadow: 0 2px 5px rgba(201, 232, 255, 0.12);
     --hover-background-color: #212325;
-    /* Buttons */
+    /*Buttons*/
     --btn-color: #464f5d;
     --btn-orange-color: #c4884e;
     --btn-red-color: #da5f52;

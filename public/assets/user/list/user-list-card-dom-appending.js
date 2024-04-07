@@ -11,9 +11,12 @@ import {getUserCardHtml} from "./user-list-card.html.js?v=0.4.0";
 export function addUsersToDom(userResultDataArray, statuses, userWrapperId = null) {
     let container = document.getElementById(userWrapperId ?? 'user-wrapper');
 
+    // Clear wrapper before adding new content
+    container.innerHTML = '';
+
     // If no results, tell user so
     if (userResultDataArray.length === 0) {
-        container.insertAdjacentHTML('afterend', '<p>No users were found.</p>')
+        container.insertAdjacentHTML('beforeend', '<p>No users were found.</p>')
     }
 
     // Loop over users and add to DOM

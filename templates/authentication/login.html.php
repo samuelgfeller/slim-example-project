@@ -69,7 +69,7 @@ $this->setLayout('');
                    required value="<?= html($preloadValues['email'] ?? '') ?>">
             <?= isset($validation['email']) ? '<strong class="err-msg">'
                 . html($validation['email'][0]) . '</strong>' : '' ?>
-            <span class="discrete-text content-below-input cursor-pointer" id="discrete-login-btn">
+            <span class="subdued-text content-below-input cursor-pointer" id="discrete-login-btn">
                 <?= __('Login') ?></span>
         </div>
 
@@ -81,7 +81,7 @@ $this->setLayout('');
             <input type="password" id="password-input" name="password" minlength="3" required>
             <?= isset($validation['password']) ?
                 '<strong class="err-msg">' . html($validation['password'][0]) . '</strong>' : '' ?>
-            <span class="discrete-text content-below-input cursor-pointer"
+            <span class="subdued-text content-below-input cursor-pointer"
                   id="password-forgotten-btn"><?= __('Password forgotten') ?></span>
         </div>
         <div class="clearfix"></div>

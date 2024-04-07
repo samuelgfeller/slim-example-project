@@ -2,7 +2,7 @@ export function getUserActivityListHtml(userActivitiesGroupedByDate) {
     let activityListHtml = '';
 
     for (const [dateString, userActivities] of Object.entries(userActivitiesGroupedByDate)) {
-        activityListHtml += `<h3 class='collapsible-button'>${dateString}</h3>\n                
+        activityListHtml += `<h3 class='collapsible-button cursor-pointer'>${dateString}</h3>\n                
             <section class='collapsible-content'>\n`
         for (const userActivity of userActivities) {
             const {timeAndActionName, pageUrl, table, rowId, data} = userActivity;

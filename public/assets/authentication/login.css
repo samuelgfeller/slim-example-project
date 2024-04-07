@@ -1,4 +1,4 @@
-/* mobile first min-width sets base and content is adapted to computers. */
+/*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     body {
         display: flex;
@@ -76,7 +76,7 @@
         99% {
             overflow: hidden;
         }
-        /*Value here doesn't matter much */
+        /*Value here doesn't matter much*/
         100% {
             max-height: 120px;
         }

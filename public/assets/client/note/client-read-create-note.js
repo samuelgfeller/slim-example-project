@@ -28,10 +28,7 @@ export function disableHideCheckMarkTimeoutOnCreation(noteId) {
 
 export function addNewNoteTextarea() {
     // Hide no note info if there is one
-    let noNotesInfo = document.getElementById('no-notes-info');
-    if (noNotesInfo !== null) {
-        noNotesInfo.remove();
-    }
+    document.getElementById('no-notes-info')?.remove();
     // Check if bubble already exists and only create new one if there isn't one already
     let existingNewNoteBubble = document.getElementById('new-note');
     if (existingNewNoteBubble === null) {
@@ -44,7 +41,7 @@ export function addNewNoteTextarea() {
                        <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg" 
                        style="display: none">
                        <span
-                            class="discrete-text note-right-side-label-span"></span></label>
+                            class="subdued-text note-right-side-label-span"></span></label>
                 <!-- Extra div necessary to position circle loader to relative parent without taking label into account -->
                 <div class="relative">
                     <!-- Textarea opening and closing has to be on the same line to prevent unnecessary line break -->
