@@ -2,20 +2,17 @@
     --form-input-background-color: rgba(255, 255, 255, 0.7);
     /*dark pink #660066*/
 }
+
 [data-theme="dark"] {
     --form-input-background-color: var(--background-accent-6-color);
 }
 
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    /*Form design source: https://codepen.io/abergin/pen/vYmaPE*/
     .page-form-container {
         width: 100%;
         margin: 30px 0;
         border-radius: 37px;
-        /*border: 4px solid #2e3e50;*/
-        /*padding: 20px;*/
-        /*box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);*/
         box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         position: relative;
         font-size: 17px;
@@ -23,10 +20,8 @@
         padding: 20px 15px;
     }
 
-    /*Animated form input group*/
     .form-input-div {
         position: relative;
-        /*padding: 10px 0;*/
         margin-bottom: 20px;
     }
 
@@ -38,7 +33,7 @@
         padding-bottom: 0;
     }
 
-    .form-input-div label{
+    .form-input-div label {
         color: var(--black-white-text-color);
     }
 
@@ -89,8 +84,8 @@
 
     }
 
-    .form-input-div input::placeholder, .form-input-div textarea::placeholder{
-        color:var(--secondary-text-color);
+    .form-input-div input::placeholder, .form-input-div textarea::placeholder {
+        color: var(--secondary-text-color);
     }
 
     .form-input-div input:not(input[type="radio"]), .form-input:not(input[type="radio"]),
@@ -105,7 +100,6 @@
         padding: 10px 15px;
         border-radius: 60px;
         color: var(--black-white-text-color);
-        /*font-weight: 100;*/
         letter-spacing: 0.02em;
         position: relative;
         z-index: 1;
@@ -147,10 +141,8 @@
     }
 
     .form-input-div input[type=submit], .submit-btn {
-        /*padding: 6px 6px;*/
         width: fit-content;
         min-width: 160px;
-        /*max-width: 250px;*/
         float: right;
         color: var(--black-white-text-color);
         border-radius: 99px;
@@ -181,7 +173,6 @@
 
     /*When form input group is faulty after submit (server response)*/
     .input-group-error label, label.invalid-input {
-        /*color: #9f0009;*/
         font-weight: bold;
     }
 
@@ -206,10 +197,6 @@
 
     .success-msg {
         font-weight: bold;
-    }
-
-    .invalid-form {
-        /*border: 3px solid darkred;*/
     }
 
     .input-warning {

@@ -48,13 +48,13 @@
 
     /*CLIENT PANELS*/
     /*Shrink profile card so that it takes the least amount of space*/
-    .panel-content .client-wrapper {
+    .panel-content .client-list-wrapper {
         margin-top: 5px;
         justify-content: center;
         gap: 20px 20px;
     }
 
-    .panel-content .client-wrapper .client-profile-card {
+    .panel-content .client-list-wrapper .client-profile-card {
         font-size: initial;
     }
 
@@ -95,21 +95,21 @@
         --card-placeholder-scale: 0.7;
     }
     /*Switch between full width clients in panel to smallest width for side to side panels*/
-    .panel-content .client-wrapper .client-profile-card {
+    .panel-content .client-list-wrapper .client-profile-card {
         width: min-content;
         /*font-size: initial;*/
     }
 
-    .panel-content .client-wrapper .client-profile-card select {
+    .panel-content .client-list-wrapper .client-profile-card select {
         font-size: 12px;
         padding: 3px;
     }
 
-    .panel-content .client-wrapper .client-profile-card h3 {
+    .panel-content .client-list-wrapper .client-profile-card h3 {
         font-size: 1.2em;
     }
 
-    .panel-content .client-wrapper .client-profile-card .profile-card-header {
+    .panel-content .client-list-wrapper .client-profile-card .profile-card-header {
         padding-top: 10px;
     }
 

@@ -6,7 +6,7 @@ import {getClientProfileCardLoadingPlaceholderHtml} from "./client-list-profile-
  * a custom one can be provided.
  */
 export function displayClientProfileCardLoadingPlaceholder(clientWrapperId) {
-    let clientWrapper = document.getElementById(clientWrapperId ?? 'client-wrapper');
+    let clientWrapper = document.getElementById(clientWrapperId ?? 'client-list-wrapper');
     // Empty clients
     clientWrapper.innerHTML = '';
 
@@ -24,5 +24,5 @@ export function displayClientProfileCardLoadingPlaceholder(clientWrapperId) {
 export function removeClientCardContentPlaceholder(clientWrapperId) {
     // Empty entire client container (and not only removing content placeholders to prevent duplicates when requests
     // are rapidly chained)
-    document.getElementById(clientWrapperId ?? 'client-wrapper').innerHTML = '';
+    document.getElementById(clientWrapperId ?? 'client-list-wrapper').innerHTML = '';
 }

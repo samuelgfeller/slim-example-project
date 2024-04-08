@@ -1,16 +1,10 @@
-/**
- * Creates option list for html select
- *
- * @param {object} allEntries database key has to be object key and value is name
- * @param {number|string} selectedKey optional selected key. If not found, no option is selected
- * @return {string}
- */
 import {html} from "../general-js/functions.js?v=0.4.0";
 
 /**
- * @param {Object} allEntries
- * @param {string|int} selectedKey
+ * @param {object} allEntries database key has to be object key and value is name
+ * @param {number|string} selectedKey optional selected key. If not found, no option is selected
  * @param {string|boolean} nullable or nullable value
+ * @return {string}
  */
 export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable = false){
     let optionsHtml = '';

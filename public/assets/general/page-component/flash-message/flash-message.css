@@ -1,10 +1,11 @@
-:root{
+:root {
     --flash-success-background-color: #bee8c2;
     --flash-error-background-color: #fabfb5;
     --flash-info-background-color: #bde4ee;
     --flash-warning-background-color: #f8d9af;
     --flash-message-brightness: 100%;
 }
+
 [data-theme="dark"] {
     --flash-success-background-color: #619366;
     --flash-error-background-color: #a4685e;
@@ -12,6 +13,7 @@
     --flash-warning-background-color: #a48252;
     --flash-message-brightness: 70%;
 }
+
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #flash-container {
@@ -179,7 +181,8 @@
         /*width: 200px;*/
         /*display: block;*/
     }
-    .flash-message a{
+
+    .flash-message a {
         color: black;
         font-weight: bold;
     }

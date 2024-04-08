@@ -1,9 +1,10 @@
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    .filter-chip-container{
+    .filter-chip-container {
         position: relative;
     }
-    .active-filter-chips-div button{
+
+    .active-filter-chips-div button {
         font-size: 14px;
         background: transparent;
         padding: 3px 10px 3px 10px;
@@ -13,72 +14,60 @@
         margin-top: 5px;
         cursor: pointer;
     }
-    /*#available-filter-div-page-overlay{*/
-    /*   position: fixed; !* Stay in place *!*/
-    /*   z-index: 100;*/
-    /*   !*padding-top: 100px; !* Location of the box *!*!*/
-    /*   left: 0;*/
-    /*   top: 0;*/
-    /*   width: 100%;*/
-    /*   height: 100%; !* Full height *!*/
-    /*   display: none;*/
-    /*}*/
-    #available-filter-div{
-        /*display: inline-block;*/
+
+    #available-filter-div {
         display: none;
         padding: 10px;
         border-radius: 30px;
-        /*border: 1px solid darkgrey;*/
         background: var(--accent-color-when-dark);
-        box-shadow:0 2px 10px rgba(0, 0, 0, 0.19);
-        /*box-shadow:0 2px 10px rgba(0, 0, 0, 1);*/
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.19);
         max-width: 480px;
         position: absolute;
         margin-top: 10px;
         z-index: 20; /*Has to be on top of client in list but below nav menu*/
         vertical-align: middle;
     }
-    .active-filter-chips-div button:active{
+
+    .active-filter-chips-div button:active {
         background: transparent;
         /*background: #e1e1e1;*/
     }
+
     .active-filter-chips-div button:focus {
         /*background: transparent;*/
         background: var(--background-accent-4-color);
     }
 
-    .filter-chip{
+    .filter-chip {
         padding: 3px 14px 3px 14px;
-        /*padding: 0 10px 0 10px;*/
-        /*border: 1px solid #d5d5d5;*/
         font-size: 14px;
         font-weight: 500;
         margin: 5px 5px;
         background: var(--background-accent-4-color);
-        /*display: inline-block;*/
         display: inline-flex;
         align-items: center;
         position: relative;
         border-radius: 99px;
-        /*line-height: 35px;*/
         min-height: 35px;
         /*If vertical-align is middle, the selected filters slip one px downwards and are not aligned with + filters btn*/
-        /*vertical-align: middle;*/
     }
+
     /*Has to be in a span for the close button and label being centered both*/
-    .filter-chip span{
+    .filter-chip span {
         color: var(--grey-secondary-text-color);
         font-weight: 500;
         font-size: 14px;
     }
-    .filter-chip:hover{
+
+    .filter-chip:hover {
         cursor: pointer;
     }
+
     .filter-chip-active {
         background: var(--background-accent-5-color);
-        /*border: none;*/
     }
-    .filter-chip-active::after{
+
+    .filter-chip-active::after {
         content: '×';
         color: var(--secondary-text-color);
         font-size: 22px;
@@ -87,14 +76,13 @@
         margin: auto;
     }
 
-    #no-more-available-filters-span{
+    #no-more-available-filters-span {
         font-size: 14px;
         padding: 10px;
         display: none;
-        /*font-weight: 500;*/
     }
 
-    .filter-chip-container-label{
+    .filter-chip-container-label {
         display: block;
         margin-top: 10px;
         margin-left: 10px;
@@ -118,6 +106,7 @@ for galaxy fold and very slim phones*/
 
 
 }
+
 /*Very big phones or small tablets*/
 @media (min-width: 420px) {
 

@@ -36,9 +36,9 @@ export function addNewNoteTextarea() {
         document.querySelector('#activity-header').insertAdjacentHTML('afterend', `<div class="note-container">
                 <label for="new-note" class="bigger-select-label textarea-label" data-note-id="">
                        <a class="note-left-side-label no-style-a"></a>
-                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg"
+                       <img class="btn-above-note hide-note-btn" alt="hide" src="assets/client/img/eye-icon.svg"
                        style="display: none">
-                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg" 
+                       <img class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/action/del-btn-icon.svg" 
                        style="display: none">
                        <span
                             class="subdued-text note-right-side-label-span"></span></label>

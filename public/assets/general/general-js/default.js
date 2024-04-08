@@ -31,7 +31,7 @@ window.addEventListener("load", function (event) {
      * another place called initCollapsible before*/
     // initCollapsible();
 
-    /** Scroll to anchor if there are some in url */
+    /** Scroll to anchor if there is any in the url */
     scrollToAnchor();
 });
 

@@ -24,8 +24,6 @@
         grid-template-rows: auto;
         gap: 13px;
         height: 25px;
-        /*justify-content: space-between;*/
-        /*justify-items: end;*/
         margin: 25px 0 20px 0;
     }
 
@@ -38,17 +36,10 @@
         height: 30px;
         gap: 10%;
     }
+
     /*Add border radius to immediate div children*/
     .user-card-dropdown-container > div {
         border-radius: 99px;
-    }
-}
-/*After very small phones (iPhone 4) for medium phones to big phones to bigger*/
-@media (min-width: 337px) {
-    .user-card-dropdown-container {
-        /*This would be the correct width but to prevent overflow on smaller devices it is only fix after here*/
-        /*Could probably be improved with minmax but I couldn't do it quickly minmax(45%, 140px) minmax(45%, 140px)*/
-        /*grid-template-columns: 140px 140px;*/
     }
 }
 
@@ -56,6 +47,7 @@
     .user-card-dropdown-container {
         justify-content: space-between;
     }
+
     .user-card-skeleton-loader {
         width: 314px;
     }

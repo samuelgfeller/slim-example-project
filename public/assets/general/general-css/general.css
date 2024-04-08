@@ -15,6 +15,13 @@
 .vertical-center {
     display: flex;
     align-items: center;
+    /*Add the margin to the group because it has been removed on the h1. Approximately same as normal h1 bottom margin*/
+    margin-bottom: 25px;
+}
+
+/*Remove bottom margin when header is in vertical-center div to align all elements in the middle*/
+.vertical-center h1 {
+    margin-bottom: 0;
 }
 
 /*Button*/
@@ -98,6 +105,12 @@
 
 .secondary-text {
     color: var(--secondary-text-color);
+}
+
+/*Default icon color and size*/
+.default-icon {
+    height: 20px;
+    filter: var(--primary-color-filter);
 }
 
 #recaptcha {

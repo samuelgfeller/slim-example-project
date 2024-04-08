@@ -2,7 +2,7 @@
 especially elements from the layout/layout.html.php*/
 
 /*mobile first min-width sets base and content is adapted to computers.*/
-@media (min-width:100px)  {
+@media (min-width: 100px) {
     /*Default styles for common HTML elements (tag name as selectors)*/
     body, html {
         min-height: 100vh;
@@ -17,19 +17,21 @@ especially elements from the layout/layout.html.php*/
         and height and not overflowing to the parent.
         https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing*/
         box-sizing: border-box;
-        /*font-family: Comfortaa, DM-Sans, Geneva, AppleGothic, sans-serif;*/
         font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
-        /*letter-spacing: 2px;*/
         transition: background-color 250ms, color 250ms, border-color 250ms;
     }
 
     a {
         color: var(--primary-text-color);
+        text-decoration: none;
+    }
+
+    a:hover:not(a.currently-editable):not(#nav-container a):not(a.btn) {
+        text-decoration: underline;
     }
 
     h2, h1, h3 {
         color: var(--title-color);
-        /*text-shadow: 0 0px 5px rgba(255, 255, 255, 0.4);*/
         font-family: SF-Pro Display, Helvetica, sans-serif;
         font-weight: bold;
     }
@@ -46,19 +48,7 @@ especially elements from the layout/layout.html.php*/
         font-size: 1.5em;
     }
 
-    a {
-        text-decoration: none;
-    }
-
-    a:hover:not(a.currently-editable):not(#nav-container a):not(a.btn) {
-        /*text-shadow: 0 0 1px black;*/
-        /*font-weight: bold;*/
-        /*text-decoration: none;*/
-        text-decoration: underline;
-        /*font-weight: 500;*//*The issue with making text bold is that it expands the container the link is in*/
-    }
-
-    #wrapper{
+    #wrapper {
         display: flex;
         flex-direction: column;
         /*Using new dvh unit for dynamic viewport height. svh (small vh) does not work as the footer would not stick
@@ -67,9 +57,12 @@ especially elements from the layout/layout.html.php*/
         Previously used a js hack: https://css-tricks.com/the-trick-to-viewport-units-on-mobile*/
         height: 100dvh;
     }
-    header{
+
+    header {
         flex: none;
     }
+
+    /*Brand name*/
     header span {
         color: #757575;
         width: 80%;
@@ -81,34 +74,29 @@ especially elements from the layout/layout.html.php*/
         padding-top: 1em;
         letter-spacing: 1vw;
     }
+
     main {
-        /*width: 100%;*/
         padding: 1em 0.5em 1em 0.5em; /*Not margin, it creates a scrollbar because of wrapper 100vh*/
-        /*Prevent Browser from letting these items shrink to smaller than their content's default minimum size.*/
+        /*Prevent Browser from letting flex items shrink to smaller than their content's default minimum size.*/
         flex: 1 0 auto;
         border-radius: 20px;
     }
-    main *:where(:not(h1):not(h2):not(h3):not(a:not(.no-style-a))){
+
+    main *:where(:not(h1):not(h2):not(h3):not(a:not(.no-style-a))) {
         color: var(--primary-text-color);
     }
+
     .no-style-a, .no-style-a:hover {
         font-weight: normal;
         text-decoration: none !important;
     }
-    /*Headers have have a margin too big on mobile*/
-    main h1{
+
+    /*Headers have have a margin that is too large on mobile*/
+    main h1 {
         margin-top: 0;
     }
-    /*Remove bottom margin as well when header is in vertical-center div to align all elements in the middle*/
-    .vertical-center h1{
-        margin-bottom: 0;
-    }
-    .vertical-center {
-        /*Approximately same as normal h1 bottom margin*/
-        margin-bottom: 25px;
-    }
 
-    footer{
+    footer {
         flex: none;
         /*Prevent Browser from letting these items shrink to smaller than their content's default minimum size.*/
         flex-shrink: 0;
@@ -117,63 +105,70 @@ especially elements from the layout/layout.html.php*/
         text-align: center;
         color: #9b9b9b;
         font-size: 0.9em;
-        margin-top: 1em; /*Same as margin-bottom on header*/
+        margin-top: 1em;
         border-radius: 999px 999px 0 0;
     }
-    footer a{
+
+    footer a {
         color: #9B9B9B;
     }
-    footer a:hover{
+
+    footer a:hover {
         color: var(--grey-secondary-text-color);
     }
-    .footer-icon{
+
+    .footer-icon {
         width: 1em;
         vertical-align: middle;
     }
-    #github-icon{
+
+    #github-icon {
         width: 1.3em;
     }
-    address{
+
+    address {
         font-style: normal;
     }
-    .error-div-below-form{
+
+    .error-div-below-form {
         margin-top: 20px;
     }
 }
-@media (min-width: 340px) {
-    /*340px enough wide to add letter-spacing*/
-    header span {
-    }
-}
-@media (min-width:400px)  {
+
+@media (min-width: 400px) {
     main {
         padding: 1em 1em 1em 1em; /*Not margin, it creates a scrollbar because of wrapper 100vh*/
     }
 }
-@media (min-width:641px)  { /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
-    /*#wrapper{*/
-    /*   margin: 0 2em;*/
-    /*}*/
+
+@media (min-width: 641px) {
+    /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 }
-@media (min-width:961px)  { /*tablet, landscape iPad, lo-res laptops ands desktops*/
-    #wrapper{
+
+@media (min-width: 961px) {
+    /*tablet, landscape iPad, lo-res laptops ands desktops*/
+    #wrapper {
         width: 100%;
-        /*height: 100vh;*/
-        /*background: darkgrey;*/
-        /*border-right: 8px solid #cc0033;*/
     }
-    header{
+
+    header {
         display: none;
     }
+
     main {
         margin-top: 10px;
         margin-left: 100px;
     }
 }
-@media (min-width:1025px) { /*big landscape tablets, laptops, and desktops*/
+
+@media (min-width: 1025px) {
+    /*big landscape tablets, laptops, and desktops*/
 
 }
-@media (min-width:1281px) { /*hi-res laptops and desktops*/ }
+
+@media (min-width: 1281px) {
+    /*hi-res laptops and desktops*/
+}
 
 
 

@@ -19,7 +19,7 @@ export function displayValidationErrorMessage(fieldName, errorMessage, domFieldI
     }
     // console.log(domFieldId, field);
     if (field !== null) {
-        // If field is a checkbox, the error message placement is a bit different
+        // If the field is a checkbox, the error message placement is a bit different
         if (field.hasAttribute('type') && ['checkbox', 'radio'].includes(field.type)) {
             let radioInputs = document.querySelectorAll(`[name="${fieldName}"]`);
             // field is last label-input radio group and validation error message should be displayed below it

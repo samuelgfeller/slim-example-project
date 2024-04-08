@@ -1,11 +1,12 @@
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    #create-client-btn{
+    #create-client-btn {
         /*margin-top: 0;*/
         width: 40px;
         height: 40px;
     }
-    #client-wrapper, .client-wrapper {
+
+    #client-list-wrapper, .client-list-wrapper {
         width: 100%;
         display: flex;
         /*Make items shrink if different height on same row*/
@@ -15,7 +16,8 @@
         padding: 0 1em;
         margin-top: 30px;
     }
-    .vertical-center, .vertical-center h1{
+
+    .vertical-center, .vertical-center h1 {
         /*margin-bottom: 15px;*/
     }
 
@@ -33,6 +35,7 @@
         background-color: transparent;
         /*background-color: var(--background-accent-color);*/
     }
+
     #name-search-input:focus {
         border-bottom: 2px solid var(--primary-color);
         outline: none;
@@ -152,62 +155,13 @@
 
     .profile-card-assignee-and-status div {
         margin-top: 10px;
-    /*For smallest version, min-width 80% that will be removed later*/
+        /*For smallest version, min-width 80% that will be removed later*/
         min-width: 90%;
     }
 
     .profile-card-content select {
         width: 100%;
         font-size: 12px;
-    }
-
-    .profile-client-card:hover {
-        box-shadow: inset 0 0 0 0px black;
-    }
-
-    .profile-client-card:hover > .card-del-icon, .profile-client-card:hover > .profile-card-edit-icon {
-        display: inline;
-    }
-
-
-    .client-card-additional-info {
-        font-style: italic;
-        color: #575757;
-        line-height: 1.5em;
-        font-size: 0.9em;
-        margin-bottom: 0;
-    }
-
-    .contact-btn {
-        width: 50%;
-        margin: auto;
-    }
-
-    .card-del-icon {
-        display: none;
-        width: 20px;;
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        margin: 20px;
-    }
-
-    .card-edit-icon {
-        display: none;
-        width: 30px;;
-        position: absolute;
-        right: 40px;
-        top: 0px;
-        margin: 15px;
-    }
-
-    /*Loader that replaces the delete icon after clicking on it*/
-    .client-card-del-loader {
-        /* Loader size changed in javascript */
-        position: absolute;
-        right: 0;
-        top: 0;
-        margin: 10px 12px;
     }
 }
 
@@ -233,23 +187,26 @@ for galaxy fold and very slim phones*/
     }
 
 }
+
 /*Very big phones or small tablets*/
 @media (min-width: 420px) {
     /*Increase font and gap size for small tablet or big phone*/
     .profile-card-content {
         font-size: 21px;
     }
+
     .profile-card-content select {
         font-size: 16px;
     }
-        .profile-card-assignee-and-status div {
+
+    .profile-card-assignee-and-status div {
         margin-top: 18px;
     }
 }
 
 /*portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones*/
 @media (min-width: 641px) {
-    #client-wrapper, .client-wrapper {
+    #client-list-wrapper, .client-list-wrapper {
         padding: 0 10px;
     }
 
@@ -261,16 +218,15 @@ for galaxy fold and very slim phones*/
         justify-content: space-between; /*align the flex box items to the left and right*/
     }
 
-    .profile-card-avatar {
-        /*width: 130px;*/
-    }
     /*Reset values after mobile*/
     .profile-card-content {
         font-size: initial;
     }
+
     .profile-card-content select {
         font-size: 13px; /*Reset to 13px*/
     }
+
     .profile-card-assignee-and-status div {
         margin-top: 10px; /*Set to 10px again after small tablet*/
     }

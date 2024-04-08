@@ -1,5 +1,5 @@
 /**
- * Returns form element in object where key is the element name
+ * Return form element in object where key is the element name
  * and value the element value.
  * Source https://gomakethings.com/how-to-serialize-form-data-with-vanilla-js/
  *

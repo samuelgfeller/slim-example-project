@@ -9,7 +9,7 @@ export function initFilterChipEventListeners(chipClickEventHandler) {
     // Button to open available filter chip collection
     addFilterBtn.addEventListener('click', toggleAvailableFilterDiv);
 
-    // Show no more filter span if there are none on initialisation
+    // Show no more filter span if there are none on initialization
     toggleNoMoreFilters();
 
     // Get active and inactive filter chips
@@ -90,7 +90,7 @@ function toggleFilterChip() {
     toggleNoMoreFilters();
 }
 
-// Show chip that says that there are no more filters button
+// Show chip that says that there are no more filters buttons
 function toggleNoMoreFilters() {
     let noMoreFilterSpan = document.getElementById('no-more-available-filters-span');
     // If there is less than one child in the available filter div (1 is the noMoreFilterSpan)

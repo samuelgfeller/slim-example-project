@@ -63,13 +63,13 @@ class ClientDeleteActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'DELETE',
-            // Client delete route with id like /posts/1
+            // Construct url /clients/1
             $this->urlFor('client-delete-submit', ['client_id' => $clientRow['id']]),
         );
 
         $response = $this->app->handle($request);
 
-        // Assert: 200 OK
+        // Assert status code
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
 
         // Assert database

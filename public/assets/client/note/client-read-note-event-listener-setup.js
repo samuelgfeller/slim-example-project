@@ -181,13 +181,13 @@ export function addHideNoteBtnEventListener(btn) {
                 if (document.activeElement !== noteContainer.querySelector('textarea')) {
                     btn.style.display = null;
                 }
-                btn.src = 'assets/general/general-img/eye-icon.svg';
+                btn.src = 'assets/client/img/eye-icon.svg';
             } else {
                 // If note not already hidden, it has to be changed to 1
                 newHiddenValue = 1;
                 btn.style.display = 'inline-block';
                 noteContainer.classList.add('hidden-note');
-                btn.src = 'assets/general/general-img/eye-icon-active.svg';
+                btn.src = 'assets/client/img/eye-icon-active.svg';
             }
         }
         // Toggle eye icon as soon as user clicks even before request

@@ -29,14 +29,14 @@ final readonly class UserCreateAction
         $userValues = (array)$request->getParsedBody();
 
         try {
-            // Throws exception if there is error and returns false if user already exists
+            // Throws exception if there is an error and returns false if user already exists
             $insertId = $this->userCreator->createUser($userValues);
 
             if ($insertId !== false) {
                 $this->logger->info('User "' . $userValues['email'] . '" created');
             } else {
                 $this->logger->info('Account creation tried with existing email: "' . $userValues['email'] . '"');
-                $response = $response->withAddedHeader('Warning', 'The post could not be created');
+                $response = $response->withAddedHeader('Warning', 'The user was not created');
             }
 
             return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);

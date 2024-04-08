@@ -91,7 +91,7 @@ ${translated['Create client']}
     </button></form>
     <div class="clearfix">
     </div>`;
-    document.getElementById('client-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
+    document.getElementById('client-list-wrapper').insertAdjacentHTML('afterend', '<div id="create-client-div"></div>');
     let container = document.getElementById('create-client-div');
     createModal(header, body, footer, container, true);
 

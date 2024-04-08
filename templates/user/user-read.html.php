@@ -42,7 +42,7 @@ $this->addAttribute(
                 <?php
                 if (str_contains($user->generalPrivilege, 'U')) { ?>
                     <!-- Img has to be before title because only the next sibling can be styled in css -->
-                    <img src="assets/general/general-img/material-edit-icon.svg"
+                    <img src="assets/general/general-img/action/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
                          id="edit-first-name-btn">
@@ -54,7 +54,7 @@ $this->addAttribute(
             <div class="inner-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
                 <?php
                 if (str_contains($user->generalPrivilege, 'U')) { ?>
-                    <img src="assets/general/general-img/material-edit-icon.svg"
+                    <img src="assets/general/general-img/action/material-edit-icon.svg"
                          class="contenteditable-edit-icon cursor-pointer"
                          alt="Edit"
                          id="edit-last-name-btn">
@@ -103,7 +103,7 @@ $this->addAttribute(
         <div class="contenteditable-field-container user-field-value-container" data-field-element="span">
             <?php
             if (str_contains($user->generalPrivilege, 'U')) { ?>
-                <img src="assets/general/general-img/material-edit-icon.svg"
+                <img src="assets/general/general-img/action/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-email-btn">

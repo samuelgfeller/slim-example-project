@@ -1,10 +1,11 @@
 /**
  * Auto resize all given textarea elements with class name auto-resize-textarea
  * Source: https://stackoverflow.com/a/25621277/9013718
- * Known issue: https://stackoverflow.com/q/73475416/9013718
+ * Known issue when window is resized and scrollbar appears, depending on the width of the scrollbar
+ * and the text content it may not expand the textarea enough: https://stackoverflow.com/q/73475416/9013718
  */
 export function initAutoResizingTextareaElements() {
-    // Target all textarea fields that have class name auto-resize-textarea
+    // Target all textarea fields that have the class name auto-resize-textarea
     let textareaElements = document.getElementsByClassName("auto-resize-textarea");
     // Init observer to call resizeTextarea when the dimensions of the textareaElements change
     let observer = new ResizeObserver(entries => {

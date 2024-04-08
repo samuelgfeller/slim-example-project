@@ -52,8 +52,6 @@
     /*Modal Header*/
     #modal-header {
         padding: 2px 0;
-        /*background-color: #5cb85c;*/
-        /*color: white;*/
     }
 
     /*Modal Body*/
@@ -64,8 +62,6 @@
     /*Modal Footer*/
     #modal-footer {
         padding-top: 10px;
-        /*background-color: #5cb85c;*/
-        /*color: white;*/
     }
 
     /*Wide form input group with label and input being max half wide and wrapping*/
@@ -78,7 +74,7 @@
 
     .double-width-form-input-div {
         /*I would like the client create main note column to be twice the width of the other grid columns but don't know
-        how to implement it easily with the complex grid-template-columns setting*/
+        how to implement it easily with the current grid-template-columns setting*/
     }
 }
 
@@ -100,6 +96,7 @@
         width: 80%;
         padding: 2px 30px 30px 30px;
     }
+
     #modal-box.wide-modal {
         width: 95%;
     }
@@ -128,11 +125,13 @@
         width: 50%;
     }
 }
+
 @media (min-width: 1200px) {
     /*tablet, landscape iPad, lo-res laptops ands desktops*/
     #modal-box:not(.wide-modal) {
         width: 40%;
     }
+
     #modal-box.wide-modal {
         width: 70%;
     }
@@ -163,22 +162,3 @@
         opacity: 1
     }
 }
-
-/*@media only screen and (max-width: 1100px) {*/
-/*   #modal-box {*/
-/*       width: 60%;*/
-/*   }*/
-/*}*/
-
-/*@media only screen and (max-width: 700px) {*/
-/*   #modal-box {*/
-/*       width: 80%;*/
-/*   }*/
-/*}*/
-
-/*@media only screen and (max-width: 500px) {*/
-/*   #modal-box {*/
-/*       width: 95%;*/
-/*   }*/
-/*}*/
-

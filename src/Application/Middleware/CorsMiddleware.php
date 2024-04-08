@@ -33,7 +33,7 @@ final class CorsMiddleware implements MiddlewareInterface
         // https://github.com/samuelgfeller/slim-example-project/wiki/Middleware#order-of-execution
         $response = $response
             ->withHeader('Access-Control-Allow-Credentials', 'true')
-            ->withHeader('Access-Control-Allow-Origin', $this->allowedOrigin ?? '*')
+            ->withHeader('Access-Control-Allow-Origin', $this->allowedOrigin ?? '')
             ->withHeader('Access-Control-Allow-Headers', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

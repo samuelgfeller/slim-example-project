@@ -1,16 +1,16 @@
+/*Loading animation that resolves into a checkmark*/
 /*Source: https://stackoverflow.com/a/53123267/9013718 https://codepen.io/scottloway/pen/zqoLyQ*/
-:root{
+:root {
     --animated-checkmark-factor: 0.25;
     --animated-checkmark-color: var(--primary-color);
-    /*--animated-checkmark-bright-color: #eef0f1;*/
     --animated-checkmark-bright-color: transparent;
 }
+
 .circle-loader {
     margin-bottom: calc(3.5em * var(--animated-checkmark-factor));
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-left-color: var(--animated-checkmark-color);
     animation: loader-spin 1.2s infinite linear;
-    /*position: relative;*/
     display: none;
     vertical-align: top;
     border-radius: 50%;
@@ -41,27 +41,26 @@
     height: calc(3.5em * var(--animated-checkmark-factor));
     width: calc(1.75em * var(--animated-checkmark-factor));
     transform-origin: left top;
-    /*transform-origin: 50% 50%;*/
     border-right: 2px solid var(--animated-checkmark-color);
     border-top: 2px solid var(--animated-checkmark-color);
     content: "";
-    /*left: calc(1.75em * var(--animated-checkmark-factor));*/
-    /*top: calc(3.5em * var(--animated-checkmark-factor));*/
     position: absolute;
-    top: 50%; right: 50%;
-    /*transform: ;*/
+    top: 50%;
+    right: 50%;
 }
 
 /*If it contains the class "color-inverted"*/
-.circle-loader.color-inverted{
+.circle-loader.color-inverted {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-left-color: var(--animated-checkmark-bright-color);
     background: var(--animated-checkmark-color);
 }
-.circle-loader.color-inverted.load-complete{
+
+.circle-loader.color-inverted.load-complete {
     border-color: var(--animated-checkmark-bright-color) !important;
 }
-.color-inverted .checkmark:after{
+
+.color-inverted .checkmark:after {
     border-right: 2px solid var(--animated-checkmark-bright-color);
     border-top: 2px solid var(--animated-checkmark-bright-color);
 }

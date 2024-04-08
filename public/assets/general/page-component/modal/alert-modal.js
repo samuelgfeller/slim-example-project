@@ -3,7 +3,7 @@ import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.4.0";
 
 function initAlertModalEventListeners() {
     // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically
-// more on https://stackoverflow.com/a/34896387/9013718
+    // https://stackoverflow.com/a/34896387/9013718
     document.addEventListener('click', function (e) {
         if (e.target && (
             // When anywhere in the window is clicked except the modal area itself
@@ -17,6 +17,12 @@ function initAlertModalEventListeners() {
         }
     });
 
+    // Hide modal when the escape key is pressed
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeAlertModal();
+        }
+    });
 }
 
 // List of words that are used in modal box and need to be translated
@@ -62,7 +68,7 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
     // Add event listener on confirmation
     document.getElementById('alert-modal-confirm-btn').addEventListener('click', confirmationEventFunction);
 
-    // Not working idk why
+    // Focus on the cancel button by default
     document.getElementById('alert-modal-cancel-btn').focus();
 }
 

@@ -22,8 +22,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is the first fixture note.',
             'is_main' => 1,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
         // Note id 2: is not main note and linked to user 10 and client 1
@@ -34,8 +34,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is the second fixture note.',
             'is_main' => 0,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
         // Note id 3
@@ -46,8 +46,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is the third fixture note.',
             'is_main' => 0,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
         // Note id 4
@@ -58,8 +58,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is the fourth fixture note.',
             'is_main' => 0,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
 
@@ -71,9 +71,9 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is the sixth fixture note.',
             'is_main' => 0,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
-            'deleted_at' => '2021-01-01 00:00:02',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
+            'deleted_at' => '2024-01-01 00:00:02',
         ],
 
         // Client id 2
@@ -85,8 +85,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is a test main note.',
             'is_main' => 1,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
         // Note id 7: is not main note and linked to user 1
@@ -97,8 +97,8 @@ class NoteFixture implements FixtureInterface
             'message' => 'This is a normal note.',
             'is_main' => 0,
             'hidden' => null,
-            'updated_at' => '2021-01-01 00:00:01',
-            'created_at' => '2021-01-01 00:00:01',
+            'updated_at' => '2024-01-01 00:00:01',
+            'created_at' => '2024-01-01 00:00:01',
             'deleted_at' => null,
         ],
     ];

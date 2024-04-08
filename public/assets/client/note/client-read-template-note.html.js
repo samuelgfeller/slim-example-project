@@ -14,11 +14,11 @@ export function getNoteHtml(note) {
                     ${/*Show active eye icon if hidden*/ hidden === 1 || hidden === '1' ? `<img 
                         class="btn-above-note hide-note-btn ${privilege.includes('U') ? `` : `
                             not-clickable` /*Add not clickable class when not allowed to update*/}" alt="hide" 
-                        style="display: inline-block" src="assets/general/general-img/eye-icon-active.svg"
+                        style="display: inline-block" src="assets/client/img/eye-icon-active.svg"
                         >` : /* Else the non-active one if allowed*/ privilege.includes('U') ? `
-                        <img class="btn-above-note hide-note-btn" alt="hide" src="assets/general/general-img/eye-icon.svg">` : ''}
+                        <img class="btn-above-note hide-note-btn" alt="hide" src="assets/client/img/eye-icon.svg">` : ''}
                     ${/*Show delete button */ privilege.includes('D') ? `<img 
-                        class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/del-icon.svg">` : ''}
+                        class="btn-above-note delete-note-btn" alt="delete" src="assets/general/general-img/action/del-btn-icon.svg">` : ''}
                     <span class="subdued-text note-right-side-label-span 
                     ${isClientMessage === 1 ? 'client-message-label' : ''}">${html(userFullName)}</span>
                 </label>

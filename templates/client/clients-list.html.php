@@ -18,8 +18,6 @@ $this->addAttribute('libs', ['fontawesome.css']);
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-//    'assets/general/css/loader/three-dots-loader.css',
-    // post.css has to come last to overwrite other styles
     'assets/general/page-component/form/form.css',
     'assets/general/page-component/filter-chip/filter-chip.css',
     'assets/general/page-component/skeleton-loader/skeleton-loader.css',
@@ -89,7 +87,7 @@ $this->addAttribute(
 <!-- Client visibility scope is either "own" or "all" depending on the if current page shows only own clients or all.
 All clients and own clients pages are quite similar and share the same create form and modal box. After the creation of
 a client, they are re-loaded in the background (async) to be up to date with the server -->
-<div id="client-wrapper" data-client-filter="all">
+<div id="client-list-wrapper" data-client-filter="all">
 
 </div>
 

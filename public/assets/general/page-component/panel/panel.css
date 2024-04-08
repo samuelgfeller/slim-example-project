@@ -1,20 +1,13 @@
+/*Collapsible panels holding content used in dashboard for e.g.*/
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     .panel-container {
         flex-grow: 1;
         border-radius: 40px;
-        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);*/
-        /*max-width: 100%;*/
-        /*width: fit-content;*/
-        /*height: auto;*/
-        /*min-width: max-content;*/
     }
 
     .panel-header {
-        /*background: rgba(0, 0, 0, 0.20);*/
-        /*background: #e0e2e5;*/
         background: var(--background-accent-5-color);
-        /*border-top: 8px solid red;*/
         overflow: hidden;
         border-radius: 32px 32px 0 0;
         display: flex;
@@ -26,7 +19,6 @@
     .panel-header h2 {
         margin-top: 0;
         margin-bottom: 0;
-        /*padding: 12px 20px 20px 20px;*/
         padding: 20px;
         font-size: 1.5em;
         font-weight: 600;
@@ -39,13 +31,10 @@
         overflow: hidden;
         background: var(--background-accent-2-color);
         border-radius: 0 0 30px 30px;
-        /*border: 8px solid rgba(46, 62, 80, 0.2);*/
-        /*border-top: none;*/
     }
 
     .panel-content h3 {
         font-size: 1.4em;
-        /*margin-top: 15px;*/
         margin-bottom: 5px;
     }
 
@@ -91,8 +80,9 @@
         /*Make all borders rounded when collapsed*/
         border-radius: 32px;
     }
+
     /*Make note visible by adding more accent*/
-    .dashboard-panel-container .client-note-wrapper textarea{
+    .dashboard-panel-container .client-note-wrapper textarea {
         background-color: var(--background-accent-4-color);
     }
 }
@@ -105,8 +95,4 @@
 }
 
 @media (min-width: 641px) {
-    .panel-container {
-        /*min-width: 500px;*/
-        /*margin-right: 40px;*/
-    }
 }

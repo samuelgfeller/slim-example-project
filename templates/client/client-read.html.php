@@ -38,7 +38,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <?php
             if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
                 <!-- Img has to be before title because only the next sibling can be styled in css -->
-                <img src="assets/general/general-img/material-edit-icon.svg"
+                <img src="assets/general/general-img/action/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-first-name-btn">
@@ -50,7 +50,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div class="inner-contenteditable-heading-div contenteditable-field-container" data-field-element="h1">
             <?php
             if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                <img src="assets/general/general-img/material-edit-icon.svg"
+                <img src="assets/general/general-img/action/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer"
                      alt="Edit"
                      id="edit-last-name-btn">
@@ -131,7 +131,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <!-- Toggle edit icons on mobile if user has privilege to update something -->
             <?php
             if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                <img src="assets/general/general-img/material-edit-icon.svg"
+                <img src="assets/general/general-img/action/material-edit-icon.svg"
                      class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                      id="toggle-personal-info-edit-icons">
                 <?php
@@ -139,14 +139,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
             <!-- id prefix has to be the same as alt attr of personal-info-icon inside here but also available icons -->
             <div id="birthdate-container" style="<?= $clientReadData->birthdate ? '' : 'display: none;' ?>">
                 <!-- icon alt has to be the same as the input name -->
-                <img src="assets/general/general-img/birthdate-icon.svg"
+                <img src="assets/general/general-img/personal-data-icons/birthdate-icon.svg"
                      class="personal-info-icon default-icon" alt="birthdate">
                 <div class="partial-personal-info-and-edit-icon-div contenteditable-field-container"
                      data-field-element="span"
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-birthdate-btn">
                         <?php
@@ -172,7 +172,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-sex-btn">
                         <select name="sex" class="default-select" id="sex-select">
@@ -202,7 +202,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-location-btn">
                         <?php
@@ -221,7 +221,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-phone-btn">
                         <?php
@@ -240,7 +240,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-email-btn">
                         <?php
@@ -260,7 +260,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                      data-hide-if-empty="true">
                     <?php
                     if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
-                        <img src="assets/general/general-img/material-edit-icon.svg"
+                        <img src="assets/general/general-img/action/material-edit-icon.svg"
                              class="contenteditable-edit-icon cursor-pointer" alt="Edit"
                              id="edit-vigilance-level-btn">
                         <select name="vigilance_level" class="default-select" id="vigilance-level-select">
@@ -285,7 +285,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <?php
         if (str_contains($clientReadData->generalPrivilege, 'U')) { ?>
             <div id="add-client-personal-info-div">
-                <img src="assets/general/general-img/plus-icon.svg" id="toggle-personal-info-icons"
+                <img src="assets/general/general-img/action/plus-icon.svg" id="toggle-personal-info-icons"
                      class="default-icon" alt="add info">
 
                 <?php
@@ -300,7 +300,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                 <!-- alt has to be exactly the same as the field name.
                 The field container id has to be "[alt]-container".
                 The edit icon image in the existing container has to have the same alt as the name as well. -->
-                <img src="assets/general/general-img/birthdate-icon.svg"
+                <img src="assets/general/general-img/personal-data-icons/birthdate-icon.svg"
                      class="personal-info-icon default-icon" alt="birthdate">
                 <img src="assets/general/general-img/personal-data-icons/gender-icon.svg"
                      class="personal-info-icon default-icon" alt="sex">

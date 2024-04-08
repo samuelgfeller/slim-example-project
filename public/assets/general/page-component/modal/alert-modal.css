@@ -1,3 +1,4 @@
+/*Confirmation modal*/
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     /*The Modal (background)*/
@@ -37,11 +38,6 @@
 
         animation-name: fade-in-alert-modal;
         animation-duration: 0.3s;
-    }
-
-    /*Modal Header*/
-    #alert-modal-header {
-        /*padding: 2px 0;*/
     }
 
     /*Modal Body*/

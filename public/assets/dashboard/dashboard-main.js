@@ -82,8 +82,8 @@ for (const clientPanel of clientPanels) {
         filterParams.append(paramData.dataset.paramName, paramData.dataset.paramValue);
     }
 
-    // client panels have to have a div.client-wrapper in the content section
-    fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-wrapper').id, false);
+    // client panels have to have a div.client-list-wrapper in the content section
+    fetchAndLoadClients(filterParams, clientPanel.querySelector('.client-list-wrapper').id, false);
 }
 
 // Load notes in notes panels
@@ -95,7 +95,7 @@ for (const notePanel of notesPanels) {
         noteFilterParam.append(paramData.dataset.paramName, paramData.dataset.paramValue);
     }
 
-    // client panels have to have a div.client-wrapper in the content section with a unique id
+    // client panels have to have a div.client-list-wrapper in the content section with a unique id
     fetchAndLoadClientNotes(noteFilterParam, notePanel.querySelector('.client-note-wrapper').id);
 }
 

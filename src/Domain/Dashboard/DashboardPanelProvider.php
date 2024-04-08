@@ -56,7 +56,7 @@ final readonly class DashboardPanelProvider
                 'panelId' => 'unassigned-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="user" data-param-value="" value=""></data>
-                    <div id="client-wrapper-unassigned" class="client-wrapper"></div>',
+                    <div id="client-list-wrapper-unassigned" class="client-list-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             new DashboardData([
@@ -65,7 +65,7 @@ final readonly class DashboardPanelProvider
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="user" data-param-value="' . $loggedInUserId . '" value=""></data>
                 <data data-param-name="status" data-param-value="' . $statusesMappedByNameId['Action pending'] . '" value=""></data>
-                <div id="client-wrapper-assigned-to-me" class="client-wrapper"></div>',
+                <div id="client-list-wrapper-assigned-to-me" class="client-list-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]),
             new DashboardData([
@@ -91,7 +91,7 @@ final readonly class DashboardPanelProvider
                 'panelId' => 'recently-assigned-panel',
                 'panelClass' => 'client-panel',
                 'panelHtmlContent' => '<data data-param-name="recently-assigned" data-param-value="1" value=""></data>
-                                <div id="client-wrapper-recently-assigned" class="client-wrapper"></div>',
+                                <div id="client-list-wrapper-recently-assigned" class="client-list-wrapper"></div>',
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(
                     UserRole::MANAGING_ADVISOR
                 ),

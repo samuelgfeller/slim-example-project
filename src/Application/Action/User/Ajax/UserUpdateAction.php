@@ -20,9 +20,11 @@ final readonly class UserUpdateAction
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        // Id in url user_id defined in routes.php
+        // Key 'user_id' for the user id in the URL is defined in the route definition in routes.php
         $userIdToChange = (int)$args['user_id'];
         $userValuesToChange = (array)$request->getParsedBody();
+
+        // Call service function to update user with the id and values to change
         $updated = $this->userUpdater->updateUser($userIdToChange, $userValuesToChange);
 
         if ($updated) {

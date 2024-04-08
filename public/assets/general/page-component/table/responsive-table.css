@@ -26,7 +26,8 @@
         white-space: nowrap;
         letter-spacing: 0.03em;
     }
-    .responsive-table a{
+
+    .responsive-table a {
         color: #2e3e50;
     }
 
@@ -42,6 +43,7 @@
     .responsive-table a {
         text-decoration: none;
     }
+
     .column-hidden-on-mobile {
         display: none;
     }

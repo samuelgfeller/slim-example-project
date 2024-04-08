@@ -28,8 +28,6 @@ final readonly class UserDeleteAction
      * @param ResponseInterface $response The response
      * @param array $args The routing arguments
      *
-     * @throws \JsonException
-     *
      * @return ResponseInterface The response
      */
     public function __invoke(
@@ -63,7 +61,6 @@ final readonly class UserDeleteAction
 
         $response = $this->jsonResponder->encodeAndAddToResponse(
             $response,
-            // response json body asserted in UserDeleteActionTest
             ['status' => 'warning', 'message' => 'User not deleted.']
         );
 

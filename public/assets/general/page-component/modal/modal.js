@@ -1,5 +1,5 @@
 // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically
-// more on https://stackoverflow.com/a/34896387/9013718
+// https://stackoverflow.com/a/34896387/9013718
 document.addEventListener('click', function (e) {
     // Hide modal when close-modal button is clicked
     if (e.target && e.target.id === 'close-modal') {
@@ -15,6 +15,13 @@ document.addEventListener('mousedown', function (e) {
             closeModal();
             document.removeEventListener('mouseup', mouseUpListener);
         });
+    }
+});
+
+// Hide modal when the escape key is pressed
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeModal();
     }
 });
 

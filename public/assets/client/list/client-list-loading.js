@@ -145,7 +145,7 @@ function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) 
  * a custom one can be provided.
  */
 function addClientsToDom(clients, allUsers, allStatuses, clientWrapperId = null) {
-    let clientContainer = document.getElementById(clientWrapperId ?? 'client-wrapper');
+    let clientContainer = document.getElementById(clientWrapperId ?? 'client-list-wrapper');
 
     // Clear wrapper before adding new content
     clientContainer.innerHTML = '';

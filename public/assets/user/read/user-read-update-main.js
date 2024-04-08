@@ -88,7 +88,7 @@ function submitUserDropdownChange() {
         });
 }
 
-// Display all edit icons if touch screen
+// Display all edit icons if touch screen detected because there is no hover
 if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
     let editIcons = document.querySelectorAll('.contenteditable-edit-icon');
     for (let editIcon of editIcons) {
