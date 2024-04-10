@@ -184,7 +184,7 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
      *
      * @param Throwable $exception
      *
-     * @return array
+     * @return array<string, array|string|int>
      */
     private function getExceptionDetailsAttributes(Throwable $exception): array
     {

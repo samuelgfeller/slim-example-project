@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Prod error page
+ *
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
  * @var string|null $statusCode e.g. 403

@@ -63,7 +63,7 @@ class ClientDeleteActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'DELETE',
-            // Construct url /clients/1
+            // Construct url /clients/1 with urlFor()
             $this->urlFor('client-delete-submit', ['client_id' => $clientRow['id']]),
         );
 

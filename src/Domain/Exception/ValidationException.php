@@ -6,8 +6,13 @@ use RuntimeException;
 
 class ValidationException extends RuntimeException
 {
+    /** @var array<string, array<int, string>> */
     public readonly array $validationErrors;
 
+    /**
+     * @param array<string, array<string, string>> $validationErrors
+     * @param string $message
+     */
     public function __construct(array $validationErrors, string $message = 'Validation error')
     {
         parent::__construct($message);
@@ -17,7 +22,7 @@ class ValidationException extends RuntimeException
 
     /**
      * Transform the validation error output from the library to array that is used by the frontend.
-     * The changes are tiny, but the main purpose is to add an abstraction layer in case the validation
+     * Changes are small, but the main purpose is to add an abstraction layer in case the validation
      * library changes its error output format in the future so that only this function has to be
      * changed instead of the frontend.
      *
@@ -50,9 +55,9 @@ class ValidationException extends RuntimeException
      *    ],
      * ]
      *
-     * @param array $validationErrors The cakephp validation errors
+     * @param array<string, array<string, string>> $validationErrors The cakephp validation errors
      *
-     * @return array the transformed result in the format documented above
+     * @return array<string, array<int, string>> the transformed result in the format documented above
      */
     private function transformCakephpValidationErrorsToOutputFormat(array $validationErrors): array
     {

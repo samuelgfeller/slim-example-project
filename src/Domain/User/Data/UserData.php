@@ -12,7 +12,7 @@ class UserData implements \JsonSerializable
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     public ?string $firstName;
     public ?string $surname;
-    // Email has to be default null as it is indicator that user obj is empty in AuthService register function
+    // Email has to be default null as it is an indicator that user obj is empty in AuthService register function
     public ?string $email;
     public ?string $password;
     public ?string $password2;

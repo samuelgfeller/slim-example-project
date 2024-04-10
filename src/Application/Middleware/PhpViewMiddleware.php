@@ -18,8 +18,10 @@ use Slim\Views\PhpRenderer;
 
 final class PhpViewMiddleware implements MiddlewareInterface
 {
+    /** @var array<string, mixed> */
     private array $publicSettings;
     private bool $devSetting;
+    /** @var array<string, mixed> */
     private array $deploymentSettings;
 
     public function __construct(

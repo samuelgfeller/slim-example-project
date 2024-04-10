@@ -53,7 +53,7 @@ class UserDeleteActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'DELETE',
-            // Construct url /users/1
+            // Construct url /users/1 with urlFor()
             $this->urlFor('user-delete-submit', ['user_id' => $userToDeleteRow['id']]),
         );
 
