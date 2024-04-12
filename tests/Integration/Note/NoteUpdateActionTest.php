@@ -56,22 +56,22 @@ class NoteUpdateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert linked status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Insert main note attached to client and given "owner" user
         $mainNoteRow = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             ['is_main' => 1, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id']],
         );
 
         // Insert normal non-hidden note attached to client and given "owner" user
         $normalNoteRow = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             ['is_main' => 0, 'user_id' => $linkedUserRow['id'], 'client_id' => $clientRow['id'], 'hidden' => 0],
         );
 
@@ -181,20 +181,20 @@ class NoteUpdateActionTest extends TestCase
     {
         // Insert authorized user
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert client row
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
         );
 
         // Insert note linked to client and user
         $noteData = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
         );
 

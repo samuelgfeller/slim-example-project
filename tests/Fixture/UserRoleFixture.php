@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
-class UserRoleFixture implements FixtureInterface
+class UserRoleFixture
 {
     // Table name
     public string $table = 'user_role';

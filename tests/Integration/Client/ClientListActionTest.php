@@ -58,7 +58,7 @@ class ClientListActionTest extends TestCase
     {
         // Insert logged-in user with the lowest privilege
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         );
 
@@ -114,15 +114,15 @@ class ClientListActionTest extends TestCase
         array $usersToInsert,
         array $clientStatusesToInsert,
     ): void {
-        $users = $this->insertFixture(new UserFixture(), $usersToInsert);
-        $statuses = $this->insertFixture(new ClientStatusFixture(), $clientStatusesToInsert);
+        $users = $this->insertFixture(UserFixture::class, $usersToInsert);
+        $statuses = $this->insertFixture(ClientStatusFixture::class, $clientStatusesToInsert);
         // Insert authenticated user before client
         $loggedInUserId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId($authenticatedUserAttributes),
         )['id'];
         // Insert clients
-        $clients = $this->insertFixture(new ClientFixture(), $clientsToInsert);
+        $clients = $this->insertFixture(ClientFixture::class, $clientsToInsert);
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
@@ -203,7 +203,7 @@ class ClientListActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
     {
-        $loggedInUserId = $this->insertFixture(new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

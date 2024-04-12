@@ -63,7 +63,7 @@ class ClientUpdateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
 
         // Insert client status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientAttributes = ['client_status_id' => $clientStatusId, 'user_id' => $userLinkedToClientRow['id']];
         // If deleted at is provided in the request data, it means that client should be undeleted
@@ -71,19 +71,19 @@ class ClientUpdateActionTest extends TestCase
             // Add deleted at to client attributes
             $clientAttributes = array_merge($clientAttributes, ['deleted_at' => date('Y-m-d H:i:s')]);
         }
-        $clientRow = $this->insertFixture(new ClientFixture(), $clientAttributes);
+        $clientRow = $this->insertFixture(ClientFixture::class, $clientAttributes);
 
         // Insert other user and client status used for the modification request if needed.
         if (isset($requestData['user_id'])) {
             // Replace the value "new" from the data to be changed array with a new,
             // different user id (user linked previously + 1)
             $requestData['user_id'] = $clientRow['user_id'] + 1;
-            $this->insertFixture(new UserFixture(), ['id' => $requestData['user_id']]);
+            $this->insertFixture(UserFixture::class, ['id' => $requestData['user_id']]);
         }
         if (isset($requestData['client_status_id'])) {
             // Add previously not existing client status to request data (previous client status + 1)
             $requestData['client_status_id'] = $clientRow['client_status_id'] + 1;
-            $this->insertFixture(new ClientStatusFixture(), ['id' => $requestData['client_status_id']]);
+            $this->insertFixture(ClientStatusFixture::class, ['id' => $requestData['client_status_id']]);
         }
 
         // Simulate logged-in user by setting the user_id session variable
@@ -167,13 +167,13 @@ class ClientUpdateActionTest extends TestCase
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         )['id'];
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['client_status_id' => $clientStatusId, 'user_id' => $userId],
         );
 
@@ -231,13 +231,13 @@ class ClientUpdateActionTest extends TestCase
     {
         // Insert user that is allowed to change content
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         )['id'];
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert client that will be used for this test
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['client_status_id' => $clientStatusId, 'user_id' => $userId],
         );
 

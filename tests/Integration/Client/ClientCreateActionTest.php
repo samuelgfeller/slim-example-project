@@ -56,7 +56,7 @@ class ClientCreateActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
 
         // Client status is not authorization relevant for client creation
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
 
         $clientCreationValues = [
             'first_name' => 'New',
@@ -161,10 +161,10 @@ class ClientCreateActionTest extends TestCase
     {
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         )['id'];
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // To test note message validation when submitted in client creation form the client values have to be valid
         if (isset($requestBody['user_id']) && $requestBody['user_id'] === 'valid'
             && $requestBody['client_status_id'] === 'valid') {
@@ -214,11 +214,11 @@ class ClientCreateActionTest extends TestCase
     {
         // Insert managing advisor user which is allowed to create clients
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         )['id'];
         // Insert mandatory field client status id
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Add valid client status id to request body
         $requestBody['client_status_id'] = $clientStatusId;
 

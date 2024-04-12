@@ -2,23 +2,21 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
 /**
  * Client status values that can be inserted into the database
  * No fixture has to be inserted first.
  */
-class ClientStatusFixture implements FixtureInterface
+class ClientStatusFixture
 {
     // Table name
     public string $table = 'client_status';
 
     // Database records in 2d array
     public array $records = [
-        // First record must have deleted_at => null
         [
             'id' => 1,
             'name' => 'Action pending',
+            // The first record must have deleted_at => null
             'deleted_at' => null,
         ],
         [

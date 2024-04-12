@@ -44,7 +44,7 @@ class PasswordResetSubmitActionTest extends TestCase
     {
         $newPassword = 'new password';
         // Insert user
-        $userRow = $this->insertFixture(new UserFixture(), ['id' => $verification->userId]);
+        $userRow = $this->insertFixture(UserFixture::class, ['id' => $verification->userId]);
 
         $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 
@@ -85,7 +85,7 @@ class PasswordResetSubmitActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 
@@ -140,7 +140,7 @@ class PasswordResetSubmitActionTest extends TestCase
         // Invalid new password
         $newPassword = '1';
         // Insert user id 2 role: user
-        $userRow = $this->insertFixture(new UserFixture(), ['id' => $verification->userId]);
+        $userRow = $this->insertFixture(UserFixture::class, ['id' => $verification->userId]);
 
         $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
 

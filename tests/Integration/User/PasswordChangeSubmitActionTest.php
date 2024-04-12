@@ -136,7 +136,7 @@ class PasswordChangeSubmitActionTest extends TestCase
     {
         // Insert user that is allowed to change content
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         );
 

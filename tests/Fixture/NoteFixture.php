@@ -2,19 +2,16 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
 /**
  * Note values that can be inserted into the database.
  */
-class NoteFixture implements FixtureInterface
+class NoteFixture
 {
     // Table name
     public string $table = 'note';
 
     // Database records in 2d array
     public array $records = [
-        // First record must have deleted_at => null
         [
             'id' => 1,
             'user_id' => 10,
@@ -24,6 +21,7 @@ class NoteFixture implements FixtureInterface
             'hidden' => null,
             'updated_at' => '2024-01-01 00:00:01',
             'created_at' => '2024-01-01 00:00:01',
+            // The first record must have deleted_at => null
             'deleted_at' => null,
         ],
         // Note id 2: is not main note and linked to user 10 and client 1

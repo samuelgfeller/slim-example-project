@@ -43,7 +43,7 @@ class LoginSecurityTest extends TestCase
         $correctLoginRequestBody = ['email' => $email, 'password' => $password];
 
         // Insert user fixture
-        $user = $this->insertFixture(new UserFixture(), [
+        $user = $this->insertFixture(UserFixture::class, [
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
         ], );

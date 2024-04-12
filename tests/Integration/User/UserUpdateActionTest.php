@@ -126,7 +126,7 @@ class UserUpdateActionTest extends TestCase
         // Insert user that is allowed to change content (advisor owner)
         $userRow = $this->insertFixture(
             // Replace user_role_id enum case with database id with AuthorizationTestTrait function addUserRoleId()
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         );
 

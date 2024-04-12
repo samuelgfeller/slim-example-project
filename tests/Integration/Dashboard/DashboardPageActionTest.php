@@ -25,19 +25,19 @@ class DashboardPageActionTest extends TestCase
     public function testDashboardPageActionAuthenticated(): void
     {
         // Insert authenticated user
-        $loggedInUserId = $this->insertFixture(new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
         // Insert other users to have different user filter chips (to test logic for user activity panel)
-        $userId = $this->insertFixture(new UserFixture(), ['first_name' => 'Andrew'])['id'];
+        $userId = $this->insertFixture(UserFixture::class, ['first_name' => 'Andrew'])['id'];
         // Set user Andrew to active filter
         $this->insertFixture(
-            new UserFilterSettingFixture(),
+            UserFilterSettingFixture::class,
             ['module' => 'dashboard-user-activity', 'filter_id' => "user_$userId", 'user_id' => $loggedInUserId],
         );
         // Insert another inactive user
-        $this->insertFixture(new UserFixture(), ['first_name' => 'Mike']);
+        $this->insertFixture(UserFixture::class, ['first_name' => 'Mike']);
 
         // A dashboard panel is for the status "action pending" and its id is retrieved by the code
-        $this->insertFixture(new ClientStatusFixture(), ['name' => 'Action pending']);
+        $this->insertFixture(ClientStatusFixture::class, ['name' => 'Action pending']);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

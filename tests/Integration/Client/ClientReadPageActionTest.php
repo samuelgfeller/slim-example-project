@@ -36,12 +36,12 @@ class ClientReadPageActionTest extends TestCase
     {
         // Add needed database values to correctly display the page
         // Insert authenticated user permitted to see client read page
-        $userId = $this->insertFixture(new UserFixture())['id'];
+        $userId = $this->insertFixture(UserFixture::class)['id'];
         // Insert linked client status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert client linked to user to be sure that the user is permitted to see the client read page
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['user_id' => $userId, 'client_status_id' => $clientStatusId],
         );
 

@@ -51,7 +51,7 @@ class UserCreateActionTest extends TestCase
         $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $authenticatedUserRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId($authenticatedUserAttr),
         );
 
@@ -149,7 +149,7 @@ class UserCreateActionTest extends TestCase
         // Insert user that is allowed to create user without any authorization limitation (admin)
         // Even if user_role_id is empty string or null
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
         );
 
@@ -179,7 +179,7 @@ class UserCreateActionTest extends TestCase
     {
         // Insert authenticated admin
         $adminRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
         );
         // Simulate logged-in user by setting the user_id session variable
@@ -187,7 +187,7 @@ class UserCreateActionTest extends TestCase
 
         $existingEmail = 'email@address.com';
         // Insert user with email that will be used in request to create a new one
-        $this->insertFixture(new UserFixture(), ['email' => $existingEmail]);
+        $this->insertFixture(UserFixture::class, ['email' => $existingEmail]);
 
         $request = $this->createJsonRequest(
             'POST',

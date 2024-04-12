@@ -75,7 +75,7 @@ jobs:
         run: composer update --no-ansi --no-interaction --no-progress
 
       - name: Execute database migrations
-        run: composer migrate-prod
+        run: composer migrate:prod
 
       - name: Show test db tables
         run: mysql -uroot -proot -D ${{ matrix.test-database }} -e "SHOW TABLES;"

@@ -42,7 +42,7 @@ class NoteReadPageActionTest extends TestCase
     {
         // Insert authenticated user newcomer which is allowed to read the page (only his user will load however)
         $userId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         )['id'];
 
@@ -61,13 +61,13 @@ class NoteReadPageActionTest extends TestCase
         self::assertSame($expectedClientReadUrl, $response->getHeaderLine('Location'));
 
         // *Test request on existing note
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         $clientId = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['client_status_id' => $clientStatusId],
         )['id'];
         $noteId = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             ['client_id' => $clientId, 'user_id' => $userId],
         )['id'];
 

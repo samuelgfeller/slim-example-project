@@ -42,7 +42,7 @@ class AccountUnlockActionTest extends TestCase
     {
         // Insert locked user
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
         );
 
@@ -87,7 +87,7 @@ class AccountUnlockActionTest extends TestCase
     ): void {
         // Insert locked user
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['status' => UserStatus::Locked->value, 'id' => $verification->userId],
         );
 
@@ -133,7 +133,7 @@ class AccountUnlockActionTest extends TestCase
     ): void {
         // Insert locked user
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['status' => UserStatus::Active->value, 'id' => $verification->userId],
         );
 

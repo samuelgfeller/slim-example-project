@@ -47,9 +47,9 @@ trait AppTestTrait
             $this->setUpDatabase($this->container->get('settings')['root_dir'] . '/resources/schema/schema.sql');
 
             // If fixtureTestTrait is included in the test class, insert default user roles
-            if (method_exists($this, 'insertFixture')) {
+            if (method_exists($this, 'insertDefaultFixtureRecords')) {
                 // Automatically insert user roles
-                $this->insertDefaultFixtures([UserRoleFixture::class]);
+                $this->insertDefaultFixtureRecords([UserRoleFixture::class]);
             }
         }
     }

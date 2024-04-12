@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
-class UserFilterSettingFixture implements FixtureInterface
+class UserFilterSettingFixture
 {
     // Table name
     public string $table = 'user_filter_setting';

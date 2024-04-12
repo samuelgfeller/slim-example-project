@@ -64,21 +64,21 @@ class NoteListActionTest extends TestCase
         // because note read rights change (e.g. that newcomers may not see the notes from everyone), the
         // client owner id has to be added to the provider
         $clientOwnerId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::ADVISOR]),
         )['id'];
         // Insert linked status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
 
         // Insert client row
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
         );
 
         // Insert linked note. Only one per test to simplify assertions with different privileges
         $noteData = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             [
                 'is_main' => 0,
                 'client_id' => $clientRow['id'],
@@ -154,17 +154,17 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     ): void {
         // Authenticated user role not relevant here, and it should not cause issues (authorization tested above)
         $loggedInUserId = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::MANAGING_ADVISOR]),
         )['id'];
 
         // Insert users without specific user role
-        $users = $this->insertFixture(new UserFixture(), $usersAttrToInsert);
+        $users = $this->insertFixture(UserFixture::class, $usersAttrToInsert);
         // Insert client status and client
-        $statusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $statusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         $clientAttrToInsert['client_status_id'] = $statusId;
-        $clientId = $this->insertFixture(new ClientFixture(), $clientAttrToInsert)['id'];
-        $notes = $this->insertFixture(new NoteFixture(), $notesAttrToInsert);
+        $clientId = $this->insertFixture(ClientFixture::class, $clientAttrToInsert)['id'];
+        $notes = $this->insertFixture(NoteFixture::class, $notesAttrToInsert);
 
         // Add session
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
@@ -223,7 +223,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         array $filterQueryParams,
         string $exceptionMessage,
     ): void {
-        $loggedInUserId = $this->insertFixture(new UserFixture())['id'];
+        $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 
         $request = $this->createJsonRequest(

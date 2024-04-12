@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
-class UserActivityFixture implements FixtureInterface
+class UserActivityFixture
 {
     // Table name
     public string $table = 'user_activity';

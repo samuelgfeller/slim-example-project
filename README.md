@@ -15,10 +15,10 @@ It showcases the implementation of a simple yet robust
 with a variety of backend and
 frontend features built using the Slim 4 micro-framework. 
 The base for this project was the official 
-[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton).
+[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and the [slim4-skeleton](https://github.com/odan/slim4-skeleton).
 
 This repository can serve as a learning example or be adapted for developing new
-applications.
+applications. 
 
 External library dependencies are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework) 
 to facilitate maintenance and ensure long-term viability. 
@@ -32,17 +32,18 @@ A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-pro
 Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
 to get started.
 
-Stripped down versions of this repository are available as skeleton templates:
-[**slim-api-starter**](https://github.com/samuelgfeller/slim-api-starter) (only API) and 
-[**slim-starter**](https://github.com/samuelgfeller/slim-starter) (with frontend and API endpoint).
+Stripped down versions of this repository are available as skeleton 
+templates.
+With frontend [`slim-starter`](https://github.com/samuelgfeller/slim-starter) or just for an API:
+[`slim-api-starter`](https://github.com/samuelgfeller/slim-api-starter).
 
 ## Features
 All the features were developed with an effort to ensure maximum user-friendliness. 
-The frontend should be intuitive, aesthetically pleasing, minimalistic, and functional.
-The backend should be efficient and secure.
+The frontend, intuitive, aesthetically pleasing, minimalistic, and functional.
+The backend, efficient and secure.
 
 This project is currently designed for non-profit organizations or foundations that require a platform
-to manage and maintain a record of communication through notes of people they assist.
+to manage and maintain a record of communication through notes of people they help.
 
 **Project components:**
 
@@ -56,8 +57,7 @@ to manage and maintain a record of communication through notes of people they as
   protection against rapid fire and distributed brute force attacks (time throttling and captcha)
 * [Localization](https://github.com/samuelgfeller/slim-example-project/wiki/Translations) - English, German and French
 * [Validation](https://github.com/samuelgfeller/slim-example-project/wiki/Validation)
-* [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering) with native PHP syntax
-* [Editing values using `contenteditable`](https://github.com/samuelgfeller/slim-example-project/wiki/JavaScript-Frontend#contenteditable-fields)
+* [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering) with native PHP syntax (easily interchangeable with twig)
 * [Dark theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
 * [Advanced error handling](https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling)
 * [Integration & unit testing](https://github.com/samuelgfeller/slim-example-project/wiki/Writing-Tests)
@@ -66,7 +66,8 @@ to manage and maintain a record of communication through notes of people they as
 * [Query Builder](https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder)
 * [Logging](https://github.com/samuelgfeller/slim-example-project/wiki/Logging)
 * [Mailing](https://github.com/samuelgfeller/slim-example-project/wiki/Mailing)
-* Simple [console commands](https://github.com/samuelgfeller/slim-example-project/wiki/Console-Commands)
+* [Simple console commands](https://github.com/samuelgfeller/slim-example-project/wiki/Console-Commands)
+* [Scrutinizer](https://github.com/samuelgfeller/slim-example-project/wiki/How-to-set-up-Scrutinizer)
 * [GitHub Actions](https://github.com/samuelgfeller/slim-example-project/wiki/GitHub-Actions)
 
 **Functionalities demonstrating real-world features:**
@@ -86,9 +87,9 @@ to manage and maintain a record of communication through notes of people they as
 <summary><b>Click to see demo</b></summary>
 
 Link: [Login](https://demo.slim-example-project.samuel-gfeller.ch)  
-Usernames: `admin@user.com` | `managing-advisor@user.com` | `advisor@user.com` | `newcomer@user.com`  
+Username: `admin@user.com`  
 Password: `12345678`  
-The database is reset every hour.
+The database is reset regularly.
 
 </details>
 
@@ -121,7 +122,7 @@ Of course, there are big frameworks that have their own well-established set of 
 implementations of features.
  
 However, I find them often
-too complex, where the code makes too much "behind the scenes" and lots of dependencies,
+too complex, where the code makes too much "behind the scenes" and with lots of dependencies,
 which can lead to time-consuming refactoring on version changes.   
 I also dislike having to follow the propitiatory rules of a framework and
 much prefer the freedom of a micro-framework and carefully

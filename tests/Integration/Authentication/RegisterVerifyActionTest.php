@@ -43,7 +43,7 @@ class RegisterVerifyActionTest extends TestCase
     {
         // User needed to insert verification (taking first record from userFixture)
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 
@@ -90,7 +90,7 @@ class RegisterVerifyActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['id' => $verification->userId, 'status' => UserStatus::Active->value],
         );
 
@@ -139,7 +139,7 @@ class RegisterVerifyActionTest extends TestCase
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             ['id' => $verification->userId, 'status' => UserStatus::Unverified->value],
         );
 

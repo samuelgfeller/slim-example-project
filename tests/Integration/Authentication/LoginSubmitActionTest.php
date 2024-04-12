@@ -43,7 +43,7 @@ class LoginSubmitActionTest extends TestCase
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
                 'email' => $loginValues['email'],
@@ -79,7 +79,7 @@ class LoginSubmitActionTest extends TestCase
      */
     public function testLoginSubmitActionWrongPassword(): void
     {
-        $this->insertFixture(new UserFixture());
+        $this->insertFixture(UserFixture::class);
 
         $invalidCredentials = [
             'email' => 'admin@test.com',
@@ -114,7 +114,7 @@ class LoginSubmitActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Authentication\AuthenticationProvider::class, 'invalidLoginCredentialsProvider')]
     public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
-        $this->insertFixture(new UserFixture());
+        $this->insertFixture(UserFixture::class);
 
         // Create request
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $invalidLoginValues);
@@ -148,7 +148,7 @@ class LoginSubmitActionTest extends TestCase
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];
         $userRow = $this->insertFixture(
-            new UserFixture(),
+            UserFixture::class,
             [
                 'password_hash' => password_hash($loginValues['password'], PASSWORD_DEFAULT),
                 'email' => $loginValues['email'],

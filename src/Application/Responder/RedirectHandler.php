@@ -44,7 +44,7 @@ final readonly class RedirectHandler
      * @param ResponseInterface $response The response
      * @param string $routeName The redirect route name
      * @param array $data Named argument replacement data
-     * @param array<string, int|string> $queryParams Optional query string parameters
+     * @param array<string, string> $queryParams Optional query string parameters
      *
      * @return ResponseInterface The response
      */

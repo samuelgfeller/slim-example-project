@@ -43,7 +43,7 @@ class ApiClientCreateActionTest extends TestCase
     {
         // Insert required client status
         $clientStatusId = $this->insertFixture(
-            new ClientStatusFixture(),
+            ClientStatusFixture::class,
             ['name' => ClientStatus::ACTION_PENDING->value],
         )['id'];
 
@@ -114,7 +114,7 @@ class ApiClientCreateActionTest extends TestCase
     ): void {
         // Insert action pending client status because it's needed by the service function
         $this->insertFixture(
-            new ClientStatusFixture(),
+            ClientStatusFixture::class,
             ['name' => ClientStatus::ACTION_PENDING->value],
         );
 

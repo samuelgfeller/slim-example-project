@@ -53,16 +53,16 @@ class NoteDeleteActionTest extends TestCase
         $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
 
         // Insert linked status
-        $clientStatusId = $this->insertFixture(new ClientStatusFixture())['id'];
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
         // Insert one client linked to this user
         $clientRow = $this->insertFixture(
-            new ClientFixture(),
+            ClientFixture::class,
             ['user_id' => $linkedUserRow['id'], 'client_status_id' => $clientStatusId],
         );
 
         // Insert main note attached to client and given "owner" user
         $mainNoteData = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             [
                 'is_main' => 1,
                 'user_id' => $linkedUserRow['id'],
@@ -72,7 +72,7 @@ class NoteDeleteActionTest extends TestCase
 
         // Insert normal note attached to client and given "owner" user
         $normalNoteData = $this->insertFixture(
-            new NoteFixture(),
+            NoteFixture::class,
             [
                 'is_main' => 0,
                 'user_id' => $linkedUserRow['id'],

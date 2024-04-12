@@ -13,9 +13,9 @@
     "selective/basepath": "^2.0",
     "symfony/mailer": "^7",
     "odan/session": "^6",
-    "nyholm/psr7": "^1.5",
-    "nyholm/psr7-server": "^1.1",
-    "fig/http-message-util": "^1.1",
+    "nyholm/psr7": "^1",
+    "nyholm/psr7-server": "^1",
+    "fig/http-message-util": "^1",
     "php": "^8.2",
     "ext-pdo": "*",
     "ext-json": "*",
@@ -29,7 +29,7 @@
     "jetbrains/phpstorm-attributes": "^1.0",
     "friendsofphp/php-cs-fixer": "^3",
     "odan/phinx-migrations-generator": "^6",
-    "samuelgfeller/test-traits": "^5"
+    "samuelgfeller/test-traits": "^6"
   },
   "autoload": {
     "psr-4": {
@@ -54,9 +54,9 @@
       "phinx-migrations generate --overwrite -c config/env/env.phinx.php --ansi",
       "@schema:generate"
     ],
-    "migrate-prod": "vendor/bin/phinx migrate -c config/env/env.phinx.php --ansi -vvv",
+    "migrate:prod": "vendor/bin/phinx migrate -c config/env/env.phinx.php --ansi -vvv",
     "migrate": [
-      "@migrate-prod",
+      "@migrate:prod",
       "@schema:generate"
     ],
     "schema:generate": [

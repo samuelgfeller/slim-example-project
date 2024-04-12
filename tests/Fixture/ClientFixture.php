@@ -2,12 +2,10 @@
 
 namespace App\Test\Fixture;
 
-use TestTraits\Interface\FixtureInterface;
-
 /**
  * Client values that can be inserted into the database.
  */
-class ClientFixture implements FixtureInterface
+class ClientFixture
 {
     // Table name
     public string $table = 'client';
