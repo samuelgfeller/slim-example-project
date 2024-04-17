@@ -1,4 +1,10 @@
 <?php
+/**
+ * Environment settings for Scrutinizer CI.
+ * These values are relevant for the .scrutinizer.yml file.
+ *
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/How-to-set-up-Scrutinizer
+ */
 
 // Include testing configuration. Must be "require" and not require_once
 require __DIR__ . '/env.test.php';

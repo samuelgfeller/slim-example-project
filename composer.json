@@ -60,7 +60,7 @@
       "@schema:generate"
     ],
     "schema:generate": [
-      "php bin/console.php SqlSchemaGenerator generateSqlSchema",
+      "php bin/console.php SqlSchemaGenerator generateMySqlSchema",
       "@add-migrations-to-git"
     ],
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",

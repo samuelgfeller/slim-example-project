@@ -1,8 +1,12 @@
 <?php
 /**
- * Phinx config
- * In separate file to add PDO instance to config and these additional
- * settings are appended as parameter the command.
+ * Phinx configuration where PDO connection instance is retrieved from the container
+ * and is added to the 'local' phinx configuration.
+ *
+ * Migrate command: vendor/bin/phinx migrate -c config/env/env.phinx.php --ansi -vvv
+ * Generate migration: phinx-migrations generate --overwrite -c config/env/env.phinx.php --ansi
+ *
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations
  */
 
 use Cake\Core\Configure;

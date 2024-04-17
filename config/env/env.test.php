@@ -13,7 +13,7 @@ $settings['security']['global_monthly_email_threshold'] = 1000;
 // Using the null adapter to prevent emails from actually being sent
 $settings['smtp']['type'] = 'null';
 
-// Add example.com to allowed origin to test out CORS
+// Add example.com domain to allowed origin to test CORS in API call
 $settings['api']['allowed_origin'] = 'https://example.com/';
 
 // Enable test mode for the logger

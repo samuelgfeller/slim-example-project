@@ -3,7 +3,6 @@
 namespace App\Application\ErrorHandler;
 
 use App\Domain\Exception\ValidationException;
-use App\Infrastructure\Utility\Settings;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,18 +17,14 @@ use Throwable;
 final readonly class DefaultErrorHandler implements ErrorHandlerInterface
 {
     private string $fileSystemPath;
-    private bool $jsonErrorResponse;
 
     public function __construct(
         private PhpRenderer $phpRenderer,
         private ResponseFactoryInterface $responseFactory,
         private LoggerInterface $logger,
-        private Settings $settings,
     ) {
         // The filesystem path to the project root folder will be removed in the error details page
         $this->fileSystemPath = 'C:\xampp\htdocs\\';
-        // Return json error response if request is of type json
-        $this->jsonErrorResponse = $this->settings->get('error')['json_error_response'] ?? true;
     }
 
     /**
@@ -100,10 +95,8 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
         // If it's a HttpException it's safe to show the error message to the user
         $exceptionMessage = $exception instanceof HttpException ? $exception->getMessage() : null;
 
-        // If the request is JSON and json error response is enabled, return a JSON response with the exception details
-        if ($this->jsonErrorResponse === true
-            && str_contains($request->getHeaderLine('Content-Type'), 'application/json')
-        ) {
+        // If the request is JSON, return a JSON response with the error details
+        if (str_contains($request->getHeaderLine('Content-Type'), 'application/json')) {
             $jsonErrorResponse = [
                 'status' => $statusCode,
                 'message' => $exceptionMessage ?? $reasonPhrase,
@@ -112,11 +105,11 @@ final readonly class DefaultErrorHandler implements ErrorHandlerInterface
             // If $displayErrorDetails is true, return exception details in json
             if ($displayErrorDetails === true) {
                 $jsonErrorResponse['error'] = $exception->getMessage();
-                $jsonErrorResponse['details'] = [
+                /*$jsonErrorResponse['details'] = [
                     'file' => $exception->getFile(),
                     'line' => $exception->getLine(),
                     'trace' => $exception->getTrace(),
-                ];
+                ];*/
             }
 
             $response = $response->withHeader('Content-Type', 'application/json');

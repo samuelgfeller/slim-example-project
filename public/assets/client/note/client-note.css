@@ -28,12 +28,11 @@
     }
 
     .client-note-wrapper textarea:not([data-editable="0"]):focus {
-        outline: #eef0f1;
         box-shadow: var(--default-box-shadow);
     }
 
     .client-note-wrapper textarea[data-editable="0"]:focus {
-        outline: 1px solid #cccccc;
+        outline: 1px solid var(--border-accent-2-color);
         box-shadow: none;
     }
 

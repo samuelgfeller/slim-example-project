@@ -28,7 +28,7 @@ final readonly class Mailer
 
     /**
      * Returns rendered HTML of given template path.
-     * Using PHP-View template parser allows access to the attributes from PhpViewExtensionMiddleware
+     * Using PHP-View template parser allows access to the attributes from PhpViewMiddleware
      * like uri and route.
      *
      * @param string $templatePath PHP-View path relative to template path defined in config

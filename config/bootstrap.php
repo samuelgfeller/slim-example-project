@@ -1,4 +1,9 @@
 <?php
+/**
+ * Start up the Slim App.
+ *
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Web-Server-Config-and-Bootstrapping
+ */
 
 use DI\ContainerBuilder;
 use Slim\App;

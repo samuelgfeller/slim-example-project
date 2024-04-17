@@ -3,12 +3,11 @@
  * Production-specific configuration values.
  *
  * For these settings to be taken into account in production,
- * $_ENV['APP_ENV'] must be set to "prod" in the env.php file of the productive server.
+ * $_ENV['APP_ENV'] must be set to "prod" in the secret env.php file of the prod server.
  *
- * How to set values:
  * Every key must be set by its own to not overwrite the entire array.
  * Correct: $settings['db]['key'] = 'val'; $settings['db]['nextKey'] = 'nextVal';
- * Incorrect $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
+ * Incorrect: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal'];
  */
 
 // Error handler. More controlled than ini

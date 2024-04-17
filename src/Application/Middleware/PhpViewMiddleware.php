@@ -20,7 +20,6 @@ final class PhpViewMiddleware implements MiddlewareInterface
 {
     /** @var array<string, mixed> */
     private array $publicSettings;
-    private bool $devSetting;
     /** @var array<string, mixed> */
     private array $deploymentSettings;
 
@@ -34,7 +33,6 @@ final class PhpViewMiddleware implements MiddlewareInterface
         private readonly RouteParserInterface $routeParser
     ) {
         $this->publicSettings = $settings->get('public');
-        $this->devSetting = $settings->get('dev');
         $this->deploymentSettings = $settings->get('deployment');
     }
 
@@ -43,7 +41,6 @@ final class PhpViewMiddleware implements MiddlewareInterface
         $loggedInUserId = $this->session->get('user_id');
         // The following has to work even with no connection to mysql to display the error page (layout needs those attr)
         $this->phpRenderer->setAttributes([
-            'dev' => $this->devSetting,
             'version' => $this->deploymentSettings['version'],
             'uri' => $request->getUri(),
             'basePath' => $this->app->getBasePath(),

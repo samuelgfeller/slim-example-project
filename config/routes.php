@@ -8,44 +8,39 @@ use Slim\Routing\RouteCollectorProxy;
 return function (App $app) {
     // Home page
     $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
+
+    // Dashboard page
     $app->get('/', \App\Application\Action\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
+    // Ajax route to toggle panel visibility
+    $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
+        ->setName('dashboard-toggle-panel');
 
+    // API routes
     $app->group('/api', function (RouteCollectorProxy $group) {
         // Client creation API call
         $group->post('/clients', \App\Application\Action\Client\Ajax\ApiClientCreateAction::class)
             ->setName('api-client-create-submit');
-        $group->options('/clients', function ($request, $response) {
-            return $response;
-        });
-    })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes
+    })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes.
     ->add(\App\Application\Middleware\CorsMiddleware::class);
 
-    $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
-        ->setName('dashboard-toggle-panel');
-
+    // Login routes
     $app->get('/login', \App\Application\Action\Authentication\Page\LoginPageAction::class)->setName('login-page');
     $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)
         ->setName('login-submit');
-    $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout')->add(
-        Odan\Session\Middleware\SessionStartMiddleware::class
-    );
+    $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout');
 
     // Authentication - email verification - token
     $app->get(
         '/register-verification',
         \App\Application\Action\Authentication\Ajax\RegisterVerifyProcessAction::class
-    )->setName(
-        'register-verification'
-    );
+    )->setName('register-verification');
 
     $app->get(
         '/unlock-account',
         \App\Application\Action\Authentication\Ajax\AccountUnlockProcessAction::class
-    )->setName(
-        'account-unlock-verification'
-    );
+    )->setName('account-unlock-verification');
 
     $app->post(// Url password-forgotten hardcoded in login-main.js
         '/password-forgotten',
@@ -60,7 +55,7 @@ return function (App $app) {
         \App\Application\Action\Authentication\Ajax\NewPasswordResetSubmitAction::class
     )->setName('password-reset-submit');
 
-    // Submit new password when authenticated (post and not put as form submit)
+    // Submit new password when authenticated
     $app->put(
         '/change-password/{user_id:[0-9]+}',
         \App\Application\Action\User\Ajax\PasswordChangeSubmitAction::class
@@ -70,8 +65,8 @@ return function (App $app) {
     $app->get('/translate', \App\Application\Action\Common\TranslateAction::class)
         ->setName('translate');
 
+    // User routes
     $app->group('/users', function (RouteCollectorProxy $group) {
-        // $group->options('', PreflightAction::class); // Allow preflight requests
         $group->get('/list', \App\Application\Action\User\Page\UserListPageAction::class)
             ->setName('user-list-page');
         $group->get('', \App\Application\Action\User\Ajax\UserFetchListAction::class)
@@ -98,21 +93,19 @@ return function (App $app) {
     $app->get('/profile', \App\Application\Action\User\Page\UserReadPageAction::class)
         ->setName('profile-page')->add(UserAuthenticationMiddleware::class);
 
-    // Client routes; page actions may be like /clients and that's not an issue as API routes would have 'api' in the url anyway
+    // Client routes
     $app->group('/clients', function (RouteCollectorProxy $group) {
-        // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
         $group->get('/{client_id:[0-9]+}', \App\Application\Action\Client\Page\ClientReadPageAction::class)
             ->setName('client-read-page');
 
         $group->get('', \App\Application\Action\Client\Ajax\ClientFetchListAction::class)->setName('client-list');
+
         // Client create form is rendered by the client and needs to have the available dropdown options
         $group->get(
             '/dropdown-options',
             \App\Application\Action\Client\Ajax\FetchDropdownOptionsForClientCreateAction::class
         )->setName('client-create-dropdown');
-        /* For api response action:
-         json_encode transforms object with public attributes to camelCase which matches Google recommendation
-         https://stackoverflow.com/a/19287394/9013718 */
+
         $group->post('', \App\Application\Action\Client\Ajax\ClientCreateAction::class)
             ->setName('client-create-submit');
         $group->put('/{client_id:[0-9]+}', \App\Application\Action\Client\Ajax\ClientUpdateAction::class)
@@ -121,7 +114,7 @@ return function (App $app) {
             ->setName('client-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
-    // All clients with status whose status is not closed
+    // Client list page action
     $app->get('/clients/list', \App\Application\Action\Client\Page\ClientListPageAction::class)->setName(
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
