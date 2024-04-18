@@ -1,7 +1,7 @@
 import {getNoteHtml} from "./client-read-template-note.html.js?v=0.4.0";
 import {
-    displayClientNoteLoadingPlaceholder,
-    removeClientNoteContentPlaceholder
+    displayClientNoteSkeletonLoader,
+    removeClientNoteSkeletonLoader
 } from "./client-read-note-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {initNotesEventListeners} from "./client-read-note-event-listener-setup.js?v=0.4.0";
@@ -20,7 +20,7 @@ import {__} from "../../general/general-js/functions.js?v=0.4.0";
  */
 export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), noteWrapperId = null) {
 
-    displayClientNoteLoadingPlaceholder(noteWrapperId);
+    displayClientNoteSkeletonLoader(noteWrapperId);
 
     // If no query params provided take <data id="client-id"> value
     if (queryParams.toString() === '') {
@@ -28,22 +28,24 @@ export function fetchAndLoadClientNotes(queryParams = new URLSearchParams(), not
         queryParams.append('client_id', clientId);
     }
 
-    fetchData('notes?' + queryParams.toString())
-        .then(notesFromResponse => {
-            removeClientNoteContentPlaceholder(noteWrapperId);
-            addNotesToDom(notesFromResponse, noteWrapperId);
-            // Script loaded with defer so waiting for DOMContentLoaded is not needed
-            initNotesEventListeners();
-            // Add note delete btn event listeners
-            // The reason it is not in initNotesEventListeners() is that event listener were set up twice and alert modal
-            // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllButtonsAboveNotesEventListeners
-            // AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
-            // initAllButtonsAboveNotesEventListeners();
+    fetchData('notes?' + queryParams.toString()).then(notesFromResponse => {
+        removeClientNoteSkeletonLoader(noteWrapperId);
+        addNotesToDom(notesFromResponse, noteWrapperId);
+        // Script loaded with defer so waiting for DOMContentLoaded is not needed
+        initNotesEventListeners();
+        // Add note delete btn event listeners
+        // The reason it is not in initNotesEventListeners() is that event listener were set up twice and alert modal
+        // were displayed one on top of the other and thus not working. Turns out the reason was that I called initAllButtonsAboveNotesEventListeners
+        // AND initActivityTextareasEventListeners that already contained initAllDeleteBtnEventListeners
+        // initAllButtonsAboveNotesEventListeners();
 
-            // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
-            initAutoResizingTextareaElements();
-            scrollToAnchor();
-        });
+        // Manually init autoResizingTextareas to include the loaded notes as it's only done during page load and not afterwards
+        initAutoResizingTextareaElements();
+        scrollToAnchor();
+    }).catch(exception => {
+        console.error(exception);
+        removeClientNoteSkeletonLoader(noteWrapperId);
+    });
 }
 
 
@@ -54,6 +56,7 @@ fetchTranslations([noNotesFound]).then(response => {
     // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
     noNotesFound = response[[noNotesFound]] ?? noNotesFound;
 });
+
 /**
  * Add note to page
  *

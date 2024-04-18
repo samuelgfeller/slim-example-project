@@ -1,7 +1,7 @@
 import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.4.0";
 import {
-    displayClientProfileCardLoadingPlaceholder,
-    removeClientCardContentPlaceholder
+    displayClientProfileCardSkeletonLoader,
+    removeClientCardSkeletonLoader
 } from "./client-list-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {
@@ -13,10 +13,10 @@ import {
 } from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.4.0";
 import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
 
-// When searching clients a request is made on each keyup and we want to show only the final result to the user,
-// not a flickering between content placeholders, the result of the first typed key, then the second and so on.
-// On each request this requestId variable increases by 1 after assigning its value to the variable previousRequest
-// If previousRequestId does not match requestId it means there was newer request
+// When searching clients, a request is made on each keyup and only the final result should be shown to the user,
+// not a response from a previous request.
+// On each request, this requestId variable increases by 1 after assigning its value to the variable previousRequest.
+// If previousRequestId does not match requestId, it means there was a newer request.
 let requestId = 0;
 let previousRequestId = 0;
 
@@ -37,13 +37,13 @@ export function fetchAndLoadClients(
     // Remove no clients text if it exists
     document.getElementById('no-clients')?.remove();
 
-    displayClientProfileCardLoadingPlaceholder(clientWrapperId);
+    displayClientProfileCardSkeletonLoader(clientWrapperId);
     fetchClients(filterParams, saveFilter).then(jsonResponse => {
         // Add one to previous request id after request is done
         previousRequestId++;
         // If previousRequestId does not match requestId it means there was newer request and this response should be ignored
         if (requestId === previousRequestId || filterParams !== new URLSearchParams()) {
-            removeClientCardContentPlaceholder(clientWrapperId);
+            removeClientCardSkeletonLoader(clientWrapperId);
             addClientsToDom(jsonResponse.clients, jsonResponse.users, jsonResponse.statuses, clientWrapperId);
             // Add event listeners to cards
             let cards = document.querySelectorAll('.client-profile-card');
@@ -66,8 +66,9 @@ export function fetchAndLoadClients(
                     ?.addEventListener('change', submitClientCardDropdownChange);
             }
         }
-    }).catch(error => {
-        console.error(error);
+    }).catch(exception => {
+        console.error(exception);
+        removeClientCardSkeletonLoader(clientWrapperId);
     });
 
 }

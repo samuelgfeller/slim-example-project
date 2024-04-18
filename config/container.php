@@ -116,12 +116,12 @@ return [
     },
     // Add error middleware for notices and warnings
     NonFatalErrorHandlerMiddleware::class => function (ContainerInterface $container) {
-        $config = $container->get('settings')['error'];
+        $settings = $container->get('settings')['error'];
         $logger = $container->get(LoggerInterface::class);
 
         return new NonFatalErrorHandlerMiddleware(
-            (bool)$config['display_error_details'],
-            (bool)$config['log_errors'],
+            (bool)$settings['display_error_details'],
+            (bool)$settings['log_errors'],
             $logger,
         );
     },

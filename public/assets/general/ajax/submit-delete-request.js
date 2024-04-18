@@ -11,7 +11,7 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 export function submitDelete(route) {
     return fetch(basePath + route, {
         method: 'DELETE',
-        headers: {"Content-type": "application/json"}
+        headers: {"Content-type": "application/json", "Accept": "application/json"}
     })
         .then(async response => {
             if (!response.ok) {

@@ -16,7 +16,7 @@ export function submitUpdate(formFieldsAndValues, route, domFieldId = null) {
 
     return fetch(basePath + route, {
         method: 'PUT',
-        headers: {"Content-type": "application/json"},
+        headers: {"Content-type": "application/json", "Accept": "application/json"},
         body: JSON.stringify(formFieldsAndValues)
     })
         .then(async response => {

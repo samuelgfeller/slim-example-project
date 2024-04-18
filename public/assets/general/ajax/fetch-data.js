@@ -8,7 +8,9 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
  * @return {Promise<JSON>}
  */
 export function fetchData(route) {
-    return fetch(basePath + route, {method: 'GET', headers: {"Content-type": "application/json"}})
+    return fetch(basePath + route, {
+        method: 'GET', headers: {"Content-type": "application/json", "Accept": "application/json"}
+    })
         .then(async response => {
             if (!response.ok) {
                 await handleFail(response);

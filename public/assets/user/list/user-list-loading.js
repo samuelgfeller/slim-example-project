@@ -1,7 +1,4 @@
-import {
-    displayUserCardLoadingPlaceholder,
-    removeUserCardContentPlaceholder
-} from "./user-list-skeleton-loader.js?v=0.4.0";
+import {displayUserCardSkeletonLoader, removeUserCardSkeletonLoader} from "./user-list-skeleton-loader.js?v=0.4.0";
 import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.0";
 import {addUsersToDom} from "./user-list-card-dom-appending.js?v=0.4.0";
 import {
@@ -21,10 +18,10 @@ import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
  */
 export function loadUserList(userWrapperId = null) {
     // Display content placeholder
-    displayUserCardLoadingPlaceholder(userWrapperId);
+    displayUserCardSkeletonLoader(userWrapperId);
     // Fetch users
     fetchData('users').then(jsonResponse => {
-        removeUserCardContentPlaceholder();
+        removeUserCardSkeletonLoader();
         addUsersToDom(jsonResponse.userResultDataArray, jsonResponse.statuses, userWrapperId);
         // Add event listeners to cards
         let userCards = document.querySelectorAll('.user-card');
@@ -45,6 +42,9 @@ export function loadUserList(userWrapperId = null) {
             card.querySelector('select[name="user_role_id"]:not([disabled])')
                 ?.addEventListener('change', submitUserCardDropdownChange);
         }
+    }).catch(exception => {
+        console.error(exception);
+        removeUserCardSkeletonLoader();
     });
 }
 

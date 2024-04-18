@@ -31,7 +31,7 @@ export function submitModalForm(
 
     return fetch(basePath + moduleRoute, {
         method: httpMethod,
-        headers: {"Content-type": "application/json"},
+        headers: {"Content-type": "application/json", "Accept": "application/json"},
         body: JSON.stringify(formData)
     })
         .then(async response => {
