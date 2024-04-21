@@ -2,13 +2,13 @@
 
 use App\Application\Middleware\ForbiddenExceptionMiddleware;
 use App\Application\Middleware\InvalidOperationExceptionMiddleware;
-use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use App\Application\Middleware\PhpViewMiddleware;
 use App\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
-use Slim\Middleware\ErrorMiddleware;
+use SlimErrorRenderer\Middleware\ExceptionHandlingMiddleware;
+use SlimErrorRenderer\Middleware\NonFatalErrorHandlingMiddleware;
 
 // Slim middlewares are LIFO (last in, first out) so when responding, the order is backwards
 // https://github.com/samuelgfeller/slim-example-project/wiki/Middleware#order-of-execution
@@ -42,8 +42,8 @@ return function (App $app) {
     $app->add(ValidationExceptionMiddleware::class);
     $app->add(ForbiddenExceptionMiddleware::class);
     $app->add(InvalidOperationExceptionMiddleware::class);
-    // Handle and log notices and warnings (throws ErrorException if displayErrorDetails is true)
-    $app->add(NonFatalErrorHandlerMiddleware::class);
-    // Set error handler to custom DefaultErrorHandler (defined in container.php)
-    $app->add(ErrorMiddleware::class);
+    // Handle and log notices and warnings (throw ErrorException if displayErrorDetails is true)
+    $app->add(NonFatalErrorHandlingMiddleware::class);
+    // Handle exceptions and display error page
+    $app->add(ExceptionHandlingMiddleware::class);
 };

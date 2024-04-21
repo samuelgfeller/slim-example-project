@@ -15,6 +15,7 @@
     "odan/session": "^6",
     "nyholm/psr7": "^1",
     "nyholm/psr7-server": "^1",
+    "samuelgfeller/slim-error-renderer": "^1.0",
     "fig/http-message-util": "^1",
     "php": "^8.2",
     "ext-pdo": "*",

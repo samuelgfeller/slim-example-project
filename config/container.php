@@ -5,7 +5,6 @@
  * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection.
  */
 
-use App\Application\Middleware\NonFatalErrorHandlerMiddleware;
 use App\Infrastructure\Utility\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
@@ -23,8 +22,9 @@ use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
-use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\PhpRenderer;
+use SlimErrorRenderer\Middleware\ExceptionHandlingMiddleware;
+use SlimErrorRenderer\Middleware\NonFatalErrorHandlingMiddleware;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mailer\EventListener\EnvelopeListener;
@@ -91,38 +91,26 @@ return [
         return $logger->pushHandler($rotatingFileHandler);
     },
 
-    // Error handling: https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling
-    // Set error handler to custom DefaultErrorHandler
-    ErrorMiddleware::class => function (ContainerInterface $container) {
-        $config = $container->get('settings')['error'];
-        $app = $container->get(App::class);
+    // Add custom exception handling middleware
+    ExceptionHandlingMiddleware::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings');
 
-        $logger = $container->get(LoggerInterface::class);
-
-        $errorMiddleware = new ErrorMiddleware(
-            $app->getCallableResolver(),
-            $app->getResponseFactory(),
-            (bool)$config['display_error_details'],
-            (bool)$config['log_errors'],
-            (bool)$config['log_error_details'],
-            $logger
+        return new ExceptionHandlingMiddleware(
+            $container->get(ResponseFactoryInterface::class),
+            $settings['error']['log_errors'] ? $container->get(LoggerInterface::class) : null,
+            $settings['error']['display_error_details'],
+            $settings['public']['email']['main_contact_email'] ?? null,
+            // Get autowired prod error page renderer with layout and translations
+            $container->get(\App\Application\ErrorRenderer\ProdErrorPageRenderer::class)
         );
-
-        $errorMiddleware->setDefaultErrorHandler(
-            $container->get(\App\Application\ErrorHandler\DefaultErrorHandler::class)
-        );
-
-        return $errorMiddleware;
     },
     // Add error middleware for notices and warnings
-    NonFatalErrorHandlerMiddleware::class => function (ContainerInterface $container) {
+    NonFatalErrorHandlingMiddleware::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['error'];
-        $logger = $container->get(LoggerInterface::class);
 
-        return new NonFatalErrorHandlerMiddleware(
-            (bool)$settings['display_error_details'],
-            (bool)$settings['log_errors'],
-            $logger,
+        return new NonFatalErrorHandlingMiddleware(
+            $settings['display_error_details'],
+            $settings['log_errors'] ? $container->get(LoggerInterface::class) : null,
         );
     },
 

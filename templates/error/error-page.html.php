@@ -1,14 +1,13 @@
 <?php
+
 /**
  * Prod error page
  *
- * @var \Slim\Interfaces\RouteParserInterface $route
- * @var array $errorMessage containing (int) statusCode; (string) reasonPhrase; (string) exceptionMessage
  * @var string|null $statusCode e.g. 403
  * @var string|null $reasonPhrase e.g. Forbidden
  * @var string|null $exceptionMessage e.g. You are not allowed to access this page.
+ * @var string|null $errorReportEmailAddress contact email to report error
  * @var \Slim\Views\PhpRenderer $this
- * @var array $config public config values
  */
 $this->setLayout('layout/layout.html.php');
 ?>
@@ -74,10 +73,16 @@ $this->addAttribute('js', ['assets/error/prod-error-page.js']);
 
     </section>
     <section id="error-btn-section">
-        <a href="<?= $route?->urlFor('home-page') ?>" class="btn"><?= __('Go back home') ?></a>
-        <a href="mailto:<?= ($config['email']['main_contact_address'] ?? 'contact@samuel-gfeller.ch')
-        . '?subject=' . html($emailSubject) . '&body=' . html($emailBody) ?>" target="_blank" class="btn">
-            <?= __('Report the issue') ?></a>
+        <button onclick="window.history.go(-1); return false;" class="btn">Go back</button>
+        <?php
+        // Display button to report error if report email is provided
+        if (isset($errorReportEmailAddress)) { ?>
+            <a href="mailto:<?= $errorReportEmailAddress . '?subject=' . html($emailSubject) . '&body='
+            . html($emailBody) ?>" target="_blank" class="btn">
+                <?= __('Report the issue') ?></a>
+            <?php
+        }
+        ?>
     </section>
 </section>
 

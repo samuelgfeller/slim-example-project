@@ -31,7 +31,7 @@ class RegistrationMailSender
         $this->email = new Email();
         // Send auth emails from domain
         $this->email->from(new Address($settings['main_sender_address'], $settings['main_sender_name']))->replyTo(
-            $settings['main_contact_address']
+            $settings['main_contact_email']
         )->priority(Email::PRIORITY_HIGH);
     }
 

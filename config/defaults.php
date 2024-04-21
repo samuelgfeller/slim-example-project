@@ -30,7 +30,6 @@ $settings['error'] = [
     // When set to true, it shows error details and throws an ErrorException for notices and warnings.
     'display_error_details' => false,
     'log_errors' => true,
-    'log_error_details' => true,
 ];
 
 // Deployment settings
@@ -49,7 +48,7 @@ $settings['deployment'] = [
 $settings['public'] = [
     'app_name' => 'Slim Example Project',
     'email' => [
-        'main_contact_address' => 'slim-example-project@samuel-gfeller.ch',
+        'main_contact_email' => 'slim-example-project@samuel-gfeller.ch',
         'main_sender_address' => 'no-reply@samuel-gfeller.ch',
         'main_sender_name' => 'Slim Example Project',
     ],

@@ -10,7 +10,7 @@
 Guten Tag <?= html($userFullName) ?> <br>
 <br>
 Wenn Sie gerade versucht haben, sich einzuloggen, beachten Sie bitte, dass Ihr Konto gesperrt ist. <br>
-Bitte <b><a href="mailto:<?= $config['email']['main_contact_address'] ?>">kontaktieren Sie uns</a></b> wenn Sie Ihr Konto
+Bitte <b><a href="mailto:<?= $config['email']['main_contact_email'] ?>">kontaktieren Sie uns</a></b> wenn Sie Ihr Konto
 aktivieren möchten.
 
 <br>

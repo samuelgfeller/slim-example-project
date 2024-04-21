@@ -31,7 +31,7 @@ final readonly class LoginNonActiveUserHandler
     ) {
         $this->mainContactEmail = $settings->get(
             'public'
-        )['email']['main_contact_address'] ?? 'slim-example-project@samuel-gfeller.ch';
+        )['email']['main_contact_email'] ?? 'slim-example-project@samuel-gfeller.ch';
     }
 
     /**
