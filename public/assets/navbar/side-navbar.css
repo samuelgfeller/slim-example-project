@@ -4,6 +4,7 @@
     --mobile-nav-toggle-btn-background-color: #2e3e50;
     --mobile-nav-toggle-burger-bars-color: #d3e0ff;
 }
+
 [data-theme="dark"] {
     --nav-background-color: #282e31;
     /*Switch colors for dark mode*/
@@ -38,7 +39,7 @@
     }
 
     /*Show menu when mobile nav is open*/
-    #nav-container.open nav{
+    #nav-container.open nav {
         max-width: 230px;
         max-height: 500px;
         outline: 3px solid var(--mobile-nav-toggle-btn-background-color);
@@ -98,6 +99,7 @@
     nav:not(:hover) a.is-active {
         background: rgba(0, 0, 0, .05);
     }
+
     nav a span {
         margin-left: 10px;
     }
@@ -192,9 +194,11 @@
     #nav-burger-icon {
         display: none;
     }
-    #nav-container{
+
+    #nav-container {
         margin-top: 50px;
     }
+
     nav {
         display: inline-block;
         position: relative;
@@ -204,6 +208,7 @@
         width: auto;
         border-radius: 32px;
     }
+
     /*Hide nav label until hover*/
     nav a span {
         margin-left: 10px;
@@ -213,9 +218,11 @@
         overflow: hidden;
         color: var(--black-white-text-color);
     }
+
     nav:hover {
         max-width: 230px;
     }
+
     /*https://stackoverflow.com/a/47851820/9013718*/
     nav:hover > a span {
         /*display: inline-block;*/
@@ -223,9 +230,11 @@
         height: auto;
         position: initial;
     }
-    #nav-mobile-toggle-icon{
+
+    #nav-mobile-toggle-icon {
         display: none;
     }
+
     #nav-container {
         position: fixed;
         /*The z-index matters most here as its the most parent context of the menu*/

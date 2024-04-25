@@ -41,7 +41,7 @@ export function getNoteHtml(note) {
             </div>`;
 }
 
-export function getClientNoteLoadingPlaceholderHtml() {
+export function getClientNoteSkeletonLoaderHtml() {
     return `<div class="client-note-skeleton-loader">
     <!-- Note label container-->
     <div class="client-note-upper-placeholder-container">

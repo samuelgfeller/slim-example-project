@@ -142,7 +142,7 @@ $this->addAttribute(
             </div>
             <?php
         }
-        $lang = $user->language?->value;
+        $lang = $user->language->value;
         $langRadioButtonDisabled = str_contains($user->generalPrivilege, 'U') ? '' : 'disabled';
         ?>
         <div id="language-switch-div">

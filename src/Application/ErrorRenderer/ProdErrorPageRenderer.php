@@ -7,7 +7,6 @@ use SlimErrorRenderer\Interfaces\GenericErrorPageRendererInterface;
 
 final readonly class ProdErrorPageRenderer implements GenericErrorPageRendererInterface
 {
-
     public function __construct(
         private PhpRenderer $phpRenderer,
     ) {
@@ -19,8 +18,10 @@ final readonly class ProdErrorPageRenderer implements GenericErrorPageRendererIn
      * @param int $statusCode
      * @param string|null $safeExceptionMessage
      * @param string|null $errorReportEmailAddress
-     * @return string
+     *
      * @throws \Throwable
+     *
+     * @return string
      */
     public function renderHtmlProdErrorPage(
         int $statusCode,
@@ -30,7 +31,7 @@ final readonly class ProdErrorPageRenderer implements GenericErrorPageRendererIn
         return $this->phpRenderer->fetch('error/error-page.html.php', [
             'statusCode' => $statusCode,
             'exceptionMessage' => $safeExceptionMessage,
-            'errorReportEmailAddress' => $errorReportEmailAddress
+            'errorReportEmailAddress' => $errorReportEmailAddress,
         ], true);
     }
 }

@@ -1,6 +1,5 @@
 const statusCode = document.getElementById('error-status-code');
 
-
 // Make the linear gradient direction of the status code follow the cursor
 document.documentElement.addEventListener("mousemove", function (event) {
     // Retrieve the bounding rectangle of the "statusCode" element

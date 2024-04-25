@@ -1,11 +1,11 @@
 import {getUserCardHtml} from "./user-list-card.html.js?v=0.4.0";
 
 /**
- * Add elements to page
+ * Add user elements to the page.
  *
  * @param {object[]} userResultDataArray
  * @param {object} statuses
- * @param {string|null} userWrapperId if client wrapper is not the default on the client list page,
+ * @param {string|null} userWrapperId if user wrapper is not the default on the user list page,
  * a custom one can be provided.
  */
 export function addUsersToDom(userResultDataArray, statuses, userWrapperId = null) {

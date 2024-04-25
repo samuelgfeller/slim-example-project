@@ -6,9 +6,9 @@ import {html} from "../general-js/functions.js?v=0.4.0";
  * @param {string|boolean} nullable or nullable value
  * @return {string}
  */
-export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable = false){
+export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable = false) {
     let optionsHtml = '';
-    if (nullable){
+    if (nullable) {
         // Add first option empty if nullable
         optionsHtml = `<option value="">${typeof nullable === 'string' ? nullable : ''}</option>\n`;
     }
@@ -27,7 +27,7 @@ export function getDropdownAsHtmlOptions(allEntries, selectedKey = 0, nullable =
  * @param {number} checkedKey optional selected key. If not found, no radio button is checked
  * @return {string}
  */
-export function getRadioButtonsAsHtml(allEntries, inputName, checkedKey = 0){
+export function getRadioButtonsAsHtml(allEntries, inputName, checkedKey = 0) {
     let radioButtonsHtml = '';
     for (const [key, name] of Object.entries(allEntries)) {
         let selected = key === checkedKey.toString() ? `checked="true"` : '';

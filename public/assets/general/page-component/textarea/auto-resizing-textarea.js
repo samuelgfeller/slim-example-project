@@ -16,11 +16,11 @@ export function initAutoResizingTextareaElements() {
     });
     // Loop through textareaElements and add event listeners as well as other needed css attributes
     for (const textarea of textareaElements) {
-        // Initially set height as otherwise the textarea is not high enough on load
+        // Initially set height as otherwise, the textarea is not high enough on load
         textarea.style.height = textarea.scrollHeight.toString();
         // Hide scrollbar
         textarea.style.overflowY = 'hidden';
-        // Call resize function with "this" context once during initialisation as it's too high otherwise
+        // Call resize function with "this" context once during initialization as it's too high otherwise
         resizeTextarea.call(textarea);
         // Add event listener to resize textarea on input
         textarea.addEventListener('input', resizeTextarea, false);

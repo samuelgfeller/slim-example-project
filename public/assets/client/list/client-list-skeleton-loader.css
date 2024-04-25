@@ -1,29 +1,29 @@
 :root {
-    --card-placeholder-scale: 1;
+    --card-skeleton-loader-size: 1;
 }
 
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     /*Client profile card*/
     .client-profile-card-skeleton-loader {
-        height: calc(266px * var(--card-placeholder-scale));
+        height: calc(266px * var(--card-skeleton-loader-size));
         width: 100%;
-        min-width: calc(232px * var(--card-placeholder-scale));
-        padding: calc(20px * var(--card-placeholder-scale));
-        border-radius: calc(30px * var(--card-placeholder-scale));
+        min-width: calc(232px * var(--card-skeleton-loader-size));
+        padding: calc(20px * var(--card-skeleton-loader-size));
+        border-radius: calc(30px * var(--card-skeleton-loader-size));
         /*Change card to look good for preloading*/
         background: var(--background-accent-1-color);
     }
 
     .client-profile-card-skeleton-loader-header {
-        height: calc(115px * var(--card-placeholder-scale));
+        height: calc(115px * var(--card-skeleton-loader-size));
     }
 
     /*Avatar and age container*/
     .client-profile-card-avatar-age-skeleton-loader {
         margin: auto;
-        width: calc(100px * var(--card-placeholder-scale));
-        height: calc(100px * var(--card-placeholder-scale));
+        width: calc(100px * var(--card-skeleton-loader-size));
+        height: calc(100px * var(--card-skeleton-loader-size));
         position: relative;
     }
 
@@ -35,10 +35,10 @@
     }
 
     .client-profile-card-age-skeleton-loader {
-        width: calc(35px * var(--card-placeholder-scale));
-        height: calc(35px * var(--card-placeholder-scale));
-        right: calc(-20px * var(--card-placeholder-scale));
-        top: calc(5px * var(--card-placeholder-scale));
+        width: calc(35px * var(--card-skeleton-loader-size));
+        height: calc(35px * var(--card-skeleton-loader-size));
+        right: calc(-20px * var(--card-skeleton-loader-size));
+        top: calc(5px * var(--card-skeleton-loader-size));
         position: absolute;
         border-radius: 99px;
         overflow: hidden;
@@ -54,7 +54,7 @@
     .client-profile-card-name-skeleton-loader {
         width: 75%;
         margin: auto;
-        height: calc(27px * var(--card-placeholder-scale));
+        height: calc(27px * var(--card-skeleton-loader-size));
     }
 
     .client-profile-card-skeleton-loader-infos-container {
@@ -67,28 +67,28 @@
 
     /*Location*/
     .client-profile-card-location-skeleton-loader {
-        height: calc(25px * var(--card-placeholder-scale));
-        margin-top: calc(15px * var(--card-placeholder-scale));
+        height: calc(25px * var(--card-skeleton-loader-size));
+        margin-top: calc(15px * var(--card-skeleton-loader-size));
     }
 
     /*Phone nr*/
     .client-profile-card-phone-nr-skeleton-loader {
-        height: calc(25px * var(--card-placeholder-scale));
-        margin-top: calc(15px * var(--card-placeholder-scale));
+        height: calc(25px * var(--card-skeleton-loader-size));
+        margin-top: calc(15px * var(--card-skeleton-loader-size));
     }
 
     /*Assignee select*/
     .client-profile-card-assignee-skeleton-loader {
-        height: calc(30px * var(--card-placeholder-scale));
-        margin-top: calc(11px * var(--card-placeholder-scale));
+        height: calc(30px * var(--card-skeleton-loader-size));
+        margin-top: calc(11px * var(--card-skeleton-loader-size));
         border-radius: 99px;
         overflow: hidden;
     }
 
     /*Status select*/
     .client-profile-card-status-skeleton-loader {
-        height: calc(30px * var(--card-placeholder-scale));
-        margin-top: calc(11px * var(--card-placeholder-scale));
+        height: calc(30px * var(--card-skeleton-loader-size));
+        margin-top: calc(11px * var(--card-skeleton-loader-size));
         border-radius: 99px;
         overflow: hidden;
     }
@@ -103,11 +103,11 @@
 
 @media (min-width: 641px) {
     .client-profile-card-skeleton-loader-infos-container {
-        grid-template-columns: calc(90px * var(--card-placeholder-scale)) calc(120px * var(--card-placeholder-scale));
+        grid-template-columns: calc(90px * var(--card-skeleton-loader-size)) calc(120px * var(--card-skeleton-loader-size));
     }
 
     .client-profile-card-skeleton-loader {
-        width: calc(280px * var(--card-placeholder-scale));
+        width: calc(280px * var(--card-skeleton-loader-size));
     }
 }
 

@@ -1,5 +1,5 @@
 /*This file contains CSS rules that define the overall layout such as styles for the positioning of elements on the page
-especially elements from the layout/layout.html.php*/
+including elements from the layout/layout.html.php*/
 
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
@@ -14,8 +14,7 @@ especially elements from the layout/layout.html.php*/
 
     * {
         /*border-box specifies that the borders and padding should be attributed to element's width
-        and height and not overflowing to the parent.
-        https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing*/
+        and height and not overflowing to the parent. https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing*/
         box-sizing: border-box;
         font-family: SF-Pro-Text, CenturyGothic, Geneva, AppleGothic, sans-serif;
         transition: background-color 250ms, color 250ms, border-color 250ms;

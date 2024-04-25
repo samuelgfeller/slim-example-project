@@ -10,7 +10,7 @@
  * Incorrect: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal'];
  */
 
-// Error handler. More controlled than ini
+// Error handler
 $settings['error']['display_error_details'] = false;
 
 // Disable update of JS imports version in production

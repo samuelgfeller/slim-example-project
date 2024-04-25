@@ -2,7 +2,7 @@ import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?
 import {html} from "../../general/general-js/functions.js?v=0.4.0";
 
 /**
- * HTML code for client profile card
+ * HTML code for user profile card
  *
  * @return {string}
  * @param {Object} user userResultData.php object
@@ -31,7 +31,7 @@ export function getUserCardHtml(user, statuses) {
 </div>`;
 }
 
-export function getUserCardLoadingPlaceholderHtml() {
+export function getUserCardSkeletonLoaderHtml() {
     return `<div class="user-card-skeleton-loader">
             <!-- CSS Grid -->
             <div class="user-card-name-skeleton-loader">

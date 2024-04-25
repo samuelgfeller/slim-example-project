@@ -4,13 +4,13 @@ import {handleFail, removeValidationErrorMessages} from "./ajax-util/fail-handle
 
 /**
  * Send PUT update request.
- * Fail handled by handleFail() method which supports forms
- * On success validation errors are removed if there were any and response json returned
+ * Fail handled by handleFail() method which supports forms.
+ * On success validation errors are removed if there were any and response json returned.
  *
  * @param {object} formFieldsAndValues {field: value} e.g. {[input.name]: input.value}
  * @param {string} route after base path (e.g. clients/1)
- * @param domFieldId field id to display the validation error message for the correct field
- * @return Promise with as content server response as JSON
+ * @param {string} domFieldId field id to display the validation error message for the correct field
+ * @return {Promise} with as content server response as JSON
  */
 export function submitUpdate(formFieldsAndValues, route, domFieldId = null) {
 

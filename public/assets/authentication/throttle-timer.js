@@ -1,5 +1,5 @@
 /**
- * This function counts down seconds spans with class name
+ * This function counts down seconds spans with the class name
  * "throttle-time-span" loaded in dom.
  *
  */

@@ -1,8 +1,8 @@
-// Init vars
 import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
 import {fetchTranslations} from "../general/ajax/fetch-translation-data.js?v=0.4.0";
 import {__} from "../general/general-js/functions.js?v=0.4.0";
 
+// Init vars
 let password1Input, password2Inp;
 
 /**
@@ -35,7 +35,7 @@ function checkIfPasswordsMatch() {
 }
 
 /**
- * Check if password has been breached
+ * Check if the password has been breached
  */
 function checkIfPasswordIsBreached() {
     // Create hash and make Ajax request to HIBP api and display warning if needed
@@ -98,7 +98,7 @@ function showWarning() {
  * Remove warning below input field
  */
 function removeWarning() {
-    // If not breached, remove warning element if it exists
+    // If not breached, remove the warning element if it exists
     let warningElement = document.getElementById('pwned-password-warning');
     if (null !== warningElement) {
         warningElement.remove();

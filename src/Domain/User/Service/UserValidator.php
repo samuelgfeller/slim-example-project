@@ -28,10 +28,10 @@ final readonly class UserValidator
     {
         $validator = new Validator();
 
-        // Cake validation library automatically sets a rule that field cannot be null as soon as there is any
-        // validation rule set for the field. This is why we have to allowEmptyString because it also allows null.
-        // But for the user, there are no optional fields meaning that if any field is passed, it has to contain a value.
+        // Cake validation library automatically sets a rule that fields cannot be null as soon as there is any
+        // validation rule set for the field. This is why we have to allowEmptyString to allow null.
 
+        // For the user, there are no optional fields meaning that if any field is passed, it has to contain a value.
         $validator
             // First name and surname are required to have values if they're given so no allowEmptyString
             ->requirePresence('first_name', $isCreateMode, __('Field is required'))

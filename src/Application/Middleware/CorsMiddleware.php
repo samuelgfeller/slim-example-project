@@ -9,6 +9,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * Adds Access-Control headers to the response.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/API-Endpoint.
+ */
 final class CorsMiddleware implements MiddlewareInterface
 {
     private ?string $allowedOrigin;

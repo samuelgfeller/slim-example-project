@@ -93,15 +93,11 @@
 }
 
 /*After very small phones (fold) until iPhone 4*/
-/*Breakpoint: location and phone number and the 2 selects one below other
-for galaxy fold and very slim phones*/
 @media (min-width: 311px) {
 
 }
 
 /*After very small phones (iPhone 4) until medium phones to big phones*/
-/*Breakpoint for the 2 select dropdowns to stay side by side
- and not one below the other*/
 @media (min-width: 337px) {
 
 

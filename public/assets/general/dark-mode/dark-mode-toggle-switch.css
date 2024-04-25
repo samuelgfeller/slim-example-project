@@ -2,94 +2,94 @@
     --dark-mode-toggle-size: 0.3;
 }
 
-#dark-mode-switch-container{
-  margin: 15px 0 0 0;
-  display: inline-block;
-  cursor: pointer;
+#dark-mode-switch-container {
+    margin: 15px 0 0 0;
+    display: inline-block;
+    cursor: pointer;
 }
 
 #dark-mode-toggle-checkbox {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
 #dark-mode-toggle-slot {
-  position: relative;
-  height: calc(10.3em * var(--dark-mode-toggle-size));
-  width: calc(20em * var(--dark-mode-toggle-size));
-  border: calc(5px * var(--dark-mode-toggle-size)) solid #e4e7ec;
-  border-radius: calc(10em * var(--dark-mode-toggle-size));
-  background-color: white;
-  /*box-shadow: 0px 2px 5px white;*/
-  transition: background-color 250ms, border-color 250ms;
+    position: relative;
+    height: calc(10.3em * var(--dark-mode-toggle-size));
+    width: calc(20em * var(--dark-mode-toggle-size));
+    border: calc(5px * var(--dark-mode-toggle-size)) solid #e4e7ec;
+    border-radius: calc(10em * var(--dark-mode-toggle-size));
+    background-color: white;
+    /*box-shadow: 0px 2px 5px white;*/
+    transition: background-color 250ms, border-color 250ms;
 }
 
 #dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot {
-  border-color: var(--background-accent-2-color);
-  background-color: var(--background-accent-2-color);
+    border-color: var(--background-accent-2-color);
+    background-color: var(--background-accent-2-color);
 }
 
 #dark-mode-toggle-button {
-  transform: translate(calc(11.75em * var(--dark-mode-toggle-size)), calc(1.75em * var(--dark-mode-toggle-size)));
-  position: absolute;
-  height: calc(6.5em * var(--dark-mode-toggle-size));
-  width: calc(6.5em * var(--dark-mode-toggle-size));
-  border-radius: 50%;
-  background-color: #ffeccf;
-  box-shadow: inset 0px 0px 0px calc(0.75em * var(--dark-mode-toggle-size)) #ffbb52;
-  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+    transform: translate(calc(11.75em * var(--dark-mode-toggle-size)), calc(1.75em * var(--dark-mode-toggle-size)));
+    position: absolute;
+    height: calc(6.5em * var(--dark-mode-toggle-size));
+    width: calc(6.5em * var(--dark-mode-toggle-size));
+    border-radius: 50%;
+    background-color: #ffeccf;
+    box-shadow: inset 0px 0px 0px calc(0.75em * var(--dark-mode-toggle-size)) #ffbb52;
+    transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26, 2, .46, .71);
 }
 
 #dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-toggle-button {
-  background-color: #3f495b;
-  box-shadow: inset 0px 0px 0px 0.15em var(--primary-text-color);
-  transform: translate(calc(1.75em * var(--dark-mode-toggle-size)), calc(1.75em * var(--dark-mode-toggle-size)));
+    background-color: #3f495b;
+    box-shadow: inset 0px 0px 0px 0.15em var(--primary-text-color);
+    transform: translate(calc(1.75em * var(--dark-mode-toggle-size)), calc(1.75em * var(--dark-mode-toggle-size)));
 }
 
 #dark-mode-sun-icon {
-  position: absolute;
-  height: calc(6em * var(--dark-mode-toggle-size));
-  width: calc(6em * var(--dark-mode-toggle-size));
-  filter: invert(83%) sepia(100%) saturate(1000%) hue-rotate(310deg) brightness(95%) contrast(92%);;
-  /*color: #ffbb52;*/
+    position: absolute;
+    height: calc(6em * var(--dark-mode-toggle-size));
+    width: calc(6em * var(--dark-mode-toggle-size));
+    filter: invert(83%) sepia(100%) saturate(1000%) hue-rotate(310deg) brightness(95%) contrast(92%);;
+    /*color: #ffbb52;*/
 }
 
 #dark-mode-sun-icon-wrapper {
-  position: absolute;
-  height: calc(6em * var(--dark-mode-toggle-size));
-  width: calc(6em * var(--dark-mode-toggle-size));
-  opacity: 1;
-  transform: translate(calc(2em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(15deg);
-  transform-origin: 50% 50%;
-  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+    position: absolute;
+    height: calc(6em * var(--dark-mode-toggle-size));
+    width: calc(6em * var(--dark-mode-toggle-size));
+    opacity: 1;
+    transform: translate(calc(2em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(15deg);
+    transform-origin: 50% 50%;
+    transition: opacity 150ms, transform 500ms cubic-bezier(.26, 2, .46, .71);
 }
 
 #dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-sun-icon-wrapper {
-  opacity: 0;
-  transform: translate(calc(3em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(0deg);
+    opacity: 0;
+    transform: translate(calc(3em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(0deg);
 }
 
 #dark-mode-moon-icon {
-  position: absolute;
-  height: calc(6em * var(--dark-mode-toggle-size));
-  width: calc(6em * var(--dark-mode-toggle-size));
-  filter: invert(86%) sepia(7%) saturate(254%) hue-rotate(163deg) brightness(94%) contrast(90%);;
+    position: absolute;
+    height: calc(6em * var(--dark-mode-toggle-size));
+    width: calc(6em * var(--dark-mode-toggle-size));
+    filter: invert(86%) sepia(7%) saturate(254%) hue-rotate(163deg) brightness(94%) contrast(90%);;
 }
 
 #dark-mode-moon-icon-wrapper {
-  position: absolute;
-  height: calc(6em * var(--dark-mode-toggle-size));
-  width: calc(6em * var(--dark-mode-toggle-size));
-  opacity: 0;
-  transform: translate(calc(11em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(0deg);
-  transform-origin: 50% 50%;
-  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+    position: absolute;
+    height: calc(6em * var(--dark-mode-toggle-size));
+    width: calc(6em * var(--dark-mode-toggle-size));
+    opacity: 0;
+    transform: translate(calc(11em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(0deg);
+    transform-origin: 50% 50%;
+    transition: opacity 150ms, transform 500ms cubic-bezier(.26, 2.5, .46, .71);
 }
 
 #dark-mode-toggle-checkbox:checked ~ #dark-mode-toggle-slot #dark-mode-moon-icon-wrapper {
-  opacity: 1;
-  transform: translate(calc(12em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(-15deg);
+    opacity: 1;
+    transform: translate(calc(12em * var(--dark-mode-toggle-size)), calc(2em * var(--dark-mode-toggle-size))) rotate(-15deg);
 }

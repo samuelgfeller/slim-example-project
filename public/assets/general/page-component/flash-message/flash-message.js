@@ -8,7 +8,7 @@ let flashMessageIdCounter = 0;
 
 /**
  * Create and display flash message from the client side
- * Display server side flash: flash-messages.html.php
+ * Display server side flash: flash-messages.html.php.
  *
  * @param {string} typeName (success | error | warning | info)
  * @param {string} message flash message content

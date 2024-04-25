@@ -4,12 +4,12 @@ import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 import {closeModal} from "../page-component/modal/modal.js?v=0.4.0";
 
 /**
- * Retrieves form data, checks form validity, disables form, submits modal form and closes it on success
+ * Retrieves form data, checks form validity, disables form, submits modal form and closes it on success.
  *
  * @param {string} modalFormId
  * @param {string} moduleRoute POST module route like "users" or "clients"
  * @param {string} httpMethod POST or PUT
- * @return void|Promise with as content server response as JSON
+ * @return {void|Promise} with as content server response as JSON
  */
 export function submitModalForm(
     modalFormId, moduleRoute, httpMethod

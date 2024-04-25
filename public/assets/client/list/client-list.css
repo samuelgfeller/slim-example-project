@@ -1,7 +1,6 @@
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
     #create-client-btn {
-        /*margin-top: 0;*/
         width: 40px;
         height: 40px;
     }
@@ -17,10 +16,6 @@
         margin-top: 30px;
     }
 
-    .vertical-center, .vertical-center h1 {
-        /*margin-bottom: 15px;*/
-    }
-
     /*Filter client by name*/
     #name-search-input {
         margin-bottom: 18px;
@@ -33,7 +28,6 @@
         font-size: 16px;
         max-width: 400px;
         background-color: transparent;
-        /*background-color: var(--background-accent-color);*/
     }
 
     #name-search-input:focus {
@@ -75,7 +69,6 @@
         padding: 20px 20px 5px 20px;
         /*background: #d7b9b9;*/
         background: var(--background-accent-1-color);
-        /*width: 100%;*/
     }
 
     .profile-card-avatar {
@@ -84,7 +77,6 @@
         display: block; /*To center avatar image*/
         margin: auto;
         position: relative;
-        /*background: rgba(0,0,0,.1);*/
         background: var(--background-accent-4-color);
         border-radius: 99px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
@@ -121,7 +113,6 @@
         /*position: relative; makes outline hidden behind content which is unwanted*/
         font-size: 16px;
         height: 100%;
-        /*flex-shrink: 2;*/
     }
 
     .client-profile-card h3 {

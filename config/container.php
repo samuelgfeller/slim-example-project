@@ -59,7 +59,7 @@ return [
         return $container->get(Psr17Factory::class);
     },
 
-    // For PHP-View and RedirectHandler
+    // Required to create urls with urlFor
     RouteParserInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getRouteCollector()->getRouteParser();
     },
@@ -91,7 +91,7 @@ return [
         return $logger->pushHandler($rotatingFileHandler);
     },
 
-    // Add custom exception handling middleware
+    // Add samuelgfeller/slim-error-renderer exception handling middleware
     ExceptionHandlingMiddleware::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
 
@@ -104,7 +104,7 @@ return [
             $container->get(\App\Application\ErrorRenderer\ProdErrorPageRenderer::class)
         );
     },
-    // Add error middleware for notices and warnings
+    // Add error middleware for notices and warnings to make app "exception heavy"
     NonFatalErrorHandlingMiddleware::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['error'];
 
@@ -152,18 +152,17 @@ return [
         return new PhpRenderer($rendererSettings['path']);
     },
 
-    // Sessions
+    // Sessions: https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages
     SessionManagerInterface::class => function (ContainerInterface $container) {
         return $container->get(SessionInterface::class);
     },
-
     SessionInterface::class => function (ContainerInterface $container) {
         $options = $container->get('settings')['session'];
 
         return new PhpSession($options);
     },
 
-    // SMTP transport
+    // Mailing: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
     MailerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['smtp'];
         // smtp://user:pass@smtp.example.com:25

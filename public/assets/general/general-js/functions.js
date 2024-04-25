@@ -1,16 +1,8 @@
 /**
  * These functions could be added to the js String properties
  * like shown in https://stackoverflow.com/a/3291856/9013718,
- * but I think @aggregate1166877 mentions an important factor to consider:
- *
- * "It has the potential to break future additions to JS. If it's code that only
- * you will use, then it's not so bad - you just update your code and move on.
- * The real issue here is when you start publishing libraries with code like this:
- * your code modifies the built-in behavior for every library using your code.
- * The consequence is that if you and another library author both override the
- * same built-ins with your own implementations, you create bugs in the other
- * library's code (or whichever is loaded last) leaving the user with debugging
- * hell of unreproducible bug reports."
+ * but I think @aggregate1166877 mentions an important factor to consider
+ * which is that it could break other code.
  */
 
 
@@ -60,7 +52,7 @@ export function removeSpecialChars(string, upperCase = false) {
  * Empty function returning the argument value.
  * Function used so that Poedit knows that a string has to be translated.
  *
- * @param {string}string
+ * @param {string} string
  * @returns {string}
  */
 export function __(string) {

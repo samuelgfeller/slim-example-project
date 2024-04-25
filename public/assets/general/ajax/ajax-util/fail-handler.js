@@ -18,10 +18,10 @@ fetchTranslations(wordsToTranslate).then(response => {
 });
 
 /**
- * This function can be called with the Response or a TypeError
- * If response is TypeError, only a flash message is shown
- * If response is Response, the status code is checked and a flash message is shown or
- * validation errors are highlighted in the form.
+ * This function can be called with the Response or a TypeError.
+ * If response is TypeError, only a flash message is shown.
+ * If response is Response, the status code is checked, and a flash message is shown,
+ * or the validation errors are highlighted in the form.
  *
  * @param {Response|TypeError} response
  * @param {null|string} domFieldId css id of dom field the fail is about

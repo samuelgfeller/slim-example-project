@@ -13,7 +13,7 @@ import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.0";
 /**
  * Load user list into DOM
  *
- * @param {string|null} userWrapperId if client wrapper is not the default on the client list page,
+ * @param {string|null} userWrapperId if user wrapper is not the default on the user list page,
  * a custom one can be provided.
  */
 export function loadUserList(userWrapperId = null) {
@@ -54,6 +54,10 @@ export function loadUserList(userWrapperId = null) {
  * @param event
  */
 function openUserReadPageOnCardClick(event) {
+    // Don't open client read if not left-click, or middle mouse wheel, or select option click
+    if ((event.type === 'auxclick' && event.button !== 1) || event.target.tagName === 'OPTION') {
+        return;
+    }
     // "this" is the card
     openLinkOnHtmlElement(event, this, `users/${this.dataset.userId}`);
 }

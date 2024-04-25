@@ -1,18 +1,19 @@
-import {getUserCardLoadingPlaceholderHtml} from "./user-list-card.html.js?v=0.4.0";
+import {getUserCardSkeletonLoaderHtml} from "./user-list-card.html.js?v=0.4.0";
 
 /**
- * Display content placeholders
- * @param {string|null} userWrapperId if client wrapper is not the default on the client list page,
+ * Display skeleton loaders
+ *
+ * @param {string|null} userWrapperId if user wrapper is not the default on the user list page,
  * a custom one can be provided.
  */
 export function displayUserCardSkeletonLoader(userWrapperId = null) {
     let wrapper = document.getElementById(userWrapperId ?? 'user-wrapper');
-    // Empty clients
+    // Empty users
     wrapper.innerHTML = '';
 
     // Add content placeholder 3 times
     for (let i = 0; i < 3; i++) {
-        wrapper.insertAdjacentHTML('beforeend', getUserCardLoadingPlaceholderHtml());
+        wrapper.insertAdjacentHTML('beforeend', getUserCardSkeletonLoaderHtml());
     }
 }
 
@@ -21,7 +22,7 @@ export function displayUserCardSkeletonLoader(userWrapperId = null) {
  */
 export function removeUserCardSkeletonLoader() {
     let skeletonLoaders = document.querySelectorAll('.user-card-skeleton-loader');
-    // Foreach loop over content placeholders
+    // Foreach loop over skeleton loaders
     for (let skeletonLoader of skeletonLoaders) {
         // remove from DOM
         skeletonLoader.remove();

@@ -27,7 +27,7 @@ fetchTranslations(wordsToTranslate).then(response => {
 });
 
 /**
- * Create and display modal box to create a new client.
+ * Create and display modal box to create a new user.
  * In order for the modal box to be translated, the fetchTranslations()
  * must be done loading when calling this function.
  */
@@ -95,7 +95,7 @@ ${translated['Create user']}
 
 /**
  * Render loaded dropdown options and radio buttons to create modal form
- * hardcoded default user role 4 newcomer and status unverified
+ * hardcoded default user role 4 newcomer and status unverified.
  *
  * @param dropdownOptions
  */

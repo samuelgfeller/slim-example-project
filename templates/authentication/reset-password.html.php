@@ -24,7 +24,7 @@ $this->setLayout('');
     <base href="<?= html($basePath) ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
     <?php
     // fetch() includes another template in the current template
     // Include template which contains HTML to include assets
@@ -41,7 +41,7 @@ $this->setLayout('');
                 'assets/general/page-component/form/form.css',
             ],
             // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => ['assets/general/general-js/default.js', 'assets/authentication/password-reset-main.js'],
+            'jsModules' => ['assets/general/general-js/initialization.js', 'assets/authentication/password-reset-main.js'],
         ]
     );
     ?>

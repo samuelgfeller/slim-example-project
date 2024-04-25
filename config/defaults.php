@@ -34,8 +34,8 @@ $settings['error'] = [
 
 // Deployment settings
 $settings['deployment'] = [
-    // Version string or null.
-    // If JsImportCacheBuster is enabled, `null` removes all query param versions from js imports
+    // Version string or null. If JsImportCacheBuster is enabled, `null` removes all query param versions from js
+    // imports.
     'version' => '0.4.0',
     // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number
     // from the imports. Should be disabled in env.prod.php.
@@ -88,7 +88,8 @@ $settings['security'] = [
     'global_monthly_email_threshold' => 900,
 ];
 
-// Secret values are overwritten in env.php
+// Database
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
 $settings['db'] = [
     'host' => '127.0.0.1',
     'database' => 'slim_example_project',
@@ -116,7 +117,8 @@ $settings['db'] = [
     ],
 ];
 
-// API documentation: https://github.com/samuelgfeller/slim-example-project/wiki/API-Endpoint
+// API endpoint settings
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/API-Endpoint
 $settings['api'] = [
     // Url that is allowed to make api calls to this app
     'allowed_origin' => null,
@@ -143,12 +145,14 @@ $settings['phinx'] = [
 ];
 
 // Template renderer settings
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering
 $settings['renderer'] = [
     // Template path
     'path' => $settings['root_dir'] . '/templates',
 ];
 
 // Session
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages
 $settings['session'] = [
     'name' => 'slim-example-project',
     // 5h session lifetime
@@ -160,7 +164,8 @@ $settings['session'] = [
     'cookie_httponly' => false,
 ];
 
-// Logger: https://github.com/samuelgfeller/slim-example-project/wiki/Logging
+// Logger
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Logging
 $settings['logger'] = [
     // Log file location
     'path' => $settings['root_dir'] . '/logs',
@@ -169,7 +174,7 @@ $settings['logger'] = [
 ];
 
 // Email settings
-// Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
+// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
 $settings['smtp'] = [
     // use type 'null' for the null adapter
     'type' => 'smtp',

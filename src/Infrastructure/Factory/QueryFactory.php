@@ -9,9 +9,10 @@ use Cake\Database\Query\SelectQuery;
 use Cake\Database\Query\UpdateQuery;
 
 /**
- * Query factory.
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
- * CakePHP: https://book.cakephp.org/5/en/orm/query-builder.html.
+ * The Query factory provides methods to create queries.
+ *
+ * CakePHP documentation: https://book.cakephp.org/5/en/orm/query-builder.html.
+ * Repository and QueryBuilder: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
  */
 final readonly class QueryFactory
 {

@@ -45,7 +45,7 @@ function toggleAvailableFilterDiv(hideOnly = false) {
 
 /**
  * Add chip to available collection or from available to active
- * "this" is the .filter-chip
+ * "this" is the .filter-chip.
  */
 function toggleFilterChip() {
     const category = this.querySelector('span').dataset.category;
@@ -76,7 +76,7 @@ function toggleFilterChip() {
         // Remove active class
         this.classList.remove('filter-chip-active');
     }
-    // Check if elements with current category exists in available, if yes show title otherwise hide it
+    // Check if elements with current category exist in available, if yes show the title otherwise hide it
     if (categoryTitle) {
         if (availableFilterDiv.querySelector(`.filter-chip span[data-category="${category}"]`)) {
             // Making sure that category span is displayed by removing display property if set

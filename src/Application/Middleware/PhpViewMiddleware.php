@@ -16,6 +16,10 @@ use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
+/**
+ * Adds attributes to the PhpRenderer and updates js imports with version number.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering.
+ */
 final class PhpViewMiddleware implements MiddlewareInterface
 {
     /** @var array<string, mixed> */
@@ -54,10 +58,12 @@ final class PhpViewMiddleware implements MiddlewareInterface
 
         // Check and set user list authorization for "users" nav point
         if ($loggedInUserId) {
-            // Check if the authenticated user is allowed to see user list and save the result to the session
-            $this->checkUserListAuthorization($loggedInUserId);
+            // Check if the authenticated user is allowed to see user list
             // Add the user list authorization as an attribute to the PhpRenderer
-            $this->phpRenderer->addAttribute('userListAuthorization', $this->session->get('isAllowedToSeeUserList'));
+            $this->phpRenderer->addAttribute(
+                'userListAuthorization',
+                $this->checkUserListAuthorization($loggedInUserId)
+            );
         }
 
         // Add version number to js imports
@@ -69,21 +75,19 @@ final class PhpViewMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Check if the user is allowed to see the user list and save the result to the session.
+     * Check if the user is allowed to see the user list.
      *
      * @param int $loggedInUserId
+     * @return bool
      */
-    private function checkUserListAuthorization(int $loggedInUserId): void
+    private function checkUserListAuthorization(int $loggedInUserId): bool
     {
-        // If the session already contains the information, the permission check can be skipped
-        if ($this->session->get('isAllowedToSeeUserList') === null) {
-            try {
-                $isAllowedToSeeUserList = $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false);
-                $this->session->set('isAllowedToSeeUserList', $isAllowedToSeeUserList);
-            } catch (DatabaseException $databaseException) {
-                // Mysql connection not working. Caught here to prevent error page from crashing
-                return;
-            }
+        try {
+            // If the authenticated user is allowed to read another user (id + 1), the user list can be displayed
+            return $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false);
+        } catch (DatabaseException $databaseException) {
+            // Mysql connection not working. Caught here to prevent error page from crashing
+            return false;
         }
     }
 }

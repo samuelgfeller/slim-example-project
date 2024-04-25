@@ -1,19 +1,19 @@
-import {getClientNoteLoadingPlaceholderHtml} from "./client-read-template-note.html.js?v=0.4.0";
+import {getClientNoteSkeletonLoaderHtml} from "./client-read-template-note.html.js?v=0.4.0";
 
 /**
- * Display client note content placeholders
+ * Display client note skeleton loaders
  * @param {string|null} wrapperId
  */
 export function displayClientNoteSkeletonLoader(wrapperId = null) {
     let noteContainer = document.getElementById(wrapperId ?? 'client-note-wrapper');
 
-    // Display as many content placeholders as there are notes
+    // Display as many skeleton loaders as there are notes
     let notesAmount = noteContainer.dataset.notesAmount;
     if (!notesAmount || notesAmount === '0' || notesAmount === '') {
         notesAmount = 3; // Default
     }
     for (let i = 0; i < notesAmount; i++) {
-        noteContainer.insertAdjacentHTML('beforeend', getClientNoteLoadingPlaceholderHtml());
+        noteContainer.insertAdjacentHTML('beforeend', getClientNoteSkeletonLoaderHtml());
     }
 }
 
@@ -26,7 +26,7 @@ export function removeClientNoteSkeletonLoader(wrapperId = null) {
 
     // I had a very strange issue. With getElementsByClassName I got 3 elements but only 2 seem to be looped through
     let skeletonLoaders = noteContainer.querySelectorAll('.client-note-skeleton-loader');
-    // Foreach loop over content placeholders
+    // Foreach loop over skeleton loaders
     for (let skeletonLoader of skeletonLoaders) {
         // remove from DOM
         skeletonLoader.remove();

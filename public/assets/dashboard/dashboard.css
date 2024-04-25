@@ -89,15 +89,14 @@
 
 }
 
-
 @media (min-width: 641px) {
     :root {
-        --card-placeholder-scale: 0.7;
+        --card-skeleton-loader-size: 0.7;
     }
+
     /*Switch between full width clients in panel to smallest width for side to side panels*/
     .panel-content .client-list-wrapper .client-profile-card {
         width: min-content;
-        /*font-size: initial;*/
     }
 
     .panel-content .client-list-wrapper .client-profile-card select {
@@ -118,16 +117,9 @@
         min-width: 90%;
     }
 
-    /*   .dashboard-panel-container > div{
-            min-width: 590px;
-        }*/
     .dashboard-panel-container {
         grid-template-columns: repeat(auto-fit, minmax(590px, 1fr));
     }
-    /*.client-profile-card-skeleton-loader{*/
-    /*   transform: scale(70%);*/
-    /*   width: 100px;*/
-    /*}*/
 }
 
 @media (min-width: 700px) {
@@ -140,5 +132,4 @@
         /*grid-template-rows: auto auto;*/
         /*grid-template-columns: repeat(auto-fit, minmax(min(100%, max(300px, 100% / 3 - 45px)), 1fr));*/
     }
-
 }

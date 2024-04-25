@@ -7,7 +7,7 @@ use App\Domain\Note\Data\NoteData;
 /** Aggregate DTO to store data for client read page */
 class ClientReadResult extends ClientData
 {
-    // Amount of notes for the client to know how many content placeholders to display
+    // Amount of notes for the client to know how many skeleton loaders to display
     public ?int $notesAmount = null;
 
     // Main note data

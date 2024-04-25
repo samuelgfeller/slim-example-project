@@ -1,4 +1,9 @@
 <?php
+/**
+ * Routes configuration.
+ *
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Routing
+ */
 
 use App\Application\Middleware\UserAuthenticationMiddleware;
 use Slim\App;
@@ -9,6 +14,12 @@ return function (App $app) {
     // Home page
     $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
 
+    // Login routes
+    $app->get('/login', \App\Application\Action\Authentication\Page\LoginPageAction::class)->setName('login-page');
+    $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)
+        ->setName('login-submit');
+    $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout');
+
     // Dashboard page
     $app->get('/', \App\Application\Action\Dashboard\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
@@ -17,21 +28,7 @@ return function (App $app) {
     $app->put('/dashboard-toggle-panel', \App\Application\Action\Dashboard\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
 
-    // API routes
-    $app->group('/api', function (RouteCollectorProxy $group) {
-        // Client creation API call
-        $group->post('/clients', \App\Application\Action\Client\Ajax\ApiClientCreateAction::class)
-            ->setName('api-client-create-submit');
-    })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes.
-    ->add(\App\Application\Middleware\CorsMiddleware::class);
-
-    // Login routes
-    $app->get('/login', \App\Application\Action\Authentication\Page\LoginPageAction::class)->setName('login-page');
-    $app->post('/login', \App\Application\Action\Authentication\Ajax\LoginSubmitAction::class)
-        ->setName('login-submit');
-    $app->get('/logout', \App\Application\Action\Authentication\Page\LogoutPageAction::class)->setName('logout');
-
-    // Authentication - email verification - token
+    // Verification of the link sent by email after registration
     $app->get(
         '/register-verification',
         \App\Application\Action\Authentication\Ajax\RegisterVerifyProcessAction::class
@@ -54,13 +51,13 @@ return function (App $app) {
         '/reset-password',
         \App\Application\Action\Authentication\Ajax\NewPasswordResetSubmitAction::class
     )->setName('password-reset-submit');
-
     // Submit new password when authenticated
     $app->put(
         '/change-password/{user_id:[0-9]+}',
         \App\Application\Action\User\Ajax\PasswordChangeSubmitAction::class
     )->setName('change-password-submit')->add(UserAuthenticationMiddleware::class);
 
+    // Fetch gettext translations
     // Without UserAuthenticationMiddleware as translations are also needed for non-protected pages such as password reset
     $app->get('/translate', \App\Application\Action\Common\TranslateAction::class)
         ->setName('translate');
@@ -72,7 +69,7 @@ return function (App $app) {
         $group->get('', \App\Application\Action\User\Ajax\UserFetchListAction::class)
             ->setName('user-list');
 
-        $group // User dropdown options
+        $group // User create form is rendered by the client and loads the available dropdown options via Ajax
         ->get('/dropdown-options', \App\Application\Action\User\Ajax\FetchDropdownOptionsForUserCreateAction::class)
             ->setName('user-dropdown-options');
 
@@ -100,7 +97,7 @@ return function (App $app) {
 
         $group->get('', \App\Application\Action\Client\Ajax\ClientFetchListAction::class)->setName('client-list');
 
-        // Client create form is rendered by the client and needs to have the available dropdown options
+        // Client create form is rendered by the client and loads the available dropdown options via Ajax
         $group->get(
             '/dropdown-options',
             \App\Application\Action\Client\Ajax\FetchDropdownOptionsForClientCreateAction::class
@@ -133,6 +130,17 @@ return function (App $app) {
         $group->delete('/{note_id:[0-9]+}', \App\Application\Action\Note\Ajax\NoteDeleteAction::class)
             ->setName('note-submit-delete');
     })->add(UserAuthenticationMiddleware::class);
+
+    // API routes
+    $app->group('/api', function (RouteCollectorProxy $group) {
+        // Client creation API call
+        $group->post('/clients', \App\Application\Action\Client\Ajax\ApiClientCreateAction::class)
+            ->setName('api-client-create-submit');
+    })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes.
+    // If an error occurs, the CORS middleware will not be executed and the exception caught and a response
+    // sent without the appropriate access control header. I don't know how to execute a certain middleware
+    // added to a route group only before the error middleware which is added last in the middleware.php file.
+    ->add(\App\Application\Middleware\CorsMiddleware::class);
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match

@@ -71,11 +71,11 @@ final readonly class LoginSubmitAction
                 $ve,
                 $queryParams
             );
-        } catch (InvalidCredentialsException $e) {
+        } catch (InvalidCredentialsException $invalidCredentialsException) {
             // Log error
             $this->logger->notice(
-                'InvalidCredentialsException thrown with message: "' . $e->getMessage() . '" user "' .
-                $e->getUserEmail() . '"'
+                'InvalidCredentialsException thrown with message: "' . $invalidCredentialsException->getMessage() .
+                '" user "' . $invalidCredentialsException->getUserEmail() . '"'
             );
             $this->templateRenderer->addPhpViewAttribute('formError', true);
             $this->templateRenderer->addPhpViewAttribute(
@@ -114,7 +114,7 @@ final readonly class LoginSubmitAction
             return $this->templateRenderer->render(
                 $response->withStatus(401),
                 'authentication/login.html.php',
-                // Provide same query params passed to login page to be added to the login submit request
+                // Provide the same query params passed to login page to be added to the login submit request
                 ['queryParams' => $request->getQueryParams()]
             );
         }

@@ -3,11 +3,12 @@ import {initAutoResizingTextareaElements} from "../page-component/textarea/auto-
 import {scrollToAnchor} from "../page-behaviour/scroll-to-anchor.js?v=0.4.0";
 import {countDownThrottleTimer} from "../../authentication/throttle-timer.js?v=0.4.0";
 
+// This file is responsible for initializing elements for every loaded page.
+
 // displayFlashMessage('success', 'This is a success flash message.');
 // displayFlashMessage('info', 'This is an info flash message.');
 // displayFlashMessage('warning', 'This is a warning flash message.');
 // displayFlashMessage('error', 'This is an error flash message.');
-// DOMContentLoaded faster than load as it doesn't wait on all resources
 
 // "DOMContentLoaded" is fired when the initial HTML document has been completely loaded and parsed,
 // without waiting for stylesheets, images, etc. to finish loading
@@ -24,12 +25,8 @@ window.addEventListener("load", function (event) {
     /** Throttle time countdown */
     countDownThrottleTimer();
 
-    /** Init collapsible should NOT be called in default; only when used as it breaks
-     * user-read activity panel collapsible as event listeners are registered twice for some reason
-     * even if I make a non-anonymous event handler and remove the event listener first
-     * Note: that happens only if initCollapsible() is called the first time from default.js and not if
-     * another place called initCollapsible before*/
-    // initCollapsible();
+
+    initCollapsible();
 
     /** Scroll to anchor if there is any in the url */
     scrollToAnchor();

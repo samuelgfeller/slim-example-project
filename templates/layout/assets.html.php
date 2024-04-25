@@ -1,10 +1,12 @@
 <?php
 /**
- * CSS and Javascript resources
+ * Creates versioned CSS and Javascript resources html "link" and "script" tags.
+ * This template is fetched by the layout template.
  *
- * @var $stylesheets array stylesheet paths
- * @var $scripts array script paths
- * @var $version null|string app version
+ * @var array<string> $scripts js script paths
+ * @var array<string> $jsModules js module script paths
+ * @var array<string> $stylesheets stylesheet paths
+ * @var null|string $version app version
  */
 
 // CSS stylesheets

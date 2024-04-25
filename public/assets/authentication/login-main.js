@@ -5,16 +5,16 @@ const passwordInputDiv = document.getElementById('password-input-div');
 const passwordInput = passwordInputDiv.querySelector('input');
 const submitBtn = document.querySelector('input[type="submit"]');
 const form = document.querySelector('form');
-const logInBtn = document.getElementById('discrete-login-btn');
+const logInBtn = document.getElementById('discrete-login-toggle-btn');
 
 // Set max-height of passwordInputDiv to its actual height so that the value doesn't have to be hardcoded in CSS
-// for the collapse animation to be smooth (if too high max height it takes some time before container shrinks)
+// for the collapse animation to be smooth (if too high max height it takes some time before the container shrinks)
 passwordInputDiv.style.maxHeight = passwordInputDiv.scrollHeight + 'px';
 // Add password input name to data attribute
 passwordInput.dataset.name = passwordInput.name;
 
 /**
- * Remove password field and change form to submit password forgotten request
+ * Remove password field and change form to password forgotten fields
  */
 passwordForgottenBtn.addEventListener('click', () => {
     changeFormToPasswordForgotten();
@@ -34,7 +34,7 @@ function changeFormToPasswordForgotten() {
 }
 
 /**
- * Add password field and change form to submit login request
+ * Add password field and change form to "login" fields
  */
 logInBtn.addEventListener('click', () => {
     passwordInputDiv.style.maxHeight = passwordInputDiv.scrollHeight + 'px';
@@ -42,9 +42,7 @@ logInBtn.addEventListener('click', () => {
     passwordInputDiv.classList.add('input-div-expanded');
     submitBtn.value = 'Login';
     form.action = 'login';
-    // Add name to input
     passwordInput.disabled = false;
-    // logInBtn.style.display = 'none';
     logInBtn.style.maxHeight = '0';
     removeValidationErrorMessages();
 });

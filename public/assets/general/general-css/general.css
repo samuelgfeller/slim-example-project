@@ -1,4 +1,5 @@
 /*General style of page components with a custom selector (class / id)*/
+/*HTML layout defaults are in the layout.css file*/
 
 /*Divs*/
 .clearfix::after {

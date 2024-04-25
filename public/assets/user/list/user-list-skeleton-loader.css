@@ -1,6 +1,6 @@
 /*mobile first min-width sets base and content is adapted to computers.*/
 @media (min-width: 100px) {
-    /*Client profile card*/
+    /*User profile card*/
     .user-card-skeleton-loader {
         height: 185px;
         width: 100%; /*Width for non-mobile set below*/

@@ -47,7 +47,7 @@ final readonly class NewPasswordResetSubmitAction
             );
 
             return $this->redirectHandler->redirectToRouteName($response, 'login-page');
-        } catch (InvalidTokenException $ite) {
+        } catch (InvalidTokenException $invalidTokenException) {
             $this->templateRenderer->addPhpViewAttribute(
                 'formErrorMessage',
                 __( // Message below asserted in PasswordResetSubmitActionTest
@@ -56,8 +56,8 @@ sure to click on the most recent email we send you</a>.</b>'
                 )
             );
             // Pre-fill email input field for more user comfort.
-            if ($ite->userData->email !== null) {
-                $this->templateRenderer->addPhpViewAttribute('preloadValues', ['email' => $ite->userData->email]);
+            if ($invalidTokenException->userData->email !== null) {
+                $this->templateRenderer->addPhpViewAttribute('preloadValues', ['email' => $invalidTokenException->userData->email]);
             }
 
             $this->logger->error(

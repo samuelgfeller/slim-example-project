@@ -10,13 +10,15 @@
         padding: 0 10px;
         margin-top: 30px;
     }
-    .user-card{
+
+    .user-card {
         background: var(--background-accent-4-color);
         border-radius: 30px;
         padding: 0 20px 20px 20px;
         box-shadow: 0 4px 8px 0 rgb(0 0 0 / 10%), 0 6px 20px 0 rgb(0 0 0 / 10%);
         width: 100%;
     }
+
     .user-card:hover, .user-card:focus {
         /*transform: perspective(1500px) rotateX(7deg);*/
         transform: translateY(-5px);
@@ -24,7 +26,8 @@
         box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 20px 0 rgba(0, 0, 0, 0.1);
         cursor: pointer;
     }
-    .user-card h3{
+
+    .user-card h3 {
         font-size: 25px;
         margin-bottom: 20px;
     }
@@ -38,12 +41,14 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
     }
+
     /*Icon*/
     .card-icon-and-span-div img {
         margin-right: 10px;
         height: 20px;
     }
-    .user-card-dropdown-flexbox{
+
+    .user-card-dropdown-flexbox {
         display: flex;
         align-items: flex-start;
         justify-content: space-evenly;

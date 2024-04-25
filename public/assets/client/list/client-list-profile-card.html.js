@@ -61,7 +61,7 @@ export function getClientProfileCardHtml(client, allUsers, allStatuses) {
 </div>`;
 }
 
-export function getClientProfileCardLoadingPlaceholderHtml() {
+export function getClientProfileCardSkeletonLoaderHtml() {
     return `<div class="client-profile-card-skeleton-loader">
         <div class="client-profile-card-skeleton-loader-header">
             <div class="client-profile-card-avatar-age-skeleton-loader">

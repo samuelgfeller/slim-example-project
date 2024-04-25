@@ -1,4 +1,8 @@
 <?php
+/**
+ * This file loads the default and environment-specific settings.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Configuration.
+ */
 
 // Load default settings
 // MUST NOT be require_once otherwise test settings are included only once and not again for the next tests

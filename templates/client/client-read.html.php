@@ -103,7 +103,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                   minlength="0" maxlength="1000"
                   data-editable="<?= str_contains($clientReadData->mainNoteData->privilege, 'U') ? '1' : '0' ?>"
                   data-note-id="<?= html($clientReadData->mainNoteData->id ?? 'new-main - note') ?>"
-                  placeholder="<?= __('New main note') ?>"
+                  placeholder="<?= __('No main note') ?>"
         ><?= html($clientReadData->mainNoteData->message) ?></textarea>
         <div class="circle-loader client-note">
             <div class="checkmark draw"></div>

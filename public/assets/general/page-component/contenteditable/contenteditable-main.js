@@ -4,6 +4,7 @@ import {__} from "../../general-js/functions.js?v=0.4.0";
 
 /**
  * Make field value editable, add save button and focus it.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/JavaScript-Frontend#contenteditable-fields
  */
 export function makeFieldEditable(field) {
     let editIcon = field.parentNode.querySelector('.contenteditable-edit-icon');

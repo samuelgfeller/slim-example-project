@@ -5,7 +5,7 @@ let items = document.querySelectorAll('nav a');
 let isMobile = true;
 
 // Cannot use the entire nav because then it collapses on each click on a menu element since its also in nav
-document.getElementById("nav-mobile-toggle-icon").addEventListener("click", toggleOpenCloseMobileNav);
+document?.getElementById("nav-mobile-toggle-icon")?.addEventListener("click", toggleOpenCloseMobileNav);
 
 function toggleOpenCloseMobileNav() {
     nav.classList.toggle('open');

@@ -22,5 +22,3 @@ $settings['deployment']['update_js_imports_version'] = true;
 
 // Database
 $settings['db']['database'] = 'slim_example_project';
-
-// When adding new values (above this comment), please refer to the section [How to set values] in the PHPDoc on top of the page

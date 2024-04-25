@@ -2,7 +2,7 @@ import {basePath} from "../general-js/config.js?v=0.4.0";
 import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.0";
 
 /**
- * Sends a GET request and returns result in promise
+ * Sends a GET request and returns result in promise.
  *
  * @param {string} route the part after base path (e.g. 'users/1'). Query params have to be added with ?param=value
  * @return {Promise<JSON>}

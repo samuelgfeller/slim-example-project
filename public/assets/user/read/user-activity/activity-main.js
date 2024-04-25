@@ -4,7 +4,8 @@ import {initCollapsible} from "../../../general/page-component/collapsible/colla
 
 
 /**
- * Fetch and load user activities into dom
+ * Fetch and load user activity list into dom
+ *
  * @param {string} queryParams `user=${userId}` or `user[]=${userId}` user id or array of user ids
  * in query string format without trailing question mark
  */

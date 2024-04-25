@@ -161,5 +161,5 @@ Please read the [Support❤️](https://github.com/samuelgfeller/slim-example-pr
 if you value this project and its documentation and want to support it.
 
 ## License
-This project is licensed under the MIT Licence — see the 
-[LICENCE](https://github.com/samuelgfeller/slim-example-project/blob/master/LICENCE.txt) file for details.
+This project is licensed under the MIT License — see the 
+[LICENSE](LICENSE) file for details.

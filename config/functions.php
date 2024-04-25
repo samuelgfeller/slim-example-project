@@ -1,4 +1,8 @@
 <?php
+/**
+ * Autoload functions available everywhere across the application.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Composer#autoload
+ */
 
 /**
  * Convert all applicable characters to HTML entities.

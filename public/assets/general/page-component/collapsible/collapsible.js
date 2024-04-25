@@ -1,5 +1,7 @@
 /**
  * Remove max-height on elements with class name collapsible-button on click
+ *
+ * This function should NOT be called in initialization.js for every page load; only when needed.
  */
 export function initCollapsible() {
     let allCollapsible = document.getElementsByClassName("collapsible-button");
@@ -14,9 +16,8 @@ export function initCollapsible() {
                 content.style.maxHeight = content.scrollHeight + "px";
             }
         };
-        // Remove event listener does not work here so initCollapsible cannot be called by default in default.js as
-        // event is registered multiple times otherwise
-        // collapsible.removeEventListener("click", handler);
+        // Remove event listener does not work here, so initCollapsible cannot be called by
+        // default in initialization.js as event is registered multiple times otherwise
         collapsible.addEventListener("click", handler);
     }
 }

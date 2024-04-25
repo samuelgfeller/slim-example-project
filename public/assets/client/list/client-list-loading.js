@@ -137,7 +137,7 @@ function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) 
 }
 
 /**
- * Add client to page
+ * Add clients to page
  *
  * @param {object[]} clients
  * @param allUsers

@@ -6,12 +6,11 @@
         flex-direction: column;
         background: linear-gradient(to bottom right, #1dc6fd 0%, #e589b7 90%);
         padding: 0 10px;
-        /*background: linear-gradient(to top right, #2e3e50 20%, #ffffff 100%);*/
-        /*background: linear-gradient(to top, #2e3e50 0%, #ffffff 100%);;*/
+        /*background: linear-gradient(to top left, #2e3e50 20%, #ffffff 100%);*/
     }
 
     h2 {
-        color: #2e3e50;
+        color: var(--primary-color);
         font-size: 2.3em;
         letter-spacing: 3px;
         text-align: center;
@@ -39,7 +38,7 @@
         border-bottom: 3px solid #951212;
     }
 
-    #discrete-login-btn {
+    #discrete-login-toggle-btn {
         max-height: 0;
         overflow: hidden;
         display: inline-block;
@@ -66,7 +65,6 @@
     #password-input-div.input-div-expanded {
         animation: openPasswordInputDiv 0.3s ease-out;
     }
-
 
     @keyframes openPasswordInputDiv {
         0% {

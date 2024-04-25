@@ -21,7 +21,7 @@
     <base href="<?= html($basePath) ?>/"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 
     <?php
     // Define layout assets
@@ -34,7 +34,7 @@
         'assets/general/page-component/flash-message/flash-message.css',
     ];
     $layoutJs = ['assets/navbar/navbar.js',];
-    $layoutJsModules = ['assets/general/general-js/default.js',];
+    $layoutJsModules = ['assets/general/general-js/initialization.js',];
 
     // fetch() includes another template in the current template
     // Include template that renders the asset paths
