@@ -2,7 +2,7 @@
 
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
+class DbChange1527712828662a71da9af9f extends Phinx\Migration\AbstractMigration
 {
     public function change()
     {
@@ -52,8 +52,9 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'after' => 'is_main',
             ])
             ->addColumn('updated_at', 'datetime', [
-                'null' => false,
-                'default' => 'CURRENT_TIMESTAMP',
+                'null' => true,
+                'default' => null,
+                'update' => 'CURRENT_TIMESTAMP',
                 'after' => 'hidden',
             ])
             ->addColumn('created_at', 'datetime', [
@@ -72,6 +73,120 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ])
             ->addIndex(['client_id'], [
                 'name' => 'FK_note_client',
+                'unique' => false,
+            ])
+            ->create();
+        $this->table('authentication_log', [
+                'id' => false,
+                'primary_key' => ['id'],
+                'engine' => 'InnoDB',
+                'encoding' => 'utf8mb4',
+                'collation' => 'utf8mb4_general_ci',
+                'comment' => '',
+                'row_format' => 'DYNAMIC',
+            ])
+            ->addColumn('id', 'integer', [
+                'null' => false,
+                'limit' => MysqlAdapter::INT_REGULAR,
+                'identity' => true,
+            ])
+            ->addColumn('user_id', 'integer', [
+                'null' => true,
+                'default' => null,
+                'limit' => MysqlAdapter::INT_REGULAR,
+                'after' => 'id',
+            ])
+            ->addColumn('email', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 254,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'user_id',
+            ])
+            ->addColumn('ip_address', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 45,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'email',
+            ])
+            ->addColumn('is_success', 'integer', [
+                'null' => true,
+                'default' => null,
+                'limit' => MysqlAdapter::INT_TINY,
+                'after' => 'ip_address',
+            ])
+            ->addColumn('created_at', 'datetime', [
+                'null' => true,
+                'default' => 'CURRENT_TIMESTAMP',
+                'after' => 'is_success',
+            ])
+            ->addIndex(['user_id'], [
+                'name' => 'authentication_log_user_id_fk',
+                'unique' => false,
+            ])
+            ->create();
+        $this->table('email_log', [
+                'id' => false,
+                'primary_key' => ['id'],
+                'engine' => 'InnoDB',
+                'encoding' => 'utf8mb4',
+                'collation' => 'utf8mb4_general_ci',
+                'comment' => '',
+                'row_format' => 'DYNAMIC',
+            ])
+            ->addColumn('id', 'integer', [
+                'null' => false,
+                'limit' => MysqlAdapter::INT_REGULAR,
+                'identity' => true,
+            ])
+            ->addColumn('user_id', 'integer', [
+                'null' => true,
+                'default' => null,
+                'limit' => MysqlAdapter::INT_REGULAR,
+                'after' => 'id',
+            ])
+            ->addColumn('from_email', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 254,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'user_id',
+            ])
+            ->addColumn('to_email', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 254,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'from_email',
+            ])
+            ->addColumn('other_recipient', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 1000,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'to_email',
+            ])
+            ->addColumn('subject', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 998,
+                'collation' => 'utf8mb4_general_ci',
+                'encoding' => 'utf8mb4',
+                'after' => 'other_recipient',
+            ])
+            ->addColumn('created_at', 'datetime', [
+                'null' => true,
+                'default' => 'CURRENT_TIMESTAMP',
+                'after' => 'subject',
+            ])
+            ->addIndex(['user_id'], [
+                'name' => 'email_log_user_id_fk',
                 'unique' => false,
             ])
             ->create();
@@ -209,7 +324,7 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ->addColumn('vigilance_level', 'enum', [
                 'null' => true,
                 'default' => null,
-                'limit' => 13,
+                'limit' => 6,
                 'values' => ['low', 'medium', 'high'],
                 'after' => 'client_message',
             ])
@@ -232,8 +347,9 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'after' => 'client_status_id',
             ])
             ->addColumn('updated_at', 'datetime', [
-                'null' => false,
-                'default' => 'CURRENT_TIMESTAMP',
+                'null' => true,
+                'default' => null,
+                'update' => 'CURRENT_TIMESTAMP',
                 'after' => 'assigned_at',
             ])
             ->addColumn('created_at', 'datetime', [
@@ -282,36 +398,6 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'default' => null,
                 'limit' => MysqlAdapter::INT_REGULAR,
                 'after' => 'name',
-            ])
-            ->create();
-        $this->table('permission', [
-                'id' => false,
-                'primary_key' => ['id'],
-                'engine' => 'InnoDB',
-                'encoding' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'comment' => '',
-                'row_format' => 'DYNAMIC',
-            ])
-            ->addColumn('id', 'integer', [
-                'null' => false,
-                'limit' => MysqlAdapter::INT_REGULAR,
-                'identity' => true,
-            ])
-            ->addColumn('action', 'string', [
-                'null' => false,
-                'limit' => 200,
-                'collation' => 'utf8mb4_unicode_ci',
-                'encoding' => 'utf8mb4',
-                'after' => 'id',
-            ])
-            ->addColumn('module', 'string', [
-                'null' => false,
-                'limit' => 100,
-                'collation' => 'utf8mb4_unicode_ci',
-                'encoding' => 'utf8mb4',
-                'comment' => 'module where action takes place',
-                'after' => 'action',
             ])
             ->create();
         $this->table('user', [
@@ -371,10 +457,25 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
                 'encoding' => 'utf8mb4',
                 'after' => 'email',
             ])
+            ->addColumn('theme', 'enum', [
+                'null' => true,
+                'default' => 'light',
+                'limit' => 5,
+                'values' => ['light', 'dark'],
+                'after' => 'password_hash',
+            ])
+            ->addColumn('language', 'enum', [
+                'null' => true,
+                'default' => 'en_US',
+                'limit' => 5,
+                'values' => ['en_US', 'de_CH', 'fr_CH'],
+                'after' => 'theme',
+            ])
             ->addColumn('updated_at', 'datetime', [
                 'null' => true,
-                'default' => 'CURRENT_TIMESTAMP',
-                'after' => 'password_hash',
+                'default' => null,
+                'update' => 'CURRENT_TIMESTAMP',
+                'after' => 'language',
             ])
             ->addColumn('created_at', 'datetime', [
                 'null' => true,
@@ -462,29 +563,6 @@ class DbChange178208678263bffc14e3711 extends Phinx\Migration\AbstractMigration
             ])
             ->addIndex(['user_id'], [
                 'name' => 'user_activity_user_id_fk',
-                'unique' => false,
-            ])
-            ->create();
-        $this->table('user_role_to_permission', [
-                'id' => false,
-                'primary_key' => ['user_role_id', 'permission_id'],
-                'engine' => 'InnoDB',
-                'encoding' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'comment' => '',
-                'row_format' => 'DYNAMIC',
-            ])
-            ->addColumn('user_role_id', 'integer', [
-                'null' => false,
-                'limit' => MysqlAdapter::INT_REGULAR,
-            ])
-            ->addColumn('permission_id', 'integer', [
-                'null' => false,
-                'limit' => MysqlAdapter::INT_REGULAR,
-                'after' => 'user_role_id',
-            ])
-            ->addIndex(['permission_id'], [
-                'name' => 'user_role_to_permission_permission_null_fk',
                 'unique' => false,
             ])
             ->create();
