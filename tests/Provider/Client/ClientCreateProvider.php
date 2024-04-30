@@ -12,8 +12,8 @@ class ClientCreateProvider
      *
      * Each test case is an array with the following structure:
      * - 'authenticatedUserRow': An array of attributes for the authenticated user. This includes 'first_name' and 'user_role_id'.
-     * - 'other_user': An array of attributes for another user. This includes 'first_name' and 'user_role_id'.
-     * - 'expected_user_names': An array of expected user names. This is used to verify the output of the function being tested.
+     * - 'otherUserRow': An array of attributes for another user. This includes 'first_name' and 'user_role_id'.
+     * - 'expectedUserNames': An array of expected names. This is used to verify the output of the function being tested.
      *
      * @return array an array of test cases
      */
@@ -31,20 +31,20 @@ class ClientCreateProvider
             // "owner" means from the perspective of the authenticated user
             [ // ? Newcomer - not allowed so nothing should be returned
                 'authenticatedUserRow' => $newcomerAttributes,
-                'other_user' => $advisorAttributes,
-                'expected_user_names' => [],
+                'otherUserRow' => $advisorAttributes,
+                'expectedUserNames' => [],
             ],
             [ // ? Advisor - should return only himself
                 'authenticatedUserRow' => $advisorAttributes,
-                'other_user' => $newcomerAttributes,
+                'otherUserRow' => $newcomerAttributes,
                 // id not relevant only name
-                'expected_user_names' => [$advisorAttributes['first_name']],
+                'expectedUserNames' => [$advisorAttributes['first_name']],
             ],
             [ // ? Managing advisor - should return all available users
                 'authenticatedUserRow' => $managingAdvisorAttributes,
-                'other_user' => $newcomerAttributes,
+                'otherUserRow' => $newcomerAttributes,
                 // All available users are authenticated manager advisor and newcomer as the "other" user
-                'expected_user_names' => [$managingAdvisorAttributes['first_name'], $newcomerAttributes['first_name']],
+                'expectedUserNames' => [$managingAdvisorAttributes['first_name'], $newcomerAttributes['first_name']],
             ],
         ];
     }

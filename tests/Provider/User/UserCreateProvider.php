@@ -173,4 +173,31 @@ class UserCreateProvider
             ],
         ];
     }
+
+    public static function userCreationDropdownOptionsCases(): array
+    {
+        // Set users with different roles
+        $adminAttributes = ['user_role_id' => UserRole::ADMIN];
+        $managingAdvisorAttributes = ['user_role_id' => UserRole::MANAGING_ADVISOR];
+        $advisorAttributes = ['user_role_id' => UserRole::ADVISOR];
+
+        // Newcomer must not receive any available user
+        // Advisor is allowed to create client but only assign it to himself or leave user_id empty
+        // Managing advisor and higher should receive all available users
+        return [
+            [ // ? Advisor - not allowed to create user so no available roles
+                'authenticatedUserAttributes' => $advisorAttributes,
+                // id not relevant only name
+                'expectedUserRoles' => [],
+            ],
+            [ // ? Managing advisor - should return advisor and newcomer
+                'authenticatedUserAttributes' => $managingAdvisorAttributes,
+                'expectedUserRoles' => [UserRole::ADVISOR->getDisplayName(), UserRole::NEWCOMER->getDisplayName()],
+            ],
+            [ // ? Admin - should return all available users
+                'authenticatedUserAttributes' => $adminAttributes,
+                'expectedUserRoles' => UserRole::getAllDisplayNames(),
+            ],
+        ];
+    }
 }

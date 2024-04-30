@@ -22,7 +22,7 @@ class ClientDropdownValuesData
     ) {
         $this->statuses = $statuses;
         $this->users = $users;
-        $this->sexes = SexOption::toArrayWithPrettyNames();
-        $this->vigilanceLevel = ClientVigilanceLevel::toArrayWithPrettyNames();
+        $this->sexes = SexOption::getAllDisplayNames();
+        $this->vigilanceLevel = ClientVigilanceLevel::getAllDisplayNames();
     }
 }

@@ -15,19 +15,16 @@ enum SexOption: string
     // case NULL = '';
 
     /**
-     * Calling the translation function __() for each enum value
-     * so that poedit recognizes them to be translated.
-     * When using the enum values, __() will work as it's
-     * setup here and translations are in the .mo files.
+     * Get the enum case name that can be displayed by the frontend.
      *
-     * @return array
+     * @return string
      */
-    private function getTranslatedValues(): array
+    public function getDisplayName(): string
     {
-        return [
-            __('Male'),
-            __('Female'),
-            __('Other'),
-        ];
+        return match ($this) {
+            self::MALE => __('Male'),
+            self::FEMALE => __('Female'),
+            self::OTHER => __('Other'),
+        };
     }
 }

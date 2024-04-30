@@ -6,4 +6,3 @@ parameters:
         - tests
     ignoreErrors:
         - '#Parameter \#2 \$locale of function setlocale expects array\|string\|null, int given.#'
-        - '#^Method .*::getTranslatedValues\(\) is unused\.$#'

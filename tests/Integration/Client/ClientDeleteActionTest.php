@@ -3,8 +3,10 @@
 namespace App\Test\Integration\Client;
 
 use App\Domain\User\Enum\UserActivity;
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
+use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -98,6 +100,38 @@ class ClientDeleteActionTest extends TestCase
     }
 
     /**
+     * Delete request from authorized user but client does not exist.
+     *
+     * @return void
+     */
+    public function testClientSubmitDeleteError(): void
+    {
+        // Insert authenticated authorized user
+        $userRow = $this->insertFixture(
+            UserFixture::class,
+            $this->addUserRoleId(['user_role_id' => UserRole::ADMIN])
+        );
+
+        // Not inserting client
+
+        // Simulate logged-in user
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $request = $this->createJsonRequest(
+            'DELETE',
+            $this->urlFor('client-delete-submit', ['client_id' => '1']),
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert response HTTP status code: 200
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Assert response json content
+        $this->assertJsonData(['status' => 'warning', 'message' => 'Client has not been deleted.'], $response);
+    }
+
+    /**
      * Test that when user is not logged in 401 Unauthorized is returned.
      *
      * @return void
@@ -120,6 +154,4 @@ class ClientDeleteActionTest extends TestCase
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $expectedLoginUrl], $response);
     }
-
-    // Unchanged content test not done as it's not being used by the frontend
 }

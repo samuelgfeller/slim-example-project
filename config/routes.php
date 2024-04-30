@@ -70,8 +70,8 @@ return function (App $app) {
             ->setName('user-list');
 
         $group // User create form is rendered by the client and loads the available dropdown options via Ajax
-        ->get('/dropdown-options', \App\Application\Action\User\Ajax\FetchDropdownOptionsForUserCreateAction::class)
-            ->setName('user-dropdown-options');
+        ->get('/dropdown-options', \App\Application\Action\User\Ajax\UserCreateDropdownOptionsFetchAction::class)
+            ->setName('user-create-dropdown');
 
         $group->get('/activity', \App\Application\Action\User\Ajax\UserActivityFetchListAction::class)
             ->setName('user-get-activity');
@@ -100,7 +100,7 @@ return function (App $app) {
         // Client create form is rendered by the client and loads the available dropdown options via Ajax
         $group->get(
             '/dropdown-options',
-            \App\Application\Action\Client\Ajax\FetchDropdownOptionsForClientCreateAction::class
+            \App\Application\Action\Client\Ajax\ClientCreateDropdownOptionsFetchAction::class
         )->setName('client-create-dropdown');
 
         $group->post('', \App\Application\Action\Client\Ajax\ClientCreateAction::class)
@@ -123,18 +123,18 @@ return function (App $app) {
             'note-read-page'
         );
         $group->post('', \App\Application\Action\Note\Ajax\NoteCreateAction::class)->setName(
-            'note-submit-creation'
+            'note-create-submit'
         );
         $group->put('/{note_id:[0-9]+}', \App\Application\Action\Note\Ajax\NoteUpdateAction::class)
-            ->setName('note-submit-modification');
+            ->setName('note-update-submit');
         $group->delete('/{note_id:[0-9]+}', \App\Application\Action\Note\Ajax\NoteDeleteAction::class)
-            ->setName('note-submit-delete');
+            ->setName('note-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
     // API routes
     $app->group('/api', function (RouteCollectorProxy $group) {
         // Client creation API call
-        $group->post('/clients', \App\Application\Action\Client\Ajax\ApiClientCreateAction::class)
+        $group->post('/clients', \App\Application\Action\Client\Api\ApiClientCreateAction::class)
             ->setName('api-client-create-submit');
     })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes.
     // If an error occurs, the CORS middleware will not be executed and the exception caught and a response

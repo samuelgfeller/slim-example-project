@@ -220,10 +220,10 @@ class ClientUpdateActionTest extends TestCase
     }
 
     /**
-     * Test that if user makes update request but the content has not changed
-     * compared to what's in the database, the response contains the warning.
+     * Test that if user makes update request but the content is the same
+     * as what's in the database, the response contains the warning.
      *
-     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
+     *@throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */

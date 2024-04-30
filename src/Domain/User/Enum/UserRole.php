@@ -2,8 +2,12 @@
 
 namespace App\Domain\User\Enum;
 
+use App\Common\Trait\EnumToArray;
+
 enum UserRole: string
 {
+    use EnumToArray;
+
     // Value is `user_role`.`name`
     case NEWCOMER = 'newcomer';
     case ADVISOR = 'advisor';
@@ -11,31 +15,17 @@ enum UserRole: string
     case ADMIN = 'admin';
 
     /**
-     * Calling the translation function __() for each enum value
-     * so that poedit recognizes them to be translated.
-     * When using the enum values, __() will work as it's
-     * setup here and translations are in the .mo files.
-     *
-     * @return array
-     */
-    public static function getTranslatedValues(): array
-    {
-        return [
-            __('Newcomer'),
-            __('Advisor'),
-            __('Managing advisor'),
-            __('Admin'),
-        ];
-    }
-
-    /**
-     * Removes underscore and adds capital first letter.
+     * Get the enum case name that can be displayed by the frontend.
      *
      * @return string
      */
-    public function roleNameForDropdown(): string
+    public function getDisplayName(): string
     {
-        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
-        return __(ucfirst(str_replace('_', ' ', $this->value)));
+        return match ($this) {
+            self::NEWCOMER => __('Newcomer'),
+            self::ADVISOR => __('Advisor'),
+            self::MANAGING_ADVISOR => __('Managing advisor'),
+            self::ADMIN => __('Admin'),
+        };
     }
 }

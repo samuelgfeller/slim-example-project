@@ -107,8 +107,4 @@ class UserDeleteActionTest extends TestCase
         // Assert that response contains correct login url
         $this->assertJsonData(['loginUrl' => $this->urlFor('login-page')], $response);
     }
-
-    // Unchanged content test not done as it's not being used by the frontend
-    // Malformed request body also not so relevant as there is no body for deletion
-    // Invalid data not relevant either as there is no data in the request body
 }

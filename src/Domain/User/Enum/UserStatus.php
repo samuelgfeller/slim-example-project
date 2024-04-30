@@ -20,19 +20,17 @@ enum UserStatus: string
     // UserStatus::toArray() returns array for dropdown
 
     /**
-     * Each enum case has to be in the function below with
-     * called by the translation function __() so that poedit
-     * recognizes the strings to translate.
+     * Get the enum case name that can be displayed by the frontend.
      *
-     * @return array
+     * @return string
      */
-    public static function getTranslatedValues(): array
+    public function getDisplayName(): string
     {
-        return [
-            __('Unverified'),
-            __('Active'),
-            __('Locked'),
-            __('Suspended'),
-        ];
+        return match ($this) {
+            self::Unverified => __('Unverified'),
+            self::Active => __('Active'),
+            self::Locked => __('Locked'),
+            self::Suspended => __('Suspended'),
+        };
     }
 }

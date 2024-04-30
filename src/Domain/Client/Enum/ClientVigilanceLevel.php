@@ -13,35 +13,16 @@ enum ClientVigilanceLevel: string
     case HIGH = 'high';
 
     /**
-     * Calling the translation function __() for each enum value
-     * so that poedit recognizes them to be translated.
-     * When using the enum values, __() will work as it's
-     * setup here and translations are in the .mo files.
-     *
-     * @return array
-     */
-    public static function getTranslatedValues(): array
-    {
-        return [
-            __('Low'),
-            __('Medium'),
-            __('High'),
-        ];
-    }
-
-    /**
-     * All letters lowercase except first capital letter
-     * and replaces underscores with spaces.
-     *
-     * Would love this function to be global / be in a trait that could be used
-     * but don't know the best way to implement it right now as there is no access
-     * to "this" in a trait for instance
+     * Get the enum case name that can be displayed by the frontend.
      *
      * @return string
      */
-    public function prettyName(): string
+    public function getDisplayName(): string
     {
-        // Resulting string is a key in the function getTranslatedValues so __() knows how to translate
-        return __(str_replace('_', ' ', ucfirst(mb_strtolower($this->value))));
+        return match ($this) {
+            self::LOW => __('Low'),
+            self::MEDIUM => __('Medium'),
+            self::HIGH => __('High'),
+        };
     }
 }

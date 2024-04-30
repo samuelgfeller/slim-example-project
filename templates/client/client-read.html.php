@@ -276,7 +276,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                         <?php
                     } ?>
                     <span spellcheck="false" data-maxlength="254"
-                    ><?= $clientReadData->vigilanceLevel ? html($clientReadData->vigilanceLevel->prettyName())
+                    ><?= $clientReadData->vigilanceLevel ? html($clientReadData->vigilanceLevel->getDisplayName())
                             : '' ?></span>
                 </div>
             </div>

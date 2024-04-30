@@ -61,6 +61,9 @@ class ClientListActionTest extends TestCase
             UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         );
+        // Insert other user and status to fully load the different filter chip options
+        $this->insertFixture(UserFixture::class);
+        $this->insertFixture(ClientStatusFixture::class);
 
         $request = $this->createRequest('GET', $this->urlFor('client-list-page'));
         // Simulate logged-in user by setting the user_id session variable

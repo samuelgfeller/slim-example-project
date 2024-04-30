@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\User;
 
+use App\Domain\User\Enum\UserRole;
 use App\Domain\User\Enum\UserStatus;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
@@ -60,7 +61,7 @@ class UserListActionTest extends TestCase
         // Init expected response array general format
         $expectedResponseArray = [
             'userResultDataArray' => [],
-            'statuses' => UserStatus::toTranslatedNamesArray(),
+            'statuses' => UserStatus::getAllDisplayNames(),
         ];
 
         // Add response array of authenticated user to the expected userResultDataArray
@@ -104,7 +105,7 @@ class UserListActionTest extends TestCase
      * Change array of UserRole Enum cases to expected availableUserRoles
      * array from the server with id and capitalized role name [{id} => {Role name}].
      *
-     * @param array $userRoles user roles with Enum cases array
+     * @param UserRole[] $userRoles user roles with Enum cases array
      *
      * @return array
      */
@@ -113,7 +114,7 @@ class UserListActionTest extends TestCase
         $formattedRoles = [];
         foreach ($userRoles as $userRole) {
             // Key is role id and value the name for the dropdown
-            $formattedRoles[$this->getUserRoleIdByEnum($userRole)] = $userRole->roleNameForDropdown();
+            $formattedRoles[$this->getUserRoleIdByEnum($userRole)] = $userRole->getDisplayName();
         }
 
         return $formattedRoles;

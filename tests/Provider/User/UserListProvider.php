@@ -21,7 +21,7 @@ class UserListProvider
         $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
         $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
 
-        // General testing rule: test allowed with the lowest privilege and not allowed with highest not allowed
+        // Testing authorization: with the lowest allowed privilege and with highest not allowed
         return [ // User owner is the user itself
             [// ? advisor owner and newcomer other - not allowed to read other - only allowed to read own status and role
                 'userRow' => $newcomerAttr,

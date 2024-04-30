@@ -24,7 +24,7 @@ final readonly class ClientDeleteAction
     ): ResponseInterface {
         $clientId = (int)$args['client_id'];
 
-        // Delete client logic
+        // Delete client
         $deleted = $this->clientDeleter->deleteClient($clientId);
 
         $flash = $this->session->getFlash();
@@ -38,11 +38,11 @@ final readonly class ClientDeleteAction
 
         $response = $this->jsonResponder->encodeAndAddToResponse(
             $response,
-            ['status' => 'warning', 'message' => 'Client not deleted.']
+            ['status' => 'warning', 'message' => 'Client has not been deleted.']
         );
         // If not deleted, inform user
         $flash->add('warning', 'The client was not deleted');
 
-        return $response->withAddedHeader('Warning', 'The client was not deleted');
+        return $response->withAddedHeader('Warning', 'The client has not been deleted.');
     }
 }

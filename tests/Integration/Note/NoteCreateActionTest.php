@@ -68,7 +68,7 @@ class NoteCreateActionTest extends TestCase
         $noteMessage = 'Test note';
         $request = $this->createJsonRequest(
             'POST',
-            $this->urlFor('note-submit-creation'),
+            $this->urlFor('note-create-submit'),
             [
                 'message' => $noteMessage,
                 'client_id' => $clientRow['id'],
@@ -130,7 +130,7 @@ class NoteCreateActionTest extends TestCase
      */
     public function testNoteSubmitCreateActionUnauthenticated(): void
     {
-        $request = $this->createJsonRequest('POST', $this->urlFor('note-submit-creation'));
+        $request = $this->createJsonRequest('POST', $this->urlFor('note-create-submit'));
         // Make request
         $response = $this->app->handle($request);
         // Assert response HTTP status code: 401 Unauthorized
@@ -182,7 +182,7 @@ class NoteCreateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'POST',
-            $this->urlFor('note-submit-creation'),
+            $this->urlFor('note-create-submit'),
             $invalidRequestBody
         );
         $response = $this->app->handle($request);

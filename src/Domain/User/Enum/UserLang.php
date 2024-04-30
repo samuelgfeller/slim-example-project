@@ -7,6 +7,7 @@ use App\Common\Trait\EnumToArray;
 enum UserLang: string
 {
     use EnumToArray;
+
     // Case names are used as label names for the radio buttons hence the upper case first letter
     // It isn't ideal however as only ASCII chars are allowed and "Français" already has a non-ASCII char,
     // so it would probably be a lot better if name and value was switched BUT unfortunately PHP does not

@@ -83,7 +83,7 @@ class NoteUpdateActionTest extends TestCase
         // Create request to edit main note
         $mainNoteRequest = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('note-submit-modification', ['note_id' => $mainNoteRow['id']]),
+            $this->urlFor('note-update-submit', ['note_id' => $mainNoteRow['id']]),
             ['message' => $newNoteMessage, 'is_main' => 1]
         );
         // Make request
@@ -108,7 +108,7 @@ class NoteUpdateActionTest extends TestCase
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('note-submit-modification', ['note_id' => $normalNoteRow['id']]),
+            $this->urlFor('note-update-submit', ['note_id' => $normalNoteRow['id']]),
             // Change the two values that may be changed
             ['message' => $newNoteMessage, 'hidden' => 1]
         );
@@ -146,6 +146,47 @@ class NoteUpdateActionTest extends TestCase
     }
 
     /**
+     * Test that if user makes update request but the content is the same
+     * as what's in the database, the response contains the warning.
+     */
+    public function testNoteSubmitUpdateUnchangedContent(): void
+    {
+        // Insert authorized user
+        $userId = $this->insertFixture(
+            UserFixture::class,
+            $this->addUserRoleId(['user_role_id' => UserRole::ADMIN]),
+        )['id'];
+        // Insert linked client status
+        $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
+        // Insert client row
+        $clientRow = $this->insertFixture(
+            ClientFixture::class,
+            ['user_id' => $userId, 'client_status_id' => $clientStatusId],
+        );
+
+        // Insert note linked to client and user
+        $noteData = $this->insertFixture(
+            NoteFixture::class,
+            ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
+        );
+
+        // Simulate logged-in user with same user as linked to client
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('note-update-submit', ['note_id' => $noteData['id']]),
+            ['message' => $noteData['message']]
+        );
+        $response = $this->app->handle($request);
+
+        // Assert 200 OK
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+        // Assert that response contains warning
+        $this->assertJsonData(['status' => 'warning', 'message' => 'The note was not updated.'], $response);
+    }
+
+    /**
      * Test note modification on client-read page while being unauthenticated.
      *
      * @return void
@@ -154,7 +195,7 @@ class NoteUpdateActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('note-submit-modification', ['note_id' => '1']),
+            $this->urlFor('note-update-submit', ['note_id' => '1']),
             ['message' => 'New test message']
         );
 
@@ -203,7 +244,7 @@ class NoteUpdateActionTest extends TestCase
 
         $request = $this->createJsonRequest(
             'PUT',
-            $this->urlFor('note-submit-modification', ['note_id' => $noteData['id']]),
+            $this->urlFor('note-update-submit', ['note_id' => $noteData['id']]),
             $invalidRequestBody
         );
         $response = $this->app->handle($request);

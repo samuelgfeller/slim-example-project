@@ -3,9 +3,11 @@
 namespace App\Test\Integration\Note;
 
 use App\Domain\User\Enum\UserActivity;
+use App\Domain\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
+use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -86,7 +88,7 @@ class NoteDeleteActionTest extends TestCase
         // --- *NORMAL NOTE REQUEST ---
         $normalNoteRequest = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('note-submit-delete', ['note_id' => $normalNoteData['id']]),
+            $this->urlFor('note-delete-submit', ['note_id' => $normalNoteData['id']]),
         );
         // Make request
         $normalNoteResponse = $this->app->handle($normalNoteRequest);
@@ -124,7 +126,7 @@ class NoteDeleteActionTest extends TestCase
         // Create request to edit main note
         $mainNoteRequest = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('note-submit-delete', ['note_id' => $mainNoteData['id']]),
+            $this->urlFor('note-delete-submit', ['note_id' => $mainNoteData['id']]),
         );
 
         // Make request
@@ -142,6 +144,33 @@ class NoteDeleteActionTest extends TestCase
         $this->assertTableRow(['deleted_at' => null], 'note', $mainNoteData['id']);
     }
 
+    public function testNoteSubmitDeleteError(): void
+    {
+        // Insert authenticated authorized user
+        $userRow = $this->insertFixture(
+            UserFixture::class,
+            $this->addUserRoleId(['user_role_id' => UserRole::ADMIN])
+        );
+
+        // Not inserting note
+
+        // Simulate logged-in user
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $request = $this->createJsonRequest(
+            'DELETE',
+            $this->urlFor('note-delete-submit', ['note_id' => '1']),
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert response HTTP status code: 200
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Assert response json content
+        $this->assertJsonData(['status' => 'warning', 'message' => 'Note has not been deleted.'], $response);
+    }
+
     /**
      * Test note deletion on client-read page while being unauthenticated.
      *
@@ -151,7 +180,7 @@ class NoteDeleteActionTest extends TestCase
     {
         $request = $this->createJsonRequest(
             'DELETE',
-            $this->urlFor('note-submit-delete', ['note_id' => '1']),
+            $this->urlFor('note-delete-submit', ['note_id' => '1']),
         );
 
         // Make request

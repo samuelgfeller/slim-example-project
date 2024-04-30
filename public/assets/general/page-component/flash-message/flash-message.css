@@ -80,6 +80,7 @@
         /*Start to wrap right before ending*/
         100% {
             white-space: break-spaces;
+            overflow-wrap: anywhere;
             /*Takes initial max-width value which is 90%*/
         }
     }
@@ -297,6 +298,7 @@
         margin: 15px 0 10px 0px;
         transform: translateX(130%);
         white-space: break-spaces;
+        overflow-wrap: anywhere;
         /*Allow pointer events on the flash message after removing it on the container*/
         pointer-events: auto;
     }

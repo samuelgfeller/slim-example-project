@@ -78,6 +78,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
      * Check if the user is allowed to see the user list.
      *
      * @param int $loggedInUserId
+     *
      * @return bool
      */
     private function checkUserListAuthorization(int $loggedInUserId): bool

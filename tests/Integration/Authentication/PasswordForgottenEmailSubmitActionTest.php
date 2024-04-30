@@ -6,6 +6,7 @@ use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use TestTraits\Trait\DatabaseTestTrait;
 use TestTraits\Trait\FixtureTestTrait;
@@ -39,7 +40,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
-        // Simulate logged-in user with id 2
+        // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createFormRequest(
@@ -103,6 +104,60 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     }
 
     /**
+     * Assert that verification email is not sent if the email threshold is reached.
+     *
+     * @param int|string $delay
+     * @param int $emailLogAmountInTimeSpan
+     * @param array $securitySettings
+     *
+     * @return void
+     */
+    #[DataProviderExternal(\App\Test\Provider\Security\EmailRequestProvider::class, 'individualEmailThrottlingTestCases')]
+    public function testPasswordForgottenEmailSubmitSecurityThrottling(
+        int|string $delay,
+        int $emailLogAmountInTimeSpan,
+        array $securitySettings
+    ): void {
+        // Insert user
+        $userRow = $this->insertFixture(UserFixture::class);
+        $userId = $userRow['id'];
+        $email = $userRow['email'];
+
+        // Insert email log entries
+        for ($i = 0; $i < $emailLogAmountInTimeSpan; $i++) {
+            $this->insertFixtureRow(
+                'email_log',
+                ['to_email' => $email, 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')]
+            );
+        }
+
+        // Simulate logged-in user
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+
+        $request = $this->createFormRequest(
+            'POST', // Request to change password
+            $this->urlFor('password-forgotten-email-submit'),
+            [
+                'email' => $email,
+            ]
+        );
+
+        $response = $this->app->handle($request);
+
+        // Assert: 422 Unprocessable Entity
+        self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+
+        // Email assertions
+        // Assert email was not sent
+        $this->assertEmailCount(0);
+
+        // Database assertions
+
+        // Assert that there is no verification token in the database
+        $this->assertTableRowCount(0, 'user_verification');
+    }
+
+    /**
      * Test that nothing special is done if user does not exist.
      */
     public function testPasswordForgottenEmailSubmitUserNotExisting(): void
@@ -136,7 +191,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         // Insert user
         $userRow = $this->insertFixture(UserFixture::class);
 
-        // Simulate logged-in user with id 2
+        // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $request = $this->createFormRequest(

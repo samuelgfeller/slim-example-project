@@ -75,4 +75,36 @@ class DashboardTogglePanelActionTest extends TestCase
             'assigned-to-me-panel'
         );
     }
+
+    /**
+     * Test dashboard toggle panel action when request body is malformed.
+     *
+     * @return void
+     */
+    public function testDashboardTogglePanelMalformedRequestBody(): void
+    {
+        // Insert linked and authenticated user
+        $userId = $this->insertFixture(UserFixture::class)['id'];
+
+        // Simulate logged-in user by setting the user_id session variable
+        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+
+        $request = $this->createJsonRequest(
+            'PUT',
+            $this->urlFor('dashboard-toggle-panel'),
+            [
+                'invalid' => 'oops',
+            ]
+        );
+
+        $this->expectException(\Slim\Exception\HttpBadRequestException::class);
+
+        $this->app->handle($request);
+
+        // Assert flash message
+        $flash = $this->container->get(SessionInterface::class)->getFlash()->all();
+        self::assertStringContainsString('Malformed request body syntax', $flash['info'][0]);
+
+        $this->assertTableRowCount(0, 'user_filter_setting');
+    }
 }

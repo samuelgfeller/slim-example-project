@@ -125,6 +125,43 @@ class RegisterVerifyActionTest extends TestCase
         self::assertNull($session->get('user_id'));
     }
 
+    #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationProvider')]
+    public function testRegisterVerificationAlreadyVerifiedAndAuthenticated(
+        UserVerificationData $verification,
+        string $clearTextToken
+    ): void {
+        // User needed to insert verification
+        $userRow = $this->insertFixture(
+            UserFixture::class,
+            ['id' => $verification->userId, 'status' => UserStatus::Active->value],
+        );
+        // Insert user verification
+        $this->insertFixtureRow('user_verification', $verification->toArrayForDatabase());
+        // Test redirect param to this page
+        $redirectLocation = $this->urlFor('profile-page');
+        $queryParams = [
+            // To test redirect
+            'redirect' => $redirectLocation,
+            'token' => $clearTextToken,
+            'id' => (string)$verification->id,
+        ];
+
+        // Authenticate user
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $request = $this->createRequest('GET', $this->urlFor('register-verification', [], $queryParams));
+
+        $response = $this->app->handle($request);
+
+        // Assert that redirect worked when logged in
+        self::assertSame($redirectLocation, $response->getHeaderLine('Location'));
+        self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
+
+        // Assert that info flash message is set that informs user that they are already logged in
+        $flash = $this->container->get(SessionInterface::class)->getFlash()->all();
+        self::assertStringContainsString('You are already logged in', $flash['info'][0]);
+    }
+
     /**
      * Link in email contains the verification db entry id and if this id is incorrect (token not found)
      * according exception should be thrown and user redirected to register page.

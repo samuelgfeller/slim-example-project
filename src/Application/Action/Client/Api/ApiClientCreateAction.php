@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Action\Client\Ajax;
+namespace App\Application\Action\Client\Api;
 
 use App\Application\Responder\JsonResponder;
 use App\Domain\Client\Service\ClientCreatorFromApi;
@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Api action for external domains.
+ * Api action to create client.
  */
 final readonly class ApiClientCreateAction
 {
@@ -31,11 +31,9 @@ final readonly class ApiClientCreateAction
             return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);
         }
 
-        $response = $this->jsonResponder->encodeAndAddToResponse($response, [
+        return $this->jsonResponder->encodeAndAddToResponse($response, [
             'status' => 'warning',
-            'message' => 'Client not created',
+            'message' => 'Client was not created',
         ]);
-
-        return $response->withAddedHeader('Warning', 'The client could not be created');
     }
 }

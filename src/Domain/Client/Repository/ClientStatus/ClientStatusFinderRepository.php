@@ -48,7 +48,8 @@ final readonly class ClientStatusFinderRepository
         foreach ($resultRows as $resultRow) {
             // If status is required without the translation provide value directly from db
             // Translation key is created in ClientStatus enum
-            $statusName = $withoutTranslation ? $resultRow['name'] : __($resultRow['name']);
+            $statusName = $withoutTranslation ? $resultRow['name']
+                : ClientStatus::from($resultRow['name'])->getDisplayName();
             $statuses[(int)$resultRow['id']] = $statusName;
         }
 

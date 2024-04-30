@@ -34,12 +34,18 @@ final readonly class UserCreateAction
 
             if ($insertId !== false) {
                 $this->logger->info('User "' . $userValues['email'] . '" created');
-            } else {
-                $this->logger->info('Account creation tried with existing email: "' . $userValues['email'] . '"');
-                $response = $response->withAddedHeader('Warning', 'The user was not created');
+
+                return $this->jsonResponder->encodeAndAddToResponse(
+                    $response,
+                    ['status' => 'success', 'data' => null],
+                    201
+                );
             }
 
-            return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);
+            return $this->jsonResponder->encodeAndAddToResponse($response, [
+                'status' => 'warning',
+                'message' => 'User not created',
+            ]);
         } catch (TransportExceptionInterface $e) {
             // Flash message has to be added in the frontend as form is submitted via Ajax
             $this->logger->error('Mailer exception: ' . $e->getMessage());

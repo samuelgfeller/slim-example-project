@@ -10,20 +10,17 @@ enum ClientStatus: string
     case CANNOT_HELP = 'Cannot help';
 
     /**
-     * This function is not designed to be used.
-     * In order for the enum values to be acknowledged by the
-     * translation tool Poedit, they each
-     * have to be called with the __() method.
+     * Get the enum case name that can be displayed by the frontend.
      *
-     * @return array
+     * @return string
      */
-    private function getTranslatedValues(): array
+    public function getDisplayName(): string
     {
-        return [
-            __('Action pending'),
-            __('In care'),
-            __('Helped'),
-            __('Cannot help'),
-        ];
+        return match ($this) {
+            self::ACTION_PENDING => __('Action pending'),
+            self::IN_CARE => __('In care'),
+            self::HELPED => __('Helped'),
+            self::CANNOT_HELP => __('Cannot help'),
+        };
     }
 }

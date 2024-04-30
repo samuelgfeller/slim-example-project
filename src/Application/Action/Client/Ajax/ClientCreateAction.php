@@ -22,17 +22,15 @@ final readonly class ClientCreateAction
     ): ResponseInterface {
         $clientValues = (array)$request->getParsedBody();
 
-        // Validation and Forbidden exception caught in respective middlewares
         $insertId = $this->clientCreator->createClient($clientValues);
 
         if (0 !== $insertId) {
             return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);
         }
-        $response = $this->jsonResponder->encodeAndAddToResponse($response, [
+
+        return $this->jsonResponder->encodeAndAddToResponse($response, [
             'status' => 'warning',
             'message' => 'Client not created',
         ]);
-
-        return $response->withAddedHeader('Warning', 'The client could not be created');
     }
 }

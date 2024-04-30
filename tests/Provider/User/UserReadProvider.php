@@ -9,8 +9,6 @@ class UserReadProvider
 {
     /**
      * Provides authenticated and other user which is requested to be read.
-     * Only status code can be asserted as expected result as page is rendered
-     * by the server, and we can't test a rendered template.
      */
     public static function userReadAuthorizationCases(): array
     {
@@ -20,7 +18,7 @@ class UserReadProvider
         $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
         $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
 
-        // General testing rule: test allowed with the lowest privilege and not allowed with highest not allowed
+        // Testing authorization: with the lowest allowed privilege and with highest not allowed
         return [ // User owner is the user itself
             [// ? newcomer owner - other is same user - allowed to read own
                 'userRow' => $newcomerAttr,

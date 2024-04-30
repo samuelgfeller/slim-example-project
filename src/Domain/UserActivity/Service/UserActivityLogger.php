@@ -20,7 +20,7 @@ final readonly class UserActivityLogger
      *
      * @param UserActivity $userActivityAction
      * @param string $table A better name should be found as the service should not know the table name
-     * @param int $rowId
+     * @param int|null $rowId
      * @param array|null $data
      * @param int|null $userId in case there is no session like on login
      *

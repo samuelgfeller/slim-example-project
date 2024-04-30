@@ -2,6 +2,7 @@
 
 namespace App\Test\Integration\User;
 
+use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -49,6 +50,26 @@ class UserReadPageActionTest extends TestCase
 
         // Assert 200 OK - code only reaches here if no exception is thrown
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+    }
+
+    /**
+     * Test that http not found exception is thrown when
+     * user tries to read non-existing user page.
+     *
+     * @return void
+     */
+    public function testUserReadPageActionNotExisting(): void
+    {
+        $userRow = $this->insertFixture(UserFixture::class);
+
+        // Simulate logged-in user by setting the user_id session variable
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
+
+        $request = $this->createRequest('GET', $this->urlFor('user-read-page', ['user_id' => '99']));
+
+        $this->expectException(\Slim\Exception\HttpNotFoundException::class);
+
+        $response = $this->app->handle($request);
     }
 
     /**

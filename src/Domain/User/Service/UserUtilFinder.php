@@ -22,7 +22,7 @@ final readonly class UserUtilFinder
     {
         return [
             'userRoles' => $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(),
-            'statuses' => UserStatus::toTranslatedNamesArray(),
+            'statuses' => UserStatus::getAllDisplayNames(),
             'languages' => UserLang::toArray(),
         ];
     }

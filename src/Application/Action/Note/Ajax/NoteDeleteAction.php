@@ -31,7 +31,7 @@ final readonly class NoteDeleteAction
 
         $response = $this->jsonResponder->encodeAndAddToResponse(
             $response,
-            ['status' => 'warning', 'message' => 'Note not deleted.']
+            ['status' => 'warning', 'message' => 'Note has not been deleted.']
         );
 
         return $response->withAddedHeader('Warning', 'The note was not deleted');

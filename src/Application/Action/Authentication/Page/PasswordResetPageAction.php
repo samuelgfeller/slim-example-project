@@ -36,7 +36,9 @@ final readonly class PasswordResetPageAction
                 'id' => $queryParams['id'],
             ]);
         }
-
+        // Replace token from query params with ***
+        $queryParams['token'] = '***';
+        // Log error
         $this->logger->error(
             'GET request malformed: ' . json_encode($queryParams, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR)
         );

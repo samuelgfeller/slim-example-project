@@ -25,9 +25,6 @@ window.addEventListener("load", function (event) {
     /** Throttle time countdown */
     countDownThrottleTimer();
 
-
-    initCollapsible();
-
     /** Scroll to anchor if there is any in the url */
     scrollToAnchor();
 });

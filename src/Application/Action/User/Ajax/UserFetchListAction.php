@@ -26,7 +26,7 @@ final readonly class UserFetchListAction
 
         return $this->jsonResponder->encodeAndAddToResponse($response, [
             'userResultDataArray' => $userResultDataArray,
-            'statuses' => UserStatus::toTranslatedNamesArray(),
+            'statuses' => UserStatus::getAllDisplayNames(),
         ]);
     }
 }

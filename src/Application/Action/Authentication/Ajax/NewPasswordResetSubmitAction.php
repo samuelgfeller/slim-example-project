@@ -57,7 +57,10 @@ sure to click on the most recent email we send you</a>.</b>'
             );
             // Pre-fill email input field for more user comfort.
             if ($invalidTokenException->userData->email !== null) {
-                $this->templateRenderer->addPhpViewAttribute('preloadValues', ['email' => $invalidTokenException->userData->email]);
+                $this->templateRenderer->addPhpViewAttribute(
+                    'preloadValues',
+                    ['email' => $invalidTokenException->userData->email]
+                );
             }
 
             $this->logger->error(
@@ -67,8 +70,7 @@ sure to click on the most recent email we send you</a>.</b>'
             // The login page is rendered, but the url is reset-password. In login-main.js the url is replaced, and
             // the password-forgotten form is shown instead of the login form.
             return $this->templateRenderer->render($response, 'authentication/login.html.php');
-        } // Validation Exception has to be caught here and not middleware as the token,
-        // and id have to be added to php view
+        } // Validation Exception has to be caught here and not middleware as the token, and id are added to php view
         catch (ValidationException $validationException) {
             // Render reset-password form with token, and id so that it can be submitted again
             $flash->add('error', $validationException->getMessage());

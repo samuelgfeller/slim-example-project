@@ -80,7 +80,7 @@ final readonly class ClientListFilterChipProvider
         $clientStatuses = $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName();
         foreach ($clientStatuses as $id => $name) {
             $allClientFilters["status_$id"] = new FilterData([
-                'name' => __($name),
+                'name' => $name,
                 'paramName' => 'status',
                 'paramValue' => $id,
                 'category' => 'Status',

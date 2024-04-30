@@ -78,7 +78,7 @@ final readonly class UserActivityFinder
                 $userActivity->pageUrl = null;
             }
             // Add the time and action name
-            $actionVal = __($userActivity->action->value);
+            $actionVal = $userActivity->action->getDisplayName();
             // ucfirst does not work for non english chars. Below is an equivalent that also works for german chars.
             $ucFirstActionValue = mb_strtoupper(mb_substr($actionVal, 0, 1)) . mb_substr($actionVal, 1);
             $userActivity->timeAndActionName = $userActivity->datetime?->format('H:i') . ': ' . $ucFirstActionValue;

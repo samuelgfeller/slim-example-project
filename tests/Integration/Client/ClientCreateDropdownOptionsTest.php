@@ -16,7 +16,7 @@ use TestTraits\Trait\HttpJsonTestTrait;
 use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
-class ClientCreateDropdownOptions extends TestCase
+class ClientCreateDropdownOptionsTest extends TestCase
 {
     use AppTestTrait;
     use HttpTestTrait;

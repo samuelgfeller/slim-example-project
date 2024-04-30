@@ -111,7 +111,7 @@ final readonly class UserRoleFinderRepository
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
         $userRoles = [];
         foreach ($resultRows as $resultRow) {
-            $userRoles[(int)$resultRow['id']] = UserRole::from($resultRow['name'])->roleNameForDropdown();
+            $userRoles[(int)$resultRow['id']] = UserRole::from($resultRow['name'])->getDisplayName();
         }
 
         return $userRoles;
