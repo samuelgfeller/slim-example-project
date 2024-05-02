@@ -99,7 +99,7 @@ final readonly class UserRoleFinderRepository
     }
 
     /**
-     * Return all user roles with as key the id and value the name.
+     * Return all user roles with the key being the id and value the name.
      *
      * @return array<int, string>
      */

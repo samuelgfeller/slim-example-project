@@ -38,12 +38,12 @@ final readonly class RegisterTokenVerifier
 
             // Check if user is already verified
             if (UserStatus::Unverified !== $userStatus) {
-                // User is not unverified anymore, that means that user already clicked on the link
+                // User is not unverified any more; that means that user already clicked on the link
                 throw new UserAlreadyVerifiedException(
                     sprintf('User status is not "%s"', UserStatus::Unverified->value)
                 );
             }
-            // Check that verification has token in the database and token is not used
+            // Check that verification has a token in the database and that the token is not used
             if ($verification->token !== null && $verification->usedAt === null) {
                 // Verify given token with token in database
                 if ($verification->expiresAt > time() && true === password_verify($token, $verification->token)) {
@@ -70,7 +70,7 @@ final readonly class RegisterTokenVerifier
 
                         return $userId;
                     }
-                    // If somehow the record could not be updated
+                    // If somehow, the record could not be updated
                     throw new \DomainException(
                         'User status could not be set to "' . UserStatus::Active->value . '"'
                     );

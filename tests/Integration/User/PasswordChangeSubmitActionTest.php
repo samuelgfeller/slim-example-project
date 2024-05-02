@@ -47,7 +47,7 @@ class PasswordChangeSubmitActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userToUpdateRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userToUpdateRow);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);

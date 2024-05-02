@@ -12,7 +12,7 @@ final readonly class VerificationTokenCreatorRepository
     }
 
     /**
-     * Insert new user verification token.
+     * Insert a new user verification token.
      *
      * @param array $data
      *

@@ -33,8 +33,8 @@ final readonly class ClientUpdater
         // Working with array and not ClientData object to be able to differentiate values that user wants to set to null
         $this->clientValidator->validateClientValues($clientValues, false);
 
-        // Find note in db to compare its ownership
-        $clientFromDb = $this->clientFinder->findClient($clientId);
+        // Find client in db to verify its ownership
+        $clientFromDb = $this->clientFinder->findClient($clientId, true);
 
         if ($this->clientPermissionVerifier->isGrantedToUpdate($clientValues, $clientFromDb->userId)) {
             $updateData = [];
@@ -85,7 +85,7 @@ final readonly class ClientUpdater
             if ($updated) {
                 // If client is undeleted, the notes should also be restored
                 if (array_key_exists('deleted_at', $updateData) && $updateData['deleted_at'] === null) {
-                    $this->clientUpdaterRepository->restoreNotesFromClient($clientId);
+                    $this->clientUpdaterRepository->restoreNotesFromClient($clientId, $clientFromDb->deletedAt);
                 }
 
                 $this->userActivityLogger->logUserActivity(

@@ -45,13 +45,14 @@ final readonly class AccountUnlockTokenVerifier
 
             // Check if user is locked at all
             if (UserStatus::Locked !== $userStatus) {
-                // User is not locked anymore but token not verified so VERY IMPORTANT to not log user in hence the exception
+                // User is not locked any more, but token is not verified so VERY IMPORTANT to not authenticate
+                // the user, hence the exception
                 throw new UserAlreadyVerifiedException(__('User account not locked.'));
             }
 
             // Change user status to active
             $this->userUpdaterRepository->changeUserStatus(UserStatus::Active, $verification->userId);
-            // Mark token as being used only after being sure that user is active
+            // Mark token as being used only after setting the user status to active
             $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
             $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);
             // Add user activity entry

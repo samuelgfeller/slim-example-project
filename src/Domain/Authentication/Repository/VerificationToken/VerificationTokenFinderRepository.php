@@ -8,6 +8,7 @@ use App\Domain\User\Data\UserData;
 use App\Infrastructure\Factory\QueryFactory;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
+// https://stackoverflow.com/questions/75128424/troubles-with-mocking-new-php-8-2-readonly-classes-with-phpunit-test-doubles
 class VerificationTokenFinderRepository
 {
     public function __construct(

@@ -32,23 +32,4 @@ class ClientReadResult extends ClientData
             'updated_at' => $clientResultData['note_updated_at'] ?? null,
         ]);
     }
-
-    /**
-     * Define how json_encode() should serialize the object.
-     *
-     * @return array in the format expected by the frontend
-     */
-    public function jsonSerialize(): array
-    {
-        return array_merge(parent::jsonSerialize(), [
-            'notesAmount' => $this->notesAmount,
-            'mainNoteData' => $this->mainNoteData,
-
-            'personalInfoPrivilege' => $this->generalPrivilege,
-            'clientStatusPrivilege' => $this->clientStatusPrivilege,
-            'assignedUserPrivilege' => $this->assignedUserPrivilege,
-            'noteCreationPrivilege' => $this->noteCreationPrivilege,
-        ]);
-    }
-    // No need for toArrayForDatabase() as this is a result DTO
 }

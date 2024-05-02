@@ -4,7 +4,7 @@ namespace App\Application\Data;
 
 /**
  * DTO that contains client's network data such as
- * IP address and user agent and user identity id.
+ * IP address, user agent and user identity id.
  */
 class UserNetworkSessionData
 {

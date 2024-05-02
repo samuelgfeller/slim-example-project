@@ -22,7 +22,7 @@ final readonly class PasswordChanger
     }
 
     /**
-     * Normal password change with old password or without (if privilege is high enough).
+     * Normal password change with old password, or without (if privilege is high enough).
      *
      * @param $userValues array with 'password', 'password2' and optionally 'old_password'
      * @param int $userId
@@ -34,11 +34,11 @@ final readonly class PasswordChanger
         // Check if password strings are valid
         $this->userValidator->validatePasswordChange($userValues);
 
-        // If old password is provided and user is allowed to update password
+        // If an old password is provided and user is allowed to update the password
         if (isset($userValues['old_password'])
             && $this->userPermissionVerifier->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
-            // Verify old password; throws validation exception if not correct old password
+            // Verify old password; throws validation exception if old password is incorrect
             $this->userValidator->checkIfOldPasswordIsCorrect(['old_password' => $userValues['old_password']], $userId);
         } // Else if old password is not set, check if granted to update without it.
         if (!isset($userValues['old_password'])

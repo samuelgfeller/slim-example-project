@@ -26,5 +26,4 @@ class ClientListResult extends ClientData
             'assignedUserPrivilege' => $this->assignedUserPrivilege,
         ]);
     }
-    // No need for toArrayForDatabase() as this is a result DTO
 }

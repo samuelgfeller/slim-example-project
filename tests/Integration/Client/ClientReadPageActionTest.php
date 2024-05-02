@@ -37,7 +37,7 @@ class ClientReadPageActionTest extends TestCase
         int $expectedStatusCode,
     ): void {
         // Insert tested and authenticated user
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userRow);
 
         // Insert linked client status
         $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];

@@ -49,7 +49,7 @@ final readonly class LoginVerifier
         // Check if the user exists and check if the password is correct
         if (isset($dbUser->email, $dbUser->passwordHash)
             && password_verify($userLoginValues['password'], $dbUser->passwordHash)) {
-            // If password correct and status active, log user in by
+            // If password correct and status active, return user id to log user in
             if ($dbUser->status === UserStatus::Active) {
                 // Log successful login request
                 $this->authenticationLogger->logLoginRequest($dbUser->email, true, $dbUser->id);
@@ -79,7 +79,7 @@ final readonly class LoginVerifier
         $this->loginSecurityChecker->performLoginSecurityCheck($userLoginValues['email'], $captcha);
 
         // Throw exception if the user doesn't exist or wrong password
-        // Vague exception on purpose for security
+        // Vague exception on purpose in favor of security
         throw new InvalidCredentialsException($userLoginValues['email']);
     }
 }

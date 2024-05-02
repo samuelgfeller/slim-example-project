@@ -54,7 +54,7 @@ class UserUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userToChangeRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userToChangeRow);
 
         // Add user role id to $requestData as it could contain a user role enum
         $requestData = $this->addUserRoleId($requestData);

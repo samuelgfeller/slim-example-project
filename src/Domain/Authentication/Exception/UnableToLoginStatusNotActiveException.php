@@ -3,10 +3,10 @@
 namespace App\Domain\Authentication\Exception;
 
 /**
- * When user tries to log in but the status is not active
+ * When the user tries to log in but the status is not active.
  * Intentionally using the same exception for different statuses because
- * it is caught and displayed the same to the user (vague divulge only the strict necessary)
- * The full explanation is in the email.
+ * it is caught and displayed the same to the user (vague to divulge only the strict necessary information).
+ * The full explanation is in the email the user receives.
  */
 class UnableToLoginStatusNotActiveException extends \RuntimeException
 {

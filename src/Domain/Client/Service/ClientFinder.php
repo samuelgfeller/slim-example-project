@@ -91,11 +91,11 @@ final readonly class ClientFinder
      * Find one client in the database.
      *
      * @param int $id
-     * @param mixed $includeDeleted
+     * @param bool $includeDeleted
      *
      * @return ClientData
      */
-    public function findClient(int $id, $includeDeleted = false): ClientData
+    public function findClient(int $id, bool $includeDeleted = false): ClientData
     {
         return $this->clientFinderRepository->findClientById($id, $includeDeleted);
     }

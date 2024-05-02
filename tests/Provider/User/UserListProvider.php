@@ -15,7 +15,7 @@ class UserListProvider
     public static function userListAuthorizationCases(): array
     {
         // Set different user role attributes. The following function is needed in the test function to add user role id
-        // $this->insertUserFixturesWithAttributes($userData, $authenticatedUserData);
+        // $this->insertUserFixtures($userData, $authenticatedUserData);
         $adminAttr = ['user_role_id' => UserRole::ADMIN];
         $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR];
         $advisorAttr = ['user_role_id' => UserRole::ADVISOR];

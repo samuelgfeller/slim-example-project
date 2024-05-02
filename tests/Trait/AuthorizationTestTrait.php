@@ -55,7 +55,7 @@ trait AuthorizationTestTrait
      * @param array $authenticatedUserAttr user attributes reference that will be changed to the inserted user data
      * @param array|null $userAttr user attributes reference that will be changed into the inserted user data
      */
-    protected function insertUserFixturesWithAttributes(array &$authenticatedUserAttr, ?array &$userAttr): void
+    protected function insertUserFixtures(array &$authenticatedUserAttr, ?array &$userAttr): void
     {
         $authenticatedUserAttrOriginal = $authenticatedUserAttr;
         // Insert authenticated user and user linked to resource with given attributes containing the user role

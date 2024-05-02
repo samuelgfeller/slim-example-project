@@ -15,7 +15,7 @@ final readonly class VerificationTokenUpdater
     }
 
     /**
-     * Set verification token to used.
+     * Set the verification token to "used".
      *
      * @param int $verificationId
      * @param int|null $userId

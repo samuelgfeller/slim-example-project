@@ -31,7 +31,7 @@ class LoginMailSender
     }
 
     /**
-     * When user tries to log in but his status is unverified.
+     * When a user tries to log in but their status is unverified.
      *
      * @param string $email
      * @param string $fullName
@@ -78,7 +78,7 @@ class LoginMailSender
     }
 
     /**
-     * When user tries to log in but his status is suspended.
+     * When a user tries to log in but their status is suspended.
      *
      * @param string $email
      * @param string $fullName

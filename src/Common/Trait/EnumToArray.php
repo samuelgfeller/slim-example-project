@@ -46,7 +46,7 @@ trait EnumToArray
     {
         $displayNames = [];
         foreach ($enumCases as $enumCase) {
-            // If the enum case has a getDisplayName method, use it to get the display name otherwise use the case name
+            // If the enum case has a getDisplayName method, use it to get the display name to otherwise use the case name
             /** @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/7599 */
             if (method_exists($enumCase, 'getDisplayName')) {
                 $displayNames[] = $enumCase->getDisplayName();

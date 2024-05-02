@@ -15,7 +15,7 @@ It showcases the implementation of a simple yet robust
 with a variety of backend and
 frontend features built using the Slim 4 micro-framework. 
 The base for this project was the official 
-[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and the [slim4-skeleton](https://github.com/odan/slim4-skeleton).
+[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and Odan's [slim4-skeleton](https://github.com/odan/slim4-skeleton).
 
 This repository can serve as a learning example or be adapted for developing new
 applications. 

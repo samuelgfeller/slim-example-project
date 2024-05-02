@@ -7,7 +7,6 @@ use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Enum\UserStatus;
 use App\Infrastructure\Service\LocaleConfigurator;
-use App\Infrastructure\Utility\Settings;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -18,8 +17,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 final readonly class LoginNonActiveUserHandler
 {
-    private string $mainContactEmail;
-
     public function __construct(
         private VerificationTokenCreator $verificationTokenCreator,
         private LoginMailSender $loginMailer,
@@ -27,16 +24,12 @@ final readonly class LoginNonActiveUserHandler
         private SecurityEmailChecker $securityEmailChecker,
         private LoggerInterface $logger,
         private AuthenticationLogger $authenticationLogger,
-        Settings $settings,
     ) {
-        $this->mainContactEmail = $settings->get(
-            'public'
-        )['email']['main_contact_email'] ?? 'slim-example-project@samuel-gfeller.ch';
     }
 
     /**
      * Handles the login attempt from a non-active user.
-     * Sends an email to the user with information and a link to activate his account.
+     * Sends an email to the user with information and a link to activate their account.
      *
      * @param UserData $dbUser the user data from the database
      * @param array $queryParams the query parameters
@@ -84,27 +77,25 @@ final readonly class LoginNonActiveUserHandler
             }
 
             if ($dbUser->status === UserStatus::Suspended) {
-                // Inform user (only via mail) that he is suspended
+                // Inform the user (only via mail) that they are suspended
                 $this->handleSuspendedUserLoginAttempt($userId, $email, $fullName);
                 // Throw exception to display error message in form
                 throw $unableToLoginException;
             }
 
             if ($dbUser->status === UserStatus::Locked) {
-                // login fail and inform user (only via mail) that he is locked and provide unlock token
+                // login fail and inform user (only via mail) that they are locked and provide unlock token
                 $this->handleLockedUserLoginAttempt($userId, $email, $fullName, $queryParams);
                 // Throw exception to display error message in form
                 throw $unableToLoginException;
             }
-            // Reset locale if sending the mail was successful
-            $this->localeConfigurator->setLanguage($originalLocale);
         } catch (TransportException $transportException) {
             // If exception is thrown reset locale as well. If $unableToLoginException
             $this->localeConfigurator->setLanguage($originalLocale);
             // Exception while sending email
             throw new UnableToLoginStatusNotActiveException(
                 'Unable to login at the moment and there was an error when sending an email to you.' .
-                "\n Please contact $this->mainContactEmail."
+                "\n Please report the error."
             );
         } // Catch exception to reset locale before throwing it again to be caught in the action
         catch (UnableToLoginStatusNotActiveException $unableToLoginStatusNotActiveException) {
@@ -113,12 +104,11 @@ final readonly class LoginNonActiveUserHandler
             throw $unableToLoginStatusNotActiveException;
         }
 
-        // todo invalid status in db. Send email to admin to inform that there is something wrong with the user
         throw new \RuntimeException('Invalid status');
     }
 
     /**
-     * When user tries to log in but his status is unverified.
+     * When a user tries to log in but their status is unverified.
      *
      * @param int $userId
      * @param string $email
@@ -135,7 +125,7 @@ final readonly class LoginNonActiveUserHandler
         string $fullName,
         array $queryParams = []
     ): void {
-        // Create verification token, so he doesn't have to register again
+        // Create a verification token, so they don't have to register again
         $queryParams = $this->verificationTokenCreator->createUserVerification($userId, $queryParams);
         $this->loginMailer->sendInfoToUnverifiedUser($email, $fullName, $queryParams);
 
@@ -144,7 +134,7 @@ final readonly class LoginNonActiveUserHandler
     }
 
     /**
-     * When user tries to log in but his status is suspended.
+     * When a user tries to log in but their status is suspended.
      *
      * @param int $userId
      * @param string $email
@@ -164,7 +154,7 @@ final readonly class LoginNonActiveUserHandler
     }
 
     /**
-     * When user tries to log in but his status is locked
+     * When a user tries to log in, but their status is locked
      * which can happen on too many failed login requests.
      *
      * @param int $userId

@@ -48,7 +48,7 @@ class ClientCreateDropdownOptionsTest extends TestCase
         array $expectedUserNames,
     ): void {
         // Insert authenticated user one other
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $otherUserRow);
+        $this->insertUserFixtures($authenticatedUserRow, $otherUserRow);
 
         // Client statuses, sexes and vigilance levels are returned too but not tested here (authorization most important)
 

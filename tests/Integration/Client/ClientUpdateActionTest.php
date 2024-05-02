@@ -60,7 +60,7 @@ class ClientUpdateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userLinkedToClientRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userLinkedToClientRow);
 
         // Insert client status
         $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];

@@ -54,7 +54,7 @@ class NoteCreateActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $linkedUserRow);
+        $this->insertUserFixtures($authenticatedUserRow, $linkedUserRow);
 
         // Insert needed client status fixture
         $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];

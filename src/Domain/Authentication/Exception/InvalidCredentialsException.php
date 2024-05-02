@@ -21,12 +21,4 @@ class InvalidCredentialsException extends AuthenticationException
     {
         return $this->userEmail;
     }
-
-    /**
-     * @param string $userEmail
-     */
-    public function setUserEmail(string $userEmail): void
-    {
-        $this->userEmail = $userEmail;
-    }
 }

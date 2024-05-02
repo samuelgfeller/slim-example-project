@@ -39,7 +39,7 @@ class UserReadPageActionTest extends TestCase
         array $expectedResult,
     ): void {
         // Insert tested and authenticated user
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userRow);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);

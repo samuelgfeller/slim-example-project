@@ -25,7 +25,7 @@ class ClientData implements \JsonSerializable
     public ?\DateTimeImmutable $createdAt;
     public ?\DateTimeImmutable $deletedAt;
 
-    // Not database field but here so that age doesn't have to be calculated in view
+    // Not a database field but here so that age doesn't have to be calculated in view
     public ?int $age = null;
 
     public function __construct(?array $clientData = [])

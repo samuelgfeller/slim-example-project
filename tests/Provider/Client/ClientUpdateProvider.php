@@ -91,13 +91,6 @@ class ClientUpdateProvider
                 'requestData' => ['client_status_id' => 'new'],
                 'expectedResult' => $unauthorizedResult,
             ],
-            'advisor owner undelete' => [ // ? Advisor owner - undelete client - not allowed
-                'userLinkedToClientRow' => $newcomerAttr,
-                'authenticatedUserRow' => $advisorAttr,
-                // Data to be changed
-                'requestData' => ['deleted_at' => null],
-                'expectedResult' => $unauthorizedResult,
-            ],
             // * Managing advisor
             'managing advisor not owner all changes' => [ // ? Managing advisor not owner - change all data - allowed
                 'userLinkedToClientRow' => $advisorAttr,
@@ -107,13 +100,6 @@ class ClientUpdateProvider
                     $personalInfoChanges,
                     ['client_status_id' => 'new', 'user_id' => 'new']
                 ),
-                'expectedResult' => $authorizedResult,
-            ],
-            'managing advisor not owner undelete' => [ // ? Managing advisor not owner - undelete client - allowed
-                'userLinkedToClientRow' => $advisorAttr,
-                'authenticatedUserRow' => $managingAdvisorAttr,
-                // Data to be changed
-                'requestData' => ['deleted_at' => null],
                 'expectedResult' => $authorizedResult,
             ],
         ];

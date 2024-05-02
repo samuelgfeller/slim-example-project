@@ -46,7 +46,7 @@ class UserDeleteActionTest extends TestCase
         array $expectedResult
     ): void {
         // Insert authenticated user and user to delete with given attributes containing the user role
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userToDeleteRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userToDeleteRow);
 
         // Simulate logged-in user
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);

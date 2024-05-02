@@ -12,7 +12,7 @@ final readonly class ClientUpdaterRepository
     }
 
     /**
-     * Update values from client.
+     * Update client row values.
      *
      * @param int $clientId
      * @param array $data ['col_name' => 'New name']
@@ -30,28 +30,31 @@ final readonly class ClientUpdaterRepository
      * Restore all notes from the client with the same most recent deleted_at date.
      *
      * @param int $clientId
+     * @param \DateTimeImmutable $clientDeletedAt
+     *
+     * @throws \Exception
      *
      * @return bool
      */
-    public function restoreNotesFromClient(int $clientId): bool
+    public function restoreNotesFromClient(int $clientId, ?\DateTimeImmutable $clientDeletedAt): bool
     {
-        // Find the most recent deleted_at date for the notes of the given client
-        $mostRecentDeletedAt = $this->queryFactory->selectQuery()
-            ->select('MAX(deleted_at) as max_deleted_at')
-            ->from('note')
-            ->where(['client_id' => $clientId])
-            ->execute()->fetch('assoc')['max_deleted_at'];
-
-        if (!$mostRecentDeletedAt) {
-            // No notes found for the given client
+        if ($clientDeletedAt === null) {
             return false;
         }
 
-        // Restore all notes with the most recent deleted_at date
+        // Add and subtract 2 seconds from the client's deleted_at timestamp to add a buffer if client
+        // and notes were not deleted at the exact same time in the code.
+        $deletedAtPlus2Secs = $clientDeletedAt->modify('+2 seconds')->format('Y-m-d H:i:s');
+        $deletedAtMinus2Secs = $clientDeletedAt->modify('-2 seconds')->format('Y-m-d H:i:s');
+
+        // Restore all notes with the deleted_at date within the range of client's deleted_at +/- 2 seconds
         $query = $this->queryFactory->updateQuery()
             ->update('note')
             ->set(['deleted_at' => null])
-            ->where(['client_id' => $clientId, 'deleted_at' => $mostRecentDeletedAt]);
+            ->where(['client_id' => $clientId])
+            ->andWhere('deleted_at BETWEEN :deletedAtMinus2Secs AND :deletedAtPlus2Secs')
+            ->bind(':deletedAtMinus2Secs', $deletedAtMinus2Secs, 'string')
+            ->bind(':deletedAtPlus2Secs', $deletedAtPlus2Secs, 'string');
 
         return $query->execute()->rowCount() > 0;
     }

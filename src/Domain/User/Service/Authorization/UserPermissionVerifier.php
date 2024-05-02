@@ -216,8 +216,8 @@ class UserPermissionVerifier
                 // But if the user wants to change his own password, the old password is required regardless of role
                 // so that nobody can change his password if the computer is left unattended and logged-in
                 // https://security.stackexchange.com/a/24292 - to change other passwords it would be best if
-                // the authenticated managing_advisor / admin password is asked instead of the old user password
-                // but this is too much for this project.
+                // the authenticated managing_advisor / admin password is asked instead of the old user password,
+                // but this is too much complexity for this project.
                 if ($this->loggedInUserId !== (int)$userIdToUpdate) {
                     $grantedUpdateKeys[] = 'password_without_verification';
                 }

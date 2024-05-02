@@ -48,7 +48,7 @@ class UserListActionTest extends TestCase
         array $expectedResult,
     ): void {
         // Change user attributes to user data
-        $this->insertUserFixturesWithAttributes($authenticatedUserRow, $userRow);
+        $this->insertUserFixtures($authenticatedUserRow, $userRow);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);

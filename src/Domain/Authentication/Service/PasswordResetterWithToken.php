@@ -8,6 +8,9 @@ use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Validate password when resetting it with token (after forgotten password).
+ */
 final readonly class PasswordResetterWithToken
 {
     public function __construct(
@@ -36,7 +39,7 @@ final readonly class PasswordResetterWithToken
             $passwordResetValues['token']
         );
 
-        // Intentionally NOT logging user in so that he has to confirm the correctness of his credential
+        // Intentionally NOT logging user in so that they have to confirm the correctness of their credentials
         $passwordHash = password_hash($passwordResetValues['password'], PASSWORD_DEFAULT);
         $updated = $this->userUpdaterRepository->changeUserPassword($passwordHash, $userId);
         if ($updated) {
@@ -50,8 +53,7 @@ final readonly class PasswordResetterWithToken
 
             return true;
         }
-        $this->logger->info(sprintf('Password reset failed for user %s', $userId));
-
-        return false;
+        // If somehow, the record could not be updated
+        throw new \DomainException('Password could not be reset. Please try again or contact support.');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\Authentication\Exception\InvalidTokenException;
 use App\Domain\Authentication\Repository\VerificationToken\VerificationTokenFinderRepository;
+use App\Domain\Exception\Persistence\PersistenceRecordNotFoundException;
 
 final readonly class VerificationTokenVerifier
 {
@@ -19,7 +20,7 @@ final readonly class VerificationTokenVerifier
      * @param string $token
      * @param int $verificationId
      *
-     * @throws InvalidTokenException
+     * @throws PersistenceRecordNotFoundException
      *
      * @return int
      *

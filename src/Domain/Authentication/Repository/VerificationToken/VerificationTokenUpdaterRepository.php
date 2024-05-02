@@ -12,7 +12,7 @@ final readonly class VerificationTokenUpdaterRepository
     }
 
     /**
-     * Set verification token to used.
+     * Set the verification token to "used".
      *
      * @param int $verificationId
      * @param array $updateRow
