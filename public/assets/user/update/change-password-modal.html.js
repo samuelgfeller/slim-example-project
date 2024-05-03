@@ -1,7 +1,7 @@
-import {createModal} from "../../general/page-component/modal/modal.js?v=0.4.0";
-import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.4.0";
-import {__} from "../../general/general-js/functions.js?v=0.4.0";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.0";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.4.1";
+import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=0.4.1";
+import {__} from "../../general/general-js/functions.js?v=0.4.1";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.1";
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [

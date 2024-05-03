@@ -4,8 +4,8 @@
  * @param noteId
  * @param noteContainer
  */
-import {hideCheckmarkLoader} from "./client-read-note-event-listener-setup.js?v=0.4.0";
-import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.4.0";
+import {hideCheckmarkLoader} from "./client-read-note-event-listener-setup.js?v=0.4.1";
+import {submitDelete} from "../../general/ajax/submit-delete-request.js?v=0.4.1";
 
 /**
  * Make ajax delete request

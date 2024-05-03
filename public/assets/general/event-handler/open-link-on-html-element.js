@@ -1,4 +1,4 @@
-import {basePath} from "../general-js/config.js?v=0.4.0";
+import {basePath} from "../general-js/config.js?v=0.4.1";
 
 /**
  * Open link when click or focus and enter key press

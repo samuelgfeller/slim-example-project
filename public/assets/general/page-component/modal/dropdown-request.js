@@ -1,5 +1,5 @@
-import {basePath} from "../../general-js/config.js?v=0.4.0";
-import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.4.0";
+import {basePath} from "../../general-js/config.js?v=0.4.1";
+import {handleFail} from "../../ajax/ajax-util/fail-handler.js?v=0.4.1";
 
 /**
  * This function is used to request dropdown options from a specific module route.

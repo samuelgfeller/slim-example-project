@@ -1,15 +1,15 @@
-import {basePath} from "../../general/general-js/config.js?v=0.4.0";
+import {basePath} from "../../general/general-js/config.js?v=0.4.1";
 import {
     addDeleteNoteBtnEventListener,
     addHideNoteBtnEventListener,
     addTextareaInputEventListener,
     hideCheckmarkLoader,
     toggleReadOnlyAndBtnAboveNote
-} from "./client-read-note-event-listener-setup.js?v=0.4.0";
-import {handleFail, removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.0";
+} from "./client-read-note-event-listener-setup.js?v=0.4.1";
+import {handleFail, removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.1";
 import {
     initAutoResizingTextareaElements
-} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.0";
+} from "../../general/page-component/textarea/auto-resizing-textarea.js?v=0.4.1";
 
 let noteCreationHideCheckMarkTimeout = [];
 

@@ -1,5 +1,5 @@
-import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.4.0";
-import {html} from "../../general/general-js/functions.js?v=0.4.0";
+import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.4.1";
+import {html} from "../../general/general-js/functions.js?v=0.4.1";
 
 /**
  * HTML code for user profile card
