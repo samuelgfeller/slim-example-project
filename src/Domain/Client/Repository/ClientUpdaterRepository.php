@@ -30,9 +30,7 @@ final readonly class ClientUpdaterRepository
      * Restore all notes from the client with the same most recent deleted_at date.
      *
      * @param int $clientId
-     * @param \DateTimeImmutable $clientDeletedAt
-     *
-     * @throws \Exception
+     * @param \DateTimeImmutable|null $clientDeletedAt
      *
      * @return bool
      */

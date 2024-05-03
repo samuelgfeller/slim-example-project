@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Dashboard\Panel;
+namespace App\Domain\Dashboard;
 
 use App\Domain\FilterSetting\Data\FilterData;
 use App\Domain\FilterSetting\FilterModule;

@@ -54,7 +54,7 @@ final readonly class ClientCreator
             // Create main note
             try {
                 if (!empty($clientValues['message'])) {
-                    // Create main note if message is not empty
+                    // Create main note if the message is not empty
                     $mainNoteValues = [
                         'message' => $clientValues['message'],
                         'client_id' => $clientId,
@@ -66,8 +66,8 @@ final readonly class ClientCreator
 
                 return $clientId;
             } catch (ValidationException $validationException) {
-                // Main note creation wasn't successful so user has to adapt form and will re-submit all client data
-                // and to prevent duplicate the newly created client has to be deleted
+                // Main note creation wasn't successful, so the user has to adapt form and will re-submit all
+                // client data and to prevent duplicate, the newly created client has to be deleted.
                 $this->clientDeleterRepository->hardDeleteClient($clientId);
                 // Also remove client creation activity
                 $this->userActivityLogger->deleteUserActivity($clientInsertActivityId);

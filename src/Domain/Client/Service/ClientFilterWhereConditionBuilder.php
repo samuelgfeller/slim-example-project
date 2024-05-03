@@ -13,7 +13,7 @@ class ClientFilterWhereConditionBuilder
     ) {
     }
 
-    // In the select query there are multiple joins. This is the alias for the client table.
+    // In the select query, there are multiple joins. This is the alias for the client table.
 
     /**
      * Build cakephp query builder where array with filter params.
@@ -105,7 +105,7 @@ class ClientFilterWhereConditionBuilder
         }
         // If expected value is "null" the word "IS" is needed in the array key right after the column
         $is = '';
-        // If " IS" is already in column, it doesn't have to be added
+        // If " IS" is already in the column, it doesn't have to be added
         if ($value === null && !str_contains($column, ' IS')) {
             $is = ' IS'; // To be added right after column
         }

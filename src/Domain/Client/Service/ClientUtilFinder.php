@@ -29,7 +29,7 @@ final readonly class ClientUtilFinder
     {
         $allUsers = $this->userFinderRepository->findAllUsers();
         // Filter users, which the authenticated user is authorized to assign to a client.
-        // Available user roles for dropdown and privilege
+        // Available user roles for dropdown and privilege.
         $grantedAssignableUsers = [];
         foreach ($allUsers as $userData) {
             if (// If the user is already assigned to the client, the value is added so that it's displayed in the

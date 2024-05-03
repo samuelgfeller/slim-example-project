@@ -5,7 +5,7 @@ namespace App\Domain\Note\Service\Authorization;
 use App\Domain\Authorization\Privilege;
 
 /**
- * The client should know when to display edit and delete icons
+ * For the frontend to know when to display edit and delete icons.
  * Admins can edit all notes, users only their own.
  */
 final readonly class NotePrivilegeDeterminer

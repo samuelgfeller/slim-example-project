@@ -11,7 +11,7 @@ use App\Domain\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
 
 /**
- * Check if authenticated user is permitted to do actions
+ * Check if the authenticated user is permitted to do actions.
  * Roles: newcomer < advisor < managing_advisor < administrator.
  */
 final class ClientPermissionVerifier
@@ -179,7 +179,7 @@ final class ClientPermissionVerifier
             if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies['managing_advisor']
                 // isGrantedToAssignUserToClient CANNOT be used as it expects a real user_id which is not provided
                 // in the case where user_id value is the string "value" from (ClientAuthGetter) to check if
-                // the authenticated user is allowed to change assigned user (html <select> enabled/disabled)
+                // the authenticated user is allowed to change the assigned user. (To enable/disable html <select>)
                 && array_key_exists('user_id', $clientDataToUpdate)) {
                 $grantedUpdateKeys[] = 'user_id';
             }

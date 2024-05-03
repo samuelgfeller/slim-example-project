@@ -152,8 +152,9 @@ final readonly class ClientFinder
         }
         // The reasons this exception is thrown when tried to access soft deleted clients:
         // they are supposed to be deleted, so only maybe a very high privileged role should have access, and it should
-        // clearly be marked as deleted in the GUI as well. Also, a non-authorized user trying to access a client
-        // should not be able to distinguish which clients exist and which not so for both cases the not allowed exception
+        // be marked as deleted in the GUI as well. Also, a non-authorized user trying to access a client
+        // should not be able to distinguish which clients exist and which are not so for both cases the
+        // not allowed exception should be thrown.
         throw new ForbiddenException('Not allowed to read client.');
     }
 }
