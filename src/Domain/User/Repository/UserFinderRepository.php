@@ -145,27 +145,4 @@ class UserFinderRepository
 
         return $query->execute()->fetch('assoc') !== false;
     }
-
-    /**
-     * Retrieve user from database
-     * If not found error is thrown.
-     *
-     * @param int $id
-     *
-     * @throws \Exception
-     *
-     * @return UserData
-     * Throws PersistenceRecordNotFoundException if not found
-     */
-    public function getUserById(int $id): UserData
-    {
-        $query = $this->queryFactory->selectQuery()->select($this->fields)->from('user')->andWhere(
-            ['deleted_at IS' => null, 'id' => $id]
-        );
-
-        $userRows = $query->execute()->fetch('assoc');
-
-        // $notRestricted true as values are safe as they come from the database. It's not a user input.
-        return new UserData($userRows);
-    }
 }

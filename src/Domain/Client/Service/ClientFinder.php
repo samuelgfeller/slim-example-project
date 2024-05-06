@@ -101,7 +101,7 @@ final readonly class ClientFinder
     }
 
     /**
-     * Find one client in the database with aggregate.
+     * Find one client in the database with aggregate (main note, assigned user, status, privileges, notes amount).
      *
      * @param int $clientId
      *

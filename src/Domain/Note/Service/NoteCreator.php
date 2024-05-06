@@ -63,6 +63,6 @@ final readonly class NoteCreator
                 'formatted_creation_timestamp' => $dateFormatter->format($noteCreatedAtTimestamp),
             ];
         }
-        throw new ForbiddenException(__(sprintf('Not allowed to create %s', __('note'))));
+        throw new ForbiddenException(__('Not allowed to create %s', __('note')));
     }
 }

@@ -103,6 +103,15 @@ class NoteProvider
         ];
 
         return [
+            // * No filter
+            [
+                'filterQueryParams' => [],
+                // No users should be returned
+                'expectedNotesWhereString' => 'FALSE',
+                'usersAttrToInsert' => $usersToInsert,
+                'clientAttrToInsert' => $clientToInsert,
+                'notesAttrToInsert' => $notesToInsert,
+            ],
             // * Filter "client_id"
             [ // client 1 (not tested with other clients)
                 'filterQueryParams' => ['client_id' => '1'],

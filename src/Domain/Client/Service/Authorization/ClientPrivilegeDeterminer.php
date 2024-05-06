@@ -6,7 +6,6 @@ use App\Domain\Authorization\Privilege;
 
 /**
  * For the frontend to know when to display edit and delete icons.
- * Admins can edit all notes, users only their own.
  */
 final readonly class ClientPrivilegeDeterminer
 {

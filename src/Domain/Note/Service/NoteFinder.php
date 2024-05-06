@@ -96,7 +96,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
     }
 
     /**
-     * Returns $notesAmount most recent notes.
+     * Returns given amount of notes ordered by most recent.
      *
      * @param int $notesAmount
      *

@@ -20,7 +20,7 @@ enum UserStatus: string
     // UserStatus::toArray() returns array for dropdown
 
     /**
-     * Get the enum case name that can be displayed by the frontend.
+     * Returns the enum case name that can be displayed by the frontend.
      *
      * @return string
      */

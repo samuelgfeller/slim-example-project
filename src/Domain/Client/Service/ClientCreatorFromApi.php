@@ -26,7 +26,7 @@ final readonly class ClientCreatorFromApi
      *
      * @return int
      */
-    public function createClientFromClientSubmit(array $clientValues): int
+    public function createClientFromApi(array $clientValues): int
     {
         // Add default client status (action pending)
         $clientValues['client_status_id'] = $this->clientStatusFinderRepository->findClientStatusByName(

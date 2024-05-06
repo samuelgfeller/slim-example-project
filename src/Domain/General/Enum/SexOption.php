@@ -15,7 +15,7 @@ enum SexOption: string
     // case NULL = '';
 
     /**
-     * Get the enum case name that can be displayed by the frontend.
+     * Returns the enum case name that can be displayed by the frontend.
      *
      * @return string
      */

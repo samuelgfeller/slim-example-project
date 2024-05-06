@@ -69,7 +69,7 @@ final readonly class NotePermissionVerifier
     }
 
     /**
-     * Check if authenticated user is allowed to create note.
+     * Check if an authenticated user is allowed to create note.
      *
      * @param int $isMain
      * @param int|null $clientOwnerId client owner might become relevant
@@ -104,7 +104,7 @@ final readonly class NotePermissionVerifier
     }
 
     /**
-     * Check if authenticated user is allowed to update note.
+     * Check if an authenticated user is allowed to update note.
      *
      * @param int $isMain
      * @param int|null $noteOwnerId optional owner id when main note

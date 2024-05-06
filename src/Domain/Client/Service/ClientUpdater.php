@@ -21,9 +21,9 @@ final readonly class ClientUpdater
     }
 
     /**
-     * Change something or multiple things on post.
+     * Change client values.
      *
-     * @param int $clientId id of post being changed
+     * @param int $clientId id of client being changed
      * @param array $clientValues values that user wants to change
      *
      * @return array update infos containing status and optionally other

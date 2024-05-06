@@ -49,10 +49,10 @@ class ClientListActionTest extends TestCase
     /**
      * Normal page action while having an active session.
      *
-     * @throws NotFoundExceptionInterface
+     * @return void
      * @throws ContainerExceptionInterface
      *
-     * @return void
+     * @throws NotFoundExceptionInterface
      */
     public function testClientListPageActionAuthorization(): void
     {
@@ -61,7 +61,7 @@ class ClientListActionTest extends TestCase
             UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         );
-        // Insert other user and status to fully load the different filter chip options
+        // Insert another user and status to fully load the different filter chip options
         $this->insertFixture(UserFixture::class);
         $this->insertFixture(ClientStatusFixture::class);
 
@@ -85,7 +85,7 @@ class ClientListActionTest extends TestCase
         $requestRoute = $this->urlFor('client-list-page');
         $request = $this->createRequest('GET', $requestRoute);
         $response = $this->app->handle($request);
-        // Assert 302 Found redirect to login url
+        // Assert 302 Found redirect to log in url
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
         // Build expected login url with redirect to initial request route as UserAuthenticationMiddleware.php does
@@ -103,10 +103,10 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
-     *@throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListFilterCases')]
     public function testClientListWithFilterAction(
@@ -198,10 +198,10 @@ class ClientListActionTest extends TestCase
      * @param array $filterQueryParamsArr Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     *@throws NotFoundExceptionInterface
+     * @return void
      * @throws ContainerExceptionInterface
      *
-     *@return void
+     * @throws NotFoundExceptionInterface
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
@@ -219,5 +219,45 @@ class ClientListActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
 
         $this->assertJsonData($expectedBody, $response);
+    }
+
+    public function testSaveFilterChipsClientList(): void
+    {
+        $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
+        // Insert client assigned to authenticated user
+        $clientRow = $this->insertFixture(ClientFixture::class, ['user_id' => $loggedInUserId]);
+
+        $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
+
+        $filterQueryParamsArr = [
+            'user' => (string)$loggedInUserId,
+            'filterIds[]' => 'assigned_to_me',
+            'saveFilter' => '1'
+        ];
+
+        $request = $this->createJsonRequest(
+            'GET',
+            $this->urlFor('client-list', [], $filterQueryParamsArr)
+        );
+
+        $response = $this->app->handle($request);
+
+        self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
+
+        // Check if the client was returned with the client id (the entire client list response data is already tested)
+        $this->assertPartialJsonData(
+            [0 => ['id' => $clientRow['id']]],
+            $this->getJsonData($response)['clients']
+        );
+
+        // Check if the filter was saved in the database
+        $filterSettingRow = $this->findTableRowsWhere(
+            'user_filter_setting',
+            "user_id = $loggedInUserId"
+        )[0];
+        self::assertEquals(
+            ['user_id' => $loggedInUserId, 'filter_id' => 'assigned_to_me', 'module' => 'client-list'],
+            $filterSettingRow
+        );
     }
 }

@@ -10,7 +10,7 @@ enum ClientStatus: string
     case CANNOT_HELP = 'Cannot help';
 
     /**
-     * Get the enum case name that can be displayed by the frontend.
+     * Returns the enum case name that can be displayed by the frontend.
      *
      * @return string
      */

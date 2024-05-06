@@ -17,6 +17,7 @@ class ClientFilterWhereConditionBuilder
 
     /**
      * Build cakephp query builder where array with filter params.
+     * Filter test examples: @see ClientListActionTest::testClientListWithFilterAction
      *
      * @param array $filterParams default deleted_at null
      *
@@ -34,10 +35,12 @@ class ClientFilterWhereConditionBuilder
                 // Check if name part are from first name or last name
                 $namePartsConditions['OR'] = [
                     [
+                        // First name LIKE first part of name AND last name LIKE second part of name
                         [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[0] . '%'],
                         [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[1] . '%'],
                     ],
                     [
+                        // First name LIKE second part of name AND last name LIKE first part of name
                         [$this->columnPrefix . 'first_name LIKE' => '%' . $nameParts[1] . '%'],
                         [$this->columnPrefix . 'last_name LIKE' => '%' . $nameParts[0] . '%'],
                     ],

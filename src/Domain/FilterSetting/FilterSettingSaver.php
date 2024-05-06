@@ -3,19 +3,19 @@
 namespace App\Domain\FilterSetting;
 
 use App\Application\Data\UserNetworkSessionData;
-use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
+use App\Domain\FilterSetting\Repository\UserFilterCrudRepository;
 
 final readonly class FilterSettingSaver
 {
     public function __construct(
-        private UserFilterHandlerRepository $userFilterHandlerRepository,
+        private UserFilterCrudRepository $userFilterCrudRepository,
         private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
 
     /**
      * Remove old filters from db and save given filters.
-     * This function should really be called only once per request otherwise
+     * This function should really be called only once per request, otherwise
      * only the filters from the last call will be saved.
      *
      * @param array|null $filters
@@ -28,7 +28,7 @@ final readonly class FilterSettingSaver
         FilterModule $userFilterModule,
     ): void {
         // Delete previous active filters in database before adding the new ones
-        $this->userFilterHandlerRepository->deleteFilterSettingFromUser(
+        $this->userFilterCrudRepository->deleteFilterSettingFromUser(
             $this->userNetworkSessionData->userId,
             $userFilterModule->value
         );
@@ -39,7 +39,7 @@ final readonly class FilterSettingSaver
                 $userFilterRow[$key]['filter_id'] = $filterId;
                 $userFilterRow[$key]['module'] = $userFilterModule->value;
             }
-            $this->userFilterHandlerRepository->insertUserClientListFilterSetting($userFilterRow);
+            $this->userFilterCrudRepository->insertUserClientListFilterSetting($userFilterRow);
         }
     }
 }

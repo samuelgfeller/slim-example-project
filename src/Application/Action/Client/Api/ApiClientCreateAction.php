@@ -25,7 +25,7 @@ final readonly class ApiClientCreateAction
     ): ResponseInterface {
         $clientValues = (array)$request->getParsedBody();
 
-        $insertId = $this->clientCreatorFromClientSubmit->createClientFromClientSubmit($clientValues);
+        $insertId = $this->clientCreatorFromClientSubmit->createClientFromApi($clientValues);
 
         if (0 !== $insertId) {
             return $this->jsonResponder->encodeAndAddToResponse($response, ['status' => 'success', 'data' => null], 201);

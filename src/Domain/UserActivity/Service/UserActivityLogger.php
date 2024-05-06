@@ -42,7 +42,7 @@ final readonly class UserActivityLogger
         $userActivity->rowId = $rowId;
         $userActivity->data = $data;
 
-        return $this->userActivityRepository->insertUserActivity($userActivity->toArray());
+        return $this->userActivityRepository->insertUserActivity($userActivity->toArrayForDatabase());
     }
 
     /**

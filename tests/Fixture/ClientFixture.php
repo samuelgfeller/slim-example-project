@@ -22,6 +22,7 @@ class ClientFixture
             'phone' => '079 364 33 28',
             'email' => 'rachel.harmon@email.com',
             'sex' => 'F',
+            // Client message must be default null for notes tests as it is returned as note
             'client_message' => null,
             'user_id' => 1,
             'client_status_id' => 1,

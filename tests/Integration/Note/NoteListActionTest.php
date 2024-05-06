@@ -73,7 +73,8 @@ class NoteListActionTest extends TestCase
         // Insert client row
         $clientRow = $this->insertFixture(
             ClientFixture::class,
-            ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId],
+            // With client message which is should be returned in request as well
+            ['user_id' => $clientOwnerId, 'client_status_id' => $clientStatusId, 'client_message' => 'Client message'],
         );
 
         // Insert linked note. Only one per test to simplify assertions with different privileges
@@ -127,6 +128,21 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             // Has to match privilege from notePrivilegeDeterminer.php (rules are in notePermissionVerifier.php)
             'privilege' => $expectedResult['privilege']->name,
             'isClientMessage' => 0,
+        ];
+
+        // Add client message which is returned as a note
+        $expectedResponseArray[] = [
+            'id' => null,
+            'userId' => null,
+            'clientId' => null,
+            'message' => 'Client message',
+            'hidden' => null,
+            'createdAt' => $dateFormatter->format(new \DateTime($clientRow['created_at'])),
+            'updatedAt' => null,
+            'userFullName' => 'Rachel Harmon',
+            'clientFullName' => null,
+            'privilege' => 'R',
+            'isClientMessage' => 1,
         ];
 
         // Assert response data

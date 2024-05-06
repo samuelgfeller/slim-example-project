@@ -48,27 +48,27 @@ class NoteData implements \JsonSerializable
      *
      * @return array
      */
-    public function toArray(): array
-    {
-        $note = [];
-        // Not include required, from db non-nullable values if they are null -> for update
-        if ($this->id !== null) {
-            $note['id'] = $this->id;
-        }
-        if ($this->userId !== null) {
-            $note['user_id'] = $this->userId;
-        }
-        if ($this->clientId !== null) {
-            $note['client_id'] = $this->clientId;
-        }
+    /*    public function toArrayForDatabase(): array
+        {
+            $note = [];
+            // Not include required, from db non-nullable values if they are null -> for update
+            if ($this->id !== null) {
+                $note['id'] = $this->id;
+            }
+            if ($this->userId !== null) {
+                $note['user_id'] = $this->userId;
+            }
+            if ($this->clientId !== null) {
+                $note['client_id'] = $this->clientId;
+            }
 
-        // Message is nullable and null is a valid value, so it has to be included
-        $note['message'] = $this->message;
-        $note['is_main'] = $this->isMain;
-        $note['hidden'] = $this->hidden;
+            // "message" is nullable, and null is a valid db value, so it has to be included
+            $note['message'] = $this->message;
+            $note['is_main'] = $this->isMain;
+            $note['hidden'] = $this->hidden;
 
-        return $note;
-    }
+            return $note;
+        }*/
 
     public function jsonSerialize(): array
     {

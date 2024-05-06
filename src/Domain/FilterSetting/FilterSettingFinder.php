@@ -3,13 +3,13 @@
 namespace App\Domain\FilterSetting;
 
 use App\Domain\FilterSetting\Data\FilterData;
-use App\Domain\FilterSetting\Repository\UserFilterHandlerRepository;
+use App\Domain\FilterSetting\Repository\UserFilterCrudRepository;
 use Odan\Session\SessionInterface;
 
 final readonly class FilterSettingFinder
 {
     public function __construct(
-        private UserFilterHandlerRepository $userFilterHandlerRepository,
+        private UserFilterCrudRepository $userFilterCrudRepository,
         private FilterSettingSaver $filterSettingSaver,
         private SessionInterface $session,
     ) {
@@ -77,7 +77,7 @@ final readonly class FilterSettingFinder
      */
     public function findFiltersFromAuthenticatedUser(FilterModule $userFilterModule): array
     {
-        return $this->userFilterHandlerRepository->findFiltersFromUser(
+        return $this->userFilterCrudRepository->findFiltersFromUser(
             $this->session->get('user_id'),
             $userFilterModule->value
         );

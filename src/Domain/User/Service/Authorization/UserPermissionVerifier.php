@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
  * Check if authenticated user is permitted to do actions
  * Roles: newcomer < advisor < managing_advisor < administrator.
  */
-class UserPermissionVerifier
+final class UserPermissionVerifier
 {
     private ?int $loggedInUserId = null;
 

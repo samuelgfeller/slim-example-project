@@ -2,12 +2,16 @@
 
 namespace App\Domain\FilterSetting\Data;
 
+/**
+ * Filter chip data.
+ */
 class FilterData
 {
     public string $name;
     public string $paramName;
     public ?string $paramValue;
-    public ?string $category; // May be null
+    // Category is the title of the group of filters, e.g. "Status" or "User"
+    public ?string $category;
     public bool $authorized;
 
     public function __construct(array $data)

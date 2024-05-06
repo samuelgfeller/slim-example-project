@@ -23,8 +23,8 @@ final readonly class UserUpdater
 
     /**
      * Update user values.
-     * This function is intended for changes coming from a user
-     * therefore it changes only "user changeable" general info (not password).
+     * This function is intended for changes coming from a user,
+     * so it changes only "user changeable" general info (not password).
      *
      * @param int $userIdToChange user id on which the change is requested to be made
      * @param array $userValues values to change

@@ -21,7 +21,7 @@ final readonly class ClientDeleter
     }
 
     /**
-     * Delete one post logic.
+     * Delete one client.
      *
      * @param int $clientId
      *
@@ -31,7 +31,7 @@ final readonly class ClientDeleter
      */
     public function deleteClient(int $clientId): bool
     {
-        // Find post in db to get its ownership
+        // Find client in db to get its ownership
         $clientFromDb = $this->clientFinder->findClient($clientId);
 
         if ($this->clientPermissionVerifier->isGrantedToDelete($clientFromDb->userId)) {

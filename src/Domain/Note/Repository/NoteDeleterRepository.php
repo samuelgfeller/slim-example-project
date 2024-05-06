@@ -12,7 +12,7 @@ final readonly class NoteDeleterRepository
     }
 
     /**
-     * Delete note from database.
+     * Soft delete note from database.
      *
      * @param int $id
      *
@@ -26,7 +26,7 @@ final readonly class NoteDeleterRepository
     }
 
     /**
-     * Delete notes that are linked to client.
+     * Soft delete notes that are linked to given client.
      *
      * @param int $clientId
      *

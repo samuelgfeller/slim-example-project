@@ -36,6 +36,7 @@ final readonly class ClientFinderRepository
             'first_name' => 'client.first_name',
             'last_name' => 'client.last_name',
             'birthdate' => 'client.birthdate',
+            'email' => 'client.email',
             'location' => 'client.location',
             'phone' => 'client.phone',
             'sex' => 'client.sex',
@@ -64,7 +65,7 @@ final readonly class ClientFinderRepository
     }
 
     /**
-     * Return post with given id if it exists
+     * Return client with given id if it exists
      * otherwise null.
      *
      * @param string|int $id

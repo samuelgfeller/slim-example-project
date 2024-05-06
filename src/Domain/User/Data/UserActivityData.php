@@ -35,7 +35,7 @@ class UserActivityData
         $this->userAgent = $userActivityValues['user_agent'] ?? null;
     }
 
-    public function toArray(): array
+    public function toArrayForDatabase(): array
     {
         return [
             'id' => $this->id,

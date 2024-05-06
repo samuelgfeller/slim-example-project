@@ -28,24 +28,6 @@ class NoteFinderRepository
     }
 
     /**
-     * Return all notes with users attribute loaded.
-     *
-     * @return NoteResultData[]
-     */
-    public function findAllNotesWithUsers(): array
-    {
-        $query = $this->queryFactory->selectQuery()->from('note');
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
-        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
-            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
-            ->andWhere(['note.deleted_at IS' => null]);
-        $resultRows = $query->execute()->fetchAll('assoc') ?: [];
-
-        // Convert to list of Note objects with associated User info
-        return $this->hydrator->hydrate($resultRows, NoteResultData::class);
-    }
-
-    /**
      * Return note with given id if it exists
      * otherwise null.
      *
@@ -61,30 +43,6 @@ class NoteFinderRepository
         $noteRow = $query->execute()->fetch('assoc') ?: [];
 
         return new NoteData($noteRow);
-    }
-
-    /**
-     * Return all notes with users attribute loaded.
-     *
-     * @param int $id
-     *
-     * @throws \Exception
-     *
-     * @return NoteResultData
-     */
-    public function findNoteWithUserById(int $id): NoteResultData
-    {
-        $query = $this->queryFactory->selectQuery()->from('note');
-
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
-
-        $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
-            ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
-            ->andWhere(['note.id' => $id, 'note.deleted_at IS' => null]);
-        $resultRows = $query->execute()->fetch('assoc') ?: [];
-
-        // Instantiate UserNote DTO
-        return new NoteResultData($resultRows);
     }
 
     /**
@@ -153,7 +111,7 @@ class NoteFinderRepository
     }
 
     /**
-     * Returns $notesAmount most recent notes.
+     * Returns given amount of notes ordered by most recent.
      *
      * @param int $notesAmount
      *
@@ -189,7 +147,7 @@ class NoteFinderRepository
     }
 
     /**
-     * Find amount of notes without counting the main note.
+     * Find the amount of notes without counting the main note.
      *
      * @param int $clientId
      *

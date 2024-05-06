@@ -13,7 +13,7 @@ enum ClientVigilanceLevel: string
     case HIGH = 'high';
 
     /**
-     * Get the enum case name that can be displayed by the frontend.
+     * Returns the enum case name that can be displayed by the frontend.
      *
      * @return string
      */

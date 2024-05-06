@@ -112,16 +112,4 @@ class UserFinder
         // Forbidden when not found and user is not allowed to read
         throw new ForbiddenException('Not allowed to read user.');
     }
-
-    /**
-     * Find user via email.
-     *
-     * @param string $email
-     *
-     * @return UserData
-     */
-    public function findUserByEmail(string $email): UserData
-    {
-        return $this->userFinderRepository->findUserByEmail($email);
-    }
 }

@@ -41,7 +41,7 @@ final readonly class UserActivityFinder
      * Either for one user or for multiple users (dashboard panel) in which case
      * the user name precedes the time and action name.
      *
-     * @param int|array $userIds
+     * @param int|string|array $userIds
      *
      * @return array
      */

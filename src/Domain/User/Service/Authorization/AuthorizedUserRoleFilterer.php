@@ -4,11 +4,11 @@ namespace App\Domain\User\Service\Authorization;
 
 use App\Domain\Authentication\Repository\UserRoleFinderRepository;
 
-class AuthorizedUserRoleFilterer
+final readonly class AuthorizedUserRoleFilterer
 {
     public function __construct(
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private UserRoleFinderRepository $userRoleFinderRepository,
+        private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
 
