@@ -150,17 +150,17 @@ class SecurityLoginChecker
      */
     private function performGlobalLoginCheck(): void
     {
-        // Making sure that values returned from repository are cast into integers
+        // Making sure that values returned from the repository are cast into integers
         $loginAmountSummary = array_map('intval', $this->loginRequestFinderRepository->getGlobalLoginAmountSummary());
 
         // Calc allowed failure amount which is the given login_failure_percentage of the total login
         $failureThreshold = floor(
             $loginAmountSummary['total_amount'] / 100 * $this->securitySettings['login_failure_percentage']
         );
-        // Actual failure amount have to be LESS than allowed failures amount (tested this way)
+        // Actual failure amount have to be LESS than allowed failures amount (tested this way).
         // If there are not enough requests to be representative, the failureThreshold is increased to 20 meaning
-        // at least 20 failed login attempts are allowed no matter the percentage
-        // If percentage is 10, throttle begins at 200 login requests
+        // at least 20 failed login attempts are allowed no matter the percentage.
+        // If percentage is 10, throttle begins at 200 login requests.
         if (!($loginAmountSummary['failures'] < $failureThreshold) && $failureThreshold > 20) {
             // If changed, update SecurityServiceTest password spraying test expected error message
             $msg = 'Maximum amount of tolerated unrestricted login requests reached site-wide.';

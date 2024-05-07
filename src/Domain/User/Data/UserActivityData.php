@@ -16,7 +16,7 @@ class UserActivityData
     public ?string $ipAddress;
     public ?string $userAgent;
 
-    // When returning the report to the client add the page url
+    // When returning the report to the frontend add the page url
     public ?string $pageUrl = null;
     public ?string $timeAndActionName = null; // Time in the correct format and action name with upper case
 
