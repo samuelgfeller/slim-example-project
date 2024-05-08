@@ -49,7 +49,7 @@ final readonly class UserUpdater
                 // Check that keys are one of the database columns that may be updated
                 if (in_array($column, [
                     'first_name',
-                    'surname',
+                    'last_name',
                     'email',
                     'status',
                     'user_role_id',

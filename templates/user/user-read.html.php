@@ -60,8 +60,8 @@ $this->addAttribute(
                          id="edit-last-name-btn">
                     <?php
                 } ?>
-                <h1 data-name="surname" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
-                    !empty($user->surname) ? html($user->surname) : '&nbsp;' ?></h1>
+                <h1 data-name="last_name" data-minlength="2" data-maxlength="100" spellcheck="false"><?=
+                    !empty($user->lastName) ? html($user->lastName) : '&nbsp;' ?></h1>
             </div>
         </div>
 

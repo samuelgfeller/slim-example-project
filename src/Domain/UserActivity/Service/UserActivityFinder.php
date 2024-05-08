@@ -86,7 +86,7 @@ final readonly class UserActivityFinder
             if (count($userIds) > 1) {
                 $userRow = $this->userFinderRepository->findUserById((int)$userActivity->userId);
                 $userActivity->timeAndActionName = '<span style="color: var(--black-white-text-color)">' . $userRow['first_name'] . ' '
-                    . $userRow['surname'] . '</span> • ' .
+                    . $userRow['last_name'] . '</span> • ' .
                     $userActivity->timeAndActionName;
             }
             $formattedDate = ucfirst(

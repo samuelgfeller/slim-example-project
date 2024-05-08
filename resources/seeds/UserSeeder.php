@@ -34,7 +34,7 @@ class UserSeeder extends AbstractSeed
             [
                 'id' => 2,
                 'first_name' => 'Managing-advisor',
-                'surname' => 'Surname',
+                'last_name' => 'Last name',
                 'user_role_id' => 2,
                 'status' => 'active',
                 'language' => 'en_US',
@@ -44,7 +44,7 @@ class UserSeeder extends AbstractSeed
             [
                 'id' => 3,
                 'first_name' => 'Advisor',
-                'surname' => 'Surname',
+                'last_name' => 'Surname',
                 'user_role_id' => 3,
                 'status' => 'active',
                 'language' => 'de_CH',
@@ -54,7 +54,7 @@ class UserSeeder extends AbstractSeed
             [
                 'id' => 4,
                 'first_name' => 'Newcomer',
-                'surname' => 'Surname',
+                'last_name' => 'Surname',
                 'user_role_id' => 4,
                 'status' => 'active',
                 'language' => 'fr_CH',

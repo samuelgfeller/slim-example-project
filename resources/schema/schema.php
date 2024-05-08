@@ -1751,11 +1751,11 @@ return array (
           'IS_GENERATED' => 'NEVER',
           'GENERATION_EXPRESSION' => NULL,
         ),
-        'surname' => 
+        'last_name' =>
         array (
           'TABLE_CATALOG' => 'def',
           'TABLE_NAME' => 'user',
-          'COLUMN_NAME' => 'surname',
+          'COLUMN_NAME' => 'last_name',
           'ORDINAL_POSITION' => 3,
           'COLUMN_DEFAULT' => 'NULL',
           'IS_NULLABLE' => 'YES',

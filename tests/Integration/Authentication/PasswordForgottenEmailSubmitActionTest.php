@@ -69,7 +69,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         $this->assertEmailHeaderSame(
             $mailerMessage,
             'To',
-            $userRow['first_name'] . ' ' . $userRow['surname'] . ' <' . $email . '>'
+            $userRow['first_name'] . ' ' . $userRow['last_name'] . ' <' . $email . '>'
         );
 
         // Database assertions

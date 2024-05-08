@@ -17,7 +17,7 @@ class UserFixture
         [
             'id' => 1,
             'first_name' => 'Example',
-            'surname' => 'User',
+            'last_name' => 'User',
             'email' => 'user@example.com',
             // Cleartext password is 12345678
             'password_hash' => '$2y$10$r8t5LRX7Hq1.22/h6dwe1uLrrhZnGTOnsue5p/rUgeD8BAhDwFhk2',

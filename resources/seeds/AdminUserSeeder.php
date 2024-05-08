@@ -32,7 +32,7 @@ class AdminUserSeeder extends AbstractSeed
         $userRows = [
             [
                 'first_name' => 'Admin',
-                'surname' => 'Admin',
+                'last_name' => 'Admin',
                 'user_role_id' => 1,
                 'status' => 'active',
                 'email' => 'admin@user.com',

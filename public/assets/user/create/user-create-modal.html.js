@@ -42,7 +42,7 @@ export function displayUserCreateModal() {
         </div>
         <div class="form-input-div">
             <label for="last-name-input">${translated['Last name']}</label>
-            <input type="text" name="surname" id="last-name-input" placeholder="Zimmer" class="form-input" 
+            <input type="text" name="last_name" id="last-name-input" placeholder="Zimmer" class="form-input" 
             minlength="2" maxlength="100" required>
         </div>
         <div class="form-input-div">

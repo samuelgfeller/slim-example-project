@@ -45,7 +45,7 @@ final readonly class ClientFinderRepository
             'deleted_at' => 'client.deleted_at',
             // User data prefixed with user_
             'user_first_name' => 'user.first_name',
-            'user_surname' => 'user.surname',
+            'user_last_name' => 'user.last_name',
             // Client status data prefixed with client_status_
             'client_status_name' => 'client_status.name',
         ])// Multiple joins doc: https://book.cakephp.org/4/en/orm/query-builder.html#adding-joins
@@ -116,7 +116,7 @@ final readonly class ClientFinderRepository
             'deleted_at' => 'client.deleted_at',
             // User data prefixed with user_
             'user_first_name' => 'user.first_name',
-            'user_surname' => 'user.surname',
+            'user_last_name' => 'user.last_name',
             // Client status data prefixed with client_status_
             'client_status_name' => 'client_status.name',
             // Main note data loaded in page renderer prefixed with `note_`

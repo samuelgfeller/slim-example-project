@@ -13,7 +13,7 @@ class UserFinderRepository
     private array $fields = [
         'id',
         'first_name',
-        'surname',
+        'last_name',
         'email',
         'user_role_id',
         'status',

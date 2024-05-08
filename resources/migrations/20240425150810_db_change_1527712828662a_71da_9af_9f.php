@@ -422,7 +422,7 @@ class DbChange1527712828662a71da9af9f extends Phinx\Migration\AbstractMigration
                 'encoding' => 'utf8mb4',
                 'after' => 'id',
             ])
-            ->addColumn('surname', 'string', [
+            ->addColumn('last_name', 'string', [
                 'null' => true,
                 'default' => null,
                 'limit' => 100,
@@ -434,7 +434,7 @@ class DbChange1527712828662a71da9af9f extends Phinx\Migration\AbstractMigration
                 'null' => false,
                 'default' => '0',
                 'limit' => MysqlAdapter::INT_REGULAR,
-                'after' => 'surname',
+                'after' => 'last_name',
             ])
             ->addColumn('status', 'enum', [
                 'null' => true,

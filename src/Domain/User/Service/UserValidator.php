@@ -33,16 +33,16 @@ final readonly class UserValidator
 
         // For the user, there are no optional fields meaning that if any field is passed, it has to contain a value.
         $validator
-            // First name and surname are required to have values if they're given so no allowEmptyString
+            // First name and lastName are required to have values if they're given so no allowEmptyString
             ->requirePresence('first_name', $isCreateMode, __('Field is required'))
             ->minLength('first_name', 2, __('Minimum length is %d', 2))
             ->maxLength('first_name', 100, __('Maximum length is %d', 100))
             // Disallow empty strings as field is required
             ->notEmptyString('first_name', __('Required'))
-            ->requirePresence('surname', $isCreateMode, __('Field is required'))
-            ->minLength('surname', 2, __('Minimum length is %d', 2))
-            ->maxLength('surname', 100, __('Maximum length is %d', 100))
-            ->notEmptyString('surname', __('Required'))
+            ->requirePresence('last_name', $isCreateMode, __('Field is required'))
+            ->minLength('last_name', 2, __('Minimum length is %d', 2))
+            ->maxLength('last_name', 100, __('Maximum length is %d', 100))
+            ->notEmptyString('last_name', __('Required'))
             ->requirePresence('email', $isCreateMode, __('Field is required'))
             // email() automatically disallows empty strings
             ->email('email', false, __('Invalid email'))

@@ -76,7 +76,7 @@ class UserCreateProvider
                 'requestBody' => [
                     // Values too short
                     'first_name' => 'n',
-                    'surname' => 'n',
+                    'last_name' => 'n',
                     'email' => 'new.email@tes$t.ch',
                     'status' => 'non-existing',
                     'user_role_id' => 99,
@@ -89,7 +89,7 @@ class UserCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Minimum length is 2'],
-                            'surname' => [0 => 'Minimum length is 2'],
+                            'last_name' => [0 => 'Minimum length is 2'],
                             'email' => [0 => 'Invalid email'],
                             'status' => [0 => 'Invalid option'],
                             'user_role_id' => [0 => 'Invalid option'],
@@ -103,7 +103,7 @@ class UserCreateProvider
                 // Values too long
                 'requestBody' => [
                     'first_name' => str_repeat('i', 101),
-                    'surname' => str_repeat('i', 101),
+                    'last_name' => str_repeat('i', 101),
                     'email' => 'new.email.@test.ch',
                     // Valid required values to test the above
                     'status' => UserStatus::Active->value,
@@ -117,7 +117,7 @@ class UserCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Maximum length is 100'],
-                            'surname' => [0 => 'Maximum length is 100'],
+                            'last_name' => [0 => 'Maximum length is 100'],
                             'email' => [0 => 'Invalid email'],
                         ],
                     ],
@@ -127,7 +127,7 @@ class UserCreateProvider
                 // Required values not given
                 'requestBody' => [
                     'first_name' => '',
-                    'surname' => '',
+                    'last_name' => '',
                     'email' => '',
                     // Valid required values to test the above
                     'status' => '',
@@ -141,7 +141,7 @@ class UserCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Required'],
-                            'surname' => [0 => 'Required'],
+                            'last_name' => [0 => 'Required'],
                             'email' => [0 => 'Invalid email'],
                             'status' => [0 => 'Invalid option'],
                             // Same error message twice because not numeric and not existing.
@@ -161,7 +161,7 @@ class UserCreateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Field is required'],
-                            'surname' => [0 => 'Field is required'],
+                            'last_name' => [0 => 'Field is required'],
                             'email' => [0 => 'Field is required'],
                             'status' => [0 => 'Field is required'],
                             'user_role_id' => [0 => 'Field is required'],

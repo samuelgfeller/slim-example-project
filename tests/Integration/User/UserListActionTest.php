@@ -69,7 +69,7 @@ class UserListActionTest extends TestCase
             // camelCase according to Google recommendation https://stackoverflow.com/a/19287394/9013718
             'id' => $authenticatedUserRow['id'],
             'firstName' => $authenticatedUserRow['first_name'],
-            'surname' => $authenticatedUserRow['surname'],
+            'lastName' => $authenticatedUserRow['last_name'],
             'email' => $authenticatedUserRow['email'],
             'status' => $authenticatedUserRow['status'],
             'userRoleId' => $authenticatedUserRow['user_role_id'],
@@ -85,7 +85,7 @@ class UserListActionTest extends TestCase
             $expectedResponseArray['userResultDataArray'][] = [
                 'id' => $userRow['id'],
                 'firstName' => $userRow['first_name'],
-                'surname' => $userRow['surname'],
+                'lastName' => $userRow['last_name'],
                 'email' => $userRow['email'],
                 'status' => $userRow['status'],
                 'userRoleId' => $userRow['user_role_id'],

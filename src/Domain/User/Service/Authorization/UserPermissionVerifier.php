@@ -185,7 +185,7 @@ final class UserPermissionVerifier
             // Personal info are values such as first name, last name and email
             $grantedUpdateKeys[] = 'personal_info';
             $grantedUpdateKeys[] = 'first_name';
-            $grantedUpdateKeys[] = 'surname';
+            $grantedUpdateKeys[] = 'last_name';
             $grantedUpdateKeys[] = 'email';
             $grantedUpdateKeys[] = 'password_hash';
             $grantedUpdateKeys[] = 'theme';

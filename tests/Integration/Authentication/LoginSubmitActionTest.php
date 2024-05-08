@@ -181,7 +181,7 @@ class LoginSubmitActionTest extends TestCase
             $email,
             'To',
             $userRow['first_name'] . ' ' .
-            $userRow['surname'] . ' <' . $loginValues['email'] . '>'
+            $userRow['last_name'] . ' <' . $loginValues['email'] . '>'
         );
 
         // Assert that there is a verification token in the database if unverified or locked

@@ -36,7 +36,7 @@ class UserUpdateProvider
         ];
         $basicDataChanges = [
             'first_name' => 'NewFirstName',
-            'surname' => 'NewLastName',
+            'last_name' => 'NewLastName',
             'email' => 'new.email@test.ch',
             'theme' => 'dark',
             'language' => 'de_CH',
@@ -127,7 +127,7 @@ class UserUpdateProvider
                 'requestBody' => [
                     // Values too short
                     'first_name' => 'n',
-                    'surname' => 'n',
+                    'last_name' => 'n',
                     'email' => 'new.email@tes$t.ch',
                     'status' => 'non-existing',
                     'user_role_id' => 99,
@@ -139,7 +139,7 @@ class UserUpdateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Minimum length is 2'],
-                            'surname' => [0 => 'Minimum length is 2'],
+                            'last_name' => [0 => 'Minimum length is 2'],
                             'email' => [0 => 'Invalid email'],
                             'status' => [0 => 'Invalid option'],
                             'user_role_id' => [0 => 'Invalid option'],
@@ -152,7 +152,7 @@ class UserUpdateProvider
                 // Values too long
                 'requestBody' => [
                     'first_name' => str_repeat('i', 101),
-                    'surname' => str_repeat('i', 101),
+                    'last_name' => str_repeat('i', 101),
                     'email' => 'new.email.@test.ch',
                 ],
                 'jsonResponse' => [
@@ -161,7 +161,7 @@ class UserUpdateProvider
                     'data' => [
                         'errors' => [
                             'first_name' => [0 => 'Maximum length is 100'],
-                            'surname' => [0 => 'Maximum length is 100'],
+                            'last_name' => [0 => 'Maximum length is 100'],
                             'email' => [0 => 'Invalid email'],
                         ],
                     ],

@@ -115,7 +115,7 @@ class NoteCreateActionTest extends TestCase
         $expectedResponseJson = [
             'status' => 'success',
             'data' => [
-                'userFullName' => $authenticatedUserRow['first_name'] . ' ' . $authenticatedUserRow['surname'],
+                'userFullName' => $authenticatedUserRow['first_name'] . ' ' . $authenticatedUserRow['last_name'],
                 'noteId' => $noteDbRow['id'],
                 'createdDateFormatted' => $dateFormatter->format(new \DateTime($noteDbRow['created_at'])),
             ],

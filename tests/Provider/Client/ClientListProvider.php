@@ -133,7 +133,7 @@ class ClientListProvider
             'name' => [ // Test user filter "name"
                 'filterQueryParamsArr' => ['name' => 'th'],
                 'expectedClientsWhereString' => 'client.deleted_at IS NULL AND (CONCAT(client.first_name, "  ", ' .
-                    'last_name) LIKE "%th%")',
+                    'client.last_name) LIKE "%th%")',
                 'authenticatedUserAttributes' => $newcomerAttributes,
                 'clientsToInsert' => $clientsToInsert,
                 'usersToInsert' => $usersToInsert,
@@ -155,7 +155,7 @@ class ClientListProvider
             'status and name' => [ // Test user filter "status 68 or 69" and "name contains 'enth'"
                 'filterQueryParamsArr' => ['status' => [68, 69], 'name' => 'enth'],
                 'expectedClientsWhereString' => 'client.deleted_at IS NULL AND (client_status_id IN (68, 69)) AND ' .
-                    '(CONCAT(client.first_name, "  ", last_name) LIKE "%enth%")',
+                    '(CONCAT(client.first_name, "  ", client.last_name) LIKE "%enth%")',
                 'authenticatedUserAttributes' => $newcomerAttributes,
                 'clientsToInsert' => $clientsToInsert,
                 'usersToInsert' => $usersToInsert,
@@ -170,7 +170,7 @@ class ClientListProvider
                 'usersToInsert' => $usersToInsert,
                 'clientStatusesToInsert' => $clientStatusesToInsert,
             ],
-            // * Filter combination: linked to other user 43 or authenticated user 42, is deleted and the status is 68
+            // * Filter combination: linked to other user 43 or authenticated user 42, is deleted, and the status is 68
             'newcomer deleted' => [ // This test is as newcomer so no clients should be found
                 'filterQueryParamsArr' => ['status' => [68], 'user' => [42, 43], 'deleted' => 1],
                 'expectedClientsWhereString' => 'FALSE', // ? Newcomer may not see deleted clients

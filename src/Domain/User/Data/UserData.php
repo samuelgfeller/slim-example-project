@@ -11,7 +11,7 @@ class UserData implements \JsonSerializable
     // Variable names matching database columns (camelCase instead of snake_case)
     public ?int $id; // Mysql always returns string from db https://stackoverflow.com/a/5323169/9013718
     public ?string $firstName;
-    public ?string $surname;
+    public ?string $lastName;
     // Email has to be default null as it is an indicator that user obj is empty in AuthService register function
     public ?string $email;
     public ?string $password;
@@ -30,7 +30,7 @@ class UserData implements \JsonSerializable
         // Keys may be taken from view form or database, so they have to correspond to both; otherwise use mapper
         $this->id = $userData['id'] ?? null;
         $this->firstName = $userData['first_name'] ?? null;
-        $this->surname = $userData['surname'] ?? null;
+        $this->lastName = $userData['last_name'] ?? null;
         $this->email = $userData['email'] ?? null;
         $this->password = $userData['password'] ?? null;
         $this->password2 = $userData['password2'] ?? null;
@@ -47,13 +47,13 @@ class UserData implements \JsonSerializable
     }
 
     /**
-     * Returns the first and surname in one string separated by a whitespace.
+     * Returns the first and lastName in one string separated by a whitespace.
      *
      * @return string
      */
     public function getFullName(): string
     {
-        return $this->firstName . ' ' . $this->surname;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     /**
@@ -68,7 +68,7 @@ class UserData implements \JsonSerializable
         return [
             'id' => $this->id,
             'first_name' => $this->firstName,
-            'surname' => $this->surname,
+            'last_name' => $this->lastName,
             'email' => $this->email,
             'password_hash' => $this->passwordHash,
             'user_role_id' => $this->userRoleId,
@@ -83,7 +83,7 @@ class UserData implements \JsonSerializable
         return [
             'id' => $this->id,
             'firstName' => $this->firstName,
-            'surname' => $this->surname,
+            'lastName' => $this->lastName,
             'email' => $this->email,
             'status' => $this->status,
             'userRoleId' => $this->userRoleId,

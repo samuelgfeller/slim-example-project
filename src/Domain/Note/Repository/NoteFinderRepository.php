@@ -56,7 +56,7 @@ class NoteFinderRepository
     {
         $query = $this->queryFactory->selectQuery()->from('note');
 
-        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.surname' => 'identifier']);
+        $concatName = $query->func()->concat(['user.first_name' => 'identifier', ' ', 'user.last_name' => 'identifier']);
 
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
@@ -87,7 +87,7 @@ class NoteFinderRepository
         $concatName = $query->func()->concat([
             $query->func()->coalesce(['user.first_name' => 'identifier', '']),
             ' ',
-            $query->func()->coalesce(['user.surname' => 'identifier', '']),
+            $query->func()->coalesce(['user.last_name' => 'identifier', '']),
         ]);
 
         $query->select(array_merge($this->noteResultFields, ['user_full_name' => $concatName]))
@@ -123,7 +123,7 @@ class NoteFinderRepository
 
         $concatUserName = $query->func()->concat(
             // Not very sexy to put IFNULL function there but with "identifier", cake interprets the string literally
-            ['IFNULL(user.first_name, "")' => 'identifier', ' ', 'IFNULL(user.surname, "")' => 'identifier']
+            ['IFNULL(user.first_name, "")' => 'identifier', ' ', 'IFNULL(user.last_name, "")' => 'identifier']
         );
         $concatClientName = $query->func()->concat(
             ['IFNULL(client.first_name, "")' => 'identifier', ' ', 'IFNULL(client.last_name, "")' => 'identifier']

@@ -123,7 +123,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
             // Same format as in NoteFinder:findAllNotesFromClientExceptMain()
             'createdAt' => $dateFormatter->format(new \DateTime($noteData['created_at'])),
             'updatedAt' => $dateFormatter->format(new \DateTime($noteData['updated_at'])),
-            'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['surname'],
+            'userFullName' => $userLinkedToNoteRow['first_name'] . ' ' . $userLinkedToNoteRow['last_name'],
             'clientFullName' => null,
             // Has to match privilege from notePrivilegeDeterminer.php (rules are in notePermissionVerifier.php)
             'privilege' => $expectedResult['privilege']->name,

@@ -28,7 +28,7 @@ class UserNameAbbreviator
             ): string {
                 // When $i (amount of letters) of last name to abbreviate is the same as the full name,
                 // there is no short form and the function must end as it would cause infinite recursion.
-                // Checks if short form ($i letters from the beginning of surname) is contained in name to check
+                // Checks if short form ($i letters from the beginning of lastName) is contained in name to check
                 if (strlen($lastName) > $i && str_contains($lastNameToCheck, substr($lastName, 0, $i))) {
                     // Increase number of letters that should be used of the last name as it exists in the name to check
                     $i++;
@@ -41,7 +41,7 @@ class UserNameAbbreviator
                 return $shortName;
             };
             // Always privilege longest lastname abbreviation as it means that this length necessary
-            if (strlen($builtLastName = $buildLastName($lastName, (string)$userToCheck->surname)) > strlen(
+            if (strlen($builtLastName = $buildLastName($lastName, (string)$userToCheck->lastName)) > strlen(
                 $abbreviatedLastName
             )) {
                 $abbreviatedLastName = $builtLastName;
@@ -94,7 +94,7 @@ class UserNameAbbreviator
                 unset($usersToCheckAgainst[$userId]);
                 // Call recursive function which compares last name of currently iterated user with other users with same
                 // first name and returns the shortest version of non-duplicate lastname
-                $lastNameAbbr = $this->buildLastNameAbbreviation((string)$user->surname, $usersToCheckAgainst);
+                $lastNameAbbr = $this->buildLastNameAbbreviation((string)$user->lastName, $usersToCheckAgainst);
                 $outputNames[(int)$userId] = $user->firstName . ' ' . $lastNameAbbr;
             }
         }

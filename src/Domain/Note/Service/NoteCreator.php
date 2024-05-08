@@ -59,7 +59,7 @@ final readonly class NoteCreator
 
             return [
                 'note_id' => $noteId,
-                'user_full_name' => $user->firstName . ' ' . $user->surname,
+                'user_full_name' => $user->firstName . ' ' . $user->lastName,
                 'formatted_creation_timestamp' => $dateFormatter->format($noteCreatedAtTimestamp),
             ];
         }

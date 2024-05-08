@@ -59,7 +59,7 @@ class UserCreateActionTest extends TestCase
 
         $requestData = [
             'first_name' => 'Danny',
-            'surname' => 'Ric',
+            'last_name' => 'Ric',
             'email' => 'daniel.riccardo@notmclaren.com',
             'password' => '12345678',
             'password2' => '12345678',
@@ -125,7 +125,7 @@ class UserCreateActionTest extends TestCase
                 $email,
                 'To',
                 $requestData['first_name'] . ' ' .
-                $requestData['surname'] . ' <' . $requestData['email'] . '>'
+                $requestData['last_name'] . ' <' . $requestData['email'] . '>'
             );
         } else { // Database must be unchanged
             // Only 1 row (authenticated user) expected in user table
@@ -215,7 +215,7 @@ class UserCreateActionTest extends TestCase
             $this->urlFor('user-create-submit'),
             [
                 'first_name' => 'New User',
-                'surname' => 'Same Email',
+                'last_name' => 'Same Email',
                 'email' => $existingEmail,
                 'password' => '12345678',
                 'password2' => '12345678',

@@ -11,7 +11,7 @@ import {html} from "../../general/general-js/functions.js?v=0.4.1";
 export function getUserCardHtml(user, statuses) {
     return `<div class="user-card" tabindex="0" data-user-id="${user.id}">
     <div class="card-content">
-        <h3>${user.firstName !== null ? html(user.firstName) : ''} ${user.surname !== null ? html(user.surname) : ''}</h3>
+        <h3>${user.firstName !== null ? html(user.firstName) : ''} ${user.lastName !== null ? html(user.lastName) : ''}</h3>
         <div class="card-icon-and-span-div">
             <img src="assets/general/general-img/personal-data-icons/email-icon.svg" class="card-icon default-icon" alt="email">
             <a href="mailto:${html(user.email)}">${html(user.email)}</a>
