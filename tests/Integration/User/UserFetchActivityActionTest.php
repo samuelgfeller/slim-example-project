@@ -29,7 +29,7 @@ class UserFetchActivityActionTest extends TestCase
     use AuthorizationTestTrait;
 
     /**
-     * Test that when fetching user activity an array is returned.
+     * Test that when fetching user activity, an array is returned.
      *
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
@@ -43,27 +43,27 @@ class UserFetchActivityActionTest extends TestCase
             UserFixture::class,
             $this->addUserRoleId(['user_role_id' => UserRole::NEWCOMER]),
         )['id'];
-        // Insert user activity to cover most possible code with this test
+        // Insert user activity to cover the most possible code with this test
         $this->insertFixture(UserActivityFixture::class, ['user_id' => $userId]);
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
+        // Make request to fetch user activity for 2 users (even if only one exists)
         $request = $this->createJsonRequest('GET', $this->urlFor('user-get-activity'))
-            ->withQueryParams(['user' => $userId]);
+            ->withQueryParams(['user' => [$userId, $userId + 1]]);
         $response = $this->app->handle($request);
         // Assert status code 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
         // Get response as array
         $responseData = $this->getJsonData($response);
-        // Only assert if array is returned as there is quite a logic how its built and I don't think its
-        // pertinent to test this in detail and when it's changed it'd be annoying having to update it each time here
+        // Only assert that array is returned as building the entire expected response would be complicated.
         self::assertIsArray($responseData);
         self::assertNotEmpty($responseData);
     }
 
     /**
-     * Test that when fetching user activity without query params
+     * Test that when fetching user activity without query params,
      * an empty array is returned.
      *
      * @throws NotFoundExceptionInterface
@@ -87,8 +87,7 @@ class UserFetchActivityActionTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
         // Get response as array
         $responseData = $this->getJsonData($response);
-        // Only assert if array is returned as there is quite a logic how its built and I don't think its
-        // pertinent to test this in detail and when it's changed it'd be annoying having to update it each time here
+        // Only assert that array is returned as building the entire expected response would be complicated.
         self::assertIsArray($responseData);
         self::assertEmpty($responseData);
     }

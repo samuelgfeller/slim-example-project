@@ -37,7 +37,7 @@ class LogoutActionTest extends TestCase
     }
 
     /**
-     * Test that when user is not active but still logged in and tries
+     * Test that when a user is not active but still logged in and tries
      * to access a protected route, the user is logged out.
      *
      * @return void

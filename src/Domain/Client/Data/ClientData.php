@@ -33,7 +33,7 @@ class ClientData implements \JsonSerializable
         $this->id = $clientData['id'] ?? null;
         $this->firstName = $clientData['first_name'] ?? null;
         $this->lastName = $clientData['last_name'] ?? null;
-        $this->birthdate = isset($clientData['birthdate']) ? new \DateTimeImmutable($clientData['birthdate']) : null;
+        $this->birthdate = $this->createDateTimeImmutableString($clientData['birthdate'] ?? null);
         $this->location = $clientData['location'] ?? null;
         $this->phone = $clientData['phone'] ?? null;
         $this->email = $clientData['email'] ?? null;
@@ -45,13 +45,17 @@ class ClientData implements \JsonSerializable
         // Cast to int if user id is set and not empty (null / empty string)
         $this->userId = !empty($clientData['user_id']) ? (int)$clientData['user_id'] : null;
         $this->clientStatusId = !empty($clientData['client_status_id']) ? (int)$clientData['client_status_id'] : null;
-        $this->updatedAt = $clientData['updated_at'] ?? null ? new \DateTimeImmutable($clientData['updated_at']) : null;
-        $this->createdAt = $clientData['created_at'] ?? null ? new \DateTimeImmutable($clientData['created_at']) : null;
-        $this->deletedAt = $clientData['deleted_at'] ?? null ? new \DateTimeImmutable($clientData['deleted_at']) : null;
-
+        $this->updatedAt = $this->createDateTimeImmutableString($clientData['updated_at'] ?? null);
+        $this->createdAt = $this->createDateTimeImmutableString($clientData['created_at'] ?? null);
+        $this->deletedAt = $this->createDateTimeImmutableString($clientData['deleted_at'] ?? null);
         if ($this->birthdate) {
             $this->age = (new \DateTime())->diff($this->birthdate)->y;
         }
+    }
+
+    private function createDateTimeImmutableString(?string $date): ?\DateTimeImmutable
+    {
+        return isset($date) ? new \DateTimeImmutable($date) : null;
     }
 
     /**

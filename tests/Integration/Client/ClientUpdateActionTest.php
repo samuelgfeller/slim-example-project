@@ -23,12 +23,10 @@ use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Client update integration test:
- * - normal update
- * - invalid note update
+ * - normal update with different user roles
+ * - invalid update requests
  * - unauthenticated client update
  * - client update request with value to change being the same as in database
- * NOT in this test:
- * - edit non-existing client - reason: delete request on non-existing client is tested.
  */
 class ClientUpdateActionTest extends TestCase
 {

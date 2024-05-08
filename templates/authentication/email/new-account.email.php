@@ -10,6 +10,7 @@
 Hello <?= html($userFullName) ?> <br>
 <br>
 Your account has been created. <br> <br>
+<?php /** Sentence asserted at @see \App\Test\Integration\User\UserCreateActionTest::testUserSubmitCreateAuthorization() */?>
 To verify that this email address belongs to you, please click on the following link: <br>
 <b><a href="<?= $route->fullUrlFor($uri, 'register-verification', [], $queryParams) ?>">Verify account</a></b>.
 <br><br>

@@ -12,6 +12,7 @@ use Symfony\Component\Mime\Email;
 /**
  * Mailer class with added method to get the html string from a template and added logging in the send() function.
  * Test sender score: https://www.mail-tester.com/.
+ * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
  */
 final readonly class Mailer
 {

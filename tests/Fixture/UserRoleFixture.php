@@ -2,6 +2,10 @@
 
 namespace App\Test\Fixture;
 
+/**
+ * User roles are automatically inserted in the setup of all test
+ * functions using the database.
+ */
 class UserRoleFixture
 {
     // Table name
@@ -30,14 +34,4 @@ class UserRoleFixture
             'hierarchy' => 4,
         ],
     ];
-
-    public function getTable(): string
-    {
-        return $this->table;
-    }
-
-    public function getRecords(): array
-    {
-        return $this->records;
-    }
 }

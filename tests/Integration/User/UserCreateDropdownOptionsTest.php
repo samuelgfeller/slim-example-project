@@ -50,7 +50,7 @@ class UserCreateDropdownOptionsTest extends TestCase
             $this->addUserRoleId($authenticatedUserAttributes)
         );
 
-        // Simulate logged-in user with same user as linked to client
+        // Simulate logged-in user with the same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $request = $this->createJsonRequest(

@@ -38,11 +38,11 @@ final readonly class UserActivityRepository
     /**
      * Insert user activity in database.
      *
-     * @param mixed $userActivityRow
+     * @param array $userActivityRow
      *
      * @return int lastInsertId
      */
-    public function insertUserActivity($userActivityRow): int
+    public function insertUserActivity(array $userActivityRow): int
     {
         return (int)$this->queryFactory->insertQueryWithData($userActivityRow)->into('user_activity')->execute()->lastInsertId();
     }

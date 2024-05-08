@@ -15,7 +15,7 @@ class ClientReadProvider
         $advisorAttr = ['user_role_id' => UserRole::ADVISOR];
         $newcomerAttr = ['user_role_id' => UserRole::NEWCOMER];
 
-        // Testing authorization: with the lowest allowed privilege and with highest not allowed
+        // Testing authorization: with the lowest allowed privilege and with the highest not allowed
         return [ // User owner is the user itself
             [// ? newcomer not owner - allowed reading undeleted client - but not update or create main note
                 'userRow' => $managingAdvisorAttr,

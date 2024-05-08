@@ -65,7 +65,7 @@
 </head>
 <body>
 <!-- "In terms of semantics, <div> is the best choice" as wrapper https://css-tricks.com/best-way-implement-wrapper-css -->
-<!-- Wrapper should encompass entire body content as its height is 100vh -->
+<!-- Wrapper should encompass entire body content as its height is 100dvh -->
 <div id="wrapper">
     <header>
         <!-- Application name displayed on mobile -->

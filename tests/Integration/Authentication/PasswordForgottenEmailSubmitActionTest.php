@@ -17,9 +17,9 @@ use TestTraits\Trait\RouteTestTrait;
 /**
  * Integration testing email submit of forgotten password form
  *  - submit valid email
+ *  - submit valid email after email abuse threshold reached -> unprocessable entity
  *  - submit email of non-existing user -> act normal but no database change
- *  - submit invalid email -> 422 backend validation fail
- *  - submit malformed request body -> HttpBadRequestException.
+ *  - submit invalid email -> 422 backend validation fails
  */
 class PasswordForgottenEmailSubmitActionTest extends TestCase
 {
@@ -105,6 +105,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
 
     /**
      * Assert that verification email is not sent if the email threshold is reached.
+     * Using the same provider as the general security email test.
      *
      * @param int|string $delay
      * @param int $emailLogAmountInTimeSpan
@@ -123,7 +124,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         $userId = $userRow['id'];
         $email = $userRow['email'];
 
-        // Insert email log entries
+        // Insert max amount of email log entries before throttling
         for ($i = 0; $i < $emailLogAmountInTimeSpan; $i++) {
             $this->insertFixtureRow(
                 'email_log',
@@ -162,7 +163,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
      */
     public function testPasswordForgottenEmailSubmitUserNotExisting(): void
     {
-        // Not inserting user as it shouldn't exist
+        // Not inserting a user as it shouldn't exist
 
         $request = $this->createFormRequest(
             'POST', // Request to change password

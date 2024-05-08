@@ -23,7 +23,7 @@ class DashboardTogglePanelActionTest extends TestCase
     use HttpJsonTestTrait;
 
     /**
-     * Test that when user clicks to enable 2 panels it is
+     * Test that when a user clicks to enable two panels, it is
      * saved in the database table user_filter_setting.
      *
      * @return void
@@ -63,7 +63,7 @@ class DashboardTogglePanelActionTest extends TestCase
             'filter_id',
             'unassigned-panel'
         );
-        // Assert that panel assigned to me exists and has correct values
+        // Assert that the panel assigned to me exists and has correct values
         $this->assertTableRowsByColumn(
             [
                 'user_id' => $userId,

@@ -15,14 +15,4 @@ class UserFilterSettingFixture
             'module' => 'dashboard-panel',
         ],
     ];
-
-    public function getTable(): string
-    {
-        return $this->table;
-    }
-
-    public function getRecords(): array
-    {
-        return $this->records;
-    }
 }

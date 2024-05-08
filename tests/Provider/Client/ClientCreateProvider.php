@@ -25,11 +25,11 @@ class ClientCreateProvider
         $newcomerAttributes = ['first_name' => 'Newcomer', 'user_role_id' => UserRole::NEWCOMER];
 
         // Newcomer must not receive any available user
-        // Advisor is allowed to create client but only assign it to himself or leave user_id empty
+        // Advisor is allowed to create a client but only assign it to himself or leave user_id empty
         // Managing advisor and higher should receive all available users
         return [
             // "owner" means from the perspective of the authenticated user
-            [ // ? Newcomer - not allowed so nothing should be returned
+            [ // ? Newcomer - not allowed, so nothing should be returned
                 'authenticatedUserRow' => $newcomerAttributes,
                 'otherUserRow' => $advisorAttributes,
                 'expectedUserNames' => [],
@@ -239,8 +239,8 @@ class ClientCreateProvider
      * E.g. ->maxLength('first_name', 100) has the consequence that it expects
      * a non-null value for the first_name. Without ->allowEmptyString('first_name')
      * the validation would fail with "This field cannot be left empty".
-     * I did not expect this behaviour and ran into this when testing in the GUI so this test
-     * makes sense to me in order to not forget to always add ->allow[Whatever] when value is optional.
+     * I did not expect this behaviour and ran into this when testing, so this test
+     * * reminds to always add ->allow[Whatever] when value is optional.
      *
      * @return array
      */

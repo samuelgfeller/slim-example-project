@@ -38,7 +38,7 @@ class UserUpdateActionTest extends TestCase
      * @param array $userToChangeRow user to change attributes containing the user_role_id
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $requestData array of data for the request body
-     * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
+     * @param array $expectedResult HTTP status code, bool if db entry is created and json response
      *
      *@throws NotFoundExceptionInterface
      * @throws \JsonException
@@ -138,7 +138,7 @@ class UserUpdateActionTest extends TestCase
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
-        // Assert 200 OK
+        // Assert 422 Unprocessable Entity
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         // database must be unchanged
         $this->assertTableRowEquals($userRow, 'user', $userRow['id']);

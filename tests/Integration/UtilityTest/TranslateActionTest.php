@@ -33,18 +33,18 @@ class TranslateActionTest extends TestCase
         $response = $this->app->handle($request);
         // Assert 200 OK
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
-        // Testing only response structure and not if strings actually were translated as they don't work locally
+        // Testing only response structure and not if strings were translated as localization doesn't work locally
         $this->assertJsonData(['Hello' => 'Hello', 'World' => 'World'], $response);
     }
 
     /**
-     * Test that password reset page loads with status code 400 if token is missing.
+     * Test that translate action returns 400 Bad request when query params are missing.
      *
      * @return void
      */
     public function testPasswordResetPageActionTokenMissing(): void
     {
-        // Create token with missing token
+        // Create token with missing query params
         $request = $this->createRequest('GET', $this->urlFor('translate'));
         $response = $this->app->handle($request);
         // Assert 400 Bad request

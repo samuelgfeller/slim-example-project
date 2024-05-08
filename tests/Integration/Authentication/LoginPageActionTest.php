@@ -32,7 +32,8 @@ class LoginPageActionTest extends TestCase
     }
 
     /**
-     * Test login page when already authenticated with redirect link.
+     * Test that the "redirect" GET param on the login page actually redirects
+     * to the specified route when logged in login.
      *
      * @return void
      */
@@ -52,7 +53,7 @@ class LoginPageActionTest extends TestCase
         $response = $this->app->handle($request);
         // Assert 302 Found (redirect)
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
-
+        // Assert redirect location
         self::assertSame($requestRouteAfterLogin, $response->getHeaderLine('Location'));
     }
 }

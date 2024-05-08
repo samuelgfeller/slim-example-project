@@ -9,8 +9,6 @@ use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use TestTraits\Trait\DatabaseTestTrait;
 use TestTraits\Trait\FixtureTestTrait;
 use TestTraits\Trait\HttpTestTrait;
@@ -25,11 +23,8 @@ class LoginSecurityTest extends TestCase
     use RouteTestTrait;
 
     /**
-     * Test thresholds and according delays of login failures
-     * If login request amount exceeds threshold, the user has to wait a certain delay.
-     *
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
+     * Test thresholds and according delays of login failures.
+     * If the login request amount exceeds the threshold, the user has to wait a certain delay.
      *
      * @return void
      */
@@ -54,17 +49,19 @@ class LoginSecurityTest extends TestCase
         // Login request with incorrect credentials
         $request = $this->createFormRequest('POST', $this->urlFor('login-submit'), $loginRequestBody);
 
+        // Get the throttle rules from the settings
         $throttleRules = $this->container->get('settings')['security']['login_throttle_rule'];
 
         $lowestThreshold = array_key_first($throttleRules);
 
-        // It should be tested with the most strict throttle as well. This means that last run should match last threshold
+        // It should be tested with the strictest throttle as well.
+        // This means that the last run should match the last threshold
         $thresholdForStrictestThrottle = array_key_last($throttleRules);
 
         // Reverse throttleRules for the loop iterations so that it will check for the big (stricter) delays first
         krsort($throttleRules);
 
-        // Simulate amount of login requests to go through for every throttling level
+        // Simulate the amount of login requests to go through for every throttling level
         // $nthLoginRequest is the current nth amount of login request that is made (4th, 5th, 6th etc.)
         for ($nthLoginRequest = 1; $nthLoginRequest <= $thresholdForStrictestThrottle; $nthLoginRequest++) {
             // * Until the lowest threshold is reached, the login requests are normal and should not be throttled
@@ -76,20 +73,21 @@ class LoginSecurityTest extends TestCase
                 continue; // Skip to next loop iteration
             }
 
-            // * Lowest threshold reached, assert that correct throttle is applied
+            // * Lowest threshold reached, assert that the correct throttle is applied
             foreach ($throttleRules as $threshold => $delay) {
-                // Apply correct throttling rule in relation to nth login request by checking which threshold is reached
+                // Check if the number of login requests reached the threshold
                 if ($nthLoginRequest >= $threshold) {
-                    // If the amount of made login requests reaches the first threshold -> throttle
+                    // If the number of made login requests reaches the first threshold -> throttle
                     try {
-                        // Creates an additional authentication_log entry that is needed to assert for next iterations
-                        // with higher throttling
+                        // Handle request again to create an additional authentication_log entry which is needed for the
+                        // assertions in the next iterations with higher throttling.
                         $this->app->handle($request);
                         self::fail(
                             'SecurityException should be thrown' .
                             "\nnthLoginrequest: $nthLoginRequest, threshold: $threshold"
                         );
                     } catch (SecurityException $se) {
+                        // Assert the delay and security type
                         self::assertEqualsWithDelta(
                             $delay,
                             $se->getRemainingDelay(),
@@ -102,7 +100,7 @@ class LoginSecurityTest extends TestCase
                         // Below this request after waiting the delay is with WRONG credentials
                         if (is_numeric($delay)) {
                             // After waiting the delay, user is allowed to make new login request but if the credentials
-                            // are wrong again (using same $request), an exception is expected from the **second
+                            // are wrong again (using the same $request), an exception is expected from the **second
                             // security check** after the failed request in LoginVerifier.
                             // (This second security check is not done if request has correct credentials)
                             // Prepone last authentication_log to simulate waiting
@@ -122,14 +120,15 @@ class LoginSecurityTest extends TestCase
                                 $this->deleteLastAuthenticationLog();
                             }
 
-                            // * Assert that after waiting the delay, a successful request can be made with correct credentials
+                            // * Assert that after waiting the delay, a successful login request can be made with
+                            // the correct credentials.
                             $requestAfterWaitingDelay = $this->createFormRequest(
                                 'POST',
                                 $this->urlFor('login-submit'),
                                 $correctLoginRequestBody
                             );
                             $responseAfterWaiting = $this->app->handle($requestAfterWaitingDelay);
-                            // Again delete the most recent authentication log entry as the request above is also an
+                            // Again, delete the most recent authentication log entry as the request above is also an
                             // "aside" test that should not influence login stats of the next iterations.
                             $this->deleteLastAuthenticationLog();
 
@@ -143,15 +142,16 @@ class LoginSecurityTest extends TestCase
                                 $responseAfterWaiting->getStatusCode()
                             );
 
-                            // Reset last login request so that it's correct for the next request as security check is
-                            // done before the new `authentication_log` entry is made.
+                            // Reset the last login request so that it's correct for the next request as security check
+                            // is done before the new `authentication_log` entry is made.
                             // $this->postponeLastAuthenticationLog($delay);
                             // Edit: the above is not needed.
                         }
                     }
-                    // If right threshold is reached and asserted, go out of nthLogin loop to test the next iteration
-                    // Otherwise the throttling foreach continues and the delay assertion fails as it would be too small
-                    // once nthLoginRequest reaches the second-strictest throttling.
+                    // If the right threshold is reached and asserted, go out of nthLogin loop to test the next
+                    // iteration.
+                    // Otherwise, the throttling foreach continues and the delay assertion fails as it would be
+                    // too small once nthLoginRequest reaches the next throttling step.
                     continue 2;
                 }
             }

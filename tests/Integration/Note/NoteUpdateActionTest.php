@@ -24,7 +24,7 @@ use TestTraits\Trait\RouteTestTrait;
  * Test cases for client read note modification
  *  - Authenticated with different user roles
  *  - Unauthenticated
- *  - Invalid data (validation test).
+ *  - Invalid data.
  */
 class NoteUpdateActionTest extends TestCase
 {
@@ -239,7 +239,7 @@ class NoteUpdateActionTest extends TestCase
             ['client_id' => $clientRow['id'], 'user_id' => $userId, 'is_main' => 0],
         );
 
-        // Simulate logged-in user with same user as linked to client
+        // Simulate logged-in user with the same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
 
         $request = $this->createJsonRequest(

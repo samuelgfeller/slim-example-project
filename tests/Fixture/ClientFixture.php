@@ -96,14 +96,4 @@ class ClientFixture
             'deleted_at' => null,
         ],
     ];
-
-    public function getRecords(): array
-    {
-        return $this->records;
-    }
-
-    public function getTable(): string
-    {
-        return $this->table;
-    }
 }

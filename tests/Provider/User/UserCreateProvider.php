@@ -182,7 +182,7 @@ class UserCreateProvider
         $advisorAttributes = ['user_role_id' => UserRole::ADVISOR];
 
         // Newcomer must not receive any available user
-        // Advisor is allowed to create client but only assign it to himself or leave user_id empty
+        // Advisor is allowed to create a client but only assign it to himself or leave user_id empty
         // Managing advisor and higher should receive all available users
         return [
             [ // ? Advisor - not allowed to create user so no available roles

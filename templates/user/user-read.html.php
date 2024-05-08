@@ -20,8 +20,8 @@ $this->addAttribute('css', [
     'assets/general/page-component/modal/form-modal.css',
     'assets/general/dark-mode/dark-mode-toggle-switch.css',
     'assets/general/page-component/contenteditable/contenteditable.css',
+    // Page-specific css has to come last to overwrite other styles
     'assets/user/user.css',
-    // user.css has to come last to overwrite other styles
 ]);
 
 

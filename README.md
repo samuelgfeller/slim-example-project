@@ -1,24 +1,20 @@
 # Slim Example Project
 
 [![Latest Version on Packagist](https://img.shields.io/github/release/samuelgfeller/slim-example-project.svg)](https://packagist.org/packages/samuelgfeller/slim-example-project)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=coverage)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=samuelgfeller_slim-example-project&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=samuelgfeller_slim-example-project)
+[![Code Coverage](https://scrutinizer-ci.com/g/samuelgfeller/slim-example-project/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/samuelgfeller/slim-example-project/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/samuelgfeller/slim-example-project/badges/build.png?b=master)](https://scrutinizer-ci.com/g/samuelgfeller/slim-example-project/build-status/master)
+[![Quality Score](https://img.shields.io/scrutinizer/quality/g/samuelgfeller/slim-example-project.svg)](https://scrutinizer-ci.com/g/samuelgfeller/slim-example-project/?branch=master)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
-This project aims to be a real-world example of a modern [Slim 4](https://www.slimframework.com/) 
-web application with a scalable structure and
-a range of practical components and features.
+Real-world example of a modern [Slim 4](https://www.slimframework.com/) web application with a scalable 
+structure and a variety of components and features to get started quickly. 
 
-It showcases the implementation of a simple yet robust 
+This project showcases the implementation of a simple yet robust 
 [architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture) 
 with a variety of backend and
 frontend features built using the Slim 4 micro-framework. 
 The base for this project was the official 
 [Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and Odan's [slim4-skeleton](https://github.com/odan/slim4-skeleton).
-
-This repository can serve as a learning example or be adapted for developing new
-applications. 
 
 External library dependencies are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework) 
 to facilitate maintenance and ensure long-term viability. 
@@ -34,8 +30,8 @@ to get started.
 
 Stripped down versions of this repository are available as skeleton 
 templates.
-With frontend [`slim-starter`](https://github.com/samuelgfeller/slim-starter) or just for an API:
-[`slim-api-starter`](https://github.com/samuelgfeller/slim-api-starter).
+With frontend [slim-starter](https://github.com/samuelgfeller/slim-starter) or just for an API:
+[slim-api-starter](https://github.com/samuelgfeller/slim-api-starter).
 
 ## Features
 All the features were developed with an effort to ensure maximum user-friendliness. 

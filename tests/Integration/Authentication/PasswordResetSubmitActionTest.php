@@ -19,9 +19,9 @@ use TestTraits\Trait\RouteTestTrait;
 /**
  * Integration testing password change from authenticated user
  *  - request to set new password with valid token
- *  - request to set new password with invalid, expired and used token -> redirect to login page
- *  - request to set new password with valid token but invalid data -> 400 Bad request
- *  - request to set new password with malformed request body -> HttpBadRequestException.
+ *  - request to set new password with invalid, expired and used token
+ *  - request to set new password with valid token but invalid password (too short)
+ *  - request to set new password with malformed request body -> bad request.
  */
 class PasswordResetSubmitActionTest extends TestCase
 {
@@ -104,7 +104,7 @@ class PasswordResetSubmitActionTest extends TestCase
 
         $response = $this->app->handle($request);
 
-        // Assert 200 password reset first email form loaded
+        // Assert 200 OK password reset first email form loaded
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         // Assert that token had NOT been used (except if already used)
@@ -137,8 +137,6 @@ class PasswordResetSubmitActionTest extends TestCase
         UserVerificationData $verification,
         string $clearTextToken
     ): void {
-        // Invalid new password
-        $newPassword = '1';
         // Insert user id 2 role: user
         $userRow = $this->insertFixture(UserFixture::class, ['id' => $verification->userId]);
 
@@ -148,8 +146,9 @@ class PasswordResetSubmitActionTest extends TestCase
             'POST', // Request to change password
             $this->urlFor('password-reset-submit'),
             [
-                'password' => $newPassword,
-                'password2' => $newPassword,
+                // Password too short
+                'password' => '1',
+                'password2' => '1',
                 'token' => $clearTextToken,
                 'id' => (string)$verification->id,
             ]
@@ -190,7 +189,7 @@ class PasswordResetSubmitActionTest extends TestCase
     }
 
     /**
-     * Test that password reset page loads with status code 400 if token is missing.
+     * Test that password reset page loads with status code 400 if the token is missing.
      *
      * @return void
      */

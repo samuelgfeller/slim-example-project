@@ -22,7 +22,7 @@ $this->setLayout('');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
     <?php
-    // fetch() includes another template into the current template
+    // fetch() includes another template in the current template
     // Include template which contains HTML to include assets
     echo $this->fetch(
         'layout/assets.html.php',

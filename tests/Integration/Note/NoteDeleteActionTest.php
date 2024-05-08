@@ -21,7 +21,7 @@ use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
- * Test cases for client read note deletion
+ * Test cases for note deletion
  *  - Authenticated with different user roles
  *  - Unauthenticated.
  */

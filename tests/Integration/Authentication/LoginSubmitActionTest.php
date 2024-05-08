@@ -20,10 +20,11 @@ use TestTraits\Trait\RouteTestTrait;
  * Test the login submit actions. Contents of this test:
  *  - normal login submit with correct credentials (302 Found redirect)
  *  - login request with incorrect password (401 Unverified)
- *  - login request with invalid values (400 Bad request)
- *  - login request on unverified account (401 Unverified + email with verification token)
- *  - login request on suspended account (401 Unverified + email with info)
- *  - login request on locked account (401 Unverified + email with unlock token).
+ *  - login request with invalid values (422 Unprocessable Entity)
+ *  - login request on non-active account:
+ *      - login request on unverified account (401 Unverified + email with verification token)
+ *      - login request on suspended account (401 Unverified + email with info)
+ *      - login request on locked account (401 Unverified + email with unlock token).
  *
  * Login tests involving request throttle are done in @see LoginSecurityTest
  */
@@ -75,7 +76,7 @@ class LoginSubmitActionTest extends TestCase
 
     /**
      * Test that 401 Unauthorized is returned when trying to log in
-     * with wrong password.
+     *  with the wrong password.
      */
     public function testLoginSubmitActionWrongPassword(): void
     {
@@ -138,7 +139,7 @@ class LoginSubmitActionTest extends TestCase
 
     /**
      * Test login with user status unverified.
-     * When account is unverified, a verification link is sent to the user via the email.
+     * When the account is unverified, a verification link is sent to the user via the email.
      *
      * @param UserStatus $status
      * @param string $partialEmailBody
@@ -169,7 +170,7 @@ class LoginSubmitActionTest extends TestCase
         self::assertNull($session->get('user_id'));
 
         // When the account is unverified, a verification link is sent to the user via the email
-        // Assert that correct email was sent (email body contains string)
+        // Assert that the correct email was sent (email body contains string)
         $email = $this->getMailerMessage();
         $this->assertEmailHtmlBodyContains(
             $email,

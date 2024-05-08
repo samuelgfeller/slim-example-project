@@ -17,8 +17,8 @@ use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test cases for client read page load
- *  - Authenticated
- *  - Unauthenticated.
+ *  - authorization
+ *  - unauthenticated.
  */
 class ClientReadPageActionTest extends TestCase
 {

@@ -6,14 +6,11 @@
  *     active: array{\App\Domain\FilterSetting\Data\FilterData[]},
  *     } client list filters
  *
- * @var $clientCreatePrivilege Privilege create or none
+ * @var $clientCreatePrivilege App\Domain\Authorization\Privilege create or none
  */
-
-use App\Domain\Authorization\Privilege;
 
 $this->setLayout('layout/layout.html.php');
 
-$this->addAttribute('libs', ['fontawesome.css']);
 
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets

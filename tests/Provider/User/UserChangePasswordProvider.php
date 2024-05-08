@@ -20,7 +20,7 @@ class UserChangePasswordProvider
         // Set different user role attributes
         $adminAttr = ['user_role_id' => UserRole::ADMIN, 'password_hash' => $passwordHash];
         $managingAdvisorAttr = ['user_role_id' => UserRole::MANAGING_ADVISOR, 'password_hash' => $passwordHash];
-        // If one attribute is different they are differentiated and 2 separated users are added to the db
+        // If one attribute is different, they are differentiated and 2 separated users are added to the db
         $otherManagingAdvisorAttr = [
             'first_name' => 'Other',
             'user_role_id' => UserRole::MANAGING_ADVISOR,
@@ -142,42 +142,6 @@ class UserChangePasswordProvider
                             'password2' => [0 => 'Field is required'],
                         ],
                     ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Provide malformed bodies for password change submit request as well as
-     * according error messages.
-     *
-     * @return array[]
-     */
-    public static function malformedPasswordChangeRequestCases(): array
-    {
-        return [
-            [
-                // Empty body
-                'requestBody' => [],
-            ],
-            [
-                // Body "null" (because both can happen )
-                'requestBody' => null,
-            ],
-            // Missing 'old_password' currently not tested as it's not required when privileged user tries to
-            // modify other user
-            [
-                // Missing  'password'
-                'requestBody' => [
-                    'old_password' => '',
-                    'password2' => '',
-                ],
-            ],
-            [
-                // Missing 'password2'
-                'requestBody' => [
-                    'old_password' => '',
-                    'password' => '',
                 ],
             ],
         ];

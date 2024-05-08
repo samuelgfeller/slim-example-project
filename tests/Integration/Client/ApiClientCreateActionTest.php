@@ -19,7 +19,7 @@ use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
- * Client creation from public page submit tests.
+ * Client creation from external frontend application tests.
  */
 class ApiClientCreateActionTest extends TestCase
 {

@@ -21,9 +21,7 @@ use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
- * Client creation submit tests
- *  - Normal client creation
- *  - With invalid values -> 422.
+ * Client creation tests.
  */
 class ClientCreateActionTest extends TestCase
 {
@@ -42,7 +40,7 @@ class ClientCreateActionTest extends TestCase
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
      * @param array $expectedResult HTTP status code, bool if db_entry_created and json_response
      *
-     * @throws \JsonException|ContainerExceptionInterface|NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      *
      * @return void
      */
@@ -111,7 +109,7 @@ class ClientCreateActionTest extends TestCase
                 $userActivityRow['id']
             );
             // Assert relevant user activity data
-            $decodedUserActivityDataFromDb = json_decode($userActivityRow['data'], true, 512, JSON_THROW_ON_ERROR);
+            $decodedUserActivityDataFromDb = json_decode($userActivityRow['data'], true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
             // Done separately as we only want to test the relevant data for the creation, and we cannot control the order
             self::assertEqualsCanonicalizing(
                 $clientCreationValues,
@@ -131,7 +129,7 @@ class ClientCreateActionTest extends TestCase
                     'action' => UserActivity::CREATED->value,
                     'table' => 'note',
                     'row_id' => $noteId,
-                    'data' => json_encode($noteValues, JSON_THROW_ON_ERROR),
+                    'data' => json_encode($noteValues, JSON_PARTIAL_OUTPUT_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findTableRowsByColumn('user_activity', 'table', 'note')[0]['id']
@@ -200,8 +198,8 @@ class ClientCreateActionTest extends TestCase
      * E.g. ->maxLength('first_name', 100) has the consequence that it expects
      * a non-null value for the first_name. Without ->allowEmptyString('first_name')
      * the validation would fail with "This field cannot be left empty".
-     * I did not expect this behaviour and ran into this when testing in the GUI so this test
-     * makes sense to me in order to not forget to always add ->allow[Whatever] when value is optional.
+     * I did not expect this behaviour and ran into this when testing, so this test
+     * reminds to always add ->allow[Whatever] when value is optional.
      *
      * @param array $requestBody
      *
@@ -243,7 +241,7 @@ class ClientCreateActionTest extends TestCase
     }
 
     /**
-     * Client creation with valid data.
+     * Unauthenticated client creation.
      *
      * @return void
      */

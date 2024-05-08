@@ -97,7 +97,7 @@ class NoteListActionTest extends TestCase
         // Assert status code
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
-        // If user has not privilege to read note, the message is replaced by lorem ipsum
+        // If the user doesn't have the privilege to read note, the message is replaced by lorem ipsum and blurred
         $loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
 invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
 duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit 
@@ -235,10 +235,8 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'invalidNoteListFilterProvider')]
-    public function testNoteListFilterInvalid(
-        array $filterQueryParams,
-        string $exceptionMessage,
-    ): void {
+    public function testNoteListFilterInvalid(array $filterQueryParams, string $exceptionMessage,): void
+    {
         $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);
 

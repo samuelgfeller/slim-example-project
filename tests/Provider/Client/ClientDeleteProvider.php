@@ -81,7 +81,7 @@ class ClientDeleteProvider
             ],
         ];
 
-        // nly managing advisors and higher may delete clients
+        // Only managing advisors and higher may delete clients
         return [
             // * Advisor
             'advisor owner undelete' => [ // ? Advisor owner - undelete client - not allowed

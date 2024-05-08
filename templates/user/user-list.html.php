@@ -13,8 +13,8 @@ $this->addAttribute('css', [
     'assets/general/page-component/modal/form-modal.css',
     'assets/general/page-component/skeleton-loader/skeleton-loader.css',
     'assets/user/list/user-list-skeleton-loader.css',
+    // Page-specific css has to come last to overwrite other styles
     'assets/user/list/user-list.css',
-    // user-list.css has to come last to overwrite other styles
 ]);
 // Js files that import things from other js files
 $this->addAttribute(

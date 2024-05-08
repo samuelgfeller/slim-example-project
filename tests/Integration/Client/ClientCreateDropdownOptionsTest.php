@@ -32,8 +32,7 @@ class ClientCreateDropdownOptionsTest extends TestCase
      * authenticated user roles.
      *
      * @param array $authenticatedUserRow authenticated user attributes containing the user_role_id
-     * @param array $otherUserRow other user (that appears in dropdown) attributes containing the user_role_id
-     * user role not relevant as if authorized every user can be selected
+     * @param array $otherUserRow another user (that appears in dropdown) attributes containing the user_role_id
      * @param array $expectedUserNames
      *
      *@throws NotFoundExceptionInterface
@@ -52,7 +51,7 @@ class ClientCreateDropdownOptionsTest extends TestCase
 
         // Client statuses, sexes and vigilance levels are returned too but not tested here (authorization most important)
 
-        // Simulate logged-in user with same user as linked to client
+        // Simulate logged-in user with the same user as linked to client
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
 
         $request = $this->createJsonRequest(

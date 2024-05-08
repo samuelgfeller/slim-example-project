@@ -18,6 +18,7 @@ use TestTraits\Trait\DatabaseTestTrait;
 use TestTraits\Trait\FixtureTestTrait;
 use TestTraits\Trait\HttpJsonTestTrait;
 use TestTraits\Trait\HttpTestTrait;
+use TestTraits\Trait\MailerTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
@@ -32,6 +33,7 @@ class UserCreateActionTest extends TestCase
     use DatabaseTestTrait;
     use FixtureTestTrait;
     use AuthorizationTestTrait;
+    use MailerTestTrait;
 
     /**
      * Create user authorization test with different user roles.
@@ -73,11 +75,13 @@ class UserCreateActionTest extends TestCase
             $this->urlFor('user-create-submit'),
             $requestData
         );
+
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $authenticatedUserRow['id']);
         $response = $this->app->handle($request);
         // Assert status code
         self::assertSame($expectedResult[StatusCodeInterface::class], $response->getStatusCode());
+
         // Assert database
         if ($expectedResult['dbChanged'] === true) {
             $userDbRow = $this->findLastInsertedTableRow('user');
@@ -91,7 +95,7 @@ class UserCreateActionTest extends TestCase
                     'action' => UserActivity::CREATED->value,
                     'table' => 'user',
                     'row_id' => $userDbRow['id'],
-                    'data' => json_encode($requestData, JSON_THROW_ON_ERROR),
+                    'data' => json_encode($requestData, JSON_PARTIAL_OUTPUT_ON_ERROR),
                 ],
                 'user_activity',
                 (int)$this->findTableRowsByColumn('user_activity', 'table', 'user')[0]['id']
@@ -108,11 +112,28 @@ class UserCreateActionTest extends TestCase
                 'user_activity',
                 (int)$this->findTableRowsByColumn('user_activity', 'table', 'user_verification')[0]['id']
             );
-        } else {
-            // Only 1 rows (authenticated user) expected in user table
+
+            // When the account is created and unverified, a verification link is sent to the user via the email
+            // Assert that the correct email was sent (email body contains string)
+            $email = $this->getMailerMessage();
+            $this->assertEmailHtmlBodyContains(
+                $email,
+                'To verify that this email address belongs to you, please click on the following link',
+            );
+            // Assert that email was sent to the right person in the right format
+            $this->assertEmailHeaderSame(
+                $email,
+                'To',
+                $requestData['first_name'] . ' ' .
+                $requestData['surname'] . ' <' . $requestData['email'] . '>'
+            );
+        } else { // Database must be unchanged
+            // Only 1 row (authenticated user) expected in user table
             $this->assertTableRowCount(1, 'user');
             $this->assertTableRowCount(0, 'user_activity');
         }
+
+
         $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 

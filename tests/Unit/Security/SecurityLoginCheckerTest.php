@@ -17,7 +17,7 @@ use TestTraits\Trait\MockTestTrait;
 /**
  * Threats:
  *  - Rapid fire attacks (when bots try to log in with 1000 different passwords on one user account)
- *  - Password spraying attacks (try to log in 1000 different users with most common password).
+ *  - Password spraying attacks (try to log in 1000 different users with the most common password).
  *
  * Testing whole function performLoginSecurityCheck() and performEmailAbuseCheck() and not sub-functions directly as
  * they are private mainly because here (https://stackoverflow.com/a/2798203/9013718 comments), they say:

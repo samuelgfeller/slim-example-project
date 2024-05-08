@@ -25,7 +25,7 @@ use TestTraits\Trait\RouteTestTrait;
  * Test cases for client read note creation
  *  - Authenticated with different user roles
  *  - Unauthenticated
- *  - Invalid data (validation test).
+ *  - Invalid data.
  */
 class NoteCreateActionTest extends TestCase
 {
@@ -81,7 +81,7 @@ class NoteCreateActionTest extends TestCase
         // Make request
         $response = $this->app->handle($request);
 
-        // Assert 201 Created redirect to login url
+        // Assert 201 Created
         self::assertSame($expectedResult['creation'][StatusCodeInterface::class], $response->getStatusCode());
 
         // Assert database
@@ -100,7 +100,7 @@ class NoteCreateActionTest extends TestCase
                     'client_id' => $clientRow['id'],
                     'is_main' => 0,
                     'user_id' => $authenticatedUserRow['id'],
-                ], JSON_THROW_ON_ERROR),
+                ], JSON_PARTIAL_OUTPUT_ON_ERROR),
             ],
             'user_activity',
             (int)$this->findLastInsertedTableRow('user_activity')['id']

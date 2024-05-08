@@ -80,13 +80,13 @@ $this->setLayout('');
             <?= isset($validation['password2']) ?
                 '<strong class="err-msg">' . html($validation['password2'][0]) . '</strong>' : '' ?>
         </div>
-        <?= /*In case passwords not match there may be a second error for password2 */
+        <?= /*In case passwords don't match, there may be a second error for password2 */
         isset($validation['password2'][1]) ? '<strong class="err-msg">' . html($validation['password2'][1])
             . '</strong>' : '' ?>
         <a href="login" class="subdued-text content-below-input cursor-pointer"><?= __('Login') ?></a>
 
-        <input type="hidden" name="token" value="<?= html($token ?? '') ?>">
-        <input type="hidden" name="id" value="<?= html($id ?? '') ?>">
+        <input type="hidden" name="token" value="<?= html($token) ?>">
+        <input type="hidden" name="id" value="<?= html($id) ?>">
         <input type="submit" id="password-reset-submit-btn" class="submit-btn" style="margin-top: 20px"
                value="<?= __('Set new password') ?>">
         <?= $this->fetch('layout/request-throttle.html.php') ?>

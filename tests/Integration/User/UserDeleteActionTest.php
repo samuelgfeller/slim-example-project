@@ -16,7 +16,7 @@ use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
- * User submit delete action tests
+ * User delete action tests
  *  - Authenticated with different user roles
  *  - Unauthenticated.
  */
@@ -88,7 +88,7 @@ class UserDeleteActionTest extends TestCase
     }
 
     /**
-     * Test that when user is not logged in 401 Unauthorized is returned.
+     * Test that when the user is not logged in 401 Unauthorized is returned.
      *
      * @return void
      */

@@ -18,11 +18,7 @@ use TestTraits\Trait\RouteTestTrait;
 
 /**
  * Test that the link sent to user when creating an account
- * works correctly and safely. Test covered in this class:
- *  - Set user account status from unverified to active with valid token
- *  - Attempt to verify user account that is already active
- *  - Attempt to verify user with used, invalid and expired token
- *  - Test action with invalid parameters (400 Bad request).
+ * works correctly and safely.
  */
 class RegisterVerifyActionTest extends TestCase
 {

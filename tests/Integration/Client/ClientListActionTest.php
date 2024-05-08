@@ -25,15 +25,10 @@ use TestTraits\Trait\HttpTestTrait;
 use TestTraits\Trait\RouteTestTrait;
 
 /**
- * Copied and pasted content from client for now.
- */
-
-/**
  * - client list page action
- *   - Unauthenticated
- *   - Authenticated
- * - client list json request
- * - client list filtered
+ *   - authorization
+ *   - unauthenticated
+ * - client list with filter json request
  * - client list with invalid filters.
  */
 class ClientListActionTest extends TestCase

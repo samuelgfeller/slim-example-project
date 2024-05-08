@@ -54,7 +54,7 @@ class UserReadPageActionTest extends TestCase
 
     /**
      * Test that http not found exception is thrown when
-     * user tries to read non-existing user page.
+     * a user tries to read non-existing user page.
      *
      * @return void
      */

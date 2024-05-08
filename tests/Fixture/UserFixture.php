@@ -31,14 +31,4 @@ class UserFixture
             'deleted_at' => null,
         ],
     ];
-
-    public function getTable(): string
-    {
-        return $this->table;
-    }
-
-    public function getRecords(): array
-    {
-        return $this->records;
-    }
 }

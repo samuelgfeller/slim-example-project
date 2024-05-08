@@ -20,7 +20,7 @@ use TestTraits\Trait\RouteTestTrait;
 /**
  * Integration testing password change from authenticated user
  *  - change password authenticated - authorization
- *  - change password authenticated - invalid data -> 400 Bad request
+ *  - change password authenticated - invalid data
  *  - change password not authenticated -> 302 to login page with correct redirect param.
  */
 class PasswordChangeSubmitActionTest extends TestCase
@@ -148,7 +148,7 @@ class PasswordChangeSubmitActionTest extends TestCase
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
         $response = $this->app->handle($request);
-        // Assert 200 OK
+        // Assert 422 Unprocessable Entity
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         // database should be unchanged
         $this->assertTableRowEquals($userRow, 'user', $userRow['id']);

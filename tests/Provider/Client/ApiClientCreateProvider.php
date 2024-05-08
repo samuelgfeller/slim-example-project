@@ -6,7 +6,7 @@ class ApiClientCreateProvider
 {
     /**
      * Returns combinations of invalid data to trigger validation exception
-     * for client creation from public page.
+     * for client creation from external frontend.
      *
      * @return array
      */
