@@ -1,5 +1,5 @@
-import {submitUpdate} from "../ajax/submit-update-data.js?v=0.4.1";
-import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=0.4.1";
+import {submitUpdate} from "../ajax/submit-update-data.js?v=0.4.2";
+import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=0.4.2";
 
 // Get the toggle switch element
 const toggleSwitch = document.querySelector('#dark-mode-toggle-checkbox');

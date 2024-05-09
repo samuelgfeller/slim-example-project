@@ -36,7 +36,7 @@ class ClientListProvider
                 'user_id' => 43,
                 'client_status_id' => 68,
                 'first_name' => 'Seventh',
-                'last_name' => 'Davis'
+                'last_name' => 'Davis',
             ],
             // Assigned to another user than the authenticated one
             ['id' => 8, 'user_id' => 43, 'first_name' => 'Eighth', 'last_name' => 'Wilson'],
@@ -52,7 +52,7 @@ class ClientListProvider
                 'deleted_at' => $sqlDateTime,
                 'user_id' => 42,
                 'first_name' => 'Eleventh',
-                'last_name' => 'Moore'
+                'last_name' => 'Moore',
             ],
             // Assigned to deleted user
             ['id' => 13, 'user_id' => 44, 'first_name' => 'Assigned to deleted user'],

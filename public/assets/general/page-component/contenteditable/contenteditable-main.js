@@ -1,6 +1,6 @@
-import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.4.1";
-import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.4.1";
-import {__} from "../../general-js/functions.js?v=0.4.1";
+import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=0.4.2";
+import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.4.2";
+import {__} from "../../general-js/functions.js?v=0.4.2";
 
 /**
  * Make field value editable, add save button and focus it.

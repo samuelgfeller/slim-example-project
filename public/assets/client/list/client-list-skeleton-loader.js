@@ -1,4 +1,4 @@
-import {getClientProfileCardSkeletonLoaderHtml} from "./client-list-profile-card.html.js?v=0.4.1";
+import {getClientProfileCardSkeletonLoaderHtml} from "./client-list-profile-card.html.js?v=0.4.2";
 
 /**
  * Display client skeleton loaders

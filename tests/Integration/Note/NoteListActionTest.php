@@ -235,7 +235,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
      * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\Note\NoteProvider::class, 'invalidNoteListFilterProvider')]
-    public function testNoteListFilterInvalid(array $filterQueryParams, string $exceptionMessage,): void
+    public function testNoteListFilterInvalid(array $filterQueryParams, string $exceptionMessage): void
     {
         $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];
         $this->container->get(SessionInterface::class)->set('user_id', $loggedInUserId);

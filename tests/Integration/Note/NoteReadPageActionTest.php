@@ -33,10 +33,10 @@ class NoteReadPageActionTest extends TestCase
      * there should be a redirect to the client read page
      * scrolling to the note.
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     public function testNoteReadPageAction(): void
     {
@@ -48,8 +48,8 @@ class NoteReadPageActionTest extends TestCase
 
         // Insert fixtures for client and note
         $clientStatusId = $this->insertFixture(ClientStatusFixture::class)['id'];
-        $clientId = $this->insertFixture(ClientFixture::class, ['client_status_id' => $clientStatusId], )['id'];
-        $noteId = $this->insertFixture(NoteFixture::class, ['client_id' => $clientId, 'user_id' => $userId], )['id'];
+        $clientId = $this->insertFixture(ClientFixture::class, ['client_status_id' => $clientStatusId])['id'];
+        $noteId = $this->insertFixture(NoteFixture::class, ['client_id' => $clientId, 'user_id' => $userId])['id'];
 
         // Simulate logged-in user by setting the user_id session variable
         $this->container->get(SessionInterface::class)->set('user_id', $userId);
@@ -73,9 +73,10 @@ class NoteReadPageActionTest extends TestCase
     /**
      * Test that when trying to read a note that doesn't exist, the user is redirected to the client list page.
      *
-     * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testNotExistingNoteReadPageAction(): void
     {

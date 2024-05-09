@@ -1,4 +1,4 @@
-import {removeValidationErrorMessages} from "../general/ajax/ajax-util/fail-handler.js?v=0.4.1";
+import {removeValidationErrorMessages} from "../general/ajax/ajax-util/fail-handler.js?v=0.4.2";
 
 const passwordForgottenBtn = document.getElementById('password-forgotten-btn');
 const passwordInputDiv = document.getElementById('password-input-div');

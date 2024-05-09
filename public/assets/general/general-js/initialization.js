@@ -1,7 +1,7 @@
-import {displayServerSideFlashMessages} from "../page-component/flash-message/flash-message.js?v=0.4.1";
-import {initAutoResizingTextareaElements} from "../page-component/textarea/auto-resizing-textarea.js?v=0.4.1";
-import {scrollToAnchor} from "../page-behaviour/scroll-to-anchor.js?v=0.4.1";
-import {countDownThrottleTimer} from "../../authentication/throttle-timer.js?v=0.4.1";
+import {displayServerSideFlashMessages} from "../page-component/flash-message/flash-message.js?v=0.4.2";
+import {initAutoResizingTextareaElements} from "../page-component/textarea/auto-resizing-textarea.js?v=0.4.2";
+import {scrollToAnchor} from "../page-behaviour/scroll-to-anchor.js?v=0.4.2";
+import {countDownThrottleTimer} from "../../authentication/throttle-timer.js?v=0.4.2";
 
 // This file is responsible for initializing elements for every loaded page.
 

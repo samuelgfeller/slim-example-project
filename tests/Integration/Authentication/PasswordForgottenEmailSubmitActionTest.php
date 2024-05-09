@@ -19,7 +19,7 @@ use TestTraits\Trait\RouteTestTrait;
  *  - submit valid email
  *  - submit valid email after email abuse threshold reached -> unprocessable entity
  *  - submit email of non-existing user -> act normal but no database change
- *  - submit invalid email -> 422 backend validation fails
+ *  - submit invalid email -> 422 backend validation fails.
  */
 class PasswordForgottenEmailSubmitActionTest extends TestCase
 {

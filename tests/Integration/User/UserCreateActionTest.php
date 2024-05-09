@@ -133,7 +133,6 @@ class UserCreateActionTest extends TestCase
             $this->assertTableRowCount(0, 'user_activity');
         }
 
-
         $this->assertJsonData($expectedResult['jsonResponse'], $response);
     }
 

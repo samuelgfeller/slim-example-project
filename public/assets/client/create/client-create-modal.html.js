@@ -1,9 +1,9 @@
-import {createModal} from "../../general/page-component/modal/modal.js?v=0.4.1";
-import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.4.1";
-import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/template/template-util.js?v=0.4.1";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.4.1";
-import {__} from "../../general/general-js/functions.js?v=0.4.1";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.1";
+import {createModal} from "../../general/page-component/modal/modal.js?v=0.4.2";
+import {requestDropdownOptions} from "../../general/page-component/modal/dropdown-request.js?v=0.4.2";
+import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/template/template-util.js?v=0.4.2";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=0.4.2";
+import {__} from "../../general/general-js/functions.js?v=0.4.2";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=0.4.2";
 
 // List of words that are used in modal box and need to be translated
 let wordsToTranslate = [

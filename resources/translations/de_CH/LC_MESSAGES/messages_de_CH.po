@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: slim-example-project\n"
-"POT-Creation-Date: 2024-02-23 11:12+0100\n"
-"PO-Revision-Date: 2024-02-23 11:13+0100\n"
+"POT-Creation-Date: 2024-05-08 17:32+0200\n"
+"PO-Revision-Date: 2024-05-08 17:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.3\n"
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: src\n"
@@ -65,7 +65,7 @@ msgstr "Telefonnummer"
 
 #: public/assets/client/create/client-create-modal.html.js:18
 #: public/assets/user/create/user-create-modal.html.js:14
-#: templates/authentication/login.html.php:62
+#: templates/authentication/login.html.php:66
 #: templates/user/user-read.html.php:102
 msgid "E-Mail"
 msgstr "E-Mail"
@@ -85,7 +85,7 @@ msgstr "Status"
 msgid "Main note about client."
 msgstr "Hauptnotiz über Klient."
 
-#: public/assets/client/note/client-read-note-loading.js:49
+#: public/assets/client/note/client-read-note-loading.js:53
 msgid "No notes were found"
 msgstr "Keine Notizen gefunden"
 
@@ -102,7 +102,7 @@ msgid "Yes undelete"
 msgstr "Ja wiederherstellen"
 
 #: public/assets/general/ajax/ajax-util/fail-handler.js:8
-msgid "Access denied please log in and try again"
+msgid "Access denied, please log in and try again"
 msgstr ""
 "Zugriff verweigert, bitte melden Sie sich an und versuchen Sie es erneut"
 
@@ -117,7 +117,7 @@ msgid "Please try again and report the error to an administrator"
 msgstr ""
 "Bitte versuchen Sie es erneut und melden Sie den Fehler einem Administrator"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:84
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:90
 #: src/Domain/Client/Service/ClientValidator.php:106
 #: src/Domain/Client/Service/ClientValidator.php:116
 #: src/Domain/User/Service/UserValidator.php:41
@@ -125,19 +125,19 @@ msgstr ""
 msgid "Required"
 msgstr "Pflichtfeld"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:85
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:91
 msgid "Minimum length is"
 msgstr "Die Mindestlänge beträgt"
 
-#: public/assets/general/page-component/contenteditable/contenteditable-main.js:86
+#: public/assets/general/page-component/contenteditable/contenteditable-main.js:92
 msgid "Maximum length is"
 msgstr "Die maximale Länge beträgt"
 
-#: public/assets/general/page-component/modal/alert-modal.js:24
+#: public/assets/general/page-component/modal/alert-modal.js:30
 msgid "Yes delete"
 msgstr "Ja löschen"
 
-#: public/assets/general/page-component/modal/alert-modal.js:25
+#: public/assets/general/page-component/modal/alert-modal.js:31
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -194,34 +194,34 @@ msgstr "Passwort ändern"
 msgid "Old password"
 msgstr "Altes Passwort"
 
-#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:49
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:44
-#, php-format
-msgid "Congratulations!<br>Your account has been %s! <br><b>%s</b>"
-msgstr "Herzlichen Glückwunsch!<br>Ihr Konto wurde %s! <br><b>%s</b>"
-
-#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:50
-msgid "unlocked"
-msgstr "freigeschaltet"
-
-#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:51
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:46
-msgid "You are now logged in."
-msgstr "Sie sind jetzt eingeloggt."
-
-#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:62
-msgid "Invalid or expired link. Please <b>log in</b> to receive a new link."
-msgstr ""
-"Ungültiger oder abgelaufener Link. Bitte <b>melden Sie sich an</b>, um einen "
-"neuen Link zu erhalten."
-
-#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:85
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:95
-#: src/Application/Action/Authentication/Page/PasswordResetPageAction.php:47
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:35
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:38
+#: src/Application/Action/Authentication/Page/PasswordResetPageAction.php:49
 msgid "Token not found. Please click on the link you received via email."
 msgstr ""
 "Token nicht gefunden. Bitte klicken Sie auf den Link, den Sie per E-Mail "
 "erhalten haben."
+
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:64
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:58
+#, php-format
+msgid "Congratulations!<br>Your account has been %s! <br><b>%s</b>"
+msgstr "Herzlichen Glückwunsch!<br>Ihr Konto wurde %s! <br><b>%s</b>"
+
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:65
+msgid "unlocked"
+msgstr "freigeschaltet"
+
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:66
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:60
+msgid "You are now logged in."
+msgstr "Sie sind jetzt eingeloggt."
+
+#: src/Application/Action/Authentication/Ajax/AccountUnlockProcessAction.php:77
+msgid "Invalid or expired link. Please <b>log in</b> to receive a new link."
+msgstr ""
+"Ungültiger oder abgelaufener Link. Bitte <b>melden Sie sich an</b>, um einen "
+"neuen Link zu erhalten."
 
 #: src/Application/Action/Authentication/Ajax/LoginSubmitAction.php:48
 msgid "Login successful"
@@ -263,21 +263,21 @@ msgstr ""
 "Bitte überprüfen Sie den Spam-Ordner, wenn Sie die E-Mail nicht im "
 "Posteingang sehen."
 
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:45
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:59
 msgid "verified"
 msgstr "verifiziert"
 
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:61
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:75
 msgid "Invalid or expired link. Please log in to receive a new link."
 msgstr ""
 "Ungültiger oder abgelaufener Link. Bitte melden Sie sich an, um einen neuen "
 "Link zu erhalten."
 
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:72
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:86
 msgid "You are already verified. Please log in."
 msgstr "Sie sind bereits verifiziert. Bitte loggen Sie sich ein."
 
-#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:81
+#: src/Application/Action/Authentication/Ajax/RegisterVerifyProcessAction.php:95
 #, php-format
 msgid "You are already logged in.<br>Would you like to %slogout%s?"
 msgstr "Sie sind bereits eingeloggt.<br>Möchten Sie sich %sausloggen%s?"
@@ -304,15 +304,15 @@ msgstr ""
 msgid "The note was not not found."
 msgstr "Die Notiz wurde nicht gefunden."
 
-#: src/Application/Action/User/Ajax/UserCreateAction.php:49
+#: src/Application/Action/User/Ajax/UserCreateAction.php:55
 msgid "Email error. Please contact an administrator."
 msgstr "E-Mail-Fehler. Bitte kontaktieren Sie einen Administrator."
 
-#: src/Application/Action/User/Ajax/UserDeleteAction.php:57
+#: src/Application/Action/User/Ajax/UserDeleteAction.php:55
 msgid "Successfully deleted user."
 msgstr "Benutzer erfolgreich gelöscht."
 
-#: src/Domain/Authentication/Service/AccountUnlockTokenVerifier.php:49
+#: src/Domain/Authentication/Service/AccountUnlockTokenVerifier.php:50
 msgid "User account not locked."
 msgstr "Benutzerkonto nicht gesperrt."
 
@@ -328,7 +328,7 @@ msgstr "Anmeldung fehlgeschlagen, weil Ihr Konto suspendiert wurde"
 msgid "Login failed because your account is locked"
 msgstr "Anmeldung fehlgeschlagen, weil Ihr Konto gesperrt ist"
 
-#: src/Domain/Authentication/Service/LoginNonActiveUserHandler.php:63
+#: src/Domain/Authentication/Service/LoginNonActiveUserHandler.php:56
 msgid ""
 "Unable to login at the moment, please check your email inbox for a more "
 "detailed message."
@@ -336,8 +336,8 @@ msgstr ""
 "Sie können sich im Moment nicht anmelden. Bitte überprüfen Sie Ihren E-Mail-"
 "Posteingang auf eine ausführlichere Nachricht."
 
-#: src/Domain/Authentication/Service/PasswordRecoveryEmailSender.php:69
-#: templates/authentication/reset-password.html.php:53
+#: src/Domain/Authentication/Service/PasswordRecoveryEmailSender.php:72
+#: templates/authentication/reset-password.html.php:54
 msgid "Reset password"
 msgstr "Passwort zurücksetzen"
 
@@ -345,31 +345,31 @@ msgstr "Passwort zurücksetzen"
 msgid "Account created"
 msgstr "Konto erstellt"
 
-#: src/Domain/Client/Enum/ClientStatus.php:23
+#: src/Domain/Client/Enum/ClientStatus.php:20
 msgid "Action pending"
 msgstr "Anstehende Handlung"
 
-#: src/Domain/Client/Enum/ClientStatus.php:24
+#: src/Domain/Client/Enum/ClientStatus.php:21
 msgid "In care"
 msgstr "Wird gepflegt"
 
-#: src/Domain/Client/Enum/ClientStatus.php:25
+#: src/Domain/Client/Enum/ClientStatus.php:22
 msgid "Helped"
 msgstr "Geholfen"
 
-#: src/Domain/Client/Enum/ClientStatus.php:26
+#: src/Domain/Client/Enum/ClientStatus.php:23
 msgid "Cannot help"
 msgstr "Kann nicht helfen"
 
-#: src/Domain/Client/Enum/ClientVigilanceLevel.php:26
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:23
 msgid "Low"
 msgstr "Niedrig"
 
-#: src/Domain/Client/Enum/ClientVigilanceLevel.php:27
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:24
 msgid "Medium"
 msgstr "Mittel"
 
-#: src/Domain/Client/Enum/ClientVigilanceLevel.php:28
+#: src/Domain/Client/Enum/ClientVigilanceLevel.php:25
 msgid "High"
 msgstr "Hoch"
 
@@ -483,42 +483,47 @@ msgstr "Ungültige Option"
 msgid "Invalid option format"
 msgstr "Ungültige Option"
 
-#: src/Domain/Dashboard/DashboardPanelProvider.php:55
+#: src/Domain/Dashboard/DashboardPanelProvider.php:54
 msgid "Unassigned clients"
 msgstr "Nicht zugewiesene Kunden"
 
-#: src/Domain/Dashboard/DashboardPanelProvider.php:63
+#: src/Domain/Dashboard/DashboardPanelProvider.php:62
 msgid "Clients assigned to me &nbsp; — &nbsp;  action pending"
 msgstr "Mir zugewiesene Kunden &nbsp; - &nbsp; nicht abgeschlossen"
 
-#: src/Domain/Dashboard/DashboardPanelProvider.php:72
+#: src/Domain/Dashboard/DashboardPanelProvider.php:71
 #: templates/user/user-read.html.php:188
 msgid "User activity"
 msgstr "Benutzeraktivität"
 
-#: src/Domain/Dashboard/DashboardPanelProvider.php:82
+#: src/Domain/Dashboard/DashboardPanelProvider.php:81
 msgid "New notes"
 msgstr "Neue Notizen"
 
-#: src/Domain/Dashboard/DashboardPanelProvider.php:90
+#: src/Domain/Dashboard/DashboardPanelProvider.php:89
 msgid "Recently assigned clients"
 msgstr "Kürzlich zugewiesene Kunden"
 
-#: src/Domain/General/Enum/SexOption.php:28
+#: src/Domain/General/Enum/SexOption.php:25
 msgid "Male"
 msgstr "Männlich"
 
-#: src/Domain/General/Enum/SexOption.php:29
+#: src/Domain/General/Enum/SexOption.php:26
 msgid "Female"
 msgstr "Weiblich"
 
-#: src/Domain/General/Enum/SexOption.php:30
+#: src/Domain/General/Enum/SexOption.php:27
 msgid "Other"
 msgstr "Sonstiges"
 
 #: src/Domain/Note/Service/NoteCreator.php:66
 msgid "note"
 msgstr "notiz"
+
+#: src/Domain/Note/Service/NoteCreator.php:66
+#, php-format
+msgid "Not allowed to create %s"
+msgstr "Nicht erlaubt %s zu erstellen"
 
 #: src/Domain/Note/Service/NoteValidator.php:36
 msgid "Request body is empty"
@@ -556,51 +561,51 @@ msgstr ""
 "            Daher ist eine allgemeine Drosselung in Kraft. Bitte füllen Sie "
 "das Captcha aus und versuchen Sie es erneut."
 
-#: src/Domain/User/Enum/UserActivity.php:23
+#: src/Domain/User/Enum/UserActivity.php:15
 msgid "created"
 msgstr "erstellt"
 
-#: src/Domain/User/Enum/UserActivity.php:24
+#: src/Domain/User/Enum/UserActivity.php:16
 msgid "updated"
 msgstr "ändert"
 
-#: src/Domain/User/Enum/UserActivity.php:25
+#: src/Domain/User/Enum/UserActivity.php:17
 msgid "deleted"
 msgstr "löscht"
 
-#: src/Domain/User/Enum/UserActivity.php:26
+#: src/Domain/User/Enum/UserActivity.php:18
 msgid "read"
 msgstr "liest"
 
-#: src/Domain/User/Enum/UserRole.php:24
+#: src/Domain/User/Enum/UserRole.php:25
 msgid "Newcomer"
 msgstr "Neubenutzer"
 
-#: src/Domain/User/Enum/UserRole.php:25
+#: src/Domain/User/Enum/UserRole.php:26
 msgid "Advisor"
 msgstr "Sachbearbeitung"
 
-#: src/Domain/User/Enum/UserRole.php:26
+#: src/Domain/User/Enum/UserRole.php:27
 msgid "Managing advisor"
 msgstr "Leitung Bearbeitung"
 
-#: src/Domain/User/Enum/UserRole.php:27
+#: src/Domain/User/Enum/UserRole.php:28
 msgid "Admin"
 msgstr "Admin"
 
-#: src/Domain/User/Enum/UserStatus.php:32
+#: src/Domain/User/Enum/UserStatus.php:30
 msgid "Unverified"
 msgstr "Unüberprüft"
 
-#: src/Domain/User/Enum/UserStatus.php:33
+#: src/Domain/User/Enum/UserStatus.php:31
 msgid "Active"
 msgstr "Aktiv"
 
-#: src/Domain/User/Enum/UserStatus.php:34
+#: src/Domain/User/Enum/UserStatus.php:32
 msgid "Locked"
 msgstr "Gesperrt"
 
-#: src/Domain/User/Enum/UserStatus.php:35
+#: src/Domain/User/Enum/UserStatus.php:33
 msgid "Suspended"
 msgstr "Suspendiert"
 
@@ -637,31 +642,31 @@ msgstr "Altes Passwort erforderlich"
 msgid "Incorrect password"
 msgstr "Ungültiges Passwort"
 
-#: templates/authentication/login.html.php:69
-#: templates/authentication/login.html.php:86
-#: templates/authentication/reset-password.html.php:85
+#: templates/authentication/login.html.php:73
+#: templates/authentication/login.html.php:90
+#: templates/authentication/reset-password.html.php:86
 msgid "Login"
 msgstr "Anmelden"
 
-#: templates/authentication/login.html.php:76
-#: templates/authentication/reset-password.html.php:66
+#: templates/authentication/login.html.php:80
+#: templates/authentication/reset-password.html.php:67
 #: templates/user/user-read.html.php:118
 msgid "Password"
 msgstr "Passwort"
 
-#: templates/authentication/login.html.php:81
+#: templates/authentication/login.html.php:85
 msgid "Password forgotten"
 msgstr "Passwort vergessen"
 
-#: templates/authentication/login.html.php:87
+#: templates/authentication/login.html.php:91
 msgid "Request password"
 msgstr "Passwort anfordern"
 
-#: templates/authentication/reset-password.html.php:76
+#: templates/authentication/reset-password.html.php:77
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
-#: templates/authentication/reset-password.html.php:90
+#: templates/authentication/reset-password.html.php:91
 msgid "Set new password"
 msgstr "Neues Passwort festlegen"
 
@@ -670,31 +675,31 @@ msgid "Helper"
 msgstr "Helfer"
 
 #: templates/client/client-read.html.php:106
-msgid "New main note"
-msgstr "Neue Hauptnotiz"
+msgid "No main note"
+msgstr "Keine Hauptnotiz"
 
 #: templates/client/client-read.html.php:119
 msgid "Notes"
 msgstr "Notizen"
 
-#: templates/client/clients-list.html.php:42
+#: templates/client/clients-list.html.php:37
 #: templates/layout/navbar.html.php:22
 msgid "Clients"
 msgstr "Klienten"
 
-#: templates/client/clients-list.html.php:49
+#: templates/client/clients-list.html.php:44
 msgid "Search by name"
 msgstr "Nach Namen suchen"
 
-#: templates/client/clients-list.html.php:52
+#: templates/client/clients-list.html.php:47
 msgid "Filter"
 msgstr "Filter"
 
-#: templates/client/clients-list.html.php:68
+#: templates/client/clients-list.html.php:63
 msgid "No more filters"
 msgstr "Keine Filter mehr"
 
-#: templates/dashboard/dashboard.html.php:30
+#: templates/dashboard/dashboard.html.php:31
 #: templates/layout/navbar.html.php:15
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -756,11 +761,7 @@ msgstr ""
 msgid "This is what I did before the error happened:"
 msgstr "Bitte erklären Sie, was Sie vor dem Auftreten des Fehlers getan haben:"
 
-#: templates/error/error-page.html.php:74
-msgid "Go back home"
-msgstr "Zur homepage gehen"
-
-#: templates/error/error-page.html.php:77
+#: templates/error/error-page.html.php:82
 msgid "Report the issue"
 msgstr "Problem melden"
 
@@ -799,6 +800,9 @@ msgstr "Profil löschen"
 #: templates/user/user-read.html.php:180
 msgid "Delete user"
 msgstr "Benutzer löschen"
+
+#~ msgid "Go back home"
+#~ msgstr "Zur homepage gehen"
 
 #, fuzzy
 #~| msgid "Maximum length is"

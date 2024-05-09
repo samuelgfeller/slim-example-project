@@ -1,6 +1,6 @@
-import {fetchData} from "../../../general/ajax/fetch-data.js?v=0.4.1";
-import {getUserActivityListHtml} from "./user-activtiy-list.html.js?v=0.4.1";
-import {initCollapsible} from "../../../general/page-component/collapsible/collapsible.js?v=0.4.1";
+import {fetchData} from "../../../general/ajax/fetch-data.js?v=0.4.2";
+import {getUserActivityListHtml} from "./user-activtiy-list.html.js?v=0.4.2";
+import {initCollapsible} from "../../../general/page-component/collapsible/collapsible.js?v=0.4.2";
 
 
 /**

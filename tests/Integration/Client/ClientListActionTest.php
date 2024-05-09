@@ -44,10 +44,10 @@ class ClientListActionTest extends TestCase
     /**
      * Normal page action while having an active session.
      *
-     * @return void
      * @throws ContainerExceptionInterface
-     *
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     public function testClientListPageActionAuthorization(): void
     {
@@ -98,10 +98,10 @@ class ClientListActionTest extends TestCase
      * @param array $usersToInsert
      * @param array $clientStatusesToInsert
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListFilterCases')]
     public function testClientListWithFilterAction(
@@ -193,10 +193,10 @@ class ClientListActionTest extends TestCase
      * @param array $filterQueryParamsArr Filter as GET paramets
      * @param array $expectedBody Expected response body
      *
-     * @return void
      * @throws ContainerExceptionInterface
-     *
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
@@ -227,7 +227,7 @@ class ClientListActionTest extends TestCase
         $filterQueryParamsArr = [
             'user' => (string)$loggedInUserId,
             'filterIds[]' => 'assigned_to_me',
-            'saveFilter' => '1'
+            'saveFilter' => '1',
         ];
 
         $request = $this->createJsonRequest(

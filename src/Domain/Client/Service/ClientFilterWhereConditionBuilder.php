@@ -17,7 +17,7 @@ class ClientFilterWhereConditionBuilder
 
     /**
      * Build cakephp query builder where array with filter params.
-     * Filter test examples: @see ClientListActionTest::testClientListWithFilterAction
+     * Filter test examples: @see ClientListActionTest::testClientListWithFilterAction.
      *
      * @param array $filterParams default deleted_at null
      *
