@@ -133,6 +133,11 @@ return function (App $app) {
 
     // API routes
     $app->group('/api', function (RouteCollectorProxy $group) {
+        // Options route for CORS preflight requests required, otherwise exception Method not allowed is thrown.
+        $group->options('/{routes:.+}', function ($request, $response) {
+            return $response;
+        });
+
         // Client creation API call
         $group->post('/clients', \App\Application\Action\Client\Api\ApiClientCreateAction::class)
             ->setName('api-client-create-submit');

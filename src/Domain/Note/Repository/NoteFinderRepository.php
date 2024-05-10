@@ -122,11 +122,11 @@ class NoteFinderRepository
         $query = $this->queryFactory->selectQuery()->from('note');
 
         $concatUserName = $query->func()->concat(
-            // Not very sexy to put IFNULL function there but with "identifier", cake interprets the string literally
-            ['IFNULL(user.first_name, "")' => 'identifier', ' ', 'IFNULL(user.last_name, "")' => 'identifier']
+            // Cake interprets the string literally with "literal", so IFNULL() and column are interpreted as raw sql
+            ['IFNULL(user.first_name, "")' => 'literal', ' ', 'IFNULL(user.last_name, "")' => 'identifier']
         );
         $concatClientName = $query->func()->concat(
-            ['IFNULL(client.first_name, "")' => 'identifier', ' ', 'IFNULL(client.last_name, "")' => 'identifier']
+            ['IFNULL(client.first_name, "")' => 'literal', ' ', 'IFNULL(client.last_name, "")' => 'identifier']
         );
 
         $query->select(
@@ -138,7 +138,7 @@ class NoteFinderRepository
             ->join(['table' => 'user', 'conditions' => 'note.user_id = user.id'])
             ->leftJoin('client', ['note.client_id = client.id'])
             ->andWhere(['note.deleted_at IS' => null, 'note.is_main' => 0])
-            ->orderByDesc('note.updated_at')->limit($notesAmount);
+            ->orderBy(['note.updated_at' => 'DESC', 'note.created_at' => 'DESC'])->limit($notesAmount);
 
         $resultRows = $query->execute()->fetchAll('assoc') ?: [];
 
