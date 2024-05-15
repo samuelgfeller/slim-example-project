@@ -19,7 +19,7 @@ jobs:
         operating-system: [ ubuntu-latest ]
         php-versions: [ '8.2' ]
         test-database: [ 'slim_example_project_test' ]
-        sql-time-zone: [ 'Europe/Zurich' ]
+        database-time-zone: [ '+01:00' ]
     name: PHP ${{ matrix.php-versions }} Test
 
     services:
@@ -62,7 +62,7 @@ jobs:
         run: mysql -uroot -proot -e "SHOW VARIABLES LIKE 'version%';"
 
       - name: Set MySQL timezone to swiss time
-        run: mysql -uroot -proot -e "SET GLOBAL time_zone = '${{ matrix.sql-time-zone }}';"
+        run: mysql -uroot -proot -e "SET GLOBAL time_zone = '${{ matrix.database-time-zone }}';"
 
       - name: Create database
         run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS ${{ matrix.test-database }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
