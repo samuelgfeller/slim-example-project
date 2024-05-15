@@ -7,31 +7,32 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
 Real-world example of a modern [Slim 4](https://www.slimframework.com/) web application with a scalable 
-structure and a variety of components and features to get started quickly. 
+structure and a variety of components and features. 
 
-This project showcases the implementation of a simple yet robust 
-[architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture) 
-with a variety of backend and
-frontend features built using the Slim 4 micro-framework. 
-The base for this project was the official 
-[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and Odan's [slim4-skeleton](https://github.com/odan/slim4-skeleton).
-
+Current best practices and programming principles are applied throughout the project and
+adhering to the Single Responsibility Principle 
+([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP)))
+is a key focus.   
 External library dependencies are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework) 
 to facilitate maintenance and ensure long-term viability. 
 
-Current best practices and modern principles are applied throughout the project. 
-Extra care was taken to follow the 
-Single Responsibility Principle ([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))).
+The [architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture) 
+is inspired by the Domain Driven Design ([DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) 
+and the [Vertical Slice Architecture](https://www.youtube.com/watch?v=L2Wnq0ChAIA).
 
-A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-project/wiki) explains the project structure, components, design choices and features.
+The base for this project was the official 
+[Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and the [slim4-skeleton](https://github.com/odan/slim4-skeleton).
 
-Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
-to get started.
+A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-project/wiki) explains how the project is built, 
+components, design choices and features.
 
 Stripped down versions of this repository are available as skeleton 
 templates.
-With frontend [slim-starter](https://github.com/samuelgfeller/slim-starter) or just for an API:
-[slim-api-starter](https://github.com/samuelgfeller/slim-api-starter).
+With frontend [**slim-starter**](https://github.com/samuelgfeller/slim-starter) or just for an API:
+[**slim-api-starter**](https://github.com/samuelgfeller/slim-api-starter).
+
+Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
+to get started.
 
 ## Features
 All the features were developed with an effort to ensure maximum user-friendliness. 
@@ -41,33 +42,32 @@ The backend, efficient and secure.
 This project is currently designed for non-profit organizations or foundations that require a platform
 to manage and maintain a record of communication through notes of people they help.
 
-**Project components:**
+**Technologies:**
 
-* [Dependency Injection](https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection)
+* [Slim 4 micro-framework](https://github.com/slimphp/Slim)
+* [Dependency Injection](https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection) - [PHP-DI](https://php-di.org/)
 * [Session and flash messages](https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages)
+* [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering) - [PHP-View](https://github.com/slimphp/PHP-View)
+* [Logging](https://github.com/samuelgfeller/slim-example-project/wiki/Logging) - [Monolog](https://github.com/Seldaek/monolog)
+* [Database migrations](https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations) - [Phinx](https://phinx.org/)
+* [Validation](https://github.com/samuelgfeller/slim-example-project/wiki/Validation) - [cakephp/validation](https://book.cakephp.org/4/en/core-libraries/validation.html)
+* [Mailing](https://github.com/samuelgfeller/slim-example-project/wiki/Mailing) - [Symfony Mailer](https://symfony.com/doc/current/mailer.html)
+* [Localization](https://github.com/samuelgfeller/slim-example-project/wiki/Translations) - [gettext](https://www.gnu.org/software/gettext/)
+* [Query Builder](https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder) - [cakephp/database](https://book.cakephp.org/5/en/orm/query-builder.html)
+* [Integration / unit testing](https://github.com/samuelgfeller/slim-example-project/wiki/Writing-Tests) - [PHPUnit](https://github.com/sebastianbergmann/phpunit/) - [test-traits](https://github.com/samuelgfeller/test-traits)
+* [Error handling](https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling) - [slim-error-renderer](https://github.com/samuelgfeller/slim-error-renderer)
+* [GitHub Actions](https://github.com/samuelgfeller/slim-example-project/wiki/GitHub-Actions) and [Scrutinizer](https://github.com/samuelgfeller/slim-example-project/wiki/How-to-set-up-Scrutinizer)
+* [Coding standards fixer](https://github.com/samuelgfeller/slim-example-project/wiki/Coding-Standards-Fixer) - [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+* [Static code analysis](https://github.com/samuelgfeller/slim-example-project/wiki/PHPStan-Static-Code-Analysis) - [PHPStan](https://github.com/phpstan/phpstan)
+
+**Functionalities demonstrating real-world features:**
+
 * [Authentication](https://github.com/samuelgfeller/slim-example-project/wiki/Authentication) (login) 
   and [authorization](https://github.com/samuelgfeller/slim-example-project/wiki/Authorization) (permissions)
 * Account verification and [password reset](https://github.com/samuelgfeller/slim-example-project/wiki/Authentication#password-forgotten) 
   via email link and token
 * [Request throttling](https://github.com/samuelgfeller/slim-example-project/wiki/Security#request-throttling) - 
-  protection against rapid fire and distributed brute force attacks (time throttling and captcha)
-* [Localization](https://github.com/samuelgfeller/slim-example-project/wiki/Translations) - English, German and French
-* [Validation](https://github.com/samuelgfeller/slim-example-project/wiki/Validation)
-* [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering) with native PHP syntax (easily interchangeable with twig)
-* [Dark theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
-* [Advanced error handling](https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling)
-* [Integration & unit testing](https://github.com/samuelgfeller/slim-example-project/wiki/Writing-Tests)
-  with fixtures and data providers
-* [Database migrations](https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations) and [seeding](https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations#seeding)
-* [Query Builder](https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder)
-* [Logging](https://github.com/samuelgfeller/slim-example-project/wiki/Logging)
-* [Mailing](https://github.com/samuelgfeller/slim-example-project/wiki/Mailing)
-* [Simple console commands](https://github.com/samuelgfeller/slim-example-project/wiki/Console-Commands)
-* [Scrutinizer](https://github.com/samuelgfeller/slim-example-project/wiki/How-to-set-up-Scrutinizer)
-* [GitHub Actions](https://github.com/samuelgfeller/slim-example-project/wiki/GitHub-Actions)
-
-**Functionalities demonstrating real-world features:**
-
+  protection against brute force and password spraying attacks
 * User management for administrators
 * 4 user roles and different permissions
 * User activity history
@@ -76,6 +76,7 @@ to manage and maintain a record of communication through notes of people they he
 * Note creation and mutation
 * Hidden notes from unauthorized users
 * Dashboard with panels
+* [Dark / light theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
 
 
 <details>
@@ -85,7 +86,7 @@ to manage and maintain a record of communication through notes of people they he
 Link: [Login](https://demo.slim-example-project.samuel-gfeller.ch)  
 Username: `admin@user.com`  
 Password: `12345678`  
-The database is reset regularly.
+The database is regularly reset.
 
 </details>
 
@@ -120,15 +121,15 @@ implementations of features.
 However, I find them often
 too complex, where the code makes too much "behind the scenes" and with lots of dependencies,
 which can lead to time-consuming refactoring on version changes.   
-I also dislike having to follow the propitiatory rules of a framework and
+I also dislike having to follow the propitiatory rules of a framework [which often don't
+follow best practices](https://www.reddit.com/r/PHP/comments/131t2k1/laravel_considered_harmful) 
+and
 much prefer the freedom of a micro-framework and carefully
-[choosing the libraries](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework#choosing-the-right-libraries) 
-I want to use.  
+[choosing the libraries](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework#choosing-the-right-libraries) and structure
+that make sense for the project.  
 This lets me stay in control of the codebase, keep it lightweight, 
 performant and tailored to the needs of the project, and it's easier to maintain 
 and adapt to new requirements.  
-
-You can very well adapt it to your own needs as well, remove or add features, and change the libraries.
 
 ## Disclaimer
 This project and its documentation are the result of my personal learning process in the last 6 years
@@ -139,13 +140,14 @@ I made what wish I had when I started getting seriously into web development.
 The codebase is big and thus lots of subjective decisions had to be made that may not be the best
 long-term solution for everybody.   
 
-The main focus throughout the development was to make the code as dependency free as possible 
-so that it's long living and can be adapted to different needs and preferences.
+The main focus throughout the development was to make the code as long living as possible 
+with best practices and few dependencies so that it can be adapted to different needs and 
+preferences.
 
-Basically, this is my take on what a modern and efficient web app could look like with today's
+Basically, this is my take on what an efficient, extensible, and maintainable web app could look like with today's
 tech.
 
-I worked closely with the software architect 
+I worked closely with the software engineer and architect 
 [Daniel Opitz](https://odan.github.io/about.html), who also reviewed this project.
 I learned a lot during 
 [our exchanges](https://github.com/samuelgfeller/slim-example-project/wiki/Sources-of-knowledge#discussions)

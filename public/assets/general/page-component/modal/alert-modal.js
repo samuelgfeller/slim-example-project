@@ -1,5 +1,5 @@
-import {__} from "../../general-js/functions.js?v=0.4.2";
-import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=0.4.2";
+import {__} from "../../general-js/functions.js?v=1.0.0";
+import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=1.0.0";
 
 function initAlertModalEventListeners() {
     // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically

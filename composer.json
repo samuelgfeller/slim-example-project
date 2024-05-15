@@ -65,7 +65,7 @@
       "@add-migrations-to-git"
     ],
     "add-migrations-to-git": "git add resources/migrations/* && git add resources/schema/*",
-    "seed:minimal": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
-    "seed": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php"
+    "seed": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php -s ClientStatusSeeder -s UserRoleSeeder -s AdminUserSeeder",
+    "seed:extended": "php vendor/bin/phinx seed:run -c config/env/env.phinx.php"
   }
 }

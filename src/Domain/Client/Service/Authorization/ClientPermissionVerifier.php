@@ -175,10 +175,11 @@ final class ClientPermissionVerifier
                     $grantedUpdateKeys[] = 'client_status_id';
                 }
             }
+
             // Things that only managing_advisor and higher privileged are allowed to do
             if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies['managing_advisor']
                 // isGrantedToAssignUserToClient CANNOT be used as it expects a real user_id which is not provided
-                // in the case where user_id value is the string "value" from (ClientAuthGetter) to check if
+                // in the case where user_id value is the string "value" from (ClientPrivilegeDeterminer) to check if
                 // the authenticated user is allowed to change the assigned user. (To enable/disable html <select>)
                 && array_key_exists('user_id', $clientDataToUpdate)) {
                 $grantedUpdateKeys[] = 'user_id';

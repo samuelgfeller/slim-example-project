@@ -28,8 +28,8 @@ final readonly class ClientPrivilegeDeterminer
         if ($this->clientPermissionVerifier->isGrantedToDelete($clientOwnerId, false)) {
             return Privilege::CRUD->name;
         }
-        // Value does not matter as keys are relevant
         if ($column !== null
+            // Keys are relevant for the update authorization check, value doesn't matter
             && $this->clientPermissionVerifier->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
         ) {
             return Privilege::CRU->name;

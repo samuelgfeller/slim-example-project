@@ -1,6 +1,6 @@
-import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=0.4.2";
-import {fetchTranslations} from "../general/ajax/fetch-translation-data.js?v=0.4.2";
-import {__} from "../general/general-js/functions.js?v=0.4.2";
+import {handleFail} from "../general/ajax/ajax-util/fail-handler.js?v=1.0.0";
+import {fetchTranslations} from "../general/ajax/fetch-translation-data.js?v=1.0.0";
+import {__} from "../general/general-js/functions.js?v=1.0.0";
 
 // Init vars
 let password1Input, password2Inp;

@@ -1,4 +1,4 @@
-import {getClientNoteSkeletonLoaderHtml} from "./client-read-template-note.html.js?v=0.4.2";
+import {getClientNoteSkeletonLoaderHtml} from "./client-read-template-note.html.js?v=1.0.0";
 
 /**
  * Display client note skeleton loaders

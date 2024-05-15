@@ -2,14 +2,14 @@ import {
     addIconToAvailableDiv,
     removeIconFromAvailableDiv,
     showPersonalInfoContainerIfHidden
-} from "../read/client-read-personal-info.js?v=0.4.2";
-import {removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=0.4.2";
+} from "../read/client-read-personal-info.js?v=1.0.0";
+import {removeValidationErrorMessages} from "../../general/ajax/ajax-util/fail-handler.js?v=1.0.0";
 import {
     contentEditableFieldValueIsValid,
     disableEditableField,
     makeFieldEditable
-} from "../../general/page-component/contenteditable/contenteditable-main.js?v=0.4.2";
-import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.2";
+} from "../../general/page-component/contenteditable/contenteditable-main.js?v=1.0.0";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=1.0.0";
 
 function preventLinkOpening(e) {
     /* Prevent link from being opened */

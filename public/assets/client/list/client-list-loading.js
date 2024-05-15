@@ -1,17 +1,17 @@
-import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=0.4.2";
+import {getClientProfileCardHtml} from "./client-list-profile-card.html.js?v=1.0.0";
 import {
     displayClientProfileCardSkeletonLoader,
     removeClientCardSkeletonLoader
-} from "./client-list-skeleton-loader.js?v=0.4.2";
-import {fetchData} from "../../general/ajax/fetch-data.js?v=0.4.2";
+} from "./client-list-skeleton-loader.js?v=1.0.0";
+import {fetchData} from "../../general/ajax/fetch-data.js?v=1.0.0";
 import {
     disableMouseWheelClickScrolling,
     openLinkOnHtmlElement
-} from "../../general/event-handler/open-link-on-html-element.js?v=0.4.2";
+} from "../../general/event-handler/open-link-on-html-element.js?v=1.0.0";
 import {
     triggerClickOnHtmlElementEnterKeypress
-} from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=0.4.2";
-import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=0.4.2";
+} from "../../general/event-handler/trigger-click-on-enter-keypress.js?v=1.0.0";
+import {submitUpdate} from "../../general/ajax/submit-update-data.js?v=1.0.0";
 
 // When searching clients, a request is made on each keyup and only the final result should be shown to the user,
 // not a response from a previous request.

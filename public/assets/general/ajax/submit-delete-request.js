@@ -1,5 +1,5 @@
-import {basePath} from "../general-js/config.js?v=0.4.2";
-import {handleFail} from "./ajax-util/fail-handler.js?v=0.4.2";
+import {basePath} from "../general-js/config.js?v=1.0.0";
+import {handleFail} from "./ajax-util/fail-handler.js?v=1.0.0";
 
 
 /**

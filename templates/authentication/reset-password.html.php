@@ -36,12 +36,16 @@ $this->setLayout('');
                 'assets/general/general-font/fonts.css',
                 'assets/general/general-css/layout.css',
                 'assets/general/general-css/general.css',
-                'assets/authentication/login.css',
                 'assets/general/page-component/flash-message/flash-message.css',
                 'assets/general/page-component/form/form.css',
+                // Page specific css must be last to overwrite general styles
+                'assets/authentication/login.css',
             ],
             // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => ['assets/general/general-js/initialization.js', 'assets/authentication/password-reset-main.js'],
+            'jsModules' => [
+                'assets/general/general-js/initialization.js',
+                'assets/authentication/password-reset-main.js'
+            ],
         ]
     );
     ?>
@@ -60,7 +64,8 @@ $this->setLayout('');
 
         <?= // General form error message if there is one
         isset($formErrorMessage) ? '<strong id="form-general-error-msg" class="error-panel">'
-            . /*Form error message is hardcoded in the backend with styling html tags*/$formErrorMessage . '</strong>' : '' ?>
+            . /*Form error message is hardcoded in the backend with styling html tags*/
+            $formErrorMessage . '</strong>' : '' ?>
 
         <!--   Password 1    -->
         <div class="form-input-div <?= isset($validation['password']) ? ' input-group-error' : '' ?>">

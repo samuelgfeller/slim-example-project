@@ -1,6 +1,6 @@
-import {getAvatarPath} from "../util/client-template-util.js?v=0.4.2";
-import {html} from "../../general/general-js/functions.js?v=0.4.2";
-import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=0.4.2";
+import {getAvatarPath} from "../util/client-template-util.js?v=1.0.0";
+import {html} from "../../general/general-js/functions.js?v=1.0.0";
+import {getDropdownAsHtmlOptions} from "../../general/template/template-util.js?v=1.0.0";
 
 /**
  * HTML code for client profile card

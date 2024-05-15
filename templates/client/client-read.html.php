@@ -159,7 +159,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                             >&nbsp; • &nbsp;<?=
                         html((new DateTime())->diff($clientReadData->birthdate)->y) ?></span><?php
                         } else {
-                            echo ' & nbsp;';
+                            echo '';
                         } ?></span>
                 </div>
             </div>

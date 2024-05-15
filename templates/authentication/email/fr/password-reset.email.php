@@ -3,11 +3,12 @@
  * @var \Psr\Http\Message\UriInterface $uri
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var array $queryParams containing token, user, token id and possibly other values like redirect
- * @var string $userFullName
+ * @var \App\Domain\User\Data\UserData $user
  * @var array $config public configuration values
  */
+
 ?>
-Bonjour <?= html($userFullName) ?> <br>
+Bonjour <?= html($user->getFullName()) ?> <br>
 <br>
 Si vous avez récemment demandé à réinitialiser votre mot de passe, cliquez sur le lien ci-dessous. <br>
 <br>

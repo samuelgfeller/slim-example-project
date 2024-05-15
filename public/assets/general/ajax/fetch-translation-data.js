@@ -1,4 +1,4 @@
-import {fetchData} from "./fetch-data.js?v=0.4.2";
+import {fetchData} from "./fetch-data.js?v=1.0.0";
 
 /**
  * Fetch serverside translation for given words.
