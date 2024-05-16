@@ -10,9 +10,9 @@
  * Incorrect: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
-// $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file of the prod server.
-// APP_ENV should NOT be set to "dev" in the development secret env.php as it
-// would override the phpunit.xml APP_ENV setting.
+// $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file on the prod server.
+// APP_ENV must NOT be set to "dev" in the development secret env.php as it's already the default value
+// and would override the phpunit.xml APP_ENV "test" setting.
 
 // Database
 $settings['db']['host'] = 'localhost';
