@@ -9,10 +9,9 @@
 Real-world example of a modern [Slim 4](https://www.slimframework.com/) web application with a scalable
 structure and a variety of components and features.
 
-Current best practices and programming principles are applied throughout the project, and
-adhering to the Single Responsibility Principle
-([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))) 
-has been a key focus.   
+The project applies current best practices and programming principles,
+with a strong emphasis on the Single Responsibility Principle
+([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))).   
 External library dependencies
 are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework)
 to facilitate maintenance and ensure long-term viability.
@@ -84,7 +83,7 @@ to manage and maintain a record of communication through notes of people they he
 * Dashboard with panels
 * [Dark / light theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
 
-<details>
+<details markdown="1">
 
 <summary><b>Click to see demo</b></summary>
 
@@ -170,4 +169,4 @@ if you value this project and its documentation and want to support it.
 ## License
 
 This project is licensed under the MIT License — see the
-[LICENSE](LICENSE) file for details.
+[LICENSE](https://github.com/samuelgfeller/slim-example-project/blob/master/LICENSE) file for details.
