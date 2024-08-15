@@ -105,7 +105,7 @@ full-sized project.
 This is what I try to provide here.
 This project isn't just a skeleton, it contains a lot of opinionated
 practical examples on how to
-implement features that are often needed in real-world applications.
+implement features that are often necessary in real-world applications.
 
 That includes authorization, integration testing, localization, validation,
 error handling, database migrations, mailing, console commands, request throttling,
@@ -114,7 +114,7 @@ explanations in the documentation.
 
 But it's not just about the features.
 Equally important
-is the [architecture](https://samuel-gfeller.ch/docs/Architecture)
+are the [architecture](https://samuel-gfeller.ch/docs/Architecture)
 and how the components interact with each other, following modern principles such as the
 [Single Responsibility Principle](https://samuel-gfeller.ch/docs/Single-Responsibility-Principle-(SRP))
 and

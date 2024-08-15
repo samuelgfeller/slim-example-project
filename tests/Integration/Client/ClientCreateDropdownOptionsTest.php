@@ -35,10 +35,10 @@ class ClientCreateDropdownOptionsTest extends TestCase
      * @param array $otherUserRow another user (that appears in dropdown) attributes containing the user_role_id
      * @param array $expectedUserNames
      *
-     *@throws NotFoundExceptionInterface
+     * @return void
      * @throws ContainerExceptionInterface
      *
-     * @return void
+     * @throws NotFoundExceptionInterface
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'clientCreationDropdownOptionsCases')]
     public function testClientCreateAssignedUserDropdownOptionsAuthorization(
@@ -65,7 +65,14 @@ class ClientCreateDropdownOptionsTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         $responseJson = $this->getJsonData($response);
-        // Assert equals without taking into account user id as it is not known in data provider
-        self::assertEqualsCanonicalizing($expectedUserNames, $responseJson['users']);
+
+        // Sort both arrays and remove keys
+        $expectedValues = array_values($expectedUserNames);
+        $responseValues = array_values($responseJson['users']);
+
+        sort($expectedValues);
+        sort($responseValues);
+
+        self::assertEquals($expectedValues, $responseValues);
     }
 }
