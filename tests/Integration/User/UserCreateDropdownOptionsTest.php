@@ -34,10 +34,10 @@ class UserCreateDropdownOptionsTest extends TestCase
      * user create form are the right ones for different
      * authenticated user roles.
      *
-     * @throws ContainerExceptionInterface
+     * @return void
      * @throws NotFoundExceptionInterface
      *
-     * @return void
+     * @throws ContainerExceptionInterface
      */
     #[DataProviderExternal(\App\Test\Provider\User\UserCreateProvider::class, 'userCreationDropdownOptionsCases')]
     public function testUserCreateDropdownOptionsAuthorization(
@@ -64,13 +64,26 @@ class UserCreateDropdownOptionsTest extends TestCase
         self::assertSame(StatusCodeInterface::STATUS_OK, $response->getStatusCode());
 
         $responseJson = $this->getJsonData($response);
+
         // Assert equals without taking into account user id as it is not known in data provider
-        self::assertEqualsCanonicalizing($expectedUserRoles, $responseJson['userRoles']);
+        $expectedUserRolesValues = array_values($expectedUserRoles);
+        $responseUserRolesValues = array_values($responseJson['userRoles']);
+        sort($expectedUserRolesValues);
+        sort($responseUserRolesValues);
+        self::assertEquals($expectedUserRolesValues, $responseUserRolesValues);
 
         // Assert statuses
-        self::assertEqualsCanonicalizing(UserStatus::getAllDisplayNames(), $responseJson['statuses']);
+        $expectedStatusesValues = array_values(UserStatus::getAllDisplayNames());
+        $responseStatusesValues = array_values($responseJson['statuses']);
+        sort($expectedStatusesValues);
+        sort($responseStatusesValues);
+        self::assertEquals($expectedStatusesValues, $responseStatusesValues);
 
         // Assert languages
-        self::assertEqualsCanonicalizing(UserLang::toArray(), $responseJson['languages']);
+        $expectedLanguagesValues = array_values(UserLang::toArray());
+        $responseLanguagesValues = array_values($responseJson['languages']);
+        sort($expectedLanguagesValues);
+        sort($responseLanguagesValues);
+        self::assertEquals($expectedLanguagesValues, $responseLanguagesValues);
     }
 }
