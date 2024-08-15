@@ -1,7 +1,7 @@
 <?php
 /**
  * Autoload functions available everywhere across the application.
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Composer#autoload.
+ * Documentation: https://samuel-gfeller.ch/docs/Composer#autoload.
  *
  * @param ?string $text
  */

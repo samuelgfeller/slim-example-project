@@ -6,7 +6,7 @@
  * Migrate command: vendor/bin/phinx migrate -c config/env/env.phinx.php --ansi -vvv
  * Generate migration: phinx-migrations generate --overwrite -c config/env/env.phinx.php --ansi
  *
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations
+ * Documentation: https://samuel-gfeller.ch/docs/Database-Migrations
  */
 
 use Cake\Core\Configure;

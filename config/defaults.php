@@ -8,7 +8,7 @@
  * without the risk of overwriting something.
  * The only file where the following is permitted: $settings['db'] = ['key' => 'val', 'nextKey' => 'nextVal'];
  *
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Configuration.
+ * Documentation: https://samuel-gfeller.ch/docs/Configuration.
  */
 
 // Timezone - time() is timezone independent https://stackoverflow.com/a/36390811/9013718
@@ -24,7 +24,7 @@ $settings = [];
 $settings['root_dir'] = dirname(__DIR__, 1);
 
 // Error handling
-// Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling
+// Documentation: https://samuel-gfeller.ch/docs/Error-Handling
 $settings['error'] = [
     // MUST be set to false in production.
     // When set to true, it shows error details and throws an ErrorException for notices and warnings.
@@ -39,7 +39,7 @@ $settings['deployment'] = [
     'version' => '1.0.0',
     // When true, JsImportCacheBuster is enabled and goes through all js files and changes the version number
     // from the imports. Should be disabled in env.prod.php.
-    // https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering#js-import-cache-busting
+    // https://samuel-gfeller.ch/docs/Template-Rendering#js-import-cache-busting
     'update_js_imports_version' => false,
     // Asset path required by the JsImportCacheBuster
     'asset_path' => $settings['root_dir'] . '/public/assets',
@@ -54,7 +54,7 @@ $settings['public'] = [
     ],
 ];
 
-// Translations: https://github.com/samuelgfeller/slim-example-project/wiki/Translations
+// Translations: https://samuel-gfeller.ch/docs/Translations
 $settings['locale'] = [
     'translations_path' => $settings['root_dir'] . '/resources/translations',
     // When adding new available locales, new translated email templates have to be added as well in their
@@ -64,7 +64,7 @@ $settings['locale'] = [
 ];
 
 // Protection against rapid fire and password spraying force attacks
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Security#request-throttling
+// Docs: https://samuel-gfeller.ch/docs/Security#request-throttling
 $settings['security'] = [
     // Bool if login requests should be throttled
     'throttle_login' => true,
@@ -89,7 +89,7 @@ $settings['security'] = [
 ];
 
 // Database
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
+// Docs: https://samuel-gfeller.ch/docs/Repository-and-Query-Builder
 $settings['db'] = [
     'host' => '127.0.0.1',
     'database' => 'slim_example_project',
@@ -118,14 +118,14 @@ $settings['db'] = [
 ];
 
 // API endpoint settings
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/API-Endpoint
+// Docs: https://samuel-gfeller.ch/docs/API-Endpoint
 $settings['api'] = [
     // Url that is allowed to make api calls to this app
     'allowed_origin' => null,
 ];
 
 // Phinx database migrations settings
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations
+// Docs: https://samuel-gfeller.ch/docs/Database-Migrations
 $settings['phinx'] = [
     'paths' => [
         'migrations' => $settings['root_dir'] . '/resources/migrations',
@@ -145,14 +145,14 @@ $settings['phinx'] = [
 ];
 
 // Template renderer settings
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering
+// Docs: https://samuel-gfeller.ch/docs/Template-Rendering
 $settings['renderer'] = [
     // Template path
     'path' => $settings['root_dir'] . '/templates',
 ];
 
 // Session
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages
+// Docs: https://samuel-gfeller.ch/docs/Session-and-Flash-messages
 $settings['session'] = [
     'name' => 'slim-example-project',
     // 5h session lifetime
@@ -165,7 +165,7 @@ $settings['session'] = [
 ];
 
 // Logger
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Logging
+// Docs: https://samuel-gfeller.ch/docs/Logging
 $settings['logger'] = [
     // Log file location
     'path' => $settings['root_dir'] . '/logs',
@@ -174,7 +174,7 @@ $settings['logger'] = [
 ];
 
 // Email settings
-// Docs: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
+// Docs: https://samuel-gfeller.ch/docs/Mailing
 $settings['smtp'] = [
     // use type 'null' for the null adapter
     'type' => 'smtp',

@@ -11,7 +11,7 @@ use SlimErrorRenderer\Middleware\ExceptionHandlingMiddleware;
 use SlimErrorRenderer\Middleware\NonFatalErrorHandlingMiddleware;
 
 // Slim middlewares are LIFO (last in, first out) so when responding, the order is backwards
-// https://github.com/samuelgfeller/slim-example-project/wiki/Middleware#order-of-execution
+// https://samuel-gfeller.ch/docs/Slim-Middleware#order-of-execution
 return function (App $app) {
     $app->addBodyParsingMiddleware();
 

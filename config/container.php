@@ -2,7 +2,7 @@
 /**
  * Dependency Injection container configuration.
  *
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection.
+ * Documentation: https://samuel-gfeller.ch/docs/Dependency-Injection.
  */
 
 use App\Infrastructure\Utility\Settings;
@@ -69,7 +69,7 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
 
-    // Logging: https://github.com/samuelgfeller/slim-example-project/wiki/Logging
+    // Logging: https://samuel-gfeller.ch/docs/Logging
     LoggerInterface::class => function (ContainerInterface $container) {
         $loggerSettings = $container->get('settings')['logger'];
 
@@ -143,7 +143,7 @@ return [
         return new Settings($container->get('settings'));
     },
 
-    // Template renderer: https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering
+    // Template renderer: https://samuel-gfeller.ch/docs/Template-Rendering
     PhpRenderer::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         $rendererSettings = $settings['renderer'];
@@ -152,7 +152,7 @@ return [
         return new PhpRenderer($rendererSettings['path']);
     },
 
-    // Sessions: https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages
+    // Sessions: https://samuel-gfeller.ch/docs/Session-and-Flash-messages
     SessionManagerInterface::class => function (ContainerInterface $container) {
         return $container->get(SessionInterface::class);
     },
@@ -162,7 +162,7 @@ return [
         return new PhpSession($options);
     },
 
-    // Mailing: https://github.com/samuelgfeller/slim-example-project/wiki/Mailing
+    // Mailing: https://samuel-gfeller.ch/docs/Mailing
     MailerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['smtp'];
         // smtp://user:pass@smtp.example.com:25

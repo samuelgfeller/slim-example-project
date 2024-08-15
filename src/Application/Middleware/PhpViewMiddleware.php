@@ -18,7 +18,7 @@ use Slim\Views\PhpRenderer;
 
 /**
  * Adds attributes to the PhpRenderer and updates js imports with version number.
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering.
+ * Documentation: https://samuel-gfeller.ch/docs/Template-Rendering.
  */
 final class PhpViewMiddleware implements MiddlewareInterface
 {

@@ -11,12 +11,12 @@ structure and a variety of components and features.
 
 The project applies current best practices and programming principles,
 with a strong emphasis on the Single Responsibility Principle
-([SRP](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))).   
+([SRP](https://samuel-gfeller.ch/docs/Single-Responsibility-Principle-(SRP))).   
 External library dependencies
-are [kept to a minimum](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework)
+are [kept to a minimum](https://samuel-gfeller.ch/docs/Libraries-and-Framework)
 to facilitate maintenance and ensure long-term viability.
 
-The [architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture)
+The [architecture](https://samuel-gfeller.ch/docs/Architecture)
 is inspired by the Domain Driven Design ([DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
 and the [Vertical Slice Architecture](https://www.youtube.com/watch?v=L2Wnq0ChAIA).
 
@@ -24,7 +24,7 @@ The base for this project was the official
 [Slim-Skeleton](https://github.com/slimphp/Slim-Skeleton) and
 the [slim4-skeleton](https://github.com/odan/slim4-skeleton).
 
-A detailed [**documentation**](https://github.com/samuelgfeller/slim-example-project/wiki) explains how the project is
+A detailed [**documentation**](https://samuel-gfeller.ch/docs) explains how the project is
 built,
 components, design choices and features.
 
@@ -33,7 +33,7 @@ templates.
 With frontend [**slim-starter**](https://github.com/samuelgfeller/slim-starter) or just for an API:
 [**slim-api-starter**](https://github.com/samuelgfeller/slim-api-starter).
 
-Please read the [**installation guide**](https://github.com/samuelgfeller/slim-example-project/wiki/Installation-Guide)
+Please read the [**installation guide**](https://samuel-gfeller.ch/docs/Installation-Guide)
 to get started.
 
 ## Features
@@ -42,36 +42,36 @@ All the features were developed with an effort to ensure maximum user-friendline
 The frontend, intuitive, aesthetically pleasing, minimalistic, and functional.
 The backend, efficient and secure.
 
-This project is currently designed for non-profit organizations or foundations that require a platform
-to manage and maintain a record of communication through notes of people they help.
-
 **Technologies:**
 
 * [Slim 4 micro-framework](https://github.com/slimphp/Slim)
-* [Dependency Injection](https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection) - [PHP-DI](https://php-di.org/)
-* [Logging](https://github.com/samuelgfeller/slim-example-project/wiki/Logging) - [Monolog](https://github.com/Seldaek/monolog)
-* [Validation](https://github.com/samuelgfeller/slim-example-project/wiki/Validation) - [cakephp/validation](https://book.cakephp.org/4/en/core-libraries/validation.html)
-* [Database migrations](https://github.com/samuelgfeller/slim-example-project/wiki/Database-Migrations) - [Phinx](https://phinx.org/)
-* [Template rendering](https://github.com/samuelgfeller/slim-example-project/wiki/Template-rendering) - [PHP-View](https://github.com/slimphp/PHP-View)
-* [Mailing](https://github.com/samuelgfeller/slim-example-project/wiki/Mailing) - [Symfony Mailer](https://symfony.com/doc/current/mailer.html)
-* [Localization](https://github.com/samuelgfeller/slim-example-project/wiki/Translations) - [gettext](https://www.gnu.org/software/gettext/)
-* [Query Builder](https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder) - [cakephp/database](https://book.cakephp.org/5/en/orm/query-builder.html)
-* [Integration / unit testing](https://github.com/samuelgfeller/slim-example-project/wiki/Writing-Tests) - [PHPUnit](https://github.com/sebastianbergmann/phpunit/) - [test-traits](https://github.com/samuelgfeller/test-traits)
-* [Session and flash messages](https://github.com/samuelgfeller/slim-example-project/wiki/Session-and-Flash-messages) - [odan/session](https://github.com/odan/session)
-* [Error handling](https://github.com/samuelgfeller/slim-example-project/wiki/Error-Handling) - [slim-error-renderer](https://github.com/samuelgfeller/slim-error-renderer)
-* [GitHub Actions](https://github.com/samuelgfeller/slim-example-project/wiki/GitHub-Actions)
-  and [Scrutinizer](https://github.com/samuelgfeller/slim-example-project/wiki/How-to-set-up-Scrutinizer)
-* [Coding standards fixer](https://github.com/samuelgfeller/slim-example-project/wiki/Coding-Standards-Fixer) - [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
-* [Static code analysis](https://github.com/samuelgfeller/slim-example-project/wiki/PHPStan-Static-Code-Analysis) - [PHPStan](https://github.com/phpstan/phpstan)
+* [Dependency Injection](https://samuel-gfeller.ch/docs/Dependency-Injection) - [PHP-DI](https://php-di.org/)
+* [Logging](https://samuel-gfeller.ch/docs/Logging) - [Monolog](https://github.com/Seldaek/monolog)
+* [Validation](https://samuel-gfeller.ch/docs/Validation) - [cakephp/validation](https://book.cakephp.org/4/en/core-libraries/validation.html)
+* [Database migrations](https://samuel-gfeller.ch/docs/Database-Migrations) - [Phinx](https://phinx.org/)
+* [Template rendering](https://samuel-gfeller.ch/docs/Template-Rendering) - [PHP-View](https://github.com/slimphp/PHP-View)
+* [Mailing](https://samuel-gfeller.ch/docs/Mailing) - [Symfony Mailer](https://symfony.com/doc/current/mailer.html)
+* [Localization](https://samuel-gfeller.ch/docs/Translations) - [gettext](https://www.gnu.org/software/gettext/)
+* [Query Builder](https://samuel-gfeller.ch/docs/Repository-and-Query-Builder) - [cakephp/database](https://book.cakephp.org/5/en/orm/query-builder.html)
+* [Integration / unit testing](https://samuel-gfeller.ch/docs/Writing-Tests) - [PHPUnit](https://github.com/sebastianbergmann/phpunit/) - [test-traits](https://github.com/samuelgfeller/test-traits)
+* [Session and flash messages](https://samuel-gfeller.ch/docs/Session-and-Flash-messages) - [odan/session](https://github.com/odan/session)
+* [Error handling](https://samuel-gfeller.ch/docs/Error-Handling) - [slim-error-renderer](https://github.com/samuelgfeller/slim-error-renderer)
+* [GitHub Actions](https://samuel-gfeller.ch/docs/GitHub-Actions)
+  and [Scrutinizer](https://samuel-gfeller.ch/docs/How-to-set-up-Scrutinizer)
+* [Coding standards fixer](https://samuel-gfeller.ch/docs/Coding-Standards-Fixer) - [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+* [Static code analysis](https://samuel-gfeller.ch/docs/PHPStan-Static-Code-Analysis) - [PHPStan](https://github.com/phpstan/phpstan)
 
-**Functionalities demonstrating real-world features:**
+**Functionalities demonstrating real-world features:**  
 
-* [Authentication](https://github.com/samuelgfeller/slim-example-project/wiki/Authentication) (login)
-* [Authorization](https://github.com/samuelgfeller/slim-example-project/wiki/Authorization) (permissions)
+This project is currently designed for non-profit organizations or foundations that require a platform
+to manage and maintain a record of communication through notes of people they help.
+
+* [Authentication](https://samuel-gfeller.ch/docs/Authentication) (login)
+* [Authorization](https://samuel-gfeller.ch/docs/Authorization) (permissions)
 * Account verification
-  and [password reset](https://github.com/samuelgfeller/slim-example-project/wiki/Authentication#password-forgotten)
+  and [password reset](https://samuel-gfeller.ch/docs/Authentication#password-forgotten)
   via email link and token
-* [Request throttling](https://github.com/samuelgfeller/slim-example-project/wiki/Security#request-throttling) -
+* [Request throttling](https://samuel-gfeller.ch/docs/Security#request-throttling) -
   protection against brute force and password spraying attacks
 * User management for administrators
 * 4 user roles and different permissions
@@ -81,7 +81,7 @@ to manage and maintain a record of communication through notes of people they he
 * Note creation and mutation
 * Hidden notes from unauthorized users
 * Dashboard with panels
-* [Dark / light theme](https://github.com/samuelgfeller/slim-example-project/wiki/Dark-Theme)
+* [Dark / light theme](https://samuel-gfeller.ch/docs/Dark-Theme)
 
 <details markdown="1">
 
@@ -114,11 +114,11 @@ explanations in the documentation.
 
 But it's not just about the features.
 Equally important
-is the [architecture](https://github.com/samuelgfeller/slim-example-project/wiki/Architecture)
+is the [architecture](https://samuel-gfeller.ch/docs/Architecture)
 and how the components interact with each other, following modern principles such as the
-[Single Responsibility Principle](https://github.com/samuelgfeller/slim-example-project/wiki/Single-Responsibility-Principle-(SRP))
+[Single Responsibility Principle](https://samuel-gfeller.ch/docs/Single-Responsibility-Principle-(SRP))
 and
-[Dependency Injection](https://github.com/samuelgfeller/slim-example-project/wiki/Dependency-Injection).
+[Dependency Injection](https://samuel-gfeller.ch/docs/Dependency-Injection).
 
 Of course, there are big frameworks that have their own well-established set of programming conventions and
 implementations of features.
@@ -130,7 +130,7 @@ I also dislike having to follow the propitiatory rules of a framework [which oft
 follow best practices](https://www.reddit.com/r/PHP/comments/131t2k1/laravel_considered_harmful)
 and
 much prefer the freedom of a micro-framework and carefully
-[choosing the libraries](https://github.com/samuelgfeller/slim-example-project/wiki/Libraries-and-Framework#choosing-the-right-libraries)
+[choosing the libraries](https://samuel-gfeller.ch/docs/Libraries-and-Framework#choosing-the-right-libraries)
 and structure
 that make sense for the project.  
 This lets me stay in control of the codebase, keep it lightweight,
@@ -157,13 +157,13 @@ tech.
 I worked closely with the software engineer and architect
 [Daniel Opitz](https://odan.github.io/about.html), who also reviewed this project.
 I learned a lot during
-[our exchanges](https://github.com/samuelgfeller/slim-example-project/wiki/Sources-of-knowledge#discussions)
+[our exchanges](https://samuel-gfeller.ch/docs/Sources-of-Knowledge#discussions)
 and was inspired by his books, articles, tutorials and his slim
 [skeleton-project](https://github.com/odan/slim4-skeleton).
 
 ## Support
 
-Please read the [Support❤️](https://github.com/samuelgfeller/slim-example-project/wiki/Support❤️) page
+Please read the [Support❤️](https://samuel-gfeller.ch/docs/Support❤️) page
 if you value this project and its documentation and want to support it.
 
 ## License

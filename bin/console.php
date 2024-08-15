@@ -3,7 +3,7 @@
  * Execute a class function instantiated by the container with the command line.
  * The first argument is the container key and the second the function name that should be called.
  * Example: php bin/console.php SqlSchemaGenerator generateMySqlSchema
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Console-Commands
+ * Documentation: https://samuel-gfeller.ch/docs/Console-Commands
  */
 
 // Boot the application

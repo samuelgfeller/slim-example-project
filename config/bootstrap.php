@@ -2,7 +2,7 @@
 /**
  * Start up the Slim App.
  *
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Web-Server-Config-and-Bootstrapping
+ * Documentation: https://samuel-gfeller.ch/docs/Web-Server-config-and-Slim-Bootstrapping#slim-bootstrapping
  */
 
 use DI\ContainerBuilder;

@@ -12,7 +12,7 @@ use Cake\Database\Query\UpdateQuery;
  * The Query factory provides methods to create queries.
  *
  * CakePHP documentation: https://book.cakephp.org/5/en/orm/query-builder.html.
- * Repository and QueryBuilder: https://github.com/samuelgfeller/slim-example-project/wiki/Repository-and-Query-Builder
+ * Repository and QueryBuilder: https://samuel-gfeller.ch/docs/Repository-and-Query-Builder
  */
 final readonly class QueryFactory
 {

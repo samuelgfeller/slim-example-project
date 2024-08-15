@@ -2,7 +2,7 @@
 /**
  * Routes configuration.
  *
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Routing
+ * Documentation: https://samuel-gfeller.ch/docs/Slim-Routing
  */
 
 use App\Application\Middleware\UserAuthenticationMiddleware;

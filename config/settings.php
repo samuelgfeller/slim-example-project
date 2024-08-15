@@ -1,7 +1,7 @@
 <?php
 /**
  * This file loads the default and environment-specific settings.
- * Documentation: https://github.com/samuelgfeller/slim-example-project/wiki/Configuration.
+ * Documentation: https://samuel-gfeller.ch/docs/Configuration.
  */
 
 // Load default settings
