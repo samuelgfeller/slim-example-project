@@ -5,6 +5,7 @@
  * Documentation: https://samuel-gfeller.ch/docs/Dependency-Injection.
  */
 
+use App\Application\Data\UserNetworkSessionData;
 use App\Infrastructure\Utility\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
@@ -187,4 +188,8 @@ return [
 
         return $eventDispatcher;
     },
+    // Add shared UserNetworkSessionData to the container so that the DTO can be populated and used in different places
+    UserNetworkSessionData::class => function () {
+        return new UserNetworkSessionData();
+    }
 ];

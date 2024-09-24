@@ -33,7 +33,7 @@ templates.
 With frontend [**slim-starter**](https://github.com/samuelgfeller/slim-starter) or just for an API:
 [**slim-api-starter**](https://github.com/samuelgfeller/slim-api-starter).
 
-Please read the [**installation guide**](https://samuel-gfeller.ch/docs/Installation-Guide)
+Please read the [**installation guide**](https://samuel-gfeller.ch/docs/Slim-Example-Project-Installation-Guide)
 to get started.
 
 ## Features

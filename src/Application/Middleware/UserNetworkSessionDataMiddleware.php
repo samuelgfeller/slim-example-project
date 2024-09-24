@@ -16,6 +16,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 final readonly class UserNetworkSessionDataMiddleware implements MiddlewareInterface
 {
     public function __construct(
+        // The UserNetworkSessionData DTO object is registered and created in the container definition
+        // container.php so that this middleware can populate it with data that are also available
+        // by any service that also injects this DTO object.
         private UserNetworkSessionData $clientNetworkData,
         private SessionInterface $session,
     ) {
