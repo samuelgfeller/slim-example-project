@@ -81,7 +81,7 @@ class PasswordResetSubmitActionTest extends TestCase
     #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testResetPasswordSubmitInvalidToken(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
@@ -135,7 +135,7 @@ class PasswordResetSubmitActionTest extends TestCase
     #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testResetPasswordSubmitInvalidData(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // Insert user id 2 role: user
         $userRow = $this->insertFixture(UserFixture::class, ['id' => $verification->userId]);

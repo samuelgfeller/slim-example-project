@@ -7,7 +7,7 @@ use App\Infrastructure\Factory\QueryFactory;
 final readonly class VerificationTokenCreatorRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private QueryFactory $queryFactory,
     ) {
     }
 

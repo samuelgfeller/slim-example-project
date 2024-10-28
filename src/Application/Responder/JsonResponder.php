@@ -18,7 +18,7 @@ final readonly class JsonResponder
     public function encodeAndAddToResponse(
         ResponseInterface $response,
         mixed $data = null,
-        int $status = 200
+        int $status = 200,
     ): ResponseInterface {
         $response->getBody()->write((string)json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
         $response = $response->withStatus($status);

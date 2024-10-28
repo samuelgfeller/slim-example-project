@@ -21,7 +21,7 @@ final readonly class ApiClientCreateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $clientValues = (array)$request->getParsedBody();
 

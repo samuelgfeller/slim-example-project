@@ -8,7 +8,7 @@ use App\Infrastructure\Factory\QueryFactory;
 final readonly class UserUpdaterRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private QueryFactory $queryFactory,
     ) {
     }
 

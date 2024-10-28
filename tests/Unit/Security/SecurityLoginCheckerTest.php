@@ -57,7 +57,7 @@ class SecurityLoginCheckerTest extends TestCase
     public function testPerformLoginSecurityCheckIndividual(
         int|string $delay,
         array $ipAndEmailLogSummary,
-        array $securitySettings
+        array $securitySettings,
     ): void {
         $loginLogFinderRepository = $this->mock(LoginLogFinderRepository::class);
 

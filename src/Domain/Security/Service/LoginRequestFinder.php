@@ -13,7 +13,7 @@ class LoginRequestFinder
     public function __construct(
         private readonly LoginLogFinderRepository $loginRequestFinderRepository,
         private readonly UserNetworkSessionData $ipAddressData,
-        Settings $settings
+        Settings $settings,
     ) {
         $this->securitySettings = $settings->get('security');
     }

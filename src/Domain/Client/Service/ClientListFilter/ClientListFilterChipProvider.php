@@ -20,7 +20,7 @@ final readonly class ClientListFilterChipProvider
         private UserFinderRepository $userFinderRepository,
         private SessionInterface $session,
         private AuthorizationChecker $authorizationChecker,
-        private FilterSettingFinder $filterSettingFinder
+        private FilterSettingFinder $filterSettingFinder,
     ) {
     }
 

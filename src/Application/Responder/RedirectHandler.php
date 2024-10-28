@@ -26,7 +26,7 @@ final readonly class RedirectHandler
     public function redirectToUrl(
         ResponseInterface $response,
         string $destination,
-        array $queryParams = []
+        array $queryParams = [],
     ): ResponseInterface {
         if ($queryParams) {
             $destination = sprintf('%s?%s', $destination, http_build_query($queryParams));
@@ -52,7 +52,7 @@ final readonly class RedirectHandler
         ResponseInterface $response,
         string $routeName,
         array $data = [],
-        array $queryParams = []
+        array $queryParams = [],
     ): ResponseInterface {
         return $this->redirectToUrl($response, $this->routeParser->urlFor($routeName, $data, $queryParams));
     }

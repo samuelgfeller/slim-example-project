@@ -83,7 +83,7 @@ final class ClientPermissionVerifier
     public function isGrantedToAssignUserToClient(
         ?int $assignedUserId,
         ?int $authenticatedUserRoleHierarchy = null,
-        ?array $userRoleHierarchies = null
+        ?array $userRoleHierarchies = null,
     ) {
         if ($this->loggedInUserId === null) {
             $this->logger->error(
@@ -279,7 +279,7 @@ final class ClientPermissionVerifier
     public function isGrantedToRead(
         ?int $ownerId,
         string|\DateTimeImmutable|null $deletedAt = null,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if ($this->loggedInUserId !== null) {
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(

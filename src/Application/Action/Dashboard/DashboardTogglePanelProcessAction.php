@@ -24,7 +24,7 @@ final readonly class DashboardTogglePanelProcessAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $params = (array)$request->getParsedBody();
         // As there is no other validation the request body is checked for valid keys here

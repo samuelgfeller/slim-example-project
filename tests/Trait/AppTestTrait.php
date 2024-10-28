@@ -21,7 +21,7 @@ trait AppTestTrait
 {
     use ContainerTestTrait;
 
-    /** @var App<\Psr\Container\ContainerInterface> $app */
+    /** @var App<\Psr\Container\ContainerInterface> */
     protected App $app;
 
     /**

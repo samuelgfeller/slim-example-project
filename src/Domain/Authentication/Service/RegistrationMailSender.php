@@ -24,7 +24,7 @@ class RegistrationMailSender
     public function __construct(
         private readonly Mailer $mailer,
         private readonly LocaleConfigurator $localeConfigurator,
-        Settings $settings
+        Settings $settings,
     ) {
         $settings = $settings->get('public')['email'];
         // Create email object

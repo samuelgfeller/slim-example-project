@@ -18,7 +18,7 @@ final readonly class NoteDeleteAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $noteId = (int)$args['note_id'];
 

@@ -20,7 +20,7 @@ final readonly class NoteFetchListAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         try {
             // Retrieve notes with given filter values (or none)

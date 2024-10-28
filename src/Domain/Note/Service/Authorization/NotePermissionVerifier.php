@@ -34,7 +34,7 @@ final readonly class NotePermissionVerifier
         ?int $clientOwnerId = null,
         ?int $isHidden = null,
         bool $isDeleted = false,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -117,7 +117,7 @@ final readonly class NotePermissionVerifier
         int $isMain,
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
@@ -161,7 +161,7 @@ final readonly class NotePermissionVerifier
     public function isGrantedToDelete(
         ?int $noteOwnerId = null,
         ?int $clientOwnerId = null,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
             $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(

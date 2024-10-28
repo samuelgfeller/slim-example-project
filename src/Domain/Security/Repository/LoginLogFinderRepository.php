@@ -8,7 +8,7 @@ use App\Infrastructure\Factory\QueryFactory;
 class LoginLogFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory,
     ) {
     }
 

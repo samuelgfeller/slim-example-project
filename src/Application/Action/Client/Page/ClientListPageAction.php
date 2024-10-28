@@ -14,14 +14,14 @@ final readonly class ClientListPageAction
     public function __construct(
         private TemplateRenderer $templateRenderer,
         private ClientListFilterChipProvider $clientListFilterChipGetter,
-        private ClientPermissionVerifier $clientPermissionVerifier
+        private ClientPermissionVerifier $clientPermissionVerifier,
     ) {
     }
 
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         // Clients are loaded dynamically with js after page load for a faster loading time
         // Retrieving available filters

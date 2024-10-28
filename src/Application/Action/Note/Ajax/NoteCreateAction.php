@@ -18,7 +18,7 @@ final readonly class NoteCreateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $noteValues = (array)$request->getParsedBody();
 

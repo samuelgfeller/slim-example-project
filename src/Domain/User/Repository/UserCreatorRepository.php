@@ -7,7 +7,7 @@ use App\Infrastructure\Factory\QueryFactory;
 final readonly class UserCreatorRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private QueryFactory $queryFactory,
     ) {
     }
 

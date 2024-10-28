@@ -12,7 +12,7 @@ class SecurityException extends \RuntimeException
     public function __construct(
         private readonly int|string $remainingDelay,
         private readonly SecurityType $securityType,
-        string $message = 'Security check failed.'
+        string $message = 'Security check failed.',
     ) {
         parent::__construct($message);
     }

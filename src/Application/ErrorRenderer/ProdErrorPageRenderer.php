@@ -26,7 +26,7 @@ final readonly class ProdErrorPageRenderer implements GenericErrorPageRendererIn
     public function renderHtmlProdErrorPage(
         int $statusCode,
         ?string $safeExceptionMessage,
-        ?string $errorReportEmailAddress
+        ?string $errorReportEmailAddress,
     ): string {
         return $this->phpRenderer->fetch('error/error-page.html.php', [
             'statusCode' => $statusCode,

@@ -16,7 +16,7 @@ class SecurityLoginChecker
         private readonly SecurityCaptchaVerifier $captchaVerifier,
         private readonly LoginRequestFinder $loginRequestFinder,
         private readonly LoginLogFinderRepository $loginRequestFinderRepository,
-        Settings $settings
+        Settings $settings,
     ) {
         $this->securitySettings = $settings->get('security');
     }

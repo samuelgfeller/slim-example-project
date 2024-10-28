@@ -82,7 +82,7 @@ class RegisterVerifyActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationProvider')]
     public function testRegisterVerificationAlreadyVerified(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
@@ -124,7 +124,7 @@ class RegisterVerifyActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationProvider')]
     public function testRegisterVerificationAlreadyVerifiedAndAuthenticated(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(
@@ -168,7 +168,7 @@ class RegisterVerifyActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Authentication\UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testRegisterVerificationInvalidUsedExpiredToken(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // User needed to insert verification
         $userRow = $this->insertFixture(

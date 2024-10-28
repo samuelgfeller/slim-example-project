@@ -48,7 +48,7 @@ class UserCreateActionTest extends TestCase
     public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
         ?UserRole $newUserRole,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role

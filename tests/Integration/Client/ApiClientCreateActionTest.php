@@ -110,7 +110,7 @@ class ApiClientCreateActionTest extends TestCase
     #[DataProviderExternal(\App\Test\Provider\Client\ApiClientCreateProvider::class, 'invalidApiClientCreationValues')]
     public function testApiClientSubmitCreateActionInvalid(
         array $requestBody,
-        array $jsonResponse
+        array $jsonResponse,
     ): void {
         // Insert action pending client status because it's needed by the service function
         $this->insertFixture(

@@ -117,7 +117,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     public function testPasswordForgottenEmailSubmitSecurityThrottling(
         int|string $delay,
         int $emailLogAmountInTimeSpan,
-        array $securitySettings
+        array $securitySettings,
     ): void {
         // Insert user
         $userRow = $this->insertFixture(UserFixture::class);

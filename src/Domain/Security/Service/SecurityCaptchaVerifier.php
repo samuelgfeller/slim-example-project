@@ -11,7 +11,7 @@ class SecurityCaptchaVerifier
     private array $googleSettings;
 
     public function __construct(
-        Settings $settings
+        Settings $settings,
     ) {
         $this->googleSettings = $settings->get('google');
     }

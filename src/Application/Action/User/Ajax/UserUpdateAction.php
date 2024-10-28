@@ -18,7 +18,7 @@ final readonly class UserUpdateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         // Key 'user_id' for the user id in the URL is defined in the route definition in routes.php
         $userIdToChange = (int)$args['user_id'];

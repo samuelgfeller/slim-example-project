@@ -11,7 +11,7 @@ class EmailRequestFinder
 
     public function __construct(
         private readonly EmailLogFinderRepository $emailRequestFinderRepository,
-        Settings $settings
+        Settings $settings,
     ) {
         $this->securitySettings = $settings->get('security');
     }

@@ -12,7 +12,7 @@ final readonly class ClientFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,
-        private Hydrator $hydrator
+        private Hydrator $hydrator,
     ) {
     }
 

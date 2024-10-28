@@ -7,7 +7,7 @@ use App\Infrastructure\Factory\QueryFactory;
 final readonly class EmailLoggerRepository
 {
     public function __construct(
-        private QueryFactory $queryFactory
+        private QueryFactory $queryFactory,
     ) {
     }
 
@@ -25,7 +25,7 @@ final readonly class EmailLoggerRepository
         string $fromEmail,
         string $toEmail,
         string $subject,
-        int|string|null $userId
+        int|string|null $userId,
     ): int {
         $query = $this->queryFactory->insertQuery();
 

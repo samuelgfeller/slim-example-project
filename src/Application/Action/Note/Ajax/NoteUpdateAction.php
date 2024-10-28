@@ -18,7 +18,7 @@ final readonly class NoteUpdateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $noteIdToChange = (int)$args['note_id'];
         $noteValues = (array)$request->getParsedBody();

@@ -83,7 +83,7 @@ class AccountUnlockActionTest extends TestCase
     #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationInvalidTokenProvider')]
     public function testAccountUnlockActionInvalidExpiredToken(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // Insert locked user
         $userRow = $this->insertFixture(
@@ -129,7 +129,7 @@ class AccountUnlockActionTest extends TestCase
     #[DataProviderExternal(UserVerificationProvider::class, 'userVerificationProvider')]
     public function testAccountUnlockActionAlreadyUnlocked(
         UserVerificationData $verification,
-        string $clearTextToken
+        string $clearTextToken,
     ): void {
         // Insert locked user
         $userRow = $this->insertFixture(

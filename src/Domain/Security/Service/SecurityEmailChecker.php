@@ -15,7 +15,7 @@ class SecurityEmailChecker
         private readonly SecurityCaptchaVerifier $captchaVerifier,
         private readonly EmailRequestFinder $emailRequestFinder,
         private readonly EmailLogFinderRepository $requestFinderRepository,
-        Settings $settings
+        Settings $settings,
     ) {
         $this->securitySettings = $settings->get('security');
     }
@@ -74,7 +74,7 @@ class SecurityEmailChecker
      */
     private function performEmailRequestsCheck(
         int $emailsAmount,
-        string $email
+        string $email,
     ): void {
         if (isset($this->securitySettings['user_email_throttle_rule'])) {
             // Reverse order to compare fails the longest delay first and then go down from there

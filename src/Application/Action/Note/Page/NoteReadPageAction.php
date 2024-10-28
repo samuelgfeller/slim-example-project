@@ -22,7 +22,7 @@ final readonly class NoteReadPageAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $noteData = $this->noteFinder->findNote((int)$args['note_id']);
         if ($noteData->id) {

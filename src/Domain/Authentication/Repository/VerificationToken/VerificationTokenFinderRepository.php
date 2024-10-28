@@ -12,7 +12,7 @@ use App\Infrastructure\Factory\QueryFactory;
 class VerificationTokenFinderRepository
 {
     public function __construct(
-        private readonly QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory,
     ) {
     }
 

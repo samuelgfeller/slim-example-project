@@ -43,7 +43,7 @@ class UserDeleteActionTest extends TestCase
     public function testUserSubmitDeleteActionAuthorization(
         array $userToDeleteRow,
         array $authenticatedUserRow,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user to delete with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $userToDeleteRow);

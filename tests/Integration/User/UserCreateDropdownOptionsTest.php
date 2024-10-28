@@ -34,10 +34,10 @@ class UserCreateDropdownOptionsTest extends TestCase
      * user create form are the right ones for different
      * authenticated user roles.
      *
-     * @return void
      * @throws NotFoundExceptionInterface
-     *
      * @throws ContainerExceptionInterface
+     *
+     * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\User\UserCreateProvider::class, 'userCreationDropdownOptionsCases')]
     public function testUserCreateDropdownOptionsAuthorization(

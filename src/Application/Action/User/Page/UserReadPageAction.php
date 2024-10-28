@@ -23,7 +23,7 @@ final readonly class UserReadPageAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $authenticatedUserId = $this->session->get('user_id');
         $userId = (int)($args['user_id'] ?? $authenticatedUserId);

@@ -22,7 +22,7 @@ final readonly class Mailer
         private MailerInterface $mailer,
         private PhpRenderer $phpRenderer,
         private EmailLoggerRepository $emailLoggerRepository,
-        private UserNetworkSessionData $userNetworkSessionData
+        private UserNetworkSessionData $userNetworkSessionData,
     ) {
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
     }

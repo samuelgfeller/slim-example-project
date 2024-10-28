@@ -18,7 +18,7 @@ final readonly class PasswordChangeSubmitAction
         private JsonResponder $jsonResponder,
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
-        private PasswordChanger $passwordChanger
+        private PasswordChanger $passwordChanger,
     ) {
     }
 

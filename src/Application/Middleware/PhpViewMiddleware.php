@@ -35,7 +35,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
         private readonly JsImportCacheBuster $jsImportCacheBuster,
         Settings $settings,
         private readonly UserPermissionVerifier $userPermissionVerifier,
-        private readonly RouteParserInterface $routeParser
+        private readonly RouteParserInterface $routeParser,
     ) {
         $this->publicSettings = $settings->get('public');
         $this->deploymentSettings = $settings->get('deployment');

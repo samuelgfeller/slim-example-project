@@ -51,7 +51,7 @@ class NoteCreateActionTest extends TestCase
     public function testNoteSubmitCreateActionAuthorization(
         array $linkedUserRow,
         array $authenticatedUserRow,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $linkedUserRow);
@@ -152,7 +152,7 @@ class NoteCreateActionTest extends TestCase
     public function testNoteCreateSubmitActionInvalid(
         array $invalidRequestBody,
         bool $existingMainNote,
-        array $expectedResponseData
+        array $expectedResponseData,
     ): void {
         // Insert user authorized to create
         $clientOwnerId = $this->insertFixture(

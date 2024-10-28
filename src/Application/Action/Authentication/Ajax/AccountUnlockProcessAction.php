@@ -20,7 +20,7 @@ final readonly class AccountUnlockProcessAction
         private RedirectHandler $redirectHandler,
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
-        private AccountUnlockTokenVerifier $accountUnlockTokenVerifier
+        private AccountUnlockTokenVerifier $accountUnlockTokenVerifier,
     ) {
     }
 

@@ -20,7 +20,7 @@ final readonly class ClientDeleteAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $clientId = (int)$args['client_id'];
 

@@ -49,7 +49,7 @@ class NoteDeleteActionTest extends TestCase
     public function testNoteSubmitDeleteActionAuthorization(
         array $linkedUserRow,
         array $authenticatedUserRow,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $linkedUserRow);

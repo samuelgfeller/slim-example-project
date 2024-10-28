@@ -30,7 +30,7 @@ final readonly class UserActivityFetchListAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $queryParams = $request->getQueryParams();
         // User ids may be an array or a single value

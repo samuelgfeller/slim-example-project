@@ -20,7 +20,7 @@ final readonly class ClientReadPageAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $clientReadResult = $this->clientFinder->findClientReadAggregate((int)$args['client_id']);
         $dropdownValues = $this->clientUtilFinder->findClientDropdownValues($clientReadResult->userId);

@@ -18,7 +18,7 @@ final readonly class UserCreateDropdownOptionsFetchAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $dropdownOptions = $this->userUtilFinder->findUserDropdownValues();
 

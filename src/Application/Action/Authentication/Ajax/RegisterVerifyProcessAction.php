@@ -25,7 +25,7 @@ final readonly class RegisterVerifyProcessAction
         private RouteParserInterface $routeParser,
         private SessionManagerInterface $sessionManager,
         private SessionInterface $session,
-        private RegisterTokenVerifier $registerTokenVerifier
+        private RegisterTokenVerifier $registerTokenVerifier,
     ) {
     }
 

@@ -55,7 +55,7 @@ class NoteListActionTest extends TestCase
         array $userLinkedToNoteRow,
         array $authenticatedUserRow,
         ?int $noteHidden,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $userLinkedToNoteRow);

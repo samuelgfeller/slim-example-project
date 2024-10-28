@@ -35,10 +35,10 @@ class ClientCreateDropdownOptionsTest extends TestCase
      * @param array $otherUserRow another user (that appears in dropdown) attributes containing the user_role_id
      * @param array $expectedUserNames
      *
-     * @return void
      * @throws ContainerExceptionInterface
-     *
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
      */
     #[DataProviderExternal(\App\Test\Provider\Client\ClientCreateProvider::class, 'clientCreationDropdownOptionsCases')]
     public function testClientCreateAssignedUserDropdownOptionsAuthorization(

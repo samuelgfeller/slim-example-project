@@ -191,5 +191,5 @@ return [
     // Add shared UserNetworkSessionData to the container so that the DTO can be populated and used in different places
     UserNetworkSessionData::class => function () {
         return new UserNetworkSessionData();
-    }
+    },
 ];

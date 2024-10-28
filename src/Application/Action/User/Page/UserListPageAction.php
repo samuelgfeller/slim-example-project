@@ -19,7 +19,7 @@ final readonly class UserListPageAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         if ($this->userPermissionVerifier->isGrantedToRead()) {
             return $this->templateRenderer->render($response, 'user/user-list.html.php');

@@ -20,7 +20,7 @@ final readonly class NoteCreator
         private UserActivityLogger $userActivityLogger,
         private UserNetworkSessionData $userNetworkSessionData,
         private UserFinder $userFinder,
-        private NoteFinder $noteFinder
+        private NoteFinder $noteFinder,
     ) {
     }
 

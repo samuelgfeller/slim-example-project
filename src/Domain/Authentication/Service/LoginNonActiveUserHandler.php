@@ -44,7 +44,7 @@ final readonly class LoginNonActiveUserHandler
     public function handleLoginAttemptFromNonActiveUser(
         UserData $dbUser,
         array $queryParams,
-        ?string $captcha = null
+        ?string $captcha = null,
     ): void {
         // DTO values may be null and these values are required
         if (!isset($dbUser->id, $dbUser->email)) {
@@ -123,7 +123,7 @@ final readonly class LoginNonActiveUserHandler
         int $userId,
         string $email,
         string $fullName,
-        array $queryParams = []
+        array $queryParams = [],
     ): void {
         // Create a verification token, so they don't have to register again
         $queryParams = $this->verificationTokenCreator->createUserVerification($userId, $queryParams);
@@ -170,7 +170,7 @@ final readonly class LoginNonActiveUserHandler
         int $userId,
         string $email,
         string $fullName,
-        array $queryParams = []
+        array $queryParams = [],
     ): void {
         // Create verification token to unlock account
         $queryParams = $this->verificationTokenCreator->createUserVerification($userId, $queryParams);

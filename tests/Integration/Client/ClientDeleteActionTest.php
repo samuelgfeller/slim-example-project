@@ -49,7 +49,7 @@ class ClientDeleteActionTest extends TestCase
     public function testClientSubmitDeleteActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $userLinkedToClientRow);
@@ -116,7 +116,7 @@ class ClientDeleteActionTest extends TestCase
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
         array $requestData,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $this->insertUserFixtures($authenticatedUserRow, $userLinkedToClientRow);

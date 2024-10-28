@@ -18,7 +18,7 @@ final readonly class ClientUpdateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $args
+        array $args,
     ): ResponseInterface {
         $clientId = (int)$args['client_id'];
         $clientValues = (array)$request->getParsedBody();

@@ -254,7 +254,7 @@ final class UserPermissionVerifier
      */
     public function isGrantedToDelete(
         int $userIdToDelete,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if ($this->loggedInUserId === null) {
             $this->logger->error(
@@ -342,7 +342,7 @@ final class UserPermissionVerifier
      */
     public function isGrantedToReadUserActivity(
         int $userIdToRead,
-        bool $log = true
+        bool $log = true,
     ): bool {
         if ($this->loggedInUserId === null) {
             $this->logger->error(

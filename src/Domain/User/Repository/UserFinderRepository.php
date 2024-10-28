@@ -25,7 +25,7 @@ class UserFinderRepository
 
     public function __construct(
         private readonly QueryFactory $queryFactory,
-        private readonly Hydrator $hydrator
+        private readonly Hydrator $hydrator,
     ) {
     }
 

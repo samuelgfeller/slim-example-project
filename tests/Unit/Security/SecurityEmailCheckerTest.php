@@ -44,7 +44,7 @@ class SecurityEmailCheckerTest extends TestCase
     public function testPerformEmailAbuseCheckIndividual(
         int|string $delay,
         int $emailLogAmountInTimeSpan,
-        array $securitySettings
+        array $securitySettings,
     ): void {
         // Settings for login throttling
         $this->mock(Settings::class)->method('get')->willReturn($securitySettings);
@@ -99,7 +99,7 @@ class SecurityEmailCheckerTest extends TestCase
     public function testPerformEmailAbuseCheckGlobal(
         int $todayEmailAmount,
         int $thisMonthEmailAmount,
-        array $securitySettings
+        array $securitySettings,
     ): void {
         // Settings for login throttling
         $this->mock(Settings::class)->method('get')->willReturn($securitySettings);
