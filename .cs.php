@@ -67,7 +67,6 @@ return (new Config())
             'protected_to_private' => false,
             // Do not enforce yoda style
             'yoda_style' => false,
-            // Ensure fully multiline for method argument space
             'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
             // Order imports
             'ordered_imports' => [

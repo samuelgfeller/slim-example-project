@@ -47,8 +47,11 @@
   },
   "scripts": {
     "stan": "phpstan analyse -c phpstan.neon --no-progress --ansi",
-    "test": "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always",
-    "test:coverage": "php -d xdebug.mode=coverage -r \"require 'vendor/bin/phpunit';\" -- --configuration phpunit.xml --do-not-cache-result --colors=always --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
+    "test": "php ./vendor/bin/phpunit --configuration phpunit.xml --do-not-cache-result --colors=always --display-warnings --display-deprecations --no-coverage",
+    "test:coverage": [
+        "@putenv XDEBUG_MODE=coverage",
+        "phpunit --configuration phpunit.xml --do-not-cache-result --colors=always --coverage-clover build/logs/clover.xml --coverage-html build/coverage --coverage-text"
+    ],
     "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php --ansi",
     "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi --verbose",
     "migration:generate": [

@@ -5,6 +5,7 @@ namespace App\Test\Trait;
 use App\Test\Fixture\UserRoleFixture;
 use Cake\Database\Connection;
 use DI\Container;
+use DI\ContainerBuilder;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
 use Slim\App;
@@ -20,6 +21,7 @@ trait AppTestTrait
 {
     use ContainerTestTrait;
 
+    /** @var App<\Psr\Container\ContainerInterface> $app */
     protected App $app;
 
     /**
@@ -27,11 +29,16 @@ trait AppTestTrait
      */
     protected function setUp(): void
     {
-        // Start slim app
-        $this->app = require __DIR__ . '/../../config/bootstrap.php';
+        // Create a new container
+        $container = (new ContainerBuilder())
+            ->addDefinitions(__DIR__ . '/../../config/container.php')
+            ->build();
 
-        // Set $this->container to container instance
-        $this->setUpContainer($this->app->getContainer());
+        // App is created in container
+        $this->app = $container->get(App::class);
+
+        // Set $this->container to the container instance
+        $this->setUpContainer($container);
 
         // Set memory sessions
         $this->setContainerValue(SessionInterface::class, new MemorySession());
