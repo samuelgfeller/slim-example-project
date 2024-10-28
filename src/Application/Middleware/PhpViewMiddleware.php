@@ -28,6 +28,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
     private array $deploymentSettings;
 
     public function __construct(
+        /** @var App<\Psr\Container\ContainerInterface> $app */
         private readonly App $app,
         private readonly PhpRenderer $phpRenderer,
         private readonly SessionInterface $session,

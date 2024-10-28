@@ -7,14 +7,13 @@ use App\Domain\Security\Service\SecurityLoginChecker;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Enum\UserStatus;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final readonly class LoginVerifier
 {
     public function __construct(
-        private UserValidator $userValidator,
+        private AuthenticationValidator $authenticationValidator,
         private SecurityLoginChecker $loginSecurityChecker,
         private UserFinderRepository $userFinderRepository,
         private LoginNonActiveUserHandler $loginNonActiveUserHandler,
@@ -38,7 +37,7 @@ final readonly class LoginVerifier
     public function verifyLoginAndGetUserId(array $userLoginValues, array $queryParams = []): int
     {
         // Validate submitted values
-        $this->userValidator->validateUserLogin($userLoginValues);
+        $this->authenticationValidator->validateUserLogin($userLoginValues);
         $captcha = $userLoginValues['g-recaptcha-response'] ?? null;
 
         // Perform login security check before verifying credentials

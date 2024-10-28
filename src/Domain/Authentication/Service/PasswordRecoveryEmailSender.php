@@ -6,7 +6,6 @@ use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Domain\Exception\ValidationException;
 use App\Domain\Security\Service\SecurityEmailChecker;
 use App\Domain\User\Repository\UserFinderRepository;
-use App\Domain\User\Service\UserValidator;
 use App\Infrastructure\Service\LocaleConfigurator;
 use App\Infrastructure\Service\Mailer;
 use App\Infrastructure\Utility\Settings;
@@ -23,7 +22,7 @@ final readonly class PasswordRecoveryEmailSender
 
     public function __construct(
         private Mailer $mailer,
-        private UserValidator $userValidator,
+        private AuthenticationValidator $authenticationValidator,
         private UserFinderRepository $userFinderRepository,
         private VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
@@ -50,7 +49,7 @@ final readonly class PasswordRecoveryEmailSender
      */
     public function sendPasswordRecoveryEmail(array $userValues): void
     {
-        $this->userValidator->validatePasswordResetEmail($userValues);
+        $this->authenticationValidator->validatePasswordResetEmail($userValues);
 
         // Verify that user (concerned email) doesn't spam email sending
         $this->securityEmailChecker->performEmailAbuseCheck(

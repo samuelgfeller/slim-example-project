@@ -4,7 +4,6 @@ namespace App\Domain\Authentication\Service;
 
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
-use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
@@ -15,7 +14,7 @@ final readonly class PasswordResetterWithToken
 {
     public function __construct(
         private UserUpdaterRepository $userUpdaterRepository,
-        private UserValidator $userValidator,
+        private AuthenticationValidator $authenticationValidator,
         private VerificationTokenVerifier $verificationTokenVerifier,
         private UserActivityLogger $userActivityLogger,
         private LoggerInterface $logger,
@@ -32,7 +31,7 @@ final readonly class PasswordResetterWithToken
     public function resetPasswordWithToken(array $passwordResetValues): bool
     {
         // Validate passwords BEFORE token verification as it would be set to usedAt even if passwords are not valid
-        $this->userValidator->validatePasswordReset($passwordResetValues);
+        $this->authenticationValidator->validatePasswordReset($passwordResetValues);
         // If passwords are valid strings, verify token and set token to used
         $userId = $this->verificationTokenVerifier->verifyTokenAndGetUserId(
             $passwordResetValues['id'],

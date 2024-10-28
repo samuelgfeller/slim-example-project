@@ -6,7 +6,6 @@ use App\Domain\Authentication\Exception\ForbiddenException;
 use App\Domain\User\Enum\UserActivity;
 use App\Domain\User\Repository\UserUpdaterRepository;
 use App\Domain\User\Service\Authorization\UserPermissionVerifier;
-use App\Domain\User\Service\UserValidator;
 use App\Domain\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
@@ -15,7 +14,7 @@ final readonly class PasswordChanger
     public function __construct(
         private UserPermissionVerifier $userPermissionVerifier,
         private UserUpdaterRepository $userUpdaterRepository,
-        private UserValidator $userValidator,
+        private AuthenticationValidator $authenticationValidator,
         private UserActivityLogger $userActivityLogger,
         private LoggerInterface $logger,
     ) {
@@ -32,14 +31,14 @@ final readonly class PasswordChanger
     public function changeUserPassword(array $userValues, int $userId): bool
     {
         // Check if password strings are valid
-        $this->userValidator->validatePasswordChange($userValues);
+        $this->authenticationValidator->validatePasswordChange($userValues);
 
         // If an old password is provided and user is allowed to update the password
         if (isset($userValues['old_password'])
             && $this->userPermissionVerifier->isGrantedToUpdate(['password_hash' => 'value'], $userId)
         ) {
             // Verify old password; throws validation exception if old password is incorrect
-            $this->userValidator->checkIfOldPasswordIsCorrect(['old_password' => $userValues['old_password']], $userId);
+            $this->authenticationValidator->checkIfOldPasswordIsCorrect(['old_password' => $userValues['old_password']], $userId);
         } // Else if old password is not set, check if granted to update without it.
         if (!isset($userValues['old_password'])
             // Check if allowed to update password without the old password
@@ -79,7 +78,7 @@ final readonly class PasswordChanger
             return $updated;
         }
 
-        // User does not have needed rights to access area or function
+        // User does not have the required rights to access area or function
         $this->logger->warning('Failed attempt to change password of user id: ' . $userId);
         throw new ForbiddenException('Not allowed to change password.');
     }
