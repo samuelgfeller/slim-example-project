@@ -26,7 +26,6 @@ export function getUserCardHtml(user, statuses) {
                 ${getDropdownAsHtmlOptions(user.availableUserRoles, user.userRoleId)}
             </select>
         </div>
-           
     </div>
 </div>`;
 }

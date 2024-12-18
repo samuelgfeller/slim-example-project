@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Development-specific configuration values.
  * Configuration documentation: https://samuel-gfeller.ch/docs/Configuration.

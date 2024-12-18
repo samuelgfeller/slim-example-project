@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Phinx configuration where PDO connection instance is retrieved from the container
  * and is added to the 'local' phinx configuration.

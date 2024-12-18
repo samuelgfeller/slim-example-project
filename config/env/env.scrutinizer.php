@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Environment settings for Scrutinizer CI.
  * These values are relevant for the .scrutinizer.yml file.

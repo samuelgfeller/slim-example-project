@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Production-specific configuration values.
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dependency Injection container configuration.
  *

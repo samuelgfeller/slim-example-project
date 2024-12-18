@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Secret environment specific configuration values.
  *

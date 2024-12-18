@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Autoload functions available everywhere across the application.
  * Documentation: https://samuel-gfeller.ch/docs/Composer#autoload.

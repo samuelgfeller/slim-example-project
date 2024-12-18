@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file loads the default and environment-specific settings.
  * Documentation: https://samuel-gfeller.ch/docs/Configuration.
