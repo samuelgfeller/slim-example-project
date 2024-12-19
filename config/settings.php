@@ -10,8 +10,8 @@
 $settings = require __DIR__ . '/defaults.php';
 
 // Load secret configuration
-if (file_exists(__DIR__ . '/../../env.php')) {
-    require __DIR__ . '/../../env.php'; // Take env outside project dir if existing
+if (file_exists(dirname(__DIR__, 2) . '/env.php')) {
+    require dirname(__DIR__, 2) . '/env.php'; // Take env outside project dir if existing
 } elseif (file_exists(__DIR__ . '/env/env.php')) {
     require __DIR__ . '/env/env.php';
 }
