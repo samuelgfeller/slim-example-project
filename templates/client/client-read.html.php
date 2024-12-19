@@ -248,7 +248,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                     <?php
                     $emailParts = $clientReadData->email ? explode('@', $clientReadData->email) : null; ?>
                     <span id="email-prefix" spellcheck="false" data-name="email" data-maxlength="254"
-                    ><?= $emailParts ? html($emailParts[0]) . ' <br>@' . html($emailParts[1]) : '' ?></span>
+                    ><?= $emailParts ? html($emailParts[0]) . '<br>@' . html($emailParts[1]) : '' ?></span>
                 </div>
             </a>
             <div id="vigilance_level-container" style="<?= $clientReadData->vigilanceLevel ? '' : 'display: none;' ?>">

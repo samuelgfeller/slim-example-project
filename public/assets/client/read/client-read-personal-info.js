@@ -78,15 +78,15 @@ function addPersonalInfoIconToExisting() {
 }
 
 /**
- * Open and close available personal info icons
+ * Open and close div with (unused) available personal info icons
  *
- * Browsers unfortunately don't support transition on auto width or height elements so the new max width has to be
+ * Browsers unfortunately don't support transition on auto width or height elements, so the new max width has to be
  * calculated in js to have an absolute value for the transition to work
  * https://github.com/w3c/csswg-drafts/issues/626
  * https://css-tricks.com/using-css-transitions-auto-dimensions/
  */
 function openCloseAvailablePersonalIconsEventSetup() {
-    // Previously re calculated max with of available container here ()
+    // Previously recalculated max with of available container in this function,
     // but that breaks if the available div is open (user hovers over it) when an icon is added or removed
     // initialAvailableIconDivWidth = availablePersonalInfoIconsDiv.offsetWidth // Not good here
 
