@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Domain\Security\Enum\SecurityType;
-use App\Domain\Security\Exception\SecurityException;
+use App\Modules\Security\Domain\Exception\SecurityException;
+use App\Modules\Security\Enum\SecurityType;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;

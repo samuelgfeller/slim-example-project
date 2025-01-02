@@ -1,9 +1,9 @@
 <?php
 
-use App\Application\Middleware\ForbiddenExceptionMiddleware;
-use App\Application\Middleware\InvalidOperationExceptionMiddleware;
-use App\Application\Middleware\PhpViewMiddleware;
-use App\Application\Middleware\ValidationExceptionMiddleware;
+use App\Core\Application\Middleware\ForbiddenExceptionMiddleware;
+use App\Core\Application\Middleware\InvalidOperationExceptionMiddleware;
+use App\Core\Application\Middleware\PhpViewMiddleware;
+use App\Core\Application\Middleware\ValidationExceptionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
@@ -18,7 +18,7 @@ return function (App $app) {
     // Add new middlewares here
 
     // Language middleware
-    $app->add(\App\Application\Middleware\LocaleMiddleware::class);
+    $app->add(\App\Core\Application\Middleware\LocaleMiddleware::class);
 
     // Put everything possible before PhpViewMiddleware as if there is an error in a middleware,
     // the error page (and layout as well as everything else) needs this middleware loaded to work.
@@ -26,7 +26,7 @@ return function (App $app) {
 
     // Retrieve and store ip address, user agent and user id (has to be BEFORE SessionStartMiddleware as it is using it
     // but after PhpViewMiddleware as it needs the user id)
-    $app->add(\App\Application\Middleware\UserNetworkSessionDataMiddleware::class);
+    $app->add(\App\Core\Application\Middleware\UserNetworkSessionDataMiddleware::class);
 
     // Has to be before every middleware that needs a started session (LIFO)
     $app->add(SessionStartMiddleware::class);
