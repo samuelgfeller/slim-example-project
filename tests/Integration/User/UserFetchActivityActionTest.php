@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\User;
 
-use App\Domain\User\Enum\UserRole;
+use App\Modules\User\Enum\UserRole;
 use App\Test\Fixture\UserActivityFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;

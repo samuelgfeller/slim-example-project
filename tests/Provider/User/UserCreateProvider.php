@@ -2,8 +2,8 @@
 
 namespace App\Test\Provider\User;
 
-use App\Domain\User\Enum\UserRole;
-use App\Domain\User\Enum\UserStatus;
+use App\Modules\User\Enum\UserRole;
+use App\Modules\User\Enum\UserStatus;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserCreateProvider

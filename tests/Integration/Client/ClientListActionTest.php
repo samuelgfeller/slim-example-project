@@ -2,11 +2,11 @@
 
 namespace App\Test\Integration\Client;
 
-use App\Domain\Client\Data\ClientListResultCollection;
-use App\Domain\User\Data\UserData;
-use App\Domain\User\Enum\UserRole;
-use App\Domain\User\Service\UserNameAbbreviator;
-use App\Infrastructure\Utility\Hydrator;
+use App\Core\Infrastructure\Utility\Hydrator;
+use App\Modules\Client\Data\ClientListResultCollection;
+use App\Modules\User\Data\UserData;
+use App\Modules\User\Enum\UserRole;
+use App\Modules\User\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;

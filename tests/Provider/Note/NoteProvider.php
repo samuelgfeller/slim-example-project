@@ -2,8 +2,8 @@
 
 namespace App\Test\Provider\Note;
 
-use App\Domain\Authorization\Privilege;
-use App\Domain\User\Enum\UserRole;
+use App\Modules\Authorization\Enum\Privilege;
+use App\Modules\User\Enum\UserRole;
 use Fig\Http\Message\StatusCodeInterface;
 
 class NoteProvider
