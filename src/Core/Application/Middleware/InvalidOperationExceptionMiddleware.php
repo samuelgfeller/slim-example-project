@@ -4,7 +4,7 @@ namespace App\Core\Application\Middleware;
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Core\Application\Responder\JsonResponder;
-use App\Modules\Exception\Domain\InvalidOperationException;
+use App\Module\Exception\Domain\InvalidOperationException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;

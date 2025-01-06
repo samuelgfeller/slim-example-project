@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\Client;
 
-use App\Modules\User\Enum\UserActivity;
-use App\Modules\User\Enum\UserRole;
+use App\Module\User\Enum\UserActivity;
+use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;

@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Authentication;
 
-use App\Modules\User\Enum\UserStatus;
+use App\Module\User\Enum\UserStatus;
 
 class AuthenticationProvider
 {

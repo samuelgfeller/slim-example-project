@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Modules\User\Enum\UserStatus;
+use App\Module\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use Odan\Session\SessionInterface;

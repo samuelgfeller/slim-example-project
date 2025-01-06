@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Authentication;
 
-use App\Modules\Authentication\Data\UserVerificationData;
+use App\Module\Authentication\Data\UserVerificationData;
 
 class UserVerificationProvider
 {

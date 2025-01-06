@@ -3,7 +3,7 @@
 namespace App\Core\Infrastructure\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
-use App\Modules\Security\Repository\EmailLoggerRepository;
+use App\Module\Security\Repository\EmailLoggerRepository;
 use Slim\Views\PhpRenderer;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;

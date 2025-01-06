@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\Authentication;
 
-use App\Modules\Authentication\Data\UserVerificationData;
-use App\Modules\User\Enum\UserStatus;
+use App\Module\Authentication\Data\UserVerificationData;
+use App\Module\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;

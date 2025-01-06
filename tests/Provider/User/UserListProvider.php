@@ -2,8 +2,8 @@
 
 namespace App\Test\Provider\User;
 
-use App\Modules\Authorization\Enum\Privilege;
-use App\Modules\User\Enum\UserRole;
+use App\Module\Authorization\Enum\Privilege;
+use App\Module\User\Enum\UserRole;
 use Fig\Http\Message\StatusCodeInterface;
 
 class UserListProvider

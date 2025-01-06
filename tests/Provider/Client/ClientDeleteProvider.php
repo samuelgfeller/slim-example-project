@@ -2,7 +2,7 @@
 
 namespace App\Test\Provider\Client;
 
-use App\Modules\User\Enum\UserRole;
+use App\Module\User\Enum\UserRole;
 use Fig\Http\Message\StatusCodeInterface;
 
 class ClientDeleteProvider

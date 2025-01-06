@@ -3,10 +3,10 @@
 namespace App\Test\Unit\Security;
 
 use App\Core\Infrastructure\Utility\Settings;
-use App\Modules\Security\Domain\Exception\SecurityException;
-use App\Modules\Security\Domain\Service\SecurityEmailChecker;
-use App\Modules\Security\Enum\SecurityType;
-use App\Modules\Security\Repository\EmailLogFinderRepository;
+use App\Module\Security\Domain\Exception\SecurityException;
+use App\Module\Security\Domain\Service\SecurityEmailChecker;
+use App\Module\Security\Enum\SecurityType;
+use App\Module\Security\Repository\EmailLogFinderRepository;
 use App\Test\Trait\AppTestTrait;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;

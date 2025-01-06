@@ -3,7 +3,7 @@
 /**
  * @var \Slim\Views\PhpRenderer $this
  * @var int $authenticatedUserId
- * @var \App\Modules\Dashboard\Data\DashboardData[] $dashboards
+ * @var \App\Module\Dashboard\Data\DashboardData[] $dashboards
  * @var array $enabledDashboards dashboard ids of enabled dashboards
  */
 

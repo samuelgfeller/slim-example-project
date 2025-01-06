@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\User;
 
-use App\Modules\User\Enum\UserLang;
-use App\Modules\User\Enum\UserStatus;
+use App\Module\User\Enum\UserLang;
+use App\Module\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;

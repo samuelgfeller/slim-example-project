@@ -2,8 +2,8 @@
 
 namespace App\Test\Integration\Note;
 
-use App\Modules\Authorization\Enum\Privilege;
-use App\Modules\User\Enum\UserRole;
+use App\Module\Authorization\Enum\Privilege;
+use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
