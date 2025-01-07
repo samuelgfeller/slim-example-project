@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Authentication\Shared\Exception;
+namespace App\Module\Authentication\Exception;
 
 // Used in AccountUnlock feature and RegisterVerification
 class UserAlreadyVerifiedException extends \RuntimeException

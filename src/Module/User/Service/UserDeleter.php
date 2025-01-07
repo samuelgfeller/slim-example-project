@@ -3,9 +3,9 @@
 namespace App\Module\User\Service;
 
 use App\Module\Authorization\Exception\ForbiddenException;
+use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Repository\UserDeleterRepository;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
 use App\Module\UserActivity\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;

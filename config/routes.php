@@ -16,8 +16,8 @@ return function (App $app) {
     $app->redirect('/hello[/{name}]', '/', 301)->setName('hello-page');
 
     // Login routes
-    $app->get('/login', \App\Module\Authentication\Action\Page\LoginPageAction::class)->setName('login-page');
-    $app->post('/login', \App\Module\Authentication\Action\Ajax\LoginSubmitAction::class)
+    $app->get('/login', \App\Module\Authentication\Login\Action\LoginPageAction::class)->setName('login-page');
+    $app->post('/login', \App\Module\Authentication\Login\Action\LoginSubmitAction::class)
         ->setName('login-submit');
     $app->get('/logout', \App\Module\Authentication\Logout\LogoutPageAction::class)->setName('logout');
 

@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\UnlockAccount\Service;
 
-use App\Module\Authentication\Shared\Exception\UserAlreadyVerifiedException;
+use App\Module\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenUpdater;

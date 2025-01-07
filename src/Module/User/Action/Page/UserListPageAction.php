@@ -3,7 +3,7 @@
 namespace App\Module\User\Action\Page;
 
 use App\Core\Application\Responder\TemplateRenderer;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\UserPermissionVerifier;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpForbiddenException;

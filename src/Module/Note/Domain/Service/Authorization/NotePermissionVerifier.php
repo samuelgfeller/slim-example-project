@@ -3,6 +3,7 @@
 namespace App\Module\Note\Domain\Service\Authorization;
 
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\User\Enum\UserRole;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
@@ -11,7 +12,7 @@ final readonly class NotePermissionVerifier
 {
     public function __construct(
         private SessionInterface $session,
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private AuthorizationUserRoleFinderRepository $authorizationUserRoleFinderRepository,
         private LoggerInterface $logger,
     ) {
     }
@@ -37,12 +38,12 @@ final readonly class NotePermissionVerifier
         bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
             // newcomers may see all notes and main notes except deleted ones that only managing advisors can see
             if (($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
                 && ( // If the note is deleted, authenticated user must be managing advisors or higher
@@ -80,12 +81,12 @@ final readonly class NotePermissionVerifier
     public function isGrantedToCreate(int $isMain = 0, ?int $clientOwnerId = null, bool $log = true): bool
     {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
             if (($isMain === 0 // newcomers may see create notes for any client
                     && $authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value])
                 || ($isMain === 1 // only advisors and higher may create main notes
@@ -120,12 +121,12 @@ final readonly class NotePermissionVerifier
         bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
             if (($isMain === 0 && ($loggedInUserId === $noteOwnerId
@@ -164,12 +165,12 @@ final readonly class NotePermissionVerifier
         bool $log = true,
     ): bool {
         if (($loggedInUserId = (int)$this->session->get('user_id')) !== 0) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
             // If owner or logged-in hierarchy value is smaller or equal managing_advisor -> granted to update
             if ($loggedInUserId === $noteOwnerId

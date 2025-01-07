@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Module\User\Service\Authorization;
+namespace App\Module\User\Authorization;
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
+use App\Module\User\Authorization\Repository\UserAuthorizationRoleFinderRepository;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +19,8 @@ final class UserPermissionVerifier
 
     public function __construct(
         private readonly UserNetworkSessionData $userNetworkSessionData,
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly AuthorizationUserRoleFinderRepository $authorizationUserRoleFinderRepository,
+        private readonly UserAuthorizationRoleFinderRepository $userAuthorizationRoleFinderRepository,
         private readonly LoggerInterface $logger,
     ) {
         // Fix error $userId must not be accessed before initialization
@@ -42,12 +45,12 @@ final class UserPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Newcomer and advisor are not allowed to do anything from other users - only user edit his own profile
         // Managing advisor may change users
@@ -105,17 +108,17 @@ final class UserPermissionVerifier
         }
         // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
         if ($authenticatedUserRoleHierarchy === null) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $this->loggedInUserId
             );
         }
         if ($userRoleHierarchies === null) {
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
         }
 
-        $userRoleHierarchiesById = $this->userRoleFinderRepository->getUserRolesHierarchies(true);
+        $userRoleHierarchiesById = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies(true);
 
         // Role higher (lower hierarchy number) than managing advisor may assign any role (admin)
         if ($authenticatedUserRoleHierarchy < $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]) {
@@ -164,13 +167,13 @@ final class UserPermissionVerifier
         }
         $grantedUpdateKeys = [];
 
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        $userToUpdateRoleData = $this->userRoleFinderRepository->getUserRoleDataFromUser((int)$userIdToUpdate);
+        $userToUpdateRoleData = $this->userAuthorizationRoleFinderRepository->getUserRoleDataFromUser((int)$userIdToUpdate);
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Only managing advisor or higher privileged can change users
         if ((($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
@@ -264,14 +267,14 @@ final class UserPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
-        $userToDeleteRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId($userIdToDelete);
+        $userToDeleteRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId($userIdToDelete);
 
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Only managing_advisor and higher are allowed to delete user and only if the user is advisor or lower or their own
         if (($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]
@@ -309,12 +312,12 @@ final class UserPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Only managing advisor and higher privileged are allowed to see other users
         // If the user role hierarchy of the authenticated user is lower or equal
@@ -353,14 +356,14 @@ final class UserPermissionVerifier
             return false;
         }
 
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
-        $userToReadRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId($userIdToRead);
+        $userToReadRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId($userIdToRead);
 
         // Only managing advisors are allowed to see user activity, but only if target user role is not higher than also managing advisor
         if (($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::MANAGING_ADVISOR->value]

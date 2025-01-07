@@ -5,8 +5,8 @@ namespace App\Module\Authentication\PasswordReset\Service;
 use App\Module\Authentication\PasswordReset\Repository\PasswordChangerRepository;
 use App\Module\Authentication\Validation\AuthenticationValidator;
 use App\Module\Authorization\Exception\ForbiddenException;
+use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Enum\UserActivity;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
 use App\Module\UserActivity\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 

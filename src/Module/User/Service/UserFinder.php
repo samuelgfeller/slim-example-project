@@ -4,12 +4,12 @@ namespace App\Module\User\Service;
 
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Exception\Domain\DomainRecordNotFoundException;
+use App\Module\User\Authorization\AuthorizedUserRoleFilterer;
+use App\Module\User\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserData;
 use App\Module\User\Data\UserResultData;
 use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\Authorization\AuthorizedUserRoleFilterer;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
-use App\Module\User\Service\Authorization\UserPrivilegeDeterminer;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
 class UserFinder

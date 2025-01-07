@@ -4,7 +4,7 @@ namespace App\Core\Application\Middleware;
 
 use App\Core\Infrastructure\Utility\JsImportCacheBuster;
 use App\Core\Infrastructure\Utility\Settings;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\UserPermissionVerifier;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

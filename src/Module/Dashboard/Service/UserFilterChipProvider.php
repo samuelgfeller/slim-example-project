@@ -5,8 +5,8 @@ namespace App\Module\Dashboard\Service;
 use App\Module\FilterSetting\Data\FilterData;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Service\FilterSettingFinder;
+use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
 use App\Module\User\Service\UserNameAbbreviator;
 use Odan\Session\SessionInterface;
 

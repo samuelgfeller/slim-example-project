@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Module\Authentication\Login\Repository;
+namespace App\Module\Authentication\PasswordReset\Repository;
 
 use App\Core\Infrastructure\Factory\QueryFactory;
 use App\Module\User\Data\UserData;
 
-readonly class UserLoginFinderRepository
+readonly class PasswordResetUserFinderRepository
 {
 
     public function __construct(

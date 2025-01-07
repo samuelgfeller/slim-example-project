@@ -5,12 +5,12 @@ namespace App\Module\Authentication\PasswordReset\Service;
 use App\Core\Infrastructure\Service\LocaleConfigurator;
 use App\Core\Infrastructure\Service\Mailer;
 use App\Core\Infrastructure\Utility\Settings;
+use App\Module\Authentication\PasswordReset\Repository\PasswordResetUserFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authentication\Validation\AuthenticationValidator;
 use App\Module\Exception\Domain\DomainRecordNotFoundException;
 use App\Module\Exception\Domain\ValidationException;
 use App\Module\Security\Domain\Service\SecurityEmailChecker;
-use App\Module\User\Repository\UserFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -25,7 +25,7 @@ final readonly class PasswordRecoveryEmailSender
     public function __construct(
         private Mailer $mailer,
         private AuthenticationValidator $authenticationValidator,
-        private UserFinderRepository $userFinderRepository,
+        private PasswordResetUserFinderRepository $passwordResetUserFinderRepository,
         private VerificationTokenCreator $verificationTokenCreator,
         Settings $settings,
         private SecurityEmailChecker $securityEmailChecker,
@@ -59,7 +59,7 @@ final readonly class PasswordRecoveryEmailSender
             $userValues['g-recaptcha-response'] ?? null
         );
 
-        $dbUser = $this->userFinderRepository->findUserByEmail($userValues['email']);
+        $dbUser = $this->passwordResetUserFinderRepository->findUserByEmail($userValues['email']);
 
         if (isset($dbUser->email, $dbUser->id)) {
             // Create a verification token, so they don't have to register again

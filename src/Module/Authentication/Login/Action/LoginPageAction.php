@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Authentication\Action\Page;
+namespace App\Module\Authentication\Login\Action;
 
 use App\Core\Application\Responder\RedirectHandler;
 use App\Core\Application\Responder\TemplateRenderer;

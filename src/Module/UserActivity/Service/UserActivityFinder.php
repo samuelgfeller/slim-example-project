@@ -2,8 +2,8 @@
 
 namespace App\Module\UserActivity\Service;
 
+use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\Authorization\UserPermissionVerifier;
 use App\Module\UserActivity\Repository\UserActivityRepository;
 use IntlDateFormatter;
 use InvalidArgumentException;

@@ -4,6 +4,7 @@ namespace App\Module\Authorization\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\User\Enum\UserRole;
 
 /**
@@ -12,7 +13,7 @@ use App\Module\User\Enum\UserRole;
 final readonly class AuthorizationChecker
 {
     public function __construct(
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private AuthorizationUserRoleFinderRepository $authorizationUserRoleFinderRepository,
         private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
@@ -27,12 +28,12 @@ final readonly class AuthorizationChecker
      */
     public function isAuthorizedByRole(UserRole $minimalRequiredRole): bool
     {
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->userNetworkSessionData->userId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         return $authenticatedUserRoleHierarchy <= $userRoleHierarchies[$minimalRequiredRole->value];
     }

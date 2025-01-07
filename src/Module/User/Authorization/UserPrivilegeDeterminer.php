@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\User\Service\Authorization;
+namespace App\Module\User\Authorization;
 
 use App\Module\Authorization\Enum\Privilege;
 

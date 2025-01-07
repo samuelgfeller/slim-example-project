@@ -3,8 +3,8 @@
 namespace App\Module\Authentication\Register\Action;
 
 use App\Core\Application\Responder\RedirectHandler;
+use App\Module\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\Register\Service\RegisterTokenVerifier;
-use App\Module\Authentication\Shared\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;

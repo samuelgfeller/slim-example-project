@@ -4,6 +4,7 @@ namespace App\Module\Client\Domain\Service\Authorization;
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\Client\Data\ClientData;
 use App\Module\Client\Data\ClientListResult;
 use App\Module\Note\Domain\Service\Authorization\NotePermissionVerifier;
@@ -19,7 +20,7 @@ final class ClientPermissionVerifier
     private ?int $loggedInUserId = null;
 
     public function __construct(
-        private readonly UserRoleFinderRepository $userRoleFinderRepository,
+        private readonly AuthorizationUserRoleFinderRepository $authorizationUserRoleFinderRepository,
         private readonly UserNetworkSessionData $userNetworkSessionData,
         private readonly LoggerInterface $logger,
     ) {
@@ -44,12 +45,12 @@ final class ClientPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Newcomer is not allowed to do anything
         // If hierarchy number is greater or equals newcomer it means that user is not allowed
@@ -96,14 +97,14 @@ final class ClientPermissionVerifier
 
         // $authenticatedUserRoleData and $userRoleHierarchies passed as arguments if called inside this class
         if ($authenticatedUserRoleHierarchy === null) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $this->loggedInUserId
             );
         }
         if ($userRoleHierarchies === null) {
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
         }
 
         // If hierarchy privilege is greater or equals advisor, it means that user may create the client
@@ -141,12 +142,12 @@ final class ClientPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Roles: newcomer < advisor < managing_advisor < administrator
         // If logged-in hierarchy value is smaller or equal advisor -> granted
@@ -224,12 +225,12 @@ final class ClientPermissionVerifier
 
             return false;
         }
-        $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+        $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
             $this->loggedInUserId
         );
         // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
         // * Lower hierarchy number means higher privileged role
-        $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+        $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
         // Only managing_advisor and higher are allowed to delete client so user has to at least have this role
         if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies['managing_advisor']) {
@@ -282,12 +283,12 @@ final class ClientPermissionVerifier
         bool $log = true,
     ): bool {
         if ($this->loggedInUserId !== null) {
-            $authenticatedUserRoleHierarchy = $this->userRoleFinderRepository->getRoleHierarchyByUserId(
+            $authenticatedUserRoleHierarchy = $this->authorizationUserRoleFinderRepository->getRoleHierarchyByUserId(
                 $this->loggedInUserId
             );
             // Returns array with role name as key and hierarchy as value ['role_name' => hierarchy_int]
             // * Lower hierarchy number means higher privileged role
-            $userRoleHierarchies = $this->userRoleFinderRepository->getUserRolesHierarchies();
+            $userRoleHierarchies = $this->authorizationUserRoleFinderRepository->getUserRolesHierarchies();
 
             // Newcomer are allowed to see all clients regardless of owner if not deleted
             if ($authenticatedUserRoleHierarchy <= $userRoleHierarchies[UserRole::NEWCOMER->value]

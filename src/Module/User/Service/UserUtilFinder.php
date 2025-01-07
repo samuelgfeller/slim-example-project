@@ -2,9 +2,9 @@
 
 namespace App\Module\User\Service;
 
+use App\Module\User\Authorization\AuthorizedUserRoleFilterer;
 use App\Module\User\Enum\UserLang;
 use App\Module\User\Enum\UserStatus;
-use App\Module\User\Service\Authorization\AuthorizedUserRoleFilterer;
 
 final readonly class UserUtilFinder
 {

@@ -3,6 +3,7 @@
 namespace App\Test\Trait;
 
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;
 
@@ -17,9 +18,9 @@ trait AuthorizationTestTrait
      */
     protected function getUserRoleIdByEnum(UserRole $userRole): int
     {
-        $userRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
+        $authorizationUserRoleFinderRepository = $this->container->get(AuthorizationUserRoleFinderRepository::class);
 
-        return $userRoleFinderRepository->findUserRoleIdByName($userRole->value);
+        return $authorizationUserRoleFinderRepository->findUserRoleIdByName($userRole->value);
     }
 
     /**

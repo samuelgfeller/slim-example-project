@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Module\User\Service\Authorization;
+namespace App\Module\User\Authorization;
 
 use App\Module\Authentication\Repository\UserRoleFinderRepository;
+use App\Module\User\Authorization\Repository\UserAuthorizationRoleFinderRepository;
 
 final readonly class AuthorizedUserRoleFilterer
 {
     public function __construct(
-        private UserRoleFinderRepository $userRoleFinderRepository,
+        private UserAuthorizationRoleFinderRepository $userAuthorizationRoleFinderRepository,
         private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
@@ -29,7 +30,7 @@ final readonly class AuthorizedUserRoleFilterer
      */
     public function filterAuthorizedUserRoles(?int $attributedUserRoleId = null): array
     {
-        $allUserRoles = $this->userRoleFinderRepository->findAllUserRolesForDropdown();
+        $allUserRoles = $this->userAuthorizationRoleFinderRepository->findAllUserRolesForDropdown();
         // Available user roles for dropdown and privilege
         $grantedCreateUserRoles = [];
         foreach ($allUserRoles as $roleId => $roleName) {
