@@ -93,27 +93,27 @@ return function (App $app) {
 
     // Client routes
     $app->group('/clients', function (RouteCollectorProxy $group) {
-        $group->get('/{client_id:[0-9]+}', \App\Module\Client\Action\Page\ClientReadPageAction::class)
+        $group->get('/{client_id:[0-9]+}', \App\Module\Client\Read\Action\ClientReadPageAction::class)
             ->setName('client-read-page');
 
-        $group->get('', \App\Module\Client\Action\Ajax\ClientFetchListAction::class)->setName('client-list');
+        $group->get('', \App\Module\Client\ReadList\Action\ClientFetchListAction::class)->setName('client-list');
 
         // Client create form is rendered by the client and loads the available dropdown options via Ajax
         $group->get(
             '/dropdown-options',
-            \App\Module\Client\Action\Ajax\ClientCreateDropdownOptionsFetchAction::class
+            \App\Module\Client\Create\Action\ClientCreateDropdownOptionsFetchAction::class
         )->setName('client-create-dropdown');
 
-        $group->post('', \App\Module\Client\Action\Ajax\ClientCreateAction::class)
+        $group->post('', \App\Module\Client\Create\Action\ClientCreateAction::class)
             ->setName('client-create-submit');
-        $group->put('/{client_id:[0-9]+}', \App\Module\Client\Action\Ajax\ClientUpdateAction::class)
+        $group->put('/{client_id:[0-9]+}', \App\Module\Client\Update\Action\ClientUpdateAction::class)
             ->setName('client-update-submit');
-        $group->delete('/{client_id:[0-9]+}', \App\Module\Client\Action\Ajax\ClientDeleteAction::class)
+        $group->delete('/{client_id:[0-9]+}', \App\Module\Client\Delete\Action\ClientDeleteAction::class)
             ->setName('client-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
     // Client list page action
-    $app->get('/clients/list', \App\Module\Client\Action\Page\ClientListPageAction::class)->setName(
+    $app->get('/clients/list', \App\Module\Client\ReadList\Action\ClientListPageAction::class)->setName(
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
 
@@ -140,7 +140,7 @@ return function (App $app) {
         });
 
         // Client creation API call
-        $group->post('/clients', \App\Module\Client\Action\Api\ApiClientCreateAction::class)
+        $group->post('/clients', \App\Module\Client\Create\Action\ApiClientCreateAction::class)
             ->setName('api-client-create-submit');
     })// Cross-Origin Resource Sharing (CORS) middleware. Allow another domain to access '/api' routes.
     // If an error occurs, the CORS middleware will not be executed and the exception caught and a response

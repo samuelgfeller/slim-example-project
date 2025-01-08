@@ -3,11 +3,12 @@
 namespace App\Module\Note\Domain\Service;
 
 use App\Module\Authorization\Enum\Privilege;
-use App\Module\Client\Domain\Service\Authorization\ClientPermissionVerifier;
-use App\Module\Client\Domain\Service\ClientFinder;
+use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
+use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
 use App\Module\Note\Data\NoteData;
 use App\Module\Note\Data\NoteResultData;
 use App\Module\Note\Domain\Service\Authorization\NotePrivilegeDeterminer;
+use App\Module\Note\List\Repository\NoteListClientFinderRepository;
 use App\Module\Note\Repository\NoteFinderRepository;
 
 final readonly class NoteFinder
@@ -15,8 +16,9 @@ final readonly class NoteFinder
     public function __construct(
         private NoteFinderRepository $noteFinderRepository,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
-        private ClientFinder $clientFinder,
+        private ClientOwnerFinderRepository $clientOwnerFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
+        private NoteListClientFinderRepository $noteListClientFinderRepository,
     ) {
     }
 
@@ -72,7 +74,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
 
         // Get client owner id if not given
         if ($clientOwnerId === null && $clientId !== null) {
-            $clientOwnerId = $this->clientFinder->findClient($clientId)->userId;
+            $clientOwnerId = $this->clientOwnerFinderRepository->findClientOwnerId($clientId);
         }
 
         foreach ($notes as $noteResultData) {
@@ -126,7 +128,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         $this->setNotePrivilegeAndRemoveMessageOfHidden($allNotes, null, $clientId);
 
         // Add client message as last note (it's always the "oldest" as it's the same age as the client entry itself)
-        $clientData = $this->clientFinder->findClient($clientId, true);
+        $clientData = $this->noteListClientFinderRepository->findClientData($clientId);
         // The authorization for each note is verified, but the client message is added to the request
         // separately
         if (!empty($clientData->clientMessage)

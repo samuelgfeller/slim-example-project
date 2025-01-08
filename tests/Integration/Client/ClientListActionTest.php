@@ -3,7 +3,7 @@
 namespace App\Test\Integration\Client;
 
 use App\Core\Infrastructure\Utility\Hydrator;
-use App\Module\Client\Data\ClientListResultCollection;
+use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\User\Data\UserData;
 use App\Module\User\Enum\UserRole;
 use App\Module\User\Service\UserNameAbbreviator;
