@@ -96,7 +96,7 @@ return function (App $app) {
         $group->get('/{client_id:[0-9]+}', \App\Module\Client\Read\Action\ClientReadPageAction::class)
             ->setName('client-read-page');
 
-        $group->get('', \App\Module\Client\ReadList\Action\ClientFetchListAction::class)->setName('client-list');
+        $group->get('', \App\Module\Client\List\Action\ClientFetchListAction::class)->setName('client-list');
 
         // Client create form is rendered by the client and loads the available dropdown options via Ajax
         $group->get(
@@ -113,7 +113,7 @@ return function (App $app) {
     })->add(UserAuthenticationMiddleware::class);
 
     // Client list page action
-    $app->get('/clients/list', \App\Module\Client\ReadList\Action\ClientListPageAction::class)->setName(
+    $app->get('/clients/list', \App\Module\Client\List\Action\ClientListPageAction::class)->setName(
         'client-list-page'
     )->add(UserAuthenticationMiddleware::class);
 

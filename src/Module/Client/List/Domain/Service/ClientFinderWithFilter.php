@@ -3,6 +3,7 @@
 namespace App\Module\Client\List\Domain\Service;
 
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
+use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;
 use App\Module\FilterSetting\Enum\FilterModule;
@@ -101,10 +102,32 @@ final readonly class ClientFinderWithFilter
         );
         $clientListResultCollection = $this->clientListFinder->findClientListWithAggregates($queryBuilderWhereArray);
         // Remove clients that user is not allowed to see instead of throwing a ForbiddenException
-        $clientListResultCollection->clients = $this->clientPermissionVerifier->removeNonAuthorizedClientsFromList(
+        $clientListResultCollection->clients = $this->removeNonAuthorizedClientsFromList(
             $clientListResultCollection->clients
         );
 
         return $clientListResultCollection;
+    }
+
+    /**
+     * Instead of a isGrantedToListClient(), this function checks
+     * with isGrantedToReadClient and removes clients that
+     * authenticated user may not see.
+     *
+     * @param ClientListResult[]|null $clients
+     *
+     * @return ClientListResult[]
+     */
+    private function removeNonAuthorizedClientsFromList(?array $clients): array
+    {
+        $authorizedClients = [];
+        foreach ($clients ?? [] as $client) {
+            // Check if the authenticated user is allowed to read each client and if yes, add it to the return array
+            if ($this->clientPermissionVerifier->isGrantedToRead($client->userId)) {
+                $authorizedClients[] = $client;
+            }
+        }
+
+        return $authorizedClients;
     }
 }

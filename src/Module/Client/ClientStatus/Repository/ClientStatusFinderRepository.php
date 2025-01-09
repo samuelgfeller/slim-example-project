@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Module\Client\Repository\ClientStatus;
+namespace App\Module\Client\ClientStatus\Repository;
 
 use App\Core\Infrastructure\Factory\QueryFactory;
-use App\Module\Client\Enum\ClientStatus;
+use App\Module\Client\ClientStatus\Enum\ClientStatus;
 
 final readonly class ClientStatusFinderRepository
 {

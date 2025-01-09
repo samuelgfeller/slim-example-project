@@ -3,7 +3,7 @@
 namespace App\Module\Client\List\Domain\Service;
 
 use App\Module\Authorization\Service\AuthorizationChecker;
-use App\Module\Client\Repository\ClientStatus\ClientStatusFinderRepository;
+use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\FilterSetting\Data\FilterData;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Service\FilterSettingFinder;

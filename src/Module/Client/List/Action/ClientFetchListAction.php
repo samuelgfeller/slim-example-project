@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Client\ReadList\Action;
+namespace App\Module\Client\List\Action;
 
 use App\Core\Application\Responder\JsonResponder;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;

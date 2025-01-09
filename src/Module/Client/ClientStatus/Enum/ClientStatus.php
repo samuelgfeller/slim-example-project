@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Client\Enum;
+namespace App\Module\Client\ClientStatus\Enum;
 
 enum ClientStatus: string
 {

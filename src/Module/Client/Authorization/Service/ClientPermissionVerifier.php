@@ -5,7 +5,6 @@ namespace App\Module\Client\Authorization\Service;
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\Client\Data\ClientData;
-use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Note\Domain\Service\Authorization\NotePermissionVerifier;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
@@ -243,28 +242,6 @@ final class ClientPermissionVerifier
         }
 
         return false;
-    }
-
-    /**
-     * Instead of a isGrantedToListClient(), this function checks
-     * with isGrantedToReadClient and removes clients that
-     * authenticated user may not see.
-     *
-     * @param ClientListResult[]|null $clients
-     *
-     * @return ClientListResult[]
-     */
-    public function removeNonAuthorizedClientsFromList(?array $clients): array
-    {
-        $authorizedClients = [];
-        foreach ($clients ?? [] as $client) {
-            // Check if the authenticated user is allowed to read each client and if yes, add it to the return array
-            if ($this->isGrantedToRead($client->userId)) {
-                $authorizedClients[] = $client;
-            }
-        }
-
-        return $authorizedClients;
     }
 
     /**

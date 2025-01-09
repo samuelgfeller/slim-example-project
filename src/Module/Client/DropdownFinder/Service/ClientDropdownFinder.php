@@ -3,9 +3,9 @@
 namespace App\Module\Client\DropdownFinder\Service;
 
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
+use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData;
 use App\Module\Client\DropdownFinder\Repository\ClientUserDropdownFinderRepository;
-use App\Module\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Module\User\Service\UserNameAbbreviator;
 
 final readonly class ClientDropdownFinder

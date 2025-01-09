@@ -3,7 +3,7 @@
 namespace App\Module\Dashboard\Service;
 
 use App\Module\Authorization\Service\AuthorizationChecker;
-use App\Module\Client\Repository\ClientStatus\ClientStatusFinderRepository;
+use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Dashboard\Data\DashboardData;
 use App\Module\User\Enum\UserRole;
 use Odan\Session\SessionInterface;

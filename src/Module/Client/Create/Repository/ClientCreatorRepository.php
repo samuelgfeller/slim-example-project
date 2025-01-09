@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Client\Repository;
+namespace App\Module\Client\Create\Repository;
 
 use App\Core\Infrastructure\Factory\QueryFactory;
 

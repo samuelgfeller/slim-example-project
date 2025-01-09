@@ -1,41 +1,28 @@
 <?php
 
-namespace App\Module\Client\Domain\Service;
+namespace App\Module\Client\Read\Service;
 
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
-use App\Module\Client\Data\ClientData;
 use App\Module\Client\Read\Data\ClientReadResult;
+use App\Module\Client\Read\Repository\ClientReadFinderRepository;
 use App\Module\Client\Repository\ClientFinderRepository;
 use App\Module\Note\Domain\Service\Authorization\NotePermissionVerifier;
 use App\Module\Note\Domain\Service\Authorization\NotePrivilegeDeterminer;
 use App\Module\Note\Repository\NoteFinderRepository;
 
-final readonly class ClientFinder
+final readonly class ClientReadFinder
 {
     public function __construct(
-        private ClientFinderRepository $clientFinderRepository,
+        private ClientReadFinderRepository $clientReadFinderRepository,
         private NoteFinderRepository $noteFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
         private NotePermissionVerifier $notePermissionVerifier,
     ) {
-    }
-
-    /**
-     * Find one client in the database.
-     *
-     * @param int $id
-     * @param bool $includeDeleted
-     *
-     * @return ClientData
-     */
-    public function findClient(int $id, bool $includeDeleted = false): ClientData
-    {
-        return $this->clientFinderRepository->findClientById($id, $includeDeleted);
     }
 
     /**
@@ -47,7 +34,7 @@ final readonly class ClientFinder
      */
     public function findClientReadAggregate(int $clientId): ClientReadResult
     {
-        $clientResultAggregate = $this->clientFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
+        $clientResultAggregate = $this->clientReadFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id
             && $this->clientPermissionVerifier->isGrantedToRead(
                 $clientResultAggregate->userId,

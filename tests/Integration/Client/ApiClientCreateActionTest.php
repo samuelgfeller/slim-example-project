@@ -2,7 +2,7 @@
 
 namespace App\Test\Integration\Client;
 
-use App\Module\Client\Enum\ClientStatus;
+use App\Module\Client\ClientStatus\Enum\ClientStatus;
 use App\Module\User\Enum\UserActivity;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Trait\AppTestTrait;

@@ -2,8 +2,8 @@
 
 namespace App\Module\Client\Validation;
 
+use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\Enum\ClientVigilanceLevel;
-use App\Module\Client\Repository\ClientStatus\ClientStatusFinderRepository;
 use App\Module\Exception\Domain\ValidationException;
 use App\Module\User\Repository\UserFinderRepository;
 use Cake\Validation\Validator;
