@@ -3,7 +3,7 @@
 namespace App\Module\User\Action\Page;
 
 use App\Core\Application\Responder\TemplateRenderer;
-use App\Module\Exception\Domain\DomainRecordNotFoundException;
+use App\Core\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Service\UserFinder;
 use Odan\Session\SessionInterface;

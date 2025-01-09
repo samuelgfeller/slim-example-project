@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Delete\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 final readonly class ClientDeleterRepository
 {
@@ -38,5 +38,4 @@ final readonly class ClientDeleterRepository
 
         return $query->execute()->rowCount() > 0;
     }
-
 }

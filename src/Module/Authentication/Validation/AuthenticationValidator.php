@@ -2,8 +2,8 @@
 
 namespace App\Module\Authentication\Validation;
 
-use App\Module\Exception\Domain\ValidationException;
 use App\Module\User\Repository\UserFinderRepository;
+use App\Module\Validation\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class AuthenticationValidator

@@ -6,9 +6,9 @@ use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Delete\Repository\ClientDeleterRepository;
 use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
-use App\Module\Note\Repository\NoteDeleterRepository;
+use App\Module\Note\Delete\Repository\NoteDeleterRepository;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class ClientDeleter
 {

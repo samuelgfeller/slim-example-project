@@ -2,15 +2,15 @@
 
 namespace App\Module\Client\Update\Service;
 
+use App\Core\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
 use App\Module\Client\Update\Repository\ClientDeletedDateFinderRepository;
 use App\Module\Client\Update\Repository\ClientUpdaterRepository;
 use App\Module\Client\Validation\ClientValidator;
-use App\Module\Exception\Domain\InvalidOperationException;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class ClientUpdater
 {

@@ -6,7 +6,7 @@ use App\Module\Authentication\PasswordReset\Repository\PasswordChangerRepository
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenVerifier;
 use App\Module\Authentication\Validation\AuthenticationValidator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 /**

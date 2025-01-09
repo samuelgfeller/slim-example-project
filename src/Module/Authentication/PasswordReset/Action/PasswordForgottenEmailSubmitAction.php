@@ -4,10 +4,10 @@ namespace App\Module\Authentication\PasswordReset\Action;
 
 use App\Core\Application\Responder\RedirectHandler;
 use App\Core\Application\Responder\TemplateRenderer;
+use App\Core\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\Authentication\PasswordReset\Service\PasswordRecoveryEmailSender;
-use App\Module\Exception\Domain\DomainRecordNotFoundException;
-use App\Module\Exception\Domain\ValidationException;
-use App\Module\Security\Domain\Exception\SecurityException;
+use App\Module\Security\Exception\SecurityException;
+use App\Module\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

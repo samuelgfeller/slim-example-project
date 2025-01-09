@@ -10,7 +10,7 @@ use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Repository\UserUpdaterRepository;
 use App\Module\User\Service\UserFinder;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class RegisterTokenVerifier
 {

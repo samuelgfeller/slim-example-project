@@ -8,16 +8,15 @@ use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\Read\Data\ClientReadResult;
 use App\Module\Client\Read\Repository\ClientReadFinderRepository;
-use App\Module\Client\Repository\ClientFinderRepository;
-use App\Module\Note\Domain\Service\Authorization\NotePermissionVerifier;
-use App\Module\Note\Domain\Service\Authorization\NotePrivilegeDeterminer;
-use App\Module\Note\Repository\NoteFinderRepository;
+use App\Module\Client\Read\Repository\ClientReadNoteAmountFinderRepository;
+use App\Module\Note\Authorization\NotePermissionVerifier;
+use App\Module\Note\Authorization\NotePrivilegeDeterminer;
 
 final readonly class ClientReadFinder
 {
     public function __construct(
         private ClientReadFinderRepository $clientReadFinderRepository,
-        private NoteFinderRepository $noteFinderRepository,
+        private ClientReadNoteAmountFinderRepository $clientReadNoteAmountFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
@@ -71,7 +70,7 @@ final readonly class ClientReadFinder
                 false
             ) ? Privilege::CR->name : Privilege::N->name;
 
-            $clientResultAggregate->notesAmount = $this->noteFinderRepository->findClientNotesAmount($clientId);
+            $clientResultAggregate->notesAmount = $this->clientReadNoteAmountFinderRepository->findClientNotesAmount($clientId);
 
             return $clientResultAggregate;
         }

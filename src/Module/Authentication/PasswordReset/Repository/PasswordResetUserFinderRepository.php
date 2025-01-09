@@ -2,16 +2,14 @@
 
 namespace App\Module\Authentication\PasswordReset\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\User\Data\UserData;
 
 readonly class PasswordResetUserFinderRepository
 {
-
     public function __construct(
         private QueryFactory $queryFactory,
-    )
-    {
+    ) {
     }
 
     /**

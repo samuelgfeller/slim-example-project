@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Authorization\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\User\Data\UserRoleData;
 use App\Module\User\Enum\UserRole;
 

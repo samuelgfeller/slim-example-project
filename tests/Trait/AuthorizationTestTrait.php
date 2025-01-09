@@ -2,7 +2,6 @@
 
 namespace App\Test\Trait;
 
-use App\Module\Authentication\Repository\UserRoleFinderRepository;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\UserFixture;

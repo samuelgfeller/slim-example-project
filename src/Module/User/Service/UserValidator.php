@@ -3,12 +3,12 @@
 namespace App\Module\User\Service;
 
 use App\Module\Authentication\Validation\AuthenticationValidator;
-use App\Module\Exception\Domain\ValidationException;
 use App\Module\User\Enum\UserLang;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Enum\UserTheme;
 use App\Module\User\Repository\UserFinderRepository;
 use App\Module\User\Validation\Repository\ValidationUserRoleFinderRepository;
+use App\Module\Validation\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class UserValidator

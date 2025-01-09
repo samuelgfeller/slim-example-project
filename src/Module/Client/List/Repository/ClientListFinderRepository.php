@@ -2,8 +2,8 @@
 
 namespace App\Module\Client\List\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
-use App\Core\Infrastructure\Utility\Hydrator;
+use App\Core\Infrastructure\Database\Hydrator;
+use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\Client\List\Data\ClientListResult;
 
 final readonly class ClientListFinderRepository

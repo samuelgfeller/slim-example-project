@@ -2,9 +2,9 @@
 
 namespace App\Module\Authentication\TokenVerification\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\Exception\PersistenceRecordNotFoundException;
+use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\Authentication\Data\UserVerificationData;
-use App\Module\Exception\Infrastructure\PersistenceRecordNotFoundException;
 use App\Module\User\Data\UserData;
 
 // Class cannot be readonly as it's mocked (doubled) in tests

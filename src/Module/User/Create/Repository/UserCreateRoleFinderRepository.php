@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Create\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 /**
  * Repository for finding user roles for the user create feature.

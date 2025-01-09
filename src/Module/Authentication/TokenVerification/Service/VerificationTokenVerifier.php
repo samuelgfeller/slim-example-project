@@ -2,11 +2,11 @@
 
 namespace App\Module\Authentication\TokenVerification\Service;
 
+use App\Core\Infrastructure\Database\Exception\PersistenceRecordNotFoundException;
 use App\Module\Authentication\Register\Service\RegisterTokenVerifier;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenFinderRepository;
 use App\Module\Authentication\UnlockAccount\Service\AccountUnlockTokenVerifier;
-use App\Module\Exception\Infrastructure\PersistenceRecordNotFoundException;
 
 final readonly class VerificationTokenVerifier
 {

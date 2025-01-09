@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Validation\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 final readonly class ValidationUserRoleFinderRepository
 {

@@ -5,7 +5,7 @@ namespace App\Module\Client\Authorization\Service;
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\Client\Data\ClientData;
-use App\Module\Note\Domain\Service\Authorization\NotePermissionVerifier;
+use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
 

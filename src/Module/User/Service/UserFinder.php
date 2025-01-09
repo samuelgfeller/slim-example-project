@@ -2,8 +2,8 @@
 
 namespace App\Module\User\Service;
 
+use App\Core\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Exception\Domain\DomainRecordNotFoundException;
 use App\Module\User\Authorization\AuthorizedUserRoleFilterer;
 use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Authorization\UserPrivilegeDeterminer;

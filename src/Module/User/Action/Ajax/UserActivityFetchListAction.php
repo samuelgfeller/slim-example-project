@@ -4,8 +4,8 @@ namespace App\Module\User\Action\Ajax;
 
 use App\Core\Application\Responder\JsonResponder;
 use App\Module\FilterSetting\Enum\FilterModule;
-use App\Module\FilterSetting\Service\FilterSettingSaver;
-use App\Module\UserActivity\Service\UserActivityFinder;
+use App\Module\FilterSetting\Save\Service\FilterSettingSaver;
+use App\Module\UserActivity\List\Service\UserActivityListFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -13,7 +13,7 @@ final readonly class UserActivityFetchListAction
 {
     public function __construct(
         private JsonResponder $jsonResponder,
-        private UserActivityFinder $userActivityFinder,
+        private UserActivityListFinder $userActivityFinder,
         private FilterSettingSaver $filterSettingSaver,
     ) {
     }

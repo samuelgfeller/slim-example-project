@@ -6,7 +6,7 @@ use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Repository\UserDeleterRepository;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 

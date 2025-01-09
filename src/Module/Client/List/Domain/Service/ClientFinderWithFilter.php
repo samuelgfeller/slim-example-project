@@ -7,7 +7,7 @@ use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;
 use App\Module\FilterSetting\Enum\FilterModule;
-use App\Module\FilterSetting\Service\FilterSettingSaver;
+use App\Module\FilterSetting\Save\Service\FilterSettingSaver;
 
 final readonly class ClientFinderWithFilter
 {

@@ -2,7 +2,6 @@
 
 namespace App\Test\Integration\User;
 
-use App\Module\Authentication\Repository\UserRoleFinderRepository;
 use App\Module\User\Create\Repository\UserCreateRoleFinderRepository;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserRole;

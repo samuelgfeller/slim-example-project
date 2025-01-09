@@ -9,10 +9,11 @@ use App\Module\Client\Create\Repository\ClientCreatorRepository;
 use App\Module\Client\Data\ClientData;
 use App\Module\Client\Delete\Repository\ClientDeleterRepository;
 use App\Module\Client\Validation\ClientValidator;
-use App\Module\Exception\Domain\ValidationException;
-use App\Module\Note\Domain\Service\NoteCreator;
+use App\Module\Note\Create\Service\NoteCreator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Delete\Service\UserActivityDeleter;
+use App\Module\Validation\ValidationException;
 
 final readonly class ClientCreator
 {
@@ -23,6 +24,7 @@ final readonly class ClientCreator
         private NoteCreator $noteCreator,
         private ClientDeleterRepository $clientDeleterRepository,
         private UserActivityLogger $userActivityLogger,
+        private UserActivityDeleter $userActivityDeleter,
         private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }
@@ -71,7 +73,7 @@ final readonly class ClientCreator
                 // client data and to prevent duplicate, the newly created client has to be deleted.
                 $this->clientDeleterRepository->hardDeleteClient($clientId);
                 // Also remove client creation activity
-                $this->userActivityLogger->deleteUserActivity($clientInsertActivityId);
+                $this->userActivityDeleter->deleteUserActivity($clientInsertActivityId);
                 // Throw exception for it to be caught in middleware
                 throw $validationException;
             }

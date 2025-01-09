@@ -2,10 +2,10 @@
 
 namespace App\Module\Authentication\Login\Domain\Service;
 
-use App\Core\Infrastructure\Service\LocaleConfigurator;
+use App\Core\Infrastructure\Locale\LocaleConfigurator;
 use App\Module\Authentication\Login\Domain\Exception\UnableToLoginStatusNotActiveException;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
-use App\Module\Security\Domain\Service\SecurityEmailChecker;
+use App\Module\Security\Email\Service\SecurityEmailChecker;
 use App\Module\User\Data\UserData;
 use App\Module\User\Enum\UserStatus;
 use Psr\Log\LoggerInterface;

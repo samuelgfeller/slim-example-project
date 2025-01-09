@@ -3,7 +3,6 @@
 namespace App\Module\User\Authorization;
 
 use App\Core\Application\Data\UserNetworkSessionData;
-use App\Module\Authentication\Repository\UserRoleFinderRepository;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\User\Authorization\Repository\UserAuthorizationRoleFinderRepository;
 use App\Module\User\Enum\UserRole;

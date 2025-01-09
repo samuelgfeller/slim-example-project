@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\User\Enum\UserStatus;
 
 final readonly class UserUpdaterRepository

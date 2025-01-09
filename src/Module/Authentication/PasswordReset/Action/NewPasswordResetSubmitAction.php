@@ -6,7 +6,7 @@ use App\Core\Application\Responder\RedirectHandler;
 use App\Core\Application\Responder\TemplateRenderer;
 use App\Module\Authentication\PasswordReset\Service\PasswordResetterWithToken;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
-use App\Module\Exception\Domain\ValidationException;
+use App\Module\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

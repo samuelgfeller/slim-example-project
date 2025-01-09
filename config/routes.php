@@ -22,11 +22,11 @@ return function (App $app) {
     $app->get('/logout', \App\Module\Authentication\Logout\LogoutPageAction::class)->setName('logout');
 
     // Dashboard page
-    $app->get('/', \App\Module\Dashboard\Action\DashboardPageAction::class)->setName('home-page')->add(
+    $app->get('/', \App\Module\Dashboard\Display\Action\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
     // Ajax route to toggle panel visibility
-    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\Action\DashboardTogglePanelProcessAction::class)
+    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\Toggle\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
 
     // Verification of the link sent by email after registration
@@ -119,16 +119,16 @@ return function (App $app) {
 
     // Note routes
     $app->group('/notes', function (RouteCollectorProxy $group) {
-        $group->get('', \App\Module\Note\Action\Ajax\NoteFetchListAction::class)->setName('note-list');
-        $group->get('/{note_id:[0-9]+}', \App\Module\Note\Action\Page\NoteReadPageAction::class)->setName(
+        $group->get('', \App\Module\Note\List\Action\NoteFetchListAction::class)->setName('note-list');
+        $group->get('/{note_id:[0-9]+}', \App\Module\Note\Read\Action\NoteReadPageAction::class)->setName(
             'note-read-page'
         );
-        $group->post('', \App\Module\Note\Action\Ajax\NoteCreateAction::class)->setName(
+        $group->post('', \App\Module\Note\Create\Action\NoteCreateAction::class)->setName(
             'note-create-submit'
         );
-        $group->put('/{note_id:[0-9]+}', \App\Module\Note\Action\Ajax\NoteUpdateAction::class)
+        $group->put('/{note_id:[0-9]+}', \App\Module\Note\Update\Action\NoteUpdateAction::class)
             ->setName('note-update-submit');
-        $group->delete('/{note_id:[0-9]+}', \App\Module\Note\Action\Ajax\NoteDeleteAction::class)
+        $group->delete('/{note_id:[0-9]+}', \App\Module\Note\Delete\Action\NoteDeleteAction::class)
             ->setName('note-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 

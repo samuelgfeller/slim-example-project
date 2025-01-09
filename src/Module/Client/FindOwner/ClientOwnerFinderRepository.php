@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\FindOwner;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 final readonly class ClientOwnerFinderRepository
 {
@@ -17,7 +17,7 @@ final readonly class ClientOwnerFinderRepository
      *
      * @param string|int $id
      *
-     * @return null|int
+     * @return int|null
      */
     public function findClientOwnerId(string|int $id): ?int
     {

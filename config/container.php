@@ -8,7 +8,7 @@
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Core\Application\Middleware\PhpViewMiddleware;
-use App\Core\Infrastructure\Utility\Settings;
+use App\Core\Infrastructure\Settings\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;

@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Enum;
 
-use App\Core\Shared\Trait\EnumToArray;
+use App\Core\Common\Trait\EnumToArray;
 
 enum ClientVigilanceLevel: string
 {

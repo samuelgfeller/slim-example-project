@@ -2,7 +2,7 @@
 
 namespace App\Core\Application\Middleware;
 
-use App\Core\Infrastructure\Service\LocaleConfigurator;
+use App\Core\Infrastructure\Locale\LocaleConfigurator;
 use App\Module\User\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

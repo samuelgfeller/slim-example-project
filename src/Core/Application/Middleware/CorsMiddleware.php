@@ -2,7 +2,7 @@
 
 namespace App\Core\Application\Middleware;
 
-use App\Core\Infrastructure\Utility\Settings;
+use App\Core\Infrastructure\Settings\Settings;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

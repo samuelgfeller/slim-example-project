@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 class ClientFilterWhereConditionBuilder
 {

@@ -2,12 +2,12 @@
 
 namespace App\Module\User\Service;
 
+use App\Core\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Exception\Domain\InvalidOperationException;
 use App\Module\User\Authorization\UserPermissionVerifier;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Repository\UserUpdaterRepository;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 final readonly class UserUpdater

@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\PasswordReset\Repository;
 
-use App\Core\Infrastructure\Factory\QueryFactory;
+use App\Core\Infrastructure\Database\QueryFactory;
 
 class PasswordChangerRepository
 {

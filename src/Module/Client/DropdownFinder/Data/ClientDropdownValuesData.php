@@ -3,7 +3,7 @@
 namespace App\Module\Client\DropdownFinder\Data;
 
 use App\Module\Client\Enum\ClientVigilanceLevel;
-use App\Module\General\Enum\SexOption;
+use App\Module\FormOption\SexOption;
 
 /**
  * All status, sex and users for dropdowns.

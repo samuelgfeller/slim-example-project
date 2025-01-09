@@ -2,15 +2,15 @@
 
 namespace App\Module\Authentication\PasswordReset\Service;
 
-use App\Core\Infrastructure\Service\LocaleConfigurator;
-use App\Core\Infrastructure\Service\Mailer;
-use App\Core\Infrastructure\Utility\Settings;
+use App\Core\Domain\Exception\DomainRecordNotFoundException;
+use App\Core\Infrastructure\Locale\LocaleConfigurator;
+use App\Core\Infrastructure\Mail\Service\Mailer;
+use App\Core\Infrastructure\Settings\Settings;
 use App\Module\Authentication\PasswordReset\Repository\PasswordResetUserFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authentication\Validation\AuthenticationValidator;
-use App\Module\Exception\Domain\DomainRecordNotFoundException;
-use App\Module\Exception\Domain\ValidationException;
-use App\Module\Security\Domain\Service\SecurityEmailChecker;
+use App\Module\Security\Email\Service\SecurityEmailChecker;
+use App\Module\Validation\ValidationException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;

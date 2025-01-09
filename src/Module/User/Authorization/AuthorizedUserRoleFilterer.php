@@ -2,7 +2,6 @@
 
 namespace App\Module\User\Authorization;
 
-use App\Module\Authentication\Repository\UserRoleFinderRepository;
 use App\Module\User\Authorization\Repository\UserAuthorizationRoleFinderRepository;
 
 final readonly class AuthorizedUserRoleFilterer

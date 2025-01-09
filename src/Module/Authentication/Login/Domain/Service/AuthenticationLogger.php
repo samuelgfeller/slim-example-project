@@ -3,7 +3,7 @@
 namespace App\Module\Authentication\Login\Domain\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
-use App\Module\Security\Repository\AuthenticationLoggerRepository;
+use App\Module\Authentication\Login\Repository\AuthenticationLoggerRepository;
 
 final readonly class AuthenticationLogger
 {

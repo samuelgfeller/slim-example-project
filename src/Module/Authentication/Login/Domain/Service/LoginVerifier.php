@@ -3,12 +3,12 @@
 namespace App\Module\Authentication\Login\Domain\Service;
 
 use App\Module\Authentication\Login\Domain\Exception\InvalidCredentialsException;
-use App\Module\Authentication\Login\Repository\UserLoginFinderRepository;
+use App\Module\Authentication\Login\Repository\LoginUserFinderRepository;
 use App\Module\Authentication\Validation\AuthenticationValidator;
-use App\Module\Security\Domain\Service\SecurityLoginChecker;
+use App\Module\Security\Login\Service\SecurityLoginChecker;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final readonly class LoginVerifier
@@ -16,7 +16,7 @@ final readonly class LoginVerifier
     public function __construct(
         private AuthenticationValidator $authenticationValidator,
         private SecurityLoginChecker $loginSecurityChecker,
-        private UserLoginFinderRepository $userFinderRepository,
+        private LoginUserFinderRepository $userFinderRepository,
         private LoginNonActiveUserHandler $loginNonActiveUserHandler,
         private UserActivityLogger $userActivityLogger,
         private AuthenticationLogger $authenticationLogger,

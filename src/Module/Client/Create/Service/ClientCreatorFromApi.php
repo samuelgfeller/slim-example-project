@@ -7,7 +7,7 @@ use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\Create\Repository\ClientCreatorRepository;
 use App\Module\Client\Validation\ClientValidator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Service\UserActivityLogger;
+use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class ClientCreatorFromApi
 {
