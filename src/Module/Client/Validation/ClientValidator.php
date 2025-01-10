@@ -4,7 +4,7 @@ namespace App\Module\Client\Validation;
 
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\Enum\ClientVigilanceLevel;
-use App\Module\User\Repository\UserFinderRepository;
+use App\Module\User\Find\Service\UserFinder;
 use App\Module\Validation\ValidationException;
 use Cake\Validation\Validator;
 
@@ -12,7 +12,7 @@ final readonly class ClientValidator
 {
     public function __construct(
         private ClientStatusFinderRepository $clientStatusFinderRepository,
-        private UserFinderRepository $userFinderRepository,
+        private UserFinder $userFinder,
     ) {
     }
 
@@ -117,7 +117,7 @@ final readonly class ClientValidator
             ->numeric('user_id', __('Invalid option format'))
             ->add('user_id', 'exists', [
                 'rule' => function ($value, $context) {
-                    return !empty($this->userFinderRepository->findUserById((int)$value));
+                    return !empty($this->userFinder->findUserById((int)$value)->email);
                 },
                 'message' => __('Invalid option'),
             ])

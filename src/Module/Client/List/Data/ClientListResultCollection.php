@@ -10,6 +10,7 @@ class ClientListResultCollection
 
     // This is a result data class and is transmitted to the view that needs all status, sex and users for dropdowns
     public ?array $statuses;
+    /** @var array<int, string>|null $users */
     public ?array $users;
     public ?array $sexes = ['M' => 'Male', 'F' => 'Female', 'O' => 'Other'];
 }

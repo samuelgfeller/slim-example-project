@@ -8,16 +8,14 @@ use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;
 use App\Module\FilterSetting\Find\Service\FilterSettingFinder;
 use App\Module\User\Enum\UserRole;
-use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\UserNameAbbreviator;
+use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
 use Odan\Session\SessionInterface;
 
 final readonly class ClientListFilterChipProvider
 {
     public function __construct(
         private ClientStatusFinderRepository $clientStatusFinderRepository,
-        private UserNameAbbreviator $userNameAbbreviator,
-        private UserFinderRepository $userFinderRepository,
+        private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
         private SessionInterface $session,
         private AuthorizationChecker $authorizationChecker,
         private FilterSettingFinder $filterSettingFinder,
@@ -89,9 +87,7 @@ final readonly class ClientListFilterChipProvider
         }
 
         // Add all users with the correct chip label and category
-        $abbreviatedUserNames = $this->userNameAbbreviator->abbreviateUserNames(
-            $this->userFinderRepository->findAllUsers()
-        );
+        $abbreviatedUserNames = $this->abbreviatedUserNameListFinder->findAbbreviatedUserNamesList();
         foreach ($abbreviatedUserNames as $userId => $name) {
             // All users except authenticated user as there is already a filter "Assigned to me"
             if ($userId !== $loggedInUserId) {

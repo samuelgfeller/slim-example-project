@@ -3,7 +3,8 @@
 namespace App\Core\Application\Middleware;
 
 use App\Core\Infrastructure\Locale\LocaleConfigurator;
-use App\Module\User\Service\UserFinder;
+use App\Module\User\Find\Service\UserFinder;
+use App\Module\User\Service\UserFinderOld;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

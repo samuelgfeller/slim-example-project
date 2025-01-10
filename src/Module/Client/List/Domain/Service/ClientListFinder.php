@@ -8,15 +8,14 @@ use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Repository\ClientListFinderRepository;
-use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\UserNameAbbreviator;
+use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
+
 
 final readonly class ClientListFinder
 {
     public function __construct(
         private ClientListFinderRepository $clientListFinderRepository,
-        private UserFinderRepository $userFinderRepository,
-        private UserNameAbbreviator $userNameAbbreviator,
+        private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
         private ClientStatusFinderRepository $clientStatusFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
@@ -38,9 +37,7 @@ final readonly class ClientListFinder
         $clientResultCollection->clients = $this->findClientsWhereWithResultAggregate($queryBuilderWhereArray);
 
         $clientResultCollection->statuses = $this->clientStatusFinderRepository->findAllClientStatusesMappedByIdName();
-        $clientResultCollection->users = $this->userNameAbbreviator->abbreviateUserNames(
-            $this->userFinderRepository->findAllUsers()
-        );
+        $clientResultCollection->users = $this->abbreviatedUserNameListFinder->findAbbreviatedUserNamesList();
 
         // Add permissions on what logged-in user is allowed to do with object
         return $clientResultCollection;

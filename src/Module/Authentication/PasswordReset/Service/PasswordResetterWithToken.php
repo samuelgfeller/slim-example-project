@@ -4,7 +4,7 @@ namespace App\Module\Authentication\PasswordReset\Service;
 
 use App\Module\Authentication\PasswordReset\Repository\PasswordChangerRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenVerifier;
-use App\Module\Authentication\Validation\AuthenticationValidator;
+use App\Module\Authentication\Validation\Service\AuthenticationValidator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;

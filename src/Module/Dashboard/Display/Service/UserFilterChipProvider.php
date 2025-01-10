@@ -6,8 +6,7 @@ use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;
 use App\Module\FilterSetting\Find\Service\FilterSettingFinder;
 use App\Module\User\Authorization\UserPermissionVerifier;
-use App\Module\User\Repository\UserFinderRepository;
-use App\Module\User\Service\UserNameAbbreviator;
+use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
 use Odan\Session\SessionInterface;
 
 final readonly class UserFilterChipProvider
@@ -15,8 +14,7 @@ final readonly class UserFilterChipProvider
     public function __construct(
         private FilterSettingFinder $filterSettingFinder,
         private SessionInterface $session,
-        private UserNameAbbreviator $userNameAbbreviator,
-        private UserFinderRepository $userFinderRepository,
+        private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
         private UserPermissionVerifier $userPermissionVerifier,
     ) {
     }
@@ -89,9 +87,7 @@ final readonly class UserFilterChipProvider
     {
         $loggedInUserId = $this->session->get('user_id');
 
-        $abbreviatedUserNames = $this->userNameAbbreviator->abbreviateUserNames(
-            $this->userFinderRepository->findAllUsers()
-        );
+        $abbreviatedUserNames = $this->abbreviatedUserNameListFinder->findAbbreviatedUserNamesList();
         $userFilters = [];
         foreach ($abbreviatedUserNames as $userId => $abbreviatedUserName) {
             // All users except authenticated user as the own activity is not that pertinent

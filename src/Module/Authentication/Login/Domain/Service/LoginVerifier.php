@@ -4,7 +4,7 @@ namespace App\Module\Authentication\Login\Domain\Service;
 
 use App\Module\Authentication\Login\Domain\Exception\InvalidCredentialsException;
 use App\Module\Authentication\Login\Repository\LoginUserFinderRepository;
-use App\Module\Authentication\Validation\AuthenticationValidator;
+use App\Module\Authentication\Validation\Service\AuthenticationValidator;
 use App\Module\Security\Login\Service\SecurityLoginChecker;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;

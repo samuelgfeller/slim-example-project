@@ -6,10 +6,11 @@ use App\Module\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenUpdater;
+use App\Module\User\ChangeUserStatus\Service\UserStatusUpdater;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
-use App\Module\User\Repository\UserUpdaterRepository;
-use App\Module\User\Service\UserFinder;
+use App\Module\User\Find\Service\UserFinder;
+use App\Module\User\Service\UserFinderOld;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class AccountUnlockTokenVerifier
@@ -18,7 +19,7 @@ final readonly class AccountUnlockTokenVerifier
         private UserFinder $userFinder,
         private VerificationTokenFinderRepository $verificationTokenFinderRepository,
         private VerificationTokenUpdater $verificationTokenUpdater,
-        private UserUpdaterRepository $userUpdaterRepository,
+        private UserStatusUpdater $userStatusUpdater,
         private UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -52,7 +53,7 @@ final readonly class AccountUnlockTokenVerifier
             }
 
             // Change user status to active
-            $this->userUpdaterRepository->changeUserStatus(UserStatus::Active, $verification->userId);
+            $this->userStatusUpdater->updateStatus(UserStatus::Active, $verification->userId);
             // Mark token as being used only after setting the user status to active
             $this->verificationTokenUpdater->setVerificationEntryToUsed($verificationId, $verification->userId);
             $userId = $this->verificationTokenFinderRepository->getUserIdFromVerification($verificationId);

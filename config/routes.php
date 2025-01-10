@@ -65,30 +65,30 @@ return function (App $app) {
 
     // User routes
     $app->group('/users', function (RouteCollectorProxy $group) {
-        $group->get('/list', \App\Module\User\Action\Page\UserListPageAction::class)
+        $group->get('/list', \App\Module\User\ListPage\Action\UserListPageAction::class)
             ->setName('user-list-page');
-        $group->get('', \App\Module\User\Action\Ajax\UserFetchListAction::class)
+        $group->get('', \App\Module\User\ListPage\Action\UserFetchListAction::class)
             ->setName('user-list');
 
         $group // User create form is rendered by the client and loads the available dropdown options via Ajax
-        ->get('/dropdown-options', \App\Module\User\Action\Ajax\UserCreateDropdownOptionsFetchAction::class)
+        ->get('/dropdown-options', \App\Module\User\FindDropdownOptions\Action\UserCreateDropdownOptionsFetchAction::class)
             ->setName('user-create-dropdown');
 
-        $group->get('/activity', \App\Module\User\Action\Ajax\UserActivityFetchListAction::class)
+        $group->get('/activity', \App\Module\UserActivity\List\Action\UserActivityFetchListAction::class)
             ->setName('user-get-activity');
 
-        $group->post('', \App\Module\User\Action\Ajax\UserCreateAction::class)
+        $group->post('', \App\Module\User\Create\Action\UserCreateAction::class)
             ->setName('user-create-submit');
         // Route name has to be in the format: "[table_name]-read-page" and argument "[table-name]-id" to link from user activity
-        $group->get('/{user_id:[0-9]+}', \App\Module\User\Action\Page\UserReadPageAction::class)
+        $group->get('/{user_id:[0-9]+}', \App\Module\User\Read\Action\UserReadPageAction::class)
             ->setName('user-read-page');
-        $group->put('/{user_id:[0-9]+}', \App\Module\User\Action\Ajax\UserUpdateAction::class)
+        $group->put('/{user_id:[0-9]+}', \App\Module\User\Update\Action\UserUpdateAction::class)
             ->setName('user-update-submit');
-        $group->delete('/{user_id:[0-9]+}', \App\Module\User\Action\Ajax\UserDeleteAction::class)
+        $group->delete('/{user_id:[0-9]+}', \App\Module\User\Delete\Action\UserDeleteAction::class)
             ->setName('user-delete-submit');
     })->add(UserAuthenticationMiddleware::class);
 
-    $app->get('/profile', \App\Module\User\Action\Page\UserReadPageAction::class)
+    $app->get('/profile', \App\Module\User\Read\Action\UserReadPageAction::class)
         ->setName('profile-page')->add(UserAuthenticationMiddleware::class);
 
     // Client routes

@@ -8,7 +8,7 @@ use App\Core\Infrastructure\Mail\Service\Mailer;
 use App\Core\Infrastructure\Settings\Settings;
 use App\Module\Authentication\PasswordReset\Repository\PasswordResetUserFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
-use App\Module\Authentication\Validation\AuthenticationValidator;
+use App\Module\Authentication\Validation\Service\AuthenticationValidator;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
 use App\Module\Validation\ValidationException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;

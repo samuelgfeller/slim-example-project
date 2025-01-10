@@ -3,7 +3,7 @@
 namespace App\Module\UserActivity\List\Service;
 
 use App\Module\User\Authorization\UserPermissionVerifier;
-use App\Module\User\Repository\UserFinderRepository;
+use App\Module\User\Find\Service\UserFinder;
 use App\Module\UserActivity\List\Repository\UserActivityListFinderRepository;
 use IntlDateFormatter;
 use InvalidArgumentException;
@@ -15,7 +15,7 @@ final readonly class UserActivityListFinder
     public function __construct(
         private UserPermissionVerifier $userPermissionVerifier,
         private RouteParserInterface $routeParser,
-        private UserFinderRepository $userFinderRepository,
+        private UserFinder $userFinder,
         private UserActivityListFinderRepository $userActivityRepository,
     ) {
     }
@@ -84,9 +84,9 @@ final readonly class UserActivityListFinder
             $userActivity->timeAndActionName = $userActivity->datetime?->format('H:i') . ': ' . $ucFirstActionValue;
             // If there are multiple users, add the user name before time and action name
             if (count($userIds) > 1) {
-                $userRow = $this->userFinderRepository->findUserById((int)$userActivity->userId);
-                $userActivity->timeAndActionName = '<span style="color: var(--black-white-text-color)">' . $userRow['first_name'] . ' '
-                    . $userRow['last_name'] . '</span> • ' .
+                $userData = $this->userFinder->findUserById((int)$userActivity->userId);
+                $userActivity->timeAndActionName =
+                    '<span style="color: var(--black-white-text-color)">' . $userData->getFullName() . '</span> • ' .
                     $userActivity->timeAndActionName;
             }
             $formattedDate = ucfirst(

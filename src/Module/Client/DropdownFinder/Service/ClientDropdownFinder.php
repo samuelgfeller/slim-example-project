@@ -6,12 +6,13 @@ use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData;
 use App\Module\Client\DropdownFinder\Repository\ClientUserDropdownFinderRepository;
-use App\Module\User\Service\UserNameAbbreviator;
+use App\Module\User\FindAbbreviatedNameList\Service\UserNameAbbreviator;
+use App\Module\User\FindList\UserListFinderRepository;
 
 final readonly class ClientDropdownFinder
 {
     public function __construct(
-        private ClientUserDropdownFinderRepository $clientUserDropdownFinderRepository,
+        private UserListFinderRepository $userListFinderRepository,
         private UserNameAbbreviator $userNameAbbreviator,
         private ClientStatusFinderRepository $clientStatusFinderRepository,
         private ClientPermissionVerifier $clientPermissionVerifier,
@@ -27,7 +28,7 @@ final readonly class ClientDropdownFinder
      */
     public function findClientDropdownValues(?int $alreadyAssignedUserId = null): ClientDropdownValuesData
     {
-        $allUsers = $this->clientUserDropdownFinderRepository->findAllUsers();
+        $allUsers = $this->userListFinderRepository->findAllUsers();
         // Filter users, which the authenticated user is authorized to assign to a client.
         // Available user roles for dropdown and privilege.
         $grantedAssignableUsers = [];

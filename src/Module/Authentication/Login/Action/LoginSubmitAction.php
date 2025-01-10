@@ -8,7 +8,8 @@ use App\Module\Authentication\Login\Domain\Exception\InvalidCredentialsException
 use App\Module\Authentication\Login\Domain\Exception\UnableToLoginStatusNotActiveException;
 use App\Module\Authentication\Login\Domain\Service\LoginVerifier;
 use App\Module\Security\Exception\SecurityException;
-use App\Module\User\Service\UserFinder;
+use App\Module\User\Find\Service\UserFinder;
+use App\Module\User\Service\UserFinderOld;
 use App\Module\Validation\ValidationException;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;

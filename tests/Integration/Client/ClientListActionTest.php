@@ -6,7 +6,7 @@ use App\Core\Infrastructure\Database\Hydrator;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\User\Data\UserData;
 use App\Module\User\Enum\UserRole;
-use App\Module\User\Service\UserNameAbbreviator;
+use App\Module\User\FindAbbreviatedNameList\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
