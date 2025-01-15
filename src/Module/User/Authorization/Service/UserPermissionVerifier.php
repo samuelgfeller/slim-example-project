@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\User\Authorization;
+namespace App\Module\User\Authorization\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;

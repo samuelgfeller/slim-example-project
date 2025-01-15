@@ -2,7 +2,7 @@
 
 namespace App\Module\UserActivity\List\Service;
 
-use App\Module\User\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Find\Service\UserFinder;
 use App\Module\UserActivity\List\Repository\UserActivityListFinderRepository;
 use IntlDateFormatter;

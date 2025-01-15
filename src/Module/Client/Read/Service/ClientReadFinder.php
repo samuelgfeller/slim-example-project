@@ -4,8 +4,8 @@ namespace App\Module\Client\Read\Service;
 
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Authorization\Exception\ForbiddenException;
+use App\Module\Client\Authorization\ClientPrivilegeDeterminer;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
-use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\Read\Data\ClientReadResult;
 use App\Module\Client\Read\Repository\ClientReadFinderRepository;
 use App\Module\Client\Read\Repository\ClientReadNoteAmountFinderRepository;
@@ -17,7 +17,7 @@ final readonly class ClientReadFinder
     public function __construct(
         private ClientReadFinderRepository $clientReadFinderRepository,
         private ClientReadNoteAmountFinderRepository $clientReadNoteAmountFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientReadAuthorizationChecker $clientReadAuthorizationChecker,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
         private NotePermissionVerifier $notePermissionVerifier,
@@ -35,7 +35,7 @@ final readonly class ClientReadFinder
     {
         $clientResultAggregate = $this->clientReadFinderRepository->findClientAggregateByIdIncludingDeleted($clientId);
         if ($clientResultAggregate->id
-            && $this->clientPermissionVerifier->isGrantedToRead(
+            && $this->clientReadAuthorizationChecker->isGrantedToRead(
                 $clientResultAggregate->userId,
                 $clientResultAggregate->deletedAt
             )

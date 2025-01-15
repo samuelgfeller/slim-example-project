@@ -5,7 +5,7 @@ namespace App\Module\Dashboard\Display\Service;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;
 use App\Module\FilterSetting\Find\Service\FilterSettingFinder;
-use App\Module\User\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
 use Odan\Session\SessionInterface;
 

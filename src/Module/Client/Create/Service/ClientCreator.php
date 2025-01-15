@@ -20,7 +20,7 @@ final readonly class ClientCreator
     public function __construct(
         private ClientValidator $clientValidator,
         private ClientCreatorRepository $clientCreatorRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientCreateAuthorizationChecker $clientCreateAuthorizationChecker,
         private NoteCreator $noteCreator,
         private ClientDeleterRepository $clientDeleterRepository,
         private UserActivityLogger $userActivityLogger,
@@ -44,7 +44,7 @@ final readonly class ClientCreator
 
         $client = new ClientData($clientValues);
 
-        if ($this->clientPermissionVerifier->isGrantedToCreate($client)) {
+        if ($this->clientCreateAuthorizationChecker->isGrantedToCreate($client)) {
             // Insert client
             $clientId = $this->clientCreatorRepository->insertClient($client->toArrayForDatabase());
             // Insert user activity

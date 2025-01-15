@@ -15,7 +15,7 @@ final readonly class ClientDeleter
     public function __construct(
         private ClientDeleterRepository $clientDeleterRepository,
         private ClientOwnerFinderRepository $clientOwnerFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientDeleteAuthorizationChecker $clientDeleteAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
         private NoteDeleterRepository $noteDeleterRepository,
     ) {
@@ -35,7 +35,7 @@ final readonly class ClientDeleter
         // Find client in db to get its ownership
         $clientOwnerUserId = $this->clientOwnerFinderRepository->findClientOwnerId($clientId);
 
-        if ($this->clientPermissionVerifier->isGrantedToDelete($clientOwnerUserId)) {
+        if ($this->clientDeleteAuthorizationChecker->isGrantedToDelete($clientOwnerUserId)) {
             $this->noteDeleterRepository->deleteNotesFromClient($clientId);
             $deleted = $this->clientDeleterRepository->deleteClient($clientId);
             if ($deleted) {

@@ -6,7 +6,7 @@ use App\Module\Authentication\Register\Service\RegistrationMailSender;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
-use App\Module\User\Authorization\UserPermissionVerifier;
+use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Create\Repository\UserCreateRoleFinderRepository;
 use App\Module\User\Create\Repository\UserCreatorRepository;
 use App\Module\User\Data\UserData;

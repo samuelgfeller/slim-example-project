@@ -2,7 +2,7 @@
 
 namespace App\Module\User\FindDropdownOptions\Service;
 
-use App\Module\User\Authorization\AuthorizedUserRoleFilterer;
+use App\Module\User\Authorization\Service\AuthorizedUserRoleFilterer;
 use App\Module\User\Enum\UserLang;
 use App\Module\User\Enum\UserStatus;
 

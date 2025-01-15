@@ -4,7 +4,7 @@ namespace App\Module\UserActivity\Delete\Service;
 
 use App\Module\UserActivity\Delete\Repository\UserActivityDeleterRepository;
 
-class UserActivityDeleter
+final readonly class UserActivityDeleter
 {
     public function __construct(
         private UserActivityDeleterRepository $userActivityDeleterRepository,

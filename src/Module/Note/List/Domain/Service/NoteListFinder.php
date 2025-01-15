@@ -5,6 +5,7 @@ namespace App\Module\Note\List\Domain\Service;
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
+use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
 use App\Module\Note\Authorization\NotePrivilegeDeterminer;
 use App\Module\Note\Data\NoteResultData;
 use App\Module\Note\List\Repository\NoteListClientFinderRepository;
@@ -16,7 +17,7 @@ final readonly class NoteListFinder
         private NoteListFinderRepository $noteListFinderRepository,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
         private ClientOwnerFinderRepository $clientOwnerFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientReadAuthorizationChecker $clientReadAuthorizationChecker,
         private NoteListClientFinderRepository $noteListClientFinderRepository,
     ) {
     }
@@ -119,7 +120,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         // The authorization for each note is verified, but the client message is added to the request
         // separately
         if (!empty($clientData->clientMessage)
-            && $this->clientPermissionVerifier->isGrantedToRead($clientData->userId, $clientData->deletedAt)
+            && $this->clientReadAuthorizationChecker->isGrantedToRead($clientData->userId, $clientData->deletedAt)
         ) {
             $clientMessageNote = new NoteResultData();
             $clientMessageNote->message = $clientData->clientMessage;

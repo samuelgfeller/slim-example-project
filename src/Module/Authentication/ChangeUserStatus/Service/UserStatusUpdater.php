@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Module\User\ChangeUserStatus\Service;
+namespace App\Module\Authentication\ChangeUserStatus\Service;
 
-use App\Module\User\ChangeUserStatus\Repository\UserStatusUpdaterRepository;
+use App\Module\Authentication\ChangeUserStatus\Repository\UserStatusUpdaterRepository;
 use App\Module\User\Enum\UserStatus;
 
-readonly class UserStatusUpdater
+final readonly class UserStatusUpdater
 {
     public function __construct(
         private UserStatusUpdaterRepository $userStatusUpdaterRepository

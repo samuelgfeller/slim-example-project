@@ -2,11 +2,11 @@
 
 namespace App\Module\Authentication\UnlockAccount\Service;
 
+use App\Module\Authentication\ChangeUserStatus\Service\UserStatusUpdater;
 use App\Module\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenUpdater;
-use App\Module\User\ChangeUserStatus\Service\UserStatusUpdater;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Find\Service\UserFinder;

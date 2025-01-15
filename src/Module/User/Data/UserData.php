@@ -41,7 +41,7 @@ class UserData implements \JsonSerializable
         // can be created before validation
         $this->updatedAt = $userData['updated_at'] ?? null ? new \DateTimeImmutable($userData['updated_at']) : null;
         $this->createdAt = $userData['created_at'] ?? null ? new \DateTimeImmutable($userData['created_at']) : null;
-        $this->status = isset($userData['status']) ? UserStatus::tryFrom($userData['status']) : null;
+        $this->status = isset($userData['status']) ? UserStatus::tryFrom($userData['status']) : UserStatus::Unverified;
         // Empty check is for testUserSubmitCreate_invalid test function where user_role_id is an empty string
         $this->userRoleId = !empty($userData['user_role_id']) ? $userData['user_role_id'] : null;
     }

@@ -18,7 +18,7 @@ final readonly class ClientUpdater
         private ClientUpdaterRepository $clientUpdaterRepository,
         private ClientValidator $clientValidator,
         private ClientOwnerFinderRepository $clientOwnerFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientUpdateAuthorizationChecker $clientUpdateAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
         private ClientDeletedDateFinderRepository $clientDeletedDateFinderRepository,
     ) {
@@ -41,7 +41,7 @@ final readonly class ClientUpdater
         $clientOwnerUserId = $this->clientOwnerFinderRepository->findClientOwnerId($clientId);
 
         // Check if the user is granted to update client
-        if (!$this->clientPermissionVerifier->isGrantedToUpdate($clientValues, $clientOwnerUserId)) {
+        if (!$this->clientUpdateAuthorizationChecker->isGrantedToUpdate($clientValues, $clientOwnerUserId)) {
             // NOT ALLOWED - add activity entry with failed update attempt
             $this->userActivityLogger->logUserActivity(
                 UserActivity::UPDATED,

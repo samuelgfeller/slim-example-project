@@ -2,6 +2,7 @@
 
 namespace App\Module\Client\DropdownFinder\Service;
 
+use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData;
@@ -15,7 +16,7 @@ final readonly class ClientDropdownFinder
         private UserListFinderRepository $userListFinderRepository,
         private UserNameAbbreviator $userNameAbbreviator,
         private ClientStatusFinderRepository $clientStatusFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientAssignUserAuthorizationChecker $clientAssignUserAuthorizationChecker,
     ) {
     }
 
@@ -37,7 +38,7 @@ final readonly class ClientDropdownFinder
                 // dropdown for it to be visible in the user interface, even if the <select> is greyed out
                 ($alreadyAssignedUserId !== null && $userData->id === $alreadyAssignedUserId)
                 // Check if the authenticated user is allowed to assign the currently iterating user to a client
-                || $this->clientPermissionVerifier->isGrantedToAssignUserToClient($userData->id)
+                || $this->clientAssignUserAuthorizationChecker->isGrantedToAssignUserToClient($userData->id)
             ) {
                 $grantedAssignableUsers[] = $userData;
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\User\ChangeUserStatus\Repository;
+namespace App\Module\Authentication\ChangeUserStatus\Repository;
 
 use App\Core\Infrastructure\Database\QueryFactory;
 use App\Module\User\Enum\UserStatus;

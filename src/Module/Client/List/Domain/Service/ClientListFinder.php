@@ -2,12 +2,13 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
+use App\Module\Client\Authorization\ClientPrivilegeDeterminer;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
-use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Repository\ClientListFinderRepository;
+use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
 use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
 
 
@@ -17,7 +18,7 @@ final readonly class ClientListFinder
         private ClientListFinderRepository $clientListFinderRepository,
         private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
         private ClientStatusFinderRepository $clientStatusFinderRepository,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientReadAuthorizationChecker $clientReadAuthorizationChecker,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
     ) {
     }
@@ -56,7 +57,7 @@ final readonly class ClientListFinder
         $clientResultsWithAggregates = $this->clientListFinderRepository->findClientsWithResultAggregate($whereArray);
         // Add assigned user and client status privilege to each clientResultAggregate
         foreach ($clientResultsWithAggregates as $key => $client) {
-            if ($this->clientPermissionVerifier->isGrantedToRead($client->userId, $client->deletedAt)) {
+            if ($this->clientReadAuthorizationChecker->isGrantedToRead($client->userId, $client->deletedAt)) {
                 $client->assignedUserPrivilege = $this->clientPrivilegeDeterminer->getMutationPrivilege(
                     $client->userId,
                     'user_id'

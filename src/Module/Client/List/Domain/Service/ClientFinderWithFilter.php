@@ -6,6 +6,7 @@ use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;
+use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Save\Service\FilterSettingSaver;
 
@@ -14,7 +15,7 @@ final readonly class ClientFinderWithFilter
     public function __construct(
         private ClientListFinder $clientListFinder,
         private ClientFilterWhereConditionBuilder $clientFilterWhereConditionBuilder,
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientReadAuthorizationChecker $clientReadAuthorizationChecker,
         private FilterSettingSaver $filterSettingSaver,
     ) {
     }
@@ -123,7 +124,7 @@ final readonly class ClientFinderWithFilter
         $authorizedClients = [];
         foreach ($clients ?? [] as $client) {
             // Check if the authenticated user is allowed to read each client and if yes, add it to the return array
-            if ($this->clientPermissionVerifier->isGrantedToRead($client->userId)) {
+            if ($this->clientReadAuthorizationChecker->isGrantedToRead($client->userId)) {
                 $authorizedClients[] = $client;
             }
         }

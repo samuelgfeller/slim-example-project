@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Module\Client\Authorization\Service;
+namespace App\Module\Client\Authorization;
 
 use App\Module\Authorization\Enum\Privilege;
+use App\Module\Client\Delete\Service\ClientDeleteAuthorizationChecker;
+use App\Module\Client\Update\Service\ClientUpdateAuthorizationChecker;
 
 /**
  * For the frontend to know when to display edit and delete icons.
@@ -10,7 +12,8 @@ use App\Module\Authorization\Enum\Privilege;
 final readonly class ClientPrivilegeDeterminer
 {
     public function __construct(
-        private ClientPermissionVerifier $clientPermissionVerifier,
+        private ClientUpdateAuthorizationChecker $clientUpdateAuthorizationChecker,
+        private ClientDeleteAuthorizationChecker $clientDeleteAuthorizationChecker,
     ) {
     }
 
@@ -25,12 +28,12 @@ final readonly class ClientPrivilegeDeterminer
     public function getMutationPrivilege(?int $clientOwnerId, ?string $column = null): string
     {
         // Check first against the highest privilege, if allowed, directly return otherwise continue down the chain
-        if ($this->clientPermissionVerifier->isGrantedToDelete($clientOwnerId, false)) {
+        if ($this->clientDeleteAuthorizationChecker->isGrantedToDelete($clientOwnerId, false)) {
             return Privilege::CRUD->name;
         }
         if ($column !== null
             // Keys are relevant for the update authorization check, value doesn't matter
-            && $this->clientPermissionVerifier->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
+            && $this->clientUpdateAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $clientOwnerId, false)
         ) {
             return Privilege::CRU->name;
         }
