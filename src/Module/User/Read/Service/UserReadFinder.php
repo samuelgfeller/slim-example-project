@@ -4,11 +4,10 @@ namespace App\Module\User\Read\Service;
 
 use App\Core\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\User\Authorization\Service\AuthorizedUserRoleFilterer;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Authorization\Service\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserResultData;
 use App\Module\User\Find\Repository\UserFinderRepository;
+use App\Module\User\FindDropdownOptions\Service\AuthorizedUserRoleFilterer;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
 readonly class UserReadFinder
@@ -17,7 +16,7 @@ readonly class UserReadFinder
         private UserFinderRepository $userFinderRepository,
         private UserPrivilegeDeterminer $userPrivilegeDeterminer,
         private AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserReadAuthorizationChecker $userReadAuthorizationChecker,
     ) {
     }
 
@@ -32,7 +31,7 @@ readonly class UserReadFinder
      */
     public function findUserReadResult(int $id): UserResultData
     {
-        if ($this->userPermissionVerifier->isGrantedToRead($id)) {
+        if ($this->userReadAuthorizationChecker->isGrantedToRead($id)) {
             $userRow = $this->userFinderRepository->findUserById($id);
             if (!empty($userRow)) {
                 $userResultData = new UserResultData($userRow);

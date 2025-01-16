@@ -3,11 +3,11 @@
 namespace App\Module\User\ListPage\Service;
 
 use App\Core\Infrastructure\Database\Hydrator;
-use App\Module\User\Authorization\Service\AuthorizedUserRoleFilterer;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Authorization\Service\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserResultData;
+use App\Module\User\FindDropdownOptions\Service\AuthorizedUserRoleFilterer;
 use App\Module\User\FindList\UserListFinderRepository;
+use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
 class UserListPageFinder
@@ -16,7 +16,7 @@ class UserListPageFinder
         private readonly UserListFinderRepository $userListFinderRepository,
         private readonly UserPrivilegeDeterminer $userPrivilegeDeterminer,
         private readonly AuthorizedUserRoleFilterer $authorizedUserRoleFilterer,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private readonly UserReadAuthorizationChecker $userReadAuthorizationChecker,
         private readonly Hydrator $hydrator,
     ) {
     }
@@ -33,7 +33,7 @@ class UserListPageFinder
 
         foreach ($userResultArray as $key => $userResultData) {
             // Check if authenticated user is allowed to read user
-            if ($this->userPermissionVerifier->isGrantedToRead($userResultData->id)) {
+            if ($this->userReadAuthorizationChecker->isGrantedToRead($userResultData->id)) {
                 // Authorization limits which entries are in the user role dropdown
                 $userResultData->availableUserRoles = $this->authorizedUserRoleFilterer->filterAuthorizedUserRoles(
                     $userResultData->userRoleId

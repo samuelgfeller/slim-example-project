@@ -4,7 +4,7 @@ namespace App\Core\Application\Middleware;
 
 use App\Core\Infrastructure\JsCacheBusting\JsImportCacheBuster;
 use App\Core\Infrastructure\Settings\Settings;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
+use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +34,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
         private readonly SessionInterface $session,
         private readonly JsImportCacheBuster $jsImportCacheBuster,
         Settings $settings,
-        private readonly UserPermissionVerifier $userPermissionVerifier,
+        private readonly UserReadAuthorizationChecker $userReadAuthorizationChecker,
         private readonly RouteParserInterface $routeParser,
     ) {
         $this->publicSettings = $settings->get('public');
@@ -86,7 +86,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
     {
         try {
             // If the authenticated user is allowed to read another user (id + 1), the user list can be displayed
-            return $this->userPermissionVerifier->isGrantedToRead($loggedInUserId + 1, false);
+            return $this->userReadAuthorizationChecker->isGrantedToRead($loggedInUserId + 1, false);
         } catch (DatabaseException $databaseException) {
             // Mysql connection not working. Caught here to prevent error page from crashing
             return false;

@@ -2,9 +2,9 @@
 
 namespace App\Module\UserActivity\List\Service;
 
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Find\Service\UserFinder;
 use App\Module\UserActivity\List\Repository\UserActivityListFinderRepository;
+use App\Module\UserActivity\ReadAuthorization\UserActivityReadAuthorizationChecker;
 use IntlDateFormatter;
 use InvalidArgumentException;
 use RuntimeException;
@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteParserInterface;
 final readonly class UserActivityListFinder
 {
     public function __construct(
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserActivityReadAuthorizationChecker $userPermissionVerifier,
         private RouteParserInterface $routeParser,
         private UserFinder $userFinder,
         private UserActivityListFinderRepository $userActivityRepository,

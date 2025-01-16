@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Module\User\Authorization\Service;
+namespace App\Module\User\FindDropdownOptions\Service;
 
-use App\Module\User\Authorization\Repository\UserAuthorizationRoleFinderRepository;
+use App\Module\User\AssignRole\UserAssignRoleAuthorizationChecker;
+use App\Module\User\FindDropdownOptions\Repository\UserDropdownOptionsRoleFinderRepository;
 
 final readonly class AuthorizedUserRoleFilterer
 {
     public function __construct(
-        private UserAuthorizationRoleFinderRepository $userAuthorizationRoleFinderRepository,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserDropdownOptionsRoleFinderRepository $userDropdownOptionsRoleFinderRepository,
+        private UserAssignRoleAuthorizationChecker $userAssignRoleAuthorizationChecker,
     ) {
     }
 
@@ -29,14 +30,14 @@ final readonly class AuthorizedUserRoleFilterer
      */
     public function filterAuthorizedUserRoles(?int $attributedUserRoleId = null): array
     {
-        $allUserRoles = $this->userAuthorizationRoleFinderRepository->findAllUserRolesForDropdown();
+        $allUserRoles = $this->userDropdownOptionsRoleFinderRepository->findAllUserRolesForDropdown();
         // Available user roles for dropdown and privilege
         $grantedCreateUserRoles = [];
         foreach ($allUserRoles as $roleId => $roleName) {
             // If the role is already attributed to user the value is added so that it's displayed in the dropdown
             if (($attributedUserRoleId !== null && $roleId === $attributedUserRoleId)
-                // Check if user role is granted
-                || $this->userPermissionVerifier->userRoleIsGranted($roleId, $attributedUserRoleId) === true
+                // Check if assigning the user role is granted for the authenticated user
+                || $this->userAssignRoleAuthorizationChecker->userRoleIsGranted($roleId, $attributedUserRoleId) === true
             ) {
                 $grantedCreateUserRoles[$roleId] = $roleName;
             }

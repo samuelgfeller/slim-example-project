@@ -5,8 +5,8 @@ namespace App\Module\Dashboard\Display\Service;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;
 use App\Module\FilterSetting\Find\Service\FilterSettingFinder;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
+use App\Module\UserActivity\ReadAuthorization\UserActivityReadAuthorizationChecker;
 use Odan\Session\SessionInterface;
 
 final readonly class UserFilterChipProvider
@@ -15,7 +15,7 @@ final readonly class UserFilterChipProvider
         private FilterSettingFinder $filterSettingFinder,
         private SessionInterface $session,
         private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserActivityReadAuthorizationChecker $userActivityReadAuthorizationChecker,
     ) {
     }
 
@@ -97,7 +97,7 @@ final readonly class UserFilterChipProvider
                     'paramName' => 'user',
                     'paramValue' => $userId,
                     'category' => null,
-                    'authorized' => $this->userPermissionVerifier->isGrantedToReadUserActivity((int)$userId, false),
+                    'authorized' => $this->userActivityReadAuthorizationChecker->isGrantedToReadUserActivity((int)$userId, false),
                 ]);
             }
         }

@@ -47,10 +47,7 @@ one specific task and to align with the Single Responsibility Principle (SRP).
 Services that can be tied to one feature and are used by other features of the same module may be kept 
 in the feature folder.
 E.g. client-create authorization checker in the `Client/Create` folder is also used by the client list page feature to 
-decide if the client create button should be displayed or not.  
-
-If the service is used by other modules, it should always be extracted into a separate feature folder or
-even module folder.
+decide if the client create button should be displayed or not.
 
 ### Folder creation
 Folders are generally only created if they bring value.   

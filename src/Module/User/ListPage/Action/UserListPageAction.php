@@ -3,7 +3,7 @@
 namespace App\Module\User\ListPage\Action;
 
 use App\Core\Application\Responder\TemplateRenderer;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
+use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpForbiddenException;
@@ -12,7 +12,7 @@ final readonly class UserListPageAction
 {
     public function __construct(
         private TemplateRenderer $templateRenderer,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserReadAuthorizationChecker $userReadAuthorizationChecker,
     ) {
     }
 
@@ -21,7 +21,7 @@ final readonly class UserListPageAction
         ResponseInterface $response,
         array $args,
     ): ResponseInterface {
-        if ($this->userPermissionVerifier->isGrantedToRead()) {
+        if ($this->userReadAuthorizationChecker->isGrantedToRead()) {
             return $this->templateRenderer->render($response, 'user/user-list.html.php');
         }
 

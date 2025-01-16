@@ -6,7 +6,6 @@ use App\Module\Authentication\Register\Service\RegistrationMailSender;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Create\Repository\UserCreateRoleFinderRepository;
 use App\Module\User\Create\Repository\UserCreatorRepository;
 use App\Module\User\Data\UserData;
@@ -22,7 +21,7 @@ final readonly class UserCreator
     public function __construct(
         private UserValidator $userValidator,
         private SecurityEmailChecker $emailSecurityChecker,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserCreateAuthorizationChecker $userCreateAuthorizationChecker,
         private UserCreatorRepository $userCreatorRepository,
         private VerificationTokenCreator $verificationTokenCreator,
         private RegistrationMailSender $registrationMailer,
@@ -43,7 +42,7 @@ final readonly class UserCreator
     public function createUser(array $userValues): bool|int
     {
         // Before validation, check if authenticated user is authorized to create user with the given data
-        if ($this->userPermissionVerifier->isGrantedToCreate($userValues)) {
+        if ($this->userCreateAuthorizationChecker->isGrantedToCreate($userValues)) {
             // * Validation has to be done AFTER authorization check
             // to not reveal potential sensitive infos such as from the validation messages (e.g. email already exists)
             $this->userValidator->validateUserValues($userValues);

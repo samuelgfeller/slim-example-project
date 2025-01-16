@@ -3,7 +3,6 @@
 namespace App\Module\User\Delete\Service;
 
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Delete\Repository\UserDeleterRepository;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
@@ -16,7 +15,7 @@ final readonly class UserDeleter
         private LoggerInterface $logger,
         private UserDeleterRepository $userDeleterRepository,
         private SessionInterface $session,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserDeleteAuthorizationChecker $userDeleteAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -33,7 +32,7 @@ final readonly class UserDeleter
     public function deleteUser(int $userIdToDelete): bool
     {
         // Check if it's admin or if it's its own post
-        if ($this->userPermissionVerifier->isGrantedToDelete($userIdToDelete)) {
+        if ($this->userDeleteAuthorizationChecker->isGrantedToDelete($userIdToDelete)) {
             $isDeleted = $this->userDeleterRepository->deleteUserById($userIdToDelete);
             if ($isDeleted) {
                 $this->userActivityLogger->logUserActivity(UserActivity::DELETED, 'user', $userIdToDelete);

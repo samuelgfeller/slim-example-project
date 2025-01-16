@@ -3,6 +3,9 @@
 namespace App\Module\User\Authorization\Service;
 
 use App\Module\Authorization\Enum\Privilege;
+use App\Module\User\Delete\Service\UserDeleteAuthorizationChecker;
+use App\Module\User\Read\Service\UserReadAuthorizationChecker;
+use App\Module\User\Update\Service\UserUpdateAuthorizationChecker;
 
 /**
  * This class is responsible for determining the level of privileges a user has.
@@ -10,7 +13,9 @@ use App\Module\Authorization\Enum\Privilege;
 final readonly class UserPrivilegeDeterminer
 {
     public function __construct(
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserReadAuthorizationChecker $userReadAuthorizationChecker,
+        private UserUpdateAuthorizationChecker $userUpdateAuthorizationChecker,
+        private UserDeleteAuthorizationChecker $userDeleteAuthorizationChecker,
     ) {
     }
 
@@ -49,13 +54,13 @@ final readonly class UserPrivilegeDeterminer
         // Check if given value may be updated by authenticated user (value does not matter as keys are relevant)
         $updatePrivilege = Privilege::N;
         if ($column !== null
-            && $this->userPermissionVerifier->isGrantedToUpdate([$column => 'value'], $userId, false)
+            && $this->userUpdateAuthorizationChecker->isGrantedToUpdate([$column => 'value'], $userId, false)
         ) {
             $updatePrivilege = Privilege::CRU;
         }
         // If update privilege is set or there was no column, check for "delete"
         if (($updatePrivilege === Privilege::CRU || $column === null)
-            && $this->userPermissionVerifier->isGrantedToDelete($userId, false)
+            && $this->userDeleteAuthorizationChecker->isGrantedToDelete($userId, false)
         ) {
             return Privilege::CRUD->name;
         }
@@ -64,7 +69,7 @@ final readonly class UserPrivilegeDeterminer
             return $updatePrivilege->name;
         }
 
-        if ($this->userPermissionVerifier->isGrantedToRead($userId, false)) {
+        if ($this->userReadAuthorizationChecker->isGrantedToRead($userId, false)) {
             return Privilege::R->name;
         }
 

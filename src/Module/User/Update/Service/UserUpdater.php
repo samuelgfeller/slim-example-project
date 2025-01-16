@@ -4,7 +4,6 @@ namespace App\Module\User\Update\Service;
 
 use App\Core\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\User\Authorization\Service\UserPermissionVerifier;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Update\Repository\UserUpdaterRepository;
 use App\Module\User\Validation\Service\UserValidator;
@@ -15,7 +14,7 @@ final readonly class UserUpdater
 {
     public function __construct(
         private UserValidator $userValidator,
-        private UserPermissionVerifier $userPermissionVerifier,
+        private UserUpdateAuthorizationChecker $userUpdateAuthorizationChecker,
         private UserUpdaterRepository $userUpdaterRepository,
         private UserActivityLogger $userActivityLogger,
         private LoggerInterface $logger,
@@ -42,7 +41,7 @@ final readonly class UserUpdater
         unset($userValues['id']);
 
         // Check if it's admin or if it's its own user
-        if ($this->userPermissionVerifier->isGrantedToUpdate($userValues, $userIdToChange)) {
+        if ($this->userUpdateAuthorizationChecker->isGrantedToUpdate($userValues, $userIdToChange)) {
             // User values to change (cannot use object as unset values would be "null" and remove values in db)
             $validUpdateData = [];
             // Additional check to be sure that only columns that may be updated are sent to the database
