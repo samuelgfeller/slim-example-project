@@ -3,7 +3,7 @@
 namespace App\Module\User\ListPage\Service;
 
 use App\Core\Infrastructure\Database\Hydrator;
-use App\Module\User\Authorization\Service\UserPrivilegeDeterminer;
+use App\Module\User\Authorization\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserResultData;
 use App\Module\User\FindDropdownOptions\Service\AuthorizedUserRoleFilterer;
 use App\Module\User\FindList\UserListFinderRepository;

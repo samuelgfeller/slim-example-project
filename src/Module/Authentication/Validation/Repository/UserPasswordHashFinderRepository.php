@@ -4,24 +4,11 @@ namespace App\Module\Authentication\Validation\Repository;
 
 use App\Core\Infrastructure\Database\QueryFactory;
 
-class UserPasswordHashFinderRepository
+readonly class UserPasswordHashFinderRepository
 {
-    // Fields without password
-    private array $fields = [
-        'id',
-        'first_name',
-        'last_name',
-        'email',
-        'user_role_id',
-        'status',
-        'updated_at',
-        'created_at',
-        'theme',
-        'language',
-    ];
 
     public function __construct(
-        private readonly QueryFactory $queryFactory,
+        private QueryFactory $queryFactory,
     ) {
     }
 

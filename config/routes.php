@@ -26,7 +26,7 @@ return function (App $app) {
         UserAuthenticationMiddleware::class
     );
     // Ajax route to toggle panel visibility
-    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\Toggle\DashboardTogglePanelProcessAction::class)
+    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\ToggleView\DashboardTogglePanelProcessAction::class)
         ->setName('dashboard-toggle-panel');
 
     // Verification of the link sent by email after registration
@@ -60,7 +60,7 @@ return function (App $app) {
 
     // Fetch gettext translations
     // Without UserAuthenticationMiddleware as translations are also needed for non-protected pages such as password reset
-    $app->get('/translate', \App\Module\Localization\Action\TranslateAction::class)
+    $app->get('/translate', \App\Module\Localization\TranslateAction::class)
         ->setName('translate');
 
     // User routes

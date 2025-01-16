@@ -5,7 +5,7 @@ namespace App\Module\Client\Create\Service;
 use App\Module\Client\ClientStatus\Enum\ClientStatus;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\Create\Repository\ClientCreatorRepository;
-use App\Module\Client\Validation\ClientValidator;
+use App\Module\Client\Validation\Service\ClientValidator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 

@@ -3,9 +3,9 @@
 namespace App\Module\UserActivity\Create\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
-use App\Module\User\Data\UserActivityData;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Repository\UserActivityCreatorRepository;
+use App\Module\UserActivity\Data\UserActivityData;
 
 final readonly class UserActivityLogger
 {

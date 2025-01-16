@@ -3,7 +3,7 @@
 namespace App\Module\Dashboard\Display\Service;
 
 use App\Core\Application\Data\UserNetworkSessionData;
-use App\Module\Authorization\Service\AuthorizationChecker;
+use App\Module\Authorization\Service\AuthorizedByRoleChecker;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Dashboard\Display\Data\DashboardData;
 use App\Module\User\Enum\UserRole;
@@ -14,7 +14,7 @@ final class DashboardPanelProvider
 
     public function __construct(
         private readonly ClientStatusFinderRepository $clientStatusFinderRepository,
-        private readonly AuthorizationChecker $authorizationChecker,
+        private readonly AuthorizedByRoleChecker $authorizationChecker,
         private readonly UserFilterChipProvider $userFilterChipProvider,
         UserNetworkSessionData $userNetworkSessionData,
     ) {

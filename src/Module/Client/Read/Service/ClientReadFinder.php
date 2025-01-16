@@ -11,6 +11,7 @@ use App\Module\Client\Read\Repository\ClientReadFinderRepository;
 use App\Module\Client\Read\Repository\ClientReadNoteAmountFinderRepository;
 use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Authorization\NotePrivilegeDeterminer;
+use App\Module\Note\Create\Service\NoteCreateAuthorizationChecker;
 
 final readonly class ClientReadFinder
 {
@@ -20,7 +21,7 @@ final readonly class ClientReadFinder
         private ClientReadAuthorizationChecker $clientReadAuthorizationChecker,
         private ClientPrivilegeDeterminer $clientPrivilegeDeterminer,
         private NotePrivilegeDeterminer $notePrivilegeDeterminer,
-        private NotePermissionVerifier $notePermissionVerifier,
+        private NoteCreateAuthorizationChecker $noteCreateAuthorizationChecker,
     ) {
     }
 
@@ -64,7 +65,7 @@ final readonly class ClientReadFinder
                 'client_status_id',
             );
             //  Set create note privilege
-            $clientResultAggregate->noteCreationPrivilege = $this->notePermissionVerifier->isGrantedToCreate(
+            $clientResultAggregate->noteCreationPrivilege = $this->noteCreateAuthorizationChecker->isGrantedToCreate(
                 0,
                 $clientResultAggregate->userId,
                 false

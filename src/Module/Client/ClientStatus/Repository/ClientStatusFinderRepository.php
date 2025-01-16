@@ -55,21 +55,4 @@ final readonly class ClientStatusFinderRepository
 
         return $statuses;
     }
-
-    /**
-     * Check if given client status id exists.
-     *
-     * @param int $clientStatusId
-     *
-     * @return bool
-     */
-    public function clientStatusExists(int $clientStatusId): bool
-    {
-        $query = $this->queryFactory->selectQuery()->from('client_status');
-
-        $query->select(['id'])->where(['id' => $clientStatusId, 'deleted_at IS' => null]);
-        $resultRow = $query->execute()->fetch('assoc') ?: [];
-
-        return !empty($resultRow);
-    }
 }

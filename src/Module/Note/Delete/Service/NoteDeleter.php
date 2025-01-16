@@ -15,7 +15,7 @@ final readonly class NoteDeleter
     public function __construct(
         private NoteDeleterRepository $noteDeleterRepository,
         private NoteFinder $noteFinder,
-        private NotePermissionVerifier $notePermissionVerifier,
+        private NoteDeleteAuthorizationChecker $noteDeleteAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -38,7 +38,7 @@ final readonly class NoteDeleter
             throw new InvalidOperationException('The main note cannot be deleted.');
         }
 
-        if ($this->notePermissionVerifier->isGrantedToDelete($noteFromDb->userId)) {
+        if ($this->noteDeleteAuthorizationChecker->isGrantedToDelete($noteFromDb->userId)) {
             $deleted = $this->noteDeleterRepository->deleteNote($noteId);
             if ($deleted) {
                 $this->userActivityLogger->logUserActivity(

@@ -8,7 +8,7 @@ use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
 use App\Module\Client\Update\Repository\ClientDeletedDateFinderRepository;
 use App\Module\Client\Update\Repository\ClientUpdaterRepository;
-use App\Module\Client\Validation\ClientValidator;
+use App\Module\Client\Validation\Service\ClientValidator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 

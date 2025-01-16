@@ -3,10 +3,8 @@
 namespace App\Module\Client\DropdownFinder\Service;
 
 use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
-use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData;
-use App\Module\Client\DropdownFinder\Repository\ClientUserDropdownFinderRepository;
 use App\Module\User\FindAbbreviatedNameList\Service\UserNameAbbreviator;
 use App\Module\User\FindList\UserListFinderRepository;
 

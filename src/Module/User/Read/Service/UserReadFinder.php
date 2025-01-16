@@ -4,7 +4,7 @@ namespace App\Module\User\Read\Service;
 
 use App\Core\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\User\Authorization\Service\UserPrivilegeDeterminer;
+use App\Module\User\Authorization\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserResultData;
 use App\Module\User\Find\Repository\UserFinderRepository;
 use App\Module\User\FindDropdownOptions\Service\AuthorizedUserRoleFilterer;

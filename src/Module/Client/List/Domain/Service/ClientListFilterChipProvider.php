@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
-use App\Module\Authorization\Service\AuthorizationChecker;
+use App\Module\Authorization\Service\AuthorizedByRoleChecker;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;
@@ -17,7 +17,7 @@ final readonly class ClientListFilterChipProvider
         private ClientStatusFinderRepository $clientStatusFinderRepository,
         private AbbreviatedUserNameListFinder $abbreviatedUserNameListFinder,
         private SessionInterface $session,
-        private AuthorizationChecker $authorizationChecker,
+        private AuthorizedByRoleChecker $authorizationChecker,
         private FilterSettingFinder $filterSettingFinder,
     ) {
     }

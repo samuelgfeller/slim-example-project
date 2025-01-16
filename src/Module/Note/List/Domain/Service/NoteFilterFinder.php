@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\List\Domain\Service;
 
-use App\Module\Note\Data\NoteResultData;
+use App\Module\Note\List\Data\NoteResultData;
 use App\Module\Note\List\Domain\Exception\InvalidNoteFilterException;
 
 final readonly class NoteFilterFinder

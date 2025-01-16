@@ -19,7 +19,7 @@ final readonly class NoteCreator
     public function __construct(
         private NoteValidator $noteValidator,
         private NoteCreatorRepository $noteCreatorRepository,
-        private NotePermissionVerifier $notePermissionVerifier,
+        private NoteCreateAuthorizationChecker $noteCreateAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
         private UserNetworkSessionData $userNetworkSessionData,
         private UserFinder $userFinder,
@@ -40,7 +40,7 @@ final readonly class NoteCreator
         // Exception thrown if validation fails
         $this->noteValidator->validateNoteValues($noteValues, true);
 
-        if ($this->notePermissionVerifier->isGrantedToCreate((int)$noteValues['is_main'])) {
+        if ($this->noteCreateAuthorizationChecker->isGrantedToCreate((int)$noteValues['is_main'])) {
             $noteId = $this->noteCreatorRepository->insertNote($noteValues);
             if (!empty($noteId)) {
                 $this->userActivityLogger->logUserActivity(

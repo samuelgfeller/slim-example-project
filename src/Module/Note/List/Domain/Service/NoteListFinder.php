@@ -7,7 +7,7 @@ use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
 use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
 use App\Module\Note\Authorization\NotePrivilegeDeterminer;
-use App\Module\Note\Data\NoteResultData;
+use App\Module\Note\List\Data\NoteResultData;
 use App\Module\Note\List\Repository\NoteListClientFinderRepository;
 use App\Module\Note\List\Repository\NoteListFinderRepository;
 
@@ -124,7 +124,7 @@ et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum 
         ) {
             $clientMessageNote = new NoteResultData();
             $clientMessageNote->message = $clientData->clientMessage;
-            // The "userFullName" has to be the client itself as it's his client_message that is being displayed as note
+            // The "userFullName" has to be the client itself as it's their client_message that is being displayed as note
             $clientMessageNote->userFullName = $clientData->firstName . ' ' . $clientData->lastName;
             $clientMessageNote->createdAt = $clientData->createdAt;
             // Always READ privilege as same as client read right and this request is for client read

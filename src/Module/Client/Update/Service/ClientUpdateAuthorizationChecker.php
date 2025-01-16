@@ -7,6 +7,7 @@ use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\Delete\Service\ClientDeleteAuthorizationChecker;
 use App\Module\Note\Authorization\NotePermissionVerifier;
+use App\Module\Note\Update\Service\NoteUpdateAuthorizationChecker;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
 
@@ -73,7 +74,7 @@ final class ClientUpdateAuthorizationChecker
             $grantedUpdateKeys[] = 'sex';
             $grantedUpdateKeys[] = 'vigilance_level';
 
-            /** Update main note authorization is in @see NotePermissionVerifier::isGrantedToUpdate () */
+            /** Update main note authorization is in @see NoteUpdateAuthorizationChecker::isGrantedToUpdate () */
 
             // Everything that owner and managing_advisor is permitted to do
             // advisor may only edit client_status_id if they are owner | managing_advisor and higher is allowed

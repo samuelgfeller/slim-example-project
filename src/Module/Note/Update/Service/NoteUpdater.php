@@ -17,7 +17,7 @@ final readonly class NoteUpdater
         private NoteValidator $noteValidator,
         private NoteUpdaterRepository $noteUpdaterRepository,
         private NoteFinder $noteFinder,
-        private NotePermissionVerifier $notePermissionVerifier,
+        private NoteUpdateAuthorizationChecker $noteUpdateAuthorizationChecker,
         private UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -42,7 +42,7 @@ final readonly class NoteUpdater
 
         $note = new NoteData($noteValues);
 
-        if ($this->notePermissionVerifier->isGrantedToUpdate($noteFromDb->isMain ?? 0, $noteFromDb->userId)) {
+        if ($this->noteUpdateAuthorizationChecker->isGrantedToUpdate($noteFromDb->isMain ?? 0, $noteFromDb->userId)) {
             $updateData = [];
             // Change message
             if (null !== $note->message) {
