@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Authentication\Login;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
 use App\Test\Fixture\UserFixture;
+use App\Test\TestCase\Security\Integration\LoginSecurityTest;
 use App\Test\Trait\AppTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Odan\Session\SessionInterface;

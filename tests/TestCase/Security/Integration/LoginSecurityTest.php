@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Authentication\Login;
+namespace App\Test\TestCase\Security\Integration;
 
 use App\Module\Security\Enum\SecurityType;
 use App\Module\Security\Exception\SecurityException;
