@@ -8,7 +8,7 @@ use App\Module\User\Enum\UserStatus;
 use App\Module\User\Enum\UserTheme;
 use App\Module\User\Validation\Repository\UserExistenceCheckerRepository;
 use App\Module\User\Validation\Repository\ValidationUserRoleFinderRepository;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class UserValidator

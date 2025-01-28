@@ -2,7 +2,7 @@
 
 namespace App\Module\Security\Email\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 // Class cannot be readonly as it's mocked (doubled) in tests
 class EmailLogFinderRepository

@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\TokenVerification\Service;
 
-use App\Core\Infrastructure\Database\Exception\PersistenceRecordNotFoundException;
+use App\Infrastructure\Database\Exception\PersistenceRecordNotFoundException;
 use App\Module\Authentication\Register\Service\RegisterTokenVerifier;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenFinderRepository;

@@ -4,7 +4,7 @@ namespace App\Module\UserActivity\List\Service;
 
 use App\Module\User\Find\Service\UserFinder;
 use App\Module\UserActivity\List\Repository\UserActivityListFinderRepository;
-use App\Module\UserActivity\ReadAuthorization\UserActivityReadAuthorizationChecker;
+use App\Module\UserActivity\ReadAuthorization\Service\UserActivityReadAuthorizationChecker;
 use IntlDateFormatter;
 use InvalidArgumentException;
 use RuntimeException;

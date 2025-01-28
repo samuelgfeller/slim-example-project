@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\Find\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\Note\Data\NoteData;
 
 readonly class NoteFinderRepository

@@ -2,8 +2,8 @@
 
 namespace App\Module\Security\Login\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
-use App\Core\Infrastructure\Settings\Settings;
+use App\Application\Data\UserNetworkSessionData;
+use App\Infrastructure\Settings\Settings;
 use App\Module\Security\Login\Repository\LoginLogFinderRepository;
 
 class LoginRequestFinder

@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\TokenVerification\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 final readonly class VerificationTokenCreatorRepository
 {

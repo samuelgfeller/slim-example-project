@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\List\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\Note\List\Domain\Exception\InvalidNoteFilterException;
 use App\Module\Note\List\Domain\Service\NoteFilterFinder;
 use Fig\Http\Message\StatusCodeInterface;

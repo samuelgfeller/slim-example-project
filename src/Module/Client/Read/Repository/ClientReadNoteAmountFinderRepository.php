@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Read\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 readonly class ClientReadNoteAmountFinderRepository
 {

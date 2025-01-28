@@ -5,7 +5,7 @@ namespace App\Module\Client\Validation\Service;
 use App\Module\Client\Enum\ClientVigilanceLevel;
 use App\Module\Client\Validation\Repository\ClientStatusValidatorRepository;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class ClientValidator

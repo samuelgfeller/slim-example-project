@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Client\List;
 
-use App\Core\Infrastructure\Database\Hydrator;
+use App\Infrastructure\Database\Hydrator;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\User\Data\UserData;
 use App\Module\User\Enum\UserRole;

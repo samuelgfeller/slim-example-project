@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\Delete\Service;
 
-use App\Core\Domain\Exception\InvalidOperationException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Delete\Repository\NoteDeleterRepository;

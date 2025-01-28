@@ -11,7 +11,7 @@
  * Incorrect: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal'];
  */
 
-// Error handler
+// Disable error details and fatal ErrorException for notices and warnings
 $settings['error']['display_error_details'] = false;
 
 // Disable update of JS imports version in production

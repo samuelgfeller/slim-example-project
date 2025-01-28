@@ -2,7 +2,7 @@
 
 namespace App\Module\User\FindDropdownOptions\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\User\FindDropdownOptions\Service\UserDropdownOptionFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\Delete\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\Note\Delete\Service\NoteDeleter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

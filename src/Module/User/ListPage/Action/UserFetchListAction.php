@@ -2,7 +2,7 @@
 
 namespace App\Module\User\ListPage\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\ListPage\Service\UserListPageFinder;
 use Psr\Http\Message\ResponseInterface;

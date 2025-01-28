@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Validation\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 readonly class UserExistenceCheckerRepository
 {

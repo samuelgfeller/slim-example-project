@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\List\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;
 use App\Module\Client\List\Domain\Service\ClientFinderWithFilter;
 use Fig\Http\Message\StatusCodeInterface;

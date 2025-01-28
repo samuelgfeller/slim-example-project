@@ -2,8 +2,8 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
-use App\Module\Client\Authorization\ClientPrivilegeDeterminer;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
+use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;

@@ -2,7 +2,7 @@
 
 namespace App\Module\User\FindDropdownOptions\Service;
 
-use App\Module\User\AssignRole\UserAssignRoleAuthorizationChecker;
+use App\Module\User\AssignRole\Service\UserAssignRoleAuthorizationChecker;
 use App\Module\User\FindDropdownOptions\Repository\UserDropdownOptionsRoleFinderRepository;
 
 final readonly class AuthorizedUserRoleFilterer

@@ -2,8 +2,8 @@
 
 namespace App\Module\User\Read\Action;
 
-use App\Core\Application\Responder\TemplateRenderer;
-use App\Core\Domain\Exception\DomainRecordNotFoundException;
+use App\Application\Responder\TemplateRenderer;
+use App\Domain\Exception\DomainRecordNotFoundException;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Read\Service\UserReadFinder;
 use Odan\Session\SessionInterface;

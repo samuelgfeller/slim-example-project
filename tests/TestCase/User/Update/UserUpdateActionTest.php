@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\User\Updat;
+namespace App\Test\TestCase\User\Update;
 
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserRole;

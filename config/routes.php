@@ -6,7 +6,7 @@
  * Documentation: https://samuel-gfeller.ch/docs/Slim-Routing
  */
 
-use App\Core\Application\Middleware\UserAuthenticationMiddleware;
+use App\Application\Middleware\UserAuthenticationMiddleware;
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteCollectorProxy;
@@ -19,14 +19,14 @@ return function (App $app) {
     $app->get('/login', \App\Module\Authentication\Login\Action\LoginPageAction::class)->setName('login-page');
     $app->post('/login', \App\Module\Authentication\Login\Action\LoginSubmitAction::class)
         ->setName('login-submit');
-    $app->get('/logout', \App\Module\Authentication\Logout\LogoutPageAction::class)->setName('logout');
+    $app->get('/logout', \App\Module\Authentication\Logout\Action\LogoutPageAction::class)->setName('logout');
 
     // Dashboard page
     $app->get('/', \App\Module\Dashboard\Display\Action\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
     // Ajax route to toggle panel visibility
-    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\ToggleView\DashboardTogglePanelProcessAction::class)
+    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\ToggleView\Action\DashboardTogglePanelAction::class)
         ->setName('dashboard-toggle-panel');
 
     // Verification of the link sent by email after registration
@@ -60,7 +60,7 @@ return function (App $app) {
 
     // Fetch gettext translations
     // Without UserAuthenticationMiddleware as translations are also needed for non-protected pages such as password reset
-    $app->get('/translate', \App\Module\Localization\TranslateAction::class)
+    $app->get('/translate', \App\Module\Localization\Action\TranslateAction::class)
         ->setName('translate');
 
     // User routes
@@ -146,7 +146,7 @@ return function (App $app) {
     // If an error occurs, the CORS middleware will not be executed and the exception caught and a response
     // sent without the appropriate access control header. I don't know how to execute a certain middleware
     // added to a route group only before the error middleware which is added last in the middleware.php file.
-    ->add(\App\Core\Application\Middleware\CorsMiddleware::class);
+    ->add(\App\Application\Middleware\CorsMiddleware::class);
 
     /**
      * Catch-all route to serve a 404 Not Found page if none of the routes match

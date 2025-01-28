@@ -2,8 +2,8 @@
 
 namespace App\Module\UserActivity\List\Repository;
 
-use App\Core\Infrastructure\Database\Hydrator;
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\Hydrator;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\UserActivity\Data\UserActivityData;
 
 final readonly class UserActivityListFinderRepository

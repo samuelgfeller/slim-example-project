@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Update\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 final readonly class UserUpdaterRepository
 {

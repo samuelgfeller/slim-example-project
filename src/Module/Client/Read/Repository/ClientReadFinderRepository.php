@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Read\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\Client\Read\Data\ClientReadResult;
 
 final readonly class ClientReadFinderRepository

@@ -2,7 +2,7 @@
 
 namespace App\Module\User\FindAbbreviatedNameList\Service;
 
-use App\Module\User\FindList\UserListFinderRepository;
+use App\Module\User\FindList\Repository\UserListFinderRepository;
 
 readonly class AbbreviatedUserNameListFinder
 {

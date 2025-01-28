@@ -2,11 +2,11 @@
 
 namespace App\Module\User\ListPage\Service;
 
-use App\Core\Infrastructure\Database\Hydrator;
-use App\Module\User\Authorization\UserPrivilegeDeterminer;
+use App\Infrastructure\Database\Hydrator;
+use App\Module\User\Authorization\Service\UserPrivilegeDeterminer;
 use App\Module\User\Data\UserResultData;
 use App\Module\User\FindDropdownOptions\Service\AuthorizedUserRoleFilterer;
-use App\Module\User\FindList\UserListFinderRepository;
+use App\Module\User\FindList\Repository\UserListFinderRepository;
 use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 
 // Class cannot be readonly as it's mocked (doubled) in tests

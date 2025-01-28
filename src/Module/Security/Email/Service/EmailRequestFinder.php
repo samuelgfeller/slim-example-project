@@ -2,7 +2,7 @@
 
 namespace App\Module\Security\Email\Service;
 
-use App\Core\Infrastructure\Settings\Settings;
+use App\Infrastructure\Settings\Settings;
 use App\Module\Security\Email\Repository\EmailLogFinderRepository;
 
 class EmailRequestFinder

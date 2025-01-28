@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\UnlockAccount\Action;
 
-use App\Core\Application\Responder\RedirectHandler;
+use App\Application\Responder\RedirectHandler;
 use App\Module\Authentication\Exception\UserAlreadyVerifiedException;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
 use App\Module\Authentication\UnlockAccount\Service\AccountUnlockTokenVerifier;

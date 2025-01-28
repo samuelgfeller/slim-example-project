@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Create\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\Client\DropdownFinder\Service\ClientDropdownFinder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -4,9 +4,9 @@ namespace App\Module\Note\List\Domain\Service;
 
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
-use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
+use App\Module\Client\FindOwner\Repository\ClientOwnerFinderRepository;
 use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
-use App\Module\Note\Authorization\NotePrivilegeDeterminer;
+use App\Module\Note\Authorization\Service\NotePrivilegeDeterminer;
 use App\Module\Note\List\Data\NoteResultData;
 use App\Module\Note\List\Repository\NoteListClientFinderRepository;
 use App\Module\Note\List\Repository\NoteListFinderRepository;

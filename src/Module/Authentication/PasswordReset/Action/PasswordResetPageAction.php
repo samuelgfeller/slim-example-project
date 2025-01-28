@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\PasswordReset\Action;
 
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;

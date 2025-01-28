@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Security\Unit;
 
-use App\Core\Infrastructure\Settings\Settings;
+use App\Infrastructure\Settings\Settings;
 use App\Module\Security\Email\Repository\EmailLogFinderRepository;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
 use App\Module\Security\Enum\SecurityType;

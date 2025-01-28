@@ -2,7 +2,7 @@
 
 namespace App\Module\UserActivity\List\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Save\Service\FilterSettingSaver;
 use App\Module\UserActivity\List\Service\UserActivityListFinder;

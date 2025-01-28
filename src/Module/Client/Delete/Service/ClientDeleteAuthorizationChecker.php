@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Delete\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use Psr\Log\LoggerInterface;
 

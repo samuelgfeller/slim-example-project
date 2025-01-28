@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Security\Unit;
 
-use App\Core\Infrastructure\Settings\Settings;
+use App\Infrastructure\Settings\Settings;
 use App\Module\Security\Enum\SecurityType;
 use App\Module\Security\Exception\SecurityException;
 use App\Module\Security\Login\Repository\LoginLogFinderRepository;

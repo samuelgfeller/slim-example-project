@@ -2,9 +2,9 @@
 
 namespace App\Module\Client\Create\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
-use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
+use App\Module\Client\AssignUser\Service\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\Data\ClientData;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;

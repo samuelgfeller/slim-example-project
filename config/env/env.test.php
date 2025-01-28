@@ -1,6 +1,6 @@
 <?php
 
-// Enable display_error_details for testing as this will throw an ErrorException for notices and warnings
+// Enable fatal ErrorException for notices and warnings (exception heavy)
 $settings['error']['display_error_details'] = true;
 
 // Database for integration testing must include the word "test"

@@ -2,11 +2,11 @@
 
 namespace App\Module\Client\DropdownFinder\Service;
 
-use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
+use App\Module\Client\AssignUser\Service\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData;
 use App\Module\User\FindAbbreviatedNameList\Service\UserNameAbbreviator;
-use App\Module\User\FindList\UserListFinderRepository;
+use App\Module\User\FindList\Repository\UserListFinderRepository;
 
 final readonly class ClientDropdownFinder
 {

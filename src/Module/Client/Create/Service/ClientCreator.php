@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Create\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Client\Create\Repository\ClientCreatorRepository;
 use App\Module\Client\Data\ClientData;
@@ -12,7 +12,7 @@ use App\Module\Note\Create\Service\NoteCreator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use App\Module\UserActivity\Delete\Service\UserActivityDeleter;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 
 final readonly class ClientCreator
 {

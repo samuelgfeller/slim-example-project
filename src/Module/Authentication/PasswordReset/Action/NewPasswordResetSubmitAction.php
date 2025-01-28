@@ -2,11 +2,11 @@
 
 namespace App\Module\Authentication\PasswordReset\Action;
 
-use App\Core\Application\Responder\RedirectHandler;
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Module\Authentication\PasswordReset\Service\PasswordResetterWithToken;
 use App\Module\Authentication\TokenVerification\Exception\InvalidTokenException;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

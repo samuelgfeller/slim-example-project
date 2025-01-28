@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\ChangeUserStatus\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\User\Enum\UserStatus;
 
 final readonly class UserStatusUpdaterRepository

@@ -2,7 +2,7 @@
 
 namespace App\Module\FormOption;
 
-use App\Core\Common\Trait\EnumToArray;
+use App\Common\Trait\EnumToArray;
 
 enum SexOption: string
 {

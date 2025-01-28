@@ -2,7 +2,7 @@
 
 namespace App\Module\Security\Login\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 // ?Class cannot be final or readonly as it's mocked (doubled) in tests
 class LoginLogFinderRepository

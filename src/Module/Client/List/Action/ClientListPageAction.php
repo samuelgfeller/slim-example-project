@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\List\Action;
 
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Create\Service\ClientCreateAuthorizationChecker;

@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\Read\Action;
 
-use App\Core\Application\Responder\RedirectHandler;
+use App\Application\Responder\RedirectHandler;
 use App\Module\Note\Find\Service\NoteFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;

@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\Login\Domain\Service;
 
-use App\Core\Infrastructure\Locale\LocaleConfigurator;
+use App\Infrastructure\Locale\LocaleConfigurator;
 use App\Module\Authentication\Login\Domain\Exception\UnableToLoginStatusNotActiveException;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Security\Email\Service\SecurityEmailChecker;

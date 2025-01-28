@@ -2,7 +2,7 @@
 
 namespace App\Module\Note\Create\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Create\Repository\NoteCreatorRepository;

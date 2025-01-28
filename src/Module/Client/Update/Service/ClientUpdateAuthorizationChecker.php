@@ -2,9 +2,9 @@
 
 namespace App\Module\Client\Update\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
-use App\Module\Client\AssignUser\ClientAssignUserAuthorizationChecker;
+use App\Module\Client\AssignUser\Service\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\Delete\Service\ClientDeleteAuthorizationChecker;
 use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Update\Service\NoteUpdateAuthorizationChecker;

@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Update\Service;
 
-use App\Core\Domain\Exception\InvalidOperationException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Update\Repository\UserUpdaterRepository;

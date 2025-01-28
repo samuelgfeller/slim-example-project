@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Read\Action;
 
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use App\Module\Client\DropdownFinder\Service\ClientDropdownFinder;
 use App\Module\Client\Read\Service\ClientReadFinder;
 use Psr\Http\Message\ResponseInterface;

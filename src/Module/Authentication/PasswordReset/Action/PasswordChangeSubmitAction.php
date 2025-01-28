@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\PasswordReset\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\Authentication\PasswordReset\Service\PasswordChanger;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;

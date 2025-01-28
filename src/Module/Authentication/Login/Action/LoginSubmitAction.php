@@ -2,15 +2,15 @@
 
 namespace App\Module\Authentication\Login\Action;
 
-use App\Core\Application\Responder\RedirectHandler;
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\RedirectHandler;
+use App\Application\Responder\TemplateRenderer;
 use App\Module\Authentication\Login\Domain\Exception\InvalidCredentialsException;
 use App\Module\Authentication\Login\Domain\Exception\UnableToLoginStatusNotActiveException;
 use App\Module\Authentication\Login\Domain\Service\LoginVerifier;
 use App\Module\Security\Exception\SecurityException;
 use App\Module\User\Find\Service\UserFinder;
 use App\Module\User\Service\UserFinderOld;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;

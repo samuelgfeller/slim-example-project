@@ -3,7 +3,7 @@
 namespace App\Module\Authentication\Validation\Service;
 
 use App\Module\Authentication\Validation\Repository\UserPasswordHashFinderRepository;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Cake\Validation\Validator;
 
 final readonly class AuthenticationValidator

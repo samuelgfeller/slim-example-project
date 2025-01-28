@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Find\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 class UserFinderRepository
 {

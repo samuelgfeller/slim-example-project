@@ -2,10 +2,10 @@
 
 namespace App\Module\Client\Update\Service;
 
-use App\Core\Domain\Exception\InvalidOperationException;
+use App\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
-use App\Module\Client\FindOwner\ClientOwnerFinderRepository;
+use App\Module\Client\FindOwner\Repository\ClientOwnerFinderRepository;
 use App\Module\Client\Update\Repository\ClientDeletedDateFinderRepository;
 use App\Module\Client\Update\Repository\ClientUpdaterRepository;
 use App\Module\Client\Validation\Service\ClientValidator;

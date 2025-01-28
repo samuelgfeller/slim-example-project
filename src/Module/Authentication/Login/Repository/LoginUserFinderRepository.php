@@ -2,7 +2,7 @@
 
 namespace App\Module\Authentication\Login\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\User\Data\UserData;
 
 readonly class LoginUserFinderRepository

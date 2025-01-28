@@ -3,7 +3,7 @@
 namespace App\Module\Note\Validation\Service;
 
 use App\Module\Note\Validation\Repository\NoteValidatorRepository;
-use App\Module\Validation\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Cake\Validation\Validator;
 use Psr\Log\LoggerInterface;
 

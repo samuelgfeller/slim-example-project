@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\ClientStatus\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\Client\ClientStatus\Enum\ClientStatus;
 
 final readonly class ClientStatusFinderRepository

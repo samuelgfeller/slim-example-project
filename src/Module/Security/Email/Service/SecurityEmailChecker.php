@@ -2,8 +2,8 @@
 
 namespace App\Module\Security\Email\Service;
 
-use App\Core\Infrastructure\Settings\Settings;
-use App\Module\Security\Captcha\SecurityCaptchaVerifier;
+use App\Infrastructure\Settings\Settings;
+use App\Module\Security\Captcha\Service\SecurityCaptchaVerifier;
 use App\Module\Security\Email\Repository\EmailLogFinderRepository;
 use App\Module\Security\Enum\SecurityType;
 use App\Module\Security\Exception\SecurityException;

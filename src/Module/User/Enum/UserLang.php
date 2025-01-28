@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Enum;
 
-use App\Core\Common\Trait\EnumToArray;
+use App\Common\Trait\EnumToArray;
 
 enum UserLang: string
 {

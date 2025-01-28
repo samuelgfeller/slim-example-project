@@ -2,7 +2,7 @@
 
 namespace App\Module\User\ListPage\Action;
 
-use App\Core\Application\Responder\TemplateRenderer;
+use App\Application\Responder\TemplateRenderer;
 use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

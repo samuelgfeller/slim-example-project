@@ -2,7 +2,7 @@
 
 namespace App\Module\FilterSetting\Save\Service;
 
-use App\Core\Application\Data\UserNetworkSessionData;
+use App\Application\Data\UserNetworkSessionData;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Save\Repository\UserFilterSaverRepository;
 

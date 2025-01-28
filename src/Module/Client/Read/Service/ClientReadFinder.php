@@ -4,13 +4,13 @@ namespace App\Module\Client\Read\Service;
 
 use App\Module\Authorization\Enum\Privilege;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Client\Authorization\ClientPrivilegeDeterminer;
 use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
+use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\Read\Data\ClientReadResult;
 use App\Module\Client\Read\Repository\ClientReadFinderRepository;
 use App\Module\Client\Read\Repository\ClientReadNoteAmountFinderRepository;
 use App\Module\Note\Authorization\NotePermissionVerifier;
-use App\Module\Note\Authorization\NotePrivilegeDeterminer;
+use App\Module\Note\Authorization\Service\NotePrivilegeDeterminer;
 use App\Module\Note\Create\Service\NoteCreateAuthorizationChecker;
 
 final readonly class ClientReadFinder

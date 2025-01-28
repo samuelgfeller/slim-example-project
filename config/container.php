@@ -6,9 +6,9 @@
  * Documentation: https://samuel-gfeller.ch/docs/Dependency-Injection.
  */
 
-use App\Core\Application\Data\UserNetworkSessionData;
-use App\Core\Application\Middleware\PhpViewMiddleware;
-use App\Core\Infrastructure\Settings\Settings;
+use App\Application\Data\UserNetworkSessionData;
+use App\Application\Middleware\PhpViewMiddleware;
+use App\Infrastructure\Settings\Settings;
 use Cake\Database\Connection;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
@@ -104,7 +104,7 @@ return [
             $settings['error']['display_error_details'],
             $settings['public']['email']['main_contact_email'] ?? null,
             // Get autowired prod error page renderer with layout and translations
-            $container->get(\App\Core\Application\ErrorRenderer\ProdErrorPageRenderer::class)
+            $container->get(\App\Application\ErrorRenderer\ProdErrorPageRenderer::class)
         );
     },
     // Add error middleware for notices and warnings to make app "exception heavy"

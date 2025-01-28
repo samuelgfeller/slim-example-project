@@ -2,8 +2,8 @@
 
 namespace App\Module\UserActivity\Create\Repository;
 
-use App\Core\Infrastructure\Database\Hydrator;
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\Hydrator;
+use App\Infrastructure\Database\QueryFactory;
 
 final readonly class UserActivityCreatorRepository
 {

@@ -2,8 +2,8 @@
 
 namespace App\Module\Note\List\Repository;
 
-use App\Core\Infrastructure\Database\Hydrator;
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\Hydrator;
+use App\Infrastructure\Database\QueryFactory;
 use App\Module\Note\List\Data\NoteResultData;
 
 class NoteListFinderRepository

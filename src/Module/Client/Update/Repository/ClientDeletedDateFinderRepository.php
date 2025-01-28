@@ -2,7 +2,7 @@
 
 namespace App\Module\Client\Update\Repository;
 
-use App\Core\Infrastructure\Database\QueryFactory;
+use App\Infrastructure\Database\QueryFactory;
 
 /**
  * When a client is restored, the notes with the same deleted date as the client are restored.

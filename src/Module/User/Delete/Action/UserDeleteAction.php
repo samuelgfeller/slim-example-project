@@ -2,7 +2,7 @@
 
 namespace App\Module\User\Delete\Action;
 
-use App\Core\Application\Responder\JsonResponder;
+use App\Application\Responder\JsonResponder;
 use App\Module\User\Delete\Service\UserDeleter;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
