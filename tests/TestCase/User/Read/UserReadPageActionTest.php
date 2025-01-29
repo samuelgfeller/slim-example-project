@@ -32,7 +32,7 @@ class UserReadPageActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Read\UserReadProvider::class, 'userReadAuthorizationCases')]
+    #[DataProviderExternal(UserReadProvider::class, 'userReadAuthorizationCases')]
     public function testUserReadPageActionAuthorization(
         array $userRow,
         array $authenticatedUserRow,

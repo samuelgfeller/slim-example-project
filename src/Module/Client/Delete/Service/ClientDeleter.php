@@ -3,7 +3,6 @@
 namespace App\Module\Client\Delete\Service;
 
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Delete\Repository\ClientDeleterRepository;
 use App\Module\Client\FindOwner\Repository\ClientOwnerFinderRepository;
 use App\Module\Note\Delete\Repository\NoteDeleterRepository;

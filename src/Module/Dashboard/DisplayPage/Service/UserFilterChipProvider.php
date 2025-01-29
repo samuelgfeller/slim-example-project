@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Dashboard\Display\Service;
+namespace App\Module\Dashboard\DisplayPage\Service;
 
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Data\FilterData;

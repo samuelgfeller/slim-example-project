@@ -6,7 +6,6 @@ use App\Application\Responder\JsonResponder;
 use App\Application\Responder\RedirectHandler;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\User\Service\UserFinderOld;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

@@ -26,6 +26,7 @@ final readonly class DashboardTogglePanelAction
         $params = (array)$request->getParsedBody();
         try {
             $this->activeDashboardPanelChanger->toggleDashboardPanel($params);
+
             return $this->jsonResponder->encodeAndAddToResponse($response, ['success' => true]);
         } catch (\InvalidArgumentException $invalidArgumentException) {
             $flash = $this->session->getFlash();

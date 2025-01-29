@@ -57,8 +57,8 @@ final class ClientCreateAuthorizationChecker
             // Advisor may create clients but can only assign them to themself or leave it unassigned.
             // If $client is null (not provided), advisor is authorized (being used to check if create btn should
             // be displayed in template)
-            if ($client === null ||
-                $this->clientAssignUserAuthorizationChecker->isGrantedToAssignUserToClient(
+            if ($client === null
+                || $this->clientAssignUserAuthorizationChecker->isGrantedToAssignUserToClient(
                     $client->userId,
                     $authenticatedUserRoleHierarchy,
                     $userRoleHierarchies

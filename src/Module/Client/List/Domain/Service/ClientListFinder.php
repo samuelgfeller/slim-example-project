@@ -2,7 +2,6 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
-use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Authorization\Service\ClientPrivilegeDeterminer;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
 use App\Module\Client\List\Data\ClientListResult;
@@ -10,7 +9,6 @@ use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Repository\ClientListFinderRepository;
 use App\Module\Client\Read\Service\ClientReadAuthorizationChecker;
 use App\Module\User\FindAbbreviatedNameList\Service\AbbreviatedUserNameListFinder;
-
 
 final readonly class ClientListFinder
 {

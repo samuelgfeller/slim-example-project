@@ -6,7 +6,6 @@ use App\Infrastructure\Database\QueryFactory;
 
 readonly class UserPasswordHashFinderRepository
 {
-
     public function __construct(
         private QueryFactory $queryFactory,
     ) {
@@ -18,7 +17,7 @@ readonly class UserPasswordHashFinderRepository
      *
      * @param int $id
      *
-     * @return null|string
+     * @return string|null
      */
     public function findPasswordHashFromUserId(int $id): ?string
     {
@@ -31,5 +30,4 @@ readonly class UserPasswordHashFinderRepository
         // $notRestricted true as values are safe as they come from the database. It's not a user input.
         return $userValues['password_hash'] ?? null;
     }
-
 }

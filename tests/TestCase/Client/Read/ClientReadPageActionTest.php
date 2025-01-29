@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Client\Read;
 
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
-use App\Test\TestCase\Client\Read;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -30,7 +29,7 @@ class ClientReadPageActionTest extends TestCase
     use FixtureTestTrait;
     use AuthorizationTestTrait;
 
-    #[DataProviderExternal(Read\ClientReadProvider::class, 'clientReadAuthorizationCases')]
+    #[DataProviderExternal(ClientReadProvider::class, 'clientReadAuthorizationCases')]
     public function testClientReadPageActionAuthorization(
         array $userRow,
         array $authenticatedUserRow,

@@ -9,7 +9,6 @@ use App\Module\Authentication\Login\Domain\Exception\UnableToLoginStatusNotActiv
 use App\Module\Authentication\Login\Domain\Service\LoginVerifier;
 use App\Module\Security\Exception\SecurityException;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\User\Service\UserFinderOld;
 use App\Module\Validation\Exception\ValidationException;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;

@@ -24,7 +24,6 @@ final class UserAssignRoleAuthorizationChecker
         $this->loggedInUserId = $this->userNetworkSessionData->userId ?? null;
     }
 
-
     /**
      * Check if the authenticated user is allowed to assign a user role.
      *

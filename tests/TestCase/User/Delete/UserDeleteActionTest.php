@@ -39,7 +39,7 @@ class UserDeleteActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Delete\UserDeleteProvider::class, 'userDeleteAuthorizationCases')]
+    #[DataProviderExternal(UserDeleteProvider::class, 'userDeleteAuthorizationCases')]
     public function testUserSubmitDeleteActionAuthorization(
         array $userToDeleteRow,
         array $authenticatedUserRow,

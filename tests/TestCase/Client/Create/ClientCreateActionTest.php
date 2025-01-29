@@ -6,7 +6,6 @@ use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\TestCase\Client\Create;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -45,7 +44,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Create\ClientCreateProvider::class, 'clientCreationAuthorizationProvider')]
+    #[DataProviderExternal(ClientCreateProvider::class, 'clientCreationAuthorizationProvider')]
     public function testClientSubmitCreateActionAuthorization(
         ?array $userLinkedToClientRow,
         array $authenticatedUserRow,
@@ -155,7 +154,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Create\ClientCreateProvider::class, 'invalidClientCreationProvider')]
+    #[DataProviderExternal(ClientCreateProvider::class, 'invalidClientCreationProvider')]
     public function testClientSubmitCreateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert managing advisor user which is allowed to create clients
@@ -208,7 +207,7 @@ class ClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Create\ClientCreateProvider::class, 'validClientCreationProvider')]
+    #[DataProviderExternal(ClientCreateProvider::class, 'validClientCreationProvider')]
     public function testClientSubmitCreateActionValid(array $requestBody): void
     {
         // Insert managing advisor user which is allowed to create clients

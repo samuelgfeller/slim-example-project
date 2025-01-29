@@ -17,7 +17,7 @@ final readonly class ActiveDashboardPanelChanger
     ) {
     }
 
-    public function toggleDashboardPanel(array $params)
+    public function toggleDashboardPanel(array $params): void
     {
         // As there is no other validation, the request body is checked for valid keys here
         if (!$this->requestBodyKeyValidator->requestBodyHasValidKeys($params, ['panelIds'])) {
@@ -28,5 +28,4 @@ final readonly class ActiveDashboardPanelChanger
             FilterModule::DASHBOARD_PANEL
         );
     }
-
 }

@@ -6,7 +6,6 @@ use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Repository\AuthorizationUserRoleFinderRepository;
 use App\Module\Client\AssignUser\Service\ClientAssignUserAuthorizationChecker;
 use App\Module\Client\Delete\Service\ClientDeleteAuthorizationChecker;
-use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Update\Service\NoteUpdateAuthorizationChecker;
 use App\Module\User\Enum\UserRole;
 use Psr\Log\LoggerInterface;
@@ -87,12 +86,13 @@ final class ClientUpdateAuthorizationChecker
             }
 
             // Assign user to client
-            if (array_key_exists('user_id', $clientDataToUpdate) && (
-                $this->clientAssignUserAuthorizationChecker->isGrantedToAssignUserToClient(
+            if (array_key_exists('user_id', $clientDataToUpdate)
+                && $this->clientAssignUserAuthorizationChecker->isGrantedToAssignUserToClient(
                     $clientDataToUpdate['user_id'],
                     $authenticatedUserRoleHierarchy,
                     $userRoleHierarchies
-                ))
+                )
+
                 //         // Advisors (already checked above) may only assign clients to themselves or unassign themselves
                 //         ($this->loggedInUserId === $clientDataToUpdate['user_id'] || $clientDataToUpdate['user_id'] === null)
                 //         // Managing_advisor and higher may assign clients to any advisor

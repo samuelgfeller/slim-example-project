@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Dashboard\Display\Data;
+namespace App\Module\Dashboard\DisplayPage\Data;
 
 class DashboardData
 {

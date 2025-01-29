@@ -4,13 +4,11 @@ namespace App\Module\Note\Create\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Create\Repository\NoteCreatorRepository;
 use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\Note\Validation\Service\NoteValidator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\User\Service\UserFinderOld;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use IntlDateFormatter;
 

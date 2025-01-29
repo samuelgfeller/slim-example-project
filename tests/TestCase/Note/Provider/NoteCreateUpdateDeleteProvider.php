@@ -7,7 +7,6 @@ use Fig\Http\Message\StatusCodeInterface;
 
 class NoteCreateUpdateDeleteProvider
 {
-
     /**
      * Provides logged-in user and user linked to note with the expected result.
      * As the permissions are a lot more simple than for client, for instance,

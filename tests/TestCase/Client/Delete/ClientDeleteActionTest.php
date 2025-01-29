@@ -8,7 +8,6 @@ use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\NoteFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\TestCase\Client\Delete;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -46,7 +45,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Delete\ClientDeleteProvider::class, 'clientDeleteProvider')]
+    #[DataProviderExternal(ClientDeleteProvider::class, 'clientDeleteProvider')]
     public function testClientSubmitDeleteActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
@@ -112,7 +111,7 @@ class ClientDeleteActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Delete\ClientDeleteProvider::class, 'clientUndeleteDeleteProvider')]
+    #[DataProviderExternal(ClientDeleteProvider::class, 'clientUndeleteDeleteProvider')]
     public function testClientSubmitUndeleteActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,

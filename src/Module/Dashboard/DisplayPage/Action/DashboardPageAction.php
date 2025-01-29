@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Module\Dashboard\Display\Action;
+namespace App\Module\Dashboard\DisplayPage\Action;
 
 use App\Application\Responder\TemplateRenderer;
-use App\Module\Dashboard\Display\Service\DashboardPanelProvider;
+use App\Module\Dashboard\DisplayPage\Service\DashboardPanelProvider;
 use App\Module\FilterSetting\Enum\FilterModule;
 use App\Module\FilterSetting\Find\Service\FilterSettingFinder;
 use Odan\Session\SessionInterface;

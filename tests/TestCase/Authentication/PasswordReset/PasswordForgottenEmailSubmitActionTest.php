@@ -37,18 +37,14 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
     {
         // Insert user
         $userRow = $this->insertFixture(UserFixture::class);
-        $userId = $userRow['id'];
-        $email = $userRow['email'];
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $request = $this->createFormRequest(
             'POST', // Request to change password
             $this->urlFor('password-forgotten-email-submit'),
-            [
-                'email' => $email,
-            ]
+            ['email' => $userRow['email']]
         );
 
         $response = $this->app->handle($request);
@@ -56,11 +52,12 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         // Assert: 302 Found (redirect)
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
 
-        // Email assertions
-        // Assert email was sent
+        // --- Email assertions ---
+        // Assert that an email was sent
         $this->assertEmailCount(1);
         // Get email RawMessage
         $mailerMessage = $this->getMailerMessage();
+        // Assert that the email contains the right text
         $this->assertEmailHtmlBodyContains(
             $mailerMessage,
             'If you recently requested to reset your password, click the link below to do so.'
@@ -69,15 +66,14 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         $this->assertEmailHeaderSame(
             $mailerMessage,
             'To',
-            $userRow['first_name'] . ' ' . $userRow['last_name'] . ' <' . $email . '>'
+            $userRow['first_name'] . ' ' . $userRow['last_name'] . ' <' . $userRow['email'] . '>'
         );
 
-        // Database assertions
-
+        // --- Database assertions ---
         // Assert that there is a verification token in the database
         $expectedVerificationToken = [
             // CakePHP Database returns always strings
-            'user_id' => $userId,
+            'user_id' => $userRow['id'],
             'used_at' => null,
             'deleted_at' => null,
         ];
@@ -85,14 +81,14 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
             $expectedVerificationToken,
             'user_verification',
             'user_id',
-            $userId,
+            $userRow['id'],
             array_keys($expectedVerificationToken)
         );
 
         // Get user_verification row to make sure its valid
-        $userVerificationRow = $this->findTableRowsByColumn('user_verification', 'user_id', $userId)[0];
+        $userVerificationRow = $this->findTableRowsByColumn('user_verification', 'user_id', $userRow['id'])[0];
 
-        // Assert that token expiration date is at least 59min the future
+        // Assert that token expiration date is at least 59 min the future
         self::assertTrue($userVerificationRow['expires_at'] > (time() + 60 * 59));
 
         // Assert that token starts with the beginning of a BCRYPT hash
@@ -133,7 +129,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
         }
 
         // Simulate logged-in user
-        $this->container->get(SessionInterface::class)->set('user_id', $userId);
+        $this->container->get(SessionInterface::class)->set('user_id', $userRow['id']);
 
         $request = $this->createFormRequest(
             'POST', // Request to change password

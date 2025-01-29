@@ -8,7 +8,7 @@ use App\Module\User\Enum\UserStatus;
 final readonly class UserStatusUpdater
 {
     public function __construct(
-        private UserStatusUpdaterRepository $userStatusUpdaterRepository
+        private UserStatusUpdaterRepository $userStatusUpdaterRepository,
     ) {
     }
 

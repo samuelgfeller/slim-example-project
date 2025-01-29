@@ -23,7 +23,6 @@ final class ClientAssignUserAuthorizationChecker
         $this->loggedInUserId = $this->userNetworkSessionData->userId;
     }
 
-
     /**
      * Check if the authenticated user is allowed to assign user to client.
      * (Client id not needed as the same rules applies for new clients and all existing clients)
@@ -36,7 +35,7 @@ final class ClientAssignUserAuthorizationChecker
      * @return bool|void
      */
     public function isGrantedToAssignUserToClient(
-        null|int|string $assignedUserId,
+        int|string|null $assignedUserId,
         ?int $authenticatedUserRoleHierarchy = null,
         ?array $userRoleHierarchies = null,
     ) {

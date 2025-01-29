@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Note\Create;
 
 class NoteCreateProvider
 {
-
     /**
      * Returns combinations of invalid data to trigger validation exception
      * for note creation.

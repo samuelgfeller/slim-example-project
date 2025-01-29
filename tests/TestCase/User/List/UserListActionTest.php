@@ -41,7 +41,7 @@ class UserListActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\List\UserListProvider::class, 'userListAuthorizationCases')]
+    #[DataProviderExternal(UserListProvider::class, 'userListAuthorizationCases')]
     public function testUserListAuthorization(
         array $userRow,
         array $authenticatedUserRow,

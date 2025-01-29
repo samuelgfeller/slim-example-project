@@ -113,7 +113,7 @@ class LoginSubmitActionTest extends TestCase
      * @param array $invalidLoginValues valid credentials
      * @param string $errorMessage validation message that should be in response body
      */
-    #[DataProviderExternal(\App\Test\TestCase\Authentication\Login\LoginProvider::class, 'invalidLoginCredentialsProvider')]
+    #[DataProviderExternal(LoginProvider::class, 'invalidLoginCredentialsProvider')]
     public function testLoginSubmitActionInvalidValues(array $invalidLoginValues, string $errorMessage): void
     {
         $this->insertFixture(UserFixture::class);
@@ -145,7 +145,7 @@ class LoginSubmitActionTest extends TestCase
      * @param UserStatus $status
      * @param string $partialEmailBody
      */
-    #[DataProviderExternal(\App\Test\TestCase\Authentication\Login\LoginProvider::class, 'nonActiveAuthenticationRequestCases')]
+    #[DataProviderExternal(LoginProvider::class, 'nonActiveAuthenticationRequestCases')]
     public function testLoginSubmitActionNotActiveAccount(UserStatus $status, string $partialEmailBody): void
     {
         $loginValues = ['password' => '12345678', 'email' => 'user@example.com'];

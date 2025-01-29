@@ -22,11 +22,11 @@ return function (App $app) {
     $app->get('/logout', \App\Module\Authentication\Logout\Action\LogoutPageAction::class)->setName('logout');
 
     // Dashboard page
-    $app->get('/', \App\Module\Dashboard\Display\Action\DashboardPageAction::class)->setName('home-page')->add(
+    $app->get('/', \App\Module\Dashboard\DisplayPage\Action\DashboardPageAction::class)->setName('home-page')->add(
         UserAuthenticationMiddleware::class
     );
     // Ajax route to toggle panel visibility
-    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\ToggleView\Action\DashboardTogglePanelAction::class)
+    $app->put('/dashboard-toggle-panel', \App\Module\Dashboard\TogglePanel\Action\DashboardTogglePanelAction::class)
         ->setName('dashboard-toggle-panel');
 
     // Verification of the link sent by email after registration

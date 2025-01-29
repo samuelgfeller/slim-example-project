@@ -7,7 +7,6 @@ use App\Module\User\Enum\UserRole;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\TestCase\Client\Update;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -51,7 +50,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Update\ClientUpdateProvider::class, 'clientUpdateAuthorizationCases')]
+    #[DataProviderExternal(ClientUpdateProvider::class, 'clientUpdateAuthorizationCases')]
     public function testClientSubmitUpdateActionAuthorization(
         array $userLinkedToClientRow,
         array $authenticatedUserRow,
@@ -161,7 +160,7 @@ class ClientUpdateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Update\ClientUpdateProvider::class, 'invalidClientUpdateProvider')]
+    #[DataProviderExternal(ClientUpdateProvider::class, 'invalidClientUpdateProvider')]
     public function testClientSubmitUpdateActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content

@@ -12,6 +12,7 @@ class UserFinder
         private readonly UserFinderRepository $userFinderRepository,
     ) {
     }
+
     /**
      * @param string|int|null $id
      *

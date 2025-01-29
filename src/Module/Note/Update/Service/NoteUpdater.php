@@ -3,7 +3,6 @@
 namespace App\Module\Note\Update\Service;
 
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Data\NoteData;
 use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\Note\Update\Repository\NoteUpdaterRepository;

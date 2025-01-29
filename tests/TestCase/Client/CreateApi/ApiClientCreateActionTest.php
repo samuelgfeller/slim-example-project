@@ -5,7 +5,6 @@ namespace App\Test\TestCase\Client\CreateApi;
 use App\Module\Client\ClientStatus\Enum\ClientStatus;
 use App\Module\User\Enum\UserActivity;
 use App\Test\Fixture\ClientStatusFixture;
-use App\Test\TestCase\Client\CreateApi;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -108,7 +107,7 @@ class ApiClientCreateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(CreateApi\ApiClientCreateProvider::class, 'invalidApiClientCreationValues')]
+    #[DataProviderExternal(ApiClientCreateProvider::class, 'invalidApiClientCreationValues')]
     public function testApiClientSubmitCreateActionInvalid(
         array $requestBody,
         array $jsonResponse,

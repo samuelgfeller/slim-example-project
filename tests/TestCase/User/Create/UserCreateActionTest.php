@@ -44,7 +44,7 @@ class UserCreateActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Create\UserCreateProvider::class, 'userCreateAuthorizationCases')]
+    #[DataProviderExternal(UserCreateProvider::class, 'userCreateAuthorizationCases')]
     public function testUserSubmitCreateAuthorization(
         array $authenticatedUserAttr,
         ?UserRole $newUserRole,
@@ -163,7 +163,7 @@ class UserCreateActionTest extends TestCase
      *
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Create\UserCreateProvider::class, 'invalidUserCreateCases')]
+    #[DataProviderExternal(UserCreateProvider::class, 'invalidUserCreateCases')]
     public function testUserSubmitCreateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to create user without any authorization limitation (admin)

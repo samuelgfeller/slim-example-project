@@ -40,7 +40,7 @@ class PasswordChangeSubmitActionTest extends TestCase
      * @param array $authenticatedUserRow
      * @param array $expectedResult
      */
-    #[DataProviderExternal(\App\Test\TestCase\Authentication\PasswordChange\UserChangePasswordProvider::class, 'userPasswordChangeAuthorizationCases')]
+    #[DataProviderExternal(UserChangePasswordProvider::class, 'userPasswordChangeAuthorizationCases')]
     public function testChangePasswordSubmitActionAuthorization(
         array $userToUpdateRow,
         array $authenticatedUserRow,
@@ -131,7 +131,7 @@ class PasswordChangeSubmitActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\Authentication\PasswordChange\UserChangePasswordProvider::class, 'invalidPasswordChangeCases')]
+    #[DataProviderExternal(UserChangePasswordProvider::class, 'invalidPasswordChangeCases')]
     public function testChangePasswordSubmitActionInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content

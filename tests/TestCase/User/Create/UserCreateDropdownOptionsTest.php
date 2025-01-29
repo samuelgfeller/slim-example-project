@@ -39,7 +39,7 @@ class UserCreateDropdownOptionsTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Create\UserCreateProvider::class, 'userCreationDropdownOptionsCases')]
+    #[DataProviderExternal(UserCreateProvider::class, 'userCreationDropdownOptionsCases')]
     public function testUserCreateDropdownOptionsAuthorization(
         array $authenticatedUserAttributes,
         array $expectedUserRoles,

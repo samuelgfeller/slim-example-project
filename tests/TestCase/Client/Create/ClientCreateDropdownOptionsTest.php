@@ -2,7 +2,6 @@
 
 namespace App\Test\TestCase\Client\Create;
 
-use App\Test\TestCase\Client\Create;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -41,7 +40,7 @@ class ClientCreateDropdownOptionsTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(Create\ClientCreateProvider::class, 'clientCreationDropdownOptionsCases')]
+    #[DataProviderExternal(ClientCreateProvider::class, 'clientCreationDropdownOptionsCases')]
     public function testClientCreateAssignedUserDropdownOptionsAuthorization(
         array $authenticatedUserRow,
         array $otherUserRow,

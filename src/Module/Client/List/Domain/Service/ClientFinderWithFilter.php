@@ -2,7 +2,6 @@
 
 namespace App\Module\Client\List\Domain\Service;
 
-use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\List\Data\ClientListResult;
 use App\Module\Client\List\Data\ClientListResultCollection;
 use App\Module\Client\List\Domain\Exception\InvalidClientFilterException;

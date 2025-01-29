@@ -4,7 +4,6 @@ namespace App\Module\Client\List\Action;
 
 use App\Application\Responder\TemplateRenderer;
 use App\Module\Authorization\Enum\Privilege;
-use App\Module\Client\Authorization\Service\ClientPermissionVerifier;
 use App\Module\Client\Create\Service\ClientCreateAuthorizationChecker;
 use App\Module\Client\List\Domain\Service\ClientListFilterChipProvider;
 use Psr\Http\Message\ResponseInterface;

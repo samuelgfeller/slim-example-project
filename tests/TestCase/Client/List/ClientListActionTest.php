@@ -10,7 +10,6 @@ use App\Module\User\FindAbbreviatedNameList\Service\UserNameAbbreviator;
 use App\Test\Fixture\ClientFixture;
 use App\Test\Fixture\ClientStatusFixture;
 use App\Test\Fixture\UserFixture;
-use App\Test\TestCase\Client\List;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -104,7 +103,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(List\ClientListProvider::class, 'clientListFilterCases')]
+    #[DataProviderExternal(ClientListProvider::class, 'clientListFilterCases')]
     public function testClientListWithFilterAction(
         array $filterQueryParamsArr,
         string $expectedClientsWhereString,
@@ -199,7 +198,7 @@ class ClientListActionTest extends TestCase
      *
      * @return void
      */
-    #[DataProviderExternal(List\ClientListProvider::class, 'clientListInvalidFilterCases')]
+    #[DataProviderExternal(ClientListProvider::class, 'clientListInvalidFilterCases')]
     public function testClientListActionInvalidFilters(array $filterQueryParamsArr, array $expectedBody): void
     {
         $loggedInUserId = $this->insertFixture(UserFixture::class)['id'];

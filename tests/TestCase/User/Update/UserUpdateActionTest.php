@@ -40,13 +40,13 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestData array of data for the request body
      * @param array $expectedResult HTTP status code, bool if db entry is created and json response
      *
-     *@throws NotFoundExceptionInterface
      * @throws \JsonException
      * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return void
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Update\UserUpdateProvider::class, 'userUpdateAuthorizationCases')]
+    #[DataProviderExternal(UserUpdateProvider::class, 'userUpdateAuthorizationCases')]
     public function testUserSubmitUpdateAuthorization(
         array $userToChangeRow,
         array $authenticatedUserRow,
@@ -120,7 +120,7 @@ class UserUpdateActionTest extends TestCase
      * @param array $requestBody
      * @param array $jsonResponse
      */
-    #[DataProviderExternal(\App\Test\TestCase\User\Update\UserUpdateProvider::class, 'invalidUserUpdateCases')]
+    #[DataProviderExternal(UserUpdateProvider::class, 'invalidUserUpdateCases')]
     public function testUserSubmitUpdateInvalid(array $requestBody, array $jsonResponse): void
     {
         // Insert user that is allowed to change content (advisor owner)
@@ -140,7 +140,7 @@ class UserUpdateActionTest extends TestCase
         $response = $this->app->handle($request);
         // Assert 422 Unprocessable Entity
         self::assertSame(StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-        // database must be unchanged
+        // Database must be unchanged
         $this->assertTableRowEquals($userRow, 'user', $userRow['id']);
         $this->assertJsonData($jsonResponse, $response);
     }

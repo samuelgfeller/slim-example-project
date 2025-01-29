@@ -10,7 +10,6 @@ use App\Module\Authentication\TokenVerification\Service\VerificationTokenUpdater
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\User\Service\UserFinderOld;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
 
 final readonly class AccountUnlockTokenVerifier

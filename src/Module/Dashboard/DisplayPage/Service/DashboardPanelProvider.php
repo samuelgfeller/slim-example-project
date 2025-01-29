@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Module\Dashboard\Display\Service;
+namespace App\Module\Dashboard\DisplayPage\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Module\Authorization\Service\AuthorizedByRoleChecker;
 use App\Module\Client\ClientStatus\Repository\ClientStatusFinderRepository;
-use App\Module\Dashboard\Display\Data\DashboardData;
+use App\Module\Dashboard\DisplayPage\Data\DashboardData;
 use App\Module\User\Enum\UserRole;
 
 final class DashboardPanelProvider

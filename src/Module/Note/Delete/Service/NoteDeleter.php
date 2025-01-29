@@ -4,7 +4,6 @@ namespace App\Module\Note\Delete\Service;
 
 use App\Domain\Exception\InvalidOperationException;
 use App\Module\Authorization\Exception\ForbiddenException;
-use App\Module\Note\Authorization\NotePermissionVerifier;
 use App\Module\Note\Delete\Repository\NoteDeleterRepository;
 use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\User\Enum\UserActivity;

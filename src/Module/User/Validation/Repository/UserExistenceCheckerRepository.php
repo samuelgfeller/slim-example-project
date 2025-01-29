@@ -6,7 +6,6 @@ use App\Infrastructure\Database\QueryFactory;
 
 readonly class UserExistenceCheckerRepository
 {
-
     public function __construct(
         private QueryFactory $queryFactory,
     ) {
