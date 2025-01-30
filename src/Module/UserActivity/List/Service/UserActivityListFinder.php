@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteParserInterface;
 final readonly class UserActivityListFinder
 {
     public function __construct(
-        private UserActivityReadAuthorizationChecker $userPermissionVerifier,
+        private UserActivityReadAuthorizationChecker $userActivityReadAuthorizationChecker,
         private RouteParserInterface $routeParser,
         private UserFinder $userFinder,
         private UserActivityListFinderRepository $userActivityRepository,
@@ -52,7 +52,7 @@ final readonly class UserActivityListFinder
         }
         $grantedUserIds = [];
         foreach ($userIds as $userId) {
-            if ($this->userPermissionVerifier->isGrantedToReadUserActivity((int)$userId)) {
+            if ($this->userActivityReadAuthorizationChecker->isGrantedToReadUserActivity((int)$userId)) {
                 $grantedUserIds[] = (int)$userId;
             }
         }

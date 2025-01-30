@@ -10,8 +10,8 @@ Real-world example of a modern [Slim 4](https://www.slimframework.com/) web appl
 structure and a variety of components and features.
 
 The project applies current best practices and programming principles,
-with a strong emphasis on the Single Responsibility Principle
-([SRP](https://samuel-gfeller.ch/docs/Single-Responsibility-Principle-(SRP))).   
+with a strong emphasis on the [SOLID](https://en.wikipedia.org/wiki/SOLID) 
+Single Responsibility Principle ([SRP](https://samuel-gfeller.ch/docs/Single-Responsibility-Principle-(SRP))).   
 External library dependencies
 are [kept to a minimum](https://samuel-gfeller.ch/docs/Libraries-and-Framework)
 to facilitate maintenance and ensure long-term viability.

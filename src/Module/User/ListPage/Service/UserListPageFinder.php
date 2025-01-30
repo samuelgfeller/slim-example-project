@@ -47,9 +47,6 @@ class UserListPageFinder
                     (int)$userResultData->id,
                     'status',
                 );
-                // Personal info privilege like first name, email and so on no needed for list
-                // $userResultData->generalPrivilege = $this->userPermissionVerifier->getUpdatePrivilegeForUserColumn(
-                // 'personal_info', $userResultData->id );
             } else {
                 unset($userResultArray[$key]);
             }

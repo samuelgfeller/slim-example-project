@@ -44,28 +44,30 @@ class SecurityLoginChecker
      */
     public function performLoginSecurityCheck(string $email, ?string $reCaptchaResponse = null): void
     {
-        if ($this->securitySettings['throttle_login'] === true) {
-            // Standard verification has to be done before captcha check as the captcha may be needed for email
-            // verification when email is sent to a non-active user for instance
-            try {
-                $loginEntries = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
-                // Perform login check on single user
-                $this->performLoginCheck($loginEntries['logins_by_ip'], $loginEntries['logins_by_email'], $email);
-                // Global login check
-                $this->performGlobalLoginCheck();
-            } catch (SecurityException $securityException) {
-                // reCAPTCHA check done AFTER other login checks.
-                // A captcha can be verified only once, and it may be required later in the login process when security
-                // check did not fail (e.g. for the email verification to send email to a non-active user).
-                if ($reCaptchaResponse !== null) {
-                    $this->captchaVerifier->verifyReCaptcha(
-                        $reCaptchaResponse,
-                        SecurityType::USER_LOGIN
-                    );
-                } else {
-                    // If security exception was thrown and reCaptcha response is null, throw exception
-                    throw $securityException;
-                }
+        if (!$this->securitySettings['throttle_login'] === true) {
+            return;
+        }
+
+        // Standard verification has to be done before captcha check as the captcha may be needed for email
+        // verification when email is sent to a non-active user for instance
+        try {
+            $loginEntries = $this->loginRequestFinder->findLoginLogEntriesInTimeLimit($email);
+            // Perform login check on single user
+            $this->performLoginCheck($loginEntries['logins_by_ip'], $loginEntries['logins_by_email'], $email);
+            // Global login check
+            $this->performGlobalLoginCheck();
+        } catch (SecurityException $securityException) {
+            // reCAPTCHA check done AFTER other login checks.
+            // A captcha can be verified only once, and it may be required later in the login process when security
+            // check did not fail (e.g. for the email verification to send email to a non-active user).
+            if ($reCaptchaResponse !== null) {
+                $this->captchaVerifier->verifyReCaptcha(
+                    $reCaptchaResponse,
+                    SecurityType::USER_LOGIN
+                );
+            } else {
+                // If security exception was thrown and reCaptcha response is null, throw exception
+                throw $securityException;
             }
         }
     }
