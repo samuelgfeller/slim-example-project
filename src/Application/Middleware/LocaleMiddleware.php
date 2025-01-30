@@ -2,8 +2,8 @@
 
 namespace App\Application\Middleware;
 
-use App\Domain\User\Service\UserFinder;
-use App\Infrastructure\Service\LocaleConfigurator;
+use App\Infrastructure\Locale\LocaleConfigurator;
+use App\Module\User\Find\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

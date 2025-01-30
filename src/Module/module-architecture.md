@@ -1,0 +1,1 @@
+Documentation: [How to organize modules](https://samuel-gfeller.ch/docs/Architecture#loosely-coupled-modules)

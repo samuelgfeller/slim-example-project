@@ -2,8 +2,8 @@
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Slim\Views\PhpRenderer $this Rendering engine
- * @var \App\Domain\Client\Data\ClientReadResult $clientReadData client
- * @var App\Domain\Client\Data\ClientDropdownValuesData $dropdownValues all statuses, users and sexes to populate dropdown
+ * @var \App\Module\Client\Read\Data\ClientReadResult $clientReadData client
+ * @var \App\Module\Client\DropdownFinder\Data\ClientDropdownValuesData $dropdownValues all statuses, users and sexes to populate dropdown
  */
 
 $this->setLayout('layout/layout.html.php');

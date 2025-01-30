@@ -2,11 +2,11 @@
 /**
  * @var $this \Slim\Views\PhpRenderer Rendering engine
  * @var $clientListFilters array{
- *     inactive: array{\App\Domain\FilterSetting\Data\FilterData[]},
- *     active: array{\App\Domain\FilterSetting\Data\FilterData[]},
+ *     inactive: array{\App\Module\FilterSetting\Find\Data\FilterData[]},
+ *     active: array{\App\Module\FilterSetting\Find\Data\FilterData[]},
  *     } client list filters
  *
- * @var $clientCreatePrivilege App\Domain\Authorization\Privilege create or none
+ * @var $clientCreatePrivilege \App\Module\Authorization\Enum\Privilege create or none
  */
 
 $this->setLayout('layout/layout.html.php');
@@ -47,7 +47,7 @@ $this->addAttribute(
         <button id="add-filter-btn">+ <?= __('Filter') ?></button>
         <?php
         foreach ($clientListFilters['active'] as $filterCategory => $filtersInCategory) {
-            /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
+            /** @var \App\Module\FilterSetting\Find\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) { ?>
                 <div class="filter-chip filter-chip-active">
                 <span data-filter-id="<?= html($filterId) ?>" data-param-name="<?= html($filterData->paramName) ?>"
@@ -66,7 +66,7 @@ $this->addAttribute(
             echo $filterCategory ?
                 '<span class="filter-chip-container-label" data-category="' . html($filterCategory) .
                 '">' . html($filterCategory) . '</span>' : '';
-            /** @var \App\Domain\FilterSetting\Data\FilterData $filterData */
+            /** @var \App\Module\FilterSetting\Find\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) { ?>
                 <div class="filter-chip">
             <span data-filter-id="<?= html($filterId) ?>" data-param-name="<?= html($filterData->paramName) ?>"

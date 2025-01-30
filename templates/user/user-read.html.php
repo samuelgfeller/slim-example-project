@@ -2,9 +2,9 @@
 /**
  * @var \Slim\Interfaces\RouteParserInterface $route
  * @var \Slim\Views\PhpRenderer $this Rendering engine
- * @var \App\Domain\User\Data\UserResultData $user user
- * @var \App\Domain\User\Enum\UserStatus[] $userStatuses all user statuses
- * @var \App\Domain\User\Data\UserActivityData[] $userActivities all user activities
+ * @var \App\Module\User\Data\UserResultData $user user
+ * @var \App\Module\User\Enum\UserStatus[] $userStatuses all user statuses
+ * @var \App\Module\UserActivity\Data\UserActivityData[] $userActivities all user activities
  * @var bool $isOwnProfile if the authenticated user is viewing his own profile
  */
 

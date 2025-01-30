@@ -28,7 +28,7 @@ $settings['root_dir'] = dirname(__DIR__, 1);
 // Documentation: https://samuel-gfeller.ch/docs/Error-Handling
 $settings['error'] = [
     // MUST be set to false in production.
-    // When set to true, it shows error details and throws an ErrorException for notices and warnings.
+    // When set to true, it shows error details and throws a fatal ErrorException for notices and warnings.
     'display_error_details' => false,
     'log_errors' => true,
 ];

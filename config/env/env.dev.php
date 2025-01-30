@@ -15,7 +15,7 @@ $settings['dev'] = true;
 // For the case where the error is not caught by custom error handler
 ini_set('display_errors', $settings['dev'] ? '1' : '0');
 
-// Display error details in browser and throw ErrorException for notices and warnings
+// Display error details in the browser and throw fatal ErrorException for notices and warnings
 $settings['error']['display_error_details'] = $settings['dev'];
 
 // Break cache for js imports with the JsImportCacheBuster called in PhpViewMiddleware

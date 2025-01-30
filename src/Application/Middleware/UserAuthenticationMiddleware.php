@@ -4,8 +4,8 @@ namespace App\Application\Middleware;
 
 use App\Application\Responder\JsonResponder;
 use App\Application\Responder\RedirectHandler;
-use App\Domain\User\Enum\UserStatus;
-use App\Domain\User\Service\UserFinder;
+use App\Module\User\Enum\UserStatus;
+use App\Module\User\Find\Service\UserFinder;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

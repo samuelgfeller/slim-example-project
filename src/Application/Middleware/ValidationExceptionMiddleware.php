@@ -3,7 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\JsonResponder;
-use App\Domain\Exception\ValidationException;
+use App\Module\Validation\Exception\ValidationException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -2,8 +2,8 @@
 
 namespace App\Application\Responder;
 
-use App\Domain\Exception\ValidationException;
-use App\Domain\Security\Exception\SecurityException;
+use App\Module\Security\Exception\SecurityException;
+use App\Module\Validation\Exception\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\PhpRenderer;
 

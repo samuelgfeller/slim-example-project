@@ -3,7 +3,7 @@
 namespace App\Application\Middleware;
 
 use App\Application\Responder\JsonResponder;
-use App\Domain\Authentication\Exception\ForbiddenException;
+use App\Module\Authorization\Exception\ForbiddenException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
