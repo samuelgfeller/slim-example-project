@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Module\User\Create\Repository;
+namespace App\Module\UserRole\Find\Repository;
 
 use App\Infrastructure\Database\QueryFactory;
 
 /**
- * Repository for finding user roles for the user create feature.
+ * Repository for finding user roles.
  */
-final readonly class UserCreateRoleFinderRepository
+final readonly class UserRoleFinderRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

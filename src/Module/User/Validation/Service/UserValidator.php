@@ -25,6 +25,7 @@ final readonly class UserValidator
      *
      * @param array $userValues
      * @param bool $isCreateMode
+     * @throws ValidationException
      */
     public function validateUserValues(array $userValues, bool $isCreateMode = true): void
     {

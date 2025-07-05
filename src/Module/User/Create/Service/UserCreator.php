@@ -6,7 +6,6 @@ use App\Module\Authentication\Register\Service\RegistrationMailSender;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
-use App\Module\User\Create\Repository\UserCreateRoleFinderRepository;
 use App\Module\User\Create\Repository\UserCreatorRepository;
 use App\Module\User\Data\UserData;
 use App\Module\User\Enum\UserActivity;
@@ -14,6 +13,7 @@ use App\Module\User\Enum\UserRole;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Validation\Service\UserValidator;
 use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserRole\Find\Repository\UserRoleFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final readonly class UserCreator
@@ -25,7 +25,7 @@ final readonly class UserCreator
         private UserCreatorRepository $userCreatorRepository,
         private VerificationTokenCreator $verificationTokenCreator,
         private RegistrationMailSender $registrationMailer,
-        private UserCreateRoleFinderRepository $userCreateRoleFinderRepository,
+        private UserRoleFinderRepository $userCreateRoleFinderRepository,
         private UserActivityLogger $userActivityLogger,
     ) {
     }

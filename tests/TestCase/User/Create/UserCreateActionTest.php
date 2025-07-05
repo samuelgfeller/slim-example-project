@@ -2,9 +2,9 @@
 
 namespace App\Test\TestCase\User\Create;
 
-use App\Module\User\Create\Repository\UserCreateRoleFinderRepository;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserRole;
+use App\Module\UserRole\Find\Repository\UserRoleFinderRepository;
 use App\Test\Fixture\UserFixture;
 use App\Test\Trait\AppTestTrait;
 use App\Test\Trait\AuthorizationTestTrait;
@@ -50,7 +50,7 @@ class UserCreateActionTest extends TestCase
         ?UserRole $newUserRole,
         array $expectedResult,
     ): void {
-        $userCreateRoleFinderRepository = $this->container->get(UserCreateRoleFinderRepository::class);
+        $userCreateRoleFinderRepository = $this->container->get(UserRoleFinderRepository::class);
         // Insert authenticated user and user linked to resource with given attributes containing the user role
         $authenticatedUserRow = $this->insertFixture(
             UserFixture::class,
