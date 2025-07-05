@@ -12,7 +12,7 @@ use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserRole;
 use App\Module\User\Enum\UserStatus;
 use App\Module\User\Validation\Service\UserValidator;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use App\Module\UserRole\Find\Repository\UserRoleFinderRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Module\UserActivity\Create\Repository;
+namespace App\Module\UserActivity\Log\Repository;
 
 use App\Infrastructure\Database\QueryFactory;
 
-final readonly class UserActivityCreatorRepository
+final readonly class UserActivityLoggerRepository
 {
     public function __construct(
         private QueryFactory $queryFactory,

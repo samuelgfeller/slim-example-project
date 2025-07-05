@@ -7,7 +7,7 @@ use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\Note\Delete\Repository\NoteDeleterRepository;
 use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 
 final readonly class NoteDeleter
 {

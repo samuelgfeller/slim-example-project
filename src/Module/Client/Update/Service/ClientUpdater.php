@@ -9,7 +9,7 @@ use App\Module\Client\Update\Repository\ClientDeletedDateFinderRepository;
 use App\Module\Client\Update\Repository\ClientUpdaterRepository;
 use App\Module\Client\Validation\Service\ClientValidator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 
 final readonly class ClientUpdater
 {

@@ -10,8 +10,8 @@ use App\Module\Client\Delete\Repository\ClientDeleterRepository;
 use App\Module\Client\Validation\Service\ClientValidator;
 use App\Module\Note\Create\Service\NoteCreator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
 use App\Module\UserActivity\Delete\Service\UserActivityDeleter;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use App\Module\Validation\Exception\ValidationException;
 
 final readonly class ClientCreator

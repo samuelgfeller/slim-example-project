@@ -8,7 +8,7 @@ use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\Note\Update\Repository\NoteUpdaterRepository;
 use App\Module\Note\Validation\Service\NoteValidator;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 
 final readonly class NoteUpdater
 {

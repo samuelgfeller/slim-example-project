@@ -5,7 +5,7 @@ namespace App\Module\Authentication\TokenVerification\Service;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenCreatorRepository;
 use App\Module\Authentication\TokenVerification\Repository\VerificationTokenDeleterRepository;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 
 final readonly class VerificationTokenCreator
 {

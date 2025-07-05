@@ -9,7 +9,7 @@ use App\Module\Note\Find\Service\NoteFinder;
 use App\Module\Note\Validation\Service\NoteValidator;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Find\Service\UserFinder;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use IntlDateFormatter;
 
 final readonly class NoteCreator

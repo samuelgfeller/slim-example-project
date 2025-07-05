@@ -5,7 +5,7 @@ namespace App\Module\User\Delete\Service;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\User\Delete\Repository\UserDeleterRepository;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use Odan\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
 

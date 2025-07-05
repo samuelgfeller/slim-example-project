@@ -8,7 +8,7 @@ use App\Module\Authentication\Validation\Service\AuthenticationValidator;
 use App\Module\Security\Login\Service\SecurityLoginChecker;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Enum\UserStatus;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final readonly class LoginVerifier

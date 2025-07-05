@@ -7,7 +7,7 @@ use App\Module\Authentication\Validation\Service\AuthenticationValidator;
 use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Update\Service\UserUpdateAuthorizationChecker;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 final readonly class PasswordChanger

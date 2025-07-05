@@ -7,7 +7,7 @@ use App\Module\Authorization\Exception\ForbiddenException;
 use App\Module\User\Enum\UserActivity;
 use App\Module\User\Update\Repository\UserUpdaterRepository;
 use App\Module\User\Validation\Service\UserValidator;
-use App\Module\UserActivity\Create\Service\UserActivityLogger;
+use App\Module\UserActivity\Log\Service\UserActivityLogger;
 use Psr\Log\LoggerInterface;
 
 final readonly class UserUpdater

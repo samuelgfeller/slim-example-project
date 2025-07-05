@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Module\UserActivity\Create\Service;
+namespace App\Module\UserActivity\Log\Service;
 
 use App\Application\Data\UserNetworkSessionData;
 use App\Module\User\Enum\UserActivity;
-use App\Module\UserActivity\Create\Repository\UserActivityCreatorRepository;
 use App\Module\UserActivity\Data\UserActivityData;
+use App\Module\UserActivity\Log\Repository\UserActivityLoggerRepository;
 
 final readonly class UserActivityLogger
 {
     public function __construct(
-        private UserActivityCreatorRepository $userActivityCreatorRepository,
+        private UserActivityLoggerRepository $userActivityCreatorRepository,
         private UserNetworkSessionData $userNetworkSessionData,
     ) {
     }

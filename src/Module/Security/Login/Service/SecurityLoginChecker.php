@@ -7,7 +7,6 @@ use App\Module\Security\Captcha\Service\SecurityCaptchaVerifier;
 use App\Module\Security\Enum\SecurityType;
 use App\Module\Security\Exception\SecurityException;
 use App\Module\Security\Login\Repository\LoginLogFinderRepository;
-use App\Test\Unit\Security\SecurityLoginCheckerTest;
 
 class SecurityLoginChecker
 {
