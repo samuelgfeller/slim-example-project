@@ -1,5 +1,8 @@
 /*Dark mode*/
 :root {
+    /* For scrollbar, forms and other browser ui elements */
+    color-scheme: light;
+
     --primary-color: #2e3e50;
     /*Background colors*/
     --background-color: white;
@@ -34,6 +37,9 @@
 }
 
 [data-theme="dark"] {
+    /* For scrollbar, forms and other browser ui elements */
+    color-scheme: dark;
+
     --primary-color: #4f6b8a;
     /*Background colors*/
     --background-color: #101213;
