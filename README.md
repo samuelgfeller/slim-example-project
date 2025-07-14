@@ -127,7 +127,7 @@ I also dislike having to follow the propitiatory rules of a framework [which oft
 follow best practices](https://www.reddit.com/r/PHP/comments/131t2k1/laravel_considered_harmful)
 and
 much prefer the freedom of a micro-framework and carefully
-[choosing the libraries](https://samuel-gfeller.ch/docs/Libraries-and-Framework#choosing-the-right-libraries)
+[choosing the libraries](https://samuel-gfeller.ch/docs/Libraries-and-Framework)
 and structure
 that make sense for the project.  
 This lets me stay in control of the codebase, keep it lightweight,
