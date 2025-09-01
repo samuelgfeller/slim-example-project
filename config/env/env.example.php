@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Secret environment specific configuration values.
+ * Secret environment-specific configuration values.
  *
  * Make sure this env.php file is added to .gitignore and ideally place it outside
  * the project root directory.
@@ -11,7 +11,8 @@
  * Incorrect: $settings['db'] = [ 'key' => 'val', 'nextKey' => 'nextVal',];
  */
 
-// $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file on the prod server.
+// $_ENV['APP_ENV'] should be set to "prod" in the secret env.php file on the prod server
+// $_ENV['APP_ENV'] = 'prod'; // Only for the env.php on the prod server
 // APP_ENV must NOT be set to "dev" in the development secret env.php as it's already the default value
 // and would override the phpunit.xml APP_ENV "test" setting.
 
