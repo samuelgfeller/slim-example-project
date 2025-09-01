@@ -179,6 +179,7 @@
         /*Right margin replaced by padding on the entire flash to have a space during opening animation*/
         margin: 9px 0 9px 4px;
         font-size: 0.9rem;
+        color: black;
         /*width: 200px;*/
         /*display: block;*/
     }
