@@ -1,10 +1,10 @@
-import {basePath} from "../../general/general-js/config.js?v=1.0.0";
+import {basePath} from "../../general/general-js/config.js?v=4.0.2";
 import {
     changeUserIsTyping,
     hideCheckmarkLoader,
     userIsTypingOnNoteId
-} from "./client-read-note-event-listener-setup.js?v=1.0.0";
-import {handleFail} from "../../general/ajax/ajax-util/fail-handler.js?v=1.0.0";
+} from "./client-read-note-event-listener-setup.js?v=4.0.2";
+import {handleFail} from "../../general/ajax/ajax-util/fail-handler.js?v=4.0.2";
 
 let noteSaveHideCheckMarkTimeout = [];
 

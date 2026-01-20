@@ -1,5 +1,5 @@
-import {fetchAndLoadClients, fetchAndLoadClientsEventHandler} from "./client-list-loading.js?v=1.0.0";
-import {initFilterChipEventListeners} from "../../general/page-component/filter-chip/filter-chip.js?v=1.0.0";
+import {fetchAndLoadClients, fetchAndLoadClientsEventHandler} from "./client-list-loading.js?v=4.0.2";
+import {initFilterChipEventListeners} from "../../general/page-component/filter-chip/filter-chip.js?v=4.0.2";
 
 // Load clients at page startup
 fetchAndLoadClients();

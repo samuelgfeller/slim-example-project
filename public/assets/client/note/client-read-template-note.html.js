@@ -1,4 +1,4 @@
-import {html} from "../../general/general-js/functions.js?v=1.0.0";
+import {html} from "../../general/general-js/functions.js?v=4.0.2";
 
 export function getNoteHtml(note) {
     // Thanks https://www.youtube.com/watch?v=Mus_vwhTCq0 for this syntax

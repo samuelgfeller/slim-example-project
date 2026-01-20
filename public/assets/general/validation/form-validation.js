@@ -1,4 +1,4 @@
-import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=1.0.0";
+import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=4.0.2";
 
 /**
  * Display form error message

@@ -1,4 +1,4 @@
-import {__} from "../../general-js/functions.js?v=1.0.0";
+import {__} from "../../general-js/functions.js?v=4.0.2";
 
 function initAlertModalEventListeners() {
     // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically

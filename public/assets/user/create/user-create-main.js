@@ -1,8 +1,8 @@
-import {displayUserCreateModal} from "./user-create-modal.html.js?v=1.0.0";
-import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=1.0.0";
-import {loadUserList} from "../list/user-list-loading.js?v=1.0.0";
-import {__} from "../../general/general-js/functions.js?v=1.0.0";
-import {submitModalForm} from "../../general/ajax/modal-submit-request.js?v=1.0.0";
+import {displayUserCreateModal} from "./user-create-modal.html.js?v=4.0.2";
+import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=4.0.2";
+import {loadUserList} from "../list/user-list-loading.js?v=4.0.2";
+import {__} from "../../general/general-js/functions.js?v=4.0.2";
+import {submitModalForm} from "../../general/ajax/modal-submit-request.js?v=4.0.2";
 
 
 document.querySelector('#create-user-btn').addEventListener('click', displayUserCreateModal);

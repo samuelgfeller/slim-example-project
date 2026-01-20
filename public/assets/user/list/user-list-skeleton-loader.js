@@ -1,4 +1,4 @@
-import {getUserCardSkeletonLoaderHtml} from "./user-list-card.html.js?v=1.0.0";
+import {getUserCardSkeletonLoaderHtml} from "./user-list-card.html.js?v=4.0.2";
 
 /**
  * Display skeleton loaders

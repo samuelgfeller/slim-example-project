@@ -1,6 +1,6 @@
-import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=1.0.0";
-import {displayFlashMessage} from "../../page-component/flash-message/flash-message.js?v=1.0.0";
-import {__} from "../../general-js/functions.js?v=1.0.0";
+import {displayValidationErrorMessage} from "../../validation/form-validation.js?v=4.0.2";
+import {displayFlashMessage} from "../../page-component/flash-message/flash-message.js?v=4.0.2";
+import {__} from "../../general-js/functions.js?v=4.0.2";
 
 /**
  * This function can be called with the Response or a TypeError.

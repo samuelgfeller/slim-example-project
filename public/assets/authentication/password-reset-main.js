@@ -1,4 +1,4 @@
-import {addPasswordStrengthCheck} from "./password-strength-checker.js?v=1.0.0";
+import {addPasswordStrengthCheck} from "./password-strength-checker.js?v=4.0.2";
 
 addPasswordStrengthCheck();
 
