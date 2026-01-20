@@ -3,11 +3,11 @@
 namespace App\Module\Authentication\PasswordReset\Service;
 
 use App\Domain\Exception\DomainRecordNotFoundException;
-use App\Infrastructure\Locale\LocaleConfigurator;
 use App\Infrastructure\Settings\Settings;
 use App\Module\Authentication\PasswordReset\Repository\PasswordResetUserFinderRepository;
 use App\Module\Authentication\TokenVerification\Service\VerificationTokenCreator;
 use App\Module\Authentication\Validation\Service\AuthenticationValidator;
+use App\Module\Localization\Infrastructure\LocaleConfigurator;
 use App\Module\Mail\Service\Mailer;
 use App\Module\Security\Email\Service\SecurityEmailChecker;
 use App\Module\Validation\Exception\ValidationException;

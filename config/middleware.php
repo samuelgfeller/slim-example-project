@@ -17,12 +17,12 @@ return function (App $app) {
 
     // Add new middlewares here
 
-    // Language middleware
-    $app->add(\App\Application\Middleware\LocaleMiddleware::class);
-
-    // Put everything possible before PhpViewMiddleware as if there is an error in a middleware,
-    // the error page (and layout as well as everything else) needs this middleware loaded to work.
+    // Put everything that is not required in PhpViewMiddleware above this line, as if there is an error in
+    // a middleware, the error page (and layout as well as everything else) needs this middleware loaded to work.
     $app->add(PhpViewMiddleware::class);
+
+    // Language middleware PhpViewMiddleware requires it
+    $app->add(\App\Application\Middleware\LocaleMiddleware::class);
 
     // Retrieve and store ip address, user agent and user id (has to be BEFORE SessionStartMiddleware as it is using it
     // but after PhpViewMiddleware as it needs the user id)

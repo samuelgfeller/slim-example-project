@@ -4,6 +4,7 @@ namespace App\Application\Middleware;
 
 use App\Infrastructure\JsCacheBusting\JsImportCacheBuster;
 use App\Infrastructure\Settings\Settings;
+use App\Module\Localization\Infrastructure\LocaleConfigurator;
 use App\Module\User\Read\Service\UserReadAuthorizationChecker;
 use Cake\Database\Exception\DatabaseException;
 use Odan\Session\SessionInterface;
@@ -36,6 +37,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
         Settings $settings,
         private readonly UserReadAuthorizationChecker $userReadAuthorizationChecker,
         private readonly RouteParserInterface $routeParser,
+        private readonly LocaleConfigurator $localeConfigurator,
     ) {
         $this->publicSettings = $settings->get('public');
         $this->deploymentSettings = $settings->get('deployment');
@@ -55,6 +57,7 @@ final class PhpViewMiddleware implements MiddlewareInterface
             // Used for public values used by view like company email address
             'config' => $this->publicSettings,
             'authenticatedUser' => $loggedInUserId,
+            'languageCode' => $this->localeConfigurator->getLanguageCodeFromLocale(),
         ]);
 
         // Check and set user list authorization for "users" nav point

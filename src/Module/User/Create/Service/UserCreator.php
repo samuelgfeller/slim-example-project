@@ -25,7 +25,7 @@ final readonly class UserCreator
         private UserCreatorRepository $userCreatorRepository,
         private VerificationTokenCreator $verificationTokenCreator,
         private RegistrationMailSender $registrationMailer,
-        private UserRoleFinderRepository $userCreateRoleFinderRepository,
+        private UserRoleFinderRepository $userRoleFinderRepository,
         private UserActivityLogger $userActivityLogger,
     ) {
     }
@@ -59,7 +59,7 @@ final readonly class UserCreator
             // Set default status and role
             $user->status = $user->status ?? UserStatus::Unverified;
             $user->userRoleId = $user->userRoleId ??
-                $this->userCreateRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
+                $this->userRoleFinderRepository->findUserRoleIdByName(UserRole::NEWCOMER->value);
 
             // Insert new user into database
             $userRow = $user->toArrayForDatabase();

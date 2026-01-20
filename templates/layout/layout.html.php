@@ -9,13 +9,14 @@
  * @var array $config 'public' configuration values
  * @var bool $userListAuthorization if the user is allowed to read other users
  * @var string|int|null $authenticatedUser logged-in user id or null if not authenticated
+ * @var string|null $languageCode current language code
  */
 
 // echo strftime("%A %e %B %Y", mktime(0, 0, 0, 12, 22, 1978));
 ?>
 
 <!DOCTYPE html>
-<html lang="<?= str_replace('_', '-', setlocale(LC_ALL, 0)) ?>">
+<html lang="<?= html($languageCode ?? 'en') ?>">
 <head>
     <!--  Trailing slash has to be avoided on asset paths. Otherwise, <base> does not work  -->
     <base href="<?= html($basePath) ?>/"/>
@@ -26,12 +27,12 @@
     <?php
     // Define layout assets
     $layoutCss = [
-        'assets/general/general-css/general.css',
-        'assets/general/general-css/colors.css',
-        'assets/general/general-font/fonts.css',
-        'assets/general/general-css/layout.css',
-        'assets/navbar/side-navbar.css',
-        'assets/general/page-component/flash-message/flash-message.css',
+            'assets/general/general-css/general.css',
+            'assets/general/general-css/colors.css',
+            'assets/general/general-font/fonts.css',
+            'assets/general/general-css/layout.css',
+            'assets/navbar/side-navbar.css',
+            'assets/general/page-component/flash-message/flash-message.css',
     ];
     $layoutJs = ['assets/navbar/navbar.js',];
     $layoutJsModules = ['assets/general/general-js/initialization.js',];
@@ -39,13 +40,13 @@
     // fetch() includes another template in the current template
     // Include template that renders the asset paths
     echo $this->fetch(
-        'layout/assets.html.php',
-        [ // Merge layout assets and assets required by templates (added via $this->addAttribute())
-            'stylesheets' => array_merge($layoutCss, $css ?? []),
-            'scripts' => array_merge($layoutJs, $js ?? []),
-            // The type="module" allows the use of import and export inside a JS file.
-            'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
-        ]
+            'layout/assets.html.php',
+            [ // Merge layout assets and assets required by templates (added via $this->addAttribute())
+                    'stylesheets' => array_merge($layoutCss, $css ?? []),
+                    'scripts' => array_merge($layoutJs, $js ?? []),
+                // The type="module" allows the use of import and export inside a JS file.
+                    'jsModules' => array_merge($layoutJsModules, $jsModules ?? []),
+            ]
     );
     ?>
 
@@ -87,7 +88,20 @@
     <?= $this->fetch('layout/footer.html.php') ?>
 
 </div>
-
+<script id="layout-translations" type="application/json">
+    <?= addTranslationsArray([
+        'Access denied, please log in and try again',
+        'Forbidden. Not allowed to access this area or function',
+        'Please try again and report the error to an administrator',
+        'Access denied, please refresh the page and try again',
+        'Required',
+        'Minimum length is',
+        'Maximum length is',
+        'Yes delete',
+        'Cancel',
+        'entries'
+    ]) ?>
+</script>
 </body>
 </html>
 

@@ -3,9 +3,9 @@
 namespace App\Application\ErrorRenderer;
 
 use Slim\Views\PhpRenderer;
-use SlimErrorRenderer\Interfaces\GenericErrorPageRendererInterface;
+use SlimErrorRenderer\Interfaces\ProdErrorPageRendererInterface;
 
-final readonly class ProdErrorPageRenderer implements GenericErrorPageRendererInterface
+final readonly class ProdErrorPageRenderer implements ProdErrorPageRendererInterface
 {
     public function __construct(
         private PhpRenderer $phpRenderer,

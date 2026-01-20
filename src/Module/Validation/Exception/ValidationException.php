@@ -10,7 +10,7 @@ class ValidationException extends RuntimeException
     public readonly array $validationErrors;
 
     /**
-     * @param array<string, array<string, string>> $validationErrors
+     * @param array<string, array<string, array|string>> $validationErrors
      * @param string $message
      */
     public function __construct(array $validationErrors, string $message = 'Validation error')
@@ -55,7 +55,7 @@ class ValidationException extends RuntimeException
      *    ],
      * ]
      *
-     * @param array<string, array<string, string>> $validationErrors The cakephp validation errors
+     * @param array<string, array<string, array|string>> $validationErrors The cakephp validation errors
      *
      * @return array<string, array<int, string>> the transformed result in the format documented above
      */
@@ -66,7 +66,12 @@ class ValidationException extends RuntimeException
             // There may be cases with multiple error messages for a single field.
             foreach ($fieldErrors as $infringedRuleName => $infringedRuleMessage) {
                 // Output is basically the same except without the rule name as a key.
-                $validationErrorsForOutput[$fieldName][] = $infringedRuleMessage;
+                // Ensure message is a string even if it's an array
+                $message = is_array($infringedRuleMessage) ? implode(
+                    ', ',
+                    $infringedRuleMessage
+                ) : $infringedRuleMessage;
+                $validationErrorsForOutput[$fieldName][] = $message;
             }
         }
 

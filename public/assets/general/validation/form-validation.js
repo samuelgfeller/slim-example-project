@@ -1,3 +1,5 @@
+import {displayFlashMessage} from "../page-component/flash-message/flash-message.js?v=1.0.0";
+
 /**
  * Display form error message
  *
@@ -8,7 +10,7 @@
 export function displayValidationErrorMessage(fieldName, errorMessage, domFieldId = null) {
     let field;
     // console.log('displayValidationErrorMessage', fieldName, errorMessage, domFieldId);
-    if (domFieldId !== null) {
+    if (domFieldId) {
         field = document.querySelector('#' + domFieldId);
     } else {
         field = document.querySelector(`[name="${fieldName}"]`);
@@ -17,8 +19,10 @@ export function displayValidationErrorMessage(fieldName, errorMessage, domFieldI
         // Contenteditable field accessed with data-name
         field = document.querySelector(`[data-name="${fieldName}"]`);
     }
-    // console.log(domFieldId, field);
-    if (field !== null) {
+    // If the field is still null, display the flash message
+    if (field === null) {
+        displayFlashMessage('error', `<b>${fieldName}</b>: ${errorMessage}`)
+    } else { // If the field is not null, display error message below field
         // If the field is a checkbox, the error message placement is a bit different
         if (field.hasAttribute('type') && ['checkbox', 'radio'].includes(field.type)) {
             let radioInputs = document.querySelectorAll(`[name="${fieldName}"]`);

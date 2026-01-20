@@ -9,7 +9,6 @@ import {
     initAutoResizingTextareaElements
 } from "../../general/page-component/textarea/auto-resizing-textarea.js?v=1.0.0";
 import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=1.0.0";
-import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=1.0.0";
 import {__} from "../../general/general-js/functions.js?v=1.0.0";
 
 /**

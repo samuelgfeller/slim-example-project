@@ -8,21 +8,21 @@ $this->setLayout('layout/layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/page-component/form/form.css',
-    'assets/general/page-component/button/plus-button.css',
-    'assets/general/page-component/modal/form-modal.css',
-    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
-    'assets/user/list/user-list-skeleton-loader.css',
+        'assets/general/page-component/form/form.css',
+        'assets/general/page-component/button/plus-button.css',
+        'assets/general/page-component/modal/form-modal.css',
+        'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+        'assets/user/list/user-list-skeleton-loader.css',
     // Page-specific css has to come last to overwrite other styles
-    'assets/user/list/user-list.css',
+        'assets/user/list/user-list.css',
 ]);
 // Js files that import things from other js files
 $this->addAttribute(
-    'jsModules',
-    [
-        'assets/user/list/user-list-main.js',
-        'assets/user/create/user-create-main.js',
-    ]
+        'jsModules',
+        [
+                'assets/user/list/user-list-main.js',
+                'assets/user/create/user-create-main.js',
+        ]
 );
 
 ?>
@@ -33,3 +33,20 @@ $this->addAttribute(
 
 <div id="user-wrapper">
 </div>
+
+<script id="page-translations" type="application/json">
+    <?= addTranslationsArray([
+            'User created successfully',
+            'Create user',
+            'First name',
+            'Last name',
+            'E-Mail',
+            'Language',
+            'New password',
+            'Repeat new password',
+            'Status',
+            'User role',
+    ]) ?>
+
+
+</script>

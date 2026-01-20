@@ -15,19 +15,19 @@ $this->setLayout('layout/layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/page-component/form/form.css',
-    'assets/general/page-component/modal/alert-modal.css',
-    'assets/general/page-component/modal/form-modal.css',
-    'assets/general/dark-mode/dark-mode-toggle-switch.css',
-    'assets/general/page-component/contenteditable/contenteditable.css',
+        'assets/general/page-component/form/form.css',
+        'assets/general/page-component/modal/alert-modal.css',
+        'assets/general/page-component/modal/form-modal.css',
+        'assets/general/dark-mode/dark-mode-toggle-switch.css',
+        'assets/general/page-component/contenteditable/contenteditable.css',
     // Page-specific css has to come last to overwrite other styles
-    'assets/user/user.css',
+        'assets/user/user.css',
 ]);
 
 
 $this->addAttribute(
-    'jsModules',
-    ['assets/user/read/user-read-update-main.js', 'assets/general/dark-mode/dark-mode.js',]
+        'jsModules',
+        ['assets/user/read/user-read-update-main.js', 'assets/general/dark-mode/dark-mode.js',]
 );
 
 // Store user id on the page in <data> element for js to read it
@@ -71,14 +71,14 @@ $this->addAttribute(
             <div>
                 <label for="user-status" class="bigger-select-label"><?= __('Status') ?></label>
                 <select name="status" class="default-select bigger-select" id="user-status"
-                    <?= str_contains($user->statusPrivilege, 'U')
-                        ? '' : 'disabled' ?>>
+                        <?= str_contains($user->statusPrivilege, 'U')
+                                ? '' : 'disabled' ?>>
                     <?php
                     // User status select options
                     foreach ($userStatuses as $userStatus) {
                         $selected = $userStatus === $user->status ? 'selected' : '';
                         echo '<option value="' . html($userStatus->value) . '" ' . $selected . '>' .
-                            __(ucfirst(html($userStatus->value))) . '</option>';
+                                __(ucfirst(html($userStatus->value))) . '</option>';
                     }
                     ?>
                 </select>
@@ -88,7 +88,7 @@ $this->addAttribute(
             <div>
                 <label for="user-role-select" class="bigger-select-label"><?= __('User role') ?> </label>
                 <select name="user_role_id" class="default-select bigger-select" id="user-role-select"
-                    <?= str_contains($user->userRolePrivilege, 'U') ? '' : 'disabled' ?>>
+                        <?= str_contains($user->userRolePrivilege, 'U') ? '' : 'disabled' ?>>
                     <?php
                     foreach ($user->availableUserRoles as $id => $userRole) {
                         $selected = $id === $user->userRoleId ? 'selected' : '';
@@ -118,7 +118,7 @@ $this->addAttribute(
                 <h3 class="label-h3"><?= __('Password') ?></h3>
                 <button class="btn btn-orange" id="change-password-btn"
                         data-old-password-requested="<?= str_contains($user->passwordWithoutVerificationPrivilege, 'U')
-                            ? 'false' : 'true' ?>"><?= __('Change password') ?>
+                                ? 'false' : 'true' ?>"><?= __('Change password') ?>
                 </button>
                 <?php
             } ?>
@@ -149,15 +149,15 @@ $this->addAttribute(
             <h3 class="label-h3"><?= __('Language') ?></h3>
             <label class="form-radio-input">
                 <input type="radio" name="language" value="en_US" <?= $lang === 'en_US' ? 'checked' : '' ?>
-                    <?= $langRadioButtonDisabled ?>>English
+                        <?= $langRadioButtonDisabled ?>>English
             </label>
             <label class="form-radio-input">
                 <input type="radio" name="language" value="de_CH" <?= $lang === 'de_CH' ? 'checked' : '' ?>
-                    <?= $langRadioButtonDisabled ?>>Deutsch
+                        <?= $langRadioButtonDisabled ?>>Deutsch
             </label>
             <label class="form-radio-input">
                 <input type="radio" name="language" value="fr_CH" <?= $lang === 'fr_CH' ? 'checked' : '' ?>
-                    <?= $langRadioButtonDisabled ?>>Français
+                        <?= $langRadioButtonDisabled ?>>Français
             </label>
         </div>
         <h3 class="label-h3"><?= __('Metadata') ?></h3>
@@ -165,9 +165,9 @@ $this->addAttribute(
             <?php
             // Create date formatter that outputs the date in the correct lang in a format like February 12, 2023 at 8:45 PM
             $dateFormatter = new \IntlDateFormatter(
-                setlocale(LC_ALL, 0),
-                \IntlDateFormatter::LONG,
-                \IntlDateFormatter::SHORT
+                    setlocale(LC_ALL, 0),
+                    \IntlDateFormatter::LONG,
+                    \IntlDateFormatter::SHORT
             );
             ?>
             <b><?= __('Created') ?>:</b> <?= $dateFormatter->format($user->createdAt) ?><br>
@@ -191,3 +191,22 @@ $this->addAttribute(
         </div>
     </div>
 </div>
+
+<script id="page-translations" type="application/json">
+    <?= addTranslationsArray([
+            'Change password',
+            'Old password',
+            'New password',
+            'Repeat new password',
+            'Are you sure that you want to delete this user?',
+            'Are you sure that you want to delete your profile?',
+            'You will be logged out and not be able to log in again.',
+            'Successfully changed password.',
+            'Are you sure that you want to delete this user?',
+            'Are you sure that you want to delete your profile?',
+            'You will be logged out and not be able to log in again.',
+            'Successfully changed password.',
+    ]) ?>
+
+
+</script>

@@ -81,7 +81,7 @@ final readonly class ClientListFilterChipProvider
                 'name' => $name,
                 'paramName' => 'status',
                 'paramValue' => $id,
-                'category' => 'Status',
+                'category' => __('Status'),
                 'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
             ]);
         }
@@ -95,7 +95,7 @@ final readonly class ClientListFilterChipProvider
                     'name' => __('Assigned to') . ' ' . $name,
                     'paramName' => 'user',
                     'paramValue' => $userId,
-                    'category' => 'Other user',
+                    'category' => __('Other user'),
                     'authorized' => $this->authorizationChecker->isAuthorizedByRole(UserRole::NEWCOMER),
                 ]);
             }
@@ -104,7 +104,7 @@ final readonly class ClientListFilterChipProvider
             'name' => __('Deleted assigned user'),
             'paramName' => 'deleted-assigned-user',
             'paramValue' => '1',
-            'category' => 'Other user',
+            'category' => __('Other user'),
             'authorized' => $this->authorizationChecker->isAuthorizedByRole(
                 UserRole::ADVISOR
             ),

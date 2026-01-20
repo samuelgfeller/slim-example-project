@@ -2,8 +2,8 @@
 
 namespace App\Module\Authentication\Register\Service;
 
-use App\Infrastructure\Locale\LocaleConfigurator;
 use App\Infrastructure\Settings\Settings;
+use App\Module\Localization\Infrastructure\LocaleConfigurator;
 use App\Module\Mail\Service\Mailer;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;

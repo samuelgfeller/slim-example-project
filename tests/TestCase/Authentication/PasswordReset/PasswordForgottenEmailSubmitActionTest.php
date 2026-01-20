@@ -85,7 +85,7 @@ class PasswordForgottenEmailSubmitActionTest extends TestCase
             array_keys($expectedVerificationToken)
         );
 
-        // Get user_verification row to make sure its valid
+        // Get user_verification row to make sure it's valid
         $userVerificationRow = $this->findTableRowsByColumn('user_verification', 'user_id', $userRow['id'])[0];
 
         // Assert that token expiration date is at least 59 min the future

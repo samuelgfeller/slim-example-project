@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Locale;
+namespace App\Module\Localization\Infrastructure;
 
 use App\Infrastructure\Settings\Settings;
 
@@ -116,8 +116,12 @@ final class LocaleConfigurator
      *
      * @return string|null e.g. 'en'
      */
-    private function getLanguageCodeFromLocale(string|false|null $locale): ?string
+    public function getLanguageCodeFromLocale(string|false|null $locale = null): ?string
     {
+        if (!$locale) {
+            $locale = setlocale(LC_ALL, 0);
+        }
+
         // If locale has hyphen instead of underscore, replace it
         if ($locale && str_contains($locale, '-')) {
             $locale = str_replace('-', '_', $locale);

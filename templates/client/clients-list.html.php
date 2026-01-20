@@ -15,21 +15,21 @@ $this->setLayout('layout/layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/page-component/form/form.css',
-    'assets/general/page-component/filter-chip/filter-chip.css',
-    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
-    'assets/general/page-component/button/plus-button.css',
-    'assets/general/page-component/modal/form-modal.css',
-    'assets/client/list/client-list.css',
-    'assets/client/list/client-list-skeleton-loader.css',
+        'assets/general/page-component/form/form.css',
+        'assets/general/page-component/filter-chip/filter-chip.css',
+        'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+        'assets/general/page-component/button/plus-button.css',
+        'assets/general/page-component/modal/form-modal.css',
+        'assets/client/list/client-list.css',
+        'assets/client/list/client-list-skeleton-loader.css',
 ]);
 // Js files that import things from other js files
 $this->addAttribute(
-    'jsModules',
-    [
-        'assets/client/list/client-list-main.js',
-        'assets/client/create/client-create-main.js',
-    ]
+        'jsModules',
+        [
+                'assets/client/list/client-list-main.js',
+                'assets/client/create/client-create-main.js',
+        ]
 );
 
 ?>
@@ -64,8 +64,8 @@ $this->addAttribute(
         <?php
         foreach ($clientListFilters['inactive'] as $filterCategory => $filtersInCategory) {
             echo $filterCategory ?
-                '<span class="filter-chip-container-label" data-category="' . html($filterCategory) .
-                '">' . html($filterCategory) . '</span>' : '';
+                    '<span class="filter-chip-container-label" data-category="' . html($filterCategory) .
+                    '">' . html($filterCategory) . '</span>' : '';
             /** @var \App\Module\FilterSetting\Find\Data\FilterData $filterData */
             foreach ($filtersInCategory as $filterId => $filterData) { ?>
                 <div class="filter-chip">
@@ -88,3 +88,21 @@ a client, they are re-loaded in the background (async) to be up to date with the
 
 </div>
 
+<script id="page-translations" type="application/json">
+    <?= addTranslationsArray([
+            'Create client',
+            'First name',
+            'Last name',
+            'Birthdate',
+            'Location',
+            'Main note',
+            'Sex',
+            'Phone number',
+            'E-Mail',
+            'Assigned user',
+            'Status',
+            'Main note about client.',
+            'Please fill out either the first name or last name',
+            'Client created successfully.',
+    ]) ?>
+</script>

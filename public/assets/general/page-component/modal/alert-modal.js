@@ -1,5 +1,4 @@
 import {__} from "../../general-js/functions.js?v=1.0.0";
-import {fetchTranslations} from "../../ajax/fetch-translation-data.js?v=1.0.0";
 
 function initAlertModalEventListeners() {
     // Event delegation. Add event listeners to non-existent elements during page loads but loaded dynamically
@@ -25,19 +24,6 @@ function initAlertModalEventListeners() {
     });
 }
 
-// List of words that are used in modal box and need to be translated
-let wordsToTranslate = [
-    __('Yes delete'),
-    __('Cancel'),
-];
-// Init translated var by populating it with english values as a default so that all keys are existing
-let translated = Object.fromEntries(wordsToTranslate.map(value => [value, value]));
-// Fetch translations and replace translated var
-fetchTranslations(wordsToTranslate).then(response => {
-    // Fill the var with a JSON of the translated words. Key is the original english words and value the translated one
-    translated = response;
-});
-
 /**
  * Create and show alert modal with given content
  *
@@ -46,7 +32,7 @@ fetchTranslations(wordsToTranslate).then(response => {
  * @param {function} confirmationEventFunction function that is executed on confirmation
  * @param {string} btnString
  */
-export function createAlertModal(title, info, confirmationEventFunction, btnString = translated['Yes delete']) {
+export function createAlertModal(title, info, confirmationEventFunction, btnString = __('Yes delete')) {
     initAlertModalEventListeners();
     // Insert parts into entire modal structure
     let htmlString = `<div id="alert-modal">
@@ -57,7 +43,7 @@ export function createAlertModal(title, info, confirmationEventFunction, btnStri
                 <p>${info}</p>
             </div>
             <div id="alert-modal-footer">
-                <button class="btn" id="alert-modal-cancel-btn">${translated['Cancel']}</button>
+                <button class="btn" id="alert-modal-cancel-btn">${__('Cancel')}</button>
                 <button class="btn btn-red" id="alert-modal-confirm-btn">${btnString}</button>
             </div>
         </div>    

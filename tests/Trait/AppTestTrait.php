@@ -8,6 +8,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Odan\Session\MemorySession;
 use Odan\Session\SessionInterface;
+use Psr\Container\ContainerInterface;
 use Slim\App;
 use TestTraits\Trait\ContainerTestTrait;
 use UnexpectedValueException;
@@ -21,7 +22,7 @@ trait AppTestTrait
 {
     use ContainerTestTrait;
 
-    /** @var App<\Psr\Container\ContainerInterface> */
+    /** @var App<ContainerInterface> */
     protected App $app;
 
     /**

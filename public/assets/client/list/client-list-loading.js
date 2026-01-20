@@ -94,7 +94,6 @@ export function fetchAndLoadClientsEventHandler() {
  * (user filter setting). Should be true only for client list page
  */
 function fetchClients(searchParams = new URLSearchParams(), saveFilter = false) {
-
     // Loop through all the active filter chips and add filters to query params
     const activeFilterChips = document
         .querySelectorAll('#active-client-filter-chips-div .filter-chip span');

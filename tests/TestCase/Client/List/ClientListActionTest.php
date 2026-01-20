@@ -138,7 +138,8 @@ class ClientListActionTest extends TestCase
         $clientRows = $this->findTableRowsWhere(
             'client',
             $expectedClientsWhereString,
-            null,
+            'client.*',
+            // Join the user table needed because $expectedClientsWhereString may include user.column condition
             'left join user on user.id = client.user_id'
         );
 

@@ -13,16 +13,16 @@ $this->setLayout('layout/layout.html.php');
 // Define assets that should be included
 // Populate variable $css for layout which then generates the HTML code to include assets
 $this->addAttribute('css', [
-    'assets/general/page-component/form/form.css',
-    'assets/general/page-component/modal/alert-modal.css',
-    'assets/general/page-component/loader/animated-checkmark.css',
-    'assets/general/page-component/button/plus-button.css',
-    'assets/general/page-component/skeleton-loader/skeleton-loader.css',
-    'assets/client/read/client-read-note-skeleton-loader.css',
-    'assets/general/page-component/contenteditable/contenteditable.css',
+        'assets/general/page-component/form/form.css',
+        'assets/general/page-component/modal/alert-modal.css',
+        'assets/general/page-component/loader/animated-checkmark.css',
+        'assets/general/page-component/button/plus-button.css',
+        'assets/general/page-component/skeleton-loader/skeleton-loader.css',
+        'assets/client/read/client-read-note-skeleton-loader.css',
+        'assets/general/page-component/contenteditable/contenteditable.css',
     // page-specific css has to come last to overwrite other styles
-    'assets/client/note/client-note.css',
-    'assets/client/read/client-read.css',
+        'assets/client/note/client-note.css',
+        'assets/client/read/client-read.css',
 ]);
 $this->addAttribute('js', []);
 // Js files that import things from other js files
@@ -30,6 +30,14 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
 
 // Store client id on the page in <data> element for js to read it
 ?>
+<script id="page-translations" type="application/json">
+    <?= addTranslationsArray([
+            'Are you sure that you want to delete this client?',
+            'Are you sure that you want to restore this client?',
+            'Yes undelete',
+    ]) ?>
+
+</script>
 <data id="client-id" value="<?= html($clientReadData->id) ?>"></data>
 
 <div id="title-and-dropdown-flexbox">
@@ -66,8 +74,8 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="client-status" class="bigger-select-label"><?= __('Status') ?></label>
             <select name="client_status_id" class="default-select bigger-select"
-                <?= str_contains($clientReadData->clientStatusPrivilege, 'U')
-                    ? '' : 'disabled' ?>>
+                    <?= str_contains($clientReadData->clientStatusPrivilege, 'U')
+                            ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
                 // Client status select options
@@ -83,7 +91,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
         <div>
             <label for="assigned-user-select" class="bigger-select-label"><?= __('Helper') ?></label>
             <select name="user_id" class="default-select bigger-select" id="assigned-user-select"
-                <?= str_contains($clientReadData->assignedUserPrivilege, 'U') ? '' : 'disabled' ?>>
+                    <?= str_contains($clientReadData->assignedUserPrivilege, 'U') ? '' : 'disabled' ?>>
                 <option value=""></option>
                 <?php
                 // Linked user select options
@@ -277,7 +285,7 @@ $this->addAttribute('jsModules', ['assets/client/read/client-read-main.js']);
                     } ?>
                     <span spellcheck="false" data-maxlength="254"
                     ><?= $clientReadData->vigilanceLevel ? html($clientReadData->vigilanceLevel->getDisplayName())
-                            : '' ?></span>
+                                : '' ?></span>
                 </div>
             </div>
         </div>

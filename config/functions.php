@@ -20,22 +20,29 @@ function html(?string $text = null): string
 }
 
 /**
- * This function is used for text translation.
- * It takes a message string and an optional context.
- * The message is passed to the gettext function for translation.
- * If a context is provided, it is used to replace placeholders
- * in the translated string.
+ * Translate a message string using gettext with optional placeholder replacement.
  *
- * @param string $message the message to be translated (may contain sprintf placeholders e.g. %s, %d)
- * @param mixed ...$context Optional elements that should be inserted in the string with placeholders.
- * The function can be called like this:
+ * This function serves as a wrapper around gettext() for localization (i18n).
+ * It supports sprintf-style placeholders for dynamic content insertion.
+ *
+ * Example usage:
+ * ```php
  * __('The %s contains %d monkeys and %d birds.', 'tree', 5, 3);
- * With the argument unpacking operator ...$context, the arguments are accessible within the function as an array.
+ * // Returns: "The tree contains 5 monkeys and 3 birds."
+ * ```
  *
- * @return string the translated string
+ * @param string|null $message The message to be translated. May contain sprintf placeholders
+ *                             (e.g., %s for strings, %d for integers). Null returns empty string.
+ * @param mixed ...$context Optional values to replace placeholders in the translated string.
+ *                         Values are passed to vsprintf() in the order provided.
+ *
+ * @return string The translated string with placeholders replaced, or empty string if the message is null
  */
-function __(string $message, ...$context): string
+function __(?string $message, ...$context): string
 {
+    if ($message === null) {
+        return '';
+    }
     $translated = gettext($message);
     if (!empty($context)) {
         // If context is provided, replace placeholders in the translated string
@@ -43,4 +50,31 @@ function __(string $message, ...$context): string
     }
 
     return $translated;
+}
+
+/**
+ * Generate a key-value array of translations for frontend use.
+ *
+ * Converts an array of English strings into an associative array where each key
+ * is the original English string and its value is the translated equivalent.
+ * This format is particularly useful for JavaScript internationalization.
+ *
+ * Example:
+ * ```php
+ * $translations = addTranslationsArray(['Hello', 'Goodbye']);
+ * // Returns: ['Hello' => 'Hola', 'Goodbye' => 'Adiós'] (if Spanish is the  active locale)
+ * ```
+ *
+ * @param array $translations Array of English strings to be translated
+ *
+ * @return string json encoded Associative array with English strings as keys and translations as values
+ */
+function addTranslationsArray(array $translations = []): string
+{
+    $translatedArray = [];
+    foreach ($translations as $message) {
+        $translatedArray[$message] = __($message);
+    }
+
+    return json_encode($translatedArray) ?: '';
 }
