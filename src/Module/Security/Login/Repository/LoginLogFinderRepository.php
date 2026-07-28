@@ -61,7 +61,7 @@ class LoginLogFinderRepository
         )->from('authentication_log')->where(
             [
                 // Return all between now and x amount of minutes
-                'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
+                'created_at >' => $query->expr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
             ]
         )->andWhere($whereEmailOrIpArr)->bind(':sec', $seconds, 'integer');
         // $sql = $query->sql();
@@ -119,7 +119,7 @@ class LoginLogFinderRepository
             ]
         )->from('authentication_log')->where(
             [
-                'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL 1 MONTH)'),
+                'created_at >' => $query->expr('DATE_SUB(NOW(), INTERVAL 1 MONTH)'),
             ]
         );
 

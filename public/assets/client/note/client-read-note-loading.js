@@ -10,7 +10,7 @@ import {
 } from "../../general/page-component/textarea/auto-resizing-textarea.js?v=4.0.2";
 import {scrollToAnchor} from "../../general/page-behaviour/scroll-to-anchor.js?v=4.0.2";
 import {__} from "../../general/general-js/functions.js?v=4.0.2";
-
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=4.0.2";
 /**
  * Loading notes into dom
  * @param {URLSearchParams} queryParams note request query parameters.
