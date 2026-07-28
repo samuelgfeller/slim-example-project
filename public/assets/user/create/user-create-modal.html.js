@@ -4,6 +4,7 @@ import {getDropdownAsHtmlOptions, getRadioButtonsAsHtml} from "../../general/tem
 import {displayFlashMessage} from "../../general/page-component/flash-message/flash-message.js?v=4.0.2";
 import {addPasswordStrengthCheck} from "../../authentication/password-strength-checker.js?v=4.0.2";
 import {__} from "../../general/general-js/functions.js?v=4.0.2";
+import {fetchTranslations} from "../../general/ajax/fetch-translation-data.js?v=4.0.2";
 
 /**
  * Create and display modal box to create a new user.

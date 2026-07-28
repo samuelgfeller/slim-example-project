@@ -32,7 +32,7 @@ class EmailLogFinderRepository
         )->from('email_log')->where(
             [
                 // Return all between now and x number of minutes
-                'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
+                'created_at >' => $query->expr('DATE_SUB(NOW(), INTERVAL :sec SECOND)'),
             ]
         )->where( // Where to_email is $email or user_id is $userId if it's set
             $userId ? ['OR' => ['to_email' => $email], 'user_id' => $userId] : ['to_email' => $email]
@@ -79,7 +79,7 @@ class EmailLogFinderRepository
             ]
         )->from('email_log')->where(
             [
-                'created_at >' => $query->newExpr('DATE_SUB(NOW(), INTERVAL :days DAY)'),
+                'created_at >' => $query->expr('DATE_SUB(NOW(), INTERVAL :days DAY)'),
             ]
         )->bind(':days', $days, 'integer');
 
